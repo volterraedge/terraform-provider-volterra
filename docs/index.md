@@ -1,6 +1,6 @@
 # Volterra Provider
 
-Volterra terraform provider can be used to configure Volterra Objects amd these objects represent desired state of the system. The desired state of the system could be configuring a http/tcp loadbalancer, vk8s cluster, service mesh, enabling api security etc.
+Volterra terraform provider can be used to configure Volterra Objects and these objects represent desired state of the system. The desired state of the system could be configuring a http/tcp loadbalancer, vk8s cluster, service mesh, enabling api security etc.
 
 
 ## Authenticating to Volterra
@@ -28,4 +28,4 @@ provider "volterra" {
 
 * `url` - (Required) Tenant API url file path. This can also be sourced from `VOLT_API_URL` env variable (`String`).
 
-* `timeout` - Volterra api call timeout, by default its 10 seconds. This can also be sourced from `VOLT_API_TIMEOUT` env variable (`String`).
+* `timeout` - Volterra api call timeout, by default its 20 seconds. This can also be sourced from `VOLT_API_TIMEOUT` env variable (`String`).

@@ -63,22 +63,19 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetRuleChoiceSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetRuleChoiceSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetRuleChoiceSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *CreateSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
-	var osrInfos []db.SelrFldInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *CreateSpecType_PolicyRuleList:
+
+		return nil, nil
 
 	case *CreateSpecType_K8SClusterRoleSelector:
 
@@ -86,16 +83,17 @@ func (m *CreateSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 		if sref == nil {
 			return nil, nil
 		}
-		osri := db.SelrFldInfo{
+		sri := db.SelrFldInfo{
 			Name:  "CreateSpecType.rule_choice.k8s_cluster_role_selector",
 			Kind:  "k8s_cluster_role.Object",
 			Value: strings.Join(sref.Expressions, ","),
 			Ref:   sref,
 		}
-		osrInfos = append(osrInfos, osri)
+		return []db.SelrFldInfo{sri}, nil
 
+	default:
+		return nil, nil
 	}
-	return osrInfos, nil
 }
 
 type ValidateCreateSpecType struct {
@@ -266,22 +264,19 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetRuleChoiceSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetRuleChoiceSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetRuleChoiceSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *GetSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
-	var osrInfos []db.SelrFldInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *GetSpecType_PolicyRuleList:
+
+		return nil, nil
 
 	case *GetSpecType_K8SClusterRoleSelector:
 
@@ -289,16 +284,17 @@ func (m *GetSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 		if sref == nil {
 			return nil, nil
 		}
-		osri := db.SelrFldInfo{
+		sri := db.SelrFldInfo{
 			Name:  "GetSpecType.rule_choice.k8s_cluster_role_selector",
 			Kind:  "k8s_cluster_role.Object",
 			Value: strings.Join(sref.Expressions, ","),
 			Ref:   sref,
 		}
-		osrInfos = append(osrInfos, osri)
+		return []db.SelrFldInfo{sri}, nil
 
+	default:
+		return nil, nil
 	}
-	return osrInfos, nil
 }
 
 type ValidateGetSpecType struct {
@@ -1148,22 +1144,19 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetRuleChoiceSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetRuleChoiceSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetRuleChoiceSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ReplaceSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
-	var osrInfos []db.SelrFldInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *ReplaceSpecType_PolicyRuleList:
+
+		return nil, nil
 
 	case *ReplaceSpecType_K8SClusterRoleSelector:
 
@@ -1171,16 +1164,17 @@ func (m *ReplaceSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 		if sref == nil {
 			return nil, nil
 		}
-		osri := db.SelrFldInfo{
+		sri := db.SelrFldInfo{
 			Name:  "ReplaceSpecType.rule_choice.k8s_cluster_role_selector",
 			Kind:  "k8s_cluster_role.Object",
 			Value: strings.Join(sref.Expressions, ","),
 			Ref:   sref,
 		}
-		osrInfos = append(osrInfos, osri)
+		return []db.SelrFldInfo{sri}, nil
 
+	default:
+		return nil, nil
 	}
-	return osrInfos, nil
 }
 
 type ValidateReplaceSpecType struct {

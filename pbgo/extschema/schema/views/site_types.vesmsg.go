@@ -27,6 +27,207 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSSubnetIdsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSSubnetIdsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSSubnetIdsType) DeepCopy() *AWSSubnetIdsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSSubnetIdsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSSubnetIdsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSSubnetIdsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSSubnetIdsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSSubnetIdsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSSubnetIdsType) AzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for az_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSSubnetIdsType) OutsideSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_subnet_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSSubnetIdsType) InsideSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_subnet_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSSubnetIdsType) WorkloadSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for workload_subnet_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSSubnetIdsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSSubnetIdsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSSubnetIdsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["az_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("az_name"))
+		if err := fv(ctx, m.GetAzName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inside_subnet_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_subnet_id"))
+		if err := fv(ctx, m.GetInsideSubnetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_subnet_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_subnet_id"))
+		if err := fv(ctx, m.GetOutsideSubnetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["workload_subnet_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("workload_subnet_id"))
+		if err := fv(ctx, m.GetWorkloadSubnetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSSubnetIdsTypeValidator = func() *ValidateAWSSubnetIdsType {
+	v := &ValidateAWSSubnetIdsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAzName := v.AzNameValidationRuleHandler
+	rulesAzName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1a\",\"ap-northeast-1c\",\"ap-northeast-1d\",\"ap-southeast-1a\",\"ap-southeast-1b\",\"ap-southeast-1c\",\"eu-central-1a\",\"eu-central-1b\",\"eu-central-1c\",\"eu-west-1a\",\"eu-west-1b\",\"eu-west-1c\",\"eu-west-3a\",\"eu-west-3b\",\"eu-west-3c\",\"sa-east-1a\",\"sa-east-1b\",\"sa-east-1c\",\"us-east-1a\",\"us-east-1b\",\"us-east-1c\",\"us-east-1d\",\"us-east-1e\",\"us-east-1f\",\"us-east-2a\",\"us-east-2b\",\"us-east-2c\",\"us-west-2a\",\"us-west-2b\",\"us-west-2c\",\"us-west-2d\",\"ca-central-1a\",\"ca-central-1b\",\"ca-central-1d\",\"af-south-1a\",\"af-south-1b\",\"af-south-1c\",\"ap-east-1a\",\"ap-east-1b\",\"ap-east-1c\",\"ap-south-1a\",\"ap-south-1b\",\"ap-south-1c\",\"ap-northeast-2a\",\"ap-northeast-2b\",\"ap-northeast-2c\",\"ap-northeast-2d\",\"ap-southeast-2a\",\"ap-southeast-2b\",\"ap-southeast-2c\",\"eu-south-1a\",\"eu-south-1b\",\"eu-south-1c\",\"eu-north-1a\",\"eu-north-1b\",\"eu-north-1c\",\"eu-west-2a\",\"eu-west-2b\",\"eu-west-2c\",\"me-south-1a\",\"me-south-1b\",\"me-south-1c\",\"us-west-1a\",\"us-west-1c\"]",
+	}
+	vFn, err = vrhAzName(rulesAzName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetIdsType.az_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_name"] = vFn
+
+	vrhOutsideSubnetId := v.OutsideSubnetIdValidationRuleHandler
+	rulesOutsideSubnetId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhOutsideSubnetId(rulesOutsideSubnetId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetIdsType.outside_subnet_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_subnet_id"] = vFn
+
+	vrhInsideSubnetId := v.InsideSubnetIdValidationRuleHandler
+	rulesInsideSubnetId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhInsideSubnetId(rulesInsideSubnetId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetIdsType.inside_subnet_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_subnet_id"] = vFn
+
+	vrhWorkloadSubnetId := v.WorkloadSubnetIdValidationRuleHandler
+	rulesWorkloadSubnetId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhWorkloadSubnetId(rulesWorkloadSubnetId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetIdsType.workload_subnet_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["workload_subnet_id"] = vFn
+
+	return v
+}()
+
+func AWSSubnetIdsTypeValidator() db.Validator {
+	return DefaultAWSSubnetIdsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AWSVPCOneInterfaceNodeType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2734,6 +2935,8 @@ var DefaultCustomPortsValidator = func() *ValidateCustomPorts {
 	vrhPortRanges := v.PortRangesValidationRuleHandler
 	rulesPortRanges := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
 		"ves.io.schema.rules.string.port_range_list": "true",
 	}
 	vFn, err = vrhPortRanges(rulesPortRanges)
@@ -3630,39 +3833,34 @@ func (m *GlobalNetworkConnectionListType) Validate(ctx context.Context, opts ...
 }
 
 func (m *GlobalNetworkConnectionListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetGlobalNetworkConnectionsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetGlobalNetworkConnectionsDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnectionsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetGlobalNetworkConnections() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetGlobalNetworkConnections() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetGlobalNetworkConnections() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("global_network_connections[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGlobalNetworkConnectionListType struct {
@@ -3818,53 +4016,46 @@ func (m *GlobalNetworkConnectionType) Validate(ctx context.Context, opts ...db.V
 }
 
 func (m *GlobalNetworkConnectionType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetConnectionChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetConnectionChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetConnectionChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetConnectionChoice().(type) {
 	case *GlobalNetworkConnectionType_SliToGlobalDr:
-		odrInfos, err = m.GetSliToGlobalDr().GetDRefInfo()
+		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_global_dr." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_dr." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalNetworkConnectionType_SloToGlobalDr:
-		odrInfos, err = m.GetSloToGlobalDr().GetDRefInfo()
+		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "slo_to_global_dr." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_dr." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGlobalNetworkConnectionType struct {
@@ -4031,39 +4222,34 @@ func (m *SiteStaticRoutesListType) Validate(ctx context.Context, opts ...db.Vali
 }
 
 func (m *SiteStaticRoutesListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetStaticRouteListDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetStaticRouteListDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *SiteStaticRoutesListType) GetStaticRouteListDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStaticRouteList() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRouteList() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStaticRouteList() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("static_route_list[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateSiteStaticRoutesListType struct {
@@ -4205,43 +4391,35 @@ func (m *SiteStaticRoutesType) Validate(ctx context.Context, opts ...db.Validate
 }
 
 func (m *SiteStaticRoutesType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetConfigModeChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetConfigModeChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *SiteStaticRoutesType) GetConfigModeChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetConfigModeChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetConfigModeChoice().(type) {
 	case *SiteStaticRoutesType_CustomStaticRoute:
-		odrInfos, err = m.GetCustomStaticRoute().GetDRefInfo()
+		drInfos, err := m.GetCustomStaticRoute().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetCustomStaticRoute().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "custom_static_route." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_static_route." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateSiteStaticRoutesType struct {

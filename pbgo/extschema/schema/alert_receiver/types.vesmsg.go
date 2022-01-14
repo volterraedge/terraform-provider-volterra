@@ -88,6 +88,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) ReceiverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for receiver")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -100,6 +108,16 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["receiver"]; exists {
+		val := m.GetReceiver()
+		vOpts := append(opts,
+			db.WithValidateField("receiver"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetReceiver().(type) {
@@ -167,6 +185,25 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhReceiver := v.ReceiverValidationRuleHandler
+	rulesReceiver := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhReceiver(rulesReceiver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.receiver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["receiver"] = vFn
 
 	v.FldValidators["receiver.slack"] = SlackConfigValidator().Validate
 	v.FldValidators["receiver.pagerduty"] = PagerDutyConfigValidator().Validate
@@ -351,6 +388,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) ReceiverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for receiver")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -363,6 +408,16 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["receiver"]; exists {
+		val := m.GetReceiver()
+		vOpts := append(opts,
+			db.WithValidateField("receiver"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetReceiver().(type) {
@@ -430,6 +485,25 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhReceiver := v.ReceiverValidationRuleHandler
+	rulesReceiver := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhReceiver(rulesReceiver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.receiver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["receiver"] = vFn
 
 	v.FldValidators["receiver.slack"] = SlackConfigValidator().Validate
 	v.FldValidators["receiver.pagerduty"] = PagerDutyConfigValidator().Validate
@@ -507,6 +581,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) ReceiverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for receiver")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -519,6 +601,16 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["receiver"]; exists {
+		val := m.GetReceiver()
+		vOpts := append(opts,
+			db.WithValidateField("receiver"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetReceiver().(type) {
@@ -586,6 +678,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhReceiver := v.ReceiverValidationRuleHandler
+	rulesReceiver := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhReceiver(rulesReceiver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.receiver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["receiver"] = vFn
 
 	v.FldValidators["receiver.slack"] = SlackConfigValidator().Validate
 	v.FldValidators["receiver.pagerduty"] = PagerDutyConfigValidator().Validate
@@ -747,6 +858,7 @@ var DefaultOpsGenieConfigValidator = func() *ValidateOpsGenieConfig {
 	vrhUrl := v.UrlValidationRuleHandler
 	rulesUrl := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.uri_ref":   "true",
 	}
 	vFn, err = vrhUrl(rulesUrl)
 	if err != nil {
@@ -909,6 +1021,7 @@ var DefaultPagerDutyConfigValidator = func() *ValidatePagerDutyConfig {
 	vrhUrl := v.UrlValidationRuleHandler
 	rulesUrl := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.uri_ref":   "true",
 	}
 	vFn, err = vrhUrl(rulesUrl)
 	if err != nil {
@@ -987,6 +1100,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) ReceiverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for receiver")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -999,6 +1120,16 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["receiver"]; exists {
+		val := m.GetReceiver()
+		vOpts := append(opts,
+			db.WithValidateField("receiver"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetReceiver().(type) {
@@ -1066,6 +1197,25 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhReceiver := v.ReceiverValidationRuleHandler
+	rulesReceiver := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhReceiver(rulesReceiver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.receiver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["receiver"] = vFn
 
 	v.FldValidators["receiver.slack"] = SlackConfigValidator().Validate
 	v.FldValidators["receiver.pagerduty"] = PagerDutyConfigValidator().Validate
@@ -1334,6 +1484,7 @@ var DefaultSlackConfigValidator = func() *ValidateSlackConfig {
 	vrhChannel := v.ChannelValidationRuleHandler
 	rulesChannel := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^[a-z0-9-_]{1,80}$",
 	}
 	vFn, err = vrhChannel(rulesChannel)
 	if err != nil {

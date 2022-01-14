@@ -1658,7 +1658,7 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
-                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created.\nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1750,7 +1750,7 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
-                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created.\nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -2203,7 +2203,7 @@ var APISwaggerJSON string = `{
         },
         "clusterLoadbalancerAlgorithm": {
             "type": "string",
-            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nHash policy is taken from from the load balancer which is using this origin pool",
+            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\nPolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nHash policy is taken from from the load balancer which is using this origin pool",
             "title": "LoadbalancerAlgorithm",
             "enum": [
                 "ROUND_ROBIN",
@@ -2275,7 +2275,7 @@ var APISwaggerJSON string = `{
         },
         "ioschemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -2834,7 +2834,7 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with private or public IP address and site information",
             "title": "OriginServerPrivateIP",
             "x-displayname": "IP address on given Sites",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateIP",
             "properties": {
@@ -2938,7 +2938,6 @@ var APISwaggerJSON string = `{
             "description": "Various options to specify origin server",
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
-            "x-ves-displayorder": "9,8",
             "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
@@ -3096,12 +3095,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "tls_certificates": {
                     "type": "array",
-                    "description": " TLS Certificates",
+                    "description": " TLS Certificates\nRequired: YES",
                     "title": "TLS certificates",
                     "items": {
                         "$ref": "#/definitions/schemaTlsCertificateType"
                     },
-                    "x-displayname": "TLS Certificates"
+                    "x-displayname": "TLS Certificates",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3244,7 +3244,7 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.  \n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
                     "title": "URL",
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
@@ -3295,6 +3295,38 @@ var APISwaggerJSON string = `{
                     "title": "message",
                     "x-displayname": "Message",
                     "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaHashAlgorithm": {
+            "type": "string",
+            "description": "Specifies the Hash Algorithm to be used\n\nInvalid hash algorithm\nsha256 hash algorithm\nsha1 hash algorithm",
+            "title": "HashAlgoritm",
+            "enum": [
+                "INVALID_HASH_ALGORITHM",
+                "SHA256",
+                "SHA1"
+            ],
+            "default": "INVALID_HASH_ALGORITHM",
+            "x-displayname": "Hash Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.HashAlgorithm"
+        },
+        "schemaHashAlgorithms": {
+            "type": "object",
+            "description": "Specifies the hash algorithms to be used",
+            "title": "HashAlgorithms",
+            "x-displayname": "Hash Algorithms",
+            "x-ves-proto-message": "ves.io.schema.HashAlgorithms",
+            "properties": {
+                "hash_algorithms": {
+                    "type": "array",
+                    "description": " Ordered list of hash algorithms to be used.\nRequired: YES",
+                    "title": "Hash Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaHashAlgorithm"
+                    },
+                    "x-displayname": "Hash Algorithms",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3380,7 +3412,7 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
@@ -3433,7 +3465,7 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
@@ -3486,14 +3518,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3542,7 +3574,7 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
@@ -3676,7 +3708,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -3692,7 +3724,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -3771,7 +3803,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -3787,7 +3819,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -3856,6 +3888,13 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -3864,7 +3903,7 @@ var APISwaggerJSON string = `{
             "description": "Handle to fetch certificate and key",
             "title": "TlsCertificateType",
             "x-displayname": "TLS Certificate",
-            "x-ves-displayorder": "1,4,5",
+            "x-ves-oneof-field-ocsp_stapling_choice": "[\"custom_hash_algorithms\",\"disable_ocsp_stapling\",\"use_system_defaults\"]",
             "x-ves-proto-message": "ves.io.schema.TlsCertificateType",
             "properties": {
                 "certificate_url": {
@@ -3874,11 +3913,21 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Certificate URL",
                     "x-ves-required": "true"
                 },
+                "custom_hash_algorithms": {
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "title": "Use Custom Order for Hash Algorithms",
+                    "$ref": "#/definitions/schemaHashAlgorithms"
+                },
                 "description": {
                     "type": "string",
                     "description": " Description for the certificate",
                     "title": "description",
                     "x-displayname": "Description"
+                },
+                "disable_ocsp_stapling": {
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "title": "Disable OCSP Stapling",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\nRequired: YES",
@@ -3886,6 +3935,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Private Key",
                     "x-ves-required": "true"
+                },
+                "use_system_defaults": {
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with Volterra default settings",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },

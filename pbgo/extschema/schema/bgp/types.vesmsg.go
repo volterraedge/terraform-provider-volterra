@@ -308,19 +308,21 @@ func (m *BgpPeer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 }
 
 func (m *BgpPeer) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfaceRefsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfaceRefsDRefInfo()
+
 }
 
 func (m *BgpPeer) GetInterfaceRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetInterfaceRefs() {
+	refs := m.GetInterfaceRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("BgpPeer.interface_refs[%d] has a nil value", i)
 		}
@@ -335,8 +337,8 @@ func (m *BgpPeer) GetInterfaceRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInterfaceRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -986,68 +988,65 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPeers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWhere() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWhere().GetDRefInfo()
+	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "where." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateCreateSpecType struct {
@@ -1929,68 +1928,65 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPeers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWhere() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWhere().GetDRefInfo()
+	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "where." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGetSpecType struct {
@@ -2210,68 +2206,74 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetBgpPeersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetBgpPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkInterfaceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkInterfaceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetBgpPeersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetBgpPeers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetBgpPeers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetBgpPeers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("bgp_peers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkInterface() {
+	refs := m.GetNetworkInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.network_interface[%d] has a nil value", i)
 		}
@@ -2286,8 +2288,8 @@ func (m *GlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2312,31 +2314,27 @@ func (m *GlobalSpecType) GetNetworkInterfaceDBEntries(ctx context.Context, d db.
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPeers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -2344,16 +2342,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2387,25 +2385,20 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWhere() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWhere().GetDRefInfo()
+	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "where." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGlobalSpecType struct {
@@ -2765,19 +2758,21 @@ func (m *InterfaceList) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 }
 
 func (m *InterfaceList) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfacesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfacesDRefInfo()
+
 }
 
 func (m *InterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetInterfaces() {
+	vrefs := m.GetInterfaces()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("InterfaceList.interfaces[%d] has a nil value", i)
 		}
@@ -2793,8 +2788,8 @@ func (m *InterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInterfacesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2966,45 +2961,39 @@ func (m *Peer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 }
 
 func (m *Peer) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetTypeChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetTypeChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *Peer) GetTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetTypeChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetTypeChoice().(type) {
 	case *Peer_External:
-		odrInfos, err = m.GetExternal().GetDRefInfo()
+		drInfos, err := m.GetExternal().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetExternal().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "external." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "external." + dri.DRField
 		}
+		return drInfos, err
 
 	case *Peer_Internal:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidatePeer struct {
@@ -3193,49 +3182,47 @@ func (m *PeerExternal) Validate(ctx context.Context, opts ...db.ValidateOpt) err
 }
 
 func (m *PeerExternal) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfaceChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *PeerExternal) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *PeerExternal_Interface:
 
+		return nil, nil
+
 	case *PeerExternal_InterfaceList:
-		odrInfos, err = m.GetInterfaceList().GetDRefInfo()
+		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *PeerExternal_InsideInterfaces:
 
+		return nil, nil
+
 	case *PeerExternal_OutsideInterfaces:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidatePeerExternal struct {
@@ -3999,68 +3986,65 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPeers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWhere() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWhere().GetDRefInfo()
+	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "where." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateReplaceSpecType struct {

@@ -377,6 +377,114 @@ func ApplicationMetricsServerTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApplicationPrometheusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApplicationPrometheusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApplicationPrometheusType) DeepCopy() *ApplicationPrometheusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApplicationPrometheusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApplicationPrometheusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApplicationPrometheusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApplicationPrometheusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApplicationPrometheusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApplicationPrometheusType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApplicationPrometheusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApplicationPrometheusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApplicationPrometheusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["generated_yaml"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("generated_yaml"))
+		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApplicationPrometheusTypeValidator = func() *ValidateApplicationPrometheusType {
+	v := &ValidateApplicationPrometheusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhGeneratedYaml := v.GeneratedYamlValidationRuleHandler
+	rulesGeneratedYaml := map[string]string{
+		"ves.io.schema.rules.string.max_len": "4096",
+		"ves.io.schema.rules.string.uri_ref": "true",
+	}
+	vFn, err = vrhGeneratedYaml(rulesGeneratedYaml)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApplicationPrometheusType.generated_yaml: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["generated_yaml"] = vFn
+
+	return v
+}()
+
+func ApplicationPrometheusTypeValidator() db.Validator {
+	return DefaultApplicationPrometheusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ClusterRoleBindingListType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -413,19 +521,21 @@ func (m *ClusterRoleBindingListType) Validate(ctx context.Context, opts ...db.Va
 }
 
 func (m *ClusterRoleBindingListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetClusterRoleBindingsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetClusterRoleBindingsDRefInfo()
+
 }
 
 func (m *ClusterRoleBindingListType) GetClusterRoleBindingsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetClusterRoleBindings() {
+	vrefs := m.GetClusterRoleBindings()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("ClusterRoleBindingListType.cluster_role_bindings[%d] has a nil value", i)
 		}
@@ -441,8 +551,8 @@ func (m *ClusterRoleBindingListType) GetClusterRoleBindingsDRefInfo() ([]db.DRef
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetClusterRoleBindingsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -558,7 +668,7 @@ var DefaultClusterRoleBindingListTypeValidator = func() *ValidateClusterRoleBind
 	vrhClusterRoleBindings := v.ClusterRoleBindingsValidationRuleHandler
 	rulesClusterRoleBindings := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.max_items": "100",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -614,19 +724,21 @@ func (m *ClusterRoleListType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *ClusterRoleListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetClusterRolesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetClusterRolesDRefInfo()
+
 }
 
 func (m *ClusterRoleListType) GetClusterRolesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetClusterRoles() {
+	vrefs := m.GetClusterRoles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("ClusterRoleListType.cluster_roles[%d] has a nil value", i)
 		}
@@ -642,8 +754,8 @@ func (m *ClusterRoleListType) GetClusterRolesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetClusterRolesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -759,7 +871,7 @@ var DefaultClusterRoleListTypeValidator = func() *ValidateClusterRoleListType {
 	vrhClusterRoles := v.ClusterRolesValidationRuleHandler
 	rulesClusterRoles := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "100",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -1052,6 +1164,17 @@ func (v *ValidateClusterWideAppType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *ClusterWideAppType_Prometheus:
+		if fv, exists := v.FldValidators["app_choice.prometheus"]; exists {
+			val := m.GetAppChoice().(*ClusterWideAppType_Prometheus).Prometheus
+			vOpts := append(opts,
+				db.WithValidateField("app_choice"),
+				db.WithValidateField("prometheus"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1084,6 +1207,7 @@ var DefaultClusterWideAppTypeValidator = func() *ValidateClusterWideAppType {
 	v.FldValidators["app_choice.argo_cd"] = ApplicationArgoCDTypeValidator().Validate
 	v.FldValidators["app_choice.dashboard"] = ApplicationDashboardTypeValidator().Validate
 	v.FldValidators["app_choice.metrics_server"] = ApplicationMetricsServerTypeValidator().Validate
+	v.FldValidators["app_choice.prometheus"] = ApplicationPrometheusTypeValidator().Validate
 
 	return v
 }()
@@ -1144,119 +1268,112 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetClusterRoleBindingsChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetClusterRoleBindingsChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetClusterRoleBindingsChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetClusterRoleBindingsChoice().(type) {
 	case *CreateSpecType_UseDefaultClusterRoleBindings:
 
-	case *CreateSpecType_UseCustomClusterRoleBindings:
-		odrInfos, err = m.GetUseCustomClusterRoleBindings().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_cluster_role_bindings." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *CreateSpecType_UseCustomClusterRoleBindings:
+		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetClusterRoleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetClusterRoleChoice().(type) {
 	case *CreateSpecType_UseDefaultClusterRoles:
 
-	case *CreateSpecType_UseCustomClusterRoleList:
-		odrInfos, err = m.GetUseCustomClusterRoleList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_cluster_role_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *CreateSpecType_UseCustomClusterRoleList:
+		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPodSecurityPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetPodSecurityPolicyChoice().(type) {
 	case *CreateSpecType_UseDefaultPsp:
 
-	case *CreateSpecType_UseCustomPspList:
-		odrInfos, err = m.GetUseCustomPspList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_psp_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *CreateSpecType_UseCustomPspList:
+		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_psp_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -1748,119 +1865,112 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetClusterRoleBindingsChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetClusterRoleBindingsChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetClusterRoleBindingsChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetClusterRoleBindingsChoice().(type) {
 	case *GetSpecType_UseDefaultClusterRoleBindings:
 
-	case *GetSpecType_UseCustomClusterRoleBindings:
-		odrInfos, err = m.GetUseCustomClusterRoleBindings().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_cluster_role_bindings." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GetSpecType_UseCustomClusterRoleBindings:
+		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetClusterRoleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetClusterRoleChoice().(type) {
 	case *GetSpecType_UseDefaultClusterRoles:
 
-	case *GetSpecType_UseCustomClusterRoleList:
-		odrInfos, err = m.GetUseCustomClusterRoleList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_cluster_role_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GetSpecType_UseCustomClusterRoleList:
+		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPodSecurityPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetPodSecurityPolicyChoice().(type) {
 	case *GetSpecType_UseDefaultPsp:
 
-	case *GetSpecType_UseCustomPspList:
-		odrInfos, err = m.GetUseCustomPspList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_psp_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GetSpecType_UseCustomPspList:
+		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_psp_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -2352,117 +2462,118 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetClusterRoleBindingsChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetClusterRoleBindingsChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetFinalClusterRoleBindingsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetFinalClusterRoleBindingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetFinalClusterRolesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetFinalClusterRolesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetFinalPodSecurityPoliciesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetFinalPodSecurityPoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetClusterRoleBindingsChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetClusterRoleBindingsChoice().(type) {
 	case *GlobalSpecType_UseDefaultClusterRoleBindings:
 
-	case *GlobalSpecType_UseCustomClusterRoleBindings:
-		odrInfos, err = m.GetUseCustomClusterRoleBindings().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_cluster_role_bindings." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_UseCustomClusterRoleBindings:
+		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetClusterRoleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetClusterRoleChoice().(type) {
 	case *GlobalSpecType_UseDefaultClusterRoles:
 
-	case *GlobalSpecType_UseCustomClusterRoleList:
-		odrInfos, err = m.GetUseCustomClusterRoleList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_cluster_role_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_UseCustomClusterRoleList:
+		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetFinalClusterRoleBindingsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetFinalClusterRoleBindings() {
+	vrefs := m.GetFinalClusterRoleBindings()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.final_cluster_role_bindings[%d] has a nil value", i)
 		}
@@ -2478,8 +2589,8 @@ func (m *GlobalSpecType) GetFinalClusterRoleBindingsDRefInfo() ([]db.DRefInfo, e
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetFinalClusterRoleBindingsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2512,8 +2623,12 @@ func (m *GlobalSpecType) GetFinalClusterRoleBindingsDBEntries(ctx context.Contex
 }
 
 func (m *GlobalSpecType) GetFinalClusterRolesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetFinalClusterRoles() {
+	vrefs := m.GetFinalClusterRoles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.final_cluster_roles[%d] has a nil value", i)
 		}
@@ -2529,8 +2644,8 @@ func (m *GlobalSpecType) GetFinalClusterRolesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetFinalClusterRolesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2563,8 +2678,12 @@ func (m *GlobalSpecType) GetFinalClusterRolesDBEntries(ctx context.Context, d db
 }
 
 func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetFinalPodSecurityPolicies() {
+	vrefs := m.GetFinalPodSecurityPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.final_pod_security_policies[%d] has a nil value", i)
 		}
@@ -2580,8 +2699,8 @@ func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDRefInfo() ([]db.DRefInfo, e
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetFinalPodSecurityPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2615,37 +2734,32 @@ func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDBEntries(ctx context.Contex
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPodSecurityPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetPodSecurityPolicyChoice().(type) {
 	case *GlobalSpecType_UseDefaultPsp:
 
-	case *GlobalSpecType_UseCustomPspList:
-		odrInfos, err = m.GetUseCustomPspList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_psp_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_UseCustomPspList:
+		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_psp_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -2653,16 +2767,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3445,11 +3559,11 @@ var DefaultInsecureRegistryListTypeValidator = func() *ValidateInsecureRegistryL
 	vrhInsecureRegistries := v.InsecureRegistriesValidationRuleHandler
 	rulesInsecureRegistries := map[string]string{
 		"ves.io.schema.rules.message.required":                "true",
+		"ves.io.schema.rules.repeated.items.string.hostport":  "true",
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
-		"ves.io.schema.rules.string.hostport":                 "true",
 	}
 	vFn, err = vrhInsecureRegistries(rulesInsecureRegistries)
 	if err != nil {
@@ -3928,19 +4042,21 @@ func (m *PodSecurityPolicyListType) Validate(ctx context.Context, opts ...db.Val
 }
 
 func (m *PodSecurityPolicyListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetPodSecurityPoliciesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetPodSecurityPoliciesDRefInfo()
+
 }
 
 func (m *PodSecurityPolicyListType) GetPodSecurityPoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetPodSecurityPolicies() {
+	vrefs := m.GetPodSecurityPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("PodSecurityPolicyListType.pod_security_policies[%d] has a nil value", i)
 		}
@@ -3956,8 +4072,8 @@ func (m *PodSecurityPolicyListType) GetPodSecurityPoliciesDRefInfo() ([]db.DRefI
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetPodSecurityPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4143,119 +4259,112 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetClusterRoleBindingsChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetClusterRoleBindingsChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetClusterRoleBindingsChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetClusterRoleBindingsChoice().(type) {
 	case *ReplaceSpecType_UseDefaultClusterRoleBindings:
 
-	case *ReplaceSpecType_UseCustomClusterRoleBindings:
-		odrInfos, err = m.GetUseCustomClusterRoleBindings().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_cluster_role_bindings." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReplaceSpecType_UseCustomClusterRoleBindings:
+		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetClusterRoleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetClusterRoleChoice().(type) {
 	case *ReplaceSpecType_UseDefaultClusterRoles:
 
-	case *ReplaceSpecType_UseCustomClusterRoleList:
-		odrInfos, err = m.GetUseCustomClusterRoleList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_cluster_role_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReplaceSpecType_UseCustomClusterRoleList:
+		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPodSecurityPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetPodSecurityPolicyChoice().(type) {
 	case *ReplaceSpecType_UseDefaultPsp:
 
-	case *ReplaceSpecType_UseCustomPspList:
-		odrInfos, err = m.GetUseCustomPspList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "use_custom_psp_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReplaceSpecType_UseCustomPspList:
+		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_psp_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {

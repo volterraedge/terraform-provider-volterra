@@ -314,6 +314,44 @@ func resourceVolterraCluster() *schema.Resource {
 													Optional: true,
 												},
 
+												"custom_hash_algorithms": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"hash_algorithms": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"disable_ocsp_stapling": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
+													},
+												},
+
+												"use_system_defaults": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
+													},
+												},
+
 												"private_key": {
 
 													Type:     schema.TypeSet,
@@ -871,6 +909,45 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 							if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
 								tlsCertificates[i].Description = w.(string)
+							}
+
+							ocspStaplingChoiceTypeFound := false
+
+							if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+								ocspStaplingChoiceTypeFound = true
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+								ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+										hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+										for _, j := range v.([]interface{}) {
+											hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+										}
+										ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+									}
+
+								}
+
+							}
+
+							if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+								ocspStaplingChoiceTypeFound = true
+								_ = v
+							}
+
+							if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+								ocspStaplingChoiceTypeFound = true
+								_ = v
 							}
 
 							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
@@ -1510,6 +1587,45 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 							if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
 								tlsCertificates[i].Description = w.(string)
+							}
+
+							ocspStaplingChoiceTypeFound := false
+
+							if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+								ocspStaplingChoiceTypeFound = true
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+								ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+										hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+										for _, j := range v.([]interface{}) {
+											hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+										}
+										ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+									}
+
+								}
+
+							}
+
+							if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+								ocspStaplingChoiceTypeFound = true
+								_ = v
+							}
+
+							if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+								ocspStaplingChoiceTypeFound = true
+								_ = v
 							}
 
 							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {

@@ -2670,7 +2670,7 @@ var APISwaggerJSON string = `{
         },
         "clusterLoadbalancerAlgorithm": {
             "type": "string",
-            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nHash policy is taken from from the load balancer which is using this origin pool",
+            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\nPolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nHash policy is taken from from the load balancer which is using this origin pool",
             "title": "LoadbalancerAlgorithm",
             "enum": [
                 "ROUND_ROBIN",
@@ -2872,7 +2872,7 @@ var APISwaggerJSON string = `{
         },
         "ioschemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -3060,7 +3060,7 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.  \n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
                     "title": "URL",
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
@@ -3103,7 +3103,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3190,6 +3190,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaDomainNameList": {
+            "type": "object",
+            "description": "List of domain names used for Host header matching",
+            "title": "List of Domain names",
+            "x-displayname": "Domain name list",
+            "x-ves-proto-message": "ves.io.schema.DomainNameList",
+            "properties": {
+                "domains": {
+                    "type": "array",
+                    "description": "\n A list of domain names that will be matched to loadbalancer.\n These domains are not used for SNI match.\n Wildcard names are supported in the suffix or prefix form.\n\nExample: - \"www.foo.com\"-",
+                    "title": "Domains",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Domain names",
+                    "x-ves-example": "www.foo.com"
+                }
+            }
+        },
         "schemaDomainType": {
             "type": "object",
             "description": "Domains names",
@@ -3244,11 +3263,44 @@ var APISwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
+        "schemaHashAlgorithm": {
+            "type": "string",
+            "description": "Specifies the Hash Algorithm to be used\n\nInvalid hash algorithm\nsha256 hash algorithm\nsha1 hash algorithm",
+            "title": "HashAlgoritm",
+            "enum": [
+                "INVALID_HASH_ALGORITHM",
+                "SHA256",
+                "SHA1"
+            ],
+            "default": "INVALID_HASH_ALGORITHM",
+            "x-displayname": "Hash Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.HashAlgorithm"
+        },
+        "schemaHashAlgorithms": {
+            "type": "object",
+            "description": "Specifies the hash algorithms to be used",
+            "title": "HashAlgorithms",
+            "x-displayname": "Hash Algorithms",
+            "x-ves-proto-message": "ves.io.schema.HashAlgorithms",
+            "properties": {
+                "hash_algorithms": {
+                    "type": "array",
+                    "description": " Ordered list of hash algorithms to be used.\nRequired: YES",
+                    "title": "Hash Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaHashAlgorithm"
+                    },
+                    "x-displayname": "Hash Algorithms",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "schemaHeaderManipulationOptionType": {
             "type": "object",
             "description": "HTTP header is a key-value pair.\nThe name acts as key of HTTP header\nThe value acts as the data/value of HTTP header\nExample HTTP header\n    Host: user.volterra.com\nIn the above example, Host is the name or key of HTTP header\nIn the above example, user.volterra.com is the value of HTTP header",
             "title": "HeaderManipulationOptionType",
             "x-displayname": "Header Manipulation Option",
+            "x-ves-oneof-field-value_choice": "[\"secret_value\",\"value\"]",
             "x-ves-proto-message": "ves.io.schema.HeaderManipulationOptionType",
             "properties": {
                 "append": {
@@ -3265,12 +3317,15 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Name",
                     "x-ves-required": "true"
                 },
+                "secret_value": {
+                    "description": "Exclusive with [value]\nx-displayName: \"Secret Value\"\nSecret Value of the HTTP header.",
+                    "title": "Secret Value",
+                    "$ref": "#/definitions/schemaSecretType"
+                },
                 "value": {
                     "type": "string",
-                    "description": " Value of the HTTP header.\nRequired: YES",
-                    "title": "value",
-                    "x-displayname": "Value",
-                    "x-ves-required": "true"
+                    "description": "Exclusive with [secret_value]\nx-displayName: \"Value\"\nValue of the HTTP header.",
+                    "title": "value"
                 }
             }
         },
@@ -3375,14 +3430,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3463,7 +3518,7 @@ var APISwaggerJSON string = `{
                 },
                 "retry_on": {
                     "type": "string",
-                    "description": " Specifies the conditions under which retry takes place. \n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
                     "title": "retry_on",
                     "x-displayname": "Retry On",
                     "x-ves-example": "5xx"
@@ -3560,7 +3615,7 @@ var APISwaggerJSON string = `{
                 },
                 "status_id": {
                     "type": "string",
-                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
                     "title": "status_id",
                     "x-displayname": "Status ID"
                 },
@@ -3573,22 +3628,29 @@ var APISwaggerJSON string = `{
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "description": " Origin of this status exchanged by VTRP.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
             "default": "STATUS_DO_NOT_PUBLISH",
-            "x-displayname": "Publish",
+            "x-displayname": "Status Publish Type",
             "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
@@ -3659,7 +3721,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -3675,7 +3737,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -3744,6 +3806,13 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -3752,7 +3821,7 @@ var APISwaggerJSON string = `{
             "description": "Handle to fetch certificate and key",
             "title": "TlsCertificateType",
             "x-displayname": "TLS Certificate",
-            "x-ves-displayorder": "1,4,5",
+            "x-ves-oneof-field-ocsp_stapling_choice": "[\"custom_hash_algorithms\",\"disable_ocsp_stapling\",\"use_system_defaults\"]",
             "x-ves-proto-message": "ves.io.schema.TlsCertificateType",
             "properties": {
                 "certificate_url": {
@@ -3762,11 +3831,21 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Certificate URL",
                     "x-ves-required": "true"
                 },
+                "custom_hash_algorithms": {
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "title": "Use Custom Order for Hash Algorithms",
+                    "$ref": "#/definitions/schemaHashAlgorithms"
+                },
                 "description": {
                     "type": "string",
                     "description": " Description for the certificate",
                     "title": "description",
                     "x-displayname": "Description"
+                },
+                "disable_ocsp_stapling": {
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "title": "Disable OCSP Stapling",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\nRequired: YES",
@@ -3774,6 +3853,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Private Key",
                     "x-ves-required": "true"
+                },
+                "use_system_defaults": {
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with Volterra default settings",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -3870,7 +3954,7 @@ var APISwaggerJSON string = `{
             "description": "Information of different aspects for TLS authentication related to ciphers,\ncertificates and trust store",
             "title": "TlsParamsType",
             "x-displayname": "TLS Parameters",
-            "x-ves-displayorder": "4,5,1,2,3",
+            "x-ves-displayorder": "4,7,1,2,3",
             "x-ves-proto-message": "ves.io.schema.TlsParamsType",
             "properties": {
                 "cipher_suites": {
@@ -4191,8 +4275,11 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
+            "x-ves-oneof-field-bot_defense_choice": "[\"bot_defense\",\"disable_bot_defense\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
+            "x-ves-oneof-field-strict_sni_host_header_check_choice": "[\"additional_domains\",\"enable_strict_sni_host_header_check\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GlobalSpecType",
             "properties": {
                 "add_location": {
@@ -4202,6 +4289,11 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Add Location",
                     "x-ves-example": "true"
+                },
+                "additional_domains": {
+                    "description": "Exclusive with [enable_strict_sni_host_header_check]\nx-displayName: \"Additional Domains\"\nx-example: \"www.bar.com\"\nA list of additional domains that will be matched to loadbalancer.\nThese domains are not used for SNI match.\nWildcard names are supported in the suffix or prefix form",
+                    "title": "Additional Domains",
+                    "$ref": "#/definitions/schemaDomainNameList"
                 },
                 "advertise_policies": {
                     "type": "array",
@@ -4241,6 +4333,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCertificationState",
                     "x-displayname": "Auto Cert State"
                 },
+                "bot_defense": {
+                    "description": "Exclusive with [disable_bot_defense]\nx-displayName: \"Specify Shape Bot Defense Configuration\"\nShape Bot Defense intent configuration object",
+                    "title": "Shape Bot Defense",
+                    "$ref": "#/definitions/virtual_hostShapeBotDefenseConfigType"
+                },
                 "buffer_policy": {
                     "description": " Some upstream applications are not capable of handling streamed data and high network latency.\n This config enables buffering the entire request before sending to upstream application. We can\n specify the maximum buffer size and buffer interval with this config.",
                     "title": "Buffer configuration for requests",
@@ -4276,6 +4373,11 @@ var APISwaggerJSON string = `{
                     "title": "default_header",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "disable_bot_defense": {
+                    "description": "Exclusive with [bot_defense]\nx-displayName: \"Disable Shape Bot Defense\"\nNo Shape Bot Defense configuration for this load balancer",
+                    "title": "Disable Shape Bot Defense",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "disable_default_error_pages": {
                     "type": "boolean",
                     "description": "\n An option to specify whether to disable using default Volterra error pages\n\nExample: - \"true\"-",
@@ -4291,6 +4393,11 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
+                },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\nx-displayName: \"Disable path normalization\"\nPath normalization is disabled",
+                    "title": "Disable Path normalization",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "dns_domains": {
                     "type": "array",
@@ -4332,6 +4439,16 @@ var APISwaggerJSON string = `{
                     "title": "Enable the dynamic resolution of the endpoint",
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
+                },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\nx-displayName: \"Enable path normalization\"\nPath normalization is enabled",
+                    "title": "Enable Path normalization",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_strict_sni_host_header_check": {
+                    "description": "Exclusive with [additional_domains]\nx-displayName: \"Enable strict SNI and Host header check\"\nEnable strict SNI and Host header check\"",
+                    "title": "Strict check of Host header and SNI is enabled",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "host_name": {
                     "type": "string",
@@ -4385,7 +4502,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note: \n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
+                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
                     "title": "Maximum request header size",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size (KiB)",
@@ -4412,7 +4529,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostPolicyBasedChallenge"
                 },
                 "proxy": {
-                    "description": " Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access",
+                    "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
                     "title": "Proxy Type",
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
@@ -4650,6 +4767,15 @@ var APISwaggerJSON string = `{
                     "description": " Subject of the auto certificate",
                     "title": "Auto Cert Subject",
                     "x-displayname": "Auto Cert Subject"
+                },
+                "dns_records": {
+                    "type": "array",
+                    "description": " DNS Records that are to be added by user in their DNS domain.\n Currently, this will be populated when auto certificates are\n desired but DNS delegation is not enabled.",
+                    "title": "DNS Records",
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostDNSRecord"
+                    },
+                    "x-displayname": "DNS Records"
                 }
             }
         },
@@ -4740,6 +4866,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostDNSRecord": {
+            "type": "object",
+            "description": "Defines a DNS record",
+            "title": "DNSRecord",
+            "x-displayname": "DNS Record",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.DNSRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the DNS record",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of the DNS record\n\nExample: - \"CNAME\"-",
+                    "title": "Type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "CNAME"
+                },
+                "value": {
+                    "type": "string",
+                    "description": " DNS record Value",
+                    "title": "Value",
+                    "x-displayname": "Value"
+                }
+            }
+        },
         "virtual_hostDynamicReverseProxyType": {
             "type": "object",
             "description": "In this mode of proxy, virtual host will resolve the destination endpoint dynamically.\n\nThe dynamic resolution is done using a predefined field in the request. This predefined\nfield depends on the ProxyType configured on the Virtual Host.\n\nFor HTTP traffic, i.e. with ProxyType as HTTP_PROXY or HTTPS_PROXY, virtual host will use the\n\"HOST\" http header from the request and perform DNS resolution to select destination endpoint.\n\nFor TCP traffic with SNI, (If the ProxyType is TCP_PROXY_WITH_SNI), virtual host will perform DNS\nresolution using the SNI.\n\nThe DNS resolution is performed in the virtual network specified in outside_network_type or\noutside_network\n\nIn both modes of operation(either using Host header or SNI), the DNS resolution could return\nmultiple addresses. First IPv4 address from such returned list is used as endpoint for the\nrequest. The DNS response is cached for 60s by default.",
@@ -4808,7 +4962,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostJavascriptChallengeType": {
             "type": "object",
-            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow \nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
+            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow\nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
             "title": "JavascriptChallengeType",
             "x-displayname": "Javascript Challenge Parameters",
             "x-ves-proto-message": "ves.io.schema.virtual_host.JavascriptChallengeType",
@@ -4903,6 +5057,37 @@ var APISwaggerJSON string = `{
             "x-displayname": "Type of Proxy",
             "x-ves-proto-enum": "ves.io.schema.virtual_host.ProxyType"
         },
+        "virtual_hostShapeBotDefenseConfigType": {
+            "type": "object",
+            "description": "This defines various configuration options for Shape Bot Defense per virtual host.",
+            "title": "ShapeBotDefenseConfigType",
+            "x-displayname": "Shape Bot Defense Config for virtual host",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.ShapeBotDefenseConfigType",
+            "properties": {
+                "api_auth_key": {
+                    "description": " API auth key for Shared Shape Bot Defense instance. This value is set\n on the tenant object from Shape Backend.",
+                    "title": "API auth key for Shared Shape Instance",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "API auth key"
+                },
+                "application_id": {
+                    "type": "string",
+                    "description": " Shape Bot Defense Application ID is used by shared instances.\n\nExample: - \"707a0c622df8414886a5ca71c46caf2f\"-",
+                    "title": "Application ID",
+                    "x-displayname": "Application ID",
+                    "x-ves-example": "707a0c622df8414886a5ca71c46caf2f"
+                },
+                "instance": {
+                    "type": "array",
+                    "description": " Which Shape insatnce to use",
+                    "title": "Shape Instance",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Shape Instance"
+                }
+            }
+        },
         "virtual_hostStatusObject": {
             "type": "object",
             "description": "Most recently observed status of object",
@@ -4937,7 +5122,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostTemporaryUserBlockingType": {
             "type": "object",
-            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for \nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user. \nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
+            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for\nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user.\nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
             "title": "TemporaryUserBlockingType",
             "x-displayname": "Temporary User Blocking",
             "x-ves-proto-message": "ves.io.schema.virtual_host.TemporaryUserBlockingType",

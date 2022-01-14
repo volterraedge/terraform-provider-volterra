@@ -65,99 +65,93 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEgressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetIngressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEgressRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetEgressRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("egress_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEndpoint() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetEndpoint().GetDRefInfo()
+	drInfos, err := m.GetEndpoint().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpoint().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "endpoint." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetIngressRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIngressRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("ingress_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -399,99 +393,93 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEgressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetIngressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEgressRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetEgressRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("egress_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEndpoint() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetEndpoint().GetDRefInfo()
+	drInfos, err := m.GetEndpoint().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpoint().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "endpoint." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetIngressRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIngressRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("ingress_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -733,109 +721,102 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEgressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetIngressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEgressRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetEgressRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("egress_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEndpoint() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetEndpoint().GetDRefInfo()
+	drInfos, err := m.GetEndpoint().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpoint().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "endpoint." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetIngressRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIngressRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("ingress_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -843,16 +824,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1134,99 +1115,93 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEgressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetIngressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEgressRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetEgressRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("egress_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEndpoint() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetEndpoint().GetDRefInfo()
+	drInfos, err := m.GetEndpoint().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpoint().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "endpoint." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetIngressRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIngressRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("ingress_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {

@@ -431,28 +431,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_VesIoSystemSrv6NetworkSliceReadWrite:
-		if fv, exists := v.FldValidators["choice.ves_io_system_srv6_network_slice_read_write"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VesIoSystemSrv6NetworkSliceReadWrite).VesIoSystemSrv6NetworkSliceReadWrite
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("ves_io_system_srv6_network_slice_read_write"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VesIoSystemVirtualNetworkReadWrite:
-		if fv, exists := v.FldValidators["choice.ves_io_system_virtual_network_read_write"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VesIoSystemVirtualNetworkReadWrite).VesIoSystemVirtualNetworkReadWrite
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("ves_io_system_virtual_network_read_write"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *APIGroupChoice_VesIoUamAdminRead:
 		if fv, exists := v.FldValidators["choice.ves_io_uam_admin_read"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_VesIoUamAdminRead).VesIoUamAdminRead
@@ -580,6 +558,28 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("ves_io_tenant_owner_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VesIoStoredObjectRead:
+		if fv, exists := v.FldValidators["choice.ves_io_stored_object_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VesIoStoredObjectRead).VesIoStoredObjectRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_stored_object_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VesIoStoredObjectWrite:
+		if fv, exists := v.FldValidators["choice.ves_io_stored_object_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VesIoStoredObjectWrite).VesIoStoredObjectWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_stored_object_write"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

@@ -51,6 +51,7 @@ type GlobalSpecType struct {
 	// Types that are valid to be assigned to ClientChoice:
 	//	*GlobalSpecType_AnyClient
 	//	*GlobalSpecType_ClientName
+	//	*GlobalSpecType_IpThreatCategoryList
 	//	*GlobalSpecType_ClientSelector
 	//	*GlobalSpecType_ClientNameMatcher
 	ClientChoice isGlobalSpecType_ClientChoice `protobuf_oneof:"client_choice"`
@@ -263,6 +264,21 @@ type GlobalSpecType struct {
 	// Target of the GOTO_POLICY action.
 	// The target policy must be part of the current policy set and must be after the current policy in the policy set.
 	GotoPolicy []*schema.ObjectRefType `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	// Shape Content Rewrite Action
+	//
+	// x-displayName: "Shape Content Rewrite Action Type"
+	// Rewrite HTML response action to insert HTML content such as Javascript <script> tags into the HTML document
+	ContentRewriteAction *policy.ContentRewriteAction `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
+	// Shape Protected Endpoint Action
+	//
+	// x-displayName: "Shape Protected Endpoint Action"
+	// Shape Protected Endpoint Action that include application traffic type and mitigation
+	ShapeProtectedEndpointAction *policy.ShapeProtectedEndpointAction `protobuf:"bytes,57,opt,name=shape_protected_endpoint_action,json=shapeProtectedEndpointAction,proto3" json:"shape_protected_endpoint_action,omitempty"`
+	// Bot Action
+	//
+	// x-displayName: "Bot Action"
+	// Bot action to be enforced if the input request matches the rule.
+	BotAction *policy.BotAction `protobuf:"bytes,58,opt,name=bot_action,json=botAction,proto3" json:"bot_action,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -330,6 +346,9 @@ type GlobalSpecType_AnyClient struct {
 type GlobalSpecType_ClientName struct {
 	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof" json:"client_name,omitempty"`
 }
+type GlobalSpecType_IpThreatCategoryList struct {
+	IpThreatCategoryList *IPThreatCategoryListType `protobuf:"bytes,59,opt,name=ip_threat_category_list,json=ipThreatCategoryList,proto3,oneof" json:"ip_threat_category_list,omitempty"`
+}
 type GlobalSpecType_ClientSelector struct {
 	ClientSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,proto3,oneof" json:"client_selector,omitempty"`
 }
@@ -373,22 +392,23 @@ type GlobalSpecType_DstAsnMatcher struct {
 	DstAsnMatcher *policy.AsnMatcherType `protobuf:"bytes,53,opt,name=dst_asn_matcher,json=dstAsnMatcher,proto3,oneof" json:"dst_asn_matcher,omitempty"`
 }
 
-func (*GlobalSpecType_AnyClient) isGlobalSpecType_ClientChoice()         {}
-func (*GlobalSpecType_ClientName) isGlobalSpecType_ClientChoice()        {}
-func (*GlobalSpecType_ClientSelector) isGlobalSpecType_ClientChoice()    {}
-func (*GlobalSpecType_ClientNameMatcher) isGlobalSpecType_ClientChoice() {}
-func (*GlobalSpecType_AnyIp) isGlobalSpecType_IpChoice()                 {}
-func (*GlobalSpecType_IpPrefixList) isGlobalSpecType_IpChoice()          {}
-func (*GlobalSpecType_IpMatcher) isGlobalSpecType_IpChoice()             {}
-func (*GlobalSpecType_AnyDstIp) isGlobalSpecType_DstIpChoice()           {}
-func (*GlobalSpecType_DstIpPrefixList) isGlobalSpecType_DstIpChoice()    {}
-func (*GlobalSpecType_DstIpMatcher) isGlobalSpecType_DstIpChoice()       {}
-func (*GlobalSpecType_AnyAsn) isGlobalSpecType_AsnChoice()               {}
-func (*GlobalSpecType_AsnList) isGlobalSpecType_AsnChoice()              {}
-func (*GlobalSpecType_AsnMatcher) isGlobalSpecType_AsnChoice()           {}
-func (*GlobalSpecType_AnyDstAsn) isGlobalSpecType_DstAsnChoice()         {}
-func (*GlobalSpecType_DstAsnList) isGlobalSpecType_DstAsnChoice()        {}
-func (*GlobalSpecType_DstAsnMatcher) isGlobalSpecType_DstAsnChoice()     {}
+func (*GlobalSpecType_AnyClient) isGlobalSpecType_ClientChoice()            {}
+func (*GlobalSpecType_ClientName) isGlobalSpecType_ClientChoice()           {}
+func (*GlobalSpecType_IpThreatCategoryList) isGlobalSpecType_ClientChoice() {}
+func (*GlobalSpecType_ClientSelector) isGlobalSpecType_ClientChoice()       {}
+func (*GlobalSpecType_ClientNameMatcher) isGlobalSpecType_ClientChoice()    {}
+func (*GlobalSpecType_AnyIp) isGlobalSpecType_IpChoice()                    {}
+func (*GlobalSpecType_IpPrefixList) isGlobalSpecType_IpChoice()             {}
+func (*GlobalSpecType_IpMatcher) isGlobalSpecType_IpChoice()                {}
+func (*GlobalSpecType_AnyDstIp) isGlobalSpecType_DstIpChoice()              {}
+func (*GlobalSpecType_DstIpPrefixList) isGlobalSpecType_DstIpChoice()       {}
+func (*GlobalSpecType_DstIpMatcher) isGlobalSpecType_DstIpChoice()          {}
+func (*GlobalSpecType_AnyAsn) isGlobalSpecType_AsnChoice()                  {}
+func (*GlobalSpecType_AsnList) isGlobalSpecType_AsnChoice()                 {}
+func (*GlobalSpecType_AsnMatcher) isGlobalSpecType_AsnChoice()              {}
+func (*GlobalSpecType_AnyDstAsn) isGlobalSpecType_DstAsnChoice()            {}
+func (*GlobalSpecType_DstAsnList) isGlobalSpecType_DstAsnChoice()           {}
+func (*GlobalSpecType_DstAsnMatcher) isGlobalSpecType_DstAsnChoice()        {}
 
 func (m *GlobalSpecType) GetClientChoice() isGlobalSpecType_ClientChoice {
 	if m != nil {
@@ -440,6 +460,13 @@ func (m *GlobalSpecType) GetClientName() string {
 		return x.ClientName
 	}
 	return ""
+}
+
+func (m *GlobalSpecType) GetIpThreatCategoryList() *IPThreatCategoryListType {
+	if x, ok := m.GetClientChoice().(*GlobalSpecType_IpThreatCategoryList); ok {
+		return x.IpThreatCategoryList
+	}
+	return nil
 }
 
 func (m *GlobalSpecType) GetClientSelector() *schema.LabelSelectorType {
@@ -715,11 +742,33 @@ func (m *GlobalSpecType) GetGotoPolicy() []*schema.ObjectRefType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetContentRewriteAction() *policy.ContentRewriteAction {
+	if m != nil {
+		return m.ContentRewriteAction
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetShapeProtectedEndpointAction() *policy.ShapeProtectedEndpointAction {
+	if m != nil {
+		return m.ShapeProtectedEndpointAction
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetBotAction() *policy.BotAction {
+	if m != nil {
+		return m.BotAction
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_AnyClient)(nil),
 		(*GlobalSpecType_ClientName)(nil),
+		(*GlobalSpecType_IpThreatCategoryList)(nil),
 		(*GlobalSpecType_ClientSelector)(nil),
 		(*GlobalSpecType_ClientNameMatcher)(nil),
 		(*GlobalSpecType_AnyIp)(nil),
@@ -737,6 +786,54 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// IP Threat Category List Type
+//
+// x-displayName: "IP Threat Category List Type"
+// List of ip threat categories
+type IPThreatCategoryListType struct {
+	// IP Threat Categories
+	//
+	// x-displayName: "List of IP Threat Categories to choose"
+	// x-required
+	// The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions
+	IpThreatCategories []policy.IPThreatCategory `protobuf:"varint,25,rep,packed,name=ip_threat_categories,json=ipThreatCategories,proto3,enum=ves.io.schema.policy.IPThreatCategory" json:"ip_threat_categories,omitempty"`
+}
+
+func (m *IPThreatCategoryListType) Reset()      { *m = IPThreatCategoryListType{} }
+func (*IPThreatCategoryListType) ProtoMessage() {}
+func (*IPThreatCategoryListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_771e54eb594e8c4b, []int{1}
+}
+func (m *IPThreatCategoryListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPThreatCategoryListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *IPThreatCategoryListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPThreatCategoryListType.Merge(m, src)
+}
+func (m *IPThreatCategoryListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPThreatCategoryListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPThreatCategoryListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPThreatCategoryListType proto.InternalMessageInfo
+
+func (m *IPThreatCategoryListType) GetIpThreatCategories() []policy.IPThreatCategory {
+	if m != nil {
+		return m.IpThreatCategories
+	}
+	return nil
+}
+
 // Create service policy rule
 //
 // x-displayName: "Create Service Policy Rule"
@@ -746,6 +843,7 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to ClientChoice:
 	//	*CreateSpecType_AnyClient
 	//	*CreateSpecType_ClientName
+	//	*CreateSpecType_IpThreatCategoryList
 	//	*CreateSpecType_ClientSelector
 	//	*CreateSpecType_ClientNameMatcher
 	ClientChoice   isCreateSpecType_ClientChoice       `protobuf_oneof:"client_choice"`
@@ -775,30 +873,33 @@ type CreateSpecType struct {
 	//	*CreateSpecType_AnyDstAsn
 	//	*CreateSpecType_DstAsnList
 	//	*CreateSpecType_DstAsnMatcher
-	DstAsnChoice                  isCreateSpecType_DstAsnChoice     `protobuf_oneof:"dst_asn_choice"`
-	ApiGroupMatcher               *policy.StringMatcherType         `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
-	PortMatcher                   *policy.PortMatcherType           `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
-	ExpirationTimestamp           *types.Timestamp                  `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
-	BodyMatcher                   *policy.MatcherType               `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
-	ArgMatchers                   []*policy.ArgMatcherType          `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
-	CookieMatchers                []*policy.CookieMatcherType       `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
-	WafAction                     *policy.WafAction                 `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
-	DomainMatcher                 *policy.MatcherTypeBasic          `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
-	RateLimiter                   []*schema.ObjectRefType           `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
-	VirtualHostMatcher            *policy.MatcherTypeBasic          `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
-	TlsFingerprintMatcher         *policy.TlsFingerprintMatcherType `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
-	MaliciousUserMitigationBypass *schema.Empty                     `protobuf:"bytes,28,opt,name=malicious_user_mitigation_bypass,json=maliciousUserMitigationBypass,proto3" json:"malicious_user_mitigation_bypass,omitempty"`
-	Scheme                        []string                          `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
-	UrlMatcher                    *policy.URLMatcherType            `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
-	L4DestMatcher                 *policy.L4DestMatcherType         `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
-	ChallengeAction               policy.ChallengeAction            `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
-	GotoPolicy                    []*schema.ObjectRefType           `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	DstAsnChoice                  isCreateSpecType_DstAsnChoice        `protobuf_oneof:"dst_asn_choice"`
+	ApiGroupMatcher               *policy.StringMatcherType            `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
+	PortMatcher                   *policy.PortMatcherType              `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
+	ExpirationTimestamp           *types.Timestamp                     `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
+	BodyMatcher                   *policy.MatcherType                  `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
+	ArgMatchers                   []*policy.ArgMatcherType             `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
+	CookieMatchers                []*policy.CookieMatcherType          `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
+	WafAction                     *policy.WafAction                    `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
+	DomainMatcher                 *policy.MatcherTypeBasic             `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
+	RateLimiter                   []*schema.ObjectRefType              `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
+	VirtualHostMatcher            *policy.MatcherTypeBasic             `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
+	TlsFingerprintMatcher         *policy.TlsFingerprintMatcherType    `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
+	MaliciousUserMitigationBypass *schema.Empty                        `protobuf:"bytes,28,opt,name=malicious_user_mitigation_bypass,json=maliciousUserMitigationBypass,proto3" json:"malicious_user_mitigation_bypass,omitempty"`
+	Scheme                        []string                             `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
+	UrlMatcher                    *policy.URLMatcherType               `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
+	L4DestMatcher                 *policy.L4DestMatcherType            `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
+	ChallengeAction               policy.ChallengeAction               `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
+	GotoPolicy                    []*schema.ObjectRefType              `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	ContentRewriteAction          *policy.ContentRewriteAction         `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
+	ShapeProtectedEndpointAction  *policy.ShapeProtectedEndpointAction `protobuf:"bytes,57,opt,name=shape_protected_endpoint_action,json=shapeProtectedEndpointAction,proto3" json:"shape_protected_endpoint_action,omitempty"`
+	BotAction                     *policy.BotAction                    `protobuf:"bytes,58,opt,name=bot_action,json=botAction,proto3" json:"bot_action,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_771e54eb594e8c4b, []int{1}
+	return fileDescriptor_771e54eb594e8c4b, []int{2}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -860,6 +961,9 @@ type CreateSpecType_AnyClient struct {
 type CreateSpecType_ClientName struct {
 	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof" json:"client_name,omitempty"`
 }
+type CreateSpecType_IpThreatCategoryList struct {
+	IpThreatCategoryList *IPThreatCategoryListType `protobuf:"bytes,59,opt,name=ip_threat_category_list,json=ipThreatCategoryList,proto3,oneof" json:"ip_threat_category_list,omitempty"`
+}
 type CreateSpecType_ClientSelector struct {
 	ClientSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,proto3,oneof" json:"client_selector,omitempty"`
 }
@@ -903,22 +1007,23 @@ type CreateSpecType_DstAsnMatcher struct {
 	DstAsnMatcher *policy.AsnMatcherType `protobuf:"bytes,53,opt,name=dst_asn_matcher,json=dstAsnMatcher,proto3,oneof" json:"dst_asn_matcher,omitempty"`
 }
 
-func (*CreateSpecType_AnyClient) isCreateSpecType_ClientChoice()         {}
-func (*CreateSpecType_ClientName) isCreateSpecType_ClientChoice()        {}
-func (*CreateSpecType_ClientSelector) isCreateSpecType_ClientChoice()    {}
-func (*CreateSpecType_ClientNameMatcher) isCreateSpecType_ClientChoice() {}
-func (*CreateSpecType_AnyIp) isCreateSpecType_IpChoice()                 {}
-func (*CreateSpecType_IpPrefixList) isCreateSpecType_IpChoice()          {}
-func (*CreateSpecType_IpMatcher) isCreateSpecType_IpChoice()             {}
-func (*CreateSpecType_AnyDstIp) isCreateSpecType_DstIpChoice()           {}
-func (*CreateSpecType_DstIpPrefixList) isCreateSpecType_DstIpChoice()    {}
-func (*CreateSpecType_DstIpMatcher) isCreateSpecType_DstIpChoice()       {}
-func (*CreateSpecType_AnyAsn) isCreateSpecType_AsnChoice()               {}
-func (*CreateSpecType_AsnList) isCreateSpecType_AsnChoice()              {}
-func (*CreateSpecType_AsnMatcher) isCreateSpecType_AsnChoice()           {}
-func (*CreateSpecType_AnyDstAsn) isCreateSpecType_DstAsnChoice()         {}
-func (*CreateSpecType_DstAsnList) isCreateSpecType_DstAsnChoice()        {}
-func (*CreateSpecType_DstAsnMatcher) isCreateSpecType_DstAsnChoice()     {}
+func (*CreateSpecType_AnyClient) isCreateSpecType_ClientChoice()            {}
+func (*CreateSpecType_ClientName) isCreateSpecType_ClientChoice()           {}
+func (*CreateSpecType_IpThreatCategoryList) isCreateSpecType_ClientChoice() {}
+func (*CreateSpecType_ClientSelector) isCreateSpecType_ClientChoice()       {}
+func (*CreateSpecType_ClientNameMatcher) isCreateSpecType_ClientChoice()    {}
+func (*CreateSpecType_AnyIp) isCreateSpecType_IpChoice()                    {}
+func (*CreateSpecType_IpPrefixList) isCreateSpecType_IpChoice()             {}
+func (*CreateSpecType_IpMatcher) isCreateSpecType_IpChoice()                {}
+func (*CreateSpecType_AnyDstIp) isCreateSpecType_DstIpChoice()              {}
+func (*CreateSpecType_DstIpPrefixList) isCreateSpecType_DstIpChoice()       {}
+func (*CreateSpecType_DstIpMatcher) isCreateSpecType_DstIpChoice()          {}
+func (*CreateSpecType_AnyAsn) isCreateSpecType_AsnChoice()                  {}
+func (*CreateSpecType_AsnList) isCreateSpecType_AsnChoice()                 {}
+func (*CreateSpecType_AsnMatcher) isCreateSpecType_AsnChoice()              {}
+func (*CreateSpecType_AnyDstAsn) isCreateSpecType_DstAsnChoice()            {}
+func (*CreateSpecType_DstAsnList) isCreateSpecType_DstAsnChoice()           {}
+func (*CreateSpecType_DstAsnMatcher) isCreateSpecType_DstAsnChoice()        {}
 
 func (m *CreateSpecType) GetClientChoice() isCreateSpecType_ClientChoice {
 	if m != nil {
@@ -970,6 +1075,13 @@ func (m *CreateSpecType) GetClientName() string {
 		return x.ClientName
 	}
 	return ""
+}
+
+func (m *CreateSpecType) GetIpThreatCategoryList() *IPThreatCategoryListType {
+	if x, ok := m.GetClientChoice().(*CreateSpecType_IpThreatCategoryList); ok {
+		return x.IpThreatCategoryList
+	}
+	return nil
 }
 
 func (m *CreateSpecType) GetClientSelector() *schema.LabelSelectorType {
@@ -1238,11 +1350,33 @@ func (m *CreateSpecType) GetGotoPolicy() []*schema.ObjectRefType {
 	return nil
 }
 
+func (m *CreateSpecType) GetContentRewriteAction() *policy.ContentRewriteAction {
+	if m != nil {
+		return m.ContentRewriteAction
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetShapeProtectedEndpointAction() *policy.ShapeProtectedEndpointAction {
+	if m != nil {
+		return m.ShapeProtectedEndpointAction
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetBotAction() *policy.BotAction {
+	if m != nil {
+		return m.BotAction
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_AnyClient)(nil),
 		(*CreateSpecType_ClientName)(nil),
+		(*CreateSpecType_IpThreatCategoryList)(nil),
 		(*CreateSpecType_ClientSelector)(nil),
 		(*CreateSpecType_ClientNameMatcher)(nil),
 		(*CreateSpecType_AnyIp)(nil),
@@ -1269,6 +1403,7 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to ClientChoice:
 	//	*ReplaceSpecType_AnyClient
 	//	*ReplaceSpecType_ClientName
+	//	*ReplaceSpecType_IpThreatCategoryList
 	//	*ReplaceSpecType_ClientSelector
 	//	*ReplaceSpecType_ClientNameMatcher
 	ClientChoice   isReplaceSpecType_ClientChoice      `protobuf_oneof:"client_choice"`
@@ -1298,30 +1433,33 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_AnyDstAsn
 	//	*ReplaceSpecType_DstAsnList
 	//	*ReplaceSpecType_DstAsnMatcher
-	DstAsnChoice                  isReplaceSpecType_DstAsnChoice    `protobuf_oneof:"dst_asn_choice"`
-	ApiGroupMatcher               *policy.StringMatcherType         `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
-	PortMatcher                   *policy.PortMatcherType           `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
-	ExpirationTimestamp           *types.Timestamp                  `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
-	BodyMatcher                   *policy.MatcherType               `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
-	ArgMatchers                   []*policy.ArgMatcherType          `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
-	CookieMatchers                []*policy.CookieMatcherType       `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
-	WafAction                     *policy.WafAction                 `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
-	DomainMatcher                 *policy.MatcherTypeBasic          `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
-	RateLimiter                   []*schema.ObjectRefType           `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
-	VirtualHostMatcher            *policy.MatcherTypeBasic          `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
-	TlsFingerprintMatcher         *policy.TlsFingerprintMatcherType `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
-	MaliciousUserMitigationBypass *schema.Empty                     `protobuf:"bytes,28,opt,name=malicious_user_mitigation_bypass,json=maliciousUserMitigationBypass,proto3" json:"malicious_user_mitigation_bypass,omitempty"`
-	Scheme                        []string                          `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
-	UrlMatcher                    *policy.URLMatcherType            `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
-	L4DestMatcher                 *policy.L4DestMatcherType         `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
-	ChallengeAction               policy.ChallengeAction            `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
-	GotoPolicy                    []*schema.ObjectRefType           `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	DstAsnChoice                  isReplaceSpecType_DstAsnChoice       `protobuf_oneof:"dst_asn_choice"`
+	ApiGroupMatcher               *policy.StringMatcherType            `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
+	PortMatcher                   *policy.PortMatcherType              `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
+	ExpirationTimestamp           *types.Timestamp                     `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
+	BodyMatcher                   *policy.MatcherType                  `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
+	ArgMatchers                   []*policy.ArgMatcherType             `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
+	CookieMatchers                []*policy.CookieMatcherType          `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
+	WafAction                     *policy.WafAction                    `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
+	DomainMatcher                 *policy.MatcherTypeBasic             `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
+	RateLimiter                   []*schema.ObjectRefType              `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
+	VirtualHostMatcher            *policy.MatcherTypeBasic             `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
+	TlsFingerprintMatcher         *policy.TlsFingerprintMatcherType    `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
+	MaliciousUserMitigationBypass *schema.Empty                        `protobuf:"bytes,28,opt,name=malicious_user_mitigation_bypass,json=maliciousUserMitigationBypass,proto3" json:"malicious_user_mitigation_bypass,omitempty"`
+	Scheme                        []string                             `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
+	UrlMatcher                    *policy.URLMatcherType               `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
+	L4DestMatcher                 *policy.L4DestMatcherType            `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
+	ChallengeAction               policy.ChallengeAction               `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
+	GotoPolicy                    []*schema.ObjectRefType              `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	ContentRewriteAction          *policy.ContentRewriteAction         `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
+	ShapeProtectedEndpointAction  *policy.ShapeProtectedEndpointAction `protobuf:"bytes,57,opt,name=shape_protected_endpoint_action,json=shapeProtectedEndpointAction,proto3" json:"shape_protected_endpoint_action,omitempty"`
+	BotAction                     *policy.BotAction                    `protobuf:"bytes,58,opt,name=bot_action,json=botAction,proto3" json:"bot_action,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_771e54eb594e8c4b, []int{2}
+	return fileDescriptor_771e54eb594e8c4b, []int{3}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1383,6 +1521,9 @@ type ReplaceSpecType_AnyClient struct {
 type ReplaceSpecType_ClientName struct {
 	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof" json:"client_name,omitempty"`
 }
+type ReplaceSpecType_IpThreatCategoryList struct {
+	IpThreatCategoryList *IPThreatCategoryListType `protobuf:"bytes,59,opt,name=ip_threat_category_list,json=ipThreatCategoryList,proto3,oneof" json:"ip_threat_category_list,omitempty"`
+}
 type ReplaceSpecType_ClientSelector struct {
 	ClientSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,proto3,oneof" json:"client_selector,omitempty"`
 }
@@ -1426,22 +1567,23 @@ type ReplaceSpecType_DstAsnMatcher struct {
 	DstAsnMatcher *policy.AsnMatcherType `protobuf:"bytes,53,opt,name=dst_asn_matcher,json=dstAsnMatcher,proto3,oneof" json:"dst_asn_matcher,omitempty"`
 }
 
-func (*ReplaceSpecType_AnyClient) isReplaceSpecType_ClientChoice()         {}
-func (*ReplaceSpecType_ClientName) isReplaceSpecType_ClientChoice()        {}
-func (*ReplaceSpecType_ClientSelector) isReplaceSpecType_ClientChoice()    {}
-func (*ReplaceSpecType_ClientNameMatcher) isReplaceSpecType_ClientChoice() {}
-func (*ReplaceSpecType_AnyIp) isReplaceSpecType_IpChoice()                 {}
-func (*ReplaceSpecType_IpPrefixList) isReplaceSpecType_IpChoice()          {}
-func (*ReplaceSpecType_IpMatcher) isReplaceSpecType_IpChoice()             {}
-func (*ReplaceSpecType_AnyDstIp) isReplaceSpecType_DstIpChoice()           {}
-func (*ReplaceSpecType_DstIpPrefixList) isReplaceSpecType_DstIpChoice()    {}
-func (*ReplaceSpecType_DstIpMatcher) isReplaceSpecType_DstIpChoice()       {}
-func (*ReplaceSpecType_AnyAsn) isReplaceSpecType_AsnChoice()               {}
-func (*ReplaceSpecType_AsnList) isReplaceSpecType_AsnChoice()              {}
-func (*ReplaceSpecType_AsnMatcher) isReplaceSpecType_AsnChoice()           {}
-func (*ReplaceSpecType_AnyDstAsn) isReplaceSpecType_DstAsnChoice()         {}
-func (*ReplaceSpecType_DstAsnList) isReplaceSpecType_DstAsnChoice()        {}
-func (*ReplaceSpecType_DstAsnMatcher) isReplaceSpecType_DstAsnChoice()     {}
+func (*ReplaceSpecType_AnyClient) isReplaceSpecType_ClientChoice()            {}
+func (*ReplaceSpecType_ClientName) isReplaceSpecType_ClientChoice()           {}
+func (*ReplaceSpecType_IpThreatCategoryList) isReplaceSpecType_ClientChoice() {}
+func (*ReplaceSpecType_ClientSelector) isReplaceSpecType_ClientChoice()       {}
+func (*ReplaceSpecType_ClientNameMatcher) isReplaceSpecType_ClientChoice()    {}
+func (*ReplaceSpecType_AnyIp) isReplaceSpecType_IpChoice()                    {}
+func (*ReplaceSpecType_IpPrefixList) isReplaceSpecType_IpChoice()             {}
+func (*ReplaceSpecType_IpMatcher) isReplaceSpecType_IpChoice()                {}
+func (*ReplaceSpecType_AnyDstIp) isReplaceSpecType_DstIpChoice()              {}
+func (*ReplaceSpecType_DstIpPrefixList) isReplaceSpecType_DstIpChoice()       {}
+func (*ReplaceSpecType_DstIpMatcher) isReplaceSpecType_DstIpChoice()          {}
+func (*ReplaceSpecType_AnyAsn) isReplaceSpecType_AsnChoice()                  {}
+func (*ReplaceSpecType_AsnList) isReplaceSpecType_AsnChoice()                 {}
+func (*ReplaceSpecType_AsnMatcher) isReplaceSpecType_AsnChoice()              {}
+func (*ReplaceSpecType_AnyDstAsn) isReplaceSpecType_DstAsnChoice()            {}
+func (*ReplaceSpecType_DstAsnList) isReplaceSpecType_DstAsnChoice()           {}
+func (*ReplaceSpecType_DstAsnMatcher) isReplaceSpecType_DstAsnChoice()        {}
 
 func (m *ReplaceSpecType) GetClientChoice() isReplaceSpecType_ClientChoice {
 	if m != nil {
@@ -1493,6 +1635,13 @@ func (m *ReplaceSpecType) GetClientName() string {
 		return x.ClientName
 	}
 	return ""
+}
+
+func (m *ReplaceSpecType) GetIpThreatCategoryList() *IPThreatCategoryListType {
+	if x, ok := m.GetClientChoice().(*ReplaceSpecType_IpThreatCategoryList); ok {
+		return x.IpThreatCategoryList
+	}
+	return nil
 }
 
 func (m *ReplaceSpecType) GetClientSelector() *schema.LabelSelectorType {
@@ -1761,11 +1910,33 @@ func (m *ReplaceSpecType) GetGotoPolicy() []*schema.ObjectRefType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetContentRewriteAction() *policy.ContentRewriteAction {
+	if m != nil {
+		return m.ContentRewriteAction
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetShapeProtectedEndpointAction() *policy.ShapeProtectedEndpointAction {
+	if m != nil {
+		return m.ShapeProtectedEndpointAction
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetBotAction() *policy.BotAction {
+	if m != nil {
+		return m.BotAction
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_AnyClient)(nil),
 		(*ReplaceSpecType_ClientName)(nil),
+		(*ReplaceSpecType_IpThreatCategoryList)(nil),
 		(*ReplaceSpecType_ClientSelector)(nil),
 		(*ReplaceSpecType_ClientNameMatcher)(nil),
 		(*ReplaceSpecType_AnyIp)(nil),
@@ -1792,6 +1963,7 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to ClientChoice:
 	//	*GetSpecType_AnyClient
 	//	*GetSpecType_ClientName
+	//	*GetSpecType_IpThreatCategoryList
 	//	*GetSpecType_ClientSelector
 	//	*GetSpecType_ClientNameMatcher
 	ClientChoice   isGetSpecType_ClientChoice          `protobuf_oneof:"client_choice"`
@@ -1821,30 +1993,33 @@ type GetSpecType struct {
 	//	*GetSpecType_AnyDstAsn
 	//	*GetSpecType_DstAsnList
 	//	*GetSpecType_DstAsnMatcher
-	DstAsnChoice                  isGetSpecType_DstAsnChoice        `protobuf_oneof:"dst_asn_choice"`
-	ApiGroupMatcher               *policy.StringMatcherType         `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
-	PortMatcher                   *policy.PortMatcherType           `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
-	ExpirationTimestamp           *types.Timestamp                  `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
-	BodyMatcher                   *policy.MatcherType               `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
-	ArgMatchers                   []*policy.ArgMatcherType          `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
-	CookieMatchers                []*policy.CookieMatcherType       `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
-	WafAction                     *policy.WafAction                 `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
-	DomainMatcher                 *policy.MatcherTypeBasic          `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
-	RateLimiter                   []*schema.ObjectRefType           `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
-	VirtualHostMatcher            *policy.MatcherTypeBasic          `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
-	TlsFingerprintMatcher         *policy.TlsFingerprintMatcherType `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
-	MaliciousUserMitigationBypass *schema.Empty                     `protobuf:"bytes,28,opt,name=malicious_user_mitigation_bypass,json=maliciousUserMitigationBypass,proto3" json:"malicious_user_mitigation_bypass,omitempty"`
-	Scheme                        []string                          `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
-	UrlMatcher                    *policy.URLMatcherType            `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
-	L4DestMatcher                 *policy.L4DestMatcherType         `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
-	ChallengeAction               policy.ChallengeAction            `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
-	GotoPolicy                    []*schema.ObjectRefType           `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	DstAsnChoice                  isGetSpecType_DstAsnChoice           `protobuf_oneof:"dst_asn_choice"`
+	ApiGroupMatcher               *policy.StringMatcherType            `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
+	PortMatcher                   *policy.PortMatcherType              `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
+	ExpirationTimestamp           *types.Timestamp                     `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
+	BodyMatcher                   *policy.MatcherType                  `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
+	ArgMatchers                   []*policy.ArgMatcherType             `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
+	CookieMatchers                []*policy.CookieMatcherType          `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
+	WafAction                     *policy.WafAction                    `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
+	DomainMatcher                 *policy.MatcherTypeBasic             `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
+	RateLimiter                   []*schema.ObjectRefType              `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
+	VirtualHostMatcher            *policy.MatcherTypeBasic             `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
+	TlsFingerprintMatcher         *policy.TlsFingerprintMatcherType    `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
+	MaliciousUserMitigationBypass *schema.Empty                        `protobuf:"bytes,28,opt,name=malicious_user_mitigation_bypass,json=maliciousUserMitigationBypass,proto3" json:"malicious_user_mitigation_bypass,omitempty"`
+	Scheme                        []string                             `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
+	UrlMatcher                    *policy.URLMatcherType               `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
+	L4DestMatcher                 *policy.L4DestMatcherType            `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
+	ChallengeAction               policy.ChallengeAction               `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
+	GotoPolicy                    []*schema.ObjectRefType              `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	ContentRewriteAction          *policy.ContentRewriteAction         `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
+	ShapeProtectedEndpointAction  *policy.ShapeProtectedEndpointAction `protobuf:"bytes,57,opt,name=shape_protected_endpoint_action,json=shapeProtectedEndpointAction,proto3" json:"shape_protected_endpoint_action,omitempty"`
+	BotAction                     *policy.BotAction                    `protobuf:"bytes,58,opt,name=bot_action,json=botAction,proto3" json:"bot_action,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_771e54eb594e8c4b, []int{3}
+	return fileDescriptor_771e54eb594e8c4b, []int{4}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1906,6 +2081,9 @@ type GetSpecType_AnyClient struct {
 type GetSpecType_ClientName struct {
 	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof" json:"client_name,omitempty"`
 }
+type GetSpecType_IpThreatCategoryList struct {
+	IpThreatCategoryList *IPThreatCategoryListType `protobuf:"bytes,59,opt,name=ip_threat_category_list,json=ipThreatCategoryList,proto3,oneof" json:"ip_threat_category_list,omitempty"`
+}
 type GetSpecType_ClientSelector struct {
 	ClientSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,proto3,oneof" json:"client_selector,omitempty"`
 }
@@ -1949,22 +2127,23 @@ type GetSpecType_DstAsnMatcher struct {
 	DstAsnMatcher *policy.AsnMatcherType `protobuf:"bytes,53,opt,name=dst_asn_matcher,json=dstAsnMatcher,proto3,oneof" json:"dst_asn_matcher,omitempty"`
 }
 
-func (*GetSpecType_AnyClient) isGetSpecType_ClientChoice()         {}
-func (*GetSpecType_ClientName) isGetSpecType_ClientChoice()        {}
-func (*GetSpecType_ClientSelector) isGetSpecType_ClientChoice()    {}
-func (*GetSpecType_ClientNameMatcher) isGetSpecType_ClientChoice() {}
-func (*GetSpecType_AnyIp) isGetSpecType_IpChoice()                 {}
-func (*GetSpecType_IpPrefixList) isGetSpecType_IpChoice()          {}
-func (*GetSpecType_IpMatcher) isGetSpecType_IpChoice()             {}
-func (*GetSpecType_AnyDstIp) isGetSpecType_DstIpChoice()           {}
-func (*GetSpecType_DstIpPrefixList) isGetSpecType_DstIpChoice()    {}
-func (*GetSpecType_DstIpMatcher) isGetSpecType_DstIpChoice()       {}
-func (*GetSpecType_AnyAsn) isGetSpecType_AsnChoice()               {}
-func (*GetSpecType_AsnList) isGetSpecType_AsnChoice()              {}
-func (*GetSpecType_AsnMatcher) isGetSpecType_AsnChoice()           {}
-func (*GetSpecType_AnyDstAsn) isGetSpecType_DstAsnChoice()         {}
-func (*GetSpecType_DstAsnList) isGetSpecType_DstAsnChoice()        {}
-func (*GetSpecType_DstAsnMatcher) isGetSpecType_DstAsnChoice()     {}
+func (*GetSpecType_AnyClient) isGetSpecType_ClientChoice()            {}
+func (*GetSpecType_ClientName) isGetSpecType_ClientChoice()           {}
+func (*GetSpecType_IpThreatCategoryList) isGetSpecType_ClientChoice() {}
+func (*GetSpecType_ClientSelector) isGetSpecType_ClientChoice()       {}
+func (*GetSpecType_ClientNameMatcher) isGetSpecType_ClientChoice()    {}
+func (*GetSpecType_AnyIp) isGetSpecType_IpChoice()                    {}
+func (*GetSpecType_IpPrefixList) isGetSpecType_IpChoice()             {}
+func (*GetSpecType_IpMatcher) isGetSpecType_IpChoice()                {}
+func (*GetSpecType_AnyDstIp) isGetSpecType_DstIpChoice()              {}
+func (*GetSpecType_DstIpPrefixList) isGetSpecType_DstIpChoice()       {}
+func (*GetSpecType_DstIpMatcher) isGetSpecType_DstIpChoice()          {}
+func (*GetSpecType_AnyAsn) isGetSpecType_AsnChoice()                  {}
+func (*GetSpecType_AsnList) isGetSpecType_AsnChoice()                 {}
+func (*GetSpecType_AsnMatcher) isGetSpecType_AsnChoice()              {}
+func (*GetSpecType_AnyDstAsn) isGetSpecType_DstAsnChoice()            {}
+func (*GetSpecType_DstAsnList) isGetSpecType_DstAsnChoice()           {}
+func (*GetSpecType_DstAsnMatcher) isGetSpecType_DstAsnChoice()        {}
 
 func (m *GetSpecType) GetClientChoice() isGetSpecType_ClientChoice {
 	if m != nil {
@@ -2016,6 +2195,13 @@ func (m *GetSpecType) GetClientName() string {
 		return x.ClientName
 	}
 	return ""
+}
+
+func (m *GetSpecType) GetIpThreatCategoryList() *IPThreatCategoryListType {
+	if x, ok := m.GetClientChoice().(*GetSpecType_IpThreatCategoryList); ok {
+		return x.IpThreatCategoryList
+	}
+	return nil
 }
 
 func (m *GetSpecType) GetClientSelector() *schema.LabelSelectorType {
@@ -2284,11 +2470,33 @@ func (m *GetSpecType) GetGotoPolicy() []*schema.ObjectRefType {
 	return nil
 }
 
+func (m *GetSpecType) GetContentRewriteAction() *policy.ContentRewriteAction {
+	if m != nil {
+		return m.ContentRewriteAction
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetShapeProtectedEndpointAction() *policy.ShapeProtectedEndpointAction {
+	if m != nil {
+		return m.ShapeProtectedEndpointAction
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetBotAction() *policy.BotAction {
+	if m != nil {
+		return m.BotAction
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_AnyClient)(nil),
 		(*GetSpecType_ClientName)(nil),
+		(*GetSpecType_IpThreatCategoryList)(nil),
 		(*GetSpecType_ClientSelector)(nil),
 		(*GetSpecType_ClientNameMatcher)(nil),
 		(*GetSpecType_AnyIp)(nil),
@@ -2361,7 +2569,7 @@ type ChallengeRuleSpec struct {
 func (m *ChallengeRuleSpec) Reset()      { *m = ChallengeRuleSpec{} }
 func (*ChallengeRuleSpec) ProtoMessage() {}
 func (*ChallengeRuleSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_771e54eb594e8c4b, []int{4}
+	return fileDescriptor_771e54eb594e8c4b, []int{5}
 }
 func (m *ChallengeRuleSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2695,7 +2903,7 @@ type RateLimiterRuleSpec struct {
 func (m *RateLimiterRuleSpec) Reset()      { *m = RateLimiterRuleSpec{} }
 func (*RateLimiterRuleSpec) ProtoMessage() {}
 func (*RateLimiterRuleSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_771e54eb594e8c4b, []int{5}
+	return fileDescriptor_771e54eb594e8c4b, []int{6}
 }
 func (m *RateLimiterRuleSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2809,6 +3017,8 @@ func (*RateLimiterRuleSpec) XXX_OneofWrappers() []interface{} {
 func init() {
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.service_policy_rule.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.service_policy_rule.GlobalSpecType")
+	proto.RegisterType((*IPThreatCategoryListType)(nil), "ves.io.schema.service_policy_rule.IPThreatCategoryListType")
+	golang_proto.RegisterType((*IPThreatCategoryListType)(nil), "ves.io.schema.service_policy_rule.IPThreatCategoryListType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.service_policy_rule.CreateSpecType")
 	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.service_policy_rule.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.service_policy_rule.ReplaceSpecType")
@@ -2829,182 +3039,199 @@ func init() {
 }
 
 var fileDescriptor_771e54eb594e8c4b = []byte{
-	// 2800 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x9c, 0xcf, 0x6f, 0xdb, 0x46,
-	0xda, 0xc7, 0x3d, 0x92, 0x6c, 0xcb, 0x23, 0x59, 0xa2, 0x69, 0x27, 0x65, 0x5c, 0x57, 0x51, 0xd4,
-	0x38, 0x75, 0x1b, 0x5a, 0xb6, 0x7e, 0xd8, 0x49, 0xfb, 0xa2, 0xed, 0x1b, 0xd9, 0x4d, 0x14, 0xd5,
-	0x4e, 0x5c, 0xda, 0x6d, 0xd2, 0xbe, 0xed, 0xab, 0x1d, 0x53, 0x63, 0x89, 0x2d, 0x25, 0x32, 0x24,
-	0xe5, 0xd4, 0x58, 0x04, 0x5b, 0xe4, 0xb0, 0xe7, 0x45, 0x81, 0xbd, 0xf4, 0x2f, 0x58, 0x14, 0x58,
-	0x2c, 0xb0, 0xc0, 0xee, 0x61, 0xd5, 0x83, 0x51, 0x60, 0x81, 0x62, 0x4f, 0x39, 0x06, 0x8b, 0x3d,
-	0xb4, 0xce, 0xa5, 0x7b, 0xeb, 0x39, 0xa7, 0x05, 0x87, 0x3f, 0x44, 0x4a, 0x94, 0x2a, 0x4b, 0x5e,
-	0x60, 0xb1, 0xe0, 0x29, 0x22, 0xe7, 0x79, 0xbe, 0x33, 0xcf, 0x70, 0x38, 0xf3, 0x7c, 0x98, 0x19,
-	0xc3, 0xe5, 0x43, 0xac, 0xa6, 0x05, 0x69, 0x45, 0xe5, 0x6b, 0xb8, 0x8e, 0x56, 0x54, 0xac, 0x1c,
-	0x0a, 0x3c, 0x2e, 0xcb, 0x92, 0x28, 0xf0, 0x47, 0x65, 0xa5, 0x29, 0xe2, 0x15, 0xed, 0x48, 0xc6,
-	0x6a, 0x5a, 0x56, 0x24, 0x4d, 0xa2, 0x2f, 0x19, 0xe6, 0x69, 0xc3, 0x3c, 0xed, 0x61, 0x3e, 0xbf,
-	0x5c, 0x15, 0xb4, 0x5a, 0x73, 0x3f, 0xcd, 0x4b, 0xf5, 0x95, 0xaa, 0x54, 0x95, 0x56, 0x88, 0xe7,
-	0x7e, 0xf3, 0x80, 0x5c, 0x91, 0x0b, 0xf2, 0xcb, 0x50, 0x9c, 0xbf, 0x58, 0x95, 0xa4, 0xaa, 0x88,
-	0xdb, 0x56, 0x9a, 0x50, 0xc7, 0xaa, 0x86, 0xea, 0xb2, 0x69, 0xf0, 0xa2, 0xbb, 0x85, 0x92, 0xac,
-	0x09, 0x52, 0xc3, 0x6c, 0xcf, 0x7c, 0xd2, 0x5d, 0x68, 0xb4, 0xc3, 0xd9, 0xe2, 0xf9, 0x0b, 0x6e,
-	0x0b, 0x67, 0xd1, 0x82, 0xbb, 0xe8, 0x10, 0x89, 0x42, 0x05, 0x69, 0xd8, 0x5b, 0xfa, 0x50, 0xc0,
-	0x0f, 0xcb, 0xee, 0xca, 0x2f, 0x76, 0x5b, 0xa8, 0xce, 0x0a, 0x52, 0x7f, 0x48, 0xc0, 0xd8, 0x2d,
-	0x51, 0xda, 0x47, 0xe2, 0xae, 0x8c, 0xf9, 0xbd, 0x23, 0x19, 0xd3, 0x05, 0x38, 0x81, 0x78, 0x5d,
-	0x84, 0x01, 0x49, 0xb0, 0x14, 0xcb, 0x26, 0xd3, 0xee, 0x1e, 0x35, 0x22, 0x48, 0x73, 0x4d, 0x11,
-	0xdf, 0x20, 0x76, 0x85, 0xf0, 0xdf, 0x5b, 0x20, 0xb4, 0xf9, 0xce, 0x9d, 0x0f, 0x39, 0xd3, 0x93,
-	0x5e, 0x83, 0x10, 0x35, 0x8e, 0xca, 0xbc, 0x28, 0xe0, 0x86, 0xc6, 0x2c, 0x26, 0xc1, 0x52, 0x24,
-	0x3b, 0xd7, 0xa1, 0xf3, 0x4e, 0x5d, 0xd6, 0x8e, 0x8a, 0x63, 0xdc, 0x14, 0x6a, 0x1c, 0x6d, 0x10,
-	0x43, 0x7a, 0x19, 0x46, 0x0c, 0x97, 0x72, 0x03, 0xd5, 0x31, 0x13, 0x48, 0x82, 0xa5, 0xa9, 0x02,
-	0xfc, 0xcb, 0x3f, 0x8f, 0x83, 0xe3, 0x4a, 0x70, 0xe9, 0x8b, 0x40, 0x71, 0x8c, 0x83, 0x86, 0xc1,
-	0x1d, 0x54, 0xc7, 0xf4, 0x07, 0x30, 0x6e, 0x9a, 0xab, 0x58, 0xc4, 0xbc, 0x26, 0x29, 0x4c, 0x90,
-	0x54, 0xd5, 0xd9, 0xe4, 0x2d, 0xb4, 0x8f, 0xc5, 0x5d, 0xd3, 0x46, 0x0f, 0xb2, 0x30, 0xf5, 0xd5,
-	0x37, 0x60, 0x1c, 0x06, 0x41, 0x20, 0x58, 0x1c, 0xe3, 0x62, 0x86, 0x8a, 0x65, 0x40, 0xef, 0xc2,
-	0x59, 0x47, 0x33, 0xca, 0x75, 0xa4, 0xf1, 0x35, 0xac, 0x30, 0x90, 0x68, 0x5f, 0xf2, 0xee, 0x8e,
-	0x6d, 0xc3, 0x48, 0x17, 0x2f, 0x8e, 0x71, 0x33, 0xed, 0x56, 0x9a, 0x05, 0xf4, 0x5d, 0x3b, 0x36,
-	0x45, 0x12, 0x31, 0x33, 0x45, 0xc4, 0x16, 0x7b, 0xf4, 0xad, 0x24, 0x62, 0x87, 0x60, 0x61, 0xf2,
-	0xe9, 0x23, 0xf0, 0x63, 0x0b, 0x00, 0x2b, 0x7a, 0xbd, 0x9c, 0xfe, 0x08, 0xc6, 0xf5, 0xc1, 0x8d,
-	0x95, 0x76, 0xf4, 0xcb, 0x03, 0x46, 0x1f, 0x37, 0xf5, 0xbe, 0xfa, 0x06, 0x84, 0x60, 0x00, 0x04,
-	0xb8, 0x98, 0xa1, 0xe4, 0xe8, 0x81, 0x69, 0x51, 0xf7, 0xb2, 0x63, 0x0f, 0x11, 0xe5, 0x8b, 0x5e,
-	0xca, 0xce, 0x86, 0x4e, 0xff, 0x64, 0xa8, 0x1a, 0x5d, 0xcb, 0x45, 0x45, 0x87, 0x01, 0xfd, 0x3a,
-	0x0c, 0xc9, 0x48, 0xab, 0x31, 0xe3, 0xfd, 0x42, 0xdf, 0x41, 0x5a, 0xcd, 0xa1, 0xc8, 0x11, 0x17,
-	0x7a, 0x1b, 0x4e, 0xd6, 0x30, 0xaa, 0x60, 0x45, 0x65, 0x26, 0x92, 0xc1, 0xa5, 0x48, 0xf6, 0x15,
-	0x6f, 0xef, 0x22, 0x31, 0x72, 0xb6, 0xc8, 0x18, 0x3d, 0x5f, 0x82, 0x00, 0x45, 0x71, 0x96, 0x06,
-	0xfd, 0xff, 0x30, 0xfa, 0xa0, 0x89, 0x95, 0xa3, 0xb2, 0x8c, 0x14, 0x54, 0x57, 0x99, 0x49, 0xa2,
-	0xb9, 0xe2, 0xad, 0xf9, 0x9e, 0x6e, 0xb9, 0xa3, 0x1b, 0x62, 0xad, 0xb7, 0x76, 0xe4, 0x81, 0x6d,
-	0xa6, 0xd2, 0x5b, 0x30, 0x52, 0xd3, 0x34, 0xb9, 0x5c, 0xc7, 0x5a, 0x4d, 0xaa, 0x30, 0x61, 0x12,
-	0xf0, 0xd5, 0x1e, 0x4d, 0xd6, 0x34, 0x79, 0x9b, 0xd8, 0x39, 0xc3, 0x86, 0x35, 0xfb, 0x36, 0xbd,
-	0x0c, 0x27, 0xf4, 0x97, 0x49, 0x90, 0x99, 0x8b, 0x7d, 0x5e, 0x24, 0xc0, 0x8d, 0xa3, 0xc6, 0xd1,
-	0x6d, 0x99, 0xde, 0x86, 0x31, 0x41, 0x2e, 0xcb, 0x0a, 0x3e, 0x10, 0x3e, 0x2f, 0x8b, 0x82, 0xaa,
-	0x31, 0xc9, 0xbe, 0x1d, 0x4e, 0x0c, 0x49, 0xdd, 0x5b, 0x82, 0xaa, 0x15, 0x01, 0x17, 0x15, 0x64,
-	0xe3, 0xa6, 0x7e, 0x4d, 0x6f, 0x42, 0x28, 0xc8, 0xf6, 0x38, 0x88, 0x12, 0xa9, 0x97, 0xbd, 0xa5,
-	0x6e, 0xcb, 0xce, 0xb7, 0x00, 0x70, 0x53, 0x82, 0x75, 0x83, 0x7e, 0xd3, 0x98, 0x10, 0x2a, 0xaa,
-	0xa6, 0xc7, 0xf1, 0x6a, 0xef, 0x38, 0xec, 0xb1, 0x5e, 0x0c, 0x70, 0x61, 0xd4, 0x38, 0xda, 0x54,
-	0xb5, 0xdb, 0x32, 0xfd, 0x09, 0xa4, 0x0d, 0x57, 0x57, 0x5c, 0xaf, 0x9d, 0x22, 0x2e, 0xa7, 0x6e,
-	0xbc, 0xa2, 0x8b, 0x3a, 0x62, 0xdc, 0x83, 0x31, 0x53, 0xde, 0x8a, 0xf3, 0xea, 0xc0, 0x71, 0x3a,
-	0x85, 0xa3, 0x44, 0xd8, 0x8a, 0x79, 0x05, 0x4e, 0xea, 0x31, 0x23, 0xb5, 0xc1, 0xa4, 0xfa, 0x3c,
-	0xb8, 0x20, 0xa7, 0x3f, 0xde, 0x1b, 0x6a, 0x83, 0x7e, 0x1b, 0x86, 0x91, 0xda, 0x30, 0x62, 0x7b,
-	0x99, 0x78, 0xa4, 0xbc, 0x1b, 0x70, 0x43, 0x6d, 0xb4, 0x1f, 0x58, 0x90, 0x9b, 0x44, 0x6a, 0x83,
-	0xc4, 0x71, 0x0b, 0x46, 0x74, 0x01, 0x2b, 0x88, 0x69, 0xa2, 0x71, 0xb9, 0xbf, 0x86, 0xf9, 0xb4,
-	0x82, 0x1c, 0x44, 0xf6, 0x1d, 0xfa, 0x6d, 0x18, 0xb1, 0x1e, 0x97, 0xde, 0xfc, 0xdc, 0x20, 0xcf,
-	0x2b, 0x44, 0x66, 0xf2, 0x4d, 0x55, 0xd3, 0x43, 0xb9, 0x0b, 0xa3, 0xa6, 0xb3, 0x11, 0x4e, 0x7e,
-	0xd0, 0x70, 0x9c, 0x7a, 0xb0, 0x42, 0xc4, 0x48, 0x68, 0xf7, 0x60, 0xdc, 0x12, 0xb4, 0xc2, 0x5b,
-	0x1b, 0x3c, 0x3c, 0xa7, 0xea, 0xb4, 0xa1, 0x6a, 0x85, 0xfa, 0x31, 0x9c, 0x41, 0xb2, 0x50, 0xae,
-	0x2a, 0x52, 0xb3, 0xfd, 0xf8, 0x63, 0x44, 0xba, 0xc7, 0x24, 0xb3, 0xab, 0x29, 0x42, 0xa3, 0xea,
-	0x39, 0x3f, 0xc7, 0x91, 0x2c, 0xdc, 0xd2, 0x95, 0x2c, 0xf5, 0xf7, 0x60, 0x54, 0x96, 0x14, 0xcd,
-	0x16, 0x8e, 0xf7, 0x1d, 0xb2, 0x92, 0xa2, 0x79, 0xca, 0x46, 0xe4, 0x76, 0x09, 0xbd, 0x0b, 0xe7,
-	0xf0, 0xe7, 0xb2, 0xa0, 0x20, 0x7d, 0xa5, 0x2d, 0xdb, 0xb9, 0x08, 0x43, 0x11, 0xe9, 0xf9, 0xb4,
-	0x91, 0xad, 0xa4, 0xad, 0x6c, 0x25, 0xbd, 0x67, 0x59, 0x14, 0x42, 0xc7, 0xba, 0xd8, 0x6c, 0xdb,
-	0xdb, 0x2e, 0xa2, 0x4b, 0x30, 0xba, 0x2f, 0x55, 0x8e, 0xec, 0x76, 0x9e, 0x1b, 0x70, 0xad, 0x33,
-	0x35, 0x23, 0xba, 0xb3, 0xd5, 0xc0, 0x7b, 0x30, 0x8a, 0x94, 0xaa, 0x25, 0xa5, 0x32, 0x34, 0x99,
-	0x5d, 0x7b, 0x3d, 0x27, 0xc5, 0xd5, 0x93, 0x31, 0x5d, 0xce, 0x39, 0xad, 0x22, 0xbb, 0x5c, 0xa5,
-	0x7f, 0x01, 0xe3, 0xbc, 0x24, 0x7d, 0x26, 0xe0, 0xb6, 0xf6, 0x6c, 0xbf, 0xd5, 0x60, 0x83, 0x18,
-	0xf7, 0x93, 0x8f, 0xf1, 0x4e, 0x13, 0x95, 0x2e, 0x42, 0xf8, 0x10, 0x1d, 0x94, 0xcd, 0xfc, 0x67,
-	0xce, 0x73, 0xd1, 0x33, 0xc5, 0xef, 0xa1, 0x03, 0x2b, 0xfd, 0xd1, 0x45, 0xf5, 0x85, 0x8f, 0x9b,
-	0x7a, 0x68, 0xdd, 0xa4, 0x8b, 0x30, 0x56, 0x91, 0xea, 0x48, 0x68, 0x0f, 0xd7, 0xf3, 0x03, 0x76,
-	0x29, 0x37, 0x6d, 0x38, 0x5a, 0xdd, 0x89, 0x60, 0x54, 0x41, 0x1a, 0x2e, 0x8b, 0x42, 0x5d, 0xd0,
-	0xb0, 0xc2, 0xbc, 0x40, 0x42, 0x5e, 0xe8, 0xd0, 0xb9, 0xbb, 0xff, 0x29, 0xe6, 0x35, 0x0e, 0x1f,
-	0x90, 0x38, 0x93, 0x5f, 0x3f, 0x72, 0x39, 0x99, 0x03, 0xc9, 0x8e, 0x3c, 0xc0, 0x45, 0xf4, 0xe2,
-	0x2d, 0xa3, 0x94, 0xfe, 0x18, 0xce, 0x1d, 0x0a, 0x8a, 0xd6, 0x44, 0x62, 0xb9, 0x26, 0xa9, 0xed,
-	0xd1, 0xca, 0x0c, 0x3a, 0x0a, 0xec, 0x91, 0x4a, 0x9b, 0x3a, 0x45, 0x49, 0xb5, 0x07, 0xec, 0xaf,
-	0x01, 0x7c, 0x41, 0x13, 0xd5, 0xf2, 0x81, 0xd0, 0xa8, 0x62, 0x45, 0x56, 0x84, 0x46, 0xbb, 0x86,
-	0x0b, 0xa4, 0x86, 0x1e, 0x2b, 0xef, 0x9e, 0xa8, 0xde, 0x6c, 0xfb, 0x38, 0xeb, 0x7b, 0x49, 0xef,
-	0xf2, 0x27, 0x2d, 0x00, 0x4e, 0xbe, 0xff, 0x6b, 0x90, 0xfa, 0xea, 0x1b, 0x10, 0x55, 0x6b, 0x48,
-	0xc1, 0x15, 0x36, 0xd9, 0x54, 0xb1, 0xc2, 0x9d, 0xd3, 0xbc, 0x3c, 0xe9, 0x3a, 0xa4, 0x0e, 0x24,
-	0xe5, 0x21, 0x52, 0x2a, 0x42, 0xa3, 0x5a, 0xe6, 0x45, 0xa4, 0xaa, 0xcc, 0xfc, 0x00, 0xbd, 0x79,
-	0xf9, 0xeb, 0x47, 0x5d, 0x8e, 0x9d, 0x3d, 0x1a, 0xe4, 0xe2, 0x6d, 0x93, 0x0d, 0xdd, 0x82, 0x3e,
-	0x80, 0xc9, 0x3a, 0x12, 0x05, 0x5e, 0x90, 0x9a, 0x6a, 0x59, 0x6f, 0x57, 0xb9, 0x2e, 0x68, 0x42,
-	0xd5, 0x78, 0x6f, 0xf7, 0x8f, 0x64, 0xbd, 0xfa, 0x85, 0x01, 0x66, 0x56, 0xee, 0x25, 0x5b, 0xe6,
-	0x7d, 0x15, 0x2b, 0xdb, 0xb6, 0x48, 0x81, 0x68, 0xd0, 0x55, 0x38, 0x41, 0xfc, 0x30, 0x73, 0x25,
-	0x19, 0x5c, 0x9a, 0x2a, 0xdc, 0x75, 0xb4, 0x6d, 0xe5, 0x4b, 0xc0, 0xa6, 0x5e, 0x53, 0x96, 0xb8,
-	0x2b, 0xff, 0x97, 0xba, 0x71, 0xe7, 0xc3, 0x14, 0x9b, 0x4c, 0x15, 0xf7, 0xf6, 0x76, 0xac, 0x7f,
-	0x77, 0xf5, 0x1f, 0x7b, 0x1b, 0xe4, 0x7a, 0x6f, 0x6b, 0x37, 0xf5, 0x89, 0x1d, 0x4f, 0xc8, 0xfa,
-	0xc5, 0x00, 0xce, 0x94, 0xa7, 0xef, 0xc0, 0x48, 0x53, 0x69, 0xe7, 0x84, 0xaf, 0xf4, 0x9b, 0x7f,
-	0xdf, 0xe7, 0xb6, 0xbc, 0x33, 0xd8, 0xa6, 0x62, 0x27, 0x84, 0xf7, 0x61, 0x5c, 0xcc, 0x97, 0x2b,
-	0xd8, 0x31, 0xe2, 0xd8, 0x7e, 0x13, 0xef, 0x56, 0x7e, 0x13, 0xab, 0xde, 0x33, 0xe4, 0xb4, 0xe8,
-	0x2c, 0xa3, 0x3f, 0x84, 0x14, 0x5f, 0x43, 0xa2, 0x88, 0x1b, 0x55, 0x6c, 0xbd, 0xcd, 0xeb, 0x84,
-	0x66, 0x7a, 0x4c, 0xbd, 0x1b, 0x96, 0xb5, 0xf9, 0x4e, 0xb7, 0x67, 0x74, 0xde, 0x5d, 0x42, 0x23,
-	0x18, 0xa9, 0x4a, 0x9a, 0x64, 0x02, 0x25, 0x73, 0x6d, 0x80, 0xf1, 0x93, 0xfa, 0xfa, 0x51, 0xcc,
-	0xcd, 0xa1, 0x9d, 0xa3, 0x07, 0x70, 0x50, 0x17, 0xdd, 0x21, 0x85, 0x6f, 0xfc, 0xea, 0xdb, 0x16,
-	0xf8, 0x25, 0x8c, 0xc3, 0x09, 0xb3, 0xca, 0xf1, 0x0c, 0x9b, 0xcc, 0xae, 0xc2, 0x0b, 0x70, 0xd2,
-	0xe0, 0x24, 0x95, 0x8e, 0xe5, 0xd6, 0xd9, 0x64, 0x6e, 0x95, 0x4d, 0xe6, 0x72, 0x6c, 0x32, 0xbb,
-	0x06, 0xa7, 0xe1, 0xe4, 0x2e, 0xc9, 0xe0, 0x55, 0x3a, 0x90, 0xcd, 0xc2, 0x2b, 0x70, 0x9a, 0xc3,
-	0x0f, 0x9a, 0x58, 0xd5, 0x92, 0xa4, 0x47, 0xe8, 0x73, 0xd7, 0xd9, 0xe4, 0x1a, 0x9b, 0xbc, 0xc6,
-	0x26, 0xd7, 0xd9, 0x64, 0xe6, 0x75, 0x36, 0x73, 0x9d, 0x4d, 0x66, 0x33, 0xf0, 0x3c, 0x8c, 0xdd,
-	0xa8, 0x1c, 0xa2, 0x06, 0x8f, 0x2b, 0xa6, 0x61, 0x28, 0xcf, 0x66, 0xd6, 0x0b, 0x57, 0xe0, 0xb4,
-	0xc9, 0x2a, 0x7c, 0x4d, 0x12, 0x78, 0x4c, 0x9f, 0x3b, 0x6e, 0x81, 0xc5, 0x27, 0x2d, 0x70, 0xf9,
-	0xa4, 0x05, 0xa6, 0x72, 0xd7, 0xd8, 0x2c, 0x9b, 0x59, 0x65, 0x73, 0x85, 0x45, 0x38, 0x25, 0xc8,
-	0x96, 0x0d, 0x73, 0xdc, 0x02, 0x17, 0xbf, 0x33, 0xde, 0xcb, 0xc4, 0x49, 0x0b, 0x84, 0x73, 0x19,
-	0x36, 0x97, 0x65, 0x33, 0xd9, 0xc2, 0x32, 0x9c, 0x36, 0xd3, 0x2b, 0xd3, 0x74, 0xe1, 0xb8, 0x05,
-	0x5e, 0x35, 0x4d, 0x97, 0x74, 0xd3, 0x7c, 0x86, 0xcd, 0x67, 0xd9, 0x7c, 0x4e, 0x9f, 0x45, 0x0b,
-	0xeb, 0x50, 0x4f, 0x45, 0x2c, 0xdb, 0xa5, 0xe3, 0x16, 0x48, 0x99, 0xb6, 0x97, 0x88, 0x6c, 0x9e,
-	0xcd, 0xad, 0xb1, 0x99, 0xdc, 0xe3, 0x8e, 0xb7, 0xbe, 0x90, 0x36, 0xb2, 0x38, 0x87, 0xaf, 0x5e,
-	0x4f, 0xce, 0xf4, 0xcd, 0xea, 0xbe, 0x6b, 0x19, 0x76, 0x2d, 0xcb, 0xae, 0x91, 0x7a, 0x4a, 0xa1,
-	0xf0, 0x65, 0x6a, 0xb1, 0x14, 0x0a, 0x47, 0xa8, 0x68, 0x29, 0x14, 0x4e, 0x50, 0x17, 0x4b, 0xa1,
-	0xf0, 0x12, 0xf5, 0x6a, 0x29, 0x14, 0xbe, 0x44, 0xa5, 0x4a, 0xa1, 0x70, 0x96, 0xca, 0x95, 0x42,
-	0xe1, 0x19, 0x8a, 0x2e, 0x85, 0xc2, 0x2f, 0x52, 0x0b, 0xa5, 0x50, 0xf8, 0x25, 0x2a, 0x91, 0xfa,
-	0x13, 0x03, 0x63, 0x1b, 0x0a, 0x46, 0x1a, 0xb6, 0x89, 0xf9, 0xfa, 0x69, 0x89, 0x79, 0x54, 0x4e,
-	0xbe, 0xe4, 0xc1, 0xc9, 0x1d, 0x6c, 0xfc, 0xee, 0xd0, 0x6c, 0xec, 0x01, 0xc4, 0xf7, 0xfb, 0x01,
-	0xf1, 0x95, 0x9f, 0x5f, 0x1e, 0x90, 0x2a, 0xf0, 0xde, 0x54, 0x7c, 0x73, 0x78, 0x2a, 0x76, 0xc1,
-	0xf0, 0xed, 0xa1, 0x61, 0xb8, 0x8b, 0x7d, 0x37, 0x87, 0x63, 0xdf, 0xb3, 0x83, 0xdd, 0x1b, 0xc3,
-	0xc2, 0x6e, 0x1b, 0x70, 0xb9, 0x33, 0x01, 0x5c, 0x1f, 0x6a, 0xfb, 0x43, 0x6d, 0x7e, 0x50, 0xa8,
-	0x75, 0xb1, 0xec, 0xde, 0xc8, 0x2c, 0xeb, 0x85, 0xb0, 0xef, 0x8e, 0x80, 0xb0, 0xff, 0x4d, 0xe4,
-	0xba, 0x3e, 0x30, 0xb9, 0xba, 0x81, 0xf5, 0xe6, 0xb0, 0xc0, 0xda, 0xc1, 0xa9, 0x77, 0x46, 0xe2,
-	0xd4, 0x6e, 0x3c, 0xdd, 0x1d, 0x1d, 0x4f, 0xbb, 0xa9, 0xb4, 0x38, 0x02, 0x95, 0xba, 0x61, 0x74,
-	0x7b, 0x58, 0x18, 0xf5, 0xc6, 0xd0, 0xcd, 0x21, 0x31, 0xd4, 0x0d, 0xa0, 0xb7, 0x86, 0x07, 0x50,
-	0x37, 0x70, 0xee, 0x8c, 0x0a, 0x9c, 0x5d, 0x80, 0xf9, 0xd6, 0x10, 0x80, 0xe9, 0xc4, 0xca, 0xed,
-	0x1e, 0x58, 0x39, 0xe0, 0x22, 0xdc, 0xc9, 0x96, 0x6f, 0x9f, 0x9e, 0x2d, 0xdd, 0xe4, 0x78, 0xbf,
-	0x2f, 0x39, 0x0e, 0xda, 0x2a, 0x2f, 0x6a, 0xac, 0x9e, 0x35, 0x34, 0xf6, 0xa2, 0xc2, 0x4f, 0x46,
-	0xc3, 0xb4, 0x9f, 0xa3, 0xb3, 0xf3, 0x6e, 0x3a, 0xb3, 0x61, 0xea, 0x9d, 0xa1, 0x61, 0xca, 0xc5,
-	0x50, 0x77, 0x47, 0x65, 0xa8, 0x4e, 0x74, 0xda, 0x19, 0x11, 0x9d, 0xba, 0x89, 0xe9, 0xcd, 0x53,
-	0x13, 0x93, 0x8b, 0x86, 0x66, 0xfe, 0xf6, 0x56, 0xc7, 0x7f, 0x51, 0x15, 0x52, 0x9d, 0x7c, 0x32,
-	0xf3, 0xf8, 0x39, 0x70, 0xdf, 0x2a, 0xcc, 0x3b, 0xd9, 0x64, 0xfa, 0xf1, 0x73, 0xd0, 0xbe, 0xd4,
-	0xfd, 0xdd, 0x40, 0x42, 0xfc, 0x5d, 0xb7, 0x0a, 0x0b, 0x2e, 0x0a, 0x89, 0x3d, 0x7e, 0x0e, 0x1c,
-	0xd7, 0x85, 0xcb, 0x5d, 0xac, 0x41, 0x3f, 0x7e, 0x0e, 0x3a, 0xee, 0xd9, 0x6c, 0x31, 0x43, 0xd1,
-	0xa9, 0x3f, 0x33, 0x30, 0xce, 0x61, 0x59, 0x44, 0xbc, 0x0f, 0x0e, 0x3e, 0x38, 0xf8, 0xe0, 0xe0,
-	0x83, 0x83, 0x0f, 0x0e, 0x3e, 0x38, 0xf8, 0xe0, 0xe0, 0x83, 0x83, 0x0f, 0x0e, 0x3e, 0x38, 0xf8,
-	0xe0, 0xe0, 0x83, 0x43, 0x0f, 0x70, 0xf8, 0x23, 0x03, 0x23, 0xb7, 0xb0, 0xe6, 0x43, 0x83, 0x0f,
-	0x0d, 0x3e, 0x34, 0xf8, 0xd0, 0xe0, 0x43, 0x83, 0x0f, 0x0d, 0x3e, 0x34, 0xf8, 0xd0, 0xe0, 0x43,
-	0x83, 0x0f, 0x0d, 0x3e, 0x34, 0xf8, 0xd0, 0xe0, 0x0d, 0x0d, 0xff, 0xa0, 0xe0, 0x8c, 0xdd, 0x55,
-	0x3a, 0x0a, 0xe8, 0xd1, 0xd0, 0x1b, 0x70, 0xa6, 0x22, 0xa8, 0x68, 0x5f, 0xc4, 0x65, 0xbb, 0xdb,
-	0x48, 0x3e, 0xdf, 0x9b, 0x03, 0x28, 0xd3, 0xc1, 0x16, 0xa3, 0x3f, 0x80, 0x2f, 0xe2, 0x06, 0xd1,
-	0xf8, 0x14, 0x1d, 0x22, 0x95, 0x57, 0x04, 0x59, 0x73, 0xc8, 0x05, 0xfb, 0xca, 0x5d, 0x30, 0x5c,
-	0x4b, 0xb6, 0x67, 0x5b, 0x77, 0x07, 0x32, 0xa6, 0x2e, 0x8f, 0x64, 0x8d, 0xaf, 0x21, 0x87, 0x68,
-	0xa8, 0xaf, 0xe8, 0x79, 0xc3, 0x6f, 0xc3, 0x70, 0x6b, 0x2b, 0xfe, 0x27, 0x65, 0x7d, 0x97, 0x86,
-	0xcc, 0xfa, 0x1c, 0xc9, 0x51, 0xff, 0x94, 0xcf, 0x2b, 0x39, 0x7a, 0x6d, 0xe0, 0xb4, 0x22, 0xd0,
-	0x33, 0x39, 0xba, 0x7a, 0x8a, 0x7c, 0x22, 0xe0, 0x4a, 0x8e, 0xba, 0x57, 0x8f, 0xf1, 0x51, 0x56,
-	0x0f, 0x8b, 0x71, 0x26, 0x46, 0x3a, 0x3e, 0x34, 0x79, 0x06, 0xc7, 0x87, 0xce, 0x96, 0x4d, 0x1e,
-	0xf4, 0x5e, 0x7a, 0xe0, 0x70, 0xbb, 0xa3, 0xc3, 0xd6, 0xee, 0xe8, 0x5e, 0x8b, 0x50, 0xe7, 0xf9,
-	0xa7, 0xc8, 0x19, 0x9f, 0x7f, 0xea, 0x3c, 0x4d, 0x10, 0x3d, 0xc3, 0xd3, 0x04, 0xd3, 0xff, 0xc6,
-	0xd3, 0x04, 0xb1, 0xb3, 0x3d, 0x4d, 0xf0, 0x3f, 0xae, 0xef, 0x2d, 0x54, 0x9f, 0xad, 0xde, 0x24,
-	0xee, 0x62, 0xd0, 0xf9, 0xd5, 0x25, 0xef, 0xfe, 0xea, 0x32, 0x43, 0xce, 0x42, 0xce, 0x38, 0x37,
-	0x0e, 0x1b, 0x47, 0x22, 0x83, 0xae, 0x0f, 0x31, 0xf7, 0xbb, 0x3f, 0xc4, 0xd0, 0x03, 0x1e, 0x0a,
-	0x8c, 0x1c, 0x1b, 0x67, 0xf7, 0x82, 0x10, 0xe8, 0xaa, 0x9d, 0x5f, 0x65, 0x3e, 0xf6, 0xfe, 0x2a,
-	0x33, 0x7b, 0xda, 0x23, 0x02, 0xc5, 0xa0, 0xd7, 0x97, 0x99, 0x5e, 0x99, 0xfd, 0xdc, 0x50, 0x99,
-	0xfd, 0x1b, 0x87, 0x5d, 0xab, 0xf8, 0xb7, 0x2d, 0x80, 0x60, 0xc4, 0xde, 0x52, 0x0d, 0x32, 0xf0,
-	0x7c, 0x7b, 0x3b, 0x75, 0x24, 0xb7, 0xca, 0xe6, 0x57, 0xd9, 0xcc, 0x1a, 0x9b, 0x59, 0x85, 0x97,
-	0x3b, 0x37, 0x4f, 0xcf, 0xae, 0xb1, 0xeb, 0xec, 0x35, 0xf6, 0x3a, 0x9b, 0xc9, 0xb0, 0x99, 0x2c,
-	0x9b, 0xc9, 0xb1, 0x99, 0x3c, 0x9c, 0xeb, 0xda, 0x3a, 0x1d, 0xc8, 0xae, 0x16, 0x16, 0xbb, 0xd3,
-	0x19, 0x7a, 0xe6, 0xb8, 0x05, 0x02, 0xe4, 0xac, 0x42, 0x0b, 0x8c, 0x67, 0xd9, 0x1c, 0x9b, 0x2f,
-	0x64, 0x9d, 0xd9, 0xc2, 0xa2, 0xf7, 0xbe, 0xe9, 0x5c, 0xce, 0x9d, 0x45, 0xe4, 0x5d, 0x19, 0xc2,
-	0x95, 0x5e, 0x3b, 0xa8, 0x3b, 0x32, 0x87, 0x6b, 0x9d, 0xb9, 0x8b, 0xee, 0x48, 0x99, 0x8e, 0x71,
-	0xbd, 0x45, 0x99, 0x75, 0x36, 0x73, 0xbd, 0x2b, 0xa1, 0x29, 0x85, 0xc2, 0x80, 0x0a, 0x74, 0x6c,
-	0x8b, 0x9e, 0xa2, 0x60, 0x29, 0x14, 0x8e, 0x53, 0x54, 0xea, 0xf7, 0xe3, 0x70, 0x96, 0x6b, 0x27,
-	0xe6, 0x76, 0x82, 0x71, 0x13, 0xce, 0x1a, 0x39, 0x6c, 0xd9, 0x95, 0xe8, 0xf7, 0xcf, 0x09, 0x66,
-	0x0c, 0x17, 0x87, 0x1e, 0xbd, 0x09, 0x69, 0x24, 0xcb, 0xe2, 0x91, 0x5b, 0xa6, 0x7f, 0x16, 0x40,
-	0x11, 0x0f, 0xa7, 0x0a, 0x86, 0xb3, 0x7c, 0x53, 0xd5, 0xa4, 0xba, 0x5b, 0x66, 0xdc, 0x73, 0x55,
-	0x24, 0x67, 0xa3, 0x3b, 0x36, 0xee, 0xc7, 0x3b, 0x8e, 0xd1, 0x90, 0xaf, 0x8a, 0x44, 0xd1, 0x59,
-	0x4d, 0xc7, 0x72, 0x30, 0x31, 0xda, 0x72, 0xd0, 0xbd, 0x6a, 0xc2, 0xb3, 0x58, 0x35, 0xc3, 0xa7,
-	0x5f, 0x35, 0xef, 0xb5, 0x57, 0xcd, 0xa9, 0xd3, 0xad, 0x9a, 0x73, 0x9e, 0xc7, 0x48, 0x2c, 0xb5,
-	0x37, 0xfe, 0xd7, 0xeb, 0xed, 0xbc, 0xea, 0x7c, 0x3b, 0xb3, 0x70, 0x01, 0x52, 0x44, 0x31, 0xb9,
-	0xa3, 0xe0, 0x8a, 0xc0, 0x23, 0x0d, 0xab, 0x74, 0x78, 0x9d, 0xcd, 0xac, 0xb2, 0xd7, 0xd9, 0xd7,
-	0xf5, 0x94, 0xda, 0x78, 0xbb, 0xec, 0x94, 0xfa, 0xb8, 0x05, 0x82, 0x4f, 0x5a, 0x20, 0xa0, 0x0f,
-	0xe9, 0x1c, 0x9b, 0x67, 0xd7, 0x4a, 0xa1, 0x70, 0x80, 0x0a, 0x96, 0x42, 0xe1, 0x49, 0x2a, 0x5c,
-	0xf8, 0x2d, 0x78, 0xf2, 0x43, 0x62, 0xec, 0xe9, 0x0f, 0x89, 0xb1, 0x9f, 0x7e, 0x48, 0x80, 0x2f,
-	0x4e, 0x12, 0xe0, 0x77, 0x27, 0x09, 0xf0, 0xdd, 0x49, 0x02, 0x3c, 0x39, 0x49, 0x80, 0xa7, 0x27,
-	0x09, 0xf0, 0xfd, 0x49, 0x02, 0xfc, 0x78, 0x92, 0x18, 0xfb, 0xe9, 0x24, 0x01, 0x7e, 0xf3, 0x2c,
-	0x31, 0x76, 0xfc, 0x2c, 0x01, 0x9e, 0x3c, 0x4b, 0x8c, 0x3d, 0x7d, 0x96, 0x18, 0xfb, 0xe8, 0x5e,
-	0x55, 0x92, 0x3f, 0xab, 0xa6, 0x0f, 0x25, 0x51, 0xc3, 0x8a, 0x82, 0xd2, 0x4d, 0x75, 0x85, 0xfc,
-	0x38, 0x90, 0x94, 0xfa, 0xb2, 0xac, 0x48, 0x87, 0x42, 0x05, 0x2b, 0xcb, 0x56, 0xf1, 0x8a, 0xbc,
-	0x5f, 0x95, 0x56, 0xf0, 0xe7, 0x9a, 0xf5, 0x17, 0x0b, 0x7a, 0xfe, 0xe1, 0x82, 0xfd, 0x09, 0x32,
-	0xa1, 0xe5, 0xfe, 0x15, 0x00, 0x00, 0xff, 0xff, 0xf3, 0xd5, 0xe8, 0xc8, 0xe4, 0x40, 0x00, 0x00,
+	// 3060 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0xcd, 0x6f, 0x1b, 0xc7,
+	0xf9, 0xd6, 0x90, 0x94, 0x44, 0x0d, 0x29, 0x72, 0xb5, 0x52, 0x1c, 0xda, 0x56, 0x28, 0x8a, 0xb1,
+	0x1c, 0xd9, 0x5e, 0x51, 0xe2, 0x87, 0x64, 0xd9, 0x41, 0xe2, 0x9f, 0x29, 0xd9, 0xa6, 0x19, 0xc9,
+	0x56, 0x56, 0xca, 0xcf, 0x4e, 0x9a, 0x94, 0x19, 0x2d, 0x47, 0xe4, 0x26, 0x4b, 0xee, 0x7a, 0x77,
+	0x29, 0x87, 0x28, 0x8c, 0x06, 0x3e, 0xf4, 0xd0, 0x53, 0x11, 0xa0, 0x17, 0xff, 0x05, 0x45, 0x4e,
+	0x3d, 0x97, 0x06, 0x2a, 0x04, 0x08, 0x90, 0xf6, 0xe4, 0xa3, 0x51, 0xf4, 0x90, 0xc8, 0x97, 0xf4,
+	0x96, 0x5e, 0x7d, 0x2a, 0x76, 0xf6, 0x83, 0xbb, 0xe4, 0x92, 0xa6, 0x28, 0x05, 0x68, 0x0a, 0x9e,
+	0x2c, 0xee, 0xbc, 0xef, 0x33, 0xf3, 0xce, 0xce, 0xc7, 0xfb, 0x3c, 0xc6, 0xbb, 0x70, 0x61, 0x1f,
+	0x2b, 0x09, 0x5e, 0x5c, 0x54, 0xb8, 0x32, 0xae, 0xa0, 0x45, 0x05, 0xcb, 0xfb, 0x3c, 0x87, 0x0b,
+	0x92, 0x28, 0xf0, 0x5c, 0xbd, 0x20, 0xd7, 0x04, 0xbc, 0xa8, 0xd6, 0x25, 0xac, 0x24, 0x24, 0x59,
+	0x54, 0x45, 0x7a, 0x56, 0x37, 0x4f, 0xe8, 0xe6, 0x09, 0x17, 0xf3, 0x33, 0x0b, 0x25, 0x5e, 0x2d,
+	0xd7, 0x76, 0x13, 0x9c, 0x58, 0x59, 0x2c, 0x89, 0x25, 0x71, 0x91, 0x78, 0xee, 0xd6, 0xf6, 0xc8,
+	0x2f, 0xf2, 0x83, 0xfc, 0xa5, 0x23, 0x9e, 0x99, 0x29, 0x89, 0x62, 0x49, 0xc0, 0x4d, 0x2b, 0x95,
+	0xaf, 0x60, 0x45, 0x45, 0x15, 0xc9, 0x30, 0x38, 0xeb, 0x1c, 0xa1, 0x28, 0xa9, 0xbc, 0x58, 0x35,
+	0xc6, 0x73, 0x26, 0xe6, 0x6c, 0xd4, 0xc7, 0x61, 0x1f, 0xf1, 0x99, 0xd3, 0x4e, 0x0b, 0x7b, 0xd3,
+	0xb4, 0xb3, 0x69, 0x1f, 0x09, 0x7c, 0x11, 0xa9, 0xd8, 0x1d, 0x7a, 0x9f, 0xc7, 0x0f, 0x0b, 0xce,
+	0xce, 0x67, 0xda, 0x2d, 0x14, 0x7b, 0x07, 0xf1, 0x7f, 0xcf, 0xc2, 0xd0, 0x2d, 0x41, 0xdc, 0x45,
+	0xc2, 0xb6, 0x84, 0xb9, 0x9d, 0xba, 0x84, 0xe9, 0x2c, 0x1c, 0x41, 0x9c, 0x06, 0x12, 0x01, 0x31,
+	0x30, 0x1f, 0x4a, 0xc5, 0x12, 0xce, 0x19, 0xd5, 0x23, 0x48, 0xb0, 0x35, 0x01, 0x5f, 0x27, 0x76,
+	0x59, 0xff, 0x3f, 0x1a, 0xc0, 0xb7, 0x7e, 0xe3, 0xce, 0x87, 0xac, 0xe1, 0x49, 0x2f, 0x43, 0x88,
+	0xaa, 0xf5, 0x02, 0x27, 0xf0, 0xb8, 0xaa, 0x46, 0xe6, 0x62, 0x60, 0x3e, 0x90, 0x9a, 0x6a, 0xc1,
+	0xb9, 0x51, 0x91, 0xd4, 0x7a, 0x6e, 0x88, 0x1d, 0x43, 0xd5, 0xfa, 0x1a, 0x31, 0xa4, 0x17, 0x60,
+	0x40, 0x77, 0x29, 0x54, 0x51, 0x05, 0x47, 0x3c, 0x31, 0x30, 0x3f, 0x96, 0x85, 0x7f, 0xf9, 0xd7,
+	0x81, 0x77, 0x58, 0xf6, 0xce, 0x7f, 0xe9, 0xc9, 0x0d, 0xb1, 0x50, 0x37, 0xb8, 0x83, 0x2a, 0x98,
+	0x7e, 0x04, 0x5f, 0xe7, 0xa5, 0x82, 0x5a, 0x96, 0x31, 0x52, 0x0b, 0x1c, 0x52, 0x71, 0x49, 0x94,
+	0xeb, 0x05, 0x81, 0x57, 0xd4, 0xc8, 0xdb, 0xa4, 0xcb, 0xb7, 0x13, 0xaf, 0x5c, 0x0c, 0x89, 0xdb,
+	0x5b, 0x3b, 0x04, 0x60, 0xcd, 0xf0, 0xdf, 0xe0, 0x15, 0x55, 0x9b, 0x87, 0xec, 0xe8, 0xf3, 0x47,
+	0xe0, 0xc7, 0x06, 0x00, 0xb9, 0x21, 0x76, 0x8a, 0x97, 0xda, 0x8d, 0xe8, 0x7b, 0x30, 0x6c, 0x8c,
+	0x56, 0xc1, 0x02, 0xe6, 0x54, 0x51, 0x8e, 0x78, 0x49, 0xb7, 0xad, 0x33, 0xb6, 0x81, 0x76, 0xb1,
+	0xb0, 0x6d, 0xd8, 0x10, 0x6c, 0xf8, 0xe4, 0x29, 0x18, 0x81, 0x3e, 0xe0, 0xf1, 0xfa, 0x72, 0x43,
+	0x6c, 0x48, 0x87, 0x31, 0x2d, 0xe8, 0x6d, 0x38, 0x69, 0x9b, 0x86, 0x42, 0x05, 0xa9, 0x5c, 0x19,
+	0xcb, 0x11, 0x48, 0xc0, 0x67, 0xdd, 0x5f, 0xc7, 0xa6, 0x6e, 0xa4, 0xa1, 0xe7, 0x86, 0xd8, 0x89,
+	0xe6, 0x2c, 0x19, 0x0d, 0xf4, 0x5d, 0x6b, 0x6e, 0x65, 0x51, 0xc0, 0x91, 0x31, 0x02, 0x36, 0xd7,
+	0xe1, 0xdd, 0x8a, 0x02, 0xb6, 0x01, 0x5a, 0x53, 0x61, 0xce, 0xbe, 0xd6, 0x4e, 0x7f, 0x04, 0xc3,
+	0xda, 0x7c, 0x62, 0xb9, 0x19, 0xfe, 0x42, 0x8f, 0xe1, 0x87, 0x0d, 0xbc, 0x27, 0x4f, 0x81, 0x0f,
+	0x7a, 0x80, 0x87, 0x0d, 0xe9, 0x48, 0xb6, 0x19, 0x18, 0x17, 0x34, 0x2f, 0x2b, 0x76, 0x1f, 0x41,
+	0x9e, 0x71, 0x43, 0xb6, 0x0f, 0x74, 0xfc, 0xc9, 0x53, 0x30, 0x0c, 0xbd, 0xc0, 0xe3, 0xfd, 0xf3,
+	0x53, 0x00, 0xd8, 0xa0, 0x60, 0x33, 0xa0, 0xaf, 0x41, 0x9f, 0x84, 0xd4, 0x72, 0x64, 0xb8, 0x5b,
+	0xe8, 0x5b, 0x48, 0x2d, 0xdb, 0x11, 0x7d, 0xcf, 0xb4, 0xb8, 0x89, 0x23, 0xbd, 0x09, 0x47, 0xcb,
+	0x18, 0x15, 0xb1, 0xac, 0x44, 0x46, 0x62, 0xde, 0xf9, 0x40, 0xea, 0x2d, 0x77, 0x8c, 0x1c, 0x31,
+	0xb2, 0xa3, 0xe8, 0x6b, 0xf8, 0x2b, 0xe0, 0xa1, 0x28, 0xd6, 0xc4, 0xa0, 0x7f, 0x0d, 0x83, 0x0f,
+	0x6a, 0x58, 0xae, 0x17, 0x24, 0x24, 0xa3, 0x8a, 0x12, 0x19, 0x25, 0x98, 0x8b, 0xee, 0x98, 0xef,
+	0x6b, 0x96, 0x5b, 0x9a, 0x21, 0x56, 0x3b, 0x63, 0x07, 0x1e, 0x58, 0x66, 0x0a, 0xbd, 0x01, 0x03,
+	0x65, 0x55, 0x95, 0x0a, 0x15, 0xac, 0x96, 0xc5, 0x62, 0xc4, 0x4f, 0xc2, 0xbe, 0xd4, 0x61, 0xc8,
+	0xaa, 0x2a, 0x6d, 0x12, 0x3b, 0x1b, 0x34, 0x0b, 0xcb, 0xd6, 0x63, 0x7a, 0x01, 0x8e, 0x68, 0x5b,
+	0x9a, 0x97, 0x22, 0x33, 0x5d, 0xb6, 0x33, 0x60, 0x87, 0x51, 0xb5, 0x7e, 0x5b, 0xa2, 0x37, 0x61,
+	0x88, 0x97, 0x0a, 0x92, 0x8c, 0xf7, 0xf8, 0x2f, 0xf4, 0x2d, 0x19, 0xeb, 0x3a, 0xed, 0xc4, 0x90,
+	0xf4, 0xad, 0xed, 0xad, 0x1c, 0x60, 0x83, 0xbc, 0xa4, 0x3f, 0x24, 0x7b, 0x6d, 0x1d, 0x42, 0x5e,
+	0xb2, 0x56, 0x43, 0x90, 0x40, 0xbd, 0xe9, 0x0e, 0x75, 0x5b, 0xb2, 0xef, 0x05, 0xc0, 0x8e, 0xf1,
+	0xe6, 0x03, 0xfa, 0x1d, 0xfd, 0x58, 0x2a, 0x2a, 0xaa, 0x16, 0xc7, 0x85, 0xce, 0x71, 0x34, 0x37,
+	0xbf, 0x87, 0xf5, 0xa3, 0x6a, 0x7d, 0x5d, 0x51, 0x6f, 0x4b, 0xf4, 0x27, 0x90, 0xd6, 0x5d, 0x1d,
+	0x71, 0x5d, 0x3c, 0x42, 0x5c, 0x76, 0xdc, 0x70, 0x51, 0x03, 0xb5, 0xc5, 0xb8, 0x03, 0x43, 0x06,
+	0xbc, 0x19, 0xe7, 0xa5, 0x9e, 0xe3, 0xb4, 0x03, 0x07, 0x09, 0xb0, 0x19, 0xf3, 0x22, 0x1c, 0xd5,
+	0x62, 0x46, 0x4a, 0x35, 0x12, 0xef, 0xf2, 0xe2, 0xbc, 0xac, 0xf6, 0x7a, 0xaf, 0x2b, 0x55, 0xfa,
+	0x1a, 0xf4, 0x23, 0xa5, 0xaa, 0xc7, 0xf6, 0x26, 0xf1, 0x88, 0xbb, 0x0f, 0xe0, 0xba, 0x52, 0x6d,
+	0xbe, 0x30, 0x2f, 0x3b, 0x8a, 0x94, 0x2a, 0x89, 0xe3, 0x16, 0x0c, 0x68, 0x00, 0x66, 0x10, 0xe3,
+	0x04, 0xe3, 0x5c, 0x77, 0x0c, 0xe3, 0x6d, 0x79, 0x59, 0x88, 0xac, 0x27, 0xf4, 0x35, 0x18, 0x30,
+	0x5f, 0x97, 0x36, 0xfc, 0x74, 0x2f, 0xef, 0xcb, 0x47, 0xee, 0x93, 0x75, 0x45, 0xd5, 0x42, 0xb9,
+	0x0b, 0x83, 0x86, 0xb3, 0x1e, 0x4e, 0xa6, 0xd7, 0x70, 0xec, 0x78, 0xb0, 0x48, 0xc0, 0xcc, 0x23,
+	0xdf, 0x04, 0x34, 0xc3, 0x5b, 0xee, 0x3d, 0x3c, 0x3b, 0xea, 0xb8, 0x8e, 0x6a, 0x86, 0xfa, 0x31,
+	0x9c, 0x40, 0x12, 0x5f, 0x28, 0xc9, 0x62, 0xad, 0xf9, 0xfa, 0x43, 0x04, 0xba, 0xc3, 0x21, 0xb3,
+	0xad, 0xca, 0x7c, 0xb5, 0xe4, 0x7a, 0x4a, 0x87, 0x91, 0xc4, 0xdf, 0xd2, 0x90, 0x4c, 0xf4, 0xf7,
+	0x61, 0x50, 0x12, 0x65, 0xd5, 0x02, 0x0e, 0x77, 0x5d, 0xb2, 0xa2, 0xac, 0xba, 0xc2, 0x06, 0xa4,
+	0x66, 0x0b, 0xbd, 0x0d, 0xa7, 0xf0, 0x17, 0x12, 0x2f, 0x23, 0xed, 0xbe, 0x2f, 0x58, 0x19, 0x51,
+	0x84, 0x22, 0xd0, 0x67, 0x12, 0x7a, 0xce, 0x94, 0x30, 0x73, 0xa6, 0xc4, 0x8e, 0x69, 0x91, 0xf5,
+	0x1d, 0x68, 0x60, 0x93, 0x4d, 0x6f, 0xab, 0x89, 0xce, 0xc3, 0xe0, 0xae, 0x58, 0xac, 0x5b, 0xe3,
+	0x7c, 0xad, 0xc7, 0x1b, 0xcf, 0xc0, 0x0c, 0x68, 0xce, 0xe6, 0x00, 0xef, 0xc1, 0x20, 0x92, 0x4b,
+	0x26, 0x94, 0x12, 0xa1, 0xc9, 0xe9, 0xda, 0xe9, 0x3d, 0xc9, 0x8e, 0x99, 0x0c, 0x69, 0x70, 0xf6,
+	0x63, 0x15, 0x59, 0xed, 0x0a, 0xfd, 0x29, 0x0c, 0x73, 0xa2, 0xf8, 0x39, 0x8f, 0x9b, 0xd8, 0x93,
+	0xdd, 0x6e, 0x83, 0x35, 0x62, 0xdc, 0x0d, 0x3e, 0xc4, 0xd9, 0x4d, 0x14, 0x3a, 0x07, 0xe1, 0x43,
+	0xb4, 0x57, 0x30, 0xb2, 0xb0, 0x29, 0xd7, 0xab, 0xcf, 0x00, 0xbf, 0x87, 0xf6, 0xcc, 0x24, 0x4c,
+	0x03, 0xfd, 0x49, 0x9b, 0x86, 0xb1, 0x87, 0xe6, 0x43, 0x3a, 0x07, 0x43, 0x45, 0xb1, 0x82, 0xf8,
+	0xe6, 0x72, 0x3d, 0xd5, 0xe3, 0x94, 0xb2, 0xe3, 0xba, 0xa3, 0x39, 0x9d, 0x08, 0x06, 0x65, 0xa4,
+	0xe2, 0x82, 0xc0, 0x57, 0x78, 0x15, 0xcb, 0x91, 0xd7, 0x49, 0xc8, 0xd3, 0x2d, 0x38, 0x77, 0x77,
+	0x3f, 0xc3, 0x9c, 0xca, 0xe2, 0x3d, 0x12, 0x67, 0xec, 0xeb, 0x47, 0x0e, 0x27, 0x63, 0x21, 0x59,
+	0x91, 0x7b, 0xd8, 0x80, 0xd6, 0xbc, 0xa1, 0xb7, 0xd2, 0x1f, 0xc3, 0xa9, 0x7d, 0x5e, 0x56, 0x6b,
+	0x48, 0x28, 0x94, 0x45, 0xa5, 0xb9, 0x5a, 0x23, 0xbd, 0xae, 0x02, 0x6b, 0xa5, 0xd2, 0x06, 0x4e,
+	0x4e, 0x54, 0xac, 0x05, 0xfb, 0x3b, 0x00, 0x5f, 0x57, 0x05, 0xa5, 0xb0, 0xc7, 0x57, 0x4b, 0x58,
+	0x96, 0x64, 0xbe, 0xda, 0xec, 0xe1, 0x34, 0xe9, 0xa1, 0xc3, 0xcd, 0xbb, 0x23, 0x28, 0x37, 0x9b,
+	0x3e, 0xf6, 0xfe, 0xde, 0xd0, 0xa6, 0x5c, 0xcb, 0x0f, 0x0e, 0xbf, 0xff, 0xd6, 0x4b, 0x3d, 0x79,
+	0x0a, 0x82, 0x4a, 0x19, 0xc9, 0xb8, 0xc8, 0xc4, 0x6a, 0x0a, 0x96, 0xd9, 0xd7, 0x54, 0x37, 0x4f,
+	0xba, 0x02, 0xa9, 0x3d, 0x51, 0x7e, 0x88, 0xe4, 0x22, 0x5f, 0x2d, 0x15, 0x38, 0x01, 0x29, 0x4a,
+	0xe4, 0x4c, 0x0f, 0xb3, 0x79, 0xee, 0xeb, 0x47, 0x6d, 0x8e, 0xad, 0x33, 0xea, 0x65, 0xc3, 0x4d,
+	0x93, 0x35, 0xcd, 0x82, 0xde, 0x83, 0xb1, 0x0a, 0x12, 0x78, 0x8e, 0x17, 0x6b, 0x4a, 0x41, 0x1b,
+	0x57, 0xa1, 0xc2, 0xab, 0x7c, 0x49, 0xdf, 0xb7, 0xbb, 0x75, 0x49, 0xeb, 0x7e, 0xba, 0x87, 0x93,
+	0x95, 0x7d, 0xc3, 0x82, 0xf9, 0x40, 0xc1, 0xf2, 0xa6, 0x05, 0x92, 0x25, 0x18, 0x74, 0x09, 0x8e,
+	0x10, 0x3f, 0x1c, 0x39, 0x1f, 0xf3, 0xce, 0x8f, 0x65, 0xef, 0xda, 0xc6, 0xb6, 0xf8, 0x15, 0x60,
+	0xe2, 0x17, 0xe5, 0x79, 0xf6, 0xfc, 0xaf, 0xe2, 0xd7, 0xef, 0x7c, 0x18, 0x67, 0x62, 0xf1, 0xdc,
+	0xce, 0xce, 0x96, 0xf9, 0xef, 0xb6, 0xf6, 0xc7, 0xce, 0x1a, 0xf9, 0xbd, 0xb3, 0xb1, 0x1d, 0xff,
+	0xc4, 0x8a, 0xc7, 0x67, 0xfe, 0x15, 0x01, 0xac, 0x01, 0x4f, 0xdf, 0x81, 0x81, 0x9a, 0xdc, 0xcc,
+	0x0c, 0xdf, 0xea, 0x76, 0xfe, 0x7e, 0xc0, 0x6e, 0xb8, 0xe7, 0xb1, 0x35, 0xd9, 0x4a, 0x0b, 0xef,
+	0xc3, 0xb0, 0x90, 0x29, 0x14, 0xb1, 0x6d, 0xc5, 0x31, 0xdd, 0x0e, 0xde, 0x8d, 0xcc, 0x3a, 0x56,
+	0xdc, 0x4f, 0xc8, 0x71, 0xc1, 0xde, 0x46, 0x7f, 0x08, 0x29, 0xae, 0x8c, 0x04, 0x01, 0x57, 0x4b,
+	0xd8, 0xdc, 0xcd, 0x2b, 0x84, 0x53, 0x75, 0x38, 0x7a, 0xd7, 0x4c, 0x6b, 0x63, 0x4f, 0x37, 0x4f,
+	0x74, 0xce, 0xd9, 0x42, 0x23, 0x18, 0x28, 0x89, 0xaa, 0x68, 0x30, 0x99, 0xc8, 0xe5, 0x1e, 0xd6,
+	0x4f, 0xfc, 0xeb, 0x47, 0x21, 0x27, 0x01, 0x6a, 0x5d, 0x3d, 0x80, 0x85, 0x1a, 0xe8, 0x16, 0x69,
+	0xa4, 0x79, 0x78, 0x8a, 0x13, 0xab, 0x2a, 0x61, 0x0c, 0xf8, 0xa1, 0xcc, 0xab, 0x56, 0x0c, 0xab,
+	0x64, 0x7a, 0x2e, 0x76, 0x3a, 0xee, 0x88, 0x0f, 0xab, 0xbb, 0xb4, 0x06, 0x32, 0xc5, 0xb9, 0x34,
+	0xd3, 0x8f, 0x01, 0x9c, 0x51, 0xca, 0x48, 0xc2, 0x05, 0xed, 0xbe, 0xc0, 0x9c, 0x8a, 0x8b, 0x05,
+	0x5c, 0x2d, 0x4a, 0xa2, 0xb6, 0x49, 0x8d, 0x4e, 0xaf, 0x90, 0x4e, 0x53, 0x1d, 0x2e, 0x43, 0xcd,
+	0x79, 0xcb, 0xf4, 0xbd, 0x61, 0xb8, 0xb6, 0x76, 0x3e, 0xad, 0x74, 0x31, 0xa3, 0x6f, 0x41, 0xb8,
+	0x2b, 0x5a, 0xdd, 0x5d, 0xed, 0x76, 0xea, 0x66, 0xc5, 0x36, 0xec, 0xb1, 0x5d, 0xf3, 0xd9, 0xd5,
+	0xdf, 0x7e, 0xd3, 0x00, 0xbf, 0x81, 0x61, 0x38, 0x62, 0x00, 0x0f, 0x27, 0x99, 0x58, 0x6a, 0x09,
+	0x9e, 0x86, 0xa3, 0x3a, 0xcd, 0x55, 0xe8, 0x50, 0x7a, 0x85, 0x89, 0xa5, 0x97, 0x98, 0x58, 0x3a,
+	0xcd, 0xc4, 0x52, 0xcb, 0x70, 0x1c, 0x8e, 0x6e, 0x13, 0x02, 0xa4, 0xd0, 0x9e, 0x54, 0x0a, 0x9e,
+	0x87, 0xe3, 0x2c, 0x7e, 0x50, 0xc3, 0x8a, 0x1a, 0x23, 0x4b, 0x89, 0x7e, 0x6d, 0x95, 0x89, 0x2d,
+	0x33, 0xb1, 0xcb, 0x4c, 0x6c, 0x85, 0x89, 0x25, 0xaf, 0x30, 0xc9, 0x55, 0x26, 0x96, 0x4a, 0xc2,
+	0x53, 0x30, 0x74, 0xbd, 0xb8, 0x8f, 0xaa, 0x1c, 0x2e, 0x1a, 0x86, 0xbe, 0x0c, 0x93, 0x5c, 0xc9,
+	0x5e, 0x80, 0xe3, 0x06, 0xd5, 0xe3, 0xca, 0x22, 0xcf, 0x61, 0x3a, 0x72, 0xd0, 0x00, 0x73, 0xcf,
+	0x1a, 0xe0, 0xdc, 0x61, 0x03, 0x04, 0xd3, 0x97, 0x99, 0x14, 0x93, 0x5c, 0x62, 0x96, 0xaf, 0x30,
+	0xe9, 0xec, 0x1c, 0x1c, 0xe3, 0x25, 0xbb, 0xd9, 0xcc, 0x77, 0xfa, 0x99, 0x16, 0x3d, 0x6c, 0x00,
+	0x7f, 0x3a, 0xc9, 0xa4, 0x53, 0x4c, 0x32, 0x95, 0x5d, 0x80, 0xe3, 0x46, 0x6a, 0x6a, 0x98, 0x4e,
+	0x1f, 0x34, 0xc0, 0x05, 0xc3, 0x74, 0x5e, 0x33, 0xcd, 0x24, 0x99, 0x4c, 0x8a, 0xc9, 0xa4, 0xb5,
+	0x1b, 0x28, 0xbb, 0x02, 0xb5, 0x34, 0xce, 0xb4, 0x9d, 0x3f, 0x68, 0x80, 0xb8, 0x61, 0x3b, 0x4b,
+	0x60, 0x33, 0x4c, 0x7a, 0x99, 0x49, 0xa6, 0x1f, 0xb7, 0x9c, 0x98, 0xd9, 0x84, 0x9e, 0x01, 0xdb,
+	0x7c, 0xb5, 0x7e, 0xd2, 0x86, 0x6f, 0x4a, 0xf3, 0x5d, 0x4e, 0x32, 0xcb, 0x29, 0x66, 0x99, 0xf4,
+	0x93, 0xf7, 0xf9, 0xcf, 0x51, 0x73, 0x79, 0x9f, 0x3f, 0x40, 0x05, 0xf3, 0x3e, 0x7f, 0x94, 0x9a,
+	0xc9, 0xfb, 0xfc, 0xf3, 0xd4, 0x85, 0xbc, 0xcf, 0x3f, 0x4b, 0xc5, 0xf3, 0x3e, 0x7f, 0x8a, 0x4a,
+	0xe7, 0x7d, 0xfe, 0x09, 0x8a, 0xce, 0xfb, 0xfc, 0x67, 0xa9, 0xe9, 0xbc, 0xcf, 0xff, 0x06, 0x15,
+	0x8d, 0xff, 0x1e, 0xc0, 0x48, 0x27, 0xd6, 0x4f, 0x57, 0xe1, 0x54, 0x9b, 0xa6, 0xc0, 0x63, 0x25,
+	0x72, 0x3a, 0xe6, 0x9d, 0x0f, 0xa5, 0xce, 0x77, 0x48, 0xc5, 0x5b, 0xd0, 0xb2, 0x53, 0xd6, 0x9e,
+	0x82, 0xb6, 0x13, 0x8c, 0x6e, 0x91, 0x11, 0x78, 0xac, 0xc4, 0xbf, 0x3b, 0x0b, 0x43, 0x6b, 0xda,
+	0x33, 0x6c, 0x09, 0x30, 0xab, 0x47, 0x15, 0x60, 0x8e, 0x2b, 0xbb, 0xcc, 0xba, 0xc8, 0x2e, 0x2d,
+	0x52, 0x8b, 0xfa, 0x73, 0x4a, 0x2d, 0x1d, 0x15, 0x96, 0xf7, 0xfa, 0x56, 0x58, 0x5c, 0x54, 0x95,
+	0xfb, 0xdd, 0x54, 0x95, 0xf3, 0xaf, 0xce, 0x2e, 0x90, 0xc2, 0x73, 0xee, 0xd2, 0xca, 0xcd, 0xfe,
+	0xa5, 0x15, 0x87, 0xa2, 0x72, 0xbb, 0x6f, 0x45, 0xa5, 0x4d, 0x40, 0x59, 0xef, 0x4f, 0x40, 0x69,
+	0x51, 0x4c, 0xae, 0xf4, 0xa1, 0x98, 0x18, 0x5a, 0xc9, 0xf5, 0x7e, 0xb5, 0x92, 0xa6, 0x3e, 0xc2,
+	0x9e, 0x88, 0x3e, 0x32, 0xd0, 0x44, 0xba, 0x6b, 0x22, 0x99, 0x5e, 0x35, 0x11, 0x87, 0x14, 0xb2,
+	0x73, 0x6c, 0x29, 0xc4, 0x4d, 0x01, 0x79, 0xef, 0x18, 0x0a, 0xc8, 0xff, 0x92, 0xf0, 0xb1, 0xd2,
+	0xb3, 0xf0, 0xe1, 0xd4, 0x3b, 0x6e, 0xf6, 0xab, 0x77, 0xb4, 0xc8, 0x1c, 0x77, 0x8e, 0x25, 0x73,
+	0xb4, 0xab, 0x1b, 0xdb, 0xc7, 0x57, 0x37, 0xda, 0x45, 0x8d, 0xdc, 0x31, 0x44, 0x0d, 0xa7, 0x96,
+	0xb1, 0xd9, 0xaf, 0x96, 0xe1, 0xae, 0x62, 0xac, 0xf7, 0xa9, 0x62, 0x38, 0xf5, 0x8b, 0x5b, 0xfd,
+	0xeb, 0x17, 0x4e, 0xbd, 0x62, 0xeb, 0xb8, 0x7a, 0x45, 0x9b, 0x3e, 0xf1, 0x6e, 0x1f, 0xfa, 0x84,
+	0x5d, 0x95, 0xd8, 0xec, 0xa0, 0x4a, 0xf4, 0x78, 0x09, 0xb7, 0x4a, 0x13, 0xd7, 0x8e, 0x2e, 0x4d,
+	0x38, 0x85, 0x87, 0xfb, 0x5d, 0x85, 0x87, 0x5e, 0x47, 0xe5, 0x26, 0x3a, 0x94, 0x4e, 0x5a, 0x73,
+	0xe8, 0x24, 0x2a, 0x7c, 0x72, 0x3c, 0x96, 0xff, 0x2a, 0x72, 0x7f, 0xca, 0x49, 0xee, 0x2d, 0x2e,
+	0x7e, 0xa3, 0x6f, 0x2e, 0xee, 0xa0, 0xe0, 0x77, 0x8f, 0x4b, 0xc1, 0x5b, 0x99, 0xf7, 0xd6, 0x31,
+	0x99, 0x77, 0x3b, 0xe1, 0x7e, 0xe7, 0xc8, 0x84, 0xdb, 0x41, 0xa6, 0x3f, 0x3d, 0x39, 0x32, 0xdd,
+	0x81, 0x43, 0xd7, 0x7f, 0x46, 0x0a, 0xfd, 0x0a, 0xe6, 0xfc, 0x6e, 0x1f, 0xcc, 0xd9, 0x4e, 0x98,
+	0x27, 0xfe, 0xfe, 0x6e, 0xcb, 0x7f, 0x42, 0x67, 0xe3, 0xad, 0x14, 0x76, 0xe2, 0xf1, 0x4b, 0xe0,
+	0x7c, 0x94, 0x3d, 0x63, 0xe7, 0xae, 0xe3, 0x8f, 0x5f, 0x82, 0xe6, 0x4f, 0xcd, 0xdf, 0x49, 0x58,
+	0x89, 0xbf, 0xe3, 0x51, 0x76, 0xda, 0xc1, 0x52, 0x43, 0x8f, 0x5f, 0x02, 0xdb, 0xef, 0xec, 0xb9,
+	0x36, 0x2e, 0x4a, 0x3f, 0x7e, 0x09, 0x5a, 0x9e, 0x59, 0xdc, 0x73, 0x82, 0xa2, 0xe3, 0x7f, 0x3b,
+	0x0b, 0xc3, 0x2c, 0x96, 0x04, 0xc4, 0x0d, 0xb8, 0xdc, 0x80, 0xcb, 0x0d, 0xb8, 0xdc, 0x80, 0xcb,
+	0x0d, 0xb8, 0xdc, 0x80, 0xcb, 0x0d, 0xb8, 0xdc, 0x80, 0xcb, 0x0d, 0xb8, 0xdc, 0x80, 0xcb, 0x0d,
+	0xb8, 0xdc, 0x80, 0xcb, 0x0d, 0xb8, 0xdc, 0x2f, 0x85, 0xcb, 0x7d, 0x7b, 0x16, 0x06, 0x6e, 0x61,
+	0x75, 0xc0, 0xe3, 0x06, 0x3c, 0x6e, 0xc0, 0xe3, 0x06, 0x3c, 0x6e, 0xc0, 0xe3, 0x06, 0x3c, 0x6e,
+	0xc0, 0xe3, 0x06, 0x3c, 0x6e, 0xc0, 0xe3, 0x06, 0x3c, 0x6e, 0xc0, 0xe3, 0x06, 0x3c, 0x6e, 0xc0,
+	0xe3, 0x7e, 0x21, 0x3c, 0xee, 0x9f, 0x14, 0x9c, 0xb0, 0xd6, 0x91, 0xc6, 0xce, 0xb4, 0x68, 0xe8,
+	0x35, 0x38, 0x51, 0xe4, 0x15, 0xb4, 0x2b, 0xe0, 0x82, 0xb5, 0xa6, 0x08, 0xc5, 0xea, 0x4c, 0xcd,
+	0x28, 0xc3, 0xc1, 0x02, 0xa3, 0xff, 0x1f, 0x9e, 0xc5, 0x55, 0x82, 0xf1, 0x19, 0xda, 0x47, 0x0a,
+	0x27, 0xf3, 0x92, 0x6a, 0x83, 0xf3, 0x76, 0x85, 0x3b, 0xad, 0xbb, 0xe6, 0x2d, 0xcf, 0x26, 0xee,
+	0x16, 0x8c, 0x18, 0xb8, 0x1c, 0x92, 0x54, 0xae, 0x8c, 0x6c, 0xa0, 0xbe, 0xae, 0xa0, 0xa7, 0x74,
+	0xbf, 0x35, 0xdd, 0xad, 0x89, 0xf8, 0xdf, 0x94, 0x12, 0xcf, 0xf6, 0x99, 0x12, 0xdb, 0x32, 0xc7,
+	0xee, 0xf9, 0xb0, 0x5b, 0xe6, 0x78, 0xb1, 0xe7, 0x9c, 0xcb, 0xd3, 0x31, 0x73, 0xbc, 0x74, 0x84,
+	0x64, 0xcb, 0xe3, 0xc8, 0x1c, 0xdb, 0xaf, 0xd6, 0xe1, 0xe3, 0x5c, 0xad, 0x26, 0x01, 0x1c, 0x39,
+	0x3a, 0x01, 0xb4, 0x15, 0xb0, 0x8e, 0x9e, 0x40, 0x01, 0xeb, 0xc9, 0x12, 0xb7, 0x07, 0x9d, 0xef,
+	0x65, 0xd8, 0x5f, 0x7d, 0x8e, 0xdf, 0xac, 0xcf, 0xe9, 0x74, 0x43, 0xb7, 0x56, 0xe0, 0x06, 0x4e,
+	0xb8, 0x02, 0xb7, 0xb5, 0x9e, 0x2d, 0x78, 0x82, 0xf5, 0x6c, 0xe3, 0x3f, 0x63, 0x3d, 0x5b, 0xe8,
+	0x64, 0xeb, 0xd9, 0xde, 0x76, 0x48, 0x60, 0x54, 0x97, 0x62, 0x23, 0x12, 0x77, 0xce, 0x6b, 0x17,
+	0xc2, 0x32, 0x4e, 0x21, 0x6c, 0x82, 0x7c, 0x13, 0x60, 0xc2, 0x5e, 0xba, 0xa2, 0x7f, 0x1a, 0xc0,
+	0xeb, 0xd0, 0xc6, 0xee, 0xb7, 0xab, 0x54, 0x74, 0x8f, 0xc5, 0xe9, 0x81, 0x03, 0xbd, 0x32, 0xdd,
+	0x0b, 0x81, 0x86, 0xda, 0x2a, 0x59, 0x7d, 0xec, 0x2e, 0x59, 0x4d, 0x1e, 0xb5, 0x48, 0x2d, 0xe7,
+	0x75, 0x93, 0xad, 0x3a, 0xd1, 0x9e, 0xa9, 0xbe, 0x68, 0xcf, 0xd5, 0xfd, 0xb6, 0x5b, 0xfc, 0x9b,
+	0x06, 0x40, 0x30, 0x60, 0xd5, 0xa6, 0x80, 0x24, 0x3c, 0xd5, 0xac, 0x4b, 0x09, 0xa4, 0x97, 0x98,
+	0xcc, 0x12, 0x93, 0x5c, 0x66, 0x92, 0x4b, 0xf0, 0x5c, 0x6b, 0x15, 0xca, 0xe4, 0x32, 0xb3, 0xc2,
+	0x5c, 0x66, 0x56, 0x99, 0x64, 0x92, 0x49, 0xa6, 0x98, 0x64, 0x9a, 0x49, 0x66, 0xe0, 0x54, 0x5b,
+	0x0d, 0x8a, 0x27, 0xb5, 0x94, 0x9d, 0x6b, 0xcf, 0xf5, 0xe8, 0x89, 0x83, 0x06, 0xf0, 0x90, 0x6a,
+	0xb9, 0x06, 0x18, 0x4e, 0x31, 0x69, 0x26, 0x93, 0x4d, 0xd9, 0xb3, 0x85, 0x39, 0xf7, 0xea, 0x93,
+	0x74, 0xda, 0x99, 0x45, 0x64, 0x1c, 0x19, 0xc2, 0xf9, 0x4e, 0x75, 0x28, 0x2d, 0x99, 0xc3, 0xe5,
+	0xd6, 0xdc, 0x45, 0x73, 0xa4, 0x0c, 0xc7, 0xb0, 0x36, 0xa2, 0xe4, 0x0a, 0x93, 0x5c, 0x6d, 0x4b,
+	0x68, 0xf2, 0x3e, 0x3f, 0xa0, 0x3c, 0x2d, 0xc5, 0x25, 0x63, 0x14, 0xcc, 0xfb, 0xfc, 0x61, 0x8a,
+	0x8a, 0xff, 0x75, 0x18, 0x4e, 0xb2, 0x4d, 0xd6, 0x62, 0x25, 0x18, 0x37, 0xe1, 0xa4, 0x9e, 0xe0,
+	0x17, 0x1c, 0x2c, 0xa8, 0x7b, 0x4e, 0x30, 0xa1, 0xbb, 0xd8, 0xf0, 0xe8, 0x75, 0x48, 0x23, 0x49,
+	0x12, 0xea, 0x4e, 0x98, 0xee, 0x59, 0x00, 0x45, 0x3c, 0xec, 0x28, 0x18, 0x4e, 0x72, 0x35, 0x45,
+	0x15, 0x2b, 0x4e, 0x98, 0x61, 0xd7, 0x5b, 0x91, 0x7c, 0x23, 0xa4, 0xa5, 0x74, 0x2c, 0xdc, 0x52,
+	0xc8, 0x49, 0x24, 0x57, 0x82, 0x68, 0xef, 0x86, 0x75, 0x5e, 0x07, 0x23, 0x47, 0xbe, 0x0e, 0x8c,
+	0x8f, 0x2d, 0xd8, 0x2f, 0x85, 0xed, 0xb6, 0xbb, 0xf3, 0x48, 0xda, 0xb0, 0x81, 0xd8, 0x46, 0x4e,
+	0xf5, 0x1b, 0xd4, 0xdf, 0xef, 0x87, 0x20, 0xee, 0x35, 0xef, 0xd1, 0xb1, 0xa3, 0xdd, 0xa3, 0x53,
+	0xae, 0xa5, 0x8d, 0x26, 0xda, 0xd5, 0xff, 0x73, 0xdb, 0xaf, 0x97, 0xec, 0xfb, 0x35, 0x05, 0xa7,
+	0x21, 0x45, 0x10, 0x63, 0x5b, 0x32, 0x2e, 0xf2, 0x1c, 0x52, 0xb1, 0x42, 0xfb, 0x57, 0x98, 0xe4,
+	0x12, 0xb3, 0xca, 0x5c, 0xd1, 0x92, 0x6c, 0x7d, 0xbf, 0x59, 0x49, 0xf6, 0x41, 0x03, 0x78, 0x9f,
+	0x35, 0x80, 0x47, 0x5b, 0xe4, 0x69, 0x26, 0xc3, 0x2c, 0xe7, 0x7d, 0x7e, 0x0f, 0xe5, 0xcd, 0xfb,
+	0xfc, 0xa3, 0x94, 0x3f, 0xfb, 0x47, 0xf0, 0xec, 0x87, 0xe8, 0xd0, 0xf3, 0x1f, 0xa2, 0x43, 0x3f,
+	0xfd, 0x10, 0x05, 0x5f, 0x1e, 0x46, 0xc1, 0x9f, 0x0e, 0xa3, 0xe0, 0xbb, 0xc3, 0x28, 0x78, 0x76,
+	0x18, 0x05, 0xcf, 0x0f, 0xa3, 0xe0, 0xfb, 0xc3, 0x28, 0xf8, 0xf1, 0x30, 0x3a, 0xf4, 0xd3, 0x61,
+	0x14, 0xfc, 0xe1, 0x45, 0x74, 0xe8, 0xe0, 0x45, 0x14, 0x3c, 0x7b, 0x11, 0x1d, 0x7a, 0xfe, 0x22,
+	0x3a, 0xf4, 0xd1, 0xbd, 0x92, 0x28, 0x7d, 0x5e, 0x4a, 0xec, 0x8b, 0x82, 0x8a, 0x65, 0x19, 0x25,
+	0x6a, 0xca, 0x22, 0xf9, 0x63, 0x4f, 0x94, 0x2b, 0x0b, 0x92, 0x2c, 0xee, 0xf3, 0x45, 0x2c, 0x2f,
+	0x98, 0xcd, 0x8b, 0xd2, 0x6e, 0x49, 0x5c, 0xc4, 0x5f, 0xa8, 0xe6, 0xb7, 0x7c, 0x3a, 0x7e, 0xd2,
+	0x67, 0x77, 0x84, 0x1c, 0x71, 0xe9, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0x8b, 0xf5, 0x55, 0x41,
+	0xfe, 0x47, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -3189,6 +3416,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if !this.ContentRewriteAction.Equal(that1.ContentRewriteAction) {
+		return false
+	}
+	if !this.ShapeProtectedEndpointAction.Equal(that1.ShapeProtectedEndpointAction) {
+		return false
+	}
+	if !this.BotAction.Equal(that1.BotAction) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType_AnyClient) Equal(that interface{}) bool {
@@ -3235,6 +3471,30 @@ func (this *GlobalSpecType_ClientName) Equal(that interface{}) bool {
 		return false
 	}
 	if this.ClientName != that1.ClientName {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_IpThreatCategoryList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_IpThreatCategoryList)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_IpThreatCategoryList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IpThreatCategoryList.Equal(that1.IpThreatCategoryList) {
 		return false
 	}
 	return true
@@ -3575,6 +3835,35 @@ func (this *GlobalSpecType_DstAsnMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *IPThreatCategoryListType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPThreatCategoryListType)
+	if !ok {
+		that2, ok := that.(IPThreatCategoryListType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.IpThreatCategories) != len(that1.IpThreatCategories) {
+		return false
+	}
+	for i := range this.IpThreatCategories {
+		if this.IpThreatCategories[i] != that1.IpThreatCategories[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3749,6 +4038,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if !this.ContentRewriteAction.Equal(that1.ContentRewriteAction) {
+		return false
+	}
+	if !this.ShapeProtectedEndpointAction.Equal(that1.ShapeProtectedEndpointAction) {
+		return false
+	}
+	if !this.BotAction.Equal(that1.BotAction) {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType_AnyClient) Equal(that interface{}) bool {
@@ -3795,6 +4093,30 @@ func (this *CreateSpecType_ClientName) Equal(that interface{}) bool {
 		return false
 	}
 	if this.ClientName != that1.ClientName {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_IpThreatCategoryList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_IpThreatCategoryList)
+	if !ok {
+		that2, ok := that.(CreateSpecType_IpThreatCategoryList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IpThreatCategoryList.Equal(that1.IpThreatCategoryList) {
 		return false
 	}
 	return true
@@ -4309,6 +4631,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if !this.ContentRewriteAction.Equal(that1.ContentRewriteAction) {
+		return false
+	}
+	if !this.ShapeProtectedEndpointAction.Equal(that1.ShapeProtectedEndpointAction) {
+		return false
+	}
+	if !this.BotAction.Equal(that1.BotAction) {
+		return false
+	}
 	return true
 }
 func (this *ReplaceSpecType_AnyClient) Equal(that interface{}) bool {
@@ -4355,6 +4686,30 @@ func (this *ReplaceSpecType_ClientName) Equal(that interface{}) bool {
 		return false
 	}
 	if this.ClientName != that1.ClientName {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_IpThreatCategoryList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_IpThreatCategoryList)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_IpThreatCategoryList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IpThreatCategoryList.Equal(that1.IpThreatCategoryList) {
 		return false
 	}
 	return true
@@ -4869,6 +5224,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if !this.ContentRewriteAction.Equal(that1.ContentRewriteAction) {
+		return false
+	}
+	if !this.ShapeProtectedEndpointAction.Equal(that1.ShapeProtectedEndpointAction) {
+		return false
+	}
+	if !this.BotAction.Equal(that1.BotAction) {
+		return false
+	}
 	return true
 }
 func (this *GetSpecType_AnyClient) Equal(that interface{}) bool {
@@ -4915,6 +5279,30 @@ func (this *GetSpecType_ClientName) Equal(that interface{}) bool {
 		return false
 	}
 	if this.ClientName != that1.ClientName {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_IpThreatCategoryList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_IpThreatCategoryList)
+	if !ok {
+		that2, ok := that.(GetSpecType_IpThreatCategoryList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IpThreatCategoryList.Equal(that1.IpThreatCategoryList) {
 		return false
 	}
 	return true
@@ -5797,7 +6185,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 46)
+	s := make([]string, 0, 50)
 	s = append(s, "&service_policy_rule.GlobalSpecType{")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.ClientChoice != nil {
@@ -5886,6 +6274,15 @@ func (this *GlobalSpecType) GoString() string {
 	if this.GotoPolicy != nil {
 		s = append(s, "GotoPolicy: "+fmt.Sprintf("%#v", this.GotoPolicy)+",\n")
 	}
+	if this.ContentRewriteAction != nil {
+		s = append(s, "ContentRewriteAction: "+fmt.Sprintf("%#v", this.ContentRewriteAction)+",\n")
+	}
+	if this.ShapeProtectedEndpointAction != nil {
+		s = append(s, "ShapeProtectedEndpointAction: "+fmt.Sprintf("%#v", this.ShapeProtectedEndpointAction)+",\n")
+	}
+	if this.BotAction != nil {
+		s = append(s, "BotAction: "+fmt.Sprintf("%#v", this.BotAction)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -5903,6 +6300,14 @@ func (this *GlobalSpecType_ClientName) GoString() string {
 	}
 	s := strings.Join([]string{`&service_policy_rule.GlobalSpecType_ClientName{` +
 		`ClientName:` + fmt.Sprintf("%#v", this.ClientName) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_IpThreatCategoryList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.GlobalSpecType_IpThreatCategoryList{` +
+		`IpThreatCategoryList:` + fmt.Sprintf("%#v", this.IpThreatCategoryList) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_ClientSelector) GoString() string {
@@ -6017,11 +6422,21 @@ func (this *GlobalSpecType_DstAsnMatcher) GoString() string {
 		`DstAsnMatcher:` + fmt.Sprintf("%#v", this.DstAsnMatcher) + `}`}, ", ")
 	return s
 }
+func (this *IPThreatCategoryListType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&service_policy_rule.IPThreatCategoryListType{")
+	s = append(s, "IpThreatCategories: "+fmt.Sprintf("%#v", this.IpThreatCategories)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 45)
+	s := make([]string, 0, 49)
 	s = append(s, "&service_policy_rule.CreateSpecType{")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.ClientChoice != nil {
@@ -6107,6 +6522,15 @@ func (this *CreateSpecType) GoString() string {
 	if this.GotoPolicy != nil {
 		s = append(s, "GotoPolicy: "+fmt.Sprintf("%#v", this.GotoPolicy)+",\n")
 	}
+	if this.ContentRewriteAction != nil {
+		s = append(s, "ContentRewriteAction: "+fmt.Sprintf("%#v", this.ContentRewriteAction)+",\n")
+	}
+	if this.ShapeProtectedEndpointAction != nil {
+		s = append(s, "ShapeProtectedEndpointAction: "+fmt.Sprintf("%#v", this.ShapeProtectedEndpointAction)+",\n")
+	}
+	if this.BotAction != nil {
+		s = append(s, "BotAction: "+fmt.Sprintf("%#v", this.BotAction)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6124,6 +6548,14 @@ func (this *CreateSpecType_ClientName) GoString() string {
 	}
 	s := strings.Join([]string{`&service_policy_rule.CreateSpecType_ClientName{` +
 		`ClientName:` + fmt.Sprintf("%#v", this.ClientName) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_IpThreatCategoryList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.CreateSpecType_IpThreatCategoryList{` +
+		`IpThreatCategoryList:` + fmt.Sprintf("%#v", this.IpThreatCategoryList) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType_ClientSelector) GoString() string {
@@ -6242,7 +6674,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 45)
+	s := make([]string, 0, 49)
 	s = append(s, "&service_policy_rule.ReplaceSpecType{")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.ClientChoice != nil {
@@ -6328,6 +6760,15 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.GotoPolicy != nil {
 		s = append(s, "GotoPolicy: "+fmt.Sprintf("%#v", this.GotoPolicy)+",\n")
 	}
+	if this.ContentRewriteAction != nil {
+		s = append(s, "ContentRewriteAction: "+fmt.Sprintf("%#v", this.ContentRewriteAction)+",\n")
+	}
+	if this.ShapeProtectedEndpointAction != nil {
+		s = append(s, "ShapeProtectedEndpointAction: "+fmt.Sprintf("%#v", this.ShapeProtectedEndpointAction)+",\n")
+	}
+	if this.BotAction != nil {
+		s = append(s, "BotAction: "+fmt.Sprintf("%#v", this.BotAction)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6345,6 +6786,14 @@ func (this *ReplaceSpecType_ClientName) GoString() string {
 	}
 	s := strings.Join([]string{`&service_policy_rule.ReplaceSpecType_ClientName{` +
 		`ClientName:` + fmt.Sprintf("%#v", this.ClientName) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_IpThreatCategoryList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ReplaceSpecType_IpThreatCategoryList{` +
+		`IpThreatCategoryList:` + fmt.Sprintf("%#v", this.IpThreatCategoryList) + `}`}, ", ")
 	return s
 }
 func (this *ReplaceSpecType_ClientSelector) GoString() string {
@@ -6463,7 +6912,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 45)
+	s := make([]string, 0, 49)
 	s = append(s, "&service_policy_rule.GetSpecType{")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.ClientChoice != nil {
@@ -6549,6 +6998,15 @@ func (this *GetSpecType) GoString() string {
 	if this.GotoPolicy != nil {
 		s = append(s, "GotoPolicy: "+fmt.Sprintf("%#v", this.GotoPolicy)+",\n")
 	}
+	if this.ContentRewriteAction != nil {
+		s = append(s, "ContentRewriteAction: "+fmt.Sprintf("%#v", this.ContentRewriteAction)+",\n")
+	}
+	if this.ShapeProtectedEndpointAction != nil {
+		s = append(s, "ShapeProtectedEndpointAction: "+fmt.Sprintf("%#v", this.ShapeProtectedEndpointAction)+",\n")
+	}
+	if this.BotAction != nil {
+		s = append(s, "BotAction: "+fmt.Sprintf("%#v", this.BotAction)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6566,6 +7024,14 @@ func (this *GetSpecType_ClientName) GoString() string {
 	}
 	s := strings.Join([]string{`&service_policy_rule.GetSpecType_ClientName{` +
 		`ClientName:` + fmt.Sprintf("%#v", this.ClientName) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_IpThreatCategoryList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.GetSpecType_IpThreatCategoryList{` +
+		`IpThreatCategoryList:` + fmt.Sprintf("%#v", this.IpThreatCategoryList) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_ClientSelector) GoString() string {
@@ -6911,6 +7377,57 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClientChoice != nil {
+		{
+			size := m.ClientChoice.Size()
+			i -= size
+			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BotAction != nil {
+		{
+			size, err := m.BotAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xd2
+	}
+	if m.ShapeProtectedEndpointAction != nil {
+		{
+			size, err := m.ShapeProtectedEndpointAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xca
+	}
+	if m.ContentRewriteAction != nil {
+		{
+			size, err := m.ContentRewriteAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc2
+	}
 	if len(m.GotoPolicy) > 0 {
 		for iNdEx := len(m.GotoPolicy) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -7003,15 +7520,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x2
 			i--
 			dAtA[i] = 0xb2
-		}
-	}
-	if m.ClientChoice != nil {
-		{
-			size := m.ClientChoice.Size()
-			i -= size
-			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if m.AsnChoice != nil {
@@ -7653,6 +8161,72 @@ func (m *GlobalSpecType_DstAsnMatcher) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_IpThreatCategoryList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_IpThreatCategoryList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IpThreatCategoryList != nil {
+		{
+			size, err := m.IpThreatCategoryList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xda
+	}
+	return len(dAtA) - i, nil
+}
+func (m *IPThreatCategoryListType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPThreatCategoryListType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPThreatCategoryListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.IpThreatCategories) > 0 {
+		dAtA37 := make([]byte, len(m.IpThreatCategories)*10)
+		var j36 int
+		for _, num := range m.IpThreatCategories {
+			for num >= 1<<7 {
+				dAtA37[j36] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j36++
+			}
+			dAtA37[j36] = uint8(num)
+			j36++
+		}
+		i -= j36
+		copy(dAtA[i:], dAtA37[:j36])
+		i = encodeVarintTypes(dAtA, i, uint64(j36))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7673,6 +8247,57 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClientChoice != nil {
+		{
+			size := m.ClientChoice.Size()
+			i -= size
+			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BotAction != nil {
+		{
+			size, err := m.BotAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xd2
+	}
+	if m.ShapeProtectedEndpointAction != nil {
+		{
+			size, err := m.ShapeProtectedEndpointAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xca
+	}
+	if m.ContentRewriteAction != nil {
+		{
+			size, err := m.ContentRewriteAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc2
+	}
 	if len(m.GotoPolicy) > 0 {
 		for iNdEx := len(m.GotoPolicy) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -7765,15 +8390,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x2
 			i--
 			dAtA[i] = 0xb2
-		}
-	}
-	if m.ClientChoice != nil {
-		{
-			size := m.ClientChoice.Size()
-			i -= size
-			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if m.AsnChoice != nil {
@@ -8399,6 +9015,29 @@ func (m *CreateSpecType_DstAsnMatcher) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_IpThreatCategoryList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_IpThreatCategoryList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IpThreatCategoryList != nil {
+		{
+			size, err := m.IpThreatCategoryList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xda
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8419,6 +9058,57 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClientChoice != nil {
+		{
+			size := m.ClientChoice.Size()
+			i -= size
+			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BotAction != nil {
+		{
+			size, err := m.BotAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xd2
+	}
+	if m.ShapeProtectedEndpointAction != nil {
+		{
+			size, err := m.ShapeProtectedEndpointAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xca
+	}
+	if m.ContentRewriteAction != nil {
+		{
+			size, err := m.ContentRewriteAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc2
+	}
 	if len(m.GotoPolicy) > 0 {
 		for iNdEx := len(m.GotoPolicy) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -8511,15 +9201,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x2
 			i--
 			dAtA[i] = 0xb2
-		}
-	}
-	if m.ClientChoice != nil {
-		{
-			size := m.ClientChoice.Size()
-			i -= size
-			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if m.AsnChoice != nil {
@@ -9145,6 +9826,29 @@ func (m *ReplaceSpecType_DstAsnMatcher) MarshalToSizedBuffer(dAtA []byte) (int, 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_IpThreatCategoryList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_IpThreatCategoryList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IpThreatCategoryList != nil {
+		{
+			size, err := m.IpThreatCategoryList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xda
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -9165,6 +9869,57 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClientChoice != nil {
+		{
+			size := m.ClientChoice.Size()
+			i -= size
+			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BotAction != nil {
+		{
+			size, err := m.BotAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xd2
+	}
+	if m.ShapeProtectedEndpointAction != nil {
+		{
+			size, err := m.ShapeProtectedEndpointAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xca
+	}
+	if m.ContentRewriteAction != nil {
+		{
+			size, err := m.ContentRewriteAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc2
+	}
 	if len(m.GotoPolicy) > 0 {
 		for iNdEx := len(m.GotoPolicy) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -9257,15 +10012,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x2
 			i--
 			dAtA[i] = 0xb2
-		}
-	}
-	if m.ClientChoice != nil {
-		{
-			size := m.ClientChoice.Size()
-			i -= size
-			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if m.AsnChoice != nil {
@@ -9888,6 +10634,29 @@ func (m *GetSpecType_DstAsnMatcher) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		dAtA[i] = 0x3
 		i--
 		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_IpThreatCategoryList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_IpThreatCategoryList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IpThreatCategoryList != nil {
+		{
+			size, err := m.IpThreatCategoryList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xda
 	}
 	return len(dAtA) - i, nil
 }
@@ -10661,6 +11430,18 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 2 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.ContentRewriteAction != nil {
+		l = m.ContentRewriteAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ShapeProtectedEndpointAction != nil {
+		l = m.ShapeProtectedEndpointAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.BotAction != nil {
+		l = m.BotAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -10854,6 +11635,34 @@ func (m *GlobalSpecType_DstAsnMatcher) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_IpThreatCategoryList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IpThreatCategoryList != nil {
+		l = m.IpThreatCategoryList.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *IPThreatCategoryListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.IpThreatCategories) > 0 {
+		l = 0
+		for _, e := range m.IpThreatCategories {
+			l += sovTypes(uint64(e))
+		}
+		n += 2 + sovTypes(uint64(l)) + l
+	}
+	return n
+}
+
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -10986,6 +11795,18 @@ func (m *CreateSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.ContentRewriteAction != nil {
+		l = m.ContentRewriteAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ShapeProtectedEndpointAction != nil {
+		l = m.ShapeProtectedEndpointAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.BotAction != nil {
+		l = m.BotAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -11180,6 +12001,18 @@ func (m *CreateSpecType_DstAsnMatcher) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_IpThreatCategoryList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IpThreatCategoryList != nil {
+		l = m.IpThreatCategoryList.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -11312,6 +12145,18 @@ func (m *ReplaceSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.ContentRewriteAction != nil {
+		l = m.ContentRewriteAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ShapeProtectedEndpointAction != nil {
+		l = m.ShapeProtectedEndpointAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.BotAction != nil {
+		l = m.BotAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -11506,6 +12351,18 @@ func (m *ReplaceSpecType_DstAsnMatcher) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_IpThreatCategoryList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IpThreatCategoryList != nil {
+		l = m.IpThreatCategoryList.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -11638,6 +12495,18 @@ func (m *GetSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.ContentRewriteAction != nil {
+		l = m.ContentRewriteAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ShapeProtectedEndpointAction != nil {
+		l = m.ShapeProtectedEndpointAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.BotAction != nil {
+		l = m.BotAction.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -11828,6 +12697,18 @@ func (m *GetSpecType_DstAsnMatcher) Size() (n int) {
 	_ = l
 	if m.DstAsnMatcher != nil {
 		l = m.DstAsnMatcher.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_IpThreatCategoryList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IpThreatCategoryList != nil {
+		l = m.IpThreatCategoryList.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -12199,6 +13080,9 @@ func (this *GlobalSpecType) String() string {
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
 		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
 		`GotoPolicy:` + repeatedStringForGotoPolicy + `,`,
+		`ContentRewriteAction:` + strings.Replace(fmt.Sprintf("%v", this.ContentRewriteAction), "ContentRewriteAction", "policy.ContentRewriteAction", 1) + `,`,
+		`ShapeProtectedEndpointAction:` + strings.Replace(fmt.Sprintf("%v", this.ShapeProtectedEndpointAction), "ShapeProtectedEndpointAction", "policy.ShapeProtectedEndpointAction", 1) + `,`,
+		`BotAction:` + strings.Replace(fmt.Sprintf("%v", this.BotAction), "BotAction", "policy.BotAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12363,6 +13247,26 @@ func (this *GlobalSpecType_DstAsnMatcher) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_IpThreatCategoryList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_IpThreatCategoryList{`,
+		`IpThreatCategoryList:` + strings.Replace(fmt.Sprintf("%v", this.IpThreatCategoryList), "IPThreatCategoryListType", "IPThreatCategoryListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPThreatCategoryListType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IPThreatCategoryListType{`,
+		`IpThreatCategories:` + fmt.Sprintf("%v", this.IpThreatCategories) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -12428,6 +13332,9 @@ func (this *CreateSpecType) String() string {
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
 		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
 		`GotoPolicy:` + repeatedStringForGotoPolicy + `,`,
+		`ContentRewriteAction:` + strings.Replace(fmt.Sprintf("%v", this.ContentRewriteAction), "ContentRewriteAction", "policy.ContentRewriteAction", 1) + `,`,
+		`ShapeProtectedEndpointAction:` + strings.Replace(fmt.Sprintf("%v", this.ShapeProtectedEndpointAction), "ShapeProtectedEndpointAction", "policy.ShapeProtectedEndpointAction", 1) + `,`,
+		`BotAction:` + strings.Replace(fmt.Sprintf("%v", this.BotAction), "BotAction", "policy.BotAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12592,6 +13499,16 @@ func (this *CreateSpecType_DstAsnMatcher) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_IpThreatCategoryList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_IpThreatCategoryList{`,
+		`IpThreatCategoryList:` + strings.Replace(fmt.Sprintf("%v", this.IpThreatCategoryList), "IPThreatCategoryListType", "IPThreatCategoryListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -12657,6 +13574,9 @@ func (this *ReplaceSpecType) String() string {
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
 		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
 		`GotoPolicy:` + repeatedStringForGotoPolicy + `,`,
+		`ContentRewriteAction:` + strings.Replace(fmt.Sprintf("%v", this.ContentRewriteAction), "ContentRewriteAction", "policy.ContentRewriteAction", 1) + `,`,
+		`ShapeProtectedEndpointAction:` + strings.Replace(fmt.Sprintf("%v", this.ShapeProtectedEndpointAction), "ShapeProtectedEndpointAction", "policy.ShapeProtectedEndpointAction", 1) + `,`,
+		`BotAction:` + strings.Replace(fmt.Sprintf("%v", this.BotAction), "BotAction", "policy.BotAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12821,6 +13741,16 @@ func (this *ReplaceSpecType_DstAsnMatcher) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_IpThreatCategoryList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_IpThreatCategoryList{`,
+		`IpThreatCategoryList:` + strings.Replace(fmt.Sprintf("%v", this.IpThreatCategoryList), "IPThreatCategoryListType", "IPThreatCategoryListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -12886,6 +13816,9 @@ func (this *GetSpecType) String() string {
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
 		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
 		`GotoPolicy:` + repeatedStringForGotoPolicy + `,`,
+		`ContentRewriteAction:` + strings.Replace(fmt.Sprintf("%v", this.ContentRewriteAction), "ContentRewriteAction", "policy.ContentRewriteAction", 1) + `,`,
+		`ShapeProtectedEndpointAction:` + strings.Replace(fmt.Sprintf("%v", this.ShapeProtectedEndpointAction), "ShapeProtectedEndpointAction", "policy.ShapeProtectedEndpointAction", 1) + `,`,
+		`BotAction:` + strings.Replace(fmt.Sprintf("%v", this.BotAction), "BotAction", "policy.BotAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -13046,6 +13979,16 @@ func (this *GetSpecType_DstAsnMatcher) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_DstAsnMatcher{`,
 		`DstAsnMatcher:` + strings.Replace(fmt.Sprintf("%v", this.DstAsnMatcher), "AsnMatcherType", "policy.AsnMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_IpThreatCategoryList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_IpThreatCategoryList{`,
+		`IpThreatCategoryList:` + strings.Replace(fmt.Sprintf("%v", this.IpThreatCategoryList), "IPThreatCategoryListType", "IPThreatCategoryListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14750,6 +15693,271 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 56:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContentRewriteAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ContentRewriteAction == nil {
+				m.ContentRewriteAction = &policy.ContentRewriteAction{}
+			}
+			if err := m.ContentRewriteAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShapeProtectedEndpointAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ShapeProtectedEndpointAction == nil {
+				m.ShapeProtectedEndpointAction = &policy.ShapeProtectedEndpointAction{}
+			}
+			if err := m.ShapeProtectedEndpointAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BotAction == nil {
+				m.BotAction = &policy.BotAction{}
+			}
+			if err := m.BotAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 59:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpThreatCategoryList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &IPThreatCategoryListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientChoice = &GlobalSpecType_IpThreatCategoryList{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPThreatCategoryListType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPThreatCategoryListType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPThreatCategoryListType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 25:
+			if wireType == 0 {
+				var v policy.IPThreatCategory
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= policy.IPThreatCategory(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.IpThreatCategories = append(m.IpThreatCategories, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.IpThreatCategories) == 0 {
+					m.IpThreatCategories = make([]policy.IPThreatCategory, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v policy.IPThreatCategory
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= policy.IPThreatCategory(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.IpThreatCategories = append(m.IpThreatCategories, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpThreatCategories", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -16209,6 +17417,149 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.GotoPolicy[len(m.GotoPolicy)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 56:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContentRewriteAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ContentRewriteAction == nil {
+				m.ContentRewriteAction = &policy.ContentRewriteAction{}
+			}
+			if err := m.ContentRewriteAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShapeProtectedEndpointAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ShapeProtectedEndpointAction == nil {
+				m.ShapeProtectedEndpointAction = &policy.ShapeProtectedEndpointAction{}
+			}
+			if err := m.ShapeProtectedEndpointAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BotAction == nil {
+				m.BotAction = &policy.BotAction{}
+			}
+			if err := m.BotAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 59:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpThreatCategoryList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &IPThreatCategoryListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientChoice = &CreateSpecType_IpThreatCategoryList{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -17670,6 +19021,149 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 56:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContentRewriteAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ContentRewriteAction == nil {
+				m.ContentRewriteAction = &policy.ContentRewriteAction{}
+			}
+			if err := m.ContentRewriteAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShapeProtectedEndpointAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ShapeProtectedEndpointAction == nil {
+				m.ShapeProtectedEndpointAction = &policy.ShapeProtectedEndpointAction{}
+			}
+			if err := m.ShapeProtectedEndpointAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BotAction == nil {
+				m.BotAction = &policy.BotAction{}
+			}
+			if err := m.BotAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 59:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpThreatCategoryList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &IPThreatCategoryListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientChoice = &ReplaceSpecType_IpThreatCategoryList{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -19129,6 +20623,149 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.GotoPolicy[len(m.GotoPolicy)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 56:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContentRewriteAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ContentRewriteAction == nil {
+				m.ContentRewriteAction = &policy.ContentRewriteAction{}
+			}
+			if err := m.ContentRewriteAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShapeProtectedEndpointAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ShapeProtectedEndpointAction == nil {
+				m.ShapeProtectedEndpointAction = &policy.ShapeProtectedEndpointAction{}
+			}
+			if err := m.ShapeProtectedEndpointAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BotAction == nil {
+				m.BotAction = &policy.BotAction{}
+			}
+			if err := m.BotAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 59:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpThreatCategoryList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &IPThreatCategoryListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientChoice = &GetSpecType_IpThreatCategoryList{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

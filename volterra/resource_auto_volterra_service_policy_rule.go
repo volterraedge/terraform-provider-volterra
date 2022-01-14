@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
@@ -274,6 +275,28 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
+			"bot_action": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"bot_skip_processing": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"challenge_action": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -341,6 +364,26 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
+			"ip_threat_category_list": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"ip_threat_categories": {
+
+							Type: schema.TypeList,
+
+							Required: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
+
 			"client_role": {
 
 				Type:     schema.TypeSet,
@@ -349,6 +392,31 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"match": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"content_rewrite_action": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"element_selector": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"insert_content": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"position": {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
@@ -914,6 +982,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							},
 						},
 
+						"suffix_values": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"transformers": {
 
 							Type: schema.TypeList,
@@ -1088,6 +1166,78 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
+			"shape_protected_endpoint_action": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"app_traffic_type": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"mitigation": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"block": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"body": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"status": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"flag": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"none": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"redirect": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"uri": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"tls_fingerprint_matcher": {
 
 				Type:     schema.TypeSet,
@@ -1219,6 +1369,46 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"app_firewall_detection_control": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"exclude_signature_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"signature_id": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"exclude_violation_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"exclude_violation": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 
 						"none": {
 
@@ -1628,6 +1818,45 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//bot_action
+	if v, ok := d.GetOk("bot_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		botAction := &ves_io_schema_policy.BotAction{}
+		createSpec.BotAction = botAction
+		for _, set := range sl {
+			botActionMapStrToI := set.(map[string]interface{})
+
+			actionTypeTypeFound := false
+
+			if v, ok := botActionMapStrToI["bot_skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.BotAction_BotSkipProcessing{}
+					actionTypeInt.BotSkipProcessing = &ves_io_schema.Empty{}
+					botAction.ActionType = actionTypeInt
+				}
+
+			}
+
+			if v, ok := botActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.BotAction_None{}
+					actionTypeInt.None = &ves_io_schema.Empty{}
+					botAction.ActionType = actionTypeInt
+				}
+
+			}
+
+		}
+
+	}
+
 	//challenge_action
 	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
 
@@ -1722,6 +1951,31 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	if v, ok := d.GetOk("ip_threat_category_list"); ok && !clientChoiceTypeFound {
+
+		clientChoiceTypeFound = true
+		clientChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_IpThreatCategoryList{}
+		clientChoiceInt.IpThreatCategoryList = &ves_io_schema_service_policy_rule.IPThreatCategoryListType{}
+		createSpec.ClientChoice = clientChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+				ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+				for _, j := range v.([]interface{}) {
+					ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+				}
+				clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
+
+			}
+
+		}
+
+	}
+
 	//client_role
 	if v, ok := d.GetOk("client_role"); ok && !isIntfNil(v) {
 
@@ -1733,6 +1987,33 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
 				clientRole.Match = w.(string)
+			}
+
+		}
+
+	}
+
+	//content_rewrite_action
+	if v, ok := d.GetOk("content_rewrite_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		contentRewriteAction := &ves_io_schema_policy.ContentRewriteAction{}
+		createSpec.ContentRewriteAction = contentRewriteAction
+		for _, set := range sl {
+			contentRewriteActionMapStrToI := set.(map[string]interface{})
+
+			if w, ok := contentRewriteActionMapStrToI["element_selector"]; ok && !isIntfNil(w) {
+				contentRewriteAction.ElementSelector = w.(string)
+			}
+
+			if w, ok := contentRewriteActionMapStrToI["insert_content"]; ok && !isIntfNil(w) {
+				contentRewriteAction.InsertContent = w.(string)
+			}
+
+			if v, ok := contentRewriteActionMapStrToI["position"]; ok && !isIntfNil(v) {
+
+				contentRewriteAction.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
+
 			}
 
 		}
@@ -2440,6 +2721,14 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				path.RegexValues = ls
 			}
 
+			if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				path.SuffixValues = ls
+			}
+
 			if v, ok := pathMapStrToI["transformers"]; ok && !isIntfNil(v) {
 
 				transformersList := []ves_io_schema_policy.Transformer{}
@@ -2648,6 +2937,111 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//shape_protected_endpoint_action
+	if v, ok := d.GetOk("shape_protected_endpoint_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		shapeProtectedEndpointAction := &ves_io_schema_policy.ShapeProtectedEndpointAction{}
+		createSpec.ShapeProtectedEndpointAction = shapeProtectedEndpointAction
+		for _, set := range sl {
+			shapeProtectedEndpointActionMapStrToI := set.(map[string]interface{})
+
+			if v, ok := shapeProtectedEndpointActionMapStrToI["app_traffic_type"]; ok && !isIntfNil(v) {
+
+				shapeProtectedEndpointAction.AppTrafficType = ves_io_schema_policy.AppTrafficType(ves_io_schema_policy.AppTrafficType_value[v.(string)])
+
+			}
+
+			if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				mitigation := &ves_io_schema_policy.ShapeBotMitigationAction{}
+				shapeProtectedEndpointAction.Mitigation = mitigation
+				for _, set := range sl {
+					mitigationMapStrToI := set.(map[string]interface{})
+
+					actionTypeTypeFound := false
+
+					if v, ok := mitigationMapStrToI["block"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+						actionTypeTypeFound = true
+						actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Block{}
+						actionTypeInt.Block = &ves_io_schema_policy.ShapeBotBlockMitigationActionType{}
+						mitigation.ActionType = actionTypeInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["body"]; ok && !isIntfNil(v) {
+
+								actionTypeInt.Block.Body = v.(string)
+
+							}
+
+							if v, ok := cs["status"]; ok && !isIntfNil(v) {
+
+								actionTypeInt.Block.Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+						actionTypeTypeFound = true
+
+						if v.(bool) {
+							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+							actionTypeInt.Flag = &ves_io_schema.Empty{}
+							mitigation.ActionType = actionTypeInt
+						}
+
+					}
+
+					if v, ok := mitigationMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+						actionTypeTypeFound = true
+
+						if v.(bool) {
+							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_None{}
+							actionTypeInt.None = &ves_io_schema.Empty{}
+							mitigation.ActionType = actionTypeInt
+						}
+
+					}
+
+					if v, ok := mitigationMapStrToI["redirect"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+						actionTypeTypeFound = true
+						actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Redirect{}
+						actionTypeInt.Redirect = &ves_io_schema_policy.ShapeBotRedirectMitigationActionType{}
+						mitigation.ActionType = actionTypeInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["uri"]; ok && !isIntfNil(v) {
+
+								actionTypeInt.Redirect.Uri = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	//tls_fingerprint_matcher
 	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !isIntfNil(v) {
 
@@ -2815,6 +3209,57 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			wafActionMapStrToI := set.(map[string]interface{})
 
 			actionTypeTypeFound := false
+
+			if v, ok := wafActionMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+				actionTypeInt := &ves_io_schema_policy.WafAction_AppFirewallDetectionControl{}
+				actionTypeInt.AppFirewallDetectionControl = &ves_io_schema_policy.AppFirewallDetectionControl{}
+				wafAction.ActionType = actionTypeInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["exclude_signature_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
+						actionTypeInt.AppFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
+						for i, set := range sl {
+							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
+							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_violation_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
+						actionTypeInt.AppFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
+						for i, set := range sl {
+							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
+							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := wafActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
@@ -3295,6 +3740,44 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
+	if v, ok := d.GetOk("bot_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		botAction := &ves_io_schema_policy.BotAction{}
+		updateSpec.BotAction = botAction
+		for _, set := range sl {
+			botActionMapStrToI := set.(map[string]interface{})
+
+			actionTypeTypeFound := false
+
+			if v, ok := botActionMapStrToI["bot_skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.BotAction_BotSkipProcessing{}
+					actionTypeInt.BotSkipProcessing = &ves_io_schema.Empty{}
+					botAction.ActionType = actionTypeInt
+				}
+
+			}
+
+			if v, ok := botActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.BotAction_None{}
+					actionTypeInt.None = &ves_io_schema.Empty{}
+					botAction.ActionType = actionTypeInt
+				}
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
 
 		updateSpec.ChallengeAction = ves_io_schema_policy.ChallengeAction(ves_io_schema_policy.ChallengeAction_value[v.(string)])
@@ -3386,6 +3869,31 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
+	if v, ok := d.GetOk("ip_threat_category_list"); ok && !clientChoiceTypeFound {
+
+		clientChoiceTypeFound = true
+		clientChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_IpThreatCategoryList{}
+		clientChoiceInt.IpThreatCategoryList = &ves_io_schema_service_policy_rule.IPThreatCategoryListType{}
+		updateSpec.ClientChoice = clientChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+				ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+				for _, j := range v.([]interface{}) {
+					ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+				}
+				clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("client_role"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
@@ -3396,6 +3904,32 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
 				clientRole.Match = w.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("content_rewrite_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		contentRewriteAction := &ves_io_schema_policy.ContentRewriteAction{}
+		updateSpec.ContentRewriteAction = contentRewriteAction
+		for _, set := range sl {
+			contentRewriteActionMapStrToI := set.(map[string]interface{})
+
+			if w, ok := contentRewriteActionMapStrToI["element_selector"]; ok && !isIntfNil(w) {
+				contentRewriteAction.ElementSelector = w.(string)
+			}
+
+			if w, ok := contentRewriteActionMapStrToI["insert_content"]; ok && !isIntfNil(w) {
+				contentRewriteAction.InsertContent = w.(string)
+			}
+
+			if v, ok := contentRewriteActionMapStrToI["position"]; ok && !isIntfNil(v) {
+
+				contentRewriteAction.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
+
 			}
 
 		}
@@ -4087,6 +4621,14 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				path.RegexValues = ls
 			}
 
+			if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				path.SuffixValues = ls
+			}
+
 			if v, ok := pathMapStrToI["transformers"]; ok && !isIntfNil(v) {
 
 				transformersList := []ves_io_schema_policy.Transformer{}
@@ -4290,6 +4832,110 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
+	if v, ok := d.GetOk("shape_protected_endpoint_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		shapeProtectedEndpointAction := &ves_io_schema_policy.ShapeProtectedEndpointAction{}
+		updateSpec.ShapeProtectedEndpointAction = shapeProtectedEndpointAction
+		for _, set := range sl {
+			shapeProtectedEndpointActionMapStrToI := set.(map[string]interface{})
+
+			if v, ok := shapeProtectedEndpointActionMapStrToI["app_traffic_type"]; ok && !isIntfNil(v) {
+
+				shapeProtectedEndpointAction.AppTrafficType = ves_io_schema_policy.AppTrafficType(ves_io_schema_policy.AppTrafficType_value[v.(string)])
+
+			}
+
+			if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				mitigation := &ves_io_schema_policy.ShapeBotMitigationAction{}
+				shapeProtectedEndpointAction.Mitigation = mitigation
+				for _, set := range sl {
+					mitigationMapStrToI := set.(map[string]interface{})
+
+					actionTypeTypeFound := false
+
+					if v, ok := mitigationMapStrToI["block"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+						actionTypeTypeFound = true
+						actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Block{}
+						actionTypeInt.Block = &ves_io_schema_policy.ShapeBotBlockMitigationActionType{}
+						mitigation.ActionType = actionTypeInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["body"]; ok && !isIntfNil(v) {
+
+								actionTypeInt.Block.Body = v.(string)
+
+							}
+
+							if v, ok := cs["status"]; ok && !isIntfNil(v) {
+
+								actionTypeInt.Block.Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+						actionTypeTypeFound = true
+
+						if v.(bool) {
+							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+							actionTypeInt.Flag = &ves_io_schema.Empty{}
+							mitigation.ActionType = actionTypeInt
+						}
+
+					}
+
+					if v, ok := mitigationMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+						actionTypeTypeFound = true
+
+						if v.(bool) {
+							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_None{}
+							actionTypeInt.None = &ves_io_schema.Empty{}
+							mitigation.ActionType = actionTypeInt
+						}
+
+					}
+
+					if v, ok := mitigationMapStrToI["redirect"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+						actionTypeTypeFound = true
+						actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Redirect{}
+						actionTypeInt.Redirect = &ves_io_schema_policy.ShapeBotRedirectMitigationActionType{}
+						mitigation.ActionType = actionTypeInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["uri"]; ok && !isIntfNil(v) {
+
+								actionTypeInt.Redirect.Uri = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
@@ -4453,6 +5099,57 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 			wafActionMapStrToI := set.(map[string]interface{})
 
 			actionTypeTypeFound := false
+
+			if v, ok := wafActionMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+				actionTypeInt := &ves_io_schema_policy.WafAction_AppFirewallDetectionControl{}
+				actionTypeInt.AppFirewallDetectionControl = &ves_io_schema_policy.AppFirewallDetectionControl{}
+				wafAction.ActionType = actionTypeInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["exclude_signature_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
+						actionTypeInt.AppFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
+						for i, set := range sl {
+							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
+							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_violation_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
+						actionTypeInt.AppFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
+						for i, set := range sl {
+							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
+							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := wafActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 

@@ -168,19 +168,21 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetVirtualHostDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetVirtualHostDRefInfo()
+
 }
 
 func (m *GlobalSpecType) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVirtualHost() {
+	refs := m.GetVirtualHost()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.virtual_host[%d] has a nil value", i)
 		}
@@ -195,8 +197,8 @@ func (m *GlobalSpecType) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualHostDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -324,37 +326,30 @@ func (m *SpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 }
 
 func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetGcSpecDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetGcSpecDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetGcSpec() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetGcSpec().GetDRefInfo()
+	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "gc_spec." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateSpecType struct {

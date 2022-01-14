@@ -24,6 +24,7 @@ import (
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -38,6 +39,127 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// URLSchemeType
+//
+// x-displayName: "URL Scheme"
+// SchemeType is used to indicate URL scheme.
+type URLScheme int32
+
+const (
+	// BOTH
+	//
+	// x-displayName: "BOTH"
+	// URL scheme for https:// or http://.
+	BOTH URLScheme = 0
+	// HTTP
+	//
+	// x-displayName: "HTTP"
+	// URL scheme http:// only.
+	HTTP URLScheme = 1
+	// HTTPS
+	//
+	// x-displayName: "HTTPS"
+	// URL scheme https:// only.
+	HTTPS URLScheme = 2
+)
+
+var URLScheme_name = map[int32]string{
+	0: "BOTH",
+	1: "HTTP",
+	2: "HTTPS",
+}
+
+var URLScheme_value = map[string]int32{
+	"BOTH":  0,
+	"HTTP":  1,
+	"HTTPS": 2,
+}
+
+func (URLScheme) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{0}
+}
+
+// ShapeBotDefenseRegion
+//
+// x-displayName: "Bot Defense Region"
+// Defines a selection for Shape Bot Defense regional endpoint
+type ShapeBotDefenseRegion int32
+
+const (
+	// AUTO
+	//
+	// x-displayName: "Auto"
+	// Automatic selection based on client IP address
+	AUTO ShapeBotDefenseRegion = 0
+	// US
+	//
+	// x-displayName: "US"
+	// US regional endpoint
+	US ShapeBotDefenseRegion = 1
+	// EU
+	//
+	// x-displayName: "EU"
+	// European Union regional endpoint
+	EU ShapeBotDefenseRegion = 2
+	// ASIA
+	//
+	// x-displayName: "Asia"
+	// Asia regional endpoint
+	ASIA ShapeBotDefenseRegion = 3
+)
+
+var ShapeBotDefenseRegion_name = map[int32]string{
+	0: "AUTO",
+	1: "US",
+	2: "EU",
+	3: "ASIA",
+}
+
+var ShapeBotDefenseRegion_value = map[string]int32{
+	"AUTO": 0,
+	"US":   1,
+	"EU":   2,
+	"ASIA": 3,
+}
+
+func (ShapeBotDefenseRegion) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{1}
+}
+
+// JavaScriptLocation
+//
+// x-displayName: "JavaScript Location"
+// All inside networks.
+type JavaScriptLocation int32
+
+const (
+	// x-displayName: "After <head> tag"
+	// Insert JavaScript after <head> tag
+	AFTER_HEAD JavaScriptLocation = 0
+	// x-displayName: "After </title> tag"
+	// Insert JavaScript after </title> tag.
+	AFTER_TITLE_END JavaScriptLocation = 1
+	// x-displayName: "Before <script> tag"
+	// Insert JavaScript before first <script> tag
+	BEFORE_SCRIPT JavaScriptLocation = 2
+)
+
+var JavaScriptLocation_name = map[int32]string{
+	0: "AFTER_HEAD",
+	1: "AFTER_TITLE_END",
+	2: "BEFORE_SCRIPT",
+}
+
+var JavaScriptLocation_value = map[string]int32{
+	"AFTER_HEAD":      0,
+	"AFTER_TITLE_END": 1,
+	"BEFORE_SCRIPT":   2,
+}
+
+func (JavaScriptLocation) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{2}
+}
 
 // DownstreamTlsValidationContext
 //
@@ -107,7 +229,7 @@ type DownstreamTlsParamsType struct {
 	//
 	// x-displayName: "mTLS choice with clients"
 	// x-required
-	// mTLS choice between clients amd HTTP loadbalancer
+	// mTLS choice between clients and HTTP loadbalancer
 	//
 	// Types that are valid to be assigned to MtlsChoice:
 	//	*DownstreamTlsParamsType_NoMtls
@@ -234,6 +356,25 @@ type ProxyTypeHttps struct {
 	//	*ProxyTypeHttps_AppendServerName
 	//	*ProxyTypeHttps_PassThrough
 	ServerHeaderChoice isProxyTypeHttps_ServerHeaderChoice `protobuf_oneof:"server_header_choice"`
+	// Normalize Path
+	//
+	// x-displayName: "Path normalize"
+	//
+	// x-required
+	// Should paths be normalized before any processing of requests.
+	//
+	// In addition to path normalization according to RFC 3986, adjacent slashes in the path
+	// will be merged into one when this flag is enabled.
+	//
+	// It should be noted that normalized path is sent to the origin server.
+	//
+	// See Normalization and Comparison <https://tools.ietf.org/html/rfc3986#section-6> for details of normalization.
+	// Note that Volterra does not perform case normalization <https://tools.ietf.org/html/rfc3986#section-6.2.2.1>
+	//
+	// Types that are valid to be assigned to PathNormalizeChoice:
+	//	*ProxyTypeHttps_EnablePathNormalize
+	//	*ProxyTypeHttps_DisablePathNormalize
+	PathNormalizeChoice isProxyTypeHttps_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
 }
 
 func (m *ProxyTypeHttps) Reset()      { *m = ProxyTypeHttps{} }
@@ -270,6 +411,12 @@ type isProxyTypeHttps_ServerHeaderChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isProxyTypeHttps_PathNormalizeChoice interface {
+	isProxyTypeHttps_PathNormalizeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ProxyTypeHttps_DefaultHeader struct {
 	DefaultHeader *schema.Empty `protobuf:"bytes,5,opt,name=default_header,json=defaultHeader,proto3,oneof" json:"default_header,omitempty"`
@@ -283,15 +430,29 @@ type ProxyTypeHttps_AppendServerName struct {
 type ProxyTypeHttps_PassThrough struct {
 	PassThrough *schema.Empty `protobuf:"bytes,8,opt,name=pass_through,json=passThrough,proto3,oneof" json:"pass_through,omitempty"`
 }
+type ProxyTypeHttps_EnablePathNormalize struct {
+	EnablePathNormalize *schema.Empty `protobuf:"bytes,10,opt,name=enable_path_normalize,json=enablePathNormalize,proto3,oneof" json:"enable_path_normalize,omitempty"`
+}
+type ProxyTypeHttps_DisablePathNormalize struct {
+	DisablePathNormalize *schema.Empty `protobuf:"bytes,11,opt,name=disable_path_normalize,json=disablePathNormalize,proto3,oneof" json:"disable_path_normalize,omitempty"`
+}
 
-func (*ProxyTypeHttps_DefaultHeader) isProxyTypeHttps_ServerHeaderChoice()    {}
-func (*ProxyTypeHttps_ServerName) isProxyTypeHttps_ServerHeaderChoice()       {}
-func (*ProxyTypeHttps_AppendServerName) isProxyTypeHttps_ServerHeaderChoice() {}
-func (*ProxyTypeHttps_PassThrough) isProxyTypeHttps_ServerHeaderChoice()      {}
+func (*ProxyTypeHttps_DefaultHeader) isProxyTypeHttps_ServerHeaderChoice()         {}
+func (*ProxyTypeHttps_ServerName) isProxyTypeHttps_ServerHeaderChoice()            {}
+func (*ProxyTypeHttps_AppendServerName) isProxyTypeHttps_ServerHeaderChoice()      {}
+func (*ProxyTypeHttps_PassThrough) isProxyTypeHttps_ServerHeaderChoice()           {}
+func (*ProxyTypeHttps_EnablePathNormalize) isProxyTypeHttps_PathNormalizeChoice()  {}
+func (*ProxyTypeHttps_DisablePathNormalize) isProxyTypeHttps_PathNormalizeChoice() {}
 
 func (m *ProxyTypeHttps) GetServerHeaderChoice() isProxyTypeHttps_ServerHeaderChoice {
 	if m != nil {
 		return m.ServerHeaderChoice
+	}
+	return nil
+}
+func (m *ProxyTypeHttps) GetPathNormalizeChoice() isProxyTypeHttps_PathNormalizeChoice {
+	if m != nil {
+		return m.PathNormalizeChoice
 	}
 	return nil
 }
@@ -345,6 +506,20 @@ func (m *ProxyTypeHttps) GetPassThrough() *schema.Empty {
 	return nil
 }
 
+func (m *ProxyTypeHttps) GetEnablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*ProxyTypeHttps_EnablePathNormalize); ok {
+		return x.EnablePathNormalize
+	}
+	return nil
+}
+
+func (m *ProxyTypeHttps) GetDisablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*ProxyTypeHttps_DisablePathNormalize); ok {
+		return x.DisablePathNormalize
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ProxyTypeHttps) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -352,6 +527,8 @@ func (*ProxyTypeHttps) XXX_OneofWrappers() []interface{} {
 		(*ProxyTypeHttps_ServerName)(nil),
 		(*ProxyTypeHttps_AppendServerName)(nil),
 		(*ProxyTypeHttps_PassThrough)(nil),
+		(*ProxyTypeHttps_EnablePathNormalize)(nil),
+		(*ProxyTypeHttps_DisablePathNormalize)(nil),
 	}
 }
 
@@ -427,7 +604,7 @@ type ProxyTypeHttpsAutoCerts struct {
 	//
 	// x-displayName: "mTLS choice with clients"
 	// x-required
-	// mTLS choice between clients amd HTTP loadbalancer
+	// mTLS choice between clients and HTTP loadbalancer
 	//
 	// Types that are valid to be assigned to MtlsChoice:
 	//	*ProxyTypeHttpsAutoCerts_NoMtls
@@ -444,6 +621,25 @@ type ProxyTypeHttpsAutoCerts struct {
 	//	*ProxyTypeHttpsAutoCerts_AppendServerName
 	//	*ProxyTypeHttpsAutoCerts_PassThrough
 	ServerHeaderChoice isProxyTypeHttpsAutoCerts_ServerHeaderChoice `protobuf_oneof:"server_header_choice"`
+	// Normalize Path
+	//
+	// x-displayName: "Path normalize"
+	// x-required
+	//
+	// Should paths be normalized before any processing of requests.
+	//
+	// In addition to path normalization according to RFC 3986, adjacent slashes in the path
+	// will be merged into one when this flag is enabled.
+	//
+	// It should be noted that normalized path is sent to the origin server.
+	//
+	// See Normalization and Comparison <https://tools.ietf.org/html/rfc3986#section-6> for details of normalization.
+	// Note that Volterra does not perform case normalization <https://tools.ietf.org/html/rfc3986#section-6.2.2.1>
+	//
+	// Types that are valid to be assigned to PathNormalizeChoice:
+	//	*ProxyTypeHttpsAutoCerts_EnablePathNormalize
+	//	*ProxyTypeHttpsAutoCerts_DisablePathNormalize
+	PathNormalizeChoice isProxyTypeHttpsAutoCerts_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
 }
 
 func (m *ProxyTypeHttpsAutoCerts) Reset()      { *m = ProxyTypeHttpsAutoCerts{} }
@@ -486,6 +682,12 @@ type isProxyTypeHttpsAutoCerts_ServerHeaderChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isProxyTypeHttpsAutoCerts_PathNormalizeChoice interface {
+	isProxyTypeHttpsAutoCerts_PathNormalizeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ProxyTypeHttpsAutoCerts_NoMtls struct {
 	NoMtls *schema.Empty `protobuf:"bytes,5,opt,name=no_mtls,json=noMtls,proto3,oneof" json:"no_mtls,omitempty"`
@@ -505,13 +707,22 @@ type ProxyTypeHttpsAutoCerts_AppendServerName struct {
 type ProxyTypeHttpsAutoCerts_PassThrough struct {
 	PassThrough *schema.Empty `protobuf:"bytes,11,opt,name=pass_through,json=passThrough,proto3,oneof" json:"pass_through,omitempty"`
 }
+type ProxyTypeHttpsAutoCerts_EnablePathNormalize struct {
+	EnablePathNormalize *schema.Empty `protobuf:"bytes,13,opt,name=enable_path_normalize,json=enablePathNormalize,proto3,oneof" json:"enable_path_normalize,omitempty"`
+}
+type ProxyTypeHttpsAutoCerts_DisablePathNormalize struct {
+	DisablePathNormalize *schema.Empty `protobuf:"bytes,14,opt,name=disable_path_normalize,json=disablePathNormalize,proto3,oneof" json:"disable_path_normalize,omitempty"`
+}
 
-func (*ProxyTypeHttpsAutoCerts_NoMtls) isProxyTypeHttpsAutoCerts_MtlsChoice()                   {}
-func (*ProxyTypeHttpsAutoCerts_UseMtls) isProxyTypeHttpsAutoCerts_MtlsChoice()                  {}
-func (*ProxyTypeHttpsAutoCerts_DefaultHeader) isProxyTypeHttpsAutoCerts_ServerHeaderChoice()    {}
-func (*ProxyTypeHttpsAutoCerts_ServerName) isProxyTypeHttpsAutoCerts_ServerHeaderChoice()       {}
-func (*ProxyTypeHttpsAutoCerts_AppendServerName) isProxyTypeHttpsAutoCerts_ServerHeaderChoice() {}
-func (*ProxyTypeHttpsAutoCerts_PassThrough) isProxyTypeHttpsAutoCerts_ServerHeaderChoice()      {}
+func (*ProxyTypeHttpsAutoCerts_NoMtls) isProxyTypeHttpsAutoCerts_MtlsChoice()                       {}
+func (*ProxyTypeHttpsAutoCerts_UseMtls) isProxyTypeHttpsAutoCerts_MtlsChoice()                      {}
+func (*ProxyTypeHttpsAutoCerts_DefaultHeader) isProxyTypeHttpsAutoCerts_ServerHeaderChoice()        {}
+func (*ProxyTypeHttpsAutoCerts_ServerName) isProxyTypeHttpsAutoCerts_ServerHeaderChoice()           {}
+func (*ProxyTypeHttpsAutoCerts_AppendServerName) isProxyTypeHttpsAutoCerts_ServerHeaderChoice()     {}
+func (*ProxyTypeHttpsAutoCerts_PassThrough) isProxyTypeHttpsAutoCerts_ServerHeaderChoice()          {}
+func (*ProxyTypeHttpsAutoCerts_EnablePathNormalize) isProxyTypeHttpsAutoCerts_PathNormalizeChoice() {}
+func (*ProxyTypeHttpsAutoCerts_DisablePathNormalize) isProxyTypeHttpsAutoCerts_PathNormalizeChoice() {
+}
 
 func (m *ProxyTypeHttpsAutoCerts) GetMtlsChoice() isProxyTypeHttpsAutoCerts_MtlsChoice {
 	if m != nil {
@@ -522,6 +733,12 @@ func (m *ProxyTypeHttpsAutoCerts) GetMtlsChoice() isProxyTypeHttpsAutoCerts_Mtls
 func (m *ProxyTypeHttpsAutoCerts) GetServerHeaderChoice() isProxyTypeHttpsAutoCerts_ServerHeaderChoice {
 	if m != nil {
 		return m.ServerHeaderChoice
+	}
+	return nil
+}
+func (m *ProxyTypeHttpsAutoCerts) GetPathNormalizeChoice() isProxyTypeHttpsAutoCerts_PathNormalizeChoice {
+	if m != nil {
+		return m.PathNormalizeChoice
 	}
 	return nil
 }
@@ -589,6 +806,20 @@ func (m *ProxyTypeHttpsAutoCerts) GetPassThrough() *schema.Empty {
 	return nil
 }
 
+func (m *ProxyTypeHttpsAutoCerts) GetEnablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*ProxyTypeHttpsAutoCerts_EnablePathNormalize); ok {
+		return x.EnablePathNormalize
+	}
+	return nil
+}
+
+func (m *ProxyTypeHttpsAutoCerts) GetDisablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*ProxyTypeHttpsAutoCerts_DisablePathNormalize); ok {
+		return x.DisablePathNormalize
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ProxyTypeHttpsAutoCerts) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -598,6 +829,8 @@ func (*ProxyTypeHttpsAutoCerts) XXX_OneofWrappers() []interface{} {
 		(*ProxyTypeHttpsAutoCerts_ServerName)(nil),
 		(*ProxyTypeHttpsAutoCerts_AppendServerName)(nil),
 		(*ProxyTypeHttpsAutoCerts_PassThrough)(nil),
+		(*ProxyTypeHttpsAutoCerts_EnablePathNormalize)(nil),
+		(*ProxyTypeHttpsAutoCerts_DisablePathNormalize)(nil),
 	}
 }
 
@@ -794,22 +1027,12 @@ type RouteSimpleAdvancedOptions struct {
 	// Enable the WAF (Web Application Firewall) functionality for VirtualHost
 	//
 	// x-displayName: "Select Web Application Firewall (WAF) Config"
-	// x-required
 	//
 	// WAF can be used to analyze inbound and outbound http/https traffic.
 	// WAF can be configured either in BLOCKing Mode or ALERTing Mode.
 	// In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.
 	// In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the
 	// suspicious traffic (instead of blocking traffic).
-	//
-	// waf_type can be either WAF or WAFRules.
-	// WAF Object allows to
-	//     Configure mode of the WAF (BLOCK/ALERT)
-	//     Configure language used by the application which is being protected by the WAF
-	//     Disable different high level security tags if required (e.g. SQLI_DETECTION, XSS_DETECTION etc)
-	// WAFRules allows to
-	//     Configure mode of the WAF (BLOCK/ALERT)
-	//     Enable/Disable individual WAF security rules
 	//
 	// Types that are valid to be assigned to WafChoice:
 	//	*RouteSimpleAdvancedOptions_DisableWaf
@@ -2030,6 +2253,37 @@ type AdvancedOptionsType struct {
 	// x-displayName: "Disable Default Error Pages"
 	// Disable the use of default Volterra error pages.
 	DisableDefaultErrorPages bool `protobuf:"varint,13,opt,name=disable_default_error_pages,json=disableDefaultErrorPages,proto3" json:"disable_default_error_pages,omitempty"`
+	// Normalize Path
+	//
+	// x-displayName: "Path normalize"
+	//
+	// Should paths be normalized before any processing of requests.
+	//
+	// In addition to path normalization according to RFC 3986, adjacent slashes in the path
+	// will be merged into one when this flag is enabled.
+	//
+	// It should be noted that normalized path is sent to the origin server.
+	//
+	// For HTTP loadbalancer, this configuration is ignored and path normalization is always enabled
+	//
+	// See Normalization and Comparison <https://tools.ietf.org/html/rfc3986#section-6> for details of normalization.
+	// Note that Volterra does not perform case normalization <https://tools.ietf.org/html/rfc3986#section-6.2.2.1>
+	//
+	// Types that are valid to be assigned to PathNormalizeChoice:
+	//	*AdvancedOptionsType_EnablePathNormalize
+	//	*AdvancedOptionsType_DisablePathNormalize
+	PathNormalizeChoice isAdvancedOptionsType_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
+	// Strict check of SNI and Host header
+	//
+	// x-displayName: "Strict SNI and Host header check"
+	//
+	// Volterra allows request only if Server Name Indication(SNI) and Host header match.
+	// The domains for which this check needs to be bypassed can be configured here.
+	//
+	// Types that are valid to be assigned to StrictSniHostHeaderCheckChoice:
+	//	*AdvancedOptionsType_EnableStrictSniHostHeaderCheck
+	//	*AdvancedOptionsType_AdditionalDomains
+	StrictSniHostHeaderCheckChoice isAdvancedOptionsType_StrictSniHostHeaderCheckChoice `protobuf_oneof:"strict_sni_host_header_check_choice"`
 }
 
 func (m *AdvancedOptionsType) Reset()      { *m = AdvancedOptionsType{} }
@@ -2059,6 +2313,52 @@ func (m *AdvancedOptionsType) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_AdvancedOptionsType proto.InternalMessageInfo
+
+type isAdvancedOptionsType_PathNormalizeChoice interface {
+	isAdvancedOptionsType_PathNormalizeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isAdvancedOptionsType_StrictSniHostHeaderCheckChoice interface {
+	isAdvancedOptionsType_StrictSniHostHeaderCheckChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AdvancedOptionsType_EnablePathNormalize struct {
+	EnablePathNormalize *schema.Empty `protobuf:"bytes,15,opt,name=enable_path_normalize,json=enablePathNormalize,proto3,oneof" json:"enable_path_normalize,omitempty"`
+}
+type AdvancedOptionsType_DisablePathNormalize struct {
+	DisablePathNormalize *schema.Empty `protobuf:"bytes,16,opt,name=disable_path_normalize,json=disablePathNormalize,proto3,oneof" json:"disable_path_normalize,omitempty"`
+}
+type AdvancedOptionsType_EnableStrictSniHostHeaderCheck struct {
+	EnableStrictSniHostHeaderCheck *schema.Empty `protobuf:"bytes,18,opt,name=enable_strict_sni_host_header_check,json=enableStrictSniHostHeaderCheck,proto3,oneof" json:"enable_strict_sni_host_header_check,omitempty"`
+}
+type AdvancedOptionsType_AdditionalDomains struct {
+	AdditionalDomains *schema.DomainNameList `protobuf:"bytes,19,opt,name=additional_domains,json=additionalDomains,proto3,oneof" json:"additional_domains,omitempty"`
+}
+
+func (*AdvancedOptionsType_EnablePathNormalize) isAdvancedOptionsType_PathNormalizeChoice()  {}
+func (*AdvancedOptionsType_DisablePathNormalize) isAdvancedOptionsType_PathNormalizeChoice() {}
+func (*AdvancedOptionsType_EnableStrictSniHostHeaderCheck) isAdvancedOptionsType_StrictSniHostHeaderCheckChoice() {
+}
+func (*AdvancedOptionsType_AdditionalDomains) isAdvancedOptionsType_StrictSniHostHeaderCheckChoice() {
+}
+
+func (m *AdvancedOptionsType) GetPathNormalizeChoice() isAdvancedOptionsType_PathNormalizeChoice {
+	if m != nil {
+		return m.PathNormalizeChoice
+	}
+	return nil
+}
+func (m *AdvancedOptionsType) GetStrictSniHostHeaderCheckChoice() isAdvancedOptionsType_StrictSniHostHeaderCheckChoice {
+	if m != nil {
+		return m.StrictSniHostHeaderCheckChoice
+	}
+	return nil
+}
 
 func (m *AdvancedOptionsType) GetRequestHeadersToAdd() []*schema.HeaderManipulationOptionType {
 	if m != nil {
@@ -2142,6 +2442,46 @@ func (m *AdvancedOptionsType) GetDisableDefaultErrorPages() bool {
 		return m.DisableDefaultErrorPages
 	}
 	return false
+}
+
+// Deprecated: Do not use.
+func (m *AdvancedOptionsType) GetEnablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*AdvancedOptionsType_EnablePathNormalize); ok {
+		return x.EnablePathNormalize
+	}
+	return nil
+}
+
+// Deprecated: Do not use.
+func (m *AdvancedOptionsType) GetDisablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*AdvancedOptionsType_DisablePathNormalize); ok {
+		return x.DisablePathNormalize
+	}
+	return nil
+}
+
+func (m *AdvancedOptionsType) GetEnableStrictSniHostHeaderCheck() *schema.Empty {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*AdvancedOptionsType_EnableStrictSniHostHeaderCheck); ok {
+		return x.EnableStrictSniHostHeaderCheck
+	}
+	return nil
+}
+
+func (m *AdvancedOptionsType) GetAdditionalDomains() *schema.DomainNameList {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*AdvancedOptionsType_AdditionalDomains); ok {
+		return x.AdditionalDomains
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AdvancedOptionsType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AdvancedOptionsType_EnablePathNormalize)(nil),
+		(*AdvancedOptionsType_DisablePathNormalize)(nil),
+		(*AdvancedOptionsType_EnableStrictSniHostHeaderCheck)(nil),
+		(*AdvancedOptionsType_AdditionalDomains)(nil),
+	}
 }
 
 // policy based challenge
@@ -2586,6 +2926,16 @@ type SimpleClientSrcRule struct {
 	// x-required
 	// Common attributes for the rule including name and description.
 	Metadata *schema.MessageMetaType `protobuf:"bytes,10,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// action
+	//
+	// x-displayName: "Action"
+	// Modify WAF and Bot Processing behaviour for trusted sources.
+	//
+	// Types that are valid to be assigned to ActionChoice:
+	//	*SimpleClientSrcRule_SkipProcessing
+	//	*SimpleClientSrcRule_WafSkipProcessing
+	//	*SimpleClientSrcRule_BotSkipProcessing
+	ActionChoice isSimpleClientSrcRule_ActionChoice `protobuf_oneof:"action_choice"`
 }
 
 func (m *SimpleClientSrcRule) Reset()      { *m = SimpleClientSrcRule{} }
@@ -2622,6 +2972,12 @@ type isSimpleClientSrcRule_ClientSourceChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isSimpleClientSrcRule_ActionChoice interface {
+	isSimpleClientSrcRule_ActionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type SimpleClientSrcRule_IpPrefix struct {
 	IpPrefix string `protobuf:"bytes,4,opt,name=ip_prefix,json=ipPrefix,proto3,oneof" json:"ip_prefix,omitempty"`
@@ -2629,13 +2985,31 @@ type SimpleClientSrcRule_IpPrefix struct {
 type SimpleClientSrcRule_AsNumber struct {
 	AsNumber uint32 `protobuf:"varint,5,opt,name=as_number,json=asNumber,proto3,oneof" json:"as_number,omitempty"`
 }
+type SimpleClientSrcRule_SkipProcessing struct {
+	SkipProcessing *schema.Empty `protobuf:"bytes,12,opt,name=skip_processing,json=skipProcessing,proto3,oneof" json:"skip_processing,omitempty"`
+}
+type SimpleClientSrcRule_WafSkipProcessing struct {
+	WafSkipProcessing *schema.Empty `protobuf:"bytes,13,opt,name=waf_skip_processing,json=wafSkipProcessing,proto3,oneof" json:"waf_skip_processing,omitempty"`
+}
+type SimpleClientSrcRule_BotSkipProcessing struct {
+	BotSkipProcessing *schema.Empty `protobuf:"bytes,14,opt,name=bot_skip_processing,json=botSkipProcessing,proto3,oneof" json:"bot_skip_processing,omitempty"`
+}
 
-func (*SimpleClientSrcRule_IpPrefix) isSimpleClientSrcRule_ClientSourceChoice() {}
-func (*SimpleClientSrcRule_AsNumber) isSimpleClientSrcRule_ClientSourceChoice() {}
+func (*SimpleClientSrcRule_IpPrefix) isSimpleClientSrcRule_ClientSourceChoice()    {}
+func (*SimpleClientSrcRule_AsNumber) isSimpleClientSrcRule_ClientSourceChoice()    {}
+func (*SimpleClientSrcRule_SkipProcessing) isSimpleClientSrcRule_ActionChoice()    {}
+func (*SimpleClientSrcRule_WafSkipProcessing) isSimpleClientSrcRule_ActionChoice() {}
+func (*SimpleClientSrcRule_BotSkipProcessing) isSimpleClientSrcRule_ActionChoice() {}
 
 func (m *SimpleClientSrcRule) GetClientSourceChoice() isSimpleClientSrcRule_ClientSourceChoice {
 	if m != nil {
 		return m.ClientSourceChoice
+	}
+	return nil
+}
+func (m *SimpleClientSrcRule) GetActionChoice() isSimpleClientSrcRule_ActionChoice {
+	if m != nil {
+		return m.ActionChoice
 	}
 	return nil
 }
@@ -2668,11 +3042,35 @@ func (m *SimpleClientSrcRule) GetMetadata() *schema.MessageMetaType {
 	return nil
 }
 
+func (m *SimpleClientSrcRule) GetSkipProcessing() *schema.Empty {
+	if x, ok := m.GetActionChoice().(*SimpleClientSrcRule_SkipProcessing); ok {
+		return x.SkipProcessing
+	}
+	return nil
+}
+
+func (m *SimpleClientSrcRule) GetWafSkipProcessing() *schema.Empty {
+	if x, ok := m.GetActionChoice().(*SimpleClientSrcRule_WafSkipProcessing); ok {
+		return x.WafSkipProcessing
+	}
+	return nil
+}
+
+func (m *SimpleClientSrcRule) GetBotSkipProcessing() *schema.Empty {
+	if x, ok := m.GetActionChoice().(*SimpleClientSrcRule_BotSkipProcessing); ok {
+		return x.BotSkipProcessing
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*SimpleClientSrcRule) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*SimpleClientSrcRule_IpPrefix)(nil),
 		(*SimpleClientSrcRule_AsNumber)(nil),
+		(*SimpleClientSrcRule_SkipProcessing)(nil),
+		(*SimpleClientSrcRule_WafSkipProcessing)(nil),
+		(*SimpleClientSrcRule_BotSkipProcessing)(nil),
 	}
 }
 
@@ -3155,6 +3553,1173 @@ func (m *ServicePolicyList) GetPolicies() []*views.ObjectRefType {
 	return nil
 }
 
+// API Discovery Setting
+//
+// x-displayName: "API Discovery Setting"
+// Specifies the settings used for API discovery
+type ApiDiscoverySetting struct {
+	// Include or Exclude data in machine learning from traffic with redirect response in Business Logic Markup
+	//
+	// x-required
+	// x-displayName: "Learn From Traffic With Redirect Response"
+	// By default, the system only learns API Endpoints and patterns from traffic with response code 200
+	// On enabling this, the AI engine will learn API Endpoints from traffic with response code 3xx in addition to 200
+	//
+	// Types that are valid to be assigned to LearnFromRedirectTraffic:
+	//	*ApiDiscoverySetting_DisableLearnFromRedirectTraffic
+	//	*ApiDiscoverySetting_EnableLearnFromRedirectTraffic
+	LearnFromRedirectTraffic isApiDiscoverySetting_LearnFromRedirectTraffic `protobuf_oneof:"learn_from_redirect_traffic"`
+}
+
+func (m *ApiDiscoverySetting) Reset()      { *m = ApiDiscoverySetting{} }
+func (*ApiDiscoverySetting) ProtoMessage() {}
+func (*ApiDiscoverySetting) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{24}
+}
+func (m *ApiDiscoverySetting) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiDiscoverySetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ApiDiscoverySetting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiDiscoverySetting.Merge(m, src)
+}
+func (m *ApiDiscoverySetting) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiDiscoverySetting) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiDiscoverySetting.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiDiscoverySetting proto.InternalMessageInfo
+
+type isApiDiscoverySetting_LearnFromRedirectTraffic interface {
+	isApiDiscoverySetting_LearnFromRedirectTraffic()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ApiDiscoverySetting_DisableLearnFromRedirectTraffic struct {
+	DisableLearnFromRedirectTraffic *schema.Empty `protobuf:"bytes,2,opt,name=disable_learn_from_redirect_traffic,json=disableLearnFromRedirectTraffic,proto3,oneof" json:"disable_learn_from_redirect_traffic,omitempty"`
+}
+type ApiDiscoverySetting_EnableLearnFromRedirectTraffic struct {
+	EnableLearnFromRedirectTraffic *schema.Empty `protobuf:"bytes,3,opt,name=enable_learn_from_redirect_traffic,json=enableLearnFromRedirectTraffic,proto3,oneof" json:"enable_learn_from_redirect_traffic,omitempty"`
+}
+
+func (*ApiDiscoverySetting_DisableLearnFromRedirectTraffic) isApiDiscoverySetting_LearnFromRedirectTraffic() {
+}
+func (*ApiDiscoverySetting_EnableLearnFromRedirectTraffic) isApiDiscoverySetting_LearnFromRedirectTraffic() {
+}
+
+func (m *ApiDiscoverySetting) GetLearnFromRedirectTraffic() isApiDiscoverySetting_LearnFromRedirectTraffic {
+	if m != nil {
+		return m.LearnFromRedirectTraffic
+	}
+	return nil
+}
+
+func (m *ApiDiscoverySetting) GetDisableLearnFromRedirectTraffic() *schema.Empty {
+	if x, ok := m.GetLearnFromRedirectTraffic().(*ApiDiscoverySetting_DisableLearnFromRedirectTraffic); ok {
+		return x.DisableLearnFromRedirectTraffic
+	}
+	return nil
+}
+
+func (m *ApiDiscoverySetting) GetEnableLearnFromRedirectTraffic() *schema.Empty {
+	if x, ok := m.GetLearnFromRedirectTraffic().(*ApiDiscoverySetting_EnableLearnFromRedirectTraffic); ok {
+		return x.EnableLearnFromRedirectTraffic
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ApiDiscoverySetting) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ApiDiscoverySetting_DisableLearnFromRedirectTraffic)(nil),
+		(*ApiDiscoverySetting_EnableLearnFromRedirectTraffic)(nil),
+	}
+}
+
+// Single load balancer app setting
+//
+// x-displayName: "Single LoadBalancer App Setting"
+// Specific settings for Machine learning analysis on this HTTP LB, independently from other LBs.
+type SingleLoadBalancerAppSetting struct {
+	// API Discovery Choice
+	//
+	// x-required
+	// x-displayName: "API Discovery"
+	// When enabled, sampled traffic passing through this load balancer is analyzed and
+	// APIs exposed by the application are identified.
+	// An API is identified by its canonical (collapsed) URL path and the method used to call it.
+	// Once all APIs are identified, for each API, the system learns its possible schema.
+	// The learnt schema for all APIs is used to automatically generate a swagger definition file for the entire API set exposed by this load balancer.
+	//
+	// Types that are valid to be assigned to ApiDiscoveryChoice:
+	//	*SingleLoadBalancerAppSetting_EnableDiscovery
+	//	*SingleLoadBalancerAppSetting_DisableDiscovery
+	ApiDiscoveryChoice isSingleLoadBalancerAppSetting_ApiDiscoveryChoice `protobuf_oneof:"api_discovery_choice"`
+	// DDoS Detection Choice
+	//
+	// x-required
+	// x-displayName: "DDoS Detection"
+	// When enabled, this Load Balancer's metrics are monitored and continuously analyzed for DDoS behavior.
+	//
+	// Types that are valid to be assigned to DdosDetectionChoice:
+	//	*SingleLoadBalancerAppSetting_EnableDdosDetection
+	//	*SingleLoadBalancerAppSetting_DisableDdosDetection
+	DdosDetectionChoice isSingleLoadBalancerAppSetting_DdosDetectionChoice `protobuf_oneof:"ddos_detection_choice"`
+	// Malicious User Detection Choice
+	//
+	// x-required
+	// x-displayName: "Malicious User Detection"
+	// Configuration for malicious user detection.
+	//
+	// Types that are valid to be assigned to MaliciousUserDetectionChoice:
+	//	*SingleLoadBalancerAppSetting_EnableMaliciousUserDetection
+	//	*SingleLoadBalancerAppSetting_DisableMaliciousUserDetection
+	MaliciousUserDetectionChoice isSingleLoadBalancerAppSetting_MaliciousUserDetectionChoice `protobuf_oneof:"malicious_user_detection_choice"`
+}
+
+func (m *SingleLoadBalancerAppSetting) Reset()      { *m = SingleLoadBalancerAppSetting{} }
+func (*SingleLoadBalancerAppSetting) ProtoMessage() {}
+func (*SingleLoadBalancerAppSetting) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{25}
+}
+func (m *SingleLoadBalancerAppSetting) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SingleLoadBalancerAppSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SingleLoadBalancerAppSetting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SingleLoadBalancerAppSetting.Merge(m, src)
+}
+func (m *SingleLoadBalancerAppSetting) XXX_Size() int {
+	return m.Size()
+}
+func (m *SingleLoadBalancerAppSetting) XXX_DiscardUnknown() {
+	xxx_messageInfo_SingleLoadBalancerAppSetting.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SingleLoadBalancerAppSetting proto.InternalMessageInfo
+
+type isSingleLoadBalancerAppSetting_ApiDiscoveryChoice interface {
+	isSingleLoadBalancerAppSetting_ApiDiscoveryChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isSingleLoadBalancerAppSetting_DdosDetectionChoice interface {
+	isSingleLoadBalancerAppSetting_DdosDetectionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isSingleLoadBalancerAppSetting_MaliciousUserDetectionChoice interface {
+	isSingleLoadBalancerAppSetting_MaliciousUserDetectionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type SingleLoadBalancerAppSetting_EnableDiscovery struct {
+	EnableDiscovery *ApiDiscoverySetting `protobuf:"bytes,2,opt,name=enable_discovery,json=enableDiscovery,proto3,oneof" json:"enable_discovery,omitempty"`
+}
+type SingleLoadBalancerAppSetting_DisableDiscovery struct {
+	DisableDiscovery *schema.Empty `protobuf:"bytes,3,opt,name=disable_discovery,json=disableDiscovery,proto3,oneof" json:"disable_discovery,omitempty"`
+}
+type SingleLoadBalancerAppSetting_EnableDdosDetection struct {
+	EnableDdosDetection *schema.Empty `protobuf:"bytes,5,opt,name=enable_ddos_detection,json=enableDdosDetection,proto3,oneof" json:"enable_ddos_detection,omitempty"`
+}
+type SingleLoadBalancerAppSetting_DisableDdosDetection struct {
+	DisableDdosDetection *schema.Empty `protobuf:"bytes,6,opt,name=disable_ddos_detection,json=disableDdosDetection,proto3,oneof" json:"disable_ddos_detection,omitempty"`
+}
+type SingleLoadBalancerAppSetting_EnableMaliciousUserDetection struct {
+	EnableMaliciousUserDetection *schema.Empty `protobuf:"bytes,8,opt,name=enable_malicious_user_detection,json=enableMaliciousUserDetection,proto3,oneof" json:"enable_malicious_user_detection,omitempty"`
+}
+type SingleLoadBalancerAppSetting_DisableMaliciousUserDetection struct {
+	DisableMaliciousUserDetection *schema.Empty `protobuf:"bytes,9,opt,name=disable_malicious_user_detection,json=disableMaliciousUserDetection,proto3,oneof" json:"disable_malicious_user_detection,omitempty"`
+}
+
+func (*SingleLoadBalancerAppSetting_EnableDiscovery) isSingleLoadBalancerAppSetting_ApiDiscoveryChoice() {
+}
+func (*SingleLoadBalancerAppSetting_DisableDiscovery) isSingleLoadBalancerAppSetting_ApiDiscoveryChoice() {
+}
+func (*SingleLoadBalancerAppSetting_EnableDdosDetection) isSingleLoadBalancerAppSetting_DdosDetectionChoice() {
+}
+func (*SingleLoadBalancerAppSetting_DisableDdosDetection) isSingleLoadBalancerAppSetting_DdosDetectionChoice() {
+}
+func (*SingleLoadBalancerAppSetting_EnableMaliciousUserDetection) isSingleLoadBalancerAppSetting_MaliciousUserDetectionChoice() {
+}
+func (*SingleLoadBalancerAppSetting_DisableMaliciousUserDetection) isSingleLoadBalancerAppSetting_MaliciousUserDetectionChoice() {
+}
+
+func (m *SingleLoadBalancerAppSetting) GetApiDiscoveryChoice() isSingleLoadBalancerAppSetting_ApiDiscoveryChoice {
+	if m != nil {
+		return m.ApiDiscoveryChoice
+	}
+	return nil
+}
+func (m *SingleLoadBalancerAppSetting) GetDdosDetectionChoice() isSingleLoadBalancerAppSetting_DdosDetectionChoice {
+	if m != nil {
+		return m.DdosDetectionChoice
+	}
+	return nil
+}
+func (m *SingleLoadBalancerAppSetting) GetMaliciousUserDetectionChoice() isSingleLoadBalancerAppSetting_MaliciousUserDetectionChoice {
+	if m != nil {
+		return m.MaliciousUserDetectionChoice
+	}
+	return nil
+}
+
+func (m *SingleLoadBalancerAppSetting) GetEnableDiscovery() *ApiDiscoverySetting {
+	if x, ok := m.GetApiDiscoveryChoice().(*SingleLoadBalancerAppSetting_EnableDiscovery); ok {
+		return x.EnableDiscovery
+	}
+	return nil
+}
+
+func (m *SingleLoadBalancerAppSetting) GetDisableDiscovery() *schema.Empty {
+	if x, ok := m.GetApiDiscoveryChoice().(*SingleLoadBalancerAppSetting_DisableDiscovery); ok {
+		return x.DisableDiscovery
+	}
+	return nil
+}
+
+func (m *SingleLoadBalancerAppSetting) GetEnableDdosDetection() *schema.Empty {
+	if x, ok := m.GetDdosDetectionChoice().(*SingleLoadBalancerAppSetting_EnableDdosDetection); ok {
+		return x.EnableDdosDetection
+	}
+	return nil
+}
+
+func (m *SingleLoadBalancerAppSetting) GetDisableDdosDetection() *schema.Empty {
+	if x, ok := m.GetDdosDetectionChoice().(*SingleLoadBalancerAppSetting_DisableDdosDetection); ok {
+		return x.DisableDdosDetection
+	}
+	return nil
+}
+
+func (m *SingleLoadBalancerAppSetting) GetEnableMaliciousUserDetection() *schema.Empty {
+	if x, ok := m.GetMaliciousUserDetectionChoice().(*SingleLoadBalancerAppSetting_EnableMaliciousUserDetection); ok {
+		return x.EnableMaliciousUserDetection
+	}
+	return nil
+}
+
+func (m *SingleLoadBalancerAppSetting) GetDisableMaliciousUserDetection() *schema.Empty {
+	if x, ok := m.GetMaliciousUserDetectionChoice().(*SingleLoadBalancerAppSetting_DisableMaliciousUserDetection); ok {
+		return x.DisableMaliciousUserDetection
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SingleLoadBalancerAppSetting) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*SingleLoadBalancerAppSetting_EnableDiscovery)(nil),
+		(*SingleLoadBalancerAppSetting_DisableDiscovery)(nil),
+		(*SingleLoadBalancerAppSetting_EnableDdosDetection)(nil),
+		(*SingleLoadBalancerAppSetting_DisableDdosDetection)(nil),
+		(*SingleLoadBalancerAppSetting_EnableMaliciousUserDetection)(nil),
+		(*SingleLoadBalancerAppSetting_DisableMaliciousUserDetection)(nil),
+	}
+}
+
+// ShapeBotDefenseType
+//
+// x-displayName: "Shape Bot Defense"
+// This defines various configuration options for Shape Bot Defense Policy.
+type ShapeBotDefenseType struct {
+	// Shape Bot Defense Regional Endpoint
+	//
+	// x-displayName: "Shape Bot Defense Regional Endpoint"
+	// Specify Shape Bot Defense regional endpoint to use
+	// x-required
+	RegionalEndpoint ShapeBotDefenseRegion `protobuf:"varint,1,opt,name=regional_endpoint,json=regionalEndpoint,proto3,enum=ves.io.schema.views.http_loadbalancer.ShapeBotDefenseRegion" json:"regional_endpoint,omitempty"`
+	// ShapeBotDefensePolicyType
+	//
+	// x-displayName: "Shape Bot Defense Policy"
+	// x-required
+	// Shape Bot Defense Policy.
+	Policy *ShapeBotDefensePolicyType `protobuf:"bytes,2,opt,name=policy,proto3" json:"policy,omitempty"`
+}
+
+func (m *ShapeBotDefenseType) Reset()      { *m = ShapeBotDefenseType{} }
+func (*ShapeBotDefenseType) ProtoMessage() {}
+func (*ShapeBotDefenseType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{26}
+}
+func (m *ShapeBotDefenseType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ShapeBotDefenseType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ShapeBotDefenseType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShapeBotDefenseType.Merge(m, src)
+}
+func (m *ShapeBotDefenseType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ShapeBotDefenseType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShapeBotDefenseType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShapeBotDefenseType proto.InternalMessageInfo
+
+func (m *ShapeBotDefenseType) GetRegionalEndpoint() ShapeBotDefenseRegion {
+	if m != nil {
+		return m.RegionalEndpoint
+	}
+	return AUTO
+}
+
+func (m *ShapeBotDefenseType) GetPolicy() *ShapeBotDefensePolicyType {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+// ShapeShapeBotDefensePolicyType
+//
+// x-displayName: "Shape Bot Defense Policy"
+// This defines various configuration options for Shape Bot Defense policy.
+type ShapeBotDefensePolicyType struct {
+	// AppEndpointType
+	//
+	// x-displayName: "App Endpoint Type"
+	// x-required
+	// List of protected application endpoints (max 128 items).
+	ProtectedAppEndpoints []*AppEndpointType `protobuf:"bytes,1,rep,name=protected_app_endpoints,json=protectedAppEndpoints,proto3" json:"protected_app_endpoints,omitempty"`
+	// JavaScript Choice
+	//
+	// x-displayName: "JavaScript Insertion Settings"
+	// x-required
+	// This defines a JavaScript insertion rule.
+	//
+	// Types that are valid to be assigned to JavaScriptChoice:
+	//	*ShapeBotDefensePolicyType_DisableJsInsert
+	//	*ShapeBotDefensePolicyType_JsInsertAllPages
+	//	*ShapeBotDefensePolicyType_JsInsertAllPagesExcept
+	//	*ShapeBotDefensePolicyType_JsInsertionRules
+	JavaScriptChoice isShapeBotDefensePolicyType_JavaScriptChoice `protobuf_oneof:"java_script_choice"`
+	// js_download_path
+	//
+	// x-displayName: "JavaScript Download Path"
+	//
+	// Customize path to Shape Client JavaScript. If not specified, default `/common.js`
+	JsDownloadPath string `protobuf:"bytes,2,opt,name=js_download_path,json=jsDownloadPath,proto3" json:"js_download_path,omitempty"`
+}
+
+func (m *ShapeBotDefensePolicyType) Reset()      { *m = ShapeBotDefensePolicyType{} }
+func (*ShapeBotDefensePolicyType) ProtoMessage() {}
+func (*ShapeBotDefensePolicyType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{27}
+}
+func (m *ShapeBotDefensePolicyType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ShapeBotDefensePolicyType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ShapeBotDefensePolicyType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShapeBotDefensePolicyType.Merge(m, src)
+}
+func (m *ShapeBotDefensePolicyType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ShapeBotDefensePolicyType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShapeBotDefensePolicyType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShapeBotDefensePolicyType proto.InternalMessageInfo
+
+type isShapeBotDefensePolicyType_JavaScriptChoice interface {
+	isShapeBotDefensePolicyType_JavaScriptChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ShapeBotDefensePolicyType_DisableJsInsert struct {
+	DisableJsInsert *schema.Empty `protobuf:"bytes,4,opt,name=disable_js_insert,json=disableJsInsert,proto3,oneof" json:"disable_js_insert,omitempty"`
+}
+type ShapeBotDefensePolicyType_JsInsertAllPages struct {
+	JsInsertAllPages *ShapeJavaScriptInsertAllType `protobuf:"bytes,5,opt,name=js_insert_all_pages,json=jsInsertAllPages,proto3,oneof" json:"js_insert_all_pages,omitempty"`
+}
+type ShapeBotDefensePolicyType_JsInsertAllPagesExcept struct {
+	JsInsertAllPagesExcept *ShapeJavaScriptInsertAllWithExceptionsType `protobuf:"bytes,6,opt,name=js_insert_all_pages_except,json=jsInsertAllPagesExcept,proto3,oneof" json:"js_insert_all_pages_except,omitempty"`
+}
+type ShapeBotDefensePolicyType_JsInsertionRules struct {
+	JsInsertionRules *ShapeJavaScriptInsertType `protobuf:"bytes,7,opt,name=js_insertion_rules,json=jsInsertionRules,proto3,oneof" json:"js_insertion_rules,omitempty"`
+}
+
+func (*ShapeBotDefensePolicyType_DisableJsInsert) isShapeBotDefensePolicyType_JavaScriptChoice()  {}
+func (*ShapeBotDefensePolicyType_JsInsertAllPages) isShapeBotDefensePolicyType_JavaScriptChoice() {}
+func (*ShapeBotDefensePolicyType_JsInsertAllPagesExcept) isShapeBotDefensePolicyType_JavaScriptChoice() {
+}
+func (*ShapeBotDefensePolicyType_JsInsertionRules) isShapeBotDefensePolicyType_JavaScriptChoice() {}
+
+func (m *ShapeBotDefensePolicyType) GetJavaScriptChoice() isShapeBotDefensePolicyType_JavaScriptChoice {
+	if m != nil {
+		return m.JavaScriptChoice
+	}
+	return nil
+}
+
+func (m *ShapeBotDefensePolicyType) GetProtectedAppEndpoints() []*AppEndpointType {
+	if m != nil {
+		return m.ProtectedAppEndpoints
+	}
+	return nil
+}
+
+func (m *ShapeBotDefensePolicyType) GetDisableJsInsert() *schema.Empty {
+	if x, ok := m.GetJavaScriptChoice().(*ShapeBotDefensePolicyType_DisableJsInsert); ok {
+		return x.DisableJsInsert
+	}
+	return nil
+}
+
+func (m *ShapeBotDefensePolicyType) GetJsInsertAllPages() *ShapeJavaScriptInsertAllType {
+	if x, ok := m.GetJavaScriptChoice().(*ShapeBotDefensePolicyType_JsInsertAllPages); ok {
+		return x.JsInsertAllPages
+	}
+	return nil
+}
+
+func (m *ShapeBotDefensePolicyType) GetJsInsertAllPagesExcept() *ShapeJavaScriptInsertAllWithExceptionsType {
+	if x, ok := m.GetJavaScriptChoice().(*ShapeBotDefensePolicyType_JsInsertAllPagesExcept); ok {
+		return x.JsInsertAllPagesExcept
+	}
+	return nil
+}
+
+func (m *ShapeBotDefensePolicyType) GetJsInsertionRules() *ShapeJavaScriptInsertType {
+	if x, ok := m.GetJavaScriptChoice().(*ShapeBotDefensePolicyType_JsInsertionRules); ok {
+		return x.JsInsertionRules
+	}
+	return nil
+}
+
+func (m *ShapeBotDefensePolicyType) GetJsDownloadPath() string {
+	if m != nil {
+		return m.JsDownloadPath
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ShapeBotDefensePolicyType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ShapeBotDefensePolicyType_DisableJsInsert)(nil),
+		(*ShapeBotDefensePolicyType_JsInsertAllPages)(nil),
+		(*ShapeBotDefensePolicyType_JsInsertAllPagesExcept)(nil),
+		(*ShapeBotDefensePolicyType_JsInsertionRules)(nil),
+	}
+}
+
+// AppEndpointType
+//
+// x-displayName: "Application Endpoint"
+// Application Endpoint.
+type AppEndpointType struct {
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// x-required
+	// Common attributes for the rule including name and description.
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// HTTP Methods
+	//
+	// x-displayName: "HTTP Methods"
+	// x-required
+	// List of HTTP methods.
+	HttpMethods []schema.HttpMethod `protobuf:"varint,2,rep,packed,name=http_methods,json=httpMethods,proto3,enum=ves.io.schema.HttpMethod" json:"http_methods,omitempty"`
+	// Protocol
+	//
+	// x-displayName: "Protocol"
+	// Protocol.
+	Protocol URLScheme `protobuf:"varint,3,opt,name=protocol,proto3,enum=ves.io.schema.views.http_loadbalancer.URLScheme" json:"protocol,omitempty"`
+	// Path
+	//
+	// x-displayName: "Path"
+	// x-required
+	// Matching URI path of the route.
+	Path *schema.PathMatcherType `protobuf:"bytes,4,opt,name=path,proto3" json:"path,omitempty"`
+	// Domain Matcher
+	//
+	// x-displayName: "Domain Matcher"
+	// This defines domain matcher.
+	//
+	// Types that are valid to be assigned to DomainMatcherChoice:
+	//	*AppEndpointType_AnyDomain
+	//	*AppEndpointType_Domain
+	DomainMatcherChoice isAppEndpointType_DomainMatcherChoice `protobuf_oneof:"domain_matcher_choice"`
+	// Application traffic type
+	//
+	// x-displayName: "Application Traffic Type"
+	// x-required
+	// Select application traffic type.
+	//
+	// Types that are valid to be assigned to AppTrafficTypeChoice:
+	//	*AppEndpointType_Web
+	//	*AppEndpointType_Mobile
+	//	*AppEndpointType_WebMobile
+	AppTrafficTypeChoice isAppEndpointType_AppTrafficTypeChoice `protobuf_oneof:"app_traffic_type_choice"`
+	// Mitigation
+	//
+	// x-displayName: "Bot Traffic Mitigation"
+	// x-required
+	// Mitigation action.
+	Mitigation *policy.ShapeBotMitigationAction `protobuf:"bytes,12,opt,name=mitigation,proto3" json:"mitigation,omitempty"`
+}
+
+func (m *AppEndpointType) Reset()      { *m = AppEndpointType{} }
+func (*AppEndpointType) ProtoMessage() {}
+func (*AppEndpointType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{28}
+}
+func (m *AppEndpointType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AppEndpointType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AppEndpointType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AppEndpointType.Merge(m, src)
+}
+func (m *AppEndpointType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AppEndpointType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AppEndpointType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AppEndpointType proto.InternalMessageInfo
+
+type isAppEndpointType_DomainMatcherChoice interface {
+	isAppEndpointType_DomainMatcherChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isAppEndpointType_AppTrafficTypeChoice interface {
+	isAppEndpointType_AppTrafficTypeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AppEndpointType_AnyDomain struct {
+	AnyDomain *schema.Empty `protobuf:"bytes,6,opt,name=any_domain,json=anyDomain,proto3,oneof" json:"any_domain,omitempty"`
+}
+type AppEndpointType_Domain struct {
+	Domain *schema.DomainType `protobuf:"bytes,7,opt,name=domain,proto3,oneof" json:"domain,omitempty"`
+}
+type AppEndpointType_Web struct {
+	Web *schema.Empty `protobuf:"bytes,9,opt,name=web,proto3,oneof" json:"web,omitempty"`
+}
+type AppEndpointType_Mobile struct {
+	Mobile *schema.Empty `protobuf:"bytes,10,opt,name=mobile,proto3,oneof" json:"mobile,omitempty"`
+}
+type AppEndpointType_WebMobile struct {
+	WebMobile *WebMobileTrafficType `protobuf:"bytes,11,opt,name=web_mobile,json=webMobile,proto3,oneof" json:"web_mobile,omitempty"`
+}
+
+func (*AppEndpointType_AnyDomain) isAppEndpointType_DomainMatcherChoice()  {}
+func (*AppEndpointType_Domain) isAppEndpointType_DomainMatcherChoice()     {}
+func (*AppEndpointType_Web) isAppEndpointType_AppTrafficTypeChoice()       {}
+func (*AppEndpointType_Mobile) isAppEndpointType_AppTrafficTypeChoice()    {}
+func (*AppEndpointType_WebMobile) isAppEndpointType_AppTrafficTypeChoice() {}
+
+func (m *AppEndpointType) GetDomainMatcherChoice() isAppEndpointType_DomainMatcherChoice {
+	if m != nil {
+		return m.DomainMatcherChoice
+	}
+	return nil
+}
+func (m *AppEndpointType) GetAppTrafficTypeChoice() isAppEndpointType_AppTrafficTypeChoice {
+	if m != nil {
+		return m.AppTrafficTypeChoice
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetMetadata() *schema.MessageMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetHttpMethods() []schema.HttpMethod {
+	if m != nil {
+		return m.HttpMethods
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetProtocol() URLScheme {
+	if m != nil {
+		return m.Protocol
+	}
+	return BOTH
+}
+
+func (m *AppEndpointType) GetPath() *schema.PathMatcherType {
+	if m != nil {
+		return m.Path
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetAnyDomain() *schema.Empty {
+	if x, ok := m.GetDomainMatcherChoice().(*AppEndpointType_AnyDomain); ok {
+		return x.AnyDomain
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetDomain() *schema.DomainType {
+	if x, ok := m.GetDomainMatcherChoice().(*AppEndpointType_Domain); ok {
+		return x.Domain
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetWeb() *schema.Empty {
+	if x, ok := m.GetAppTrafficTypeChoice().(*AppEndpointType_Web); ok {
+		return x.Web
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetMobile() *schema.Empty {
+	if x, ok := m.GetAppTrafficTypeChoice().(*AppEndpointType_Mobile); ok {
+		return x.Mobile
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetWebMobile() *WebMobileTrafficType {
+	if x, ok := m.GetAppTrafficTypeChoice().(*AppEndpointType_WebMobile); ok {
+		return x.WebMobile
+	}
+	return nil
+}
+
+func (m *AppEndpointType) GetMitigation() *policy.ShapeBotMitigationAction {
+	if m != nil {
+		return m.Mitigation
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AppEndpointType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AppEndpointType_AnyDomain)(nil),
+		(*AppEndpointType_Domain)(nil),
+		(*AppEndpointType_Web)(nil),
+		(*AppEndpointType_Mobile)(nil),
+		(*AppEndpointType_WebMobile)(nil),
+	}
+}
+
+// WebMobileTrafficType
+//
+// x-displayName: "Web and Mobile traffic type"
+// Web and Mobile traffic type
+type WebMobileTrafficType struct {
+	// Mobile header
+	//
+	// x-displayName: "Header"
+	// x-required
+	// Header that is used by mobile traffic.
+	Header *policy.HeaderMatcherTypeBasic `protobuf:"bytes,1,opt,name=header,proto3" json:"header,omitempty"`
+}
+
+func (m *WebMobileTrafficType) Reset()      { *m = WebMobileTrafficType{} }
+func (*WebMobileTrafficType) ProtoMessage() {}
+func (*WebMobileTrafficType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{29}
+}
+func (m *WebMobileTrafficType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *WebMobileTrafficType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *WebMobileTrafficType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WebMobileTrafficType.Merge(m, src)
+}
+func (m *WebMobileTrafficType) XXX_Size() int {
+	return m.Size()
+}
+func (m *WebMobileTrafficType) XXX_DiscardUnknown() {
+	xxx_messageInfo_WebMobileTrafficType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WebMobileTrafficType proto.InternalMessageInfo
+
+func (m *WebMobileTrafficType) GetHeader() *policy.HeaderMatcherTypeBasic {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+// ShapeJavaScriptInsertType
+//
+// x-displayName: "JavaScript Custom Insertion Rules"
+// This defines custom JavaScript insertion rules for Shape Bot Defense Policy.
+type ShapeJavaScriptInsertType struct {
+	// rules
+	//
+	// x-displayName: "JavaScript Insertions"
+	// x-required
+	// Required list of pages to insert Shape Client JavaScript.
+	Rules []*ShapeJavaScriptInsertionRule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
+	// exclude_list
+	//
+	// x-displayName: "Exclude Paths"
+	// Optional JavaScript insertions exclude list of domain and path matchers.
+	ExcludeList []*ShapeJavaScriptExclusionRule `protobuf:"bytes,3,rep,name=exclude_list,json=excludeList,proto3" json:"exclude_list,omitempty"`
+}
+
+func (m *ShapeJavaScriptInsertType) Reset()      { *m = ShapeJavaScriptInsertType{} }
+func (*ShapeJavaScriptInsertType) ProtoMessage() {}
+func (*ShapeJavaScriptInsertType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{30}
+}
+func (m *ShapeJavaScriptInsertType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ShapeJavaScriptInsertType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ShapeJavaScriptInsertType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShapeJavaScriptInsertType.Merge(m, src)
+}
+func (m *ShapeJavaScriptInsertType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ShapeJavaScriptInsertType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShapeJavaScriptInsertType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShapeJavaScriptInsertType proto.InternalMessageInfo
+
+func (m *ShapeJavaScriptInsertType) GetRules() []*ShapeJavaScriptInsertionRule {
+	if m != nil {
+		return m.Rules
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptInsertType) GetExcludeList() []*ShapeJavaScriptExclusionRule {
+	if m != nil {
+		return m.ExcludeList
+	}
+	return nil
+}
+
+// ShapeJavaScriptInsertAllWithExceptionsType
+//
+// x-displayName: "Insert JavaScript in All Pages with the Exceptions"
+// Insert Shape Bot Defense JavaScript in all pages  with the exceptions
+type ShapeJavaScriptInsertAllWithExceptionsType struct {
+	// javascript_location
+	//
+	// x-displayName: "JavaScript Location"
+	// Defines where to insert Shape JavaScript in HTML page.
+	JavascriptLocation JavaScriptLocation `protobuf:"varint,1,opt,name=javascript_location,json=javascriptLocation,proto3,enum=ves.io.schema.views.http_loadbalancer.JavaScriptLocation" json:"javascript_location,omitempty"`
+	// exclude_list
+	//
+	// x-displayName: "Exclude Pages"
+	// Optional JavaScript insertions exclude list of domain and path matchers.
+	ExcludeList []*ShapeJavaScriptExclusionRule `protobuf:"bytes,2,rep,name=exclude_list,json=excludeList,proto3" json:"exclude_list,omitempty"`
+}
+
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) Reset() {
+	*m = ShapeJavaScriptInsertAllWithExceptionsType{}
+}
+func (*ShapeJavaScriptInsertAllWithExceptionsType) ProtoMessage() {}
+func (*ShapeJavaScriptInsertAllWithExceptionsType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{31}
+}
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShapeJavaScriptInsertAllWithExceptionsType.Merge(m, src)
+}
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShapeJavaScriptInsertAllWithExceptionsType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShapeJavaScriptInsertAllWithExceptionsType proto.InternalMessageInfo
+
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) GetJavascriptLocation() JavaScriptLocation {
+	if m != nil {
+		return m.JavascriptLocation
+	}
+	return AFTER_HEAD
+}
+
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) GetExcludeList() []*ShapeJavaScriptExclusionRule {
+	if m != nil {
+		return m.ExcludeList
+	}
+	return nil
+}
+
+// ShapeJavaScriptInsertAllType
+//
+// x-displayName: "Insert Shape Bot Defense JavaScript in All Pages"
+// Insert Shape Bot Defense JavaScript in all pages
+type ShapeJavaScriptInsertAllType struct {
+	// javascript_location
+	//
+	// x-displayName: "JavaScript Location"
+	// Defines where to insert Shape JavaScript in HTML page.
+	JavascriptLocation JavaScriptLocation `protobuf:"varint,1,opt,name=javascript_location,json=javascriptLocation,proto3,enum=ves.io.schema.views.http_loadbalancer.JavaScriptLocation" json:"javascript_location,omitempty"`
+}
+
+func (m *ShapeJavaScriptInsertAllType) Reset()      { *m = ShapeJavaScriptInsertAllType{} }
+func (*ShapeJavaScriptInsertAllType) ProtoMessage() {}
+func (*ShapeJavaScriptInsertAllType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{32}
+}
+func (m *ShapeJavaScriptInsertAllType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ShapeJavaScriptInsertAllType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ShapeJavaScriptInsertAllType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShapeJavaScriptInsertAllType.Merge(m, src)
+}
+func (m *ShapeJavaScriptInsertAllType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ShapeJavaScriptInsertAllType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShapeJavaScriptInsertAllType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShapeJavaScriptInsertAllType proto.InternalMessageInfo
+
+func (m *ShapeJavaScriptInsertAllType) GetJavascriptLocation() JavaScriptLocation {
+	if m != nil {
+		return m.JavascriptLocation
+	}
+	return AFTER_HEAD
+}
+
+// ShapeJavaScriptInsertionRule
+//
+// x-displayName: "Shape JavaScript Insertion Rule"
+// This defines a rule for Shape JavaScript insertion.
+type ShapeJavaScriptInsertionRule struct {
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// x-required
+	// Common attributes for the rule including name and description.
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Domain Matcher
+	//
+	// x-displayName: "Domain Matcher"
+	// x-required
+	// This defines domain matcher.
+	//
+	// Types that are valid to be assigned to DomainMatcherChoice:
+	//	*ShapeJavaScriptInsertionRule_AnyDomain
+	//	*ShapeJavaScriptInsertionRule_Domain
+	DomainMatcherChoice isShapeJavaScriptInsertionRule_DomainMatcherChoice `protobuf_oneof:"domain_matcher_choice"`
+	// Path
+	//
+	// x-displayName: "Path"
+	// x-required
+	// URI path matcher.
+	Path *schema.PathMatcherType `protobuf:"bytes,5,opt,name=path,proto3" json:"path,omitempty"`
+	// javascript_location
+	//
+	// x-displayName: "JavaScript Location"
+	// Defines where to insert Shape JavaScript in HTML page.
+	JavascriptLocation JavaScriptLocation `protobuf:"varint,6,opt,name=javascript_location,json=javascriptLocation,proto3,enum=ves.io.schema.views.http_loadbalancer.JavaScriptLocation" json:"javascript_location,omitempty"`
+}
+
+func (m *ShapeJavaScriptInsertionRule) Reset()      { *m = ShapeJavaScriptInsertionRule{} }
+func (*ShapeJavaScriptInsertionRule) ProtoMessage() {}
+func (*ShapeJavaScriptInsertionRule) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{33}
+}
+func (m *ShapeJavaScriptInsertionRule) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ShapeJavaScriptInsertionRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ShapeJavaScriptInsertionRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShapeJavaScriptInsertionRule.Merge(m, src)
+}
+func (m *ShapeJavaScriptInsertionRule) XXX_Size() int {
+	return m.Size()
+}
+func (m *ShapeJavaScriptInsertionRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShapeJavaScriptInsertionRule.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShapeJavaScriptInsertionRule proto.InternalMessageInfo
+
+type isShapeJavaScriptInsertionRule_DomainMatcherChoice interface {
+	isShapeJavaScriptInsertionRule_DomainMatcherChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ShapeJavaScriptInsertionRule_AnyDomain struct {
+	AnyDomain *schema.Empty `protobuf:"bytes,3,opt,name=any_domain,json=anyDomain,proto3,oneof" json:"any_domain,omitempty"`
+}
+type ShapeJavaScriptInsertionRule_Domain struct {
+	Domain *schema.DomainType `protobuf:"bytes,4,opt,name=domain,proto3,oneof" json:"domain,omitempty"`
+}
+
+func (*ShapeJavaScriptInsertionRule_AnyDomain) isShapeJavaScriptInsertionRule_DomainMatcherChoice() {}
+func (*ShapeJavaScriptInsertionRule_Domain) isShapeJavaScriptInsertionRule_DomainMatcherChoice()    {}
+
+func (m *ShapeJavaScriptInsertionRule) GetDomainMatcherChoice() isShapeJavaScriptInsertionRule_DomainMatcherChoice {
+	if m != nil {
+		return m.DomainMatcherChoice
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptInsertionRule) GetMetadata() *schema.MessageMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptInsertionRule) GetAnyDomain() *schema.Empty {
+	if x, ok := m.GetDomainMatcherChoice().(*ShapeJavaScriptInsertionRule_AnyDomain); ok {
+		return x.AnyDomain
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptInsertionRule) GetDomain() *schema.DomainType {
+	if x, ok := m.GetDomainMatcherChoice().(*ShapeJavaScriptInsertionRule_Domain); ok {
+		return x.Domain
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptInsertionRule) GetPath() *schema.PathMatcherType {
+	if m != nil {
+		return m.Path
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptInsertionRule) GetJavascriptLocation() JavaScriptLocation {
+	if m != nil {
+		return m.JavascriptLocation
+	}
+	return AFTER_HEAD
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ShapeJavaScriptInsertionRule) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ShapeJavaScriptInsertionRule_AnyDomain)(nil),
+		(*ShapeJavaScriptInsertionRule_Domain)(nil),
+	}
+}
+
+// ShapeJavaScriptExclusionRule
+//
+// x-displayName: "JavaScript Insertion Exclusion Rule"
+// Define JavaScript insertion exclusion rule
+type ShapeJavaScriptExclusionRule struct {
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// x-required
+	// Common attributes for the rule including name and description.
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Domain Matcher
+	//
+	// x-displayName: "Domain Matcher"
+	// x-required
+	// This defines domain matcher.
+	//
+	// Types that are valid to be assigned to DomainMatcherChoice:
+	//	*ShapeJavaScriptExclusionRule_AnyDomain
+	//	*ShapeJavaScriptExclusionRule_Domain
+	DomainMatcherChoice isShapeJavaScriptExclusionRule_DomainMatcherChoice `protobuf_oneof:"domain_matcher_choice"`
+	// Path
+	//
+	// x-displayName: "Path"
+	// x-required
+	// URI path matcher.
+	Path *schema.PathMatcherType `protobuf:"bytes,5,opt,name=path,proto3" json:"path,omitempty"`
+}
+
+func (m *ShapeJavaScriptExclusionRule) Reset()      { *m = ShapeJavaScriptExclusionRule{} }
+func (*ShapeJavaScriptExclusionRule) ProtoMessage() {}
+func (*ShapeJavaScriptExclusionRule) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{34}
+}
+func (m *ShapeJavaScriptExclusionRule) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ShapeJavaScriptExclusionRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ShapeJavaScriptExclusionRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShapeJavaScriptExclusionRule.Merge(m, src)
+}
+func (m *ShapeJavaScriptExclusionRule) XXX_Size() int {
+	return m.Size()
+}
+func (m *ShapeJavaScriptExclusionRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShapeJavaScriptExclusionRule.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShapeJavaScriptExclusionRule proto.InternalMessageInfo
+
+type isShapeJavaScriptExclusionRule_DomainMatcherChoice interface {
+	isShapeJavaScriptExclusionRule_DomainMatcherChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ShapeJavaScriptExclusionRule_AnyDomain struct {
+	AnyDomain *schema.Empty `protobuf:"bytes,3,opt,name=any_domain,json=anyDomain,proto3,oneof" json:"any_domain,omitempty"`
+}
+type ShapeJavaScriptExclusionRule_Domain struct {
+	Domain *schema.DomainType `protobuf:"bytes,4,opt,name=domain,proto3,oneof" json:"domain,omitempty"`
+}
+
+func (*ShapeJavaScriptExclusionRule_AnyDomain) isShapeJavaScriptExclusionRule_DomainMatcherChoice() {}
+func (*ShapeJavaScriptExclusionRule_Domain) isShapeJavaScriptExclusionRule_DomainMatcherChoice()    {}
+
+func (m *ShapeJavaScriptExclusionRule) GetDomainMatcherChoice() isShapeJavaScriptExclusionRule_DomainMatcherChoice {
+	if m != nil {
+		return m.DomainMatcherChoice
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptExclusionRule) GetMetadata() *schema.MessageMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptExclusionRule) GetAnyDomain() *schema.Empty {
+	if x, ok := m.GetDomainMatcherChoice().(*ShapeJavaScriptExclusionRule_AnyDomain); ok {
+		return x.AnyDomain
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptExclusionRule) GetDomain() *schema.DomainType {
+	if x, ok := m.GetDomainMatcherChoice().(*ShapeJavaScriptExclusionRule_Domain); ok {
+		return x.Domain
+	}
+	return nil
+}
+
+func (m *ShapeJavaScriptExclusionRule) GetPath() *schema.PathMatcherType {
+	if m != nil {
+		return m.Path
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ShapeJavaScriptExclusionRule) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ShapeJavaScriptExclusionRule_AnyDomain)(nil),
+		(*ShapeJavaScriptExclusionRule_Domain)(nil),
+	}
+}
+
 // GlobalSpecType
 //
 // x-displayName: "Global Specification"
@@ -3243,15 +4808,6 @@ type GlobalSpecType struct {
 	// In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the
 	// suspicious traffic (instead of blocking traffic).
 	//
-	// waf_type can be either WAF or WAFRules.
-	// WAF Object allows to
-	//     Configure mode of the WAF (BLOCK/ALERT)
-	//     Configure language used by the application which is being protected by the WAF
-	//     Disable different high level security tags if required (e.g. SQLI_DETECTION, XSS_DETECTION etc)
-	// WAFRules allows to
-	//     Configure mode of the WAF (BLOCK/ALERT)
-	//     Enable/Disable individual WAF security rules
-	//
 	// Types that are valid to be assigned to WafChoice:
 	//	*GlobalSpecType_DisableWaf
 	//	*GlobalSpecType_Waf
@@ -3285,12 +4841,16 @@ type GlobalSpecType struct {
 	// x-displayName: "More Options"
 	// More options like header manipulation, compression etc.
 	MoreOption *AdvancedOptionsType `protobuf:"bytes,19,opt,name=more_option,json=moreOption,proto3" json:"more_option,omitempty"`
-	// user_identification
+	// User Identifier
 	//
-	// x-displayName: "User Identification Policy"
-	// A reference to user_identification object.
-	// The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.
-	UserIdentification *views.ObjectRefType `protobuf:"bytes,20,opt,name=user_identification,json=userIdentification,proto3" json:"user_identification,omitempty"`
+	// x-displayName: "User Identifier"
+	// x-required
+	// Select user identifier for rate limiting and malicious user mitigation.
+	//
+	// Types that are valid to be assigned to UserIdChoice:
+	//	*GlobalSpecType_UserIdClientIp
+	//	*GlobalSpecType_UserIdentification
+	UserIdChoice isGlobalSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
 	// Enable Rate Limiting
 	//
 	// x-displayName: "Rate Limiting"
@@ -3323,7 +4883,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Trusted Client Rules"
 	// Rules that specify the clients to be trusted.
-	// WAF processing is skipped for trusted clients
+	// WAF or/and Bot processing can be skipped for trusted clients
 	TrustedClients []*SimpleClientSrcRule `protobuf:"bytes,35,rep,name=trusted_clients,json=trustedClients,proto3" json:"trusted_clients,omitempty"`
 	// DDoS Mitigation Rules
 	//
@@ -3355,6 +4915,25 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_CookieStickiness
 	//	*GlobalSpecType_RingHash
 	HashPolicyChoice isGlobalSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
+	// ML config choice
+	//
+	// x-displayName: "ML Config"
+	// x-required
+	// ML config choice
+	//
+	// Types that are valid to be assigned to MlConfigChoice:
+	//	*GlobalSpecType_SingleLbApp
+	//	*GlobalSpecType_MultiLbApp
+	MlConfigChoice isGlobalSpecType_MlConfigChoice `protobuf_oneof:"ml_config_choice"`
+	// Enable the Shape Bot Defense functionality for VirtualHost
+	//
+	// x-displayName: "Shape Bot Defense Config"
+	// Shape Bot Defense can be used to ....
+	//
+	// Types that are valid to be assigned to BotDefenseChoice:
+	//	*GlobalSpecType_DisableBotDefense
+	//	*GlobalSpecType_BotDefense
+	BotDefenseChoice isGlobalSpecType_BotDefenseChoice `protobuf_oneof:"bot_defense_choice"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -3391,7 +4970,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{24}
+	return fileDescriptor_6478b2bb990a4a3e, []int{35}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3446,6 +5025,12 @@ type isGlobalSpecType_ChallengeType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_UserIdChoice interface {
+	isGlobalSpecType_UserIdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 type isGlobalSpecType_RateLimitChoice interface {
 	isGlobalSpecType_RateLimitChoice()
 	Equal(interface{}) bool
@@ -3460,6 +5045,18 @@ type isGlobalSpecType_ServicePolicyChoice interface {
 }
 type isGlobalSpecType_HashPolicyChoice interface {
 	isGlobalSpecType_HashPolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_MlConfigChoice interface {
+	isGlobalSpecType_MlConfigChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_BotDefenseChoice interface {
+	isGlobalSpecType_BotDefenseChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -3519,6 +5116,12 @@ type GlobalSpecType_CaptchaChallenge struct {
 type GlobalSpecType_PolicyBasedChallenge struct {
 	PolicyBasedChallenge *PolicyBasedChallenge `protobuf:"bytes,51,opt,name=policy_based_challenge,json=policyBasedChallenge,proto3,oneof" json:"policy_based_challenge,omitempty"`
 }
+type GlobalSpecType_UserIdClientIp struct {
+	UserIdClientIp *schema.Empty `protobuf:"bytes,60,opt,name=user_id_client_ip,json=userIdClientIp,proto3,oneof" json:"user_id_client_ip,omitempty"`
+}
+type GlobalSpecType_UserIdentification struct {
+	UserIdentification *views.ObjectRefType `protobuf:"bytes,20,opt,name=user_identification,json=userIdentification,proto3,oneof" json:"user_identification,omitempty"`
+}
 type GlobalSpecType_DisableRateLimit struct {
 	DisableRateLimit *schema.Empty `protobuf:"bytes,22,opt,name=disable_rate_limit,json=disableRateLimit,proto3,oneof" json:"disable_rate_limit,omitempty"`
 }
@@ -3552,6 +5155,18 @@ type GlobalSpecType_CookieStickiness struct {
 type GlobalSpecType_RingHash struct {
 	RingHash *HashPolicyListType `protobuf:"bytes,50,opt,name=ring_hash,json=ringHash,proto3,oneof" json:"ring_hash,omitempty"`
 }
+type GlobalSpecType_SingleLbApp struct {
+	SingleLbApp *SingleLoadBalancerAppSetting `protobuf:"bytes,54,opt,name=single_lb_app,json=singleLbApp,proto3,oneof" json:"single_lb_app,omitempty"`
+}
+type GlobalSpecType_MultiLbApp struct {
+	MultiLbApp *schema.Empty `protobuf:"bytes,55,opt,name=multi_lb_app,json=multiLbApp,proto3,oneof" json:"multi_lb_app,omitempty"`
+}
+type GlobalSpecType_DisableBotDefense struct {
+	DisableBotDefense *schema.Empty `protobuf:"bytes,57,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
+}
+type GlobalSpecType_BotDefense struct {
+	BotDefense *ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+}
 
 func (*GlobalSpecType_Http) isGlobalSpecType_LoadbalancerType()                            {}
 func (*GlobalSpecType_HttpsAutoCert) isGlobalSpecType_LoadbalancerType()                   {}
@@ -3571,6 +5186,8 @@ func (*GlobalSpecType_NoChallenge) isGlobalSpecType_ChallengeType()             
 func (*GlobalSpecType_JsChallenge) isGlobalSpecType_ChallengeType()                        {}
 func (*GlobalSpecType_CaptchaChallenge) isGlobalSpecType_ChallengeType()                   {}
 func (*GlobalSpecType_PolicyBasedChallenge) isGlobalSpecType_ChallengeType()               {}
+func (*GlobalSpecType_UserIdClientIp) isGlobalSpecType_UserIdChoice()                      {}
+func (*GlobalSpecType_UserIdentification) isGlobalSpecType_UserIdChoice()                  {}
 func (*GlobalSpecType_DisableRateLimit) isGlobalSpecType_RateLimitChoice()                 {}
 func (*GlobalSpecType_RateLimit) isGlobalSpecType_RateLimitChoice()                        {}
 func (*GlobalSpecType_ServicePoliciesFromNamespace) isGlobalSpecType_ServicePolicyChoice() {}
@@ -3582,6 +5199,10 @@ func (*GlobalSpecType_Random) isGlobalSpecType_HashPolicyChoice()               
 func (*GlobalSpecType_SourceIpStickiness) isGlobalSpecType_HashPolicyChoice()              {}
 func (*GlobalSpecType_CookieStickiness) isGlobalSpecType_HashPolicyChoice()                {}
 func (*GlobalSpecType_RingHash) isGlobalSpecType_HashPolicyChoice()                        {}
+func (*GlobalSpecType_SingleLbApp) isGlobalSpecType_MlConfigChoice()                       {}
+func (*GlobalSpecType_MultiLbApp) isGlobalSpecType_MlConfigChoice()                        {}
+func (*GlobalSpecType_DisableBotDefense) isGlobalSpecType_BotDefenseChoice()               {}
+func (*GlobalSpecType_BotDefense) isGlobalSpecType_BotDefenseChoice()                      {}
 
 func (m *GlobalSpecType) GetLoadbalancerType() isGlobalSpecType_LoadbalancerType {
 	if m != nil {
@@ -3613,6 +5234,12 @@ func (m *GlobalSpecType) GetChallengeType() isGlobalSpecType_ChallengeType {
 	}
 	return nil
 }
+func (m *GlobalSpecType) GetUserIdChoice() isGlobalSpecType_UserIdChoice {
+	if m != nil {
+		return m.UserIdChoice
+	}
+	return nil
+}
 func (m *GlobalSpecType) GetRateLimitChoice() isGlobalSpecType_RateLimitChoice {
 	if m != nil {
 		return m.RateLimitChoice
@@ -3628,6 +5255,18 @@ func (m *GlobalSpecType) GetServicePolicyChoice() isGlobalSpecType_ServicePolicy
 func (m *GlobalSpecType) GetHashPolicyChoice() isGlobalSpecType_HashPolicyChoice {
 	if m != nil {
 		return m.HashPolicyChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetMlConfigChoice() isGlobalSpecType_MlConfigChoice {
+	if m != nil {
+		return m.MlConfigChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetBotDefenseChoice() isGlobalSpecType_BotDefenseChoice {
+	if m != nil {
+		return m.BotDefenseChoice
 	}
 	return nil
 }
@@ -3800,9 +5439,16 @@ func (m *GlobalSpecType) GetMoreOption() *AdvancedOptionsType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetUserIdClientIp() *schema.Empty {
+	if x, ok := m.GetUserIdChoice().(*GlobalSpecType_UserIdClientIp); ok {
+		return x.UserIdClientIp
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetUserIdentification() *views.ObjectRefType {
-	if m != nil {
-		return m.UserIdentification
+	if x, ok := m.GetUserIdChoice().(*GlobalSpecType_UserIdentification); ok {
+		return x.UserIdentification
 	}
 	return nil
 }
@@ -3920,6 +5566,34 @@ func (m *GlobalSpecType) GetRingHash() *HashPolicyListType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetSingleLbApp() *SingleLoadBalancerAppSetting {
+	if x, ok := m.GetMlConfigChoice().(*GlobalSpecType_SingleLbApp); ok {
+		return x.SingleLbApp
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetMultiLbApp() *schema.Empty {
+	if x, ok := m.GetMlConfigChoice().(*GlobalSpecType_MultiLbApp); ok {
+		return x.MultiLbApp
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDisableBotDefense() *schema.Empty {
+	if x, ok := m.GetBotDefenseChoice().(*GlobalSpecType_DisableBotDefense); ok {
+		return x.DisableBotDefense
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetBotDefense() *ShapeBotDefenseType {
+	if x, ok := m.GetBotDefenseChoice().(*GlobalSpecType_BotDefense); ok {
+		return x.BotDefense
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -3984,6 +5658,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_JsChallenge)(nil),
 		(*GlobalSpecType_CaptchaChallenge)(nil),
 		(*GlobalSpecType_PolicyBasedChallenge)(nil),
+		(*GlobalSpecType_UserIdClientIp)(nil),
+		(*GlobalSpecType_UserIdentification)(nil),
 		(*GlobalSpecType_DisableRateLimit)(nil),
 		(*GlobalSpecType_RateLimit)(nil),
 		(*GlobalSpecType_ServicePoliciesFromNamespace)(nil),
@@ -3995,6 +5671,10 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_SourceIpStickiness)(nil),
 		(*GlobalSpecType_CookieStickiness)(nil),
 		(*GlobalSpecType_RingHash)(nil),
+		(*GlobalSpecType_SingleLbApp)(nil),
+		(*GlobalSpecType_MultiLbApp)(nil),
+		(*GlobalSpecType_DisableBotDefense)(nil),
+		(*GlobalSpecType_BotDefense)(nil),
 	}
 }
 
@@ -4030,9 +5710,12 @@ type CreateSpecType struct {
 	//	*CreateSpecType_JsChallenge
 	//	*CreateSpecType_CaptchaChallenge
 	//	*CreateSpecType_PolicyBasedChallenge
-	ChallengeType      isCreateSpecType_ChallengeType `protobuf_oneof:"challenge_type"`
-	MoreOption         *AdvancedOptionsType           `protobuf:"bytes,19,opt,name=more_option,json=moreOption,proto3" json:"more_option,omitempty"`
-	UserIdentification *views.ObjectRefType           `protobuf:"bytes,20,opt,name=user_identification,json=userIdentification,proto3" json:"user_identification,omitempty"`
+	ChallengeType isCreateSpecType_ChallengeType `protobuf_oneof:"challenge_type"`
+	MoreOption    *AdvancedOptionsType           `protobuf:"bytes,19,opt,name=more_option,json=moreOption,proto3" json:"more_option,omitempty"`
+	// Types that are valid to be assigned to UserIdChoice:
+	//	*CreateSpecType_UserIdClientIp
+	//	*CreateSpecType_UserIdentification
+	UserIdChoice isCreateSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
 	// Types that are valid to be assigned to RateLimitChoice:
 	//	*CreateSpecType_DisableRateLimit
 	//	*CreateSpecType_RateLimit
@@ -4055,12 +5738,20 @@ type CreateSpecType struct {
 	//	*CreateSpecType_CookieStickiness
 	//	*CreateSpecType_RingHash
 	HashPolicyChoice isCreateSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
+	// Types that are valid to be assigned to MlConfigChoice:
+	//	*CreateSpecType_SingleLbApp
+	//	*CreateSpecType_MultiLbApp
+	MlConfigChoice isCreateSpecType_MlConfigChoice `protobuf_oneof:"ml_config_choice"`
+	// Types that are valid to be assigned to BotDefenseChoice:
+	//	*CreateSpecType_DisableBotDefense
+	//	*CreateSpecType_BotDefense
+	BotDefenseChoice isCreateSpecType_BotDefenseChoice `protobuf_oneof:"bot_defense_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{25}
+	return fileDescriptor_6478b2bb990a4a3e, []int{36}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4109,6 +5800,12 @@ type isCreateSpecType_ChallengeType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_UserIdChoice interface {
+	isCreateSpecType_UserIdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 type isCreateSpecType_RateLimitChoice interface {
 	isCreateSpecType_RateLimitChoice()
 	Equal(interface{}) bool
@@ -4123,6 +5820,18 @@ type isCreateSpecType_ServicePolicyChoice interface {
 }
 type isCreateSpecType_HashPolicyChoice interface {
 	isCreateSpecType_HashPolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCreateSpecType_MlConfigChoice interface {
+	isCreateSpecType_MlConfigChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCreateSpecType_BotDefenseChoice interface {
+	isCreateSpecType_BotDefenseChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -4173,6 +5882,12 @@ type CreateSpecType_CaptchaChallenge struct {
 type CreateSpecType_PolicyBasedChallenge struct {
 	PolicyBasedChallenge *PolicyBasedChallenge `protobuf:"bytes,51,opt,name=policy_based_challenge,json=policyBasedChallenge,proto3,oneof" json:"policy_based_challenge,omitempty"`
 }
+type CreateSpecType_UserIdClientIp struct {
+	UserIdClientIp *schema.Empty `protobuf:"bytes,60,opt,name=user_id_client_ip,json=userIdClientIp,proto3,oneof" json:"user_id_client_ip,omitempty"`
+}
+type CreateSpecType_UserIdentification struct {
+	UserIdentification *views.ObjectRefType `protobuf:"bytes,20,opt,name=user_identification,json=userIdentification,proto3,oneof" json:"user_identification,omitempty"`
+}
 type CreateSpecType_DisableRateLimit struct {
 	DisableRateLimit *schema.Empty `protobuf:"bytes,22,opt,name=disable_rate_limit,json=disableRateLimit,proto3,oneof" json:"disable_rate_limit,omitempty"`
 }
@@ -4206,6 +5921,18 @@ type CreateSpecType_CookieStickiness struct {
 type CreateSpecType_RingHash struct {
 	RingHash *HashPolicyListType `protobuf:"bytes,50,opt,name=ring_hash,json=ringHash,proto3,oneof" json:"ring_hash,omitempty"`
 }
+type CreateSpecType_SingleLbApp struct {
+	SingleLbApp *SingleLoadBalancerAppSetting `protobuf:"bytes,54,opt,name=single_lb_app,json=singleLbApp,proto3,oneof" json:"single_lb_app,omitempty"`
+}
+type CreateSpecType_MultiLbApp struct {
+	MultiLbApp *schema.Empty `protobuf:"bytes,55,opt,name=multi_lb_app,json=multiLbApp,proto3,oneof" json:"multi_lb_app,omitempty"`
+}
+type CreateSpecType_DisableBotDefense struct {
+	DisableBotDefense *schema.Empty `protobuf:"bytes,57,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
+}
+type CreateSpecType_BotDefense struct {
+	BotDefense *ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+}
 
 func (*CreateSpecType_Http) isCreateSpecType_LoadbalancerType()                            {}
 func (*CreateSpecType_HttpsAutoCert) isCreateSpecType_LoadbalancerType()                   {}
@@ -4222,6 +5949,8 @@ func (*CreateSpecType_NoChallenge) isCreateSpecType_ChallengeType()             
 func (*CreateSpecType_JsChallenge) isCreateSpecType_ChallengeType()                        {}
 func (*CreateSpecType_CaptchaChallenge) isCreateSpecType_ChallengeType()                   {}
 func (*CreateSpecType_PolicyBasedChallenge) isCreateSpecType_ChallengeType()               {}
+func (*CreateSpecType_UserIdClientIp) isCreateSpecType_UserIdChoice()                      {}
+func (*CreateSpecType_UserIdentification) isCreateSpecType_UserIdChoice()                  {}
 func (*CreateSpecType_DisableRateLimit) isCreateSpecType_RateLimitChoice()                 {}
 func (*CreateSpecType_RateLimit) isCreateSpecType_RateLimitChoice()                        {}
 func (*CreateSpecType_ServicePoliciesFromNamespace) isCreateSpecType_ServicePolicyChoice() {}
@@ -4233,6 +5962,10 @@ func (*CreateSpecType_Random) isCreateSpecType_HashPolicyChoice()               
 func (*CreateSpecType_SourceIpStickiness) isCreateSpecType_HashPolicyChoice()              {}
 func (*CreateSpecType_CookieStickiness) isCreateSpecType_HashPolicyChoice()                {}
 func (*CreateSpecType_RingHash) isCreateSpecType_HashPolicyChoice()                        {}
+func (*CreateSpecType_SingleLbApp) isCreateSpecType_MlConfigChoice()                       {}
+func (*CreateSpecType_MultiLbApp) isCreateSpecType_MlConfigChoice()                        {}
+func (*CreateSpecType_DisableBotDefense) isCreateSpecType_BotDefenseChoice()               {}
+func (*CreateSpecType_BotDefense) isCreateSpecType_BotDefenseChoice()                      {}
 
 func (m *CreateSpecType) GetLoadbalancerType() isCreateSpecType_LoadbalancerType {
 	if m != nil {
@@ -4258,6 +5991,12 @@ func (m *CreateSpecType) GetChallengeType() isCreateSpecType_ChallengeType {
 	}
 	return nil
 }
+func (m *CreateSpecType) GetUserIdChoice() isCreateSpecType_UserIdChoice {
+	if m != nil {
+		return m.UserIdChoice
+	}
+	return nil
+}
 func (m *CreateSpecType) GetRateLimitChoice() isCreateSpecType_RateLimitChoice {
 	if m != nil {
 		return m.RateLimitChoice
@@ -4273,6 +6012,18 @@ func (m *CreateSpecType) GetServicePolicyChoice() isCreateSpecType_ServicePolicy
 func (m *CreateSpecType) GetHashPolicyChoice() isCreateSpecType_HashPolicyChoice {
 	if m != nil {
 		return m.HashPolicyChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetMlConfigChoice() isCreateSpecType_MlConfigChoice {
+	if m != nil {
+		return m.MlConfigChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetBotDefenseChoice() isCreateSpecType_BotDefenseChoice {
+	if m != nil {
+		return m.BotDefenseChoice
 	}
 	return nil
 }
@@ -4424,9 +6175,16 @@ func (m *CreateSpecType) GetMoreOption() *AdvancedOptionsType {
 	return nil
 }
 
+func (m *CreateSpecType) GetUserIdClientIp() *schema.Empty {
+	if x, ok := m.GetUserIdChoice().(*CreateSpecType_UserIdClientIp); ok {
+		return x.UserIdClientIp
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetUserIdentification() *views.ObjectRefType {
-	if m != nil {
-		return m.UserIdentification
+	if x, ok := m.GetUserIdChoice().(*CreateSpecType_UserIdentification); ok {
+		return x.UserIdentification
 	}
 	return nil
 }
@@ -4543,6 +6301,34 @@ func (m *CreateSpecType) GetRingHash() *HashPolicyListType {
 	return nil
 }
 
+func (m *CreateSpecType) GetSingleLbApp() *SingleLoadBalancerAppSetting {
+	if x, ok := m.GetMlConfigChoice().(*CreateSpecType_SingleLbApp); ok {
+		return x.SingleLbApp
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetMultiLbApp() *schema.Empty {
+	if x, ok := m.GetMlConfigChoice().(*CreateSpecType_MultiLbApp); ok {
+		return x.MultiLbApp
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDisableBotDefense() *schema.Empty {
+	if x, ok := m.GetBotDefenseChoice().(*CreateSpecType_DisableBotDefense); ok {
+		return x.DisableBotDefense
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetBotDefense() *ShapeBotDefenseType {
+	if x, ok := m.GetBotDefenseChoice().(*CreateSpecType_BotDefense); ok {
+		return x.BotDefense
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -4561,6 +6347,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_JsChallenge)(nil),
 		(*CreateSpecType_CaptchaChallenge)(nil),
 		(*CreateSpecType_PolicyBasedChallenge)(nil),
+		(*CreateSpecType_UserIdClientIp)(nil),
+		(*CreateSpecType_UserIdentification)(nil),
 		(*CreateSpecType_DisableRateLimit)(nil),
 		(*CreateSpecType_RateLimit)(nil),
 		(*CreateSpecType_ServicePoliciesFromNamespace)(nil),
@@ -4572,6 +6360,10 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_SourceIpStickiness)(nil),
 		(*CreateSpecType_CookieStickiness)(nil),
 		(*CreateSpecType_RingHash)(nil),
+		(*CreateSpecType_SingleLbApp)(nil),
+		(*CreateSpecType_MultiLbApp)(nil),
+		(*CreateSpecType_DisableBotDefense)(nil),
+		(*CreateSpecType_BotDefense)(nil),
 	}
 }
 
@@ -4607,9 +6399,12 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_JsChallenge
 	//	*ReplaceSpecType_CaptchaChallenge
 	//	*ReplaceSpecType_PolicyBasedChallenge
-	ChallengeType      isReplaceSpecType_ChallengeType `protobuf_oneof:"challenge_type"`
-	MoreOption         *AdvancedOptionsType            `protobuf:"bytes,19,opt,name=more_option,json=moreOption,proto3" json:"more_option,omitempty"`
-	UserIdentification *views.ObjectRefType            `protobuf:"bytes,20,opt,name=user_identification,json=userIdentification,proto3" json:"user_identification,omitempty"`
+	ChallengeType isReplaceSpecType_ChallengeType `protobuf_oneof:"challenge_type"`
+	MoreOption    *AdvancedOptionsType            `protobuf:"bytes,19,opt,name=more_option,json=moreOption,proto3" json:"more_option,omitempty"`
+	// Types that are valid to be assigned to UserIdChoice:
+	//	*ReplaceSpecType_UserIdClientIp
+	//	*ReplaceSpecType_UserIdentification
+	UserIdChoice isReplaceSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
 	// Types that are valid to be assigned to RateLimitChoice:
 	//	*ReplaceSpecType_DisableRateLimit
 	//	*ReplaceSpecType_RateLimit
@@ -4632,12 +6427,20 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_CookieStickiness
 	//	*ReplaceSpecType_RingHash
 	HashPolicyChoice isReplaceSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
+	// Types that are valid to be assigned to MlConfigChoice:
+	//	*ReplaceSpecType_SingleLbApp
+	//	*ReplaceSpecType_MultiLbApp
+	MlConfigChoice isReplaceSpecType_MlConfigChoice `protobuf_oneof:"ml_config_choice"`
+	// Types that are valid to be assigned to BotDefenseChoice:
+	//	*ReplaceSpecType_DisableBotDefense
+	//	*ReplaceSpecType_BotDefense
+	BotDefenseChoice isReplaceSpecType_BotDefenseChoice `protobuf_oneof:"bot_defense_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{26}
+	return fileDescriptor_6478b2bb990a4a3e, []int{37}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4686,6 +6489,12 @@ type isReplaceSpecType_ChallengeType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_UserIdChoice interface {
+	isReplaceSpecType_UserIdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 type isReplaceSpecType_RateLimitChoice interface {
 	isReplaceSpecType_RateLimitChoice()
 	Equal(interface{}) bool
@@ -4700,6 +6509,18 @@ type isReplaceSpecType_ServicePolicyChoice interface {
 }
 type isReplaceSpecType_HashPolicyChoice interface {
 	isReplaceSpecType_HashPolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isReplaceSpecType_MlConfigChoice interface {
+	isReplaceSpecType_MlConfigChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isReplaceSpecType_BotDefenseChoice interface {
+	isReplaceSpecType_BotDefenseChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -4750,6 +6571,12 @@ type ReplaceSpecType_CaptchaChallenge struct {
 type ReplaceSpecType_PolicyBasedChallenge struct {
 	PolicyBasedChallenge *PolicyBasedChallenge `protobuf:"bytes,51,opt,name=policy_based_challenge,json=policyBasedChallenge,proto3,oneof" json:"policy_based_challenge,omitempty"`
 }
+type ReplaceSpecType_UserIdClientIp struct {
+	UserIdClientIp *schema.Empty `protobuf:"bytes,60,opt,name=user_id_client_ip,json=userIdClientIp,proto3,oneof" json:"user_id_client_ip,omitempty"`
+}
+type ReplaceSpecType_UserIdentification struct {
+	UserIdentification *views.ObjectRefType `protobuf:"bytes,20,opt,name=user_identification,json=userIdentification,proto3,oneof" json:"user_identification,omitempty"`
+}
 type ReplaceSpecType_DisableRateLimit struct {
 	DisableRateLimit *schema.Empty `protobuf:"bytes,22,opt,name=disable_rate_limit,json=disableRateLimit,proto3,oneof" json:"disable_rate_limit,omitempty"`
 }
@@ -4783,6 +6610,18 @@ type ReplaceSpecType_CookieStickiness struct {
 type ReplaceSpecType_RingHash struct {
 	RingHash *HashPolicyListType `protobuf:"bytes,50,opt,name=ring_hash,json=ringHash,proto3,oneof" json:"ring_hash,omitempty"`
 }
+type ReplaceSpecType_SingleLbApp struct {
+	SingleLbApp *SingleLoadBalancerAppSetting `protobuf:"bytes,54,opt,name=single_lb_app,json=singleLbApp,proto3,oneof" json:"single_lb_app,omitempty"`
+}
+type ReplaceSpecType_MultiLbApp struct {
+	MultiLbApp *schema.Empty `protobuf:"bytes,55,opt,name=multi_lb_app,json=multiLbApp,proto3,oneof" json:"multi_lb_app,omitempty"`
+}
+type ReplaceSpecType_DisableBotDefense struct {
+	DisableBotDefense *schema.Empty `protobuf:"bytes,57,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
+}
+type ReplaceSpecType_BotDefense struct {
+	BotDefense *ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+}
 
 func (*ReplaceSpecType_Http) isReplaceSpecType_LoadbalancerType()                            {}
 func (*ReplaceSpecType_HttpsAutoCert) isReplaceSpecType_LoadbalancerType()                   {}
@@ -4799,6 +6638,8 @@ func (*ReplaceSpecType_NoChallenge) isReplaceSpecType_ChallengeType()           
 func (*ReplaceSpecType_JsChallenge) isReplaceSpecType_ChallengeType()                        {}
 func (*ReplaceSpecType_CaptchaChallenge) isReplaceSpecType_ChallengeType()                   {}
 func (*ReplaceSpecType_PolicyBasedChallenge) isReplaceSpecType_ChallengeType()               {}
+func (*ReplaceSpecType_UserIdClientIp) isReplaceSpecType_UserIdChoice()                      {}
+func (*ReplaceSpecType_UserIdentification) isReplaceSpecType_UserIdChoice()                  {}
 func (*ReplaceSpecType_DisableRateLimit) isReplaceSpecType_RateLimitChoice()                 {}
 func (*ReplaceSpecType_RateLimit) isReplaceSpecType_RateLimitChoice()                        {}
 func (*ReplaceSpecType_ServicePoliciesFromNamespace) isReplaceSpecType_ServicePolicyChoice() {}
@@ -4810,6 +6651,10 @@ func (*ReplaceSpecType_Random) isReplaceSpecType_HashPolicyChoice()             
 func (*ReplaceSpecType_SourceIpStickiness) isReplaceSpecType_HashPolicyChoice()              {}
 func (*ReplaceSpecType_CookieStickiness) isReplaceSpecType_HashPolicyChoice()                {}
 func (*ReplaceSpecType_RingHash) isReplaceSpecType_HashPolicyChoice()                        {}
+func (*ReplaceSpecType_SingleLbApp) isReplaceSpecType_MlConfigChoice()                       {}
+func (*ReplaceSpecType_MultiLbApp) isReplaceSpecType_MlConfigChoice()                        {}
+func (*ReplaceSpecType_DisableBotDefense) isReplaceSpecType_BotDefenseChoice()               {}
+func (*ReplaceSpecType_BotDefense) isReplaceSpecType_BotDefenseChoice()                      {}
 
 func (m *ReplaceSpecType) GetLoadbalancerType() isReplaceSpecType_LoadbalancerType {
 	if m != nil {
@@ -4835,6 +6680,12 @@ func (m *ReplaceSpecType) GetChallengeType() isReplaceSpecType_ChallengeType {
 	}
 	return nil
 }
+func (m *ReplaceSpecType) GetUserIdChoice() isReplaceSpecType_UserIdChoice {
+	if m != nil {
+		return m.UserIdChoice
+	}
+	return nil
+}
 func (m *ReplaceSpecType) GetRateLimitChoice() isReplaceSpecType_RateLimitChoice {
 	if m != nil {
 		return m.RateLimitChoice
@@ -4850,6 +6701,18 @@ func (m *ReplaceSpecType) GetServicePolicyChoice() isReplaceSpecType_ServicePoli
 func (m *ReplaceSpecType) GetHashPolicyChoice() isReplaceSpecType_HashPolicyChoice {
 	if m != nil {
 		return m.HashPolicyChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetMlConfigChoice() isReplaceSpecType_MlConfigChoice {
+	if m != nil {
+		return m.MlConfigChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetBotDefenseChoice() isReplaceSpecType_BotDefenseChoice {
+	if m != nil {
+		return m.BotDefenseChoice
 	}
 	return nil
 }
@@ -5001,9 +6864,16 @@ func (m *ReplaceSpecType) GetMoreOption() *AdvancedOptionsType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetUserIdClientIp() *schema.Empty {
+	if x, ok := m.GetUserIdChoice().(*ReplaceSpecType_UserIdClientIp); ok {
+		return x.UserIdClientIp
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetUserIdentification() *views.ObjectRefType {
-	if m != nil {
-		return m.UserIdentification
+	if x, ok := m.GetUserIdChoice().(*ReplaceSpecType_UserIdentification); ok {
+		return x.UserIdentification
 	}
 	return nil
 }
@@ -5120,6 +6990,34 @@ func (m *ReplaceSpecType) GetRingHash() *HashPolicyListType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetSingleLbApp() *SingleLoadBalancerAppSetting {
+	if x, ok := m.GetMlConfigChoice().(*ReplaceSpecType_SingleLbApp); ok {
+		return x.SingleLbApp
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetMultiLbApp() *schema.Empty {
+	if x, ok := m.GetMlConfigChoice().(*ReplaceSpecType_MultiLbApp); ok {
+		return x.MultiLbApp
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDisableBotDefense() *schema.Empty {
+	if x, ok := m.GetBotDefenseChoice().(*ReplaceSpecType_DisableBotDefense); ok {
+		return x.DisableBotDefense
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetBotDefense() *ShapeBotDefenseType {
+	if x, ok := m.GetBotDefenseChoice().(*ReplaceSpecType_BotDefense); ok {
+		return x.BotDefense
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -5138,6 +7036,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_JsChallenge)(nil),
 		(*ReplaceSpecType_CaptchaChallenge)(nil),
 		(*ReplaceSpecType_PolicyBasedChallenge)(nil),
+		(*ReplaceSpecType_UserIdClientIp)(nil),
+		(*ReplaceSpecType_UserIdentification)(nil),
 		(*ReplaceSpecType_DisableRateLimit)(nil),
 		(*ReplaceSpecType_RateLimit)(nil),
 		(*ReplaceSpecType_ServicePoliciesFromNamespace)(nil),
@@ -5149,6 +7049,10 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_SourceIpStickiness)(nil),
 		(*ReplaceSpecType_CookieStickiness)(nil),
 		(*ReplaceSpecType_RingHash)(nil),
+		(*ReplaceSpecType_SingleLbApp)(nil),
+		(*ReplaceSpecType_MultiLbApp)(nil),
+		(*ReplaceSpecType_DisableBotDefense)(nil),
+		(*ReplaceSpecType_BotDefense)(nil),
 	}
 }
 
@@ -5184,9 +7088,12 @@ type GetSpecType struct {
 	//	*GetSpecType_JsChallenge
 	//	*GetSpecType_CaptchaChallenge
 	//	*GetSpecType_PolicyBasedChallenge
-	ChallengeType      isGetSpecType_ChallengeType `protobuf_oneof:"challenge_type"`
-	MoreOption         *AdvancedOptionsType        `protobuf:"bytes,19,opt,name=more_option,json=moreOption,proto3" json:"more_option,omitempty"`
-	UserIdentification *views.ObjectRefType        `protobuf:"bytes,20,opt,name=user_identification,json=userIdentification,proto3" json:"user_identification,omitempty"`
+	ChallengeType isGetSpecType_ChallengeType `protobuf_oneof:"challenge_type"`
+	MoreOption    *AdvancedOptionsType        `protobuf:"bytes,19,opt,name=more_option,json=moreOption,proto3" json:"more_option,omitempty"`
+	// Types that are valid to be assigned to UserIdChoice:
+	//	*GetSpecType_UserIdClientIp
+	//	*GetSpecType_UserIdentification
+	UserIdChoice isGetSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
 	// Types that are valid to be assigned to RateLimitChoice:
 	//	*GetSpecType_DisableRateLimit
 	//	*GetSpecType_RateLimit
@@ -5208,7 +7115,15 @@ type GetSpecType struct {
 	//	*GetSpecType_SourceIpStickiness
 	//	*GetSpecType_CookieStickiness
 	//	*GetSpecType_RingHash
-	HashPolicyChoice isGetSpecType_HashPolicyChoice   `protobuf_oneof:"hash_policy_choice"`
+	HashPolicyChoice isGetSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
+	// Types that are valid to be assigned to MlConfigChoice:
+	//	*GetSpecType_SingleLbApp
+	//	*GetSpecType_MultiLbApp
+	MlConfigChoice isGetSpecType_MlConfigChoice `protobuf_oneof:"ml_config_choice"`
+	// Types that are valid to be assigned to BotDefenseChoice:
+	//	*GetSpecType_DisableBotDefense
+	//	*GetSpecType_BotDefense
+	BotDefenseChoice isGetSpecType_BotDefenseChoice   `protobuf_oneof:"bot_defense_choice"`
 	HostName         string                           `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
 	DnsInfo          []*virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
 	State            virtual_host.VirtualHostState    `protobuf:"varint,1003,opt,name=state,proto3,enum=ves.io.schema.virtual_host.VirtualHostState" json:"state,omitempty"`
@@ -5219,7 +7134,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{27}
+	return fileDescriptor_6478b2bb990a4a3e, []int{38}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -5268,6 +7183,12 @@ type isGetSpecType_ChallengeType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_UserIdChoice interface {
+	isGetSpecType_UserIdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 type isGetSpecType_RateLimitChoice interface {
 	isGetSpecType_RateLimitChoice()
 	Equal(interface{}) bool
@@ -5282,6 +7203,18 @@ type isGetSpecType_ServicePolicyChoice interface {
 }
 type isGetSpecType_HashPolicyChoice interface {
 	isGetSpecType_HashPolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGetSpecType_MlConfigChoice interface {
+	isGetSpecType_MlConfigChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGetSpecType_BotDefenseChoice interface {
+	isGetSpecType_BotDefenseChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -5332,6 +7265,12 @@ type GetSpecType_CaptchaChallenge struct {
 type GetSpecType_PolicyBasedChallenge struct {
 	PolicyBasedChallenge *PolicyBasedChallenge `protobuf:"bytes,51,opt,name=policy_based_challenge,json=policyBasedChallenge,proto3,oneof" json:"policy_based_challenge,omitempty"`
 }
+type GetSpecType_UserIdClientIp struct {
+	UserIdClientIp *schema.Empty `protobuf:"bytes,60,opt,name=user_id_client_ip,json=userIdClientIp,proto3,oneof" json:"user_id_client_ip,omitempty"`
+}
+type GetSpecType_UserIdentification struct {
+	UserIdentification *views.ObjectRefType `protobuf:"bytes,20,opt,name=user_identification,json=userIdentification,proto3,oneof" json:"user_identification,omitempty"`
+}
 type GetSpecType_DisableRateLimit struct {
 	DisableRateLimit *schema.Empty `protobuf:"bytes,22,opt,name=disable_rate_limit,json=disableRateLimit,proto3,oneof" json:"disable_rate_limit,omitempty"`
 }
@@ -5365,6 +7304,18 @@ type GetSpecType_CookieStickiness struct {
 type GetSpecType_RingHash struct {
 	RingHash *HashPolicyListType `protobuf:"bytes,50,opt,name=ring_hash,json=ringHash,proto3,oneof" json:"ring_hash,omitempty"`
 }
+type GetSpecType_SingleLbApp struct {
+	SingleLbApp *SingleLoadBalancerAppSetting `protobuf:"bytes,54,opt,name=single_lb_app,json=singleLbApp,proto3,oneof" json:"single_lb_app,omitempty"`
+}
+type GetSpecType_MultiLbApp struct {
+	MultiLbApp *schema.Empty `protobuf:"bytes,55,opt,name=multi_lb_app,json=multiLbApp,proto3,oneof" json:"multi_lb_app,omitempty"`
+}
+type GetSpecType_DisableBotDefense struct {
+	DisableBotDefense *schema.Empty `protobuf:"bytes,57,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
+}
+type GetSpecType_BotDefense struct {
+	BotDefense *ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+}
 
 func (*GetSpecType_Http) isGetSpecType_LoadbalancerType()                            {}
 func (*GetSpecType_HttpsAutoCert) isGetSpecType_LoadbalancerType()                   {}
@@ -5381,6 +7332,8 @@ func (*GetSpecType_NoChallenge) isGetSpecType_ChallengeType()                   
 func (*GetSpecType_JsChallenge) isGetSpecType_ChallengeType()                        {}
 func (*GetSpecType_CaptchaChallenge) isGetSpecType_ChallengeType()                   {}
 func (*GetSpecType_PolicyBasedChallenge) isGetSpecType_ChallengeType()               {}
+func (*GetSpecType_UserIdClientIp) isGetSpecType_UserIdChoice()                      {}
+func (*GetSpecType_UserIdentification) isGetSpecType_UserIdChoice()                  {}
 func (*GetSpecType_DisableRateLimit) isGetSpecType_RateLimitChoice()                 {}
 func (*GetSpecType_RateLimit) isGetSpecType_RateLimitChoice()                        {}
 func (*GetSpecType_ServicePoliciesFromNamespace) isGetSpecType_ServicePolicyChoice() {}
@@ -5392,6 +7345,10 @@ func (*GetSpecType_Random) isGetSpecType_HashPolicyChoice()                     
 func (*GetSpecType_SourceIpStickiness) isGetSpecType_HashPolicyChoice()              {}
 func (*GetSpecType_CookieStickiness) isGetSpecType_HashPolicyChoice()                {}
 func (*GetSpecType_RingHash) isGetSpecType_HashPolicyChoice()                        {}
+func (*GetSpecType_SingleLbApp) isGetSpecType_MlConfigChoice()                       {}
+func (*GetSpecType_MultiLbApp) isGetSpecType_MlConfigChoice()                        {}
+func (*GetSpecType_DisableBotDefense) isGetSpecType_BotDefenseChoice()               {}
+func (*GetSpecType_BotDefense) isGetSpecType_BotDefenseChoice()                      {}
 
 func (m *GetSpecType) GetLoadbalancerType() isGetSpecType_LoadbalancerType {
 	if m != nil {
@@ -5417,6 +7374,12 @@ func (m *GetSpecType) GetChallengeType() isGetSpecType_ChallengeType {
 	}
 	return nil
 }
+func (m *GetSpecType) GetUserIdChoice() isGetSpecType_UserIdChoice {
+	if m != nil {
+		return m.UserIdChoice
+	}
+	return nil
+}
 func (m *GetSpecType) GetRateLimitChoice() isGetSpecType_RateLimitChoice {
 	if m != nil {
 		return m.RateLimitChoice
@@ -5432,6 +7395,18 @@ func (m *GetSpecType) GetServicePolicyChoice() isGetSpecType_ServicePolicyChoice
 func (m *GetSpecType) GetHashPolicyChoice() isGetSpecType_HashPolicyChoice {
 	if m != nil {
 		return m.HashPolicyChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetMlConfigChoice() isGetSpecType_MlConfigChoice {
+	if m != nil {
+		return m.MlConfigChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetBotDefenseChoice() isGetSpecType_BotDefenseChoice {
+	if m != nil {
+		return m.BotDefenseChoice
 	}
 	return nil
 }
@@ -5583,9 +7558,16 @@ func (m *GetSpecType) GetMoreOption() *AdvancedOptionsType {
 	return nil
 }
 
+func (m *GetSpecType) GetUserIdClientIp() *schema.Empty {
+	if x, ok := m.GetUserIdChoice().(*GetSpecType_UserIdClientIp); ok {
+		return x.UserIdClientIp
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetUserIdentification() *views.ObjectRefType {
-	if m != nil {
-		return m.UserIdentification
+	if x, ok := m.GetUserIdChoice().(*GetSpecType_UserIdentification); ok {
+		return x.UserIdentification
 	}
 	return nil
 }
@@ -5702,6 +7684,34 @@ func (m *GetSpecType) GetRingHash() *HashPolicyListType {
 	return nil
 }
 
+func (m *GetSpecType) GetSingleLbApp() *SingleLoadBalancerAppSetting {
+	if x, ok := m.GetMlConfigChoice().(*GetSpecType_SingleLbApp); ok {
+		return x.SingleLbApp
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetMultiLbApp() *schema.Empty {
+	if x, ok := m.GetMlConfigChoice().(*GetSpecType_MultiLbApp); ok {
+		return x.MultiLbApp
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDisableBotDefense() *schema.Empty {
+	if x, ok := m.GetBotDefenseChoice().(*GetSpecType_DisableBotDefense); ok {
+		return x.DisableBotDefense
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetBotDefense() *ShapeBotDefenseType {
+	if x, ok := m.GetBotDefenseChoice().(*GetSpecType_BotDefense); ok {
+		return x.BotDefense
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetHostName() string {
 	if m != nil {
 		return m.HostName
@@ -5755,6 +7765,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_JsChallenge)(nil),
 		(*GetSpecType_CaptchaChallenge)(nil),
 		(*GetSpecType_PolicyBasedChallenge)(nil),
+		(*GetSpecType_UserIdClientIp)(nil),
+		(*GetSpecType_UserIdentification)(nil),
 		(*GetSpecType_DisableRateLimit)(nil),
 		(*GetSpecType_RateLimit)(nil),
 		(*GetSpecType_ServicePoliciesFromNamespace)(nil),
@@ -5766,10 +7778,20 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_SourceIpStickiness)(nil),
 		(*GetSpecType_CookieStickiness)(nil),
 		(*GetSpecType_RingHash)(nil),
+		(*GetSpecType_SingleLbApp)(nil),
+		(*GetSpecType_MultiLbApp)(nil),
+		(*GetSpecType_DisableBotDefense)(nil),
+		(*GetSpecType_BotDefense)(nil),
 	}
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.URLScheme", URLScheme_name, URLScheme_value)
+	golang_proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.URLScheme", URLScheme_name, URLScheme_value)
+	proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.ShapeBotDefenseRegion", ShapeBotDefenseRegion_name, ShapeBotDefenseRegion_value)
+	golang_proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.ShapeBotDefenseRegion", ShapeBotDefenseRegion_name, ShapeBotDefenseRegion_value)
+	proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.JavaScriptLocation", JavaScriptLocation_name, JavaScriptLocation_value)
+	golang_proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.JavaScriptLocation", JavaScriptLocation_name, JavaScriptLocation_value)
 	proto.RegisterType((*DownstreamTlsValidationContext)(nil), "ves.io.schema.views.http_loadbalancer.DownstreamTlsValidationContext")
 	golang_proto.RegisterType((*DownstreamTlsValidationContext)(nil), "ves.io.schema.views.http_loadbalancer.DownstreamTlsValidationContext")
 	proto.RegisterType((*DownstreamTlsParamsType)(nil), "ves.io.schema.views.http_loadbalancer.DownstreamTlsParamsType")
@@ -5822,6 +7844,28 @@ func init() {
 	golang_proto.RegisterType((*RateLimitConfigType)(nil), "ves.io.schema.views.http_loadbalancer.RateLimitConfigType")
 	proto.RegisterType((*ServicePolicyList)(nil), "ves.io.schema.views.http_loadbalancer.ServicePolicyList")
 	golang_proto.RegisterType((*ServicePolicyList)(nil), "ves.io.schema.views.http_loadbalancer.ServicePolicyList")
+	proto.RegisterType((*ApiDiscoverySetting)(nil), "ves.io.schema.views.http_loadbalancer.ApiDiscoverySetting")
+	golang_proto.RegisterType((*ApiDiscoverySetting)(nil), "ves.io.schema.views.http_loadbalancer.ApiDiscoverySetting")
+	proto.RegisterType((*SingleLoadBalancerAppSetting)(nil), "ves.io.schema.views.http_loadbalancer.SingleLoadBalancerAppSetting")
+	golang_proto.RegisterType((*SingleLoadBalancerAppSetting)(nil), "ves.io.schema.views.http_loadbalancer.SingleLoadBalancerAppSetting")
+	proto.RegisterType((*ShapeBotDefenseType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeBotDefenseType")
+	golang_proto.RegisterType((*ShapeBotDefenseType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeBotDefenseType")
+	proto.RegisterType((*ShapeBotDefensePolicyType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeBotDefensePolicyType")
+	golang_proto.RegisterType((*ShapeBotDefensePolicyType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeBotDefensePolicyType")
+	proto.RegisterType((*AppEndpointType)(nil), "ves.io.schema.views.http_loadbalancer.AppEndpointType")
+	golang_proto.RegisterType((*AppEndpointType)(nil), "ves.io.schema.views.http_loadbalancer.AppEndpointType")
+	proto.RegisterType((*WebMobileTrafficType)(nil), "ves.io.schema.views.http_loadbalancer.WebMobileTrafficType")
+	golang_proto.RegisterType((*WebMobileTrafficType)(nil), "ves.io.schema.views.http_loadbalancer.WebMobileTrafficType")
+	proto.RegisterType((*ShapeJavaScriptInsertType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertType")
+	golang_proto.RegisterType((*ShapeJavaScriptInsertType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertType")
+	proto.RegisterType((*ShapeJavaScriptInsertAllWithExceptionsType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllWithExceptionsType")
+	golang_proto.RegisterType((*ShapeJavaScriptInsertAllWithExceptionsType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllWithExceptionsType")
+	proto.RegisterType((*ShapeJavaScriptInsertAllType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllType")
+	golang_proto.RegisterType((*ShapeJavaScriptInsertAllType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllType")
+	proto.RegisterType((*ShapeJavaScriptInsertionRule)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertionRule")
+	golang_proto.RegisterType((*ShapeJavaScriptInsertionRule)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertionRule")
+	proto.RegisterType((*ShapeJavaScriptExclusionRule)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptExclusionRule")
+	golang_proto.RegisterType((*ShapeJavaScriptExclusionRule)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptExclusionRule")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.http_loadbalancer.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.http_loadbalancer.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.http_loadbalancer.CreateSpecType")
@@ -5840,430 +7884,636 @@ func init() {
 }
 
 var fileDescriptor_6478b2bb990a4a3e = []byte{
-	// 6726 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7d, 0x5b, 0x6c, 0x1c, 0xd7,
-	0x7d, 0x37, 0xcf, 0xde, 0xb8, 0x3c, 0x7b, 0xe1, 0xee, 0x90, 0x22, 0x57, 0x94, 0x44, 0xad, 0xd6,
-	0x52, 0x42, 0xc9, 0xa3, 0x25, 0xf7, 0x42, 0x52, 0x64, 0x60, 0xd9, 0x5a, 0x4a, 0xce, 0x8a, 0x9f,
-	0x68, 0xd3, 0x43, 0x59, 0x4e, 0xe2, 0x24, 0x9b, 0xe1, 0xee, 0x21, 0x77, 0xac, 0xd9, 0x99, 0xcd,
-	0x9c, 0x59, 0x49, 0xf4, 0x17, 0x7d, 0x10, 0x84, 0xe4, 0x43, 0x20, 0x7c, 0x1f, 0x10, 0xb8, 0x2f,
-	0xad, 0xdb, 0x87, 0x22, 0x7d, 0x68, 0xa0, 0xa2, 0x68, 0x1f, 0x8b, 0xae, 0xda, 0x10, 0x06, 0x02,
-	0x04, 0x7d, 0x29, 0x1f, 0x8d, 0xa0, 0x28, 0x1c, 0x1a, 0x68, 0x9d, 0xa4, 0x28, 0x0c, 0xa3, 0x0f,
-	0x86, 0x81, 0x02, 0xc5, 0xb9, 0xcc, 0xec, 0xcc, 0x72, 0x76, 0x45, 0xea, 0x12, 0xa3, 0x28, 0x9f,
-	0x34, 0x3b, 0xf3, 0xbf, 0x9c, 0xcb, 0xff, 0x7f, 0xce, 0xff, 0xff, 0x3b, 0xff, 0x43, 0xc1, 0xdc,
-	0x2d, 0x84, 0xb3, 0x8a, 0x3e, 0x8d, 0xab, 0x75, 0xd4, 0x90, 0xa7, 0x6f, 0x29, 0xe8, 0x36, 0x9e,
-	0xae, 0x9b, 0x66, 0xb3, 0xa2, 0xea, 0x72, 0x6d, 0x5d, 0x56, 0x65, 0xad, 0x8a, 0x8c, 0x69, 0x73,
-	0xab, 0x89, 0x70, 0xb6, 0x69, 0xe8, 0xa6, 0x2e, 0x9c, 0x61, 0x2c, 0x59, 0xc6, 0x92, 0xa5, 0x2c,
-	0xd9, 0x3d, 0x2c, 0x13, 0xe7, 0x37, 0x15, 0xb3, 0xde, 0x5a, 0xcf, 0x56, 0xf5, 0xc6, 0xf4, 0xa6,
-	0xbe, 0xa9, 0x4f, 0x53, 0xee, 0xf5, 0xd6, 0x06, 0xfd, 0x45, 0x7f, 0xd0, 0x27, 0x26, 0x75, 0xe2,
-	0xe4, 0xa6, 0xae, 0x6f, 0xaa, 0xa8, 0x43, 0x65, 0x2a, 0x0d, 0x84, 0x4d, 0xb9, 0xd1, 0xe4, 0x04,
-	0xc7, 0xdc, 0x2d, 0xd5, 0x9b, 0xa6, 0xa2, 0x6b, 0xbc, 0x4d, 0x13, 0x69, 0xf7, 0xc7, 0xa6, 0xae,
-	0x2a, 0xd5, 0x2d, 0x67, 0xab, 0x27, 0xbe, 0xe2, 0xa6, 0x30, 0x64, 0x13, 0x55, 0x54, 0xa5, 0xa1,
-	0x98, 0xee, 0xde, 0x4d, 0x9c, 0xec, 0xa2, 0xd3, 0x5b, 0x26, 0x72, 0x11, 0x4c, 0xb9, 0x09, 0x30,
-	0x32, 0x6e, 0x29, 0x55, 0x54, 0xf1, 0x50, 0x79, 0xbe, 0x1f, 0x65, 0xc5, 0x68, 0xa9, 0x6e, 0xc1,
-	0x47, 0xdd, 0xe4, 0xce, 0x4f, 0xc7, 0xbb, 0x66, 0x49, 0x56, 0x95, 0x9a, 0x6c, 0x22, 0xef, 0xce,
-	0x93, 0x09, 0xa9, 0xb8, 0x87, 0xa7, 0xe0, 0x35, 0xcb, 0xce, 0x21, 0xf0, 0x6a, 0xfe, 0x49, 0x2f,
-	0xa6, 0x3e, 0x43, 0x7a, 0x4b, 0x31, 0xcc, 0x96, 0xac, 0x56, 0xea, 0x3a, 0x36, 0x5d, 0x74, 0x33,
-	0xbd, 0xe9, 0x2a, 0x35, 0x0d, 0x57, 0x14, 0x6d, 0x43, 0x9f, 0xd6, 0xd7, 0xdf, 0x41, 0x55, 0x93,
-	0x71, 0x64, 0x0c, 0x38, 0x79, 0x59, 0xbf, 0xad, 0x61, 0xd3, 0x40, 0x72, 0xe3, 0xba, 0x8a, 0x6f,
-	0xb0, 0x0e, 0x2b, 0xba, 0xb6, 0xa4, 0x6b, 0x26, 0xba, 0x63, 0x0a, 0xab, 0x30, 0x6e, 0x1a, 0x2d,
-	0x6c, 0xa2, 0x5a, 0xa5, 0x2a, 0x57, 0x5a, 0x86, 0x9a, 0xf2, 0xa5, 0xc1, 0xd4, 0x50, 0xe9, 0xdc,
-	0xe7, 0x6d, 0x10, 0xf8, 0xe9, 0x23, 0x10, 0x69, 0xa2, 0x86, 0x98, 0x5e, 0x97, 0x31, 0x9a, 0x2b,
-	0xfe, 0xed, 0x6f, 0xb6, 0xfd, 0x61, 0x23, 0x94, 0x06, 0x53, 0xf7, 0xee, 0x85, 0xc9, 0x8f, 0xa0,
-	0xe1, 0xff, 0x09, 0x00, 0x52, 0x94, 0x4b, 0x58, 0x92, 0xdf, 0x34, 0xd4, 0xcc, 0x5f, 0xfb, 0xe1,
-	0xb8, 0x4b, 0xe9, 0xaa, 0x6c, 0xc8, 0x0d, 0x7c, 0x7d, 0xab, 0x89, 0x84, 0x25, 0x08, 0x4d, 0x15,
-	0x57, 0xaa, 0xba, 0xb6, 0xa1, 0x6c, 0xa6, 0x40, 0x1a, 0x4c, 0x45, 0xf2, 0x93, 0x59, 0x2f, 0x3f,
-	0xb8, 0xae, 0xe2, 0x25, 0x4a, 0x55, 0x0a, 0x7c, 0xda, 0x06, 0x40, 0x1a, 0x32, 0xad, 0x17, 0xc2,
-	0x06, 0x4c, 0x50, 0x21, 0xc8, 0x30, 0x95, 0x0d, 0xa5, 0x2a, 0x9b, 0x08, 0xa7, 0x7c, 0x69, 0xff,
-	0x54, 0x24, 0x7f, 0xaa, 0x4b, 0x14, 0x11, 0xd2, 0xa1, 0x22, 0x2d, 0x28, 0xa5, 0x76, 0xda, 0x00,
-	0xd0, 0xb6, 0xbf, 0x07, 0x7c, 0x89, 0x84, 0xf5, 0x14, 0x06, 0xd2, 0xb0, 0xe9, 0xa2, 0xc6, 0xc2,
-	0x2c, 0x1c, 0xd4, 0xf4, 0x4a, 0xc3, 0x54, 0x71, 0xca, 0x4f, 0x5b, 0x3a, 0xda, 0x25, 0xfe, 0x4a,
-	0xa3, 0x69, 0x6e, 0x95, 0x02, 0xdb, 0x6d, 0x00, 0xca, 0x03, 0x52, 0x48, 0xd3, 0x57, 0x4c, 0x15,
-	0x0b, 0x75, 0x18, 0x6e, 0x61, 0xc4, 0xf8, 0x02, 0x94, 0xef, 0x4a, 0x76, 0x5f, 0x9e, 0x9e, 0xed,
-	0x3f, 0x55, 0xb6, 0xa2, 0xc1, 0x16, 0x46, 0x44, 0xd3, 0xe2, 0x89, 0x0f, 0xda, 0xe0, 0x28, 0x1c,
-	0x87, 0xf1, 0xeb, 0xd7, 0xd6, 0xd2, 0x74, 0x94, 0x91, 0x89, 0x0c, 0x2c, 0x04, 0x73, 0x62, 0x5e,
-	0x9c, 0x2d, 0x65, 0x60, 0xa4, 0x41, 0x07, 0xaa, 0xae, 0x2b, 0x55, 0x24, 0x8c, 0x6c, 0xb7, 0x81,
-	0xff, 0x97, 0x6d, 0x00, 0x76, 0xda, 0x20, 0xb8, 0xdb, 0x06, 0xfe, 0x82, 0x58, 0x5c, 0x0e, 0x84,
-	0x83, 0x89, 0x50, 0xe6, 0x47, 0x01, 0x18, 0x5f, 0x35, 0xf4, 0x3b, 0x5b, 0x64, 0x88, 0xca, 0xa6,
-	0xd9, 0xc4, 0xc2, 0x59, 0x18, 0xa3, 0x0d, 0x34, 0x50, 0x4d, 0x31, 0x50, 0xd5, 0xa4, 0x93, 0x15,
-	0x2e, 0x05, 0x3e, 0x6f, 0x83, 0x01, 0x29, 0x4a, 0x3e, 0x49, 0xfc, 0x8b, 0x70, 0x12, 0x86, 0xe5,
-	0x5a, 0xad, 0x52, 0xc7, 0x26, 0xa6, 0xc6, 0x63, 0x51, 0x0d, 0xca, 0xb5, 0x5a, 0x19, 0x9b, 0x58,
-	0xb8, 0x09, 0xe3, 0xa4, 0x1d, 0x4d, 0xbb, 0x85, 0x7c, 0x3c, 0x2f, 0x3e, 0xc9, 0xb8, 0x74, 0xac,
-	0xa9, 0x14, 0x20, 0x73, 0x29, 0xc5, 0x4c, 0xfe, 0x92, 0x75, 0x7e, 0x09, 0xc6, 0x6b, 0x68, 0x43,
-	0x6e, 0xa9, 0x66, 0xa5, 0x8e, 0xe4, 0x1a, 0x32, 0x52, 0xc1, 0x7d, 0x4c, 0x5e, 0x8c, 0xf3, 0x94,
-	0x29, 0x8b, 0x90, 0x83, 0x11, 0xb2, 0xca, 0x20, 0xa3, 0xa2, 0xc9, 0x0d, 0x94, 0x0a, 0x51, 0x97,
-	0x88, 0x6f, 0x5b, 0xa6, 0x63, 0xf8, 0x53, 0x7f, 0xfa, 0x72, 0x79, 0x40, 0x82, 0x8c, 0xe8, 0x35,
-	0xb9, 0x81, 0x84, 0x8b, 0x50, 0x90, 0x9b, 0x4d, 0xa4, 0xd5, 0x2a, 0x4e, 0xce, 0xc1, 0x1e, 0x9c,
-	0x09, 0x46, 0xbb, 0xd6, 0xe1, 0x7f, 0x19, 0x46, 0x9b, 0x32, 0xc6, 0x15, 0xb3, 0x6e, 0xe8, 0xad,
-	0xcd, 0x7a, 0x2a, 0xbc, 0x8f, 0x56, 0x47, 0x08, 0xc7, 0x75, 0xc6, 0xb0, 0x08, 0x3f, 0xbb, 0x38,
-	0x48, 0x26, 0xbe, 0x20, 0x16, 0x4b, 0xd3, 0x70, 0x94, 0xb7, 0x82, 0x8d, 0x81, 0x65, 0x03, 0xe3,
-	0xdb, 0x6d, 0x10, 0xe4, 0x36, 0x10, 0xd8, 0x6d, 0x83, 0xc1, 0x59, 0x71, 0x4e, 0x9c, 0x17, 0x2f,
-	0x2c, 0x07, 0xc2, 0x81, 0x44, 0x30, 0xb3, 0x02, 0x63, 0x2e, 0x33, 0x10, 0xe6, 0xe0, 0x28, 0x59,
-	0x58, 0x6e, 0xe9, 0xaa, 0x89, 0x0c, 0x43, 0xae, 0x34, 0x64, 0x4d, 0xde, 0x44, 0x35, 0x97, 0x31,
-	0x08, 0x35, 0x0d, 0xdf, 0xe0, 0x04, 0x2b, 0xec, 0xfb, 0x62, 0xe0, 0xb3, 0x8b, 0x20, 0x97, 0xf9,
-	0xab, 0x20, 0x1c, 0x77, 0x9b, 0xd5, 0xa5, 0x96, 0xa9, 0x13, 0x1f, 0x7b, 0xb6, 0xf6, 0xf5, 0x92,
-	0x6b, 0x55, 0xf1, 0xef, 0x67, 0x55, 0x71, 0xae, 0x27, 0x0e, 0x3f, 0x0f, 0x3e, 0xa1, 0x9f, 0x87,
-	0x9e, 0xa7, 0x9f, 0x7b, 0x98, 0xf4, 0xe3, 0x8d, 0x03, 0x3c, 0xc6, 0xa4, 0x87, 0x3c, 0x0d, 0x13,
-	0xec, 0xc3, 0xa4, 0x61, 0x0f, 0xce, 0xc7, 0x9b, 0x74, 0x64, 0x1f, 0xad, 0x76, 0x99, 0x74, 0xf4,
-	0xb3, 0x8b, 0x43, 0xc4, 0xa4, 0x8b, 0x62, 0x41, 0x9c, 0xf7, 0x5a, 0xcf, 0x9c, 0xb6, 0xec, 0x9f,
-	0x15, 0xe7, 0x4a, 0xb9, 0x1e, 0x86, 0x7f, 0x74, 0xbb, 0x0d, 0xc2, 0x9c, 0x78, 0x70, 0xb7, 0x0d,
-	0x86, 0x2e, 0x88, 0x0b, 0x62, 0x6e, 0x46, 0xcc, 0xe5, 0x98, 0xe9, 0x2f, 0x07, 0xc2, 0x83, 0x89,
-	0x70, 0xc6, 0x84, 0x42, 0x59, 0xc6, 0xf5, 0x55, 0xba, 0x89, 0x5f, 0x53, 0xb0, 0x49, 0x77, 0xad,
-	0xef, 0xc2, 0x48, 0x5d, 0xc6, 0x75, 0xbe, 0xb7, 0xa7, 0x12, 0x74, 0xaf, 0x79, 0xa1, 0xab, 0x1b,
-	0x34, 0xc0, 0xc9, 0x76, 0xb8, 0x3d, 0x76, 0x9b, 0xb0, 0xf5, 0x94, 0x02, 0x12, 0xac, 0xdb, 0x94,
-	0x99, 0x3f, 0x03, 0x30, 0xb1, 0xa2, 0x18, 0x86, 0x6e, 0x74, 0x58, 0x85, 0x35, 0x18, 0xd1, 0x0d,
-	0x65, 0x53, 0xd1, 0x2a, 0x4d, 0x5d, 0x57, 0xf9, 0x5e, 0x99, 0xf1, 0xb4, 0xb0, 0xd7, 0xe9, 0x96,
-	0x2f, 0xa1, 0x0d, 0xaa, 0x33, 0xfe, 0xf0, 0xae, 0x93, 0x53, 0x82, 0xec, 0xc7, 0xaa, 0xae, 0xab,
-	0xc2, 0x22, 0x1c, 0x6c, 0x22, 0xa3, 0x8a, 0x34, 0x93, 0x7a, 0x52, 0x24, 0x9f, 0xee, 0x12, 0xf8,
-	0xaa, 0x21, 0x57, 0x89, 0x2d, 0xca, 0xea, 0x2a, 0xa3, 0x93, 0x2c, 0x86, 0xcc, 0xff, 0x4f, 0xc1,
-	0x09, 0x89, 0x74, 0x72, 0x4d, 0x69, 0x34, 0x55, 0x74, 0xa9, 0x76, 0x8b, 0x58, 0x73, 0xed, 0x75,
-	0x16, 0x20, 0x09, 0x97, 0xa1, 0x50, 0xd5, 0x1b, 0x0d, 0x5d, 0xab, 0x38, 0xc7, 0xca, 0xd7, 0x7b,
-	0xca, 0xc9, 0x2a, 0xc8, 0x38, 0x3a, 0x83, 0x26, 0x34, 0xe0, 0x28, 0x6e, 0xa2, 0x2a, 0xd9, 0x83,
-	0x5d, 0x72, 0x98, 0x53, 0x2f, 0xec, 0xd3, 0xc1, 0xf6, 0xce, 0x61, 0x79, 0x40, 0x12, 0x2c, 0xc1,
-	0x0e, 0x75, 0xaf, 0xc0, 0x70, 0xd3, 0x50, 0x74, 0x43, 0x31, 0xb7, 0xe8, 0x5e, 0x1d, 0xdf, 0xb3,
-	0x6e, 0x90, 0x1e, 0x2b, 0xda, 0xe6, 0x2a, 0xa7, 0x62, 0x76, 0x2a, 0xd9, 0x5c, 0xc2, 0xcf, 0x00,
-	0x4c, 0x20, 0xad, 0xd6, 0xd4, 0x15, 0xcd, 0xac, 0xe0, 0xd6, 0x3a, 0x46, 0x26, 0x59, 0x46, 0x88,
-	0x85, 0xdc, 0xd8, 0x67, 0x6b, 0x7b, 0x0f, 0x6a, 0xf6, 0x0a, 0x97, 0xbc, 0xc6, 0x04, 0x5f, 0xd1,
-	0x4c, 0x63, 0xab, 0x74, 0x66, 0x9b, 0xd9, 0x31, 0x78, 0xff, 0x11, 0x08, 0x40, 0xdf, 0x00, 0x33,
-	0xb0, 0xf7, 0x49, 0x38, 0xb3, 0xfb, 0xd1, 0x2f, 0xfc, 0xa1, 0x07, 0x8f, 0x80, 0x2f, 0x3c, 0x20,
-	0x0d, 0x23, 0x37, 0xb3, 0x70, 0x0d, 0x8e, 0xd5, 0x14, 0x2c, 0xaf, 0xab, 0xa8, 0xd2, 0x34, 0xd0,
-	0x86, 0x72, 0xa7, 0x62, 0xa0, 0xdb, 0x86, 0x62, 0xb2, 0x5d, 0xaa, 0xd7, 0x2c, 0x01, 0x69, 0x94,
-	0x73, 0xad, 0x52, 0x26, 0x89, 0xf1, 0x08, 0xf3, 0x30, 0xde, 0x25, 0x25, 0xcc, 0x16, 0x06, 0xb2,
-	0x36, 0x5b, 0x0b, 0xc3, 0x3d, 0x1f, 0x59, 0x88, 0x9a, 0x2e, 0xc6, 0x77, 0xe1, 0x98, 0x81, 0xbe,
-	0xdf, 0x42, 0xd8, 0x5a, 0xcd, 0x70, 0xc5, 0xd4, 0x2b, 0x72, 0xad, 0x96, 0x1a, 0xa2, 0xc3, 0xf6,
-	0x62, 0x57, 0x33, 0xd8, 0xfa, 0xb5, 0x22, 0x6b, 0x4a, 0xb3, 0xa5, 0xd2, 0x85, 0x92, 0x8d, 0x8e,
-	0x87, 0x83, 0xa5, 0x1d, 0x0e, 0x36, 0xc2, 0x95, 0x30, 0x76, 0x7c, 0x5d, 0xbf, 0x54, 0xab, 0x09,
-	0x75, 0x78, 0xd4, 0x43, 0xb7, 0x81, 0x1a, 0xfa, 0x2d, 0xb2, 0xb0, 0xf9, 0xa7, 0x86, 0x4a, 0xe7,
-	0x89, 0xc4, 0xcf, 0xb9, 0xd4, 0xe8, 0x7b, 0x60, 0x28, 0x33, 0x68, 0x90, 0x6d, 0xe1, 0x9e, 0xcf,
-	0x53, 0xcd, 0x58, 0xb7, 0x1a, 0x89, 0x0a, 0x13, 0x7e, 0x00, 0xc7, 0x0d, 0x84, 0x9b, 0xba, 0x86,
-	0x51, 0x77, 0x37, 0x23, 0xcf, 0xb2, 0x9b, 0xa3, 0x96, 0x16, 0x57, 0x3f, 0xdf, 0x81, 0x13, 0x5e,
-	0xda, 0x79, 0x47, 0xa3, 0x4f, 0xd2, 0xd1, 0xf1, 0x3d, 0x8a, 0x78, 0x4f, 0x49, 0x8c, 0xc0, 0xcd,
-	0x4a, 0xd5, 0xab, 0xb4, 0xe5, 0xb4, 0x9b, 0x31, 0x57, 0x8c, 0xc0, 0x28, 0xae, 0x71, 0x02, 0xd2,
-	0xc6, 0x97, 0x60, 0xc4, 0xe2, 0xbb, 0x2d, 0x6f, 0xa4, 0x86, 0x1f, 0xbb, 0x39, 0xf8, 0x24, 0xc8,
-	0x19, 0xde, 0x92, 0x37, 0x84, 0x12, 0xf4, 0x13, 0xb6, 0xc4, 0xbe, 0xd7, 0x45, 0xf8, 0xf0, 0x2e,
-	0xe1, 0xe0, 0xa2, 0xc8, 0xa3, 0xf0, 0x06, 0x0c, 0xdf, 0x96, 0x37, 0x68, 0x06, 0x99, 0x4a, 0xee,
-	0x5b, 0x50, 0xe2, 0xe1, 0xdd, 0x21, 0x8b, 0x0d, 0x73, 0x71, 0x83, 0xb7, 0xe5, 0x0d, 0xa9, 0xa5,
-	0x22, 0xa1, 0x0a, 0xa3, 0x72, 0xb3, 0x59, 0xd9, 0x50, 0x0c, 0x74, 0x5b, 0x56, 0xd5, 0x54, 0x71,
-	0xdf, 0x62, 0x27, 0x1e, 0xde, 0x75, 0xb1, 0x7e, 0x78, 0x17, 0x10, 0xe1, 0x9f, 0x30, 0x05, 0x11,
-	0xb9, 0xd9, 0x7c, 0x95, 0x7f, 0x11, 0x2e, 0xc3, 0x48, 0x55, 0x37, 0xb0, 0xb5, 0x38, 0x0a, 0x54,
-	0xc7, 0xd1, 0x2e, 0x1d, 0x4b, 0xba, 0x81, 0xd9, 0x32, 0x57, 0x0a, 0x5b, 0x2b, 0x86, 0x04, 0xab,
-	0xf6, 0x5b, 0x61, 0x01, 0x46, 0xad, 0x09, 0xc0, 0xcd, 0xda, 0x56, 0x6a, 0xb4, 0xcf, 0x2a, 0xe0,
-	0x97, 0xac, 0xc9, 0x5a, 0x6b, 0xd6, 0xb6, 0x84, 0x79, 0x18, 0x41, 0x5a, 0x87, 0xf3, 0x48, 0x5f,
-	0x4e, 0xc8, 0x48, 0x29, 0xe3, 0x1b, 0xf0, 0xa8, 0x3d, 0xe9, 0x68, 0xbd, 0x82, 0xf5, 0xea, 0x4d,
-	0x64, 0x5a, 0x91, 0xdb, 0x78, 0x1f, 0x31, 0x01, 0xc9, 0x5a, 0xbc, 0xde, 0x42, 0xeb, 0x6b, 0x94,
-	0x8d, 0x87, 0x6f, 0x37, 0x60, 0x72, 0xaf, 0xa8, 0x14, 0x15, 0x35, 0xe5, 0xb9, 0x47, 0xbf, 0x85,
-	0xd6, 0xb1, 0x43, 0x00, 0xdd, 0x1e, 0x02, 0xd2, 0xf0, 0xed, 0x2e, 0xb9, 0x65, 0x38, 0x6a, 0x45,
-	0x5d, 0x06, 0x32, 0x8d, 0x2d, 0x6b, 0xb4, 0x27, 0xfa, 0xb4, 0x32, 0x28, 0x09, 0x9c, 0x47, 0x22,
-	0x2c, 0x7c, 0xa0, 0xaf, 0xc2, 0xa8, 0x4b, 0xc2, 0x31, 0xcf, 0x08, 0xd5, 0xc1, 0xd1, 0xc9, 0x6e,
-	0xca, 0x41, 0x29, 0x62, 0x38, 0x44, 0xcd, 0xc1, 0x41, 0x53, 0x69, 0x20, 0xbd, 0x65, 0xa6, 0x8e,
-	0xa7, 0xc1, 0x54, 0xac, 0x74, 0xfc, 0x57, 0x6d, 0x10, 0x2c, 0xcc, 0xcc, 0xcc, 0xcc, 0x10, 0x47,
-	0xfb, 0xf1, 0x23, 0xb6, 0xf6, 0x86, 0xce, 0x05, 0x52, 0xdb, 0xff, 0x78, 0x5a, 0xb2, 0x88, 0x85,
-	0x4b, 0x90, 0xef, 0xb5, 0x95, 0xf5, 0xd6, 0xc6, 0x06, 0x32, 0x14, 0x6d, 0x33, 0x35, 0xd9, 0xa7,
-	0x23, 0x21, 0x69, 0x98, 0xd1, 0x97, 0x2c, 0x72, 0xe1, 0x1a, 0x8c, 0x31, 0x5e, 0xab, 0x1b, 0x27,
-	0x29, 0xff, 0xc9, 0x2e, 0x7e, 0xc6, 0xd0, 0x19, 0x5a, 0xee, 0xbc, 0x21, 0x29, 0xca, 0xb8, 0x79,
-	0x47, 0x96, 0x60, 0xd2, 0x32, 0x84, 0x06, 0x0d, 0x7d, 0x48, 0x8b, 0x4e, 0xf5, 0x69, 0xd1, 0xa0,
-	0x94, 0xe0, 0x0c, 0x2b, 0x16, 0xbd, 0xf0, 0x5d, 0x18, 0x63, 0xcc, 0x56, 0x93, 0x32, 0x54, 0xc0,
-	0xfc, 0x3e, 0x37, 0xde, 0xee, 0x98, 0xab, 0x3c, 0x28, 0x45, 0x1b, 0x8e, 0x77, 0xc2, 0xcb, 0x70,
-	0x98, 0x0c, 0xbe, 0x5c, 0x35, 0x2b, 0x55, 0xb5, 0x85, 0x4d, 0x64, 0xa4, 0x4e, 0xf7, 0x69, 0x62,
-	0x58, 0x8a, 0x73, 0xf2, 0x25, 0x46, 0x2d, 0xfc, 0x2f, 0x38, 0x56, 0xd3, 0x2b, 0x9a, 0xce, 0x4c,
-	0xc8, 0x29, 0xe7, 0x4c, 0x5f, 0x39, 0x23, 0x35, 0xfd, 0x35, 0x9d, 0xda, 0x50, 0x47, 0xd8, 0x44,
-	0x09, 0x8e, 0x7a, 0xc5, 0x03, 0x42, 0x02, 0xfa, 0x6f, 0xa2, 0x2d, 0x1a, 0x21, 0x0e, 0x49, 0xe4,
-	0x51, 0x18, 0x85, 0xc1, 0x5b, 0xb2, 0xda, 0x42, 0x0c, 0xcb, 0x91, 0xd8, 0x8f, 0x45, 0xdf, 0x05,
-	0xb0, 0xf8, 0x97, 0xe0, 0x83, 0x36, 0xf8, 0x19, 0x80, 0x27, 0xe1, 0xd8, 0x35, 0x5d, 0xae, 0xa5,
-	0x4b, 0x74, 0x2c, 0x14, 0x6d, 0x33, 0x4d, 0xb2, 0x0f, 0x43, 0x57, 0x85, 0x60, 0x4e, 0x2c, 0x8a,
-	0xb3, 0x70, 0x06, 0x9e, 0x90, 0xd8, 0xce, 0x36, 0x2d, 0xf1, 0x85, 0x3f, 0xed, 0xdc, 0x9c, 0x84,
-	0xe1, 0x39, 0x2b, 0x82, 0x16, 0x73, 0x79, 0x31, 0x57, 0x80, 0x49, 0x18, 0x5e, 0x43, 0xd5, 0x16,
-	0x8d, 0x8a, 0x82, 0xb9, 0xa2, 0x98, 0xbb, 0x00, 0x27, 0x60, 0x72, 0xd5, 0xd0, 0x4d, 0xbd, 0xaa,
-	0xab, 0xe9, 0x37, 0x9b, 0x9b, 0x86, 0x5c, 0x43, 0x58, 0x08, 0xe6, 0x16, 0xc4, 0x7c, 0x1e, 0x9e,
-	0x86, 0x47, 0x56, 0x14, 0x5c, 0x45, 0xaa, 0x2a, 0x6b, 0x48, 0x6f, 0xe1, 0xb4, 0x15, 0x48, 0x46,
-	0xf2, 0xb3, 0x62, 0xfe, 0x82, 0x98, 0x5f, 0x10, 0x0b, 0xf9, 0xd2, 0x19, 0x28, 0x38, 0xc2, 0x40,
-	0x2b, 0x9a, 0x1f, 0xde, 0x6e, 0x03, 0x1f, 0x71, 0x0f, 0x12, 0xf6, 0xe7, 0xc5, 0x42, 0xe9, 0x14,
-	0x8c, 0xf3, 0x28, 0xc4, 0x49, 0x32, 0xb8, 0xd3, 0x06, 0x21, 0x42, 0x32, 0x2f, 0x5e, 0x28, 0x9d,
-	0x85, 0x90, 0x2c, 0xda, 0xfc, 0xf3, 0xb1, 0xed, 0x36, 0x18, 0xe6, 0xf9, 0x40, 0x7c, 0xb7, 0x0d,
-	0x22, 0xb9, 0x59, 0x31, 0x37, 0x27, 0xe6, 0xe6, 0xc5, 0xd9, 0x7c, 0x29, 0x0d, 0x23, 0x64, 0x59,
-	0xb3, 0x68, 0x93, 0xdb, 0x6d, 0x30, 0xba, 0xd3, 0x06, 0x23, 0xbb, 0x6d, 0x10, 0xcc, 0xcf, 0x88,
-	0xf9, 0x5c, 0xe9, 0x0c, 0x4c, 0xdc, 0xb6, 0x56, 0x11, 0x27, 0xd9, 0xf8, 0x4e, 0x1b, 0x8c, 0x51,
-	0xb2, 0x82, 0x98, 0x2f, 0x96, 0xa6, 0xe0, 0x88, 0xd3, 0xf1, 0x9d, 0x94, 0x13, 0x3b, 0x6d, 0x70,
-	0x94, 0x52, 0xce, 0x89, 0x79, 0x92, 0xdb, 0x58, 0xce, 0xe5, 0xa0, 0x99, 0xdc, 0x69, 0x83, 0x13,
-	0xbb, 0xd4, 0xbf, 0xc5, 0x02, 0x55, 0x6a, 0xbb, 0x8a, 0x93, 0xec, 0xd4, 0x4e, 0x1b, 0xa4, 0x29,
-	0x59, 0x41, 0x2c, 0x14, 0x4b, 0x33, 0x70, 0x8c, 0x1b, 0x59, 0xc7, 0xe8, 0x18, 0xf1, 0xd8, 0x76,
-	0x1b, 0x9c, 0xe6, 0x9d, 0x7e, 0x61, 0xb7, 0x0d, 0x42, 0x85, 0x39, 0x31, 0x5d, 0x98, 0x5f, 0x0e,
-	0x84, 0x41, 0xc2, 0xb7, 0x1c, 0x08, 0x87, 0x12, 0x83, 0xcb, 0x81, 0x70, 0x3c, 0x31, 0xbc, 0x1c,
-	0x08, 0x8f, 0x24, 0x46, 0x97, 0x03, 0xe1, 0xb1, 0xc4, 0xf8, 0x72, 0x20, 0x7c, 0x34, 0x31, 0xb1,
-	0x1c, 0x08, 0x9f, 0x48, 0x4c, 0x2e, 0x07, 0xc2, 0xe9, 0xc4, 0xa9, 0xe5, 0x40, 0xf8, 0x85, 0xc4,
-	0xe9, 0xcc, 0x1f, 0xfa, 0xe1, 0x69, 0x1a, 0xba, 0x12, 0xd7, 0x61, 0xe1, 0xeb, 0x5b, 0x8a, 0x59,
-	0xbf, 0xcc, 0xd6, 0xbf, 0xd7, 0x9d, 0x49, 0x47, 0x84, 0xfa, 0x5e, 0x03, 0x99, 0x75, 0x9d, 0x61,
-	0x07, 0xf1, 0x3d, 0xbb, 0x55, 0xd9, 0x34, 0x9b, 0x2b, 0x94, 0x40, 0x82, 0x75, 0xfb, 0x59, 0xb8,
-	0x00, 0x03, 0x4d, 0xd9, 0xac, 0xf3, 0x3c, 0xa2, 0x7b, 0xc9, 0x5c, 0x95, 0xcd, 0xfa, 0x8a, 0x6c,
-	0x56, 0xeb, 0xc8, 0x60, 0x4b, 0x0d, 0x85, 0x0a, 0x29, 0x87, 0x50, 0x82, 0x49, 0xb9, 0x65, 0xea,
-	0x0c, 0x1d, 0xb5, 0x42, 0xd4, 0x40, 0xdf, 0x74, 0x64, 0x98, 0x30, 0x94, 0x75, 0x6c, 0x5a, 0xa1,
-	0x6a, 0x1e, 0x46, 0x5d, 0xec, 0x41, 0x1a, 0xe1, 0xc6, 0xac, 0x08, 0x37, 0x60, 0xf8, 0xea, 0x14,
-	0x86, 0xa9, 0x3b, 0x78, 0xca, 0x9d, 0x70, 0xc8, 0xc5, 0x1b, 0xea, 0xab, 0xda, 0x0a, 0x90, 0x1c,
-	0xda, 0x17, 0xc3, 0x9f, 0x5d, 0xa4, 0x48, 0x5e, 0x81, 0xd8, 0x91, 0x53, 0x16, 0x43, 0xd2, 0x30,
-	0x9d, 0x7c, 0xb2, 0x4b, 0xf8, 0xc9, 0xe4, 0x17, 0xc5, 0x59, 0x71, 0x6e, 0x39, 0x10, 0xf6, 0x27,
-	0x02, 0x99, 0x8f, 0x03, 0x70, 0xb8, 0x6b, 0x6a, 0xec, 0x91, 0x04, 0x07, 0x1e, 0xc9, 0xae, 0xf9,
-	0xf3, 0x1d, 0x64, 0xfe, 0x36, 0x60, 0xd4, 0x91, 0x8b, 0xe2, 0x94, 0x9f, 0xc6, 0xbe, 0x67, 0xbd,
-	0xc3, 0x21, 0xdb, 0x64, 0x88, 0x1d, 0xbd, 0x85, 0x94, 0xcd, 0xba, 0xd9, 0x0b, 0xaf, 0x4d, 0x01,
-	0x29, 0xd2, 0xc9, 0x6b, 0xb1, 0xf7, 0x6c, 0x07, 0x9f, 0x6e, 0xb6, 0x43, 0x4f, 0x31, 0xdb, 0x83,
-	0x07, 0x9d, 0x6d, 0xc1, 0x80, 0x09, 0x99, 0x67, 0x7f, 0xd6, 0xa1, 0x03, 0x87, 0x79, 0x2e, 0x3d,
-	0x75, 0x1e, 0xc9, 0x91, 0xd2, 0x61, 0xd9, 0xfd, 0x9a, 0xe2, 0x2b, 0x79, 0x31, 0x27, 0x16, 0xc4,
-	0xa2, 0x78, 0xa1, 0x9f, 0x95, 0x05, 0x39, 0xc6, 0x12, 0xa4, 0x78, 0x21, 0x47, 0x0b, 0xff, 0x19,
-	0xc0, 0xa4, 0x6d, 0x65, 0x36, 0x5a, 0xf7, 0xe5, 0xd8, 0xd9, 0x55, 0x18, 0xa7, 0xc1, 0x5d, 0x07,
-	0x4f, 0xf4, 0x7b, 0x06, 0xde, 0x2c, 0x02, 0xa4, 0xad, 0xb6, 0x5a, 0x2c, 0xc5, 0x0c, 0xe7, 0x4f,
-	0xea, 0x76, 0x74, 0x50, 0x32, 0xff, 0x09, 0xe0, 0xb8, 0xdd, 0xc1, 0xcb, 0x8c, 0x98, 0xef, 0x85,
-	0x5f, 0x52, 0x37, 0xd7, 0xe1, 0x11, 0xd6, 0x4d, 0xd6, 0xd6, 0x8a, 0x95, 0x93, 0xf1, 0xde, 0x4e,
-	0xf5, 0xee, 0xad, 0xbb, 0xf9, 0xdc, 0x20, 0x46, 0x8c, 0xbd, 0x9f, 0x1c, 0xfd, 0x47, 0x70, 0xd4,
-	0xee, 0xfe, 0x52, 0x0b, 0x9b, 0x7a, 0x83, 0xfe, 0x14, 0x56, 0xe0, 0x90, 0x35, 0xd8, 0x1b, 0x07,
-	0x00, 0xa6, 0xa2, 0x0f, 0xef, 0x06, 0x29, 0xdf, 0xbd, 0x47, 0x00, 0x48, 0x61, 0x3e, 0xea, 0x1b,
-	0x99, 0x7f, 0xf7, 0xc3, 0x21, 0x5b, 0x8f, 0xf0, 0x36, 0x8c, 0x62, 0x6a, 0xc3, 0x15, 0x4a, 0xc0,
-	0xe5, 0xcf, 0x1d, 0xc4, 0x07, 0x3a, 0xab, 0x1e, 0x71, 0x57, 0x26, 0x8d, 0xb5, 0x5c, 0x26, 0x71,
-	0x82, 0x35, 0x76, 0x54, 0x3c, 0xdb, 0x58, 0x2e, 0x1c, 0x54, 0xbc, 0x65, 0x2d, 0xe5, 0x01, 0x29,
-	0x66, 0x49, 0x64, 0x2a, 0x4c, 0x78, 0xa4, 0x6b, 0x72, 0xb8, 0xa6, 0x83, 0x9d, 0x79, 0xf4, 0xb0,
-	0xbb, 0xf2, 0x80, 0x34, 0x52, 0x73, 0xbd, 0x61, 0x5a, 0x31, 0x1c, 0xa9, 0xd2, 0x19, 0x62, 0xca,
-	0x2a, 0xec, 0x14, 0x90, 0xef, 0x77, 0x5f, 0x3b, 0xa8, 0x4e, 0xc7, 0x64, 0xdb, 0x68, 0x74, 0xb2,
-	0xda, 0x79, 0xc9, 0xe6, 0x75, 0x31, 0xf9, 0x41, 0x1b, 0xc4, 0x60, 0x04, 0x86, 0xe8, 0x4b, 0x2c,
-	0x80, 0xd9, 0xd2, 0x09, 0x18, 0x72, 0xc0, 0xb3, 0xd6, 0x51, 0x93, 0x75, 0x2e, 0xc1, 0x8f, 0x9b,
-	0xee, 0xc7, 0xe1, 0x48, 0xd7, 0x0a, 0x45, 0xa7, 0xbe, 0x37, 0x32, 0x04, 0xbe, 0x5c, 0x64, 0xc8,
-	0xf7, 0x7b, 0x42, 0x86, 0xfc, 0x5f, 0x36, 0x32, 0x14, 0x78, 0xa6, 0xc8, 0xd0, 0x6b, 0x70, 0xbc,
-	0x21, 0xdf, 0xa9, 0xb8, 0xc7, 0xb5, 0x82, 0x95, 0x77, 0xd9, 0xd6, 0x1c, 0x2b, 0x8d, 0xff, 0xaa,
-	0x0d, 0x7c, 0x73, 0x56, 0xe6, 0x1a, 0xa1, 0xbb, 0xec, 0x39, 0x5f, 0xea, 0x7b, 0xd2, 0x68, 0x43,
-	0xbe, 0x23, 0x39, 0x87, 0x6f, 0x4d, 0x79, 0x17, 0x09, 0x97, 0xbb, 0x33, 0xd0, 0xd0, 0xbe, 0x32,
-	0xd0, 0xae, 0xcc, 0xf3, 0x5b, 0x14, 0xa8, 0x6e, 0x1a, 0x08, 0x63, 0x45, 0xd7, 0xf8, 0x2e, 0xc7,
-	0x37, 0xec, 0x17, 0xf7, 0x78, 0x4a, 0xe7, 0x88, 0x3d, 0xbb, 0xd4, 0xe1, 0xa2, 0x62, 0x93, 0x0e,
-	0x31, 0xec, 0x54, 0x52, 0xd8, 0x09, 0xc0, 0x18, 0xf7, 0x43, 0x44, 0x22, 0x75, 0xb2, 0x85, 0x93,
-	0x29, 0xbd, 0xb6, 0x4f, 0x0f, 0xf4, 0xf0, 0x8a, 0x2c, 0x73, 0xc6, 0x2b, 0x54, 0x1c, 0x03, 0x80,
-	0xff, 0xc9, 0x6f, 0x4d, 0xfa, 0xd8, 0xfb, 0x60, 0x24, 0x93, 0x3c, 0x37, 0x5c, 0x8a, 0x91, 0x2d,
-	0x7c, 0x56, 0x2c, 0xcc, 0xcc, 0x9c, 0x9f, 0x5d, 0x58, 0xe8, 0x00, 0xc2, 0xe4, 0x29, 0xfe, 0x3e,
-	0x88, 0x9c, 0x1b, 0x32, 0x06, 0x53, 0xf7, 0xee, 0x05, 0x7e, 0x02, 0xc0, 0xee, 0x47, 0xbf, 0xf0,
-	0xff, 0x02, 0x3c, 0x78, 0x04, 0xb6, 0x81, 0xf0, 0x77, 0xe0, 0xb7, 0x6d, 0xf0, 0x37, 0xa0, 0x7c,
-	0xfd, 0xfa, 0x6a, 0x9a, 0x6a, 0x48, 0x57, 0xf5, 0x1a, 0x4a, 0xd3, 0x7c, 0x31, 0x4d, 0x45, 0xa6,
-	0x75, 0x23, 0xbd, 0x8e, 0xcc, 0xdb, 0x08, 0x69, 0xe9, 0xc2, 0xcc, 0x4c, 0x5a, 0xd6, 0x6a, 0xe9,
-	0xd9, 0x85, 0x85, 0x6c, 0xfa, 0xca, 0x66, 0x36, 0x7d, 0x83, 0xd2, 0x15, 0xd3, 0x2f, 0xa5, 0x8b,
-	0x77, 0xee, 0x10, 0x4a, 0x59, 0x55, 0xd3, 0xc5, 0x99, 0x99, 0xf3, 0xc5, 0x85, 0x85, 0x34, 0xb2,
-	0xe5, 0x61, 0x31, 0x3d, 0x9b, 0x7e, 0x29, 0x3d, 0xdb, 0xa1, 0x99, 0x65, 0xed, 0x74, 0xd2, 0x64,
-	0xd3, 0xdf, 0xd4, 0x5b, 0xe9, 0xaa, 0xac, 0xa5, 0x65, 0x15, 0xeb, 0x69, 0x06, 0xd6, 0x6f, 0xa5,
-	0x65, 0x2d, 0x8d, 0xee, 0xc8, 0x55, 0xd3, 0x41, 0x9a, 0x56, 0x95, 0x9b, 0x28, 0x5d, 0x9c, 0x29,
-	0x66, 0x49, 0x57, 0x46, 0x1f, 0x3c, 0x02, 0x09, 0x81, 0xe4, 0x70, 0x90, 0xf5, 0x60, 0x49, 0xaf,
-	0x21, 0xf2, 0x01, 0x3e, 0x78, 0x04, 0x42, 0x42, 0xe0, 0x97, 0x6d, 0x30, 0xd0, 0x81, 0xc5, 0x69,
-	0xef, 0x2f, 0x3d, 0x78, 0x04, 0x5e, 0x9a, 0xf8, 0xda, 0x6f, 0xdb, 0x60, 0x7e, 0xcd, 0x24, 0xd9,
-	0x54, 0xda, 0x40, 0x64, 0x22, 0x91, 0x66, 0x92, 0x1f, 0x4c, 0x93, 0x65, 0xd4, 0x62, 0xba, 0x85,
-	0x5b, 0xb2, 0xaa, 0x6e, 0xa5, 0xe5, 0x74, 0xdd, 0x6c, 0xa8, 0xb4, 0x09, 0x44, 0xca, 0x89, 0x07,
-	0x8f, 0xc0, 0xd1, 0x89, 0xf1, 0xdd, 0x36, 0x18, 0x61, 0x8a, 0xed, 0x3c, 0xb9, 0xa4, 0xd7, 0xb6,
-	0x08, 0xc5, 0xf8, 0x83, 0x47, 0x60, 0x64, 0x22, 0xf9, 0xd3, 0x47, 0x20, 0x26, 0xe3, 0xaa, 0xa2,
-	0x58, 0x75, 0x14, 0x76, 0xeb, 0x26, 0x48, 0xeb, 0x02, 0x8e, 0x9f, 0xf4, 0x70, 0x21, 0x5a, 0x75,
-	0xcc, 0xb8, 0x50, 0x81, 0xc3, 0xef, 0xc8, 0xb7, 0x64, 0x5c, 0x35, 0x94, 0xa6, 0x49, 0x4b, 0x3c,
-	0xe8, 0xd9, 0x5d, 0x24, 0x3f, 0xd3, 0xcf, 0x56, 0x97, 0xe5, 0x5b, 0xf2, 0x1a, 0x65, 0x71, 0x22,
-	0x31, 0x9f, 0x10, 0xf1, 0xf1, 0x8e, 0xb8, 0xab, 0xda, 0x86, 0x2e, 0xbc, 0x02, 0xfd, 0xef, 0xdc,
-	0x36, 0x29, 0xfa, 0xbd, 0x7f, 0x20, 0xf5, 0x9d, 0xdb, 0x26, 0x15, 0x46, 0x1e, 0x84, 0x97, 0x61,
-	0x54, 0xa9, 0xa9, 0xa8, 0x62, 0x21, 0x53, 0x91, 0xc7, 0x20, 0x53, 0x1f, 0xfd, 0xb9, 0x20, 0x45,
-	0x08, 0xc7, 0x75, 0x8e, 0x4e, 0xbd, 0x04, 0x8f, 0x59, 0x51, 0xb4, 0x05, 0xb9, 0x21, 0x06, 0xeb,
-	0xc8, 0x9b, 0x08, 0x33, 0x24, 0x59, 0x4a, 0x71, 0x12, 0x9e, 0x60, 0xd2, 0xe1, 0x59, 0x25, 0xdf,
-	0x27, 0x5e, 0x86, 0xc9, 0x3d, 0x4e, 0xe2, 0x44, 0x45, 0x62, 0x8f, 0x43, 0x45, 0x8c, 0x0f, 0xda,
-	0x40, 0x83, 0xc7, 0x60, 0x9c, 0x2d, 0x36, 0x36, 0x14, 0x31, 0xc4, 0xf7, 0x2d, 0x71, 0x16, 0x9e,
-	0x85, 0x69, 0x36, 0x92, 0x2d, 0x03, 0xa5, 0xbb, 0xe6, 0xdb, 0x22, 0x0f, 0x5e, 0x10, 0xd3, 0xb9,
-	0x42, 0x1f, 0x64, 0x63, 0x4e, 0x9c, 0xb7, 0x40, 0x93, 0xcc, 0xbd, 0x28, 0x1c, 0xe5, 0xf0, 0xac,
-	0x8c, 0x51, 0x6d, 0xa9, 0x2e, 0xab, 0x2a, 0xd2, 0x36, 0x91, 0xf0, 0x1d, 0x78, 0xd2, 0x1a, 0x84,
-	0x77, 0x70, 0xa5, 0x6a, 0xbd, 0x77, 0x96, 0x4f, 0xf4, 0x3f, 0x55, 0x3b, 0xce, 0xd9, 0x97, 0xb1,
-	0x2d, 0xd4, 0x51, 0x1f, 0x81, 0xe1, 0x78, 0x2f, 0xb1, 0x2c, 0x42, 0x29, 0x3c, 0xce, 0xae, 0x98,
-	0xed, 0xd8, 0xb2, 0x1d, 0x60, 0xe5, 0x80, 0x74, 0xe4, 0x1d, 0x4f, 0xa5, 0x9b, 0xf0, 0xb4, 0xd5,
-	0xa7, 0xaa, 0xdc, 0x34, 0xab, 0x75, 0xd9, 0xbb, 0x05, 0xc1, 0xbe, 0x07, 0x51, 0xa7, 0xb8, 0x8c,
-	0x25, 0x26, 0xc2, 0x4b, 0xd1, 0xbb, 0xf0, 0x78, 0x5f, 0x05, 0xa1, 0xc7, 0xbb, 0x4e, 0xb7, 0x74,
-	0x47, 0xff, 0x80, 0x34, 0x51, 0xed, 0xad, 0x5b, 0x81, 0x67, 0xac, 0x4e, 0x9a, 0xa8, 0xd1, 0xd4,
-	0x0d, 0xd9, 0xd8, 0xaa, 0xac, 0xab, 0x7a, 0xf5, 0xa6, 0xa2, 0x6d, 0x3a, 0x1b, 0xd1, 0xe7, 0xf4,
-	0xbe, 0xec, 0x93, 0x32, 0x5c, 0xc8, 0x75, 0x4b, 0x46, 0x89, 0x8b, 0x70, 0xa8, 0x6a, 0xc1, 0xf1,
-	0x8e, 0x8a, 0x16, 0x46, 0x86, 0xad, 0x87, 0x2f, 0x0e, 0xb3, 0xfd, 0x7a, 0x68, 0x4b, 0x7e, 0x13,
-	0x23, 0xc3, 0x92, 0xee, 0xe8, 0xa6, 0x4f, 0x3a, 0x62, 0x7a, 0x91, 0x08, 0x37, 0xe0, 0x31, 0xab,
-	0x87, 0x0d, 0xc5, 0x54, 0x36, 0xd9, 0x61, 0x0f, 0x46, 0x26, 0x59, 0x37, 0x71, 0xbf, 0xf3, 0xfd,
-	0xb2, 0x5f, 0x3a, 0xca, 0x59, 0x57, 0x6c, 0xce, 0x35, 0xce, 0x28, 0xfc, 0x1f, 0x78, 0xb4, 0x21,
-	0xab, 0x4a, 0x55, 0xd1, 0x5b, 0x98, 0x75, 0xa7, 0x23, 0x3e, 0x15, 0xdd, 0x77, 0x82, 0x71, 0xfc,
-	0xe1, 0xdd, 0xde, 0x72, 0xca, 0x7e, 0x69, 0xdc, 0xfe, 0x48, 0x7a, 0xd5, 0x69, 0x87, 0xb0, 0x00,
-	0xa3, 0x9a, 0xde, 0x31, 0x98, 0x54, 0xbc, 0xef, 0x41, 0x44, 0x44, 0xd3, 0x3b, 0xde, 0xba, 0x06,
-	0x27, 0x64, 0xf5, 0xb6, 0xbc, 0x85, 0x2b, 0xfc, 0x40, 0xc4, 0xe9, 0x5c, 0xfd, 0x0e, 0xb5, 0xca,
-	0x01, 0x69, 0x9c, 0x71, 0x5e, 0xa1, 0x8c, 0x0e, 0x6f, 0x25, 0x4b, 0x80, 0x5b, 0xe8, 0x1e, 0x9b,
-	0xe6, 0xe7, 0x5e, 0xbd, 0x24, 0x1f, 0x77, 0x4a, 0xee, 0x36, 0x68, 0xe1, 0x4d, 0x38, 0x64, 0xb4,
-	0x54, 0x54, 0x51, 0x15, 0x6c, 0xf2, 0xc3, 0xa3, 0xfd, 0x26, 0x40, 0xb6, 0x10, 0xa9, 0xa5, 0xa2,
-	0x6b, 0x0a, 0x36, 0xa5, 0xb0, 0xc1, 0x9f, 0x4a, 0x39, 0x38, 0xd9, 0x63, 0x65, 0xe9, 0x89, 0xdb,
-	0xce, 0xc1, 0x17, 0xfa, 0xb9, 0xab, 0x93, 0x2f, 0xe8, 0x2c, 0xf3, 0xf8, 0x1a, 0x3c, 0xdd, 0xd7,
-	0xc5, 0x9c, 0x35, 0x22, 0x61, 0x5e, 0xf2, 0xe1, 0xbf, 0x20, 0x2e, 0x90, 0x34, 0xbc, 0xb4, 0x00,
-	0xd3, 0x3d, 0xad, 0xc4, 0x62, 0x3c, 0xb2, 0xdd, 0x06, 0x91, 0x9d, 0x36, 0x80, 0xbb, 0x6d, 0x10,
-	0xa4, 0x10, 0x37, 0x65, 0x9d, 0x82, 0x89, 0x4e, 0x3b, 0x39, 0xe9, 0xe8, 0x76, 0x1b, 0xc4, 0x77,
-	0xda, 0x20, 0xb6, 0xdb, 0x06, 0xe1, 0x5c, 0x51, 0xa4, 0x48, 0xb2, 0x8d, 0xa9, 0xda, 0xb5, 0x25,
-	0xcb, 0x81, 0x30, 0x4c, 0x44, 0x96, 0x03, 0xe1, 0x58, 0x22, 0xbe, 0x1c, 0x08, 0x27, 0x13, 0x42,
-	0xe6, 0x8f, 0x01, 0x8c, 0xb9, 0x06, 0x54, 0x58, 0x84, 0xe1, 0x06, 0x32, 0xe5, 0x9a, 0x6c, 0xca,
-	0x3d, 0x90, 0x85, 0x15, 0x84, 0xb1, 0xbc, 0x89, 0x56, 0x90, 0x29, 0xd3, 0x20, 0xd4, 0xa6, 0x17,
-	0x5e, 0x83, 0x01, 0x12, 0x34, 0xf1, 0xcd, 0xa1, 0xd8, 0xc5, 0xe7, 0x51, 0x34, 0xeb, 0x9e, 0xcc,
-	0xb5, 0x26, 0xaa, 0x72, 0x58, 0x80, 0xca, 0xc9, 0xfc, 0x6f, 0x98, 0xdc, 0x33, 0xdb, 0xc2, 0xf7,
-	0x60, 0x90, 0x1e, 0x7b, 0xf2, 0x82, 0xcb, 0xe2, 0x93, 0x98, 0x4d, 0x69, 0xd4, 0x4e, 0x23, 0x5e,
-	0xb1, 0x9e, 0x66, 0x80, 0xc4, 0x04, 0xb3, 0x81, 0xcb, 0xfc, 0xdc, 0x07, 0x47, 0x58, 0x0a, 0xbf,
-	0xa4, 0x2a, 0x48, 0x33, 0xd7, 0x8c, 0x2a, 0x1d, 0xa0, 0xb3, 0x70, 0x48, 0x69, 0xf2, 0xf2, 0x05,
-	0x9a, 0xdd, 0x0e, 0x95, 0x20, 0x2f, 0x36, 0xf8, 0x9c, 0x6e, 0x40, 0x61, 0xa5, 0xc9, 0xea, 0x14,
-	0x04, 0x11, 0x0e, 0xc9, 0xb8, 0xa2, 0xb5, 0x1a, 0xeb, 0xbc, 0x06, 0x30, 0x56, 0x8a, 0xd1, 0x0a,
-	0xd6, 0x73, 0xa1, 0xd4, 0x9f, 0xfc, 0x3c, 0x35, 0x45, 0xa9, 0x65, 0xfc, 0x1a, 0x25, 0x10, 0x56,
-	0xe0, 0x28, 0xba, 0xd3, 0x54, 0x0c, 0x66, 0x05, 0x76, 0xcd, 0x34, 0x5f, 0x4e, 0x27, 0xb2, 0xac,
-	0xaa, 0x3a, 0x6b, 0x55, 0x55, 0x67, 0xaf, 0x5b, 0x14, 0xd2, 0x48, 0x87, 0xcf, 0x7e, 0xe9, 0x9a,
-	0x48, 0x78, 0xb0, 0x89, 0x5c, 0x1c, 0xfa, 0xec, 0x62, 0x28, 0x37, 0x23, 0x16, 0xc4, 0x85, 0xd2,
-	0x57, 0xe1, 0x68, 0x95, 0xf6, 0xbf, 0x82, 0xf5, 0x96, 0x51, 0x75, 0x9d, 0x6e, 0x58, 0xc8, 0xaf,
-	0xbf, 0x28, 0xce, 0xda, 0xe6, 0xe6, 0x4b, 0xf8, 0x39, 0x06, 0xfc, 0x89, 0x0f, 0x26, 0x2e, 0x5f,
-	0xd6, 0xd7, 0xf8, 0xf8, 0x51, 0x76, 0x61, 0x09, 0x86, 0x65, 0xac, 0x31, 0xc7, 0xf7, 0x06, 0x6e,
-	0x98, 0x7d, 0x64, 0x2f, 0x61, 0x8d, 0xe2, 0x57, 0xd4, 0xb1, 0x99, 0x55, 0x0c, 0xca, 0x58, 0xa3,
-	0x36, 0xd0, 0x84, 0xd1, 0xaa, 0xde, 0x22, 0x41, 0x16, 0x13, 0x44, 0xb2, 0xd6, 0xf8, 0x9e, 0xda,
-	0x5b, 0x2e, 0x68, 0x89, 0x51, 0x92, 0xa0, 0xbc, 0x74, 0xce, 0x4a, 0x5b, 0x62, 0xef, 0x01, 0x98,
-	0x09, 0xdf, 0x07, 0xc1, 0x04, 0xc8, 0xf0, 0x62, 0x11, 0x97, 0x35, 0xa4, 0x80, 0x14, 0xe1, 0x2a,
-	0xa8, 0xc6, 0xff, 0x0b, 0xe0, 0xb8, 0xa9, 0xe2, 0xca, 0x86, 0xa2, 0x6d, 0x22, 0xa3, 0x69, 0x28,
-	0x9a, 0x59, 0x69, 0x30, 0x78, 0x8d, 0x87, 0x0c, 0xd3, 0xde, 0xda, 0xaf, 0xab, 0xf8, 0xd5, 0x0e,
-	0x8f, 0x13, 0x91, 0x3b, 0x61, 0x1d, 0x89, 0x93, 0xe8, 0x3b, 0xf1, 0xfe, 0x23, 0x10, 0xc5, 0x75,
-	0xd9, 0x40, 0x35, 0x12, 0xee, 0x23, 0x43, 0x3a, 0x62, 0x7a, 0x71, 0x72, 0x48, 0xbe, 0x40, 0x07,
-	0x9c, 0x0d, 0x75, 0x20, 0x11, 0xcc, 0xfc, 0x87, 0x1f, 0x0a, 0x64, 0xa8, 0x3b, 0x3b, 0xca, 0x53,
-	0x3b, 0xb3, 0x08, 0x83, 0x74, 0x59, 0xeb, 0x57, 0x79, 0x5c, 0x1e, 0x90, 0x18, 0x91, 0x80, 0xa1,
-	0x50, 0xab, 0xe9, 0xb8, 0xe2, 0xb2, 0x15, 0x1e, 0x66, 0xec, 0xf7, 0x30, 0xb4, 0xdb, 0x56, 0xb8,
-	0x5f, 0x3d, 0x00, 0xbe, 0x34, 0x09, 0x7c, 0x12, 0x44, 0x81, 0xcb, 0x96, 0x56, 0x60, 0xdc, 0x76,
-	0x45, 0x66, 0x08, 0xcc, 0x57, 0xce, 0x78, 0x4f, 0x05, 0xf3, 0x4a, 0xdb, 0xa8, 0xca, 0x40, 0x8a,
-	0x5a, 0xae, 0x4a, 0xe7, 0xb8, 0x97, 0x03, 0xc2, 0x27, 0x72, 0xc0, 0xc5, 0xc8, 0x67, 0x17, 0xc3,
-	0x24, 0x7a, 0x9f, 0x17, 0x73, 0x33, 0xa5, 0x0c, 0x4c, 0x3a, 0x96, 0x78, 0x56, 0xe1, 0x26, 0xc4,
-	0xb6, 0xdb, 0x80, 0x24, 0xd2, 0xbe, 0xdd, 0x36, 0x00, 0x85, 0xd2, 0x69, 0x17, 0x8d, 0xc3, 0xcf,
-	0x86, 0x1c, 0xfb, 0x87, 0x3d, 0xed, 0x83, 0x89, 0x70, 0xe6, 0x2f, 0x00, 0x1c, 0x61, 0x79, 0xc7,
-	0xd5, 0xe6, 0x25, 0x55, 0xd5, 0x6f, 0xa3, 0x1a, 0xed, 0xc9, 0x1f, 0x00, 0x78, 0xc2, 0x75, 0x27,
-	0x40, 0x66, 0x1f, 0xf9, 0x58, 0x21, 0x9c, 0x1a, 0xdb, 0x77, 0xae, 0x25, 0x3e, 0xbc, 0x1b, 0xeb,
-	0x8c, 0x32, 0x46, 0x26, 0xc9, 0xa5, 0xee, 0x3d, 0x72, 0x40, 0x3e, 0x01, 0x47, 0x09, 0xfb, 0x04,
-	0x51, 0x7b, 0x8d, 0x69, 0xe5, 0x2d, 0x5a, 0xe5, 0x3a, 0x33, 0x3f, 0x0c, 0xc2, 0x11, 0xc9, 0xfa,
-	0xdc, 0x49, 0x0a, 0x85, 0x15, 0x18, 0x75, 0x36, 0x96, 0x5b, 0xea, 0xb9, 0x6e, 0x24, 0xd9, 0x41,
-	0x92, 0xb5, 0xc5, 0xd0, 0xfc, 0x5f, 0x8a, 0x38, 0xb4, 0x0a, 0x4b, 0x50, 0xd0, 0xf4, 0x8a, 0xd2,
-	0xb4, 0x3b, 0xcd, 0x97, 0x88, 0xbe, 0x27, 0x31, 0x9a, 0xee, 0x1e, 0xc1, 0x35, 0x38, 0xdc, 0x2d,
-	0x81, 0x21, 0x99, 0xde, 0x07, 0x47, 0xac, 0x8f, 0x2c, 0x95, 0x77, 0x14, 0xfc, 0xc5, 0x14, 0x97,
-	0xd0, 0xef, 0xc3, 0x31, 0x0e, 0xcd, 0x74, 0xcb, 0x66, 0x4b, 0xc8, 0xe2, 0x7e, 0xf7, 0xb2, 0xbd,
-	0x53, 0x5e, 0x1e, 0x90, 0x38, 0xfc, 0xea, 0xee, 0xc7, 0x3c, 0x8c, 0x68, 0x3a, 0xdb, 0x72, 0x15,
-	0x84, 0x79, 0x24, 0xdb, 0x2b, 0xbb, 0x81, 0x9a, 0xbe, 0xca, 0x29, 0x85, 0x37, 0x60, 0xd8, 0xe6,
-	0x8a, 0xf5, 0xc8, 0xca, 0x48, 0xeb, 0x3c, 0xae, 0x9e, 0x64, 0x3b, 0x85, 0x8f, 0x65, 0x20, 0xd9,
-	0x62, 0x16, 0xa7, 0x3e, 0x68, 0x83, 0xd3, 0x30, 0x03, 0x53, 0x64, 0xf6, 0xd2, 0x74, 0xba, 0xec,
-	0x8c, 0x96, 0x45, 0xc1, 0x21, 0xe2, 0x2f, 0xb9, 0x5c, 0xe9, 0x45, 0x38, 0xd6, 0x35, 0x42, 0xce,
-	0xd3, 0x66, 0xcb, 0x65, 0x82, 0x34, 0x2f, 0x2e, 0x65, 0x60, 0x6c, 0xef, 0xe1, 0x76, 0x74, 0xa7,
-	0x0d, 0x22, 0x34, 0x72, 0xca, 0x8b, 0xb9, 0x82, 0xed, 0x34, 0x91, 0x44, 0x34, 0xf3, 0x43, 0x00,
-	0x93, 0x6b, 0x2c, 0x16, 0xe9, 0x34, 0x54, 0xd0, 0x1d, 0xfd, 0x05, 0xfb, 0x76, 0x8e, 0xe9, 0x87,
-	0x77, 0xe3, 0xee, 0xb8, 0xc6, 0xeb, 0x62, 0x87, 0x63, 0x53, 0xb1, 0x95, 0x64, 0x1e, 0x7c, 0x05,
-	0xc6, 0xbf, 0xae, 0xea, 0xeb, 0xb2, 0x4a, 0xe2, 0x1e, 0xea, 0x08, 0x35, 0x38, 0x58, 0xd3, 0x1b,
-	0xb2, 0xa2, 0xb1, 0x26, 0x0c, 0x95, 0x96, 0x09, 0x27, 0x7c, 0x0f, 0x0c, 0x66, 0x58, 0x29, 0x23,
-	0xf9, 0x39, 0xf4, 0x1e, 0x08, 0x65, 0x02, 0x86, 0x2f, 0x01, 0x9c, 0x1f, 0x7f, 0xec, 0xf3, 0x80,
-	0x60, 0x5d, 0x9a, 0x2d, 0xd1, 0xc2, 0x32, 0x0c, 0x10, 0x93, 0xea, 0x11, 0xa5, 0xf5, 0xb2, 0x39,
-	0x57, 0x15, 0x7d, 0x79, 0x40, 0xa2, 0x32, 0x84, 0x3a, 0x1c, 0x26, 0xff, 0xe2, 0x0a, 0x3d, 0xfa,
-	0xac, 0x22, 0xc3, 0xe4, 0xa5, 0x45, 0x17, 0x9f, 0x44, 0x6c, 0xa7, 0x38, 0x9f, 0xf8, 0x4e, 0xdd,
-	0xf9, 0x46, 0x58, 0x81, 0x41, 0xfa, 0x82, 0x3b, 0xf2, 0xec, 0x13, 0xc9, 0x27, 0xfb, 0x15, 0x95,
-	0x22, 0xbc, 0x0a, 0x13, 0xbc, 0x2c, 0x46, 0xae, 0xdd, 0x42, 0x86, 0xa9, 0x60, 0xd4, 0xcf, 0x39,
-	0xec, 0xe2, 0xf0, 0x38, 0x2d, 0x8b, 0xb9, 0x64, 0xf1, 0x08, 0xdf, 0x86, 0x27, 0x6d, 0x01, 0x15,
-	0x5d, 0xab, 0x34, 0x5b, 0xeb, 0xaa, 0x52, 0xb5, 0x31, 0xa4, 0x5b, 0x4a, 0x93, 0x7b, 0x4f, 0x2f,
-	0x9f, 0x3b, 0x66, 0xb3, 0xbf, 0xae, 0xad, 0x52, 0x66, 0x8e, 0x2e, 0xdd, 0x50, 0x9a, 0xc2, 0xb7,
-	0xe1, 0x88, 0x87, 0x74, 0xbe, 0x12, 0x9d, 0xf6, 0x1c, 0x02, 0xbb, 0x69, 0x4c, 0x98, 0xdd, 0xf0,
-	0xe4, 0x1e, 0x3d, 0xc2, 0xdb, 0xf4, 0xbc, 0x97, 0x4b, 0x67, 0x8b, 0x07, 0x5f, 0x88, 0x1e, 0x23,
-	0x9a, 0xad, 0x3f, 0x9d, 0x9a, 0xbe, 0x32, 0x3b, 0xd8, 0x75, 0x7e, 0x14, 0x30, 0x1c, 0xb1, 0x6b,
-	0xd7, 0xe8, 0x79, 0x10, 0x3b, 0x7d, 0x0f, 0x3d, 0xdd, 0xe9, 0xbb, 0xb3, 0x7e, 0x3d, 0x69, 0xd5,
-	0xb9, 0x11, 0xf1, 0x7d, 0xce, 0xe0, 0x8f, 0xf7, 0xc5, 0x3a, 0x1e, 0x7b, 0x06, 0x7f, 0xc2, 0xeb,
-	0x0c, 0xde, 0xb7, 0xbf, 0x33, 0xf8, 0xc9, 0xbe, 0xaa, 0xbd, 0xce, 0xe0, 0xef, 0xc2, 0x10, 0x1d,
-	0x2e, 0x9c, 0x1a, 0xa4, 0x23, 0x35, 0x73, 0xd0, 0x83, 0xb3, 0x52, 0xc1, 0x9a, 0x15, 0x8a, 0x75,
-	0xbe, 0x07, 0xfc, 0x89, 0xce, 0xa1, 0x49, 0x8a, 0xc6, 0x9a, 0xa1, 0xf7, 0x1e, 0x01, 0x5f, 0xa2,
-	0xf3, 0x18, 0x06, 0x12, 0x57, 0xda, 0x5d, 0xd6, 0x19, 0x7e, 0xb2, 0xb2, 0xce, 0xae, 0xba, 0xda,
-	0xc7, 0x5f, 0xba, 0xf0, 0x7b, 0xd5, 0xd5, 0x0e, 0x3d, 0x51, 0x5d, 0xad, 0x7f, 0x6f, 0x5d, 0x2d,
-	0x7c, 0x8a, 0xba, 0x5a, 0xff, 0xf3, 0xae, 0xab, 0xf5, 0xbb, 0xeb, 0x6a, 0x5f, 0x84, 0x51, 0xb9,
-	0x56, 0xb3, 0xcb, 0x98, 0x69, 0x4d, 0x70, 0x98, 0x0d, 0x33, 0x2d, 0x63, 0x8e, 0xc8, 0xb5, 0x9a,
-	0x55, 0xc2, 0x2c, 0xbc, 0xdc, 0x05, 0x1a, 0x4d, 0x3c, 0x76, 0xa0, 0xbb, 0xa0, 0xa3, 0x75, 0x18,
-	0x75, 0x81, 0x45, 0xc2, 0x93, 0xc3, 0xaf, 0x9d, 0xc5, 0x20, 0x20, 0x45, 0x1c, 0x10, 0xac, 0xa0,
-	0xc0, 0xe4, 0x5e, 0xec, 0x28, 0xf5, 0x84, 0x20, 0xa8, 0x53, 0x4b, 0xa2, 0x1b, 0x08, 0x15, 0xee,
-	0xc2, 0x31, 0x1e, 0x09, 0xac, 0xcb, 0x18, 0xd5, 0x1c, 0xfa, 0x0a, 0x07, 0x3a, 0x85, 0xf6, 0x02,
-	0xc5, 0x5d, 0xaa, 0x47, 0x9b, 0x5e, 0xb0, 0x39, 0x82, 0x91, 0x86, 0x6e, 0x20, 0x5e, 0x3b, 0x93,
-	0x1a, 0x39, 0x50, 0x4c, 0xe7, 0x71, 0xee, 0xe6, 0xf4, 0x2e, 0x22, 0x98, 0x7d, 0x22, 0x2b, 0x2b,
-	0x85, 0x8c, 0x94, 0x1a, 0xd2, 0xf8, 0x55, 0x51, 0xa2, 0x6e, 0x74, 0xdf, 0xe6, 0x38, 0xf9, 0xf0,
-	0xae, 0x97, 0x04, 0xdb, 0xc6, 0x04, 0xf2, 0xf1, 0xaa, 0xeb, 0x9b, 0xb0, 0x0c, 0xad, 0xd5, 0xaa,
-	0xd2, 0x89, 0xf8, 0x52, 0x63, 0x8f, 0x35, 0xb8, 0xa0, 0x5d, 0x33, 0x6b, 0x87, 0xec, 0x02, 0x82,
-	0xd0, 0x21, 0x63, 0xfc, 0x40, 0xc3, 0xe4, 0x91, 0x3f, 0x38, 0x66, 0x26, 0x28, 0x0d, 0xd9, 0x99,
-	0x80, 0xf0, 0x23, 0xd0, 0x0f, 0xd3, 0x4d, 0xef, 0x7b, 0xb8, 0xce, 0xf4, 0xc3, 0x74, 0x3f, 0xbc,
-	0x4b, 0xdd, 0x38, 0x05, 0x7a, 0x43, 0xbb, 0xef, 0xc2, 0x11, 0xb2, 0xa6, 0xa0, 0x3b, 0x55, 0xb5,
-	0x45, 0xcf, 0x7b, 0x19, 0x7c, 0x75, 0x8a, 0xae, 0xef, 0xa2, 0x77, 0xaa, 0xca, 0x8b, 0x19, 0xe5,
-	0x8d, 0x2b, 0x16, 0x17, 0x85, 0xad, 0x8e, 0x3b, 0xd7, 0xf6, 0x3d, 0xf0, 0x55, 0xf2, 0x76, 0x17,
-	0x3d, 0x16, 0xee, 0x03, 0x38, 0x4c, 0x13, 0x74, 0xe2, 0x0d, 0x34, 0x75, 0xc6, 0xa9, 0x0c, 0x55,
-	0xbc, 0xdf, 0x01, 0xf7, 0x80, 0xc0, 0x3a, 0xc8, 0x85, 0xc7, 0x16, 0x33, 0x03, 0xa4, 0x38, 0xd7,
-	0xc8, 0x98, 0x58, 0x23, 0xec, 0x1b, 0xde, 0xbc, 0x11, 0x2f, 0x3c, 0xf7, 0x46, 0x58, 0x37, 0xc2,
-	0x79, 0x23, 0xfe, 0x1f, 0x80, 0x47, 0x28, 0x42, 0xe1, 0x48, 0xb1, 0xd9, 0x44, 0x9c, 0xa1, 0x4d,
-	0x59, 0x38, 0x00, 0x48, 0xe1, 0x46, 0x59, 0x1e, 0xd7, 0x92, 0x11, 0xa2, 0xd6, 0xcd, 0x82, 0x85,
-	0xef, 0xc0, 0x93, 0xae, 0xbc, 0x41, 0x41, 0xb8, 0xb2, 0x61, 0xe8, 0x0d, 0x7a, 0xc1, 0x11, 0x37,
-	0xe5, 0x2a, 0x4a, 0x9d, 0xed, 0x5b, 0x1c, 0x7f, 0x1c, 0x3b, 0x52, 0x18, 0x05, 0xe1, 0x57, 0x0d,
-	0xbd, 0xf1, 0x9a, 0xc5, 0x2b, 0xbc, 0x0a, 0x47, 0x34, 0xbd, 0xd2, 0xad, 0x21, 0x75, 0xae, 0xaf,
-	0xc8, 0xa4, 0xa6, 0xaf, 0xb9, 0x85, 0x0a, 0x77, 0xe0, 0xb8, 0x5c, 0x35, 0x95, 0x5b, 0x68, 0xaf,
-	0xac, 0x17, 0x0f, 0x84, 0xda, 0xef, 0x49, 0xb8, 0xf8, 0x41, 0x4f, 0x48, 0x3a, 0xc2, 0x14, 0x74,
-	0x6b, 0x9e, 0x87, 0x11, 0x43, 0x6f, 0x69, 0xb5, 0x8a, 0xa1, 0xaf, 0x2b, 0x5a, 0xea, 0x7c, 0xdf,
-	0xba, 0x7c, 0x48, 0x49, 0x25, 0x42, 0x29, 0x2c, 0xc0, 0xa8, 0x8a, 0x64, 0x6c, 0x56, 0x98, 0xdc,
-	0x54, 0xb6, 0x2f, 0x67, 0x84, 0xd2, 0x5e, 0xa2, 0xa4, 0x42, 0x16, 0x86, 0x0c, 0x59, 0xab, 0xe9,
-	0x8d, 0xd4, 0x74, 0x5f, 0x26, 0x4e, 0x45, 0xc2, 0x3e, 0x0e, 0x8a, 0x2a, 0xcd, 0x0a, 0x36, 0x95,
-	0xea, 0x4d, 0x45, 0x43, 0x18, 0xa7, 0x66, 0xfa, 0x72, 0x0b, 0x8c, 0xe7, 0x6a, 0x73, 0xcd, 0xe6,
-	0x10, 0xae, 0xc3, 0x64, 0x55, 0xd7, 0x6f, 0x2a, 0xc8, 0x29, 0x26, 0xe7, 0x09, 0x66, 0xb1, 0x8a,
-	0xba, 0x25, 0x4a, 0xfd, 0xaa, 0x6e, 0x94, 0x65, 0x5c, 0x57, 0xb4, 0xcd, 0xf2, 0xa0, 0x94, 0x60,
-	0x12, 0x1c, 0x52, 0xbf, 0x01, 0x87, 0x68, 0xa5, 0x76, 0x5d, 0xc6, 0xf5, 0x54, 0xfe, 0x69, 0xef,
-	0x2f, 0x0e, 0x4a, 0x61, 0x22, 0x8d, 0x7c, 0x11, 0xbe, 0x0b, 0x63, 0xf4, 0x6f, 0x53, 0x28, 0x9a,
-	0x89, 0x0c, 0x4d, 0x56, 0x53, 0x9f, 0x0c, 0xee, 0x7b, 0x3d, 0x1d, 0x7d, 0x78, 0xd7, 0xcd, 0x4c,
-	0x8f, 0xf1, 0xa3, 0xe4, 0xd5, 0x55, 0xfe, 0x46, 0x38, 0x0e, 0x87, 0x68, 0x20, 0x4d, 0xaf, 0xfb,
-	0xfe, 0x86, 0x5e, 0x61, 0x97, 0xc2, 0xe4, 0x0d, 0xbd, 0xd5, 0x5b, 0x86, 0x61, 0xeb, 0x8f, 0x4d,
-	0xa4, 0x7e, 0x3b, 0xe8, 0xb9, 0x8e, 0x7a, 0xfe, 0x65, 0x8a, 0xec, 0x65, 0x0d, 0x5f, 0xd5, 0x36,
-	0x74, 0x69, 0xb0, 0xc6, 0x1e, 0x84, 0x25, 0x18, 0xc4, 0xa6, 0x6c, 0xa2, 0xd4, 0xef, 0x06, 0x69,
-	0x11, 0x64, 0x3f, 0x31, 0xd9, 0x1b, 0xec, 0x07, 0x09, 0xd7, 0xd7, 0x08, 0x93, 0xc4, 0x78, 0x85,
-	0xb7, 0xe1, 0xb0, 0x9d, 0xfe, 0x56, 0x98, 0xb8, 0x7f, 0x63, 0xe2, 0xb2, 0x7d, 0x03, 0x1c, 0xfb,
-	0x2f, 0x3d, 0x28, 0xba, 0x46, 0x05, 0x96, 0x48, 0x5a, 0x13, 0x93, 0x79, 0xca, 0x4b, 0x5f, 0x09,
-	0x6b, 0x30, 0xde, 0x11, 0x4e, 0x7b, 0xfc, 0x19, 0x1b, 0xea, 0xbe, 0x4d, 0xb5, 0xd2, 0x66, 0xd2,
-	0x49, 0x56, 0x80, 0x24, 0x3b, 0xde, 0x2c, 0x7e, 0x0a, 0x3e, 0x68, 0x83, 0xdf, 0x01, 0x78, 0x0c,
-	0x8e, 0x94, 0x64, 0xac, 0x54, 0xbb, 0x60, 0x98, 0x40, 0x4e, 0xcc, 0x15, 0xe1, 0x24, 0x1c, 0xe3,
-	0xa9, 0x68, 0x9a, 0x65, 0x66, 0x69, 0x76, 0xb1, 0x1a, 0x0b, 0x81, 0x39, 0xb1, 0x90, 0x83, 0x47,
-	0x79, 0x6d, 0x26, 0xee, 0xe2, 0x06, 0xf3, 0x70, 0x1c, 0x26, 0x6f, 0x5c, 0x5d, 0xed, 0x7a, 0xef,
-	0xcb, 0xcd, 0xc2, 0x05, 0x38, 0x66, 0xdd, 0xd0, 0xe8, 0xfa, 0x7a, 0xb2, 0x38, 0x23, 0x5e, 0x10,
-	0x73, 0x73, 0x62, 0xa1, 0x20, 0xe6, 0x67, 0x45, 0x7a, 0xc9, 0x41, 0x2c, 0xe4, 0xc5, 0x42, 0x51,
-	0x2c, 0xcc, 0x8a, 0x85, 0x79, 0x78, 0xbc, 0xe7, 0x7d, 0x11, 0x5f, 0xb1, 0x08, 0x4f, 0xc2, 0x31,
-	0x2b, 0x82, 0xea, 0x12, 0x1c, 0xcc, 0xcd, 0x8b, 0xb9, 0x85, 0xd2, 0x57, 0x61, 0xd2, 0x69, 0xe0,
-	0x15, 0x73, 0xab, 0x89, 0x04, 0x81, 0x9f, 0x06, 0xc6, 0x77, 0xdb, 0x20, 0x94, 0x17, 0xf3, 0xf3,
-	0x62, 0xa1, 0x74, 0xd6, 0x95, 0x15, 0x77, 0xce, 0xe2, 0x62, 0x3b, 0x6d, 0x30, 0xbc, 0xdb, 0x06,
-	0x43, 0x39, 0x56, 0xe8, 0x94, 0xcb, 0x97, 0xa6, 0xbd, 0xcb, 0x95, 0x53, 0xdb, 0x6d, 0x70, 0x9c,
-	0x5f, 0x72, 0x38, 0xb9, 0xdb, 0x06, 0x61, 0x7e, 0x97, 0x64, 0xa6, 0x34, 0xe5, 0xba, 0x01, 0x32,
-	0xb1, 0xdd, 0x06, 0x11, 0x4e, 0x97, 0xd8, 0x6d, 0x03, 0x98, 0xcb, 0xb1, 0xda, 0x8c, 0xd9, 0x7c,
-	0xe9, 0x3c, 0x8c, 0x77, 0x8e, 0xf9, 0x68, 0x5b, 0x8f, 0x6d, 0xb7, 0xc1, 0x04, 0xa7, 0x3e, 0xba,
-	0xdb, 0x06, 0x91, 0xfc, 0x9c, 0x98, 0xbb, 0x20, 0xe6, 0x8b, 0xe2, 0x6c, 0xae, 0x74, 0x0e, 0x26,
-	0x3b, 0x21, 0x95, 0xb3, 0xd5, 0x63, 0x9c, 0xe3, 0x08, 0xbd, 0xe8, 0x91, 0x17, 0xf3, 0x85, 0xd2,
-	0x79, 0x78, 0xa4, 0xeb, 0x28, 0xce, 0x71, 0x8c, 0x78, 0x76, 0xa7, 0x0d, 0xa6, 0x48, 0x9b, 0x8b,
-	0x39, 0xb1, 0x98, 0x17, 0x8b, 0x85, 0x52, 0xc1, 0xf3, 0xfe, 0x0b, 0xd9, 0xf3, 0xce, 0xef, 0xb4,
-	0x81, 0xb8, 0xdb, 0x06, 0xc9, 0xe2, 0xac, 0x58, 0x9c, 0x13, 0x8b, 0xf3, 0x62, 0xf1, 0x82, 0x58,
-	0x5c, 0x10, 0x67, 0x67, 0xec, 0x3b, 0x1c, 0xc3, 0x89, 0xc4, 0x72, 0x20, 0x7c, 0x32, 0x91, 0x5e,
-	0x0e, 0x84, 0x13, 0x89, 0xa4, 0x7d, 0x93, 0xe3, 0x48, 0x62, 0x6c, 0x39, 0x10, 0x9e, 0x4a, 0x9c,
-	0x5d, 0x0e, 0x84, 0xc5, 0xc4, 0xf9, 0xcc, 0xbf, 0x4c, 0xc0, 0xf8, 0x92, 0x81, 0x64, 0x13, 0xd9,
-	0x60, 0x58, 0xaa, 0x0b, 0x0c, 0x3b, 0x04, 0xb0, 0x5c, 0x00, 0xd6, 0x2b, 0x07, 0x03, 0xb0, 0x7e,
-	0xef, 0xd0, 0xd5, 0x8d, 0xa7, 0x86, 0xae, 0xbc, 0x41, 0xab, 0x37, 0x9e, 0x0e, 0xb4, 0xf2, 0x82,
-	0xaa, 0xbe, 0xf9, 0x6c, 0xa0, 0x2a, 0x2f, 0x40, 0xaa, 0xfc, 0xb4, 0x70, 0x8e, 0x8d, 0xcc, 0x2c,
-	0x1e, 0x0c, 0x99, 0x71, 0xe1, 0x31, 0xf3, 0xfb, 0xc6, 0x63, 0xba, 0x6e, 0x38, 0xcf, 0x1d, 0x10,
-	0x89, 0xb1, 0x6e, 0x35, 0xbf, 0xfc, 0x24, 0xe8, 0x8b, 0xf3, 0x0e, 0xf3, 0xd7, 0x9f, 0x14, 0x6b,
-	0xe9, 0xbe, 0xa7, 0x7c, 0xca, 0x0b, 0x4f, 0x71, 0xa3, 0x28, 0x0b, 0xfb, 0x47, 0x51, 0xca, 0x7e,
-	0x37, 0x7e, 0xf2, 0x8d, 0x67, 0x86, 0x9f, 0x10, 0xc9, 0x4e, 0xd4, 0xa4, 0xf2, 0x0c, 0x51, 0x93,
-	0xb2, 0xdf, 0x03, 0x2b, 0xc1, 0xcf, 0x11, 0x2b, 0x29, 0xfb, 0x7b, 0x20, 0x24, 0x6f, 0x3f, 0x63,
-	0x84, 0xc4, 0x85, 0x8b, 0xac, 0x3d, 0x25, 0x2e, 0xe2, 0x89, 0x7b, 0x5c, 0x3e, 0x28, 0xee, 0x51,
-	0x0e, 0x78, 0x20, 0x1e, 0x6f, 0x3f, 0x5b, 0xc4, 0xa3, 0x1c, 0x70, 0xe2, 0x1c, 0x3f, 0x78, 0x36,
-	0x30, 0x47, 0xdf, 0xd2, 0xb5, 0xde, 0xe8, 0xc6, 0xb7, 0x9f, 0x19, 0xba, 0xe1, 0x85, 0x5f, 0x54,
-	0x9f, 0x03, 0x7c, 0xb1, 0x07, 0x9f, 0xa8, 0x3e, 0x07, 0x78, 0x62, 0x0f, 0xfe, 0xd0, 0x78, 0x5e,
-	0xf0, 0xc3, 0x73, 0xc1, 0x17, 0x82, 0xcf, 0x1e, 0x5f, 0x08, 0x7a, 0xe1, 0x0b, 0xc6, 0x73, 0xc3,
-	0x17, 0xca, 0xc1, 0x67, 0x80, 0x2c, 0x84, 0x9e, 0x18, 0x59, 0x08, 0x3d, 0x09, 0xb2, 0x10, 0x7a,
-	0x2a, 0x64, 0x21, 0xf4, 0x9c, 0x90, 0x85, 0xd0, 0x73, 0x47, 0x16, 0x42, 0x1d, 0x64, 0x61, 0x31,
-	0xf9, 0x0f, 0x17, 0xbb, 0x8e, 0xc5, 0x49, 0x72, 0xb3, 0x37, 0x75, 0x3b, 0x72, 0xff, 0x0b, 0xb0,
-	0xf7, 0x75, 0x69, 0xca, 0x23, 0x7b, 0x1b, 0xbd, 0xff, 0x05, 0xd8, 0xf3, 0xb6, 0x74, 0xdc, 0x95,
-	0x8b, 0xc5, 0xef, 0x7f, 0x01, 0x1c, 0xbf, 0x4b, 0xa7, 0xf7, 0xe4, 0x5f, 0xc2, 0xfd, 0x2f, 0x40,
-	0xd7, 0xbb, 0x1e, 0x69, 0x17, 0x69, 0xd9, 0x9e, 0xd7, 0xa5, 0x7c, 0xaf, 0xb4, 0xeb, 0xe8, 0xfd,
-	0x2f, 0x80, 0xf7, 0xa7, 0x92, 0xe8, 0x99, 0x7b, 0x8d, 0xdd, 0xff, 0x02, 0x78, 0xbc, 0xef, 0x4a,
-	0xba, 0xf6, 0xa6, 0x5b, 0x24, 0xd1, 0xfa, 0xd7, 0x09, 0x38, 0x2c, 0xa1, 0xa6, 0x2a, 0x57, 0x0f,
-	0x33, 0xad, 0xc3, 0x4c, 0xeb, 0x30, 0xd3, 0x3a, 0xcc, 0xb4, 0x0e, 0x33, 0xad, 0xc3, 0x4c, 0xeb,
-	0x30, 0xd3, 0x3a, 0xcc, 0xb4, 0x0e, 0x33, 0xad, 0xc3, 0x4c, 0xeb, 0x30, 0xd3, 0x3a, 0xcc, 0xb4,
-	0x0e, 0x33, 0xad, 0x67, 0x93, 0x69, 0xfd, 0xfd, 0x09, 0x18, 0xf9, 0x3a, 0x32, 0x0f, 0xb3, 0xac,
-	0xc3, 0x2c, 0xeb, 0x30, 0xcb, 0x3a, 0xcc, 0xb2, 0x0e, 0xb3, 0xac, 0xc3, 0x2c, 0xeb, 0x30, 0xcb,
-	0x3a, 0xcc, 0xb2, 0x0e, 0xb3, 0xac, 0xc3, 0x2c, 0xeb, 0x30, 0xcb, 0xfa, 0x1f, 0x93, 0x65, 0xfd,
-	0xf7, 0xaa, 0x64, 0x7d, 0xeb, 0x59, 0x55, 0xb2, 0xfe, 0x5e, 0xaa, 0x58, 0x0f, 0x13, 0xd8, 0xe7,
-	0x99, 0xc0, 0x96, 0xfe, 0x08, 0xec, 0xfc, 0x7a, 0x72, 0xe0, 0xc3, 0x5f, 0x4f, 0x0e, 0x7c, 0xfa,
-	0xeb, 0x49, 0x70, 0x6f, 0x77, 0x12, 0xfc, 0x6c, 0x77, 0x12, 0xfc, 0x72, 0x77, 0x12, 0xec, 0xec,
-	0x4e, 0x82, 0x0f, 0x77, 0x27, 0xc1, 0x47, 0xbb, 0x93, 0xe0, 0x93, 0xdd, 0xc9, 0x81, 0x4f, 0x77,
-	0x27, 0xc1, 0x4f, 0x3e, 0x9e, 0x1c, 0xd8, 0xfe, 0x78, 0x12, 0xec, 0x7c, 0x3c, 0x39, 0xf0, 0xe1,
-	0xc7, 0x93, 0x03, 0xdf, 0x7a, 0x7b, 0x53, 0x6f, 0xde, 0xdc, 0xcc, 0x5a, 0xff, 0x71, 0x57, 0xb6,
-	0x85, 0xa7, 0xe9, 0xc3, 0x86, 0x6e, 0x34, 0xce, 0x37, 0x0d, 0xfd, 0x96, 0x52, 0x43, 0xc6, 0x79,
-	0xeb, 0xf3, 0x74, 0x73, 0x7d, 0x53, 0x9f, 0x46, 0x77, 0x4c, 0xeb, 0x7f, 0x58, 0xec, 0xfb, 0x9f,
-	0x58, 0xae, 0x87, 0xe8, 0x1f, 0x61, 0x28, 0xfc, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff, 0xdd, 0xfe,
-	0xcf, 0x3a, 0xf4, 0x72, 0x00, 0x00,
+	// 9696 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0xbd, 0x5d, 0x6c, 0x1b, 0x59,
+	0x96, 0x1f, 0xae, 0xcb, 0x2f, 0x91, 0x87, 0x94, 0x54, 0xbc, 0x92, 0x25, 0x9a, 0xb6, 0x25, 0x9a,
+	0xb6, 0xa7, 0xd5, 0x72, 0x99, 0x16, 0xa9, 0x0f, 0x5b, 0x9a, 0x6e, 0x77, 0x8b, 0xb2, 0x3d, 0xb4,
+	0xfe, 0xb6, 0x5b, 0x5d, 0x52, 0x77, 0xcf, 0xfe, 0x7b, 0x66, 0xb8, 0x25, 0xf2, 0x4a, 0x2a, 0x9b,
+	0xac, 0x62, 0x57, 0x15, 0x6d, 0x6b, 0x10, 0x27, 0xde, 0xde, 0x99, 0x60, 0xd2, 0x40, 0x36, 0xb3,
+	0x9d, 0x87, 0xc9, 0x76, 0x16, 0x83, 0xc5, 0x04, 0x48, 0x06, 0xce, 0x06, 0x08, 0x92, 0x97, 0x60,
+	0xe9, 0x45, 0x8c, 0x06, 0x36, 0x18, 0xf4, 0x4b, 0x8c, 0x3c, 0xf5, 0x0e, 0x82, 0xcd, 0x8c, 0x26,
+	0x40, 0x7a, 0x67, 0x07, 0xc1, 0xa0, 0x07, 0x01, 0x06, 0x0d, 0x24, 0x08, 0xea, 0xde, 0x5b, 0xc5,
+	0x22, 0x59, 0xa4, 0x24, 0x7f, 0xcc, 0x60, 0x37, 0x7a, 0x92, 0xaa, 0xea, 0x9c, 0x73, 0x3f, 0xcf,
+	0xb9, 0xe7, 0xfc, 0xee, 0xb9, 0x97, 0x90, 0xbd, 0x43, 0x8c, 0x8c, 0xa2, 0x9d, 0x37, 0x4a, 0xdb,
+	0xa4, 0x2a, 0x9f, 0xbf, 0xa3, 0x90, 0xbb, 0xc6, 0xf9, 0x6d, 0xd3, 0xac, 0x15, 0x2b, 0x9a, 0x5c,
+	0xde, 0x90, 0x2b, 0xb2, 0x5a, 0x22, 0xfa, 0x79, 0x73, 0xa7, 0x46, 0x8c, 0x4c, 0x4d, 0xd7, 0x4c,
+	0x0d, 0x9f, 0x61, 0x2c, 0x19, 0xc6, 0x92, 0xa1, 0x2c, 0x99, 0x0e, 0x96, 0xe4, 0xb9, 0x2d, 0xc5,
+	0xdc, 0xae, 0x6f, 0x64, 0x4a, 0x5a, 0xf5, 0xfc, 0x96, 0xb6, 0xa5, 0x9d, 0xa7, 0xdc, 0x1b, 0xf5,
+	0x4d, 0xfa, 0x44, 0x1f, 0xe8, 0x7f, 0x4c, 0x6a, 0x72, 0x62, 0x4b, 0xd3, 0xb6, 0x2a, 0xa4, 0x49,
+	0x65, 0x2a, 0x55, 0x62, 0x98, 0x72, 0xb5, 0xc6, 0x09, 0x8e, 0xb5, 0xd6, 0x54, 0xab, 0x99, 0x8a,
+	0xa6, 0xf2, 0x3a, 0x25, 0x53, 0xad, 0x1f, 0x6b, 0x5a, 0x45, 0x29, 0xed, 0xb8, 0x6b, 0x9d, 0xfc,
+	0x52, 0x2b, 0x85, 0x2e, 0x9b, 0xa4, 0x58, 0x51, 0xaa, 0x8a, 0xd9, 0xda, 0xba, 0xe4, 0x44, 0x1b,
+	0x9d, 0x56, 0x37, 0x49, 0x0b, 0xc1, 0x64, 0x2b, 0x81, 0x41, 0xf4, 0x3b, 0x4a, 0x89, 0x14, 0x3d,
+	0x8a, 0x3c, 0xd7, 0x8b, 0xb2, 0xa8, 0xd7, 0x2b, 0xad, 0x82, 0x8f, 0xb6, 0x92, 0xbb, 0x3f, 0x1d,
+	0x6f, 0x1b, 0x25, 0xb9, 0xa2, 0x94, 0x65, 0x93, 0x78, 0x37, 0xde, 0x1a, 0x90, 0x62, 0x6b, 0xf7,
+	0xcc, 0x78, 0x8d, 0xb2, 0xbb, 0x0b, 0xbc, 0xaa, 0x3f, 0xe1, 0xc5, 0xd4, 0xa3, 0x4b, 0xef, 0x28,
+	0xba, 0x59, 0x97, 0x2b, 0xc5, 0x6d, 0xcd, 0x30, 0x5b, 0xe8, 0xa6, 0xbb, 0xd3, 0x15, 0xcb, 0xaa,
+	0x51, 0x54, 0xd4, 0x4d, 0xed, 0xbc, 0xb6, 0x71, 0x8b, 0x94, 0x4c, 0xc6, 0x91, 0xd6, 0x61, 0xfc,
+	0xb2, 0x76, 0x57, 0x35, 0x4c, 0x9d, 0xc8, 0xd5, 0xf5, 0x8a, 0xf1, 0x36, 0x6b, 0xb0, 0xa2, 0xa9,
+	0xcb, 0x9a, 0x6a, 0x92, 0x7b, 0x26, 0x5e, 0x85, 0x41, 0x53, 0xaf, 0x1b, 0x26, 0x29, 0x17, 0x4b,
+	0x72, 0xb1, 0xae, 0x57, 0x12, 0xbe, 0x14, 0x9a, 0x8c, 0xe4, 0xa7, 0x7e, 0xdd, 0x40, 0x81, 0x1f,
+	0x3c, 0x42, 0xd1, 0x1a, 0xa9, 0x8a, 0xa9, 0x0d, 0xd9, 0x20, 0xf3, 0xb3, 0x7f, 0xf6, 0xd7, 0x8f,
+	0xfd, 0x61, 0x3d, 0x94, 0x42, 0x93, 0x0f, 0x1e, 0x84, 0xad, 0x87, 0xa0, 0xee, 0xff, 0x2e, 0x42,
+	0x52, 0x8c, 0x4b, 0x58, 0x96, 0xdf, 0xd2, 0x2b, 0xe9, 0x3f, 0xf5, 0xc3, 0x58, 0x4b, 0xa1, 0xab,
+	0xb2, 0x2e, 0x57, 0x8d, 0xf5, 0x9d, 0x1a, 0xc1, 0xcb, 0x00, 0x66, 0xc5, 0x28, 0x96, 0x34, 0x75,
+	0x53, 0xd9, 0x4a, 0xa0, 0x14, 0x9a, 0x8c, 0xe6, 0xc6, 0x33, 0x5e, 0x7a, 0xb0, 0x5e, 0x31, 0x96,
+	0x29, 0x55, 0x3e, 0xf0, 0xcb, 0x06, 0x42, 0x52, 0xc4, 0xb4, 0x5f, 0xe0, 0x0d, 0x10, 0xa8, 0x10,
+	0xa2, 0x9b, 0xca, 0xa6, 0x52, 0x92, 0x4d, 0x62, 0x24, 0x7c, 0x29, 0xff, 0x64, 0x34, 0x77, 0xb2,
+	0x4d, 0x94, 0x25, 0xa4, 0x49, 0x65, 0xd5, 0x20, 0x3f, 0x42, 0xeb, 0xfd, 0x21, 0xf2, 0x09, 0x82,
+	0xfd, 0x5f, 0x18, 0x49, 0x43, 0x66, 0x0b, 0xa5, 0x81, 0xe7, 0xa0, 0x5f, 0xd5, 0x8a, 0x55, 0xb3,
+	0x62, 0x24, 0xfc, 0xb4, 0x96, 0x23, 0x6d, 0xa2, 0xaf, 0x54, 0x6b, 0xe6, 0x4e, 0x3e, 0xf0, 0xb8,
+	0x81, 0x50, 0xa1, 0x4f, 0x0a, 0xa9, 0xda, 0x0d, 0xb3, 0x62, 0xe0, 0x6d, 0x08, 0xd7, 0x0d, 0xc2,
+	0xf8, 0x02, 0x94, 0xef, 0x4a, 0x66, 0x5f, 0x5a, 0x9e, 0xe9, 0x3d, 0x4c, 0x4e, 0x41, 0xfd, 0x75,
+	0x83, 0x58, 0x25, 0x2d, 0x9e, 0xf8, 0xb8, 0x81, 0x8e, 0xc2, 0x18, 0x0c, 0xae, 0x5f, 0x5f, 0x4b,
+	0xd1, 0x1e, 0x26, 0x26, 0xd1, 0x0d, 0x1c, 0xcc, 0x8a, 0x39, 0x71, 0x2e, 0x9f, 0x86, 0x68, 0x95,
+	0x76, 0xd2, 0xb6, 0xa6, 0x94, 0x08, 0x1e, 0x7e, 0xdc, 0x40, 0xfe, 0x1f, 0x35, 0x10, 0x7a, 0xd2,
+	0x40, 0xc1, 0xdd, 0x06, 0xf2, 0xcf, 0x88, 0xb3, 0x2b, 0x81, 0x70, 0x50, 0x08, 0xa5, 0xff, 0x57,
+	0x10, 0x06, 0x57, 0x75, 0xed, 0xde, 0x8e, 0xd5, 0x3d, 0x05, 0xd3, 0xac, 0x19, 0xf8, 0x65, 0x18,
+	0xa0, 0x15, 0xd4, 0x49, 0x59, 0xd1, 0x49, 0xc9, 0xa4, 0x03, 0x15, 0xce, 0x07, 0x7e, 0xdd, 0x40,
+	0x7d, 0x52, 0xcc, 0xfa, 0x24, 0xf1, 0x2f, 0x78, 0x02, 0xc2, 0x72, 0xb9, 0x5c, 0xdc, 0x36, 0x4c,
+	0x83, 0x4e, 0x1c, 0x9b, 0xaa, 0x5f, 0x2e, 0x97, 0x0b, 0x86, 0x69, 0xe0, 0xdb, 0x30, 0x68, 0xd5,
+	0xa3, 0xe6, 0xd4, 0x90, 0xf7, 0xe7, 0xa5, 0xa7, 0xe9, 0x97, 0xe6, 0x4c, 0xca, 0x07, 0x9e, 0x58,
+	0xb3, 0x62, 0xc0, 0xe4, 0x2f, 0x59, 0xe3, 0x97, 0x61, 0xb0, 0x4c, 0x36, 0xe5, 0x7a, 0xc5, 0x2c,
+	0x6e, 0x13, 0xb9, 0x4c, 0xf4, 0x44, 0x70, 0x1f, 0x83, 0x37, 0xc0, 0x79, 0x0a, 0x94, 0x05, 0x67,
+	0x21, 0x6a, 0x59, 0x18, 0xa2, 0x17, 0x55, 0xb9, 0x4a, 0x12, 0x21, 0xaa, 0x0e, 0x83, 0x16, 0x2d,
+	0x9f, 0xf2, 0x89, 0x3f, 0x79, 0xad, 0xd0, 0x27, 0x01, 0x23, 0xba, 0x29, 0x57, 0x09, 0xbe, 0x04,
+	0x58, 0xae, 0xd5, 0x88, 0x5a, 0x2e, 0xba, 0x39, 0xfb, 0xbb, 0x70, 0x0a, 0x8c, 0x76, 0xad, 0xc9,
+	0xff, 0x1a, 0xc4, 0x6a, 0xb2, 0x61, 0x14, 0xcd, 0x6d, 0x5d, 0xab, 0x6f, 0x6d, 0x27, 0xc2, 0xfb,
+	0xa8, 0x75, 0xd4, 0xe2, 0x58, 0x67, 0x0c, 0x78, 0x15, 0x8e, 0x10, 0x55, 0xde, 0xa8, 0x90, 0x62,
+	0x4d, 0x36, 0xb7, 0x8b, 0xaa, 0xa6, 0x57, 0xe5, 0x8a, 0xf2, 0x4d, 0x92, 0x80, 0x3d, 0x25, 0x21,
+	0x69, 0x98, 0xb1, 0xae, 0xca, 0xe6, 0xf6, 0x4d, 0x9b, 0x11, 0x4b, 0x30, 0x5a, 0x56, 0x0c, 0x2f,
+	0x91, 0xd1, 0x7d, 0x88, 0x1c, 0xe1, 0xbc, 0x2d, 0x32, 0x17, 0x63, 0x9f, 0x5f, 0x8a, 0x58, 0xd3,
+	0x73, 0x46, 0x9c, 0x15, 0x17, 0xf2, 0xe7, 0x61, 0x84, 0xf7, 0x16, 0x1b, 0x2b, 0x7b, 0xae, 0x8e,
+	0x3d, 0x6e, 0xa0, 0x20, 0x9f, 0xab, 0x81, 0xdd, 0x06, 0xea, 0x9f, 0x13, 0xe7, 0xc5, 0x0b, 0xe2,
+	0xc5, 0x7c, 0x06, 0x8e, 0xb4, 0x56, 0xc5, 0xe6, 0x38, 0xf2, 0xb8, 0x81, 0x80, 0x73, 0x44, 0x76,
+	0x1b, 0x28, 0x98, 0x9d, 0x16, 0xb3, 0xd9, 0x95, 0x40, 0x38, 0x20, 0x04, 0x57, 0x02, 0xe1, 0x88,
+	0x00, 0x2b, 0x81, 0x70, 0x4c, 0x18, 0x58, 0x09, 0x84, 0x07, 0x84, 0xc1, 0x95, 0x40, 0x78, 0x50,
+	0x18, 0x4a, 0xdf, 0x80, 0x81, 0x96, 0x69, 0x8f, 0xe7, 0x61, 0xc4, 0x32, 0xa2, 0x77, 0xb4, 0x8a,
+	0x49, 0x74, 0x5d, 0x2e, 0x56, 0x65, 0x55, 0xde, 0x22, 0xe5, 0x96, 0xc9, 0x8f, 0xcb, 0xaa, 0xf1,
+	0x36, 0x27, 0xb8, 0xc1, 0xbe, 0x2f, 0x06, 0x3e, 0xbf, 0x84, 0xb2, 0xe9, 0x3f, 0xe9, 0x87, 0xb1,
+	0x56, 0x35, 0x5a, 0xaa, 0x9b, 0x9a, 0x65, 0x53, 0x9e, 0xaf, 0x3e, 0xbd, 0xda, 0x62, 0x41, 0xfd,
+	0xfb, 0xb1, 0xa0, 0x6e, 0xdb, 0xe9, 0xb2, 0x6b, 0xc1, 0xa7, 0xb4, 0x6b, 0xa1, 0x17, 0x69, 0xd7,
+	0x3c, 0x54, 0x38, 0xbc, 0x8f, 0xf9, 0xd6, 0x5b, 0x85, 0x23, 0x9e, 0x8a, 0x88, 0xf6, 0xa1, 0xc2,
+	0xd0, 0x85, 0x73, 0x6f, 0x15, 0xde, 0x8f, 0x96, 0xec, 0x4f, 0x85, 0x07, 0xf6, 0x94, 0xe4, 0x3b,
+	0xa8, 0x0a, 0x0f, 0xee, 0x43, 0xa4, 0xb7, 0x0a, 0x0f, 0x7d, 0x7e, 0x29, 0x66, 0xa9, 0xf0, 0xac,
+	0x38, 0x23, 0x5e, 0x10, 0xb3, 0x39, 0xaf, 0x85, 0xc6, 0xad, 0xbc, 0xfe, 0x39, 0x71, 0x3e, 0x9f,
+	0xed, 0xa2, 0xe9, 0x47, 0x1f, 0x37, 0x50, 0x98, 0x13, 0xf7, 0xef, 0x36, 0x50, 0xe4, 0xa2, 0xb8,
+	0x20, 0x52, 0xdd, 0xed, 0xad, 0xeb, 0x03, 0x9c, 0x27, 0x46, 0x75, 0x7d, 0x46, 0xcc, 0xce, 0x3a,
+	0xba, 0xde, 0x2f, 0x84, 0x1d, 0x5d, 0x1f, 0x12, 0x84, 0x95, 0x40, 0x58, 0x10, 0xe2, 0x2b, 0x81,
+	0x70, 0x5c, 0xc0, 0xe9, 0x7f, 0x00, 0xb8, 0x20, 0x1b, 0xdb, 0xab, 0xd4, 0x43, 0xbb, 0xae, 0x18,
+	0x26, 0x75, 0x49, 0x14, 0x88, 0x6e, 0xcb, 0xc6, 0x36, 0x77, 0xdc, 0x12, 0x02, 0x75, 0x24, 0x4e,
+	0xb5, 0x75, 0x0d, 0xf5, 0x5e, 0x33, 0x4d, 0x6e, 0xba, 0x04, 0x9d, 0x7a, 0x62, 0x4f, 0x0b, 0xcb,
+	0x9d, 0x08, 0xdb, 0xff, 0x25, 0xd0, 0xee, 0x4f, 0xfe, 0xc2, 0x1f, 0xfa, 0xf0, 0x11, 0xf2, 0x09,
+	0x48, 0x82, 0x6d, 0x87, 0x29, 0xfd, 0x2f, 0x10, 0x08, 0x37, 0x14, 0x5d, 0xd7, 0xf4, 0xa6, 0x14,
+	0xbc, 0x06, 0x51, 0x4d, 0x57, 0xb6, 0x14, 0xb5, 0x58, 0xd3, 0xb4, 0x0a, 0xf7, 0x89, 0xd2, 0x9e,
+	0xda, 0xf5, 0x06, 0x75, 0xed, 0x24, 0xb2, 0x49, 0x8b, 0x1f, 0x7c, 0x78, 0xdf, 0xcd, 0x29, 0x01,
+	0x7b, 0x58, 0xd5, 0xb4, 0x0a, 0x5e, 0x84, 0xfe, 0x1a, 0xd1, 0x4b, 0x44, 0x35, 0xa9, 0x15, 0x89,
+	0xe6, 0x52, 0x6d, 0x02, 0xaf, 0xea, 0x72, 0xc9, 0xd2, 0x43, 0xb9, 0xb2, 0xca, 0xe8, 0x24, 0x9b,
+	0x21, 0xfd, 0x8b, 0x31, 0x48, 0x4a, 0x56, 0x7b, 0xd7, 0x94, 0x6a, 0xad, 0x42, 0x96, 0xca, 0x77,
+	0x2c, 0x4d, 0x2e, 0xbf, 0xc1, 0x1c, 0x61, 0x7c, 0x19, 0x70, 0x49, 0xab, 0x56, 0x35, 0xb5, 0xe8,
+	0xee, 0x36, 0x5f, 0xf7, 0x19, 0x65, 0xad, 0x78, 0x8c, 0xa3, 0xd9, 0x7f, 0xb8, 0x0a, 0x23, 0x46,
+	0x8d, 0x94, 0x2c, 0x7f, 0xab, 0x45, 0x0e, 0x33, 0x68, 0x0b, 0xfb, 0x34, 0x2e, 0x9d, 0xc3, 0x59,
+	0xe8, 0x93, 0xb0, 0x2d, 0xd8, 0x55, 0xdc, 0xeb, 0x10, 0xae, 0xe9, 0x8a, 0xa6, 0x2b, 0xe6, 0x0e,
+	0xf5, 0xcb, 0x06, 0x3b, 0x6c, 0xa6, 0xd5, 0x62, 0x45, 0xdd, 0x5a, 0xe5, 0x54, 0x4c, 0x0d, 0x24,
+	0x87, 0x0b, 0xff, 0x10, 0x81, 0x40, 0xd4, 0x72, 0x4d, 0x53, 0x54, 0xb3, 0x68, 0xd4, 0x37, 0x0c,
+	0x62, 0x5a, 0x26, 0xd4, 0x9a, 0x2c, 0x6f, 0xef, 0xb3, 0xb6, 0xdd, 0x3b, 0x35, 0x73, 0x85, 0x4b,
+	0x5e, 0x63, 0x82, 0xaf, 0xa8, 0xa6, 0xbe, 0x93, 0x3f, 0xf3, 0x98, 0x4d, 0x73, 0xf4, 0xd1, 0x23,
+	0x14, 0x00, 0x5f, 0x1f, 0x9b, 0x6b, 0x1f, 0x59, 0xae, 0x2b, 0x9d, 0x61, 0x1f, 0x3c, 0x42, 0xbe,
+	0x70, 0x9f, 0x34, 0x44, 0x5a, 0x99, 0xf1, 0x75, 0x97, 0xde, 0xeb, 0x64, 0x53, 0xb9, 0x57, 0xd4,
+	0xc9, 0x5d, 0x5d, 0x31, 0x99, 0x47, 0xd2, 0x6d, 0x94, 0x5c, 0x8b, 0x36, 0x65, 0x92, 0x18, 0x0f,
+	0xbe, 0x00, 0x83, 0x6d, 0x52, 0xc2, 0xcc, 0x28, 0x5a, 0xeb, 0x92, 0x6d, 0x14, 0x1f, 0xf8, 0x2c,
+	0x23, 0x5c, 0x6b, 0x61, 0xbc, 0x03, 0xa3, 0x3a, 0x79, 0xaf, 0x4e, 0x0c, 0xdb, 0x92, 0x1b, 0x45,
+	0x53, 0x2b, 0xca, 0xe5, 0x72, 0x22, 0x42, 0xbb, 0xed, 0x6c, 0x5b, 0x35, 0x98, 0xed, 0xbe, 0x21,
+	0xab, 0x4a, 0xad, 0x5e, 0xa1, 0x8b, 0x04, 0xeb, 0x9d, 0x36, 0xb7, 0x3d, 0xd5, 0xd4, 0x33, 0x69,
+	0x98, 0x17, 0xc0, 0x58, 0x8d, 0x75, 0x6d, 0xa9, 0x5c, 0xc6, 0xbf, 0x0b, 0x47, 0x3d, 0xca, 0xd5,
+	0x49, 0x55, 0xbb, 0x63, 0x19, 0x74, 0xff, 0x64, 0x24, 0x7f, 0xc6, 0x92, 0x11, 0xfb, 0x10, 0x45,
+	0xd2, 0xfd, 0xba, 0xb5, 0x0c, 0x3e, 0xf0, 0x79, 0x8a, 0x1f, 0x6d, 0x17, 0x2f, 0x51, 0x21, 0xf8,
+	0x1e, 0x8c, 0xe9, 0xc4, 0xa8, 0x69, 0xaa, 0x41, 0xda, 0x9b, 0x16, 0x7d, 0x5e, 0x4d, 0x1b, 0xb1,
+	0x4b, 0x68, 0x69, 0xdb, 0x06, 0x24, 0xbd, 0x4a, 0xe6, 0x8d, 0x8b, 0x1d, 0xa4, 0x71, 0x63, 0x1d,
+	0x05, 0xf0, 0xd6, 0x59, 0x7e, 0x10, 0x9f, 0x3e, 0x15, 0xad, 0x44, 0x6b, 0x4b, 0x9b, 0x36, 0xd0,
+	0xe2, 0x07, 0x31, 0x8a, 0xeb, 0x9c, 0xc0, 0xaa, 0xdb, 0x05, 0x88, 0xda, 0x7c, 0x77, 0xe5, 0xcd,
+	0xc4, 0x50, 0x8f, 0xb9, 0xe6, 0x93, 0x80, 0x93, 0xbe, 0x23, 0x6f, 0xe2, 0x6b, 0xe0, 0xb7, 0x18,
+	0x84, 0x7d, 0x5b, 0xbe, 0xf8, 0xc3, 0xfb, 0x16, 0xc7, 0xa7, 0xf7, 0x91, 0xa5, 0x21, 0x9f, 0xb1,
+	0xf5, 0xca, 0x7a, 0x83, 0xbf, 0x0a, 0xe1, 0xbb, 0xf2, 0x26, 0x85, 0x04, 0x12, 0xf1, 0x7d, 0xcb,
+	0x1b, 0x7b, 0x78, 0x3f, 0x62, 0xb3, 0x19, 0xad, 0x52, 0xfb, 0xef, 0xca, 0x9b, 0x52, 0xbd, 0x42,
+	0xf0, 0x57, 0x21, 0x26, 0xd7, 0x6a, 0xc5, 0x4d, 0x45, 0x27, 0x77, 0xe5, 0x4a, 0x25, 0x31, 0xbb,
+	0x6f, 0xe9, 0x43, 0x0f, 0xef, 0xb7, 0xb0, 0x16, 0x7c, 0x52, 0x54, 0xae, 0xd5, 0xae, 0xf2, 0x47,
+	0x7c, 0x19, 0xa2, 0x25, 0x4d, 0x37, 0x6c, 0x0b, 0x88, 0xa9, 0xe0, 0xa3, 0x6d, 0x82, 0x97, 0x35,
+	0xdd, 0x60, 0xb6, 0x2c, 0x1f, 0xb6, 0xcd, 0x82, 0x04, 0x25, 0xe7, 0x2d, 0x5e, 0x80, 0x98, 0xdd,
+	0xfb, 0x46, 0xad, 0xbc, 0x93, 0x18, 0xe9, 0xd1, 0xfd, 0x7e, 0xc9, 0x1e, 0xa9, 0xb5, 0x5a, 0x79,
+	0xc7, 0x1a, 0x38, 0xee, 0x79, 0x50, 0xce, 0x23, 0x3d, 0x39, 0x81, 0x91, 0x52, 0xc6, 0x37, 0xe1,
+	0xa8, 0x33, 0xe2, 0x64, 0xa3, 0x68, 0x68, 0xa5, 0xdb, 0xc4, 0xb4, 0x5d, 0xd3, 0xb1, 0x1e, 0x62,
+	0x02, 0x92, 0x6d, 0xa1, 0xde, 0x21, 0x1b, 0x6b, 0x94, 0x8d, 0xfb, 0xa7, 0x6f, 0x43, 0xbc, 0x53,
+	0x54, 0x82, 0x8a, 0x9a, 0xf4, 0x5c, 0x93, 0xdf, 0x21, 0x1b, 0x86, 0x4b, 0x00, 0x5d, 0x03, 0x02,
+	0xd2, 0xd0, 0xdd, 0x36, 0xb9, 0x05, 0x18, 0xb1, 0xdd, 0x4a, 0x9d, 0x98, 0xfa, 0x8e, 0xdd, 0xdb,
+	0xc9, 0x1e, 0xb5, 0x0c, 0x4a, 0x98, 0xf3, 0x48, 0x16, 0x0b, 0xef, 0xe8, 0x6b, 0x10, 0x6b, 0x91,
+	0x70, 0xcc, 0xd3, 0x05, 0x77, 0x71, 0x34, 0xc3, 0xd5, 0x42, 0x50, 0x8a, 0xea, 0x2e, 0x51, 0xf3,
+	0xd0, 0x6f, 0x2a, 0x55, 0xa2, 0xd5, 0xcd, 0xc4, 0xf1, 0x14, 0x9a, 0x1c, 0xc8, 0x1f, 0xff, 0x71,
+	0x03, 0x05, 0x67, 0xa6, 0xa7, 0xa7, 0xa7, 0x2d, 0x2d, 0xfb, 0xce, 0x23, 0x66, 0x60, 0x43, 0x53,
+	0x81, 0xc4, 0xe3, 0xff, 0x7c, 0x5a, 0xb2, 0x89, 0xf1, 0x12, 0xf0, 0x05, 0xb5, 0xb8, 0x51, 0xdf,
+	0xdc, 0x24, 0xba, 0xa2, 0x6e, 0x25, 0xc6, 0x7b, 0x34, 0x24, 0x24, 0x0d, 0x31, 0xfa, 0xbc, 0x4d,
+	0x8e, 0xaf, 0xc3, 0x00, 0xe3, 0xb5, 0x9b, 0x31, 0x41, 0xf9, 0x27, 0xda, 0xf8, 0x19, 0x43, 0xb3,
+	0x6b, 0xb9, 0x77, 0x18, 0x92, 0x62, 0x8c, 0x9b, 0x37, 0x64, 0x19, 0xe2, 0xf6, 0x44, 0xa8, 0x52,
+	0xff, 0xc6, 0xaa, 0xd1, 0xc9, 0x1e, 0x35, 0xea, 0x97, 0x04, 0xce, 0x70, 0xc3, 0xa6, 0xc7, 0xdf,
+	0x80, 0x01, 0xc6, 0x6c, 0x57, 0x29, 0x4d, 0x05, 0x5c, 0xd8, 0xe7, 0xea, 0xda, 0xee, 0x58, 0x15,
+	0xfa, 0xa5, 0x58, 0xd5, 0xf5, 0x0e, 0xbf, 0x06, 0x43, 0x56, 0xe7, 0xcb, 0x25, 0xb3, 0x58, 0xaa,
+	0xd4, 0x0d, 0x93, 0xe8, 0x89, 0xd3, 0x3d, 0xaa, 0x18, 0x96, 0x06, 0x39, 0xf9, 0x32, 0xa3, 0xc6,
+	0xff, 0x1f, 0x8c, 0x96, 0xb5, 0xa2, 0xaa, 0xb1, 0x29, 0xe4, 0x96, 0x73, 0xa6, 0xa7, 0x9c, 0xe1,
+	0xb2, 0x76, 0x53, 0xa3, 0x73, 0xa8, 0x29, 0x2c, 0x99, 0x87, 0x11, 0xaf, 0x45, 0x1f, 0x0b, 0xe0,
+	0xbf, 0x4d, 0x76, 0xa8, 0x1b, 0x18, 0x91, 0xac, 0x7f, 0xf1, 0x08, 0x04, 0xef, 0xc8, 0x95, 0x3a,
+	0x61, 0xc0, 0x9c, 0xc4, 0x1e, 0x16, 0x7d, 0x17, 0xd1, 0xe2, 0xbf, 0x41, 0x1f, 0x37, 0xd0, 0x0f,
+	0x11, 0x4c, 0xc0, 0xe8, 0x75, 0x4d, 0x2e, 0xa7, 0xf2, 0xb4, 0x2f, 0x14, 0x75, 0x2b, 0x65, 0x85,
+	0x57, 0xba, 0x56, 0xc1, 0xc1, 0xac, 0x38, 0x2b, 0xce, 0xc1, 0x34, 0x9c, 0x90, 0xd8, 0x52, 0x76,
+	0x5e, 0xe2, 0x56, 0x3f, 0xe5, 0x5e, 0x8d, 0xf0, 0xd0, 0xbc, 0xed, 0x79, 0x8b, 0xd9, 0x9c, 0x98,
+	0x9d, 0x81, 0x38, 0x84, 0xd7, 0x48, 0xa9, 0x4e, 0x5d, 0x9f, 0x60, 0x76, 0x56, 0xcc, 0x5e, 0x84,
+	0x24, 0xc4, 0x57, 0x75, 0xcd, 0xd4, 0x4a, 0x5a, 0x25, 0xf5, 0x56, 0x6d, 0x4b, 0x97, 0xcb, 0xc4,
+	0xc0, 0xc1, 0xec, 0x82, 0x98, 0xcb, 0xc1, 0x69, 0x38, 0x72, 0x43, 0x31, 0x4a, 0xa4, 0x52, 0x91,
+	0x55, 0xa2, 0xd5, 0x8d, 0x94, 0xed, 0x2d, 0x46, 0x73, 0x73, 0x62, 0xee, 0xa2, 0x98, 0x5b, 0x10,
+	0x67, 0x72, 0xf9, 0x33, 0x80, 0x5d, 0xbe, 0x9e, 0xed, 0xd1, 0x0f, 0x3d, 0x6e, 0x20, 0x9f, 0xa5,
+	0x1e, 0x56, 0xb8, 0x90, 0x13, 0x67, 0xf2, 0x27, 0x61, 0x90, 0xbb, 0x1a, 0x6e, 0x92, 0xfe, 0x27,
+	0x0d, 0x14, 0xb2, 0x48, 0x2e, 0x88, 0x17, 0xf3, 0xa7, 0x00, 0x2c, 0x83, 0xed, 0x8a, 0x09, 0x86,
+	0x9e, 0x34, 0xd0, 0x20, 0x8d, 0x07, 0xe6, 0xc4, 0xb9, 0xdc, 0x2f, 0x1b, 0x08, 0xe5, 0x53, 0x10,
+	0xb5, 0x0c, 0x9a, 0x4d, 0x15, 0x7f, 0xdc, 0x40, 0x23, 0x4f, 0x1a, 0x68, 0xd8, 0xa2, 0xca, 0x4d,
+	0x8b, 0xb9, 0x6c, 0xfe, 0x0c, 0x08, 0x77, 0x6d, 0xfb, 0xe1, 0x26, 0x1b, 0x7b, 0xd2, 0x40, 0xa3,
+	0x94, 0x6c, 0x46, 0xcc, 0xcd, 0xe6, 0x27, 0x61, 0xd8, 0xad, 0xf2, 0x6e, 0xca, 0xe4, 0x93, 0x06,
+	0x3a, 0x4a, 0x29, 0xe7, 0xc5, 0xdc, 0x85, 0x7c, 0xda, 0x51, 0x2b, 0x17, 0xcd, 0xf8, 0x93, 0x06,
+	0x3a, 0xb1, 0x4b, 0x35, 0x5b, 0x9c, 0xa1, 0x85, 0x3a, 0x4a, 0xe2, 0x26, 0x3b, 0xf9, 0xa4, 0x81,
+	0x52, 0x94, 0x6c, 0x46, 0x9c, 0x99, 0xcd, 0x4f, 0xc3, 0x28, 0x9f, 0x5e, 0xcd, 0xe9, 0xc6, 0x88,
+	0x47, 0x1f, 0x37, 0xd0, 0x69, 0x1e, 0x02, 0x9d, 0xda, 0x6d, 0xa0, 0xd0, 0xcc, 0xbc, 0x98, 0x9a,
+	0xb9, 0xb0, 0x12, 0x08, 0x23, 0xc1, 0xb7, 0x12, 0x08, 0x87, 0x84, 0x7e, 0x86, 0x71, 0xac, 0x04,
+	0xc2, 0xc3, 0xc2, 0xc8, 0x4a, 0x20, 0x3c, 0x2a, 0x8c, 0xad, 0x04, 0xc2, 0x47, 0x85, 0xe4, 0x4a,
+	0x20, 0x7c, 0x42, 0x18, 0x5f, 0x09, 0x84, 0x53, 0xc2, 0xc9, 0x95, 0x40, 0xf8, 0x94, 0x70, 0x3a,
+	0xfd, 0xcf, 0xfc, 0x70, 0x9a, 0x7a, 0xa6, 0x96, 0xd2, 0x30, 0xef, 0xf4, 0x1d, 0xc5, 0xdc, 0xbe,
+	0xcc, 0x2c, 0xdf, 0x1b, 0xee, 0x98, 0x22, 0x4a, 0xb5, 0xae, 0x4a, 0xcc, 0x6d, 0x8d, 0xc1, 0x22,
+	0x83, 0x1d, 0xeb, 0x54, 0xc1, 0x34, 0x6b, 0x37, 0x28, 0x81, 0x04, 0xdb, 0xce, 0xff, 0xf8, 0x22,
+	0x04, 0xac, 0x70, 0x8e, 0x87, 0x09, 0xed, 0xc6, 0xd2, 0x0a, 0x31, 0x6f, 0xc8, 0x66, 0x69, 0x9b,
+	0xe8, 0xcc, 0xc8, 0x50, 0xc4, 0x97, 0x72, 0xe0, 0x3c, 0xc4, 0xe5, 0xba, 0xa9, 0x31, 0x90, 0xdb,
+	0xf6, 0x40, 0x03, 0x3d, 0xa3, 0x8d, 0x21, 0x8b, 0xa1, 0xa0, 0x19, 0xa6, 0xed, 0x89, 0xe6, 0x20,
+	0xd6, 0xc2, 0x1e, 0xa4, 0x0e, 0xec, 0x80, 0xed, 0xc0, 0x06, 0x74, 0xdf, 0x36, 0x45, 0xd4, 0xb6,
+	0x5d, 0x3c, 0x85, 0xa6, 0x17, 0xd4, 0xc2, 0x1b, 0xea, 0x59, 0xb4, 0xed, 0x17, 0xb9, 0x4a, 0x5f,
+	0x0c, 0x7f, 0x7e, 0x89, 0x82, 0xb2, 0x33, 0xd6, 0x3c, 0x72, 0xcb, 0x62, 0xa0, 0xa8, 0x41, 0x07,
+	0xdf, 0x5a, 0x1f, 0xfc, 0xd6, 0xe0, 0xcf, 0x8a, 0x73, 0xe2, 0xfc, 0x4a, 0x20, 0xec, 0x17, 0x02,
+	0xe9, 0xff, 0x16, 0x80, 0xa1, 0xb6, 0xa1, 0x71, 0x7a, 0x12, 0x1d, 0xb8, 0x27, 0xdb, 0xc6, 0xcf,
+	0x77, 0x90, 0xf1, 0xdb, 0x80, 0x98, 0x2b, 0xd4, 0x34, 0x12, 0x7e, 0xea, 0xe6, 0xbe, 0xec, 0xed,
+	0xfd, 0x38, 0x53, 0xc6, 0x9a, 0x47, 0xef, 0x10, 0x65, 0x6b, 0xdb, 0xf4, 0x82, 0xdd, 0x13, 0x48,
+	0x8a, 0x36, 0x43, 0x56, 0xc3, 0x7b, 0xa4, 0x83, 0xcf, 0x36, 0xd2, 0xa1, 0x67, 0x18, 0xe9, 0xfe,
+	0x83, 0x8e, 0x34, 0xd6, 0x41, 0x90, 0x79, 0x60, 0x67, 0xef, 0x1b, 0x71, 0xf4, 0x6a, 0xe9, 0x99,
+	0x43, 0x44, 0x0e, 0x78, 0x0f, 0xc9, 0xad, 0xaf, 0x29, 0xa6, 0x9a, 0x13, 0xb3, 0x14, 0x53, 0xbd,
+	0xd8, 0x6b, 0x86, 0x05, 0x39, 0x22, 0x13, 0xa4, 0x70, 0x2a, 0x03, 0x4c, 0xd2, 0x7f, 0x85, 0x20,
+	0xee, 0xcc, 0x30, 0x07, 0x84, 0xfc, 0xed, 0xcc, 0xb1, 0x6b, 0x30, 0x48, 0x5d, 0xba, 0x26, 0x4c,
+	0xea, 0xf7, 0xf4, 0xb1, 0x99, 0xdf, 0x47, 0x6b, 0x6d, 0xd7, 0x58, 0x1a, 0xd0, 0xdd, 0x8f, 0x54,
+	0xe5, 0x68, 0xa7, 0xa4, 0xff, 0x37, 0x82, 0x31, 0xa7, 0x81, 0x97, 0x19, 0x31, 0x5f, 0x01, 0x7f,
+	0x6b, 0xaa, 0x74, 0x84, 0x35, 0x93, 0xd5, 0xb5, 0x68, 0x87, 0x61, 0xbc, 0xb5, 0x93, 0xdd, 0x5b,
+	0xdb, 0x5a, 0x7d, 0x3e, 0x21, 0x86, 0xf5, 0xce, 0x4f, 0xae, 0xf6, 0x13, 0x18, 0x71, 0x9a, 0xbf,
+	0x5c, 0x37, 0x4c, 0xad, 0x4a, 0x1f, 0xf1, 0x0d, 0x88, 0xd8, 0x9d, 0xbd, 0x79, 0x00, 0xcc, 0x29,
+	0xf6, 0xf0, 0x7e, 0x90, 0xf2, 0x3d, 0x78, 0x84, 0x90, 0x14, 0xe6, 0xbd, 0xbe, 0x99, 0xfe, 0x4f,
+	0x03, 0x10, 0x71, 0xca, 0xc1, 0xef, 0x42, 0xcc, 0xa0, 0x73, 0xb8, 0x48, 0x09, 0xb8, 0xfc, 0xf9,
+	0x83, 0xe8, 0x40, 0xd3, 0xe2, 0x59, 0xea, 0xca, 0xa4, 0xb1, 0x9a, 0xcb, 0x96, 0x77, 0x60, 0xf7,
+	0x1d, 0x15, 0xcf, 0x16, 0x95, 0x8b, 0x07, 0x15, 0x6f, 0xcf, 0x96, 0x42, 0x9f, 0x34, 0x60, 0x4b,
+	0x64, 0x45, 0x98, 0x70, 0xa4, 0x6d, 0x70, 0x78, 0x49, 0x07, 0xdb, 0xba, 0xea, 0x32, 0xef, 0x0a,
+	0x7d, 0xd2, 0x70, 0xb9, 0xe5, 0x0d, 0x2b, 0xd5, 0x80, 0xe1, 0x12, 0x1d, 0x21, 0x56, 0x58, 0x91,
+	0x6d, 0xe4, 0xf2, 0xb5, 0xee, 0xcb, 0x07, 0x2d, 0xd3, 0x35, 0xd8, 0x0e, 0xc8, 0x1e, 0x2f, 0x35,
+	0x5f, 0xb2, 0x71, 0x5d, 0xfc, 0x2c, 0xf2, 0x71, 0x03, 0x0d, 0x40, 0x14, 0x42, 0xf4, 0xad, 0x81,
+	0xd1, 0xdc, 0x27, 0x0d, 0xf4, 0x5f, 0x22, 0xf0, 0x87, 0x08, 0x02, 0x96, 0x9c, 0xa9, 0xef, 0x20,
+	0xb8, 0x0f, 0xa3, 0xad, 0x23, 0x9a, 0x0b, 0xb1, 0xb1, 0x81, 0x64, 0xfb, 0x60, 0xe4, 0xc2, 0x76,
+	0xb7, 0xc2, 0x64, 0x97, 0x5e, 0xcc, 0x0d, 0xb1, 0xfe, 0x48, 0xd9, 0xcd, 0x87, 0x13, 0x9e, 0x2d,
+	0xcf, 0x85, 0x58, 0x1b, 0x70, 0xff, 0x5b, 0xea, 0x6d, 0x55, 0xbb, 0xab, 0x42, 0x23, 0x0c, 0xd0,
+	0xdc, 0xed, 0x93, 0xfe, 0x34, 0x0c, 0x67, 0x71, 0xc2, 0x5d, 0xaf, 0x8c, 0x4b, 0x2b, 0x93, 0xd1,
+	0xc2, 0xfa, 0xfa, 0x6a, 0x8a, 0x69, 0x5d, 0xce, 0x97, 0x42, 0xf0, 0x52, 0x1b, 0xb1, 0xa5, 0xca,
+	0x19, 0x86, 0x59, 0x25, 0xa3, 0x96, 0xba, 0xa7, 0x18, 0xf2, 0x05, 0xe3, 0x78, 0xd4, 0x83, 0x50,
+	0x36, 0xb7, 0x93, 0x01, 0x8b, 0x0c, 0xce, 0xe0, 0xb1, 0xce, 0xef, 0x3a, 0xd9, 0x22, 0xf7, 0x92,
+	0x40, 0xe5, 0x48, 0xd6, 0xff, 0xf0, 0x06, 0x9c, 0x80, 0xa3, 0x2d, 0x84, 0xee, 0x35, 0x54, 0x40,
+	0xf8, 0x64, 0xd7, 0x8f, 0xef, 0x4e, 0x7f, 0x3d, 0x63, 0xfd, 0x93, 0x8c, 0xb2, 0xd5, 0x34, 0x65,
+	0x2d, 0x91, 0x70, 0x73, 0x2f, 0x81, 0xa7, 0x7b, 0x0a, 0xe4, 0xee, 0x64, 0xb2, 0x9f, 0xc7, 0x20,
+	0x70, 0xbd, 0xa7, 0xbc, 0x04, 0xc2, 0xdd, 0x3f, 0x26, 0x63, 0xae, 0x8a, 0x19, 0x69, 0x5f, 0x02,
+	0xc1, 0x39, 0x9c, 0x6c, 0x9d, 0x0b, 0xbd, 0x47, 0xe3, 0xe5, 0x0e, 0xf2, 0xae, 0xe3, 0x91, 0xc2,
+	0x09, 0x4f, 0xd2, 0xe6, 0x88, 0xbc, 0x84, 0x8f, 0x7a, 0x51, 0x74, 0x8e, 0xc9, 0x2b, 0xf8, 0x6c,
+	0x1b, 0x61, 0xeb, 0x9a, 0x93, 0xe1, 0xcb, 0x27, 0x7b, 0x4a, 0x0e, 0xd8, 0xb3, 0x39, 0x65, 0xad,
+	0xf3, 0x7b, 0x73, 0xd3, 0x3d, 0x0b, 0x0f, 0x6e, 0x5a, 0xc9, 0x25, 0x2c, 0xee, 0xc1, 0x6d, 0x85,
+	0x57, 0x4d, 0xf6, 0x78, 0x93, 0x9d, 0xc7, 0x5d, 0x30, 0x8b, 0x4f, 0x7a, 0xea, 0x54, 0xef, 0xae,
+	0x9e, 0xee, 0xc6, 0xd5, 0xb5, 0xc7, 0x5f, 0xc2, 0x13, 0xbd, 0x38, 0x9a, 0x1d, 0x9f, 0xc1, 0xa9,
+	0x1e, 0x84, 0x9d, 0xfd, 0xbf, 0x82, 0x17, 0xbc, 0xe9, 0x3d, 0xd7, 0xc4, 0x8c, 0x43, 0x54, 0xd2,
+	0xca, 0xc4, 0xea, 0x4f, 0x1e, 0xbc, 0x2e, 0x6b, 0x65, 0x02, 0xe7, 0xf0, 0x09, 0x0f, 0xb3, 0xe1,
+	0x74, 0xea, 0x66, 0x32, 0x46, 0x6d, 0x5a, 0x8a, 0x99, 0xba, 0xfc, 0x09, 0x08, 0xb9, 0x36, 0xa9,
+	0xec, 0x4c, 0x88, 0x7e, 0xbe, 0x21, 0xcd, 0xb3, 0x21, 0x7e, 0x15, 0x87, 0xe1, 0x36, 0xcf, 0x8b,
+	0x2e, 0x69, 0xdd, 0xc1, 0x6c, 0xf4, 0xdb, 0x03, 0xb3, 0x7d, 0x2f, 0x18, 0xcc, 0xf6, 0xff, 0x36,
+	0xc1, 0xec, 0xc0, 0x73, 0x01, 0xb3, 0x6f, 0xc2, 0x58, 0x55, 0xbe, 0x57, 0x6c, 0xed, 0xc3, 0xa2,
+	0xa1, 0x7c, 0x93, 0x85, 0x16, 0x03, 0xf9, 0xb1, 0x1f, 0x37, 0x90, 0x6f, 0xde, 0xc6, 0xdb, 0xa2,
+	0x34, 0x4a, 0x98, 0xf2, 0x25, 0x7e, 0x57, 0x1a, 0xa9, 0xca, 0xf7, 0x24, 0x77, 0x97, 0xad, 0x29,
+	0xdf, 0x24, 0x78, 0xa5, 0x1d, 0x37, 0x0b, 0xed, 0x13, 0x37, 0xa3, 0xce, 0x5a, 0x2b, 0x6a, 0xf6,
+	0xbb, 0x74, 0x27, 0xad, 0xa6, 0x13, 0xc3, 0x50, 0x34, 0x95, 0xfb, 0xea, 0x3c, 0xec, 0x38, 0xdb,
+	0xb1, 0xde, 0x37, 0x73, 0xbd, 0x32, 0xcb, 0x4d, 0x2e, 0x97, 0xf0, 0xb8, 0x4b, 0x18, 0x4b, 0x94,
+	0xc1, 0x4f, 0x02, 0x30, 0xc0, 0x55, 0x84, 0xe8, 0xba, 0xa6, 0x5b, 0xe1, 0x88, 0x35, 0xa4, 0xd7,
+	0xf7, 0xe9, 0x4d, 0x78, 0x68, 0x42, 0x86, 0x2d, 0xca, 0x57, 0xa8, 0x38, 0xb6, 0x4f, 0xf5, 0x5f,
+	0xfd, 0xf6, 0x46, 0xe8, 0xe8, 0x47, 0x68, 0x38, 0x1d, 0x9f, 0x1a, 0xca, 0x0f, 0x58, 0xe1, 0xc8,
+	0x9c, 0x38, 0x33, 0x3d, 0x7d, 0x6e, 0x6e, 0x61, 0xa1, 0xb9, 0x6f, 0x65, 0xfd, 0x37, 0xf8, 0x11,
+	0x8a, 0x4e, 0x45, 0xf4, 0xfe, 0xc4, 0x83, 0x07, 0x81, 0xef, 0x22, 0xba, 0x59, 0xfa, 0x17, 0xe8,
+	0x83, 0x47, 0xe8, 0x31, 0xc2, 0x7f, 0x8e, 0x7e, 0xde, 0x40, 0xff, 0x01, 0x51, 0xfb, 0x45, 0x4b,
+	0x48, 0x59, 0x7a, 0x9f, 0xa2, 0x88, 0x57, 0x8a, 0x8a, 0x4c, 0x69, 0x7a, 0x6a, 0x83, 0x98, 0x77,
+	0x09, 0x51, 0x53, 0x33, 0xd3, 0xd3, 0x29, 0x59, 0x2d, 0xa7, 0xe6, 0x16, 0x16, 0x32, 0xa9, 0x2b,
+	0x5b, 0x99, 0xd4, 0xdb, 0x94, 0x6e, 0x36, 0xf5, 0x6a, 0x6a, 0xf6, 0xde, 0x3d, 0x8b, 0x52, 0xae,
+	0x54, 0x52, 0xb3, 0xd3, 0xd3, 0xe7, 0x66, 0x17, 0x16, 0x52, 0xc4, 0x91, 0x67, 0x88, 0xa9, 0xb9,
+	0xd4, 0xab, 0xa9, 0xb9, 0x26, 0xcd, 0x1c, 0xab, 0xa7, 0x9b, 0x26, 0x93, 0xfa, 0x1d, 0xad, 0x9e,
+	0x2a, 0xc9, 0x6a, 0x4a, 0xae, 0x18, 0x5a, 0x8a, 0xed, 0x29, 0xee, 0xa4, 0x64, 0x35, 0x45, 0xee,
+	0xc9, 0x25, 0xd3, 0x45, 0x9a, 0xaa, 0x28, 0xb7, 0x49, 0x6a, 0x76, 0x7a, 0x36, 0x63, 0x35, 0x65,
+	0xe4, 0x83, 0x47, 0x48, 0xc0, 0x83, 0xbb, 0x0d, 0x04, 0xac, 0x05, 0x96, 0xa9, 0xb2, 0x3e, 0xc0,
+	0x07, 0x8f, 0x50, 0x08, 0x07, 0x7e, 0xd4, 0x40, 0x7d, 0xcd, 0xdd, 0x3b, 0xda, 0xfa, 0xa5, 0x0f,
+	0x1e, 0xa1, 0x57, 0x93, 0x5f, 0xfe, 0x79, 0x03, 0x5d, 0x58, 0x33, 0x75, 0x45, 0xdd, 0x4a, 0xe9,
+	0xc4, 0x1a, 0x48, 0xa2, 0x9a, 0xd6, 0x03, 0x2b, 0xc9, 0x9e, 0xe0, 0x62, 0xaa, 0x6e, 0xd4, 0xe5,
+	0x4a, 0x65, 0x27, 0x25, 0xa7, 0xb6, 0xcd, 0x6a, 0x85, 0x56, 0xc1, 0x92, 0x72, 0xe2, 0x83, 0x47,
+	0xe8, 0x68, 0x72, 0x6c, 0xb7, 0x81, 0x86, 0x59, 0xc1, 0x8e, 0xb1, 0xcc, 0x6b, 0xe5, 0x1d, 0x8b,
+	0x62, 0xec, 0x83, 0x47, 0x68, 0x38, 0x19, 0xff, 0xc1, 0x23, 0x34, 0x20, 0x1b, 0x25, 0x45, 0xb1,
+	0xd3, 0xfa, 0x9c, 0xda, 0x25, 0xad, 0xda, 0x05, 0x5c, 0x8f, 0x74, 0x0f, 0x34, 0x56, 0x72, 0x8d,
+	0x38, 0xde, 0x84, 0xa1, 0x5b, 0xf2, 0x1d, 0xd9, 0x28, 0xe9, 0x4a, 0xcd, 0xa4, 0x19, 0x87, 0x34,
+	0xbd, 0x22, 0x9a, 0x9b, 0xee, 0x35, 0x63, 0x57, 0xe4, 0x3b, 0xf2, 0x1a, 0x65, 0x71, 0xe9, 0x44,
+	0xf4, 0xd3, 0xfb, 0x74, 0x1f, 0xe3, 0x33, 0xab, 0x94, 0xc1, 0xa6, 0xd4, 0x6b, 0xea, 0xa6, 0x86,
+	0xdf, 0x01, 0xff, 0xad, 0xbb, 0x26, 0xdd, 0xaf, 0xdb, 0x5f, 0x68, 0x72, 0xf2, 0xe1, 0x7d, 0x8b,
+	0xe3, 0xd3, 0xfb, 0x54, 0x9e, 0x63, 0x25, 0x90, 0xcb, 0x4a, 0x58, 0xdf, 0xf1, 0x6b, 0x10, 0x53,
+	0xca, 0x15, 0x52, 0xb4, 0x91, 0xf7, 0xe8, 0x1e, 0xc8, 0xfb, 0x4f, 0xfe, 0x15, 0x96, 0xa2, 0x16,
+	0xc7, 0x3a, 0x47, 0xdf, 0x5f, 0x85, 0x63, 0x36, 0x5e, 0x60, 0x6f, 0x29, 0x10, 0x06, 0x5b, 0xcb,
+	0x5b, 0xc4, 0x60, 0xdb, 0x64, 0x52, 0x82, 0x93, 0x70, 0x18, 0x8d, 0x76, 0xde, 0xaa, 0xf5, 0x1d,
+	0xdf, 0xec, 0x96, 0xe7, 0xd1, 0x63, 0xc3, 0x2c, 0xef, 0x4b, 0x58, 0xfe, 0xbb, 0x67, 0x96, 0xc7,
+	0x6a, 0xd7, 0x2c, 0x0f, 0x61, 0x4f, 0x81, 0x9e, 0x39, 0x1e, 0xb8, 0x0a, 0xa7, 0xec, 0xfd, 0x20,
+	0x53, 0x57, 0x4a, 0x66, 0xd1, 0x50, 0x15, 0x06, 0x8d, 0x38, 0xe9, 0x1b, 0xa4, 0x74, 0x9b, 0x6f,
+	0x54, 0x79, 0x8b, 0x0f, 0x3b, 0x5b, 0x68, 0x48, 0x1a, 0xe7, 0x3b, 0x46, 0x54, 0xd6, 0x9a, 0xaa,
+	0x58, 0x9e, 0x14, 0xb3, 0xa8, 0xcb, 0x96, 0x1c, 0xfc, 0x55, 0xc0, 0x72, 0xb9, 0xac, 0xb0, 0x6c,
+	0x84, 0x62, 0x59, 0xab, 0xca, 0x8a, 0x6a, 0x24, 0x86, 0xa9, 0xf4, 0x13, 0x6d, 0xd2, 0x2f, 0xd3,
+	0xaf, 0x37, 0xe5, 0x2a, 0xb9, 0xae, 0x18, 0x66, 0x4b, 0x31, 0xf1, 0xa6, 0x10, 0x46, 0x65, 0x24,
+	0x5f, 0x83, 0x78, 0x87, 0xb5, 0x72, 0x03, 0xec, 0x03, 0x7b, 0x01, 0xec, 0x95, 0x8f, 0x1b, 0x68,
+	0x1b, 0x8e, 0xc1, 0x20, 0xab, 0xaf, 0x83, 0x6a, 0x3b, 0x59, 0x6c, 0x73, 0x30, 0x09, 0x29, 0x36,
+	0xa5, 0xeb, 0x3a, 0x49, 0xb5, 0x29, 0x9e, 0x4d, 0x1e, 0xb8, 0x28, 0x66, 0x67, 0x60, 0xa2, 0x1b,
+	0x46, 0x1e, 0x9a, 0x17, 0x2f, 0x88, 0xd9, 0x6c, 0x7e, 0xaa, 0x5b, 0xce, 0x4b, 0xdc, 0x85, 0x6d,
+	0x67, 0xe7, 0x29, 0xb6, 0xfd, 0x3a, 0x9c, 0xea, 0x35, 0x38, 0xee, 0x0c, 0x1b, 0xcc, 0xa1, 0xe2,
+	0x38, 0x95, 0x70, 0x51, 0xcc, 0x2e, 0x58, 0x12, 0x1c, 0x84, 0x38, 0x2e, 0xe0, 0xf4, 0x83, 0x18,
+	0x8c, 0xf0, 0xdd, 0x45, 0xd9, 0x20, 0xe5, 0xe5, 0x6d, 0xb9, 0x52, 0x21, 0xea, 0x16, 0xc1, 0x5f,
+	0x87, 0x09, 0x7b, 0x8e, 0xdf, 0x32, 0x8a, 0x25, 0xfb, 0xbd, 0x3b, 0x9d, 0xb3, 0x77, 0xe6, 0xc7,
+	0x71, 0xce, 0xbe, 0x62, 0x38, 0x42, 0x5d, 0xf9, 0x9a, 0x06, 0x8c, 0x75, 0x13, 0xcb, 0x42, 0xed,
+	0x99, 0xbd, 0x8c, 0x0a, 0xb3, 0x18, 0x8e, 0x6c, 0xd7, 0x5e, 0x5b, 0x9f, 0x74, 0xe4, 0x96, 0x67,
+	0xa1, 0x5b, 0x70, 0xda, 0x6e, 0x53, 0x49, 0xae, 0x99, 0xa5, 0x6d, 0xd9, 0xbb, 0x06, 0xc1, 0x9e,
+	0xc9, 0x12, 0x27, 0xb9, 0x8c, 0x65, 0x26, 0xc2, 0xab, 0xa0, 0x6f, 0xc2, 0xf1, 0x9e, 0x05, 0x84,
+	0xf6, 0xb6, 0x9b, 0xed, 0xd2, 0x5d, 0xed, 0x43, 0x52, 0xb2, 0xd4, 0xbd, 0x6c, 0x05, 0xce, 0xd8,
+	0x8d, 0x34, 0x49, 0xb5, 0xa6, 0xe9, 0xb2, 0xbe, 0x53, 0xdc, 0xa8, 0x68, 0xa5, 0xdb, 0x8a, 0xba,
+	0xe5, 0xae, 0x44, 0xb8, 0xe7, 0x36, 0x7d, 0x9a, 0x0b, 0x59, 0xb7, 0x65, 0xe4, 0xb9, 0x08, 0x57,
+	0x51, 0x75, 0x18, 0x6b, 0x16, 0x51, 0x37, 0x88, 0xee, 0x94, 0xc3, 0x57, 0x86, 0xb9, 0x5e, 0x2d,
+	0x74, 0x24, 0xbf, 0x65, 0x10, 0xdd, 0x96, 0xee, 0x6a, 0xa6, 0x4f, 0x3a, 0x62, 0x7a, 0x91, 0xe0,
+	0xb7, 0xe1, 0x98, 0xdd, 0xc2, 0xaa, 0x62, 0x2a, 0x5b, 0x2c, 0x51, 0xc1, 0x20, 0xa6, 0xb5, 0x68,
+	0x1a, 0xbd, 0xf2, 0xef, 0x0a, 0x7e, 0xe9, 0x28, 0x67, 0xbd, 0xe1, 0x70, 0xae, 0x71, 0x46, 0xfc,
+	0xf7, 0xe1, 0xa8, 0xa5, 0x7d, 0x25, 0x45, 0xab, 0x1b, 0xac, 0x39, 0x4d, 0xf1, 0x89, 0xd8, 0xbe,
+	0x91, 0xb2, 0xe3, 0x0f, 0xef, 0x77, 0x97, 0x53, 0xf0, 0x4b, 0x63, 0xce, 0x47, 0xab, 0x55, 0xcd,
+	0x7a, 0xe0, 0x05, 0x88, 0xa9, 0x5a, 0x73, 0xc2, 0xf4, 0xca, 0xd5, 0x2b, 0x04, 0xa4, 0xa8, 0xaa,
+	0x35, 0xb5, 0x75, 0x0d, 0x92, 0x72, 0xe5, 0xae, 0xbc, 0x63, 0x14, 0xb9, 0xfd, 0x76, 0x2b, 0x57,
+	0xcf, 0x84, 0x8c, 0x80, 0x34, 0xc6, 0x38, 0xaf, 0x50, 0x46, 0x97, 0xb6, 0x5a, 0x26, 0xa0, 0x55,
+	0x68, 0xc7, 0x9c, 0xee, 0xb5, 0xd0, 0x14, 0x02, 0xd2, 0x71, 0xb7, 0xe4, 0xf6, 0x09, 0x8d, 0xdf,
+	0x82, 0x88, 0x5e, 0xaf, 0x90, 0x62, 0x45, 0x31, 0x4c, 0xbe, 0xa4, 0xec, 0x17, 0xc9, 0x73, 0x84,
+	0x48, 0xf5, 0x0a, 0x5d, 0x0f, 0xa4, 0xb0, 0xce, 0xff, 0xcb, 0x67, 0x61, 0xbc, 0x8b, 0x65, 0xe9,
+	0xba, 0xed, 0x38, 0x0f, 0xa7, 0x7a, 0xa9, 0xab, 0x9b, 0x2f, 0xe8, 0xce, 0x6e, 0xfc, 0x32, 0x9c,
+	0xee, 0xa9, 0x62, 0xee, 0xd4, 0xc8, 0x30, 0xcf, 0x74, 0xf4, 0x5f, 0x14, 0xa9, 0x15, 0xce, 0x2f,
+	0x40, 0xaa, 0xeb, 0x2c, 0x71, 0x6f, 0x6f, 0x46, 0x9f, 0x34, 0x10, 0x50, 0x03, 0x9e, 0x15, 0xb3,
+	0x6c, 0x7b, 0x73, 0x12, 0x84, 0x66, 0x3d, 0x39, 0xe9, 0xc8, 0xe3, 0x06, 0x1a, 0x7c, 0xd2, 0x40,
+	0x03, 0xbb, 0x0d, 0x14, 0xce, 0xce, 0x8a, 0x74, 0xc1, 0x70, 0x36, 0x06, 0xdd, 0x29, 0x92, 0x20,
+	0x44, 0x9d, 0x74, 0x68, 0x6b, 0x09, 0xf8, 0xb3, 0x08, 0x0c, 0xb4, 0x74, 0x28, 0x5e, 0x84, 0x70,
+	0x95, 0x98, 0x72, 0x59, 0x36, 0xe5, 0x2e, 0x10, 0xf9, 0x0d, 0x62, 0x18, 0xf2, 0x16, 0xb9, 0x41,
+	0x4c, 0x99, 0x02, 0xaa, 0x0e, 0x3d, 0xbe, 0x09, 0x01, 0xcb, 0x63, 0xe6, 0x8b, 0xc3, 0x6c, 0x1b,
+	0x9f, 0xc7, 0x01, 0x9e, 0xd6, 0xc1, 0x5c, 0xab, 0x91, 0x12, 0x8f, 0x6a, 0xa8, 0x9c, 0xc5, 0x3f,
+	0x0e, 0x7f, 0xd2, 0x40, 0xdf, 0x0b, 0xc3, 0x18, 0x04, 0xac, 0xc5, 0x3f, 0x39, 0x04, 0x03, 0x76,
+	0x59, 0x19, 0x55, 0xae, 0x12, 0xf8, 0xf7, 0x08, 0x04, 0x47, 0x44, 0x6a, 0x89, 0xe6, 0x36, 0x4e,
+	0x7d, 0x1f, 0xc1, 0x3f, 0x47, 0x70, 0x16, 0x46, 0x2d, 0x19, 0x19, 0xdb, 0x4b, 0x72, 0x3a, 0x2d,
+	0x17, 0xbf, 0xcc, 0x5e, 0xa5, 0x1c, 0x4e, 0xb8, 0x08, 0xd4, 0xd5, 0xcf, 0xd8, 0x0a, 0xd4, 0x74,
+	0x75, 0x9b, 0x6c, 0x23, 0xcd, 0x85, 0xc7, 0xc5, 0x99, 0x83, 0x13, 0x6e, 0xce, 0x8e, 0xa9, 0x94,
+	0x8b, 0xf3, 0xb9, 0xef, 0xe2, 0xb9, 0x0f, 0xbe, 0x6b, 0xab, 0x53, 0x77, 0xa1, 0x0e, 0x18, 0xa2,
+	0x94, 0x5b, 0x56, 0x77, 0x8a, 0x4a, 0x2d, 0xe7, 0x5f, 0x52, 0x77, 0xe0, 0x3c, 0x4c, 0xd0, 0x77,
+	0x4a, 0xcd, 0xce, 0xe3, 0xb3, 0x94, 0xa4, 0xf9, 0x48, 0x8c, 0x74, 0x4c, 0xf0, 0x4f, 0x85, 0x57,
+	0xf9, 0x13, 0x64, 0xe0, 0x98, 0xcd, 0x50, 0x65, 0x3b, 0x17, 0x1c, 0xdc, 0xb1, 0xcc, 0xa2, 0x91,
+	0x1e, 0x12, 0xfc, 0x53, 0x51, 0x46, 0x9c, 0x5a, 0x23, 0xa6, 0x01, 0x75, 0xf0, 0x2f, 0xad, 0xdd,
+	0x9c, 0x52, 0xa1, 0x02, 0xc3, 0x10, 0x73, 0xca, 0x97, 0x0d, 0x95, 0x55, 0x60, 0x0a, 0x12, 0xec,
+	0xa5, 0xa1, 0xb2, 0xa2, 0x65, 0xa3, 0xa8, 0xd6, 0xab, 0x1b, 0x44, 0x37, 0xd2, 0x83, 0x82, 0x7f,
+	0x0a, 0x96, 0xd6, 0x52, 0x37, 0xd9, 0x33, 0xbc, 0x0c, 0x47, 0x1d, 0x5a, 0xbb, 0x70, 0xeb, 0x7f,
+	0x5a, 0x32, 0xad, 0xe6, 0xd2, 0xda, 0x4d, 0x56, 0xec, 0x2b, 0x10, 0x5a, 0xae, 0x28, 0x44, 0x35,
+	0xa7, 0x72, 0x30, 0x0d, 0xa3, 0x30, 0xe4, 0x94, 0x5c, 0xa2, 0xaf, 0x59, 0xe1, 0xa3, 0x2c, 0x43,
+	0x34, 0xc3, 0xde, 0x15, 0x0d, 0x52, 0x21, 0x25, 0x53, 0xd3, 0xe1, 0x26, 0x08, 0xeb, 0xd7, 0xd7,
+	0x52, 0x57, 0x15, 0x75, 0x8b, 0xe8, 0x35, 0x5d, 0x51, 0x4d, 0x23, 0xbd, 0x08, 0xc7, 0x29, 0xad,
+	0x59, 0x31, 0x8a, 0x9b, 0xcd, 0x0f, 0x76, 0x45, 0x30, 0x38, 0x2e, 0x5a, 0x39, 0x39, 0x78, 0x53,
+	0x33, 0x9b, 0x2e, 0x5b, 0x19, 0xa6, 0x21, 0xc4, 0xfc, 0x45, 0x01, 0xe5, 0x4f, 0xf3, 0xd1, 0x67,
+	0x4e, 0xa8, 0xd3, 0x0e, 0x1a, 0xf1, 0x15, 0xa9, 0x5b, 0x68, 0x08, 0x7e, 0x98, 0x87, 0x18, 0xe3,
+	0x60, 0x98, 0x56, 0x77, 0x3e, 0x0a, 0x7f, 0x35, 0xf9, 0x4e, 0x03, 0xc5, 0xcc, 0x04, 0x94, 0x4f,
+	0xf2, 0x29, 0x49, 0x41, 0xb2, 0x36, 0xe9, 0x22, 0xb8, 0x91, 0x38, 0x01, 0xe5, 0x8f, 0xc1, 0x58,
+	0x93, 0x98, 0x8f, 0xa7, 0x43, 0x3d, 0x05, 0x2e, 0x74, 0xad, 0x5d, 0x72, 0x5b, 0xf9, 0xa7, 0xa0,
+	0x9f, 0xc3, 0x23, 0x02, 0xca, 0x8f, 0xf2, 0x01, 0xe7, 0xc0, 0x8b, 0xe0, 0x4f, 0x07, 0xa8, 0x22,
+	0x9d, 0x85, 0x7e, 0x86, 0x1c, 0x5a, 0x44, 0xe3, 0x7c, 0x02, 0xb8, 0xd0, 0xc5, 0x4c, 0x95, 0x7f,
+	0xf5, 0x4f, 0x23, 0x10, 0x21, 0xf6, 0x66, 0x9d, 0xe8, 0x3b, 0xec, 0x00, 0x92, 0x41, 0xcb, 0x8f,
+	0x53, 0x8e, 0xf7, 0xac, 0xd7, 0x1c, 0xd2, 0x10, 0xfc, 0x69, 0xcb, 0xcf, 0xb6, 0x44, 0x2f, 0x6b,
+	0xda, 0x6d, 0x85, 0x30, 0xd1, 0x7c, 0x78, 0xe9, 0x1b, 0xbb, 0xcb, 0xdc, 0xf5, 0x80, 0x2b, 0xf7,
+	0x6a, 0x8a, 0x4e, 0x2d, 0xa1, 0x80, 0x92, 0xc7, 0xf8, 0xfc, 0x22, 0xce, 0xcb, 0xa2, 0x73, 0xb0,
+	0x31, 0xfd, 0x01, 0x82, 0x78, 0xc7, 0x6a, 0x80, 0x35, 0x08, 0xd2, 0x8c, 0x3e, 0x7e, 0x38, 0x6c,
+	0xf6, 0x69, 0x96, 0x95, 0xb6, 0x24, 0xef, 0xd7, 0xed, 0xff, 0xa6, 0x5b, 0x92, 0xbc, 0x59, 0x39,
+	0xcc, 0xce, 0xa6, 0x7f, 0x15, 0x84, 0x61, 0xb6, 0x3d, 0xc2, 0x66, 0xf9, 0x9a, 0x5e, 0xa2, 0xf6,
+	0xf4, 0x65, 0x88, 0x38, 0xaa, 0x4b, 0x77, 0x75, 0x22, 0x79, 0xe0, 0xf9, 0xb3, 0xbf, 0xa6, 0xfe,
+	0x6a, 0x58, 0xa9, 0xb1, 0x41, 0xc7, 0x22, 0x44, 0x1c, 0x55, 0xe3, 0x38, 0xd5, 0x00, 0x3d, 0x7c,
+	0x37, 0x15, 0x4a, 0xfc, 0xf1, 0x7f, 0x4c, 0x4c, 0x52, 0x6a, 0xd9, 0x60, 0xba, 0x87, 0xbf, 0x01,
+	0x23, 0x5e, 0xbd, 0xc2, 0xbd, 0xaf, 0x64, 0x86, 0x1d, 0x08, 0xcd, 0xd8, 0x07, 0x42, 0x33, 0xeb,
+	0x36, 0x45, 0x7e, 0xc8, 0x12, 0x0a, 0xff, 0x0e, 0xf5, 0xaf, 0x04, 0xc3, 0x0f, 0xfe, 0xc7, 0xb7,
+	0x86, 0xa4, 0xe1, 0xa6, 0x20, 0x87, 0xaa, 0x65, 0x21, 0x80, 0x03, 0x2e, 0x04, 0xaf, 0xc1, 0x90,
+	0x71, 0x9b, 0x36, 0x5b, 0x2b, 0x11, 0xc3, 0xb0, 0x9c, 0xc2, 0x58, 0x4f, 0xbf, 0x7a, 0xd0, 0x22,
+	0x5f, 0x75, 0xa8, 0xf1, 0x55, 0x18, 0xbe, 0x2b, 0x6f, 0x16, 0xdb, 0x85, 0x0c, 0xf4, 0x14, 0x12,
+	0xbf, 0x2b, 0x6f, 0xae, 0x75, 0xc8, 0xd9, 0xd0, 0xcc, 0x0e, 0x39, 0x83, 0xbd, 0xe5, 0x6c, 0x68,
+	0x66, 0xab, 0x9c, 0xc5, 0xdf, 0x43, 0x9f, 0x5f, 0x8a, 0x64, 0xa7, 0xc5, 0x19, 0x31, 0x9b, 0x15,
+	0x17, 0x3e, 0x69, 0xa0, 0xf7, 0xba, 0x2f, 0x4a, 0x67, 0x21, 0xbe, 0xa6, 0xd5, 0xf5, 0x12, 0xe1,
+	0xca, 0x7c, 0x7e, 0x69, 0xed, 0x66, 0x6e, 0xd4, 0x35, 0x0d, 0x5c, 0xc3, 0x0c, 0x2f, 0xc3, 0x50,
+	0x73, 0xc2, 0xa7, 0xac, 0xde, 0x4f, 0x8e, 0x7a, 0x0f, 0x6c, 0xfe, 0x25, 0x18, 0xb1, 0xad, 0x22,
+	0x15, 0xef, 0x76, 0x4d, 0xec, 0x44, 0x12, 0xff, 0xac, 0x38, 0x97, 0x7f, 0x13, 0x06, 0x58, 0x9a,
+	0xbf, 0x4d, 0xf1, 0xfa, 0xe3, 0x06, 0x8a, 0x3d, 0x69, 0xa0, 0x28, 0xf5, 0x0f, 0x72, 0x22, 0x3d,
+	0x3c, 0xf1, 0xc1, 0x23, 0x34, 0x99, 0xfc, 0x52, 0xa7, 0x22, 0x50, 0x7d, 0xa3, 0x0e, 0x0d, 0x29,
+	0x73, 0xd3, 0x6c, 0x38, 0xbe, 0x84, 0x4f, 0xf0, 0xb3, 0x2c, 0x95, 0x95, 0x40, 0x38, 0x2a, 0xc4,
+	0xd2, 0xff, 0xdd, 0x07, 0xc2, 0xe5, 0xcb, 0xda, 0x1a, 0x9f, 0xf3, 0xb4, 0x5e, 0x78, 0x19, 0xc2,
+	0xf6, 0xda, 0xd1, 0x65, 0x93, 0x99, 0xb9, 0x00, 0x99, 0x25, 0x43, 0xa5, 0x7b, 0xed, 0xd4, 0x77,
+	0x63, 0x0b, 0x7f, 0xbf, 0x6c, 0xa8, 0x54, 0x8d, 0x2b, 0x10, 0x2b, 0x69, 0x75, 0x2b, 0x76, 0x67,
+	0x82, 0xfc, 0x29, 0xff, 0xe4, 0x60, 0xc7, 0x51, 0x4f, 0x2e, 0x68, 0x99, 0x51, 0x2e, 0x6b, 0x65,
+	0x92, 0xff, 0x92, 0x35, 0xbb, 0x07, 0x3e, 0x44, 0x90, 0x0e, 0xbf, 0x8f, 0x82, 0x02, 0x4a, 0xf3,
+	0x7c, 0xf5, 0x16, 0x45, 0x4e, 0x20, 0x29, 0xca, 0xc5, 0xd3, 0xd2, 0xfe, 0x21, 0x82, 0xb1, 0x2e,
+	0xcb, 0x08, 0x8f, 0x08, 0xcf, 0x7b, 0x97, 0xbc, 0x5e, 0x31, 0x5c, 0x6b, 0x92, 0x3b, 0x73, 0xe0,
+	0x84, 0x9d, 0xb0, 0x6b, 0x99, 0x0c, 0xe1, 0xa3, 0x47, 0x28, 0x66, 0x6c, 0xcb, 0x3a, 0x29, 0x8b,
+	0x29, 0xcb, 0xe1, 0x93, 0x8e, 0x98, 0x5e, 0x9c, 0x3c, 0x6d, 0x68, 0x46, 0x9c, 0x73, 0x3a, 0x3b,
+	0x20, 0x04, 0xd3, 0x7f, 0x14, 0x02, 0x6c, 0x75, 0x73, 0x33, 0x60, 0x78, 0x66, 0x5f, 0x4d, 0x84,
+	0x20, 0x1d, 0xe4, 0x5e, 0x07, 0x5d, 0x0b, 0x7d, 0x12, 0x23, 0xc2, 0x06, 0xe0, 0x72, 0x59, 0x33,
+	0x8a, 0x2d, 0x13, 0x90, 0x47, 0x91, 0xfb, 0x4d, 0xd5, 0x6c, 0x9f, 0x27, 0xdc, 0x0e, 0x7e, 0x80,
+	0x7c, 0x29, 0x2b, 0xae, 0x15, 0xac, 0x02, 0x5a, 0xe6, 0xd1, 0x0d, 0x18, 0x6c, 0x75, 0x82, 0xb8,
+	0x6d, 0x3b, 0xe3, 0x3d, 0x14, 0x4c, 0xdb, 0x9c, 0x09, 0x55, 0x40, 0x52, 0xcc, 0x36, 0xad, 0x74,
+	0x8c, 0xbb, 0x19, 0x4c, 0x78, 0x3e, 0x06, 0x73, 0xf1, 0xfb, 0xbe, 0xcf, 0x2f, 0x85, 0xb3, 0x62,
+	0x4e, 0xbc, 0x20, 0x66, 0xa7, 0x3f, 0x69, 0xa0, 0x3f, 0xf0, 0x75, 0xb7, 0x11, 0xe7, 0x20, 0x7a,
+	0x6d, 0x35, 0x65, 0xbb, 0x70, 0xf9, 0x71, 0x48, 0x76, 0x77, 0xf7, 0x04, 0x1f, 0xe4, 0x20, 0xb0,
+	0xb4, 0x76, 0xd3, 0xc8, 0x4f, 0xc1, 0x97, 0x3a, 0x87, 0xc1, 0xcb, 0x51, 0x13, 0xfc, 0x90, 0x83,
+	0x08, 0x53, 0x0b, 0x85, 0x18, 0xf9, 0x33, 0x30, 0xe1, 0xc1, 0xe8, 0x56, 0x30, 0x21, 0x38, 0x8d,
+	0xe0, 0x6b, 0x1e, 0x5e, 0x56, 0x01, 0xa6, 0x3c, 0x58, 0x9f, 0xc2, 0xe7, 0xca, 0xa7, 0x21, 0xee,
+	0x0a, 0x73, 0x98, 0x89, 0xc2, 0x03, 0x8f, 0x1b, 0xc8, 0xff, 0xa4, 0x81, 0x7c, 0xbb, 0x0d, 0x84,
+	0x66, 0xf2, 0xa7, 0x5b, 0x68, 0x5c, 0x16, 0x2e, 0xe2, 0x8a, 0xa1, 0x1c, 0xdd, 0xe8, 0x17, 0xc2,
+	0xe9, 0x7f, 0x8d, 0x60, 0x98, 0xe1, 0x7d, 0xd7, 0x6a, 0x4b, 0x95, 0x8a, 0x76, 0x97, 0x94, 0xe9,
+	0x70, 0xff, 0x53, 0x04, 0x27, 0x5a, 0xce, 0xe8, 0xcb, 0xec, 0xa3, 0xd3, 0xaf, 0x89, 0xd1, 0x7d,
+	0xa3, 0xcc, 0xe2, 0xc3, 0xfb, 0x03, 0xcd, 0x01, 0x32, 0x88, 0xf9, 0xeb, 0x06, 0xea, 0x7b, 0xf0,
+	0xc8, 0xe5, 0x22, 0x04, 0x5c, 0xc7, 0xca, 0x93, 0x56, 0xb1, 0xd7, 0x59, 0xa9, 0xbc, 0x46, 0xf6,
+	0x48, 0xa7, 0xbf, 0x15, 0x84, 0x61, 0xc9, 0xfe, 0xdc, 0x44, 0xc5, 0xf1, 0x0d, 0x88, 0xb9, 0x2b,
+	0xcb, 0xd5, 0x79, 0xaa, 0x3d, 0x2d, 0xc8, 0x45, 0x92, 0x71, 0xc4, 0xd0, 0x0d, 0x10, 0x29, 0xea,
+	0x2a, 0x15, 0x2f, 0x03, 0x56, 0xb5, 0xa2, 0x52, 0x73, 0x1a, 0xcd, 0x6d, 0x68, 0xcf, 0xb4, 0x3a,
+	0x55, 0x6b, 0xed, 0xc1, 0x35, 0x18, 0x6a, 0x97, 0xc0, 0xd2, 0x52, 0xbc, 0x33, 0x00, 0x59, 0x1b,
+	0xd9, 0x5e, 0x86, 0xeb, 0x60, 0xd6, 0x80, 0xd2, 0x22, 0xf4, 0x3d, 0x18, 0xe5, 0x7b, 0x53, 0xed,
+	0xb2, 0x99, 0x9d, 0x5d, 0xdc, 0xaf, 0xbf, 0xd6, 0x39, 0xe4, 0x85, 0x3e, 0x89, 0x67, 0x94, 0xb4,
+	0xb6, 0xe3, 0x02, 0x44, 0x55, 0x8d, 0x85, 0x9d, 0x0a, 0x31, 0xf6, 0xf0, 0x44, 0x40, 0xd5, 0x56,
+	0x39, 0x25, 0x7e, 0x13, 0xc2, 0x0e, 0xd7, 0x40, 0x17, 0x64, 0xd2, 0xaa, 0x9d, 0xc7, 0x55, 0x10,
+	0x99, 0xe6, 0x01, 0xb5, 0x02, 0x92, 0x1c, 0x31, 0x8b, 0x93, 0x1f, 0x37, 0xd0, 0x69, 0x48, 0x43,
+	0xc2, 0x1a, 0xbd, 0x14, 0x1d, 0x2e, 0x47, 0x45, 0x18, 0x12, 0x14, 0xb2, 0x4c, 0x48, 0x36, 0x9b,
+	0x3f, 0x0b, 0xa3, 0x6d, 0x3d, 0xe4, 0x4e, 0x1b, 0xb6, 0x55, 0x26, 0x48, 0xf1, 0xe8, 0x7c, 0x1a,
+	0x06, 0x3a, 0xb3, 0x94, 0xed, 0x25, 0x3f, 0x48, 0x97, 0x7c, 0x47, 0x69, 0xac, 0x75, 0xfb, 0x5b,
+	0x08, 0xe2, 0x6b, 0x2c, 0x1e, 0x6f, 0x56, 0x14, 0x6b, 0xae, 0xf6, 0xa2, 0x7d, 0x2b, 0xc7, 0xf9,
+	0x87, 0xf7, 0x07, 0x5b, 0x63, 0x7b, 0xaf, 0xcb, 0x16, 0x5c, 0x2b, 0xaf, 0x53, 0x48, 0xfa, 0x0f,
+	0x7c, 0x30, 0xbc, 0x54, 0x53, 0x2e, 0x2b, 0x46, 0x49, 0xbb, 0x43, 0xf4, 0x1d, 0x0e, 0xc7, 0xe1,
+	0x32, 0x9c, 0x72, 0x0e, 0x23, 0x11, 0x59, 0x57, 0x8b, 0x9b, 0xba, 0x56, 0x75, 0x52, 0x24, 0x8a,
+	0xa6, 0x2e, 0x6f, 0x6e, 0x2a, 0xa5, 0x3d, 0x40, 0xe8, 0x09, 0xfb, 0xb4, 0x92, 0x25, 0xe1, 0xaa,
+	0xae, 0x55, 0xed, 0xc4, 0x8a, 0x75, 0xc6, 0x8e, 0x37, 0x20, 0xcd, 0xc3, 0xf6, 0x5e, 0x85, 0xf4,
+	0x56, 0x1a, 0xbe, 0xcd, 0xd1, 0xad, 0x8c, 0xfc, 0x4b, 0x70, 0xac, 0x87, 0x70, 0x1c, 0xb6, 0xe1,
+	0x28, 0x1e, 0x45, 0x3c, 0x0c, 0xc2, 0xf1, 0x35, 0x45, 0xdd, 0xaa, 0x90, 0xeb, 0x9a, 0x5c, 0xce,
+	0xf3, 0xc9, 0xbe, 0x54, 0xab, 0xd9, 0x3d, 0xb3, 0x05, 0x02, 0xaf, 0x73, 0xd9, 0xee, 0x34, 0xde,
+	0x0d, 0xfb, 0x55, 0x1c, 0x8f, 0xfe, 0x2e, 0xd0, 0xe3, 0x84, 0x74, 0xe3, 0xca, 0xfe, 0xe2, 0x3e,
+	0xdc, 0xd1, 0x2c, 0xa9, 0x77, 0x5f, 0xd8, 0x87, 0x3b, 0x9a, 0x42, 0x56, 0x9c, 0x5d, 0x2f, 0xba,
+	0x84, 0x94, 0x89, 0x49, 0xa8, 0xd5, 0xdf, 0x03, 0x65, 0xe7, 0x3b, 0x5e, 0x97, 0xcb, 0x9a, 0x71,
+	0xd9, 0x66, 0x71, 0x9f, 0x6f, 0x6c, 0x13, 0x16, 0xda, 0xd7, 0xf9, 0xc6, 0x56, 0x69, 0x5f, 0x87,
+	0x09, 0x5e, 0xb3, 0x36, 0x20, 0xae, 0x29, 0xb6, 0x37, 0x46, 0x7e, 0x9c, 0xb1, 0xdf, 0x70, 0xe3,
+	0xb9, 0x4d, 0xf1, 0x45, 0x48, 0x39, 0x47, 0x63, 0xba, 0xc9, 0x8f, 0xf4, 0x94, 0x7f, 0xc2, 0x3e,
+	0x29, 0xe3, 0x59, 0x40, 0x3e, 0x05, 0x23, 0x72, 0x4d, 0x69, 0x0e, 0x8d, 0xad, 0xf7, 0xce, 0x84,
+	0xca, 0x9f, 0x84, 0x23, 0xad, 0xfd, 0xe4, 0x26, 0xa1, 0x50, 0x66, 0xfe, 0x2c, 0x4c, 0x74, 0xab,
+	0x9d, 0x9b, 0x98, 0xc2, 0x97, 0x9d, 0x70, 0x62, 0xfa, 0x17, 0x08, 0x86, 0xd7, 0xb6, 0xe5, 0x1a,
+	0xc9, 0x6b, 0xe6, 0x65, 0xb2, 0x49, 0x54, 0x83, 0x25, 0x82, 0xd6, 0x21, 0xae, 0x93, 0x2d, 0xb6,
+	0xb1, 0x67, 0x9f, 0x52, 0xe5, 0x07, 0x07, 0x5e, 0xd9, 0xe7, 0x24, 0x6d, 0x13, 0x2b, 0x51, 0x71,
+	0xdc, 0x61, 0x7c, 0x9f, 0x06, 0xdf, 0x82, 0x5d, 0x84, 0x7d, 0x9e, 0x06, 0x7f, 0x03, 0x42, 0x2d,
+	0xc7, 0x92, 0x5f, 0x7f, 0xba, 0xb2, 0xda, 0x8f, 0x6f, 0x49, 0x5c, 0x6a, 0xfa, 0xcf, 0x43, 0x70,
+	0xb4, 0x2b, 0x2d, 0xfe, 0x3e, 0x82, 0x31, 0xcb, 0x75, 0x24, 0x25, 0x93, 0x94, 0x8b, 0x72, 0xad,
+	0xe6, 0x34, 0xdd, 0xb6, 0xa5, 0xf3, 0xfb, 0x56, 0xd0, 0x9a, 0xdd, 0x26, 0x5a, 0x8b, 0x8c, 0x8d,
+	0x45, 0x84, 0x3e, 0x44, 0x7e, 0xe1, 0x01, 0xf2, 0xb2, 0xa9, 0x6e, 0x58, 0xe2, 0x88, 0x53, 0x0d,
+	0x97, 0x24, 0x03, 0x17, 0x9a, 0x0a, 0x7d, 0xcb, 0x28, 0x2a, 0xaa, 0x41, 0x74, 0xb3, 0xd7, 0x91,
+	0x0a, 0x27, 0x7f, 0x74, 0x88, 0xb3, 0xad, 0x18, 0xd7, 0x28, 0x13, 0x36, 0x61, 0xd8, 0x91, 0x60,
+	0x2d, 0x50, 0x7c, 0x0b, 0x9c, 0xe9, 0xf4, 0xf2, 0x41, 0x7a, 0xbd, 0x99, 0x20, 0xc0, 0x44, 0x2f,
+	0x55, 0x2a, 0xdc, 0x6b, 0x10, 0x6e, 0x19, 0xce, 0x2b, 0xb6, 0x83, 0xfe, 0x4f, 0x10, 0x24, 0x3d,
+	0x8a, 0x2d, 0x92, 0x7b, 0x25, 0x52, 0x33, 0xb9, 0x11, 0x78, 0xf3, 0x19, 0x4b, 0x7f, 0x47, 0x31,
+	0xb7, 0xaf, 0x50, 0x81, 0x76, 0xe6, 0x4b, 0xa1, 0x4f, 0x1a, 0x6d, 0xaf, 0x0b, 0xa3, 0xc0, 0x77,
+	0x00, 0x3b, 0x15, 0xb2, 0x54, 0x86, 0xc1, 0x4e, 0xfd, 0x07, 0x9f, 0x7c, 0xed, 0x15, 0x71, 0x9d,
+	0xb9, 0x73, 0xf5, 0x04, 0x8f, 0xfa, 0x0c, 0x9c, 0x07, 0xe1, 0x96, 0x51, 0x2c, 0x6b, 0x77, 0x55,
+	0x4b, 0x54, 0xd1, 0x39, 0x62, 0x13, 0xc9, 0x27, 0x7e, 0xdc, 0x40, 0x70, 0x9e, 0x9d, 0xfa, 0xcb,
+	0xdc, 0x32, 0x38, 0xce, 0xf4, 0x99, 0x0f, 0x49, 0x83, 0xb7, 0x8c, 0xcb, 0x9c, 0x61, 0x55, 0x36,
+	0xb7, 0x17, 0x5f, 0xff, 0xb8, 0x81, 0x5e, 0x81, 0xe3, 0xf4, 0xf6, 0x12, 0x36, 0x59, 0x52, 0x4b,
+	0xb5, 0x5a, 0xaa, 0x39, 0x5d, 0x50, 0x16, 0x8e, 0xc3, 0x48, 0xb3, 0x66, 0x29, 0xa7, 0x12, 0x38,
+	0x90, 0x13, 0x53, 0x33, 0xf9, 0x97, 0x01, 0xdf, 0x92, 0xef, 0xc8, 0x45, 0x07, 0x28, 0x6f, 0xde,
+	0x04, 0xc1, 0xc1, 0x08, 0x7e, 0x85, 0xcb, 0x2c, 0x3f, 0xd7, 0xf2, 0x37, 0x11, 0x18, 0x6a, 0x9b,
+	0xdb, 0xcf, 0x14, 0xc1, 0xbe, 0x07, 0x31, 0x17, 0x42, 0xc9, 0xf0, 0xbe, 0x5e, 0xf9, 0xf8, 0xf9,
+	0x19, 0xab, 0x3f, 0x84, 0x0f, 0xd1, 0x40, 0x3a, 0xfa, 0x3e, 0x0a, 0x0b, 0x28, 0x19, 0xe8, 0x43,
+	0xfe, 0x80, 0x97, 0x0b, 0xef, 0x86, 0x09, 0x9a, 0x49, 0xfc, 0x06, 0x96, 0x20, 0x5c, 0xe3, 0x49,
+	0x99, 0x74, 0x2d, 0x1c, 0xf4, 0xd8, 0xc7, 0xf5, 0x1e, 0xe7, 0xb7, 0xa4, 0xeb, 0x6b, 0x16, 0x05,
+	0x69, 0x5e, 0x31, 0xc0, 0xe4, 0xe0, 0x1c, 0x3f, 0x8f, 0x10, 0xd8, 0xcf, 0x79, 0x04, 0x7e, 0x12,
+	0x61, 0x0e, 0x40, 0x56, 0x77, 0x78, 0xd6, 0xc4, 0x1e, 0x87, 0x93, 0x22, 0xb2, 0xba, 0xc3, 0x80,
+	0x6b, 0xbc, 0x00, 0x21, 0xce, 0xd2, 0xef, 0x79, 0xdc, 0x98, 0x91, 0x35, 0xcf, 0x3d, 0x14, 0xfa,
+	0x24, 0xce, 0x80, 0x27, 0xc1, 0x7f, 0x97, 0x6c, 0xf4, 0x5c, 0xb3, 0x90, 0x64, 0x91, 0xe0, 0x59,
+	0x08, 0x55, 0xb5, 0x0d, 0xa5, 0xb2, 0xc7, 0x2d, 0x44, 0x3c, 0x7f, 0x83, 0xd3, 0xe2, 0x0d, 0x80,
+	0xbb, 0x64, 0xa3, 0xc8, 0x39, 0xa3, 0x07, 0xca, 0x7e, 0x7f, 0x87, 0x6c, 0xdc, 0xa0, 0x7c, 0xdc,
+	0xe9, 0x62, 0x0d, 0xe0, 0x05, 0x44, 0xee, 0xda, 0x5f, 0xf1, 0x4d, 0x80, 0x8e, 0x4d, 0xdd, 0x8c,
+	0x37, 0x96, 0x60, 0xdb, 0xf9, 0x26, 0xe0, 0xc2, 0x36, 0x97, 0x24, 0x97, 0x84, 0xc5, 0x7f, 0xeb,
+	0xff, 0xfc, 0xd2, 0x20, 0xcb, 0x09, 0x99, 0x13, 0x67, 0xc5, 0x8b, 0x62, 0x36, 0xf7, 0x49, 0x03,
+	0x7d, 0xe4, 0xef, 0x1e, 0xf6, 0x9f, 0x70, 0x60, 0xf6, 0x3c, 0x6e, 0x9d, 0xbd, 0x42, 0x60, 0x1a,
+	0x41, 0x02, 0xc2, 0x76, 0xce, 0x6f, 0x32, 0xd6, 0x9c, 0x6a, 0x29, 0x04, 0x75, 0x7b, 0xbb, 0x62,
+	0xea, 0x36, 0x28, 0x10, 0x77, 0x0f, 0x3f, 0xdb, 0x37, 0x19, 0x01, 0xcc, 0x1e, 0xdd, 0x1b, 0x0b,
+	0x30, 0x01, 0xc3, 0xfc, 0xad, 0x51, 0xdf, 0x74, 0x76, 0x10, 0x70, 0x38, 0x19, 0x5a, 0xa3, 0xcf,
+	0x70, 0xc2, 0x61, 0x73, 0xed, 0x1a, 0xe0, 0xfe, 0x64, 0x90, 0xe5, 0xed, 0x7e, 0x85, 0xed, 0x5d,
+	0x4c, 0xbd, 0x06, 0xaf, 0xc2, 0x18, 0x44, 0x5d, 0x7b, 0x11, 0x96, 0x0c, 0x9e, 0x35, 0x1c, 0x85,
+	0x88, 0x93, 0x1f, 0x0c, 0x47, 0x00, 0x9a, 0x9b, 0x10, 0x4d, 0x41, 0xdf, 0x46, 0x10, 0x6f, 0xf6,
+	0xa5, 0xbd, 0x53, 0x57, 0x03, 0x15, 0xc6, 0x60, 0xa8, 0xd9, 0xa5, 0x19, 0x55, 0x53, 0x49, 0x2e,
+	0x70, 0x53, 0x53, 0x09, 0x1c, 0x05, 0xc1, 0xf5, 0x81, 0xc2, 0x50, 0xb9, 0x20, 0xcd, 0x03, 0xb0,
+	0x9a, 0xe5, 0xfa, 0x64, 0x3b, 0xd5, 0xae, 0x43, 0x08, 0xad, 0x42, 0x37, 0x2b, 0xf2, 0x56, 0x2e,
+	0x70, 0xb5, 0x22, 0x6f, 0xe5, 0x27, 0xe1, 0x48, 0xeb, 0x6e, 0x8d, 0x1b, 0x62, 0x08, 0xd9, 0xd7,
+	0xa4, 0xcd, 0x8b, 0x17, 0xf2, 0x39, 0x18, 0xb3, 0x16, 0x71, 0xee, 0xa8, 0x17, 0xcd, 0x9d, 0x1a,
+	0x71, 0x5f, 0x55, 0x15, 0xe1, 0xe9, 0x35, 0x61, 0xcb, 0xce, 0xf1, 0x43, 0xb4, 0x2c, 0x99, 0x78,
+	0x25, 0x10, 0x0e, 0x0b, 0x91, 0xf4, 0xd7, 0x60, 0xc4, 0x6b, 0x5e, 0xe2, 0xcb, 0x10, 0xe2, 0x37,
+	0x1c, 0x31, 0x7b, 0x27, 0x7a, 0x4f, 0x40, 0x3b, 0xdd, 0xb6, 0x89, 0x27, 0xca, 0x86, 0x52, 0x92,
+	0x38, 0x6f, 0xfa, 0x5f, 0xfa, 0xb8, 0x2f, 0xe2, 0xb5, 0x74, 0xe0, 0x7f, 0x84, 0x5a, 0xf7, 0x40,
+	0x9e, 0x69, 0x4d, 0xe6, 0xcb, 0xce, 0x81, 0xdd, 0x10, 0x56, 0x03, 0x7c, 0x1f, 0x62, 0xe4, 0x5e,
+	0xa9, 0x52, 0x2f, 0x93, 0x26, 0x8e, 0xfb, 0xd4, 0x35, 0xba, 0x62, 0x49, 0x32, 0xec, 0x1a, 0x1d,
+	0xf1, 0xa8, 0x8d, 0x65, 0xb1, 0x79, 0x79, 0x56, 0x48, 0x9b, 0xfe, 0x9e, 0x0f, 0xa6, 0xf6, 0xbf,
+	0xd8, 0xe3, 0x5b, 0x30, 0xec, 0xda, 0xfc, 0xb5, 0x2f, 0xc2, 0xe0, 0xce, 0xeb, 0x7e, 0xef, 0xa7,
+	0x69, 0x16, 0x65, 0x5f, 0x94, 0x21, 0xe1, 0xa6, 0x54, 0xfb, 0x5d, 0x47, 0xcf, 0xf8, 0x7e, 0xb3,
+	0x3d, 0xf3, 0x01, 0x82, 0xe3, 0xbd, 0x9c, 0xb0, 0xdf, 0x64, 0x5f, 0xa4, 0x7f, 0x10, 0xec, 0x52,
+	0x99, 0xe7, 0x01, 0x75, 0xb7, 0xae, 0x96, 0xfe, 0x83, 0xaf, 0x96, 0x81, 0x83, 0xae, 0x96, 0xf6,
+	0x9a, 0x1e, 0x3c, 0xc0, 0x9a, 0xde, 0xa5, 0xbb, 0x43, 0x2f, 0xa0, 0xbb, 0x17, 0x7f, 0xdf, 0xf7,
+	0x49, 0x03, 0xfd, 0x1f, 0xd4, 0x7d, 0xa1, 0xfa, 0xdb, 0xbe, 0xde, 0x9c, 0x82, 0xb0, 0xdd, 0xd8,
+	0xe4, 0x98, 0x67, 0xc7, 0xa6, 0x50, 0xef, 0xc5, 0xc0, 0x06, 0xd8, 0xf8, 0x9d, 0x99, 0x3e, 0xc1,
+	0x9f, 0xfe, 0xc3, 0x40, 0xc7, 0x24, 0x6d, 0x51, 0xbb, 0xbf, 0xfb, 0x93, 0x74, 0xf1, 0xaf, 0xd0,
+	0x27, 0x0d, 0xf4, 0x97, 0x7f, 0x77, 0x27, 0xce, 0x81, 0xe7, 0xc4, 0xef, 0x9f, 0x85, 0xc1, 0xaf,
+	0x54, 0xb4, 0x0d, 0xb9, 0xb2, 0x56, 0x23, 0x6c, 0x85, 0x2f, 0x43, 0xbf, 0x9d, 0xce, 0x8c, 0xe8,
+	0x69, 0x96, 0x15, 0xba, 0x7d, 0xf4, 0x21, 0xea, 0x4f, 0xb3, 0x4b, 0xb3, 0xac, 0xc7, 0xc8, 0x87,
+	0x28, 0x94, 0x0e, 0xe8, 0x3c, 0x53, 0xdd, 0xfe, 0xf8, 0x1d, 0x1f, 0xea, 0x3c, 0xe8, 0xd2, 0x12,
+	0x8e, 0xd8, 0xa2, 0xf1, 0x0a, 0x04, 0x2c, 0xf5, 0xef, 0x92, 0x6b, 0xd5, 0xcd, 0x3e, 0xb4, 0xdc,
+	0x55, 0x59, 0xe8, 0x93, 0xa8, 0x0c, 0xbc, 0x0d, 0x43, 0xd6, 0x5f, 0xa3, 0x48, 0x4f, 0xe2, 0x97,
+	0x88, 0x6e, 0xf2, 0xfb, 0x6d, 0x2e, 0x3d, 0x8d, 0xd8, 0xe6, 0x15, 0x98, 0x85, 0x3e, 0x89, 0x5e,
+	0x81, 0xe9, 0xbc, 0xc1, 0x37, 0x20, 0x48, 0x5f, 0xf0, 0x09, 0x3e, 0xf7, 0x54, 0xf2, 0x0b, 0x7d,
+	0x12, 0x93, 0x82, 0xaf, 0x82, 0xc0, 0xef, 0x66, 0x91, 0xcb, 0x77, 0xac, 0xd5, 0xc2, 0x20, 0xbd,
+	0xe0, 0x7d, 0xe7, 0x0a, 0xc6, 0x41, 0x7a, 0x37, 0xcb, 0x92, 0xcd, 0x83, 0xbf, 0x06, 0x13, 0x8e,
+	0x80, 0xa2, 0xa6, 0x16, 0x6b, 0xf5, 0x8d, 0x8a, 0x52, 0x72, 0x12, 0xfd, 0xef, 0x28, 0xb5, 0x3d,
+	0x52, 0x0f, 0x8e, 0x39, 0xec, 0x6f, 0xa8, 0xab, 0x94, 0x99, 0x1f, 0x01, 0x78, 0x5b, 0xa9, 0xe1,
+	0xaf, 0xc1, 0xb0, 0x87, 0x74, 0xae, 0xb0, 0xa7, 0x3d, 0xbb, 0xc0, 0xa9, 0x1a, 0x13, 0xe6, 0x54,
+	0x3c, 0xde, 0x51, 0x0e, 0x7e, 0x97, 0x5e, 0x3f, 0xc0, 0xa5, 0xb3, 0xed, 0x0f, 0xae, 0xd2, 0x7b,
+	0x88, 0x66, 0x3b, 0x28, 0xcd, 0x8b, 0xa5, 0x0a, 0xec, 0x9e, 0x01, 0xf7, 0x47, 0xac, 0xc1, 0xb0,
+	0x73, 0x81, 0x12, 0x3d, 0x60, 0xc7, 0xce, 0x88, 0x86, 0x9e, 0xfe, 0x22, 0x08, 0xd7, 0x85, 0x89,
+	0x52, 0xdc, 0xbe, 0x68, 0xc9, 0x12, 0xdd, 0xe3, 0x3a, 0x88, 0xe3, 0x3d, 0x91, 0xd2, 0x3d, 0xaf,
+	0x83, 0x38, 0xe1, 0x75, 0x1d, 0x84, 0x6f, 0x7f, 0xd7, 0x41, 0x8c, 0xf7, 0x2c, 0xda, 0xeb, 0x3a,
+	0x88, 0xfb, 0x10, 0xa2, 0x5d, 0x65, 0x24, 0xfa, 0x69, 0x2f, 0x4d, 0x1f, 0xf4, 0x0c, 0x77, 0x7e,
+	0xc6, 0x1e, 0x91, 0xa6, 0x17, 0xe7, 0xf3, 0xf4, 0xb1, 0x9d, 0x7f, 0xc3, 0x48, 0xe2, 0x85, 0xb6,
+	0xdf, 0x2b, 0x16, 0x7e, 0xba, 0x7b, 0xc5, 0xda, 0x6e, 0x75, 0xeb, 0x9d, 0x56, 0xed, 0x71, 0xab,
+	0x5b, 0xe4, 0x59, 0x6e, 0x75, 0xf3, 0x77, 0xde, 0xea, 0x06, 0xcf, 0x7e, 0xab, 0x9b, 0xff, 0x85,
+	0xdc, 0xea, 0xe6, 0x6f, 0xbd, 0xd5, 0xed, 0x2c, 0xc4, 0xe4, 0x72, 0xb9, 0xe9, 0xbd, 0xc5, 0xe9,
+	0xed, 0x79, 0xb4, 0x8f, 0xe9, 0x0d, 0x7a, 0x51, 0xb9, 0x5c, 0x76, 0x02, 0x80, 0xd7, 0xda, 0x72,
+	0xbe, 0x93, 0x7b, 0x5a, 0xae, 0xb6, 0xcc, 0xef, 0x0d, 0x88, 0xb5, 0xe4, 0x7a, 0xe3, 0xa7, 0x3f,
+	0x3d, 0xd1, 0xb4, 0x02, 0x01, 0x29, 0xea, 0x3a, 0x41, 0x81, 0x15, 0x88, 0x77, 0xa6, 0x7e, 0x27,
+	0x9e, 0xf2, 0x0c, 0x83, 0xbb, 0x14, 0xa1, 0xfd, 0x1c, 0x03, 0xbe, 0x0f, 0xa3, 0x7c, 0x13, 0x73,
+	0x43, 0x36, 0x48, 0xd9, 0x55, 0xde, 0xcc, 0x81, 0xf0, 0x20, 0xaf, 0x33, 0x2d, 0x2d, 0x45, 0x8f,
+	0xd4, 0xbc, 0x4e, 0xbd, 0x10, 0x88, 0x56, 0x35, 0x9d, 0xf0, 0x3b, 0x5c, 0xf8, 0x51, 0xa4, 0xc5,
+	0xa7, 0x3f, 0x33, 0xe9, 0x56, 0x2d, 0x4b, 0x30, 0xfb, 0x84, 0xbf, 0x02, 0x71, 0xba, 0xd5, 0xa2,
+	0xd8, 0xd9, 0x55, 0x45, 0xa5, 0x96, 0x78, 0x65, 0xcf, 0xa1, 0x0f, 0x4a, 0x83, 0x16, 0xdb, 0xb5,
+	0x32, 0x4b, 0x91, 0xb9, 0x56, 0xc3, 0xef, 0xc1, 0x30, 0x17, 0x44, 0x54, 0x7e, 0x85, 0xbd, 0x55,
+	0xef, 0x91, 0x7d, 0x4f, 0xe6, 0xe4, 0xc3, 0xfb, 0x5e, 0x12, 0x78, 0x71, 0x98, 0x15, 0xe7, 0xfe,
+	0x82, 0x57, 0xc0, 0xb6, 0x78, 0xc5, 0xe6, 0x9e, 0x77, 0x62, 0x74, 0xcf, 0xca, 0x87, 0x9c, 0xbd,
+	0x41, 0x27, 0x69, 0x01, 0x13, 0x00, 0x97, 0x8c, 0xb1, 0x03, 0xf5, 0xb6, 0x47, 0x06, 0x85, 0x6b,
+	0x80, 0x43, 0x52, 0xc4, 0xc9, 0x85, 0xc0, 0xdf, 0x46, 0xbd, 0x4e, 0x76, 0xa4, 0xf6, 0xdd, 0x59,
+	0x67, 0x7a, 0x9d, 0xec, 0xe0, 0xc7, 0x0f, 0x13, 0xa8, 0xfb, 0x01, 0x8f, 0x6f, 0x23, 0x96, 0xd2,
+	0x48, 0xec, 0x88, 0x81, 0x6f, 0x17, 0x9c, 0xa4, 0x8b, 0x44, 0x17, 0x14, 0x88, 0x5f, 0xcc, 0x25,
+	0x6f, 0xb6, 0x86, 0xf7, 0x2f, 0xb9, 0x17, 0x88, 0x5e, 0x19, 0xaa, 0xf1, 0xbb, 0x6d, 0xac, 0x06,
+	0xfe, 0xc7, 0x08, 0x86, 0xda, 0xb2, 0xfb, 0x12, 0x69, 0x5a, 0x87, 0xfd, 0x76, 0xbe, 0x47, 0x96,
+	0x6b, 0x7e, 0xb2, 0xc7, 0x92, 0xd5, 0x5a, 0xa5, 0x41, 0x5e, 0x38, 0xe3, 0x67, 0xf5, 0x71, 0x7e,
+	0x8a, 0x82, 0xd7, 0xe7, 0xd4, 0x6f, 0xb2, 0x3e, 0xf6, 0xaf, 0x58, 0xf0, 0xfa, 0x7c, 0x0f, 0xf1,
+	0x7d, 0x53, 0x57, 0x1a, 0x12, 0x1b, 0xa9, 0x33, 0xb4, 0x56, 0x0b, 0x07, 0xc8, 0x76, 0x6b, 0x4d,
+	0xd7, 0x3b, 0x40, 0xa5, 0x86, 0xad, 0x1a, 0xb4, 0x72, 0x1b, 0xf8, 0xeb, 0x30, 0xd1, 0x92, 0x66,
+	0xa1, 0x10, 0x83, 0x65, 0x15, 0x58, 0x81, 0x97, 0x51, 0x93, 0x4b, 0x24, 0xf1, 0x72, 0xcf, 0xcb,
+	0x17, 0x8f, 0x1b, 0xae, 0x8c, 0x0f, 0x85, 0x18, 0x57, 0x75, 0xad, 0x7a, 0xd3, 0xe6, 0xc5, 0x57,
+	0x61, 0x58, 0xd5, 0x8a, 0xed, 0x25, 0x24, 0xa6, 0x7a, 0x8a, 0x8c, 0xab, 0xda, 0x5a, 0xab, 0x50,
+	0x7c, 0x0f, 0xc6, 0xe4, 0x92, 0xa9, 0xdc, 0x21, 0x9d, 0xb2, 0xce, 0x1e, 0xe8, 0xa0, 0x4f, 0x47,
+	0x7e, 0x0a, 0x3f, 0x1b, 0xd6, 0x2f, 0x1d, 0x61, 0x05, 0xb4, 0x97, 0x7c, 0x01, 0xa2, 0xba, 0x56,
+	0x57, 0xcb, 0x45, 0x5d, 0xdb, 0x50, 0xd4, 0xc4, 0xb9, 0x9e, 0xd7, 0x33, 0x02, 0x25, 0x95, 0x2c,
+	0x4a, 0xbc, 0x00, 0xb1, 0x0a, 0x91, 0x0d, 0xb3, 0xc8, 0xe4, 0x26, 0x32, 0x3d, 0x39, 0xa3, 0x94,
+	0x76, 0x89, 0x92, 0xe2, 0x0c, 0x84, 0x74, 0x59, 0x2d, 0x6b, 0xd5, 0xc4, 0xf9, 0x9e, 0x4c, 0x9c,
+	0xca, 0xf2, 0x33, 0x79, 0xf6, 0xae, 0x52, 0x2b, 0x1a, 0xa6, 0x52, 0xba, 0xad, 0xa8, 0xc4, 0x30,
+	0x12, 0xd3, 0x3d, 0xb9, 0x31, 0xe3, 0xb9, 0x56, 0x5b, 0x73, 0x38, 0xf0, 0x3a, 0xc4, 0x79, 0x16,
+	0xbd, 0x4b, 0x4c, 0xd6, 0x33, 0x41, 0x92, 0xdd, 0xb5, 0xc1, 0xb2, 0xf0, 0xaf, 0x6a, 0x7a, 0x41,
+	0x36, 0xb6, 0x15, 0x75, 0xab, 0x10, 0x96, 0x04, 0x26, 0xc1, 0x25, 0xf5, 0xab, 0x10, 0xa1, 0x37,
+	0x14, 0x6e, 0xcb, 0xc6, 0x76, 0x22, 0xf7, 0xac, 0xd7, 0x72, 0x87, 0xa5, 0xb0, 0x25, 0xcd, 0xfa,
+	0x82, 0x35, 0x18, 0x30, 0x68, 0x66, 0x4b, 0xb1, 0xb2, 0x51, 0x94, 0x6b, 0xb5, 0xc4, 0xfc, 0xc1,
+	0xf6, 0x8b, 0x7b, 0x64, 0xc5, 0xf0, 0x55, 0x26, 0x22, 0x45, 0x59, 0x09, 0xd7, 0x37, 0x96, 0x6a,
+	0x35, 0x7c, 0x09, 0x62, 0xd5, 0x7a, 0xc5, 0x54, 0xec, 0xf2, 0x2e, 0xec, 0xb9, 0x4c, 0x45, 0x24,
+	0xa0, 0x1c, 0x8c, 0xff, 0x0d, 0x18, 0xb6, 0x17, 0xbb, 0x0d, 0xcd, 0xb4, 0x82, 0x41, 0xa2, 0x1a,
+	0x24, 0xb1, 0xd0, 0x43, 0x4c, 0x3f, 0x5f, 0x08, 0x0a, 0x20, 0xd9, 0x9b, 0xed, 0xcd, 0x64, 0x01,
+	0xbc, 0x09, 0x51, 0xb7, 0xa0, 0xc5, 0x03, 0x2d, 0x79, 0x1e, 0x89, 0x16, 0xee, 0xe2, 0x60, 0xa3,
+	0x59, 0xce, 0x37, 0x60, 0x80, 0xfe, 0x88, 0x91, 0xa2, 0x9a, 0x44, 0x57, 0xe5, 0x4a, 0xe2, 0xb3,
+	0xfe, 0x7d, 0x2f, 0x73, 0x23, 0x0f, 0xef, 0xb7, 0x32, 0xd3, 0x63, 0xfa, 0x31, 0xeb, 0xd5, 0x35,
+	0xfe, 0x06, 0x1f, 0x87, 0x08, 0x8d, 0x91, 0xe8, 0x6f, 0x25, 0xfc, 0x35, 0xfd, 0xbd, 0x13, 0x29,
+	0x6c, 0xbd, 0xa1, 0x3f, 0x89, 0x50, 0x80, 0xb0, 0xfd, 0xab, 0x44, 0x89, 0x9f, 0xf7, 0x7b, 0xae,
+	0x6e, 0x9e, 0x3f, 0x61, 0x94, 0xb9, 0xac, 0x1a, 0xd7, 0xd4, 0x4d, 0x4d, 0xea, 0x2f, 0xb3, 0x7f,
+	0xf0, 0x32, 0x04, 0x0d, 0x53, 0x36, 0x49, 0xe2, 0x6f, 0xfa, 0x29, 0x08, 0xda, 0x4b, 0x4c, 0xe6,
+	0x6d, 0xf6, 0x60, 0x45, 0x62, 0x6b, 0x16, 0x93, 0xc4, 0x78, 0xf1, 0xbb, 0x30, 0xe4, 0xa0, 0x1a,
+	0x45, 0x26, 0xee, 0x17, 0x4c, 0x5c, 0xa6, 0xa7, 0xfb, 0xea, 0xfc, 0x2c, 0x90, 0xa2, 0xa9, 0x54,
+	0x60, 0xde, 0x8a, 0x58, 0x07, 0x64, 0x8e, 0x64, 0xd0, 0x57, 0x78, 0x0d, 0x06, 0x9b, 0xc2, 0x69,
+	0x8b, 0x3f, 0xef, 0xf7, 0xdc, 0xd5, 0x69, 0x91, 0x6d, 0xa3, 0x21, 0x56, 0x23, 0x29, 0xb6, 0x16,
+	0x93, 0x5d, 0x6f, 0x16, 0x7f, 0x85, 0x3e, 0x6e, 0xa0, 0xff, 0x89, 0xe0, 0x18, 0x0c, 0xd3, 0x4d,
+	0x9f, 0xb6, 0xfc, 0xc0, 0x40, 0x56, 0xcc, 0xce, 0xc2, 0x38, 0x8c, 0x72, 0x84, 0x21, 0xc5, 0xaf,
+	0x64, 0x62, 0xbf, 0x4a, 0x61, 0xe0, 0xc0, 0xbc, 0x38, 0x93, 0x85, 0xa3, 0xfc, 0x06, 0x38, 0xa3,
+	0x8d, 0x1b, 0x5d, 0x80, 0x31, 0x88, 0xbf, 0x7d, 0x6d, 0xb5, 0xed, 0xbd, 0x2f, 0x3b, 0x07, 0xaf,
+	0xc0, 0xa8, 0x7d, 0xfb, 0x6b, 0xdb, 0xd7, 0xf4, 0xec, 0xb4, 0x38, 0x37, 0x2f, 0x66, 0xe7, 0xc5,
+	0x99, 0x19, 0xf1, 0xa2, 0x98, 0x9b, 0x13, 0xe7, 0x16, 0xc4, 0x5c, 0x56, 0x9c, 0x99, 0x15, 0x67,
+	0xe6, 0xc4, 0x99, 0x0b, 0xe2, 0xdc, 0x0c, 0x1c, 0xef, 0x7a, 0x1d, 0xad, 0x6f, 0x76, 0x16, 0x26,
+	0x60, 0xd4, 0x76, 0x91, 0xdb, 0x64, 0x07, 0xb3, 0x17, 0xc4, 0xec, 0x42, 0xfe, 0x25, 0x88, 0xbb,
+	0xe7, 0x3b, 0xdd, 0x70, 0xc3, 0x98, 0x67, 0x33, 0x0d, 0xee, 0x36, 0x50, 0x28, 0x27, 0xe6, 0x2e,
+	0x88, 0x33, 0xf9, 0x97, 0x5b, 0xf0, 0x0e, 0xd7, 0xcf, 0x43, 0x3c, 0x69, 0xa0, 0xa1, 0xdd, 0x06,
+	0x8a, 0x64, 0xd9, 0x2d, 0x24, 0xd9, 0x5c, 0xfe, 0xbc, 0xf7, 0xbd, 0x88, 0x89, 0xc7, 0x0d, 0x74,
+	0x9c, 0xef, 0xdf, 0x4d, 0xec, 0x36, 0x50, 0x98, 0x5f, 0x55, 0x3b, 0x9d, 0x9f, 0x68, 0xb9, 0x60,
+	0x36, 0xce, 0x4f, 0x60, 0x0a, 0xfc, 0x04, 0xe6, 0x5c, 0x2e, 0x7f, 0x0e, 0x06, 0x9b, 0xa7, 0x2f,
+	0x69, 0x15, 0x8f, 0x3d, 0x6e, 0xa0, 0x24, 0x17, 0x76, 0x74, 0xb7, 0x81, 0xa2, 0xb9, 0x79, 0x31,
+	0x7b, 0x51, 0xcc, 0xcd, 0x8a, 0x73, 0xd9, 0xfc, 0x4b, 0x30, 0xe8, 0xf8, 0xfa, 0xcd, 0x9a, 0xbe,
+	0xc2, 0xc9, 0xbf, 0x6c, 0xc9, 0x9d, 0x9f, 0x16, 0x73, 0xd3, 0xf9, 0x29, 0x88, 0x37, 0x9d, 0x61,
+	0x37, 0xed, 0x28, 0xa7, 0x3d, 0x42, 0x6f, 0x9b, 0xcd, 0x89, 0xb9, 0x99, 0xfc, 0x39, 0x38, 0xd2,
+	0x76, 0x94, 0xd2, 0x75, 0x0c, 0xf4, 0xe5, 0x27, 0x0d, 0x34, 0x69, 0xb5, 0x69, 0x36, 0x2b, 0xce,
+	0xe6, 0xc4, 0xd9, 0x99, 0xfc, 0x8c, 0xe7, 0xf5, 0xbb, 0x27, 0x1e, 0x37, 0xd0, 0xb9, 0x27, 0x0d,
+	0x24, 0xee, 0x36, 0x50, 0x7c, 0x76, 0x4e, 0x9c, 0x9d, 0x17, 0x67, 0x2f, 0x88, 0xb3, 0x17, 0xc5,
+	0xd9, 0x05, 0x71, 0x6e, 0xda, 0xea, 0xe4, 0x6a, 0x85, 0x5f, 0xc4, 0xed, 0xae, 0xce, 0x05, 0x5e,
+	0x9d, 0x39, 0x7a, 0xa5, 0xe4, 0xac, 0x38, 0x37, 0x97, 0x7f, 0x1d, 0xb0, 0xcb, 0xaa, 0xd9, 0xc4,
+	0x53, 0x8f, 0x1b, 0x68, 0xe1, 0x49, 0x03, 0x5d, 0xa4, 0x84, 0x17, 0xc4, 0xb9, 0x8b, 0xbf, 0x6c,
+	0x20, 0xf4, 0xe1, 0x23, 0x14, 0x37, 0x2c, 0x43, 0x76, 0x6e, 0x43, 0x33, 0xcf, 0x71, 0x16, 0xe7,
+	0x4e, 0x02, 0xf6, 0xcb, 0x1d, 0x13, 0x42, 0xca, 0xf9, 0xfd, 0x0e, 0x76, 0x77, 0xed, 0x97, 0x85,
+	0x57, 0x56, 0x02, 0xe1, 0x23, 0xc2, 0xe8, 0x4a, 0x20, 0x3c, 0x29, 0xbc, 0xbc, 0x12, 0x08, 0x8b,
+	0xc2, 0xb9, 0x95, 0x40, 0x78, 0x4e, 0x98, 0x5f, 0x09, 0x84, 0x2f, 0x0a, 0x0b, 0xe9, 0xdf, 0x9b,
+	0x80, 0xc1, 0x65, 0x9d, 0xc8, 0x26, 0x71, 0x50, 0xd8, 0x44, 0x1b, 0x0a, 0x7b, 0x88, 0x9c, 0xb6,
+	0x20, 0xa7, 0xaf, 0x1f, 0x0c, 0x39, 0xfd, 0x8d, 0x63, 0xa6, 0x6f, 0x3f, 0x33, 0x66, 0xea, 0x8d,
+	0x96, 0xbe, 0xf9, 0x6c, 0x68, 0xa9, 0x17, 0x46, 0xfa, 0x3b, 0xcf, 0x07, 0x23, 0xf5, 0x42, 0x43,
+	0x0b, 0xcf, 0x8a, 0x25, 0x3a, 0xb0, 0xe0, 0xe2, 0xc1, 0x60, 0xc1, 0xa7, 0x05, 0x03, 0x5b, 0x7f,
+	0xe2, 0x61, 0xfe, 0x80, 0x60, 0xa0, 0xfd, 0x7b, 0x0e, 0xaf, 0x3d, 0x0d, 0xf2, 0xe7, 0xfe, 0xd9,
+	0x86, 0xaf, 0x3c, 0x2d, 0xc0, 0xd7, 0xfe, 0x2b, 0x0d, 0x27, 0xbd, 0xf0, 0xbc, 0x56, 0x14, 0x6f,
+	0x61, 0xff, 0x28, 0x5e, 0xc1, 0xdf, 0x8a, 0xdf, 0x7d, 0xf5, 0xb9, 0xe1, 0x77, 0x96, 0x64, 0x37,
+	0x6a, 0x57, 0x7c, 0x8e, 0xa8, 0x5d, 0xc1, 0xef, 0x81, 0xd5, 0x19, 0x2f, 0x10, 0xab, 0x2b, 0xf8,
+	0xbb, 0x20, 0x74, 0xef, 0x3e, 0x67, 0x84, 0xae, 0x05, 0x97, 0x5b, 0x3a, 0x20, 0x2e, 0x57, 0x08,
+	0x74, 0x20, 0x72, 0x6f, 0x3d, 0x23, 0x22, 0x57, 0x08, 0x78, 0xa2, 0x6e, 0x97, 0x0f, 0x8a, 0xba,
+	0x15, 0x82, 0x1e, 0x78, 0xdb, 0xbb, 0xcf, 0x17, 0x6f, 0x2b, 0x04, 0xdd, 0x28, 0xdb, 0xdf, 0x7b,
+	0x3e, 0x20, 0x5b, 0xcf, 0xeb, 0x53, 0xba, 0x63, 0x6b, 0x5f, 0x7b, 0x6e, 0xd0, 0x9a, 0x17, 0x62,
+	0x56, 0x7a, 0x01, 0x80, 0x59, 0x07, 0x0c, 0x56, 0x7a, 0x01, 0x28, 0x58, 0x07, 0xb6, 0x55, 0x7d,
+	0x51, 0xd0, 0xd6, 0x0b, 0x01, 0xac, 0x42, 0xcf, 0x1f, 0xb0, 0x0a, 0x79, 0x01, 0x56, 0xfa, 0x0b,
+	0x03, 0xac, 0x0a, 0xa1, 0xe7, 0x00, 0x55, 0xf5, 0x3f, 0x35, 0x54, 0xd5, 0xff, 0x34, 0x50, 0x55,
+	0xff, 0x33, 0x41, 0x55, 0xfd, 0x2f, 0x08, 0xaa, 0xea, 0x7f, 0xe1, 0x50, 0x55, 0xbf, 0x0b, 0xaa,
+	0x52, 0x5e, 0x1c, 0x54, 0x55, 0x08, 0xb7, 0x82, 0x54, 0x17, 0xf7, 0x0f, 0x52, 0x15, 0xc2, 0x2d,
+	0xf0, 0xd4, 0xd5, 0x03, 0xc3, 0x53, 0x85, 0x88, 0x17, 0x2a, 0xf5, 0xf5, 0xe7, 0x8c, 0x4a, 0x15,
+	0x22, 0x6e, 0x30, 0x6a, 0x31, 0xfe, 0xc9, 0xa5, 0xb6, 0x04, 0x19, 0x2b, 0xd8, 0xed, 0x0c, 0xf5,
+	0x8f, 0xbc, 0xff, 0x05, 0xea, 0x7c, 0x9d, 0x9f, 0xf4, 0x88, 0xf6, 0x47, 0xde, 0xff, 0x02, 0x75,
+	0xbc, 0xcd, 0x1f, 0x6f, 0x89, 0xdd, 0x07, 0xdf, 0xff, 0x02, 0xb9, 0x9e, 0xf3, 0xa7, 0x3b, 0x02,
+	0x77, 0xfc, 0xfe, 0x17, 0xa8, 0xed, 0x9d, 0x45, 0xd5, 0x16, 0xaf, 0x53, 0xaa, 0xd6, 0x77, 0x5d,
+	0x82, 0x75, 0xab, 0xfe, 0x1d, 0xaf, 0xf3, 0xb9, 0x6e, 0xc1, 0xfa, 0xd1, 0xf7, 0xbf, 0x40, 0xde,
+	0x9f, 0xf2, 0xa2, 0x67, 0xc4, 0x3e, 0xfa, 0xfe, 0x17, 0xc8, 0xe3, 0xbd, 0xd5, 0x43, 0x1d, 0xa1,
+	0x3a, 0xed, 0xa1, 0xf6, 0xb7, 0x96, 0x5c, 0x8f, 0x48, 0x9d, 0xca, 0xed, 0x7c, 0xdf, 0x16, 0x95,
+	0xbb, 0xe3, 0x71, 0x16, 0x89, 0xb7, 0xc7, 0xe0, 0xef, 0x4f, 0xc0, 0x90, 0x44, 0x6a, 0x15, 0xb9,
+	0x74, 0x18, 0x84, 0x1f, 0x06, 0xe1, 0x87, 0x41, 0xf8, 0x61, 0x10, 0x7e, 0x18, 0x84, 0x1f, 0x06,
+	0xe1, 0x87, 0x41, 0xf8, 0x61, 0x10, 0x7e, 0x18, 0x84, 0x1f, 0x06, 0xe1, 0x87, 0x41, 0xf8, 0x61,
+	0x10, 0x7e, 0x18, 0x84, 0x1f, 0x06, 0xe1, 0x87, 0x41, 0xf8, 0x0b, 0x0d, 0xc2, 0xff, 0xf2, 0x24,
+	0x44, 0xbf, 0x42, 0xcc, 0xc3, 0x00, 0xfc, 0x30, 0x00, 0x3f, 0x0c, 0xc0, 0x0f, 0x03, 0xf0, 0xc3,
+	0x00, 0xfc, 0x30, 0x00, 0x3f, 0x0c, 0xc0, 0x0f, 0x03, 0xf0, 0xc3, 0x00, 0xfc, 0x30, 0x00, 0x3f,
+	0x0c, 0xc0, 0x0f, 0x03, 0xf0, 0xc3, 0x00, 0xfc, 0xb7, 0x13, 0x80, 0xff, 0xed, 0x3a, 0x32, 0xf1,
+	0xce, 0xf3, 0x3a, 0x32, 0xf1, 0x1b, 0x39, 0x2e, 0x71, 0x88, 0x6d, 0xfc, 0xbf, 0x81, 0x6d, 0x4c,
+	0x4d, 0x43, 0xc4, 0xb9, 0x45, 0x11, 0x87, 0x21, 0x90, 0x7f, 0x63, 0xbd, 0x20, 0xf4, 0x59, 0xff,
+	0x15, 0xd6, 0xd7, 0x57, 0x05, 0x84, 0x23, 0x10, 0xb4, 0xfe, 0x5b, 0x13, 0x7c, 0xf4, 0x37, 0x4c,
+	0x7d, 0x53, 0x57, 0xe1, 0x88, 0xe7, 0x45, 0xb2, 0x78, 0x00, 0x02, 0x4b, 0x6f, 0xad, 0xbf, 0x21,
+	0xf4, 0x25, 0xfd, 0x0f, 0xee, 0x23, 0x1c, 0x02, 0xdf, 0x5b, 0x6b, 0x02, 0xfd, 0x7b, 0xe5, 0x2d,
+	0xc1, 0x67, 0x89, 0x5c, 0x5a, 0xbb, 0xb6, 0x24, 0xf8, 0xd9, 0x6f, 0xa1, 0x4e, 0x49, 0x80, 0x3b,
+	0x2f, 0x56, 0xc2, 0x83, 0x00, 0x4b, 0x57, 0xd7, 0xaf, 0x48, 0xc5, 0xc2, 0x95, 0xa5, 0xcb, 0x42,
+	0x1f, 0x1e, 0x86, 0x21, 0xf6, 0xbc, 0x7e, 0x6d, 0xfd, 0xfa, 0x95, 0xe2, 0x95, 0x9b, 0x97, 0x05,
+	0x84, 0xe3, 0x30, 0x90, 0xbf, 0x72, 0xf5, 0x0d, 0xe9, 0x4a, 0x71, 0x6d, 0x59, 0xba, 0xb6, 0xba,
+	0xce, 0xeb, 0xd6, 0x97, 0xff, 0x23, 0xf4, 0xe4, 0xa7, 0xe3, 0x7d, 0x9f, 0xfe, 0x74, 0xbc, 0xef,
+	0x97, 0x3f, 0x1d, 0x47, 0x0f, 0x76, 0xc7, 0xd1, 0x0f, 0x77, 0xc7, 0xd1, 0x8f, 0x76, 0xc7, 0xd1,
+	0x93, 0xdd, 0x71, 0xf4, 0xe9, 0xee, 0x38, 0xfa, 0xc9, 0xee, 0x38, 0xfa, 0x6c, 0x77, 0xbc, 0xef,
+	0x97, 0xbb, 0xe3, 0xe8, 0xbb, 0x3f, 0x1b, 0xef, 0x7b, 0xfc, 0xb3, 0x71, 0xf4, 0xe4, 0x67, 0xe3,
+	0x7d, 0x9f, 0xfe, 0x6c, 0xbc, 0xef, 0xff, 0x7f, 0x77, 0x4b, 0xab, 0xdd, 0xde, 0xca, 0xdc, 0xd1,
+	0x2a, 0x26, 0xd1, 0x75, 0x39, 0x53, 0x37, 0xce, 0xd3, 0x7f, 0x36, 0x35, 0xbd, 0x7a, 0xae, 0xa6,
+	0x6b, 0x77, 0x94, 0x32, 0xd1, 0xcf, 0xd9, 0x9f, 0xcf, 0xd7, 0x36, 0xb6, 0xb4, 0xf3, 0xe4, 0x9e,
+	0xc9, 0xf4, 0xeb, 0x3c, 0xff, 0x43, 0xed, 0xd9, 0xf9, 0x0e, 0x7b, 0xb6, 0x11, 0xa2, 0x37, 0x0f,
+	0xce, 0xfc, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xb4, 0xac, 0x96, 0xa3, 0xde, 0xa0, 0x00, 0x00,
 }
 
+func (x URLScheme) String() string {
+	s, ok := URLScheme_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x ShapeBotDefenseRegion) String() string {
+	s, ok := ShapeBotDefenseRegion_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x JavaScriptLocation) String() string {
+	s, ok := JavaScriptLocation_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *DownstreamTlsValidationContext) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6414,6 +8664,15 @@ func (this *ProxyTypeHttps) Equal(that interface{}) bool {
 	} else if !this.ServerHeaderChoice.Equal(that1.ServerHeaderChoice) {
 		return false
 	}
+	if that1.PathNormalizeChoice == nil {
+		if this.PathNormalizeChoice != nil {
+			return false
+		}
+	} else if this.PathNormalizeChoice == nil {
+		return false
+	} else if !this.PathNormalizeChoice.Equal(that1.PathNormalizeChoice) {
+		return false
+	}
 	return true
 }
 func (this *ProxyTypeHttps_DefaultHeader) Equal(that interface{}) bool {
@@ -6512,6 +8771,54 @@ func (this *ProxyTypeHttps_PassThrough) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ProxyTypeHttps_EnablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ProxyTypeHttps_EnablePathNormalize)
+	if !ok {
+		that2, ok := that.(ProxyTypeHttps_EnablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnablePathNormalize.Equal(that1.EnablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *ProxyTypeHttps_DisablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ProxyTypeHttps_DisablePathNormalize)
+	if !ok {
+		that2, ok := that.(ProxyTypeHttps_DisablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisablePathNormalize.Equal(that1.DisablePathNormalize) {
+		return false
+	}
+	return true
+}
 func (this *ProxyTypeHttp) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6580,6 +8887,15 @@ func (this *ProxyTypeHttpsAutoCerts) Equal(that interface{}) bool {
 	} else if this.ServerHeaderChoice == nil {
 		return false
 	} else if !this.ServerHeaderChoice.Equal(that1.ServerHeaderChoice) {
+		return false
+	}
+	if that1.PathNormalizeChoice == nil {
+		if this.PathNormalizeChoice != nil {
+			return false
+		}
+	} else if this.PathNormalizeChoice == nil {
+		return false
+	} else if !this.PathNormalizeChoice.Equal(that1.PathNormalizeChoice) {
 		return false
 	}
 	return true
@@ -6724,6 +9040,54 @@ func (this *ProxyTypeHttpsAutoCerts_PassThrough) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.PassThrough.Equal(that1.PassThrough) {
+		return false
+	}
+	return true
+}
+func (this *ProxyTypeHttpsAutoCerts_EnablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ProxyTypeHttpsAutoCerts_EnablePathNormalize)
+	if !ok {
+		that2, ok := that.(ProxyTypeHttpsAutoCerts_EnablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnablePathNormalize.Equal(that1.EnablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *ProxyTypeHttpsAutoCerts_DisablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ProxyTypeHttpsAutoCerts_DisablePathNormalize)
+	if !ok {
+		that2, ok := that.(ProxyTypeHttpsAutoCerts_DisablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisablePathNormalize.Equal(that1.DisablePathNormalize) {
 		return false
 	}
 	return true
@@ -7940,6 +10304,120 @@ func (this *AdvancedOptionsType) Equal(that interface{}) bool {
 	if this.DisableDefaultErrorPages != that1.DisableDefaultErrorPages {
 		return false
 	}
+	if that1.PathNormalizeChoice == nil {
+		if this.PathNormalizeChoice != nil {
+			return false
+		}
+	} else if this.PathNormalizeChoice == nil {
+		return false
+	} else if !this.PathNormalizeChoice.Equal(that1.PathNormalizeChoice) {
+		return false
+	}
+	if that1.StrictSniHostHeaderCheckChoice == nil {
+		if this.StrictSniHostHeaderCheckChoice != nil {
+			return false
+		}
+	} else if this.StrictSniHostHeaderCheckChoice == nil {
+		return false
+	} else if !this.StrictSniHostHeaderCheckChoice.Equal(that1.StrictSniHostHeaderCheckChoice) {
+		return false
+	}
+	return true
+}
+func (this *AdvancedOptionsType_EnablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AdvancedOptionsType_EnablePathNormalize)
+	if !ok {
+		that2, ok := that.(AdvancedOptionsType_EnablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnablePathNormalize.Equal(that1.EnablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *AdvancedOptionsType_DisablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AdvancedOptionsType_DisablePathNormalize)
+	if !ok {
+		that2, ok := that.(AdvancedOptionsType_DisablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisablePathNormalize.Equal(that1.DisablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *AdvancedOptionsType_EnableStrictSniHostHeaderCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AdvancedOptionsType_EnableStrictSniHostHeaderCheck)
+	if !ok {
+		that2, ok := that.(AdvancedOptionsType_EnableStrictSniHostHeaderCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableStrictSniHostHeaderCheck.Equal(that1.EnableStrictSniHostHeaderCheck) {
+		return false
+	}
+	return true
+}
+func (this *AdvancedOptionsType_AdditionalDomains) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AdvancedOptionsType_AdditionalDomains)
+	if !ok {
+		that2, ok := that.(AdvancedOptionsType_AdditionalDomains)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AdditionalDomains.Equal(that1.AdditionalDomains) {
+		return false
+	}
 	return true
 }
 func (this *PolicyBasedChallenge) Equal(that interface{}) bool {
@@ -8365,6 +10843,15 @@ func (this *SimpleClientSrcRule) Equal(that interface{}) bool {
 	if !this.Metadata.Equal(that1.Metadata) {
 		return false
 	}
+	if that1.ActionChoice == nil {
+		if this.ActionChoice != nil {
+			return false
+		}
+	} else if this.ActionChoice == nil {
+		return false
+	} else if !this.ActionChoice.Equal(that1.ActionChoice) {
+		return false
+	}
 	return true
 }
 func (this *SimpleClientSrcRule_IpPrefix) Equal(that interface{}) bool {
@@ -8411,6 +10898,78 @@ func (this *SimpleClientSrcRule_AsNumber) Equal(that interface{}) bool {
 		return false
 	}
 	if this.AsNumber != that1.AsNumber {
+		return false
+	}
+	return true
+}
+func (this *SimpleClientSrcRule_SkipProcessing) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SimpleClientSrcRule_SkipProcessing)
+	if !ok {
+		that2, ok := that.(SimpleClientSrcRule_SkipProcessing)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SkipProcessing.Equal(that1.SkipProcessing) {
+		return false
+	}
+	return true
+}
+func (this *SimpleClientSrcRule_WafSkipProcessing) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SimpleClientSrcRule_WafSkipProcessing)
+	if !ok {
+		that2, ok := that.(SimpleClientSrcRule_WafSkipProcessing)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.WafSkipProcessing.Equal(that1.WafSkipProcessing) {
+		return false
+	}
+	return true
+}
+func (this *SimpleClientSrcRule_BotSkipProcessing) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SimpleClientSrcRule_BotSkipProcessing)
+	if !ok {
+		that2, ok := that.(SimpleClientSrcRule_BotSkipProcessing)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BotSkipProcessing.Equal(that1.BotSkipProcessing) {
 		return false
 	}
 	return true
@@ -8787,6 +11346,907 @@ func (this *ServicePolicyList) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ApiDiscoverySetting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiDiscoverySetting)
+	if !ok {
+		that2, ok := that.(ApiDiscoverySetting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.LearnFromRedirectTraffic == nil {
+		if this.LearnFromRedirectTraffic != nil {
+			return false
+		}
+	} else if this.LearnFromRedirectTraffic == nil {
+		return false
+	} else if !this.LearnFromRedirectTraffic.Equal(that1.LearnFromRedirectTraffic) {
+		return false
+	}
+	return true
+}
+func (this *ApiDiscoverySetting_DisableLearnFromRedirectTraffic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiDiscoverySetting_DisableLearnFromRedirectTraffic)
+	if !ok {
+		that2, ok := that.(ApiDiscoverySetting_DisableLearnFromRedirectTraffic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableLearnFromRedirectTraffic.Equal(that1.DisableLearnFromRedirectTraffic) {
+		return false
+	}
+	return true
+}
+func (this *ApiDiscoverySetting_EnableLearnFromRedirectTraffic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiDiscoverySetting_EnableLearnFromRedirectTraffic)
+	if !ok {
+		that2, ok := that.(ApiDiscoverySetting_EnableLearnFromRedirectTraffic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableLearnFromRedirectTraffic.Equal(that1.EnableLearnFromRedirectTraffic) {
+		return false
+	}
+	return true
+}
+func (this *SingleLoadBalancerAppSetting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SingleLoadBalancerAppSetting)
+	if !ok {
+		that2, ok := that.(SingleLoadBalancerAppSetting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.ApiDiscoveryChoice == nil {
+		if this.ApiDiscoveryChoice != nil {
+			return false
+		}
+	} else if this.ApiDiscoveryChoice == nil {
+		return false
+	} else if !this.ApiDiscoveryChoice.Equal(that1.ApiDiscoveryChoice) {
+		return false
+	}
+	if that1.DdosDetectionChoice == nil {
+		if this.DdosDetectionChoice != nil {
+			return false
+		}
+	} else if this.DdosDetectionChoice == nil {
+		return false
+	} else if !this.DdosDetectionChoice.Equal(that1.DdosDetectionChoice) {
+		return false
+	}
+	if that1.MaliciousUserDetectionChoice == nil {
+		if this.MaliciousUserDetectionChoice != nil {
+			return false
+		}
+	} else if this.MaliciousUserDetectionChoice == nil {
+		return false
+	} else if !this.MaliciousUserDetectionChoice.Equal(that1.MaliciousUserDetectionChoice) {
+		return false
+	}
+	return true
+}
+func (this *SingleLoadBalancerAppSetting_EnableDiscovery) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SingleLoadBalancerAppSetting_EnableDiscovery)
+	if !ok {
+		that2, ok := that.(SingleLoadBalancerAppSetting_EnableDiscovery)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableDiscovery.Equal(that1.EnableDiscovery) {
+		return false
+	}
+	return true
+}
+func (this *SingleLoadBalancerAppSetting_DisableDiscovery) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SingleLoadBalancerAppSetting_DisableDiscovery)
+	if !ok {
+		that2, ok := that.(SingleLoadBalancerAppSetting_DisableDiscovery)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableDiscovery.Equal(that1.DisableDiscovery) {
+		return false
+	}
+	return true
+}
+func (this *SingleLoadBalancerAppSetting_EnableDdosDetection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SingleLoadBalancerAppSetting_EnableDdosDetection)
+	if !ok {
+		that2, ok := that.(SingleLoadBalancerAppSetting_EnableDdosDetection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableDdosDetection.Equal(that1.EnableDdosDetection) {
+		return false
+	}
+	return true
+}
+func (this *SingleLoadBalancerAppSetting_DisableDdosDetection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SingleLoadBalancerAppSetting_DisableDdosDetection)
+	if !ok {
+		that2, ok := that.(SingleLoadBalancerAppSetting_DisableDdosDetection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableDdosDetection.Equal(that1.DisableDdosDetection) {
+		return false
+	}
+	return true
+}
+func (this *SingleLoadBalancerAppSetting_EnableMaliciousUserDetection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SingleLoadBalancerAppSetting_EnableMaliciousUserDetection)
+	if !ok {
+		that2, ok := that.(SingleLoadBalancerAppSetting_EnableMaliciousUserDetection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableMaliciousUserDetection.Equal(that1.EnableMaliciousUserDetection) {
+		return false
+	}
+	return true
+}
+func (this *SingleLoadBalancerAppSetting_DisableMaliciousUserDetection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SingleLoadBalancerAppSetting_DisableMaliciousUserDetection)
+	if !ok {
+		that2, ok := that.(SingleLoadBalancerAppSetting_DisableMaliciousUserDetection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableMaliciousUserDetection.Equal(that1.DisableMaliciousUserDetection) {
+		return false
+	}
+	return true
+}
+func (this *ShapeBotDefenseType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeBotDefenseType)
+	if !ok {
+		that2, ok := that.(ShapeBotDefenseType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.RegionalEndpoint != that1.RegionalEndpoint {
+		return false
+	}
+	if !this.Policy.Equal(that1.Policy) {
+		return false
+	}
+	return true
+}
+func (this *ShapeBotDefensePolicyType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeBotDefensePolicyType)
+	if !ok {
+		that2, ok := that.(ShapeBotDefensePolicyType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.ProtectedAppEndpoints) != len(that1.ProtectedAppEndpoints) {
+		return false
+	}
+	for i := range this.ProtectedAppEndpoints {
+		if !this.ProtectedAppEndpoints[i].Equal(that1.ProtectedAppEndpoints[i]) {
+			return false
+		}
+	}
+	if that1.JavaScriptChoice == nil {
+		if this.JavaScriptChoice != nil {
+			return false
+		}
+	} else if this.JavaScriptChoice == nil {
+		return false
+	} else if !this.JavaScriptChoice.Equal(that1.JavaScriptChoice) {
+		return false
+	}
+	if this.JsDownloadPath != that1.JsDownloadPath {
+		return false
+	}
+	return true
+}
+func (this *ShapeBotDefensePolicyType_DisableJsInsert) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeBotDefensePolicyType_DisableJsInsert)
+	if !ok {
+		that2, ok := that.(ShapeBotDefensePolicyType_DisableJsInsert)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableJsInsert.Equal(that1.DisableJsInsert) {
+		return false
+	}
+	return true
+}
+func (this *ShapeBotDefensePolicyType_JsInsertAllPages) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeBotDefensePolicyType_JsInsertAllPages)
+	if !ok {
+		that2, ok := that.(ShapeBotDefensePolicyType_JsInsertAllPages)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.JsInsertAllPages.Equal(that1.JsInsertAllPages) {
+		return false
+	}
+	return true
+}
+func (this *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeBotDefensePolicyType_JsInsertAllPagesExcept)
+	if !ok {
+		that2, ok := that.(ShapeBotDefensePolicyType_JsInsertAllPagesExcept)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.JsInsertAllPagesExcept.Equal(that1.JsInsertAllPagesExcept) {
+		return false
+	}
+	return true
+}
+func (this *ShapeBotDefensePolicyType_JsInsertionRules) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeBotDefensePolicyType_JsInsertionRules)
+	if !ok {
+		that2, ok := that.(ShapeBotDefensePolicyType_JsInsertionRules)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.JsInsertionRules.Equal(that1.JsInsertionRules) {
+		return false
+	}
+	return true
+}
+func (this *AppEndpointType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppEndpointType)
+	if !ok {
+		that2, ok := that.(AppEndpointType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.HttpMethods) != len(that1.HttpMethods) {
+		return false
+	}
+	for i := range this.HttpMethods {
+		if this.HttpMethods[i] != that1.HttpMethods[i] {
+			return false
+		}
+	}
+	if this.Protocol != that1.Protocol {
+		return false
+	}
+	if !this.Path.Equal(that1.Path) {
+		return false
+	}
+	if that1.DomainMatcherChoice == nil {
+		if this.DomainMatcherChoice != nil {
+			return false
+		}
+	} else if this.DomainMatcherChoice == nil {
+		return false
+	} else if !this.DomainMatcherChoice.Equal(that1.DomainMatcherChoice) {
+		return false
+	}
+	if that1.AppTrafficTypeChoice == nil {
+		if this.AppTrafficTypeChoice != nil {
+			return false
+		}
+	} else if this.AppTrafficTypeChoice == nil {
+		return false
+	} else if !this.AppTrafficTypeChoice.Equal(that1.AppTrafficTypeChoice) {
+		return false
+	}
+	if !this.Mitigation.Equal(that1.Mitigation) {
+		return false
+	}
+	return true
+}
+func (this *AppEndpointType_AnyDomain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppEndpointType_AnyDomain)
+	if !ok {
+		that2, ok := that.(AppEndpointType_AnyDomain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AnyDomain.Equal(that1.AnyDomain) {
+		return false
+	}
+	return true
+}
+func (this *AppEndpointType_Domain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppEndpointType_Domain)
+	if !ok {
+		that2, ok := that.(AppEndpointType_Domain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Domain.Equal(that1.Domain) {
+		return false
+	}
+	return true
+}
+func (this *AppEndpointType_Web) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppEndpointType_Web)
+	if !ok {
+		that2, ok := that.(AppEndpointType_Web)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Web.Equal(that1.Web) {
+		return false
+	}
+	return true
+}
+func (this *AppEndpointType_Mobile) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppEndpointType_Mobile)
+	if !ok {
+		that2, ok := that.(AppEndpointType_Mobile)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Mobile.Equal(that1.Mobile) {
+		return false
+	}
+	return true
+}
+func (this *AppEndpointType_WebMobile) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppEndpointType_WebMobile)
+	if !ok {
+		that2, ok := that.(AppEndpointType_WebMobile)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.WebMobile.Equal(that1.WebMobile) {
+		return false
+	}
+	return true
+}
+func (this *WebMobileTrafficType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*WebMobileTrafficType)
+	if !ok {
+		that2, ok := that.(WebMobileTrafficType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Header.Equal(that1.Header) {
+		return false
+	}
+	return true
+}
+func (this *ShapeJavaScriptInsertType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptInsertType)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptInsertType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Rules) != len(that1.Rules) {
+		return false
+	}
+	for i := range this.Rules {
+		if !this.Rules[i].Equal(that1.Rules[i]) {
+			return false
+		}
+	}
+	if len(this.ExcludeList) != len(that1.ExcludeList) {
+		return false
+	}
+	for i := range this.ExcludeList {
+		if !this.ExcludeList[i].Equal(that1.ExcludeList[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *ShapeJavaScriptInsertAllWithExceptionsType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptInsertAllWithExceptionsType)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptInsertAllWithExceptionsType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.JavascriptLocation != that1.JavascriptLocation {
+		return false
+	}
+	if len(this.ExcludeList) != len(that1.ExcludeList) {
+		return false
+	}
+	for i := range this.ExcludeList {
+		if !this.ExcludeList[i].Equal(that1.ExcludeList[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *ShapeJavaScriptInsertAllType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptInsertAllType)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptInsertAllType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.JavascriptLocation != that1.JavascriptLocation {
+		return false
+	}
+	return true
+}
+func (this *ShapeJavaScriptInsertionRule) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptInsertionRule)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptInsertionRule)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if that1.DomainMatcherChoice == nil {
+		if this.DomainMatcherChoice != nil {
+			return false
+		}
+	} else if this.DomainMatcherChoice == nil {
+		return false
+	} else if !this.DomainMatcherChoice.Equal(that1.DomainMatcherChoice) {
+		return false
+	}
+	if !this.Path.Equal(that1.Path) {
+		return false
+	}
+	if this.JavascriptLocation != that1.JavascriptLocation {
+		return false
+	}
+	return true
+}
+func (this *ShapeJavaScriptInsertionRule_AnyDomain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptInsertionRule_AnyDomain)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptInsertionRule_AnyDomain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AnyDomain.Equal(that1.AnyDomain) {
+		return false
+	}
+	return true
+}
+func (this *ShapeJavaScriptInsertionRule_Domain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptInsertionRule_Domain)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptInsertionRule_Domain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Domain.Equal(that1.Domain) {
+		return false
+	}
+	return true
+}
+func (this *ShapeJavaScriptExclusionRule) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptExclusionRule)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptExclusionRule)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if that1.DomainMatcherChoice == nil {
+		if this.DomainMatcherChoice != nil {
+			return false
+		}
+	} else if this.DomainMatcherChoice == nil {
+		return false
+	} else if !this.DomainMatcherChoice.Equal(that1.DomainMatcherChoice) {
+		return false
+	}
+	if !this.Path.Equal(that1.Path) {
+		return false
+	}
+	return true
+}
+func (this *ShapeJavaScriptExclusionRule_AnyDomain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptExclusionRule_AnyDomain)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptExclusionRule_AnyDomain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AnyDomain.Equal(that1.AnyDomain) {
+		return false
+	}
+	return true
+}
+func (this *ShapeJavaScriptExclusionRule_Domain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeJavaScriptExclusionRule_Domain)
+	if !ok {
+		that2, ok := that.(ShapeJavaScriptExclusionRule_Domain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Domain.Equal(that1.Domain) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -8884,7 +12344,13 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.MoreOption.Equal(that1.MoreOption) {
 		return false
 	}
-	if !this.UserIdentification.Equal(that1.UserIdentification) {
+	if that1.UserIdChoice == nil {
+		if this.UserIdChoice != nil {
+			return false
+		}
+	} else if this.UserIdChoice == nil {
+		return false
+	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
 		return false
 	}
 	if that1.RateLimitChoice == nil {
@@ -8947,6 +12413,24 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if this.HashPolicyChoice == nil {
 		return false
 	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
+		return false
+	}
+	if that1.MlConfigChoice == nil {
+		if this.MlConfigChoice != nil {
+			return false
+		}
+	} else if this.MlConfigChoice == nil {
+		return false
+	} else if !this.MlConfigChoice.Equal(that1.MlConfigChoice) {
+		return false
+	}
+	if that1.BotDefenseChoice == nil {
+		if this.BotDefenseChoice != nil {
+			return false
+		}
+	} else if this.BotDefenseChoice == nil {
+		return false
+	} else if !this.BotDefenseChoice.Equal(that1.BotDefenseChoice) {
 		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
@@ -9406,6 +12890,54 @@ func (this *GlobalSpecType_PolicyBasedChallenge) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_UserIdClientIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_UserIdClientIp)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_UserIdClientIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdClientIp.Equal(that1.UserIdClientIp) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_UserIdentification) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_UserIdentification)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_UserIdentification)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdentification.Equal(that1.UserIdentification) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType_DisableRateLimit) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -9670,6 +13202,102 @@ func (this *GlobalSpecType_RingHash) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_SingleLbApp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_SingleLbApp)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_SingleLbApp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SingleLbApp.Equal(that1.SingleLbApp) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_MultiLbApp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_MultiLbApp)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_MultiLbApp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MultiLbApp.Equal(that1.MultiLbApp) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DisableBotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DisableBotDefense)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DisableBotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableBotDefense.Equal(that1.DisableBotDefense) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_BotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_BotDefense)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_BotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BotDefense.Equal(that1.BotDefense) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -9758,7 +13386,13 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.MoreOption.Equal(that1.MoreOption) {
 		return false
 	}
-	if !this.UserIdentification.Equal(that1.UserIdentification) {
+	if that1.UserIdChoice == nil {
+		if this.UserIdChoice != nil {
+			return false
+		}
+	} else if this.UserIdChoice == nil {
+		return false
+	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
 		return false
 	}
 	if that1.RateLimitChoice == nil {
@@ -9821,6 +13455,24 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.HashPolicyChoice == nil {
 		return false
 	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
+		return false
+	}
+	if that1.MlConfigChoice == nil {
+		if this.MlConfigChoice != nil {
+			return false
+		}
+	} else if this.MlConfigChoice == nil {
+		return false
+	} else if !this.MlConfigChoice.Equal(that1.MlConfigChoice) {
+		return false
+	}
+	if that1.BotDefenseChoice == nil {
+		if this.BotDefenseChoice != nil {
+			return false
+		}
+	} else if this.BotDefenseChoice == nil {
+		return false
+	} else if !this.BotDefenseChoice.Equal(that1.BotDefenseChoice) {
 		return false
 	}
 	return true
@@ -10185,6 +13837,54 @@ func (this *CreateSpecType_PolicyBasedChallenge) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_UserIdClientIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_UserIdClientIp)
+	if !ok {
+		that2, ok := that.(CreateSpecType_UserIdClientIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdClientIp.Equal(that1.UserIdClientIp) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_UserIdentification) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_UserIdentification)
+	if !ok {
+		that2, ok := that.(CreateSpecType_UserIdentification)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdentification.Equal(that1.UserIdentification) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType_DisableRateLimit) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -10449,6 +14149,102 @@ func (this *CreateSpecType_RingHash) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_SingleLbApp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_SingleLbApp)
+	if !ok {
+		that2, ok := that.(CreateSpecType_SingleLbApp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SingleLbApp.Equal(that1.SingleLbApp) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_MultiLbApp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_MultiLbApp)
+	if !ok {
+		that2, ok := that.(CreateSpecType_MultiLbApp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MultiLbApp.Equal(that1.MultiLbApp) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DisableBotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DisableBotDefense)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DisableBotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableBotDefense.Equal(that1.DisableBotDefense) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_BotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_BotDefense)
+	if !ok {
+		that2, ok := that.(CreateSpecType_BotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BotDefense.Equal(that1.BotDefense) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -10537,7 +14333,13 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.MoreOption.Equal(that1.MoreOption) {
 		return false
 	}
-	if !this.UserIdentification.Equal(that1.UserIdentification) {
+	if that1.UserIdChoice == nil {
+		if this.UserIdChoice != nil {
+			return false
+		}
+	} else if this.UserIdChoice == nil {
+		return false
+	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
 		return false
 	}
 	if that1.RateLimitChoice == nil {
@@ -10600,6 +14402,24 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.HashPolicyChoice == nil {
 		return false
 	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
+		return false
+	}
+	if that1.MlConfigChoice == nil {
+		if this.MlConfigChoice != nil {
+			return false
+		}
+	} else if this.MlConfigChoice == nil {
+		return false
+	} else if !this.MlConfigChoice.Equal(that1.MlConfigChoice) {
+		return false
+	}
+	if that1.BotDefenseChoice == nil {
+		if this.BotDefenseChoice != nil {
+			return false
+		}
+	} else if this.BotDefenseChoice == nil {
+		return false
+	} else if !this.BotDefenseChoice.Equal(that1.BotDefenseChoice) {
 		return false
 	}
 	return true
@@ -10964,6 +14784,54 @@ func (this *ReplaceSpecType_PolicyBasedChallenge) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_UserIdClientIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_UserIdClientIp)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_UserIdClientIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdClientIp.Equal(that1.UserIdClientIp) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_UserIdentification) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_UserIdentification)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_UserIdentification)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdentification.Equal(that1.UserIdentification) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType_DisableRateLimit) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -11228,6 +15096,102 @@ func (this *ReplaceSpecType_RingHash) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_SingleLbApp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_SingleLbApp)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_SingleLbApp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SingleLbApp.Equal(that1.SingleLbApp) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_MultiLbApp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_MultiLbApp)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_MultiLbApp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MultiLbApp.Equal(that1.MultiLbApp) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DisableBotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DisableBotDefense)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DisableBotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableBotDefense.Equal(that1.DisableBotDefense) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_BotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_BotDefense)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_BotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BotDefense.Equal(that1.BotDefense) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -11316,7 +15280,13 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.MoreOption.Equal(that1.MoreOption) {
 		return false
 	}
-	if !this.UserIdentification.Equal(that1.UserIdentification) {
+	if that1.UserIdChoice == nil {
+		if this.UserIdChoice != nil {
+			return false
+		}
+	} else if this.UserIdChoice == nil {
+		return false
+	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
 		return false
 	}
 	if that1.RateLimitChoice == nil {
@@ -11379,6 +15349,24 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.HashPolicyChoice == nil {
 		return false
 	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
+		return false
+	}
+	if that1.MlConfigChoice == nil {
+		if this.MlConfigChoice != nil {
+			return false
+		}
+	} else if this.MlConfigChoice == nil {
+		return false
+	} else if !this.MlConfigChoice.Equal(that1.MlConfigChoice) {
+		return false
+	}
+	if that1.BotDefenseChoice == nil {
+		if this.BotDefenseChoice != nil {
+			return false
+		}
+	} else if this.BotDefenseChoice == nil {
+		return false
+	} else if !this.BotDefenseChoice.Equal(that1.BotDefenseChoice) {
 		return false
 	}
 	if this.HostName != that1.HostName {
@@ -11763,6 +15751,54 @@ func (this *GetSpecType_PolicyBasedChallenge) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_UserIdClientIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_UserIdClientIp)
+	if !ok {
+		that2, ok := that.(GetSpecType_UserIdClientIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdClientIp.Equal(that1.UserIdClientIp) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_UserIdentification) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_UserIdentification)
+	if !ok {
+		that2, ok := that.(GetSpecType_UserIdentification)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdentification.Equal(that1.UserIdentification) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType_DisableRateLimit) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -12027,6 +16063,102 @@ func (this *GetSpecType_RingHash) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_SingleLbApp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_SingleLbApp)
+	if !ok {
+		that2, ok := that.(GetSpecType_SingleLbApp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SingleLbApp.Equal(that1.SingleLbApp) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_MultiLbApp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_MultiLbApp)
+	if !ok {
+		that2, ok := that.(GetSpecType_MultiLbApp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MultiLbApp.Equal(that1.MultiLbApp) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DisableBotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DisableBotDefense)
+	if !ok {
+		that2, ok := that.(GetSpecType_DisableBotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableBotDefense.Equal(that1.DisableBotDefense) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_BotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_BotDefense)
+	if !ok {
+		that2, ok := that.(GetSpecType_BotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BotDefense.Equal(that1.BotDefense) {
+		return false
+	}
+	return true
+}
 func (this *DownstreamTlsValidationContext) GoString() string {
 	if this == nil {
 		return "nil"
@@ -12075,7 +16207,7 @@ func (this *ProxyTypeHttps) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 13)
 	s = append(s, "&http_loadbalancer.ProxyTypeHttps{")
 	s = append(s, "HttpRedirect: "+fmt.Sprintf("%#v", this.HttpRedirect)+",\n")
 	s = append(s, "AddHsts: "+fmt.Sprintf("%#v", this.AddHsts)+",\n")
@@ -12084,6 +16216,9 @@ func (this *ProxyTypeHttps) GoString() string {
 	}
 	if this.ServerHeaderChoice != nil {
 		s = append(s, "ServerHeaderChoice: "+fmt.Sprintf("%#v", this.ServerHeaderChoice)+",\n")
+	}
+	if this.PathNormalizeChoice != nil {
+		s = append(s, "PathNormalizeChoice: "+fmt.Sprintf("%#v", this.PathNormalizeChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12120,6 +16255,22 @@ func (this *ProxyTypeHttps_PassThrough) GoString() string {
 		`PassThrough:` + fmt.Sprintf("%#v", this.PassThrough) + `}`}, ", ")
 	return s
 }
+func (this *ProxyTypeHttps_EnablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ProxyTypeHttps_EnablePathNormalize{` +
+		`EnablePathNormalize:` + fmt.Sprintf("%#v", this.EnablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *ProxyTypeHttps_DisablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ProxyTypeHttps_DisablePathNormalize{` +
+		`DisablePathNormalize:` + fmt.Sprintf("%#v", this.DisablePathNormalize) + `}`}, ", ")
+	return s
+}
 func (this *ProxyTypeHttp) GoString() string {
 	if this == nil {
 		return "nil"
@@ -12134,7 +16285,7 @@ func (this *ProxyTypeHttpsAutoCerts) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 15)
 	s = append(s, "&http_loadbalancer.ProxyTypeHttpsAutoCerts{")
 	s = append(s, "HttpRedirect: "+fmt.Sprintf("%#v", this.HttpRedirect)+",\n")
 	s = append(s, "AddHsts: "+fmt.Sprintf("%#v", this.AddHsts)+",\n")
@@ -12146,6 +16297,9 @@ func (this *ProxyTypeHttpsAutoCerts) GoString() string {
 	}
 	if this.ServerHeaderChoice != nil {
 		s = append(s, "ServerHeaderChoice: "+fmt.Sprintf("%#v", this.ServerHeaderChoice)+",\n")
+	}
+	if this.PathNormalizeChoice != nil {
+		s = append(s, "PathNormalizeChoice: "+fmt.Sprintf("%#v", this.PathNormalizeChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12196,6 +16350,22 @@ func (this *ProxyTypeHttpsAutoCerts_PassThrough) GoString() string {
 	}
 	s := strings.Join([]string{`&http_loadbalancer.ProxyTypeHttpsAutoCerts_PassThrough{` +
 		`PassThrough:` + fmt.Sprintf("%#v", this.PassThrough) + `}`}, ", ")
+	return s
+}
+func (this *ProxyTypeHttpsAutoCerts_EnablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ProxyTypeHttpsAutoCerts_EnablePathNormalize{` +
+		`EnablePathNormalize:` + fmt.Sprintf("%#v", this.EnablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *ProxyTypeHttpsAutoCerts_DisablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ProxyTypeHttpsAutoCerts_DisablePathNormalize{` +
+		`DisablePathNormalize:` + fmt.Sprintf("%#v", this.DisablePathNormalize) + `}`}, ", ")
 	return s
 }
 func (this *HashPolicyListType) GoString() string {
@@ -12626,7 +16796,7 @@ func (this *AdvancedOptionsType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 20)
 	s = append(s, "&http_loadbalancer.AdvancedOptionsType{")
 	if this.RequestHeadersToAdd != nil {
 		s = append(s, "RequestHeadersToAdd: "+fmt.Sprintf("%#v", this.RequestHeadersToAdd)+",\n")
@@ -12664,8 +16834,46 @@ func (this *AdvancedOptionsType) GoString() string {
 	}
 	s = append(s, "IdleTimeout: "+fmt.Sprintf("%#v", this.IdleTimeout)+",\n")
 	s = append(s, "DisableDefaultErrorPages: "+fmt.Sprintf("%#v", this.DisableDefaultErrorPages)+",\n")
+	if this.PathNormalizeChoice != nil {
+		s = append(s, "PathNormalizeChoice: "+fmt.Sprintf("%#v", this.PathNormalizeChoice)+",\n")
+	}
+	if this.StrictSniHostHeaderCheckChoice != nil {
+		s = append(s, "StrictSniHostHeaderCheckChoice: "+fmt.Sprintf("%#v", this.StrictSniHostHeaderCheckChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *AdvancedOptionsType_EnablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AdvancedOptionsType_EnablePathNormalize{` +
+		`EnablePathNormalize:` + fmt.Sprintf("%#v", this.EnablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *AdvancedOptionsType_DisablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AdvancedOptionsType_DisablePathNormalize{` +
+		`DisablePathNormalize:` + fmt.Sprintf("%#v", this.DisablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *AdvancedOptionsType_EnableStrictSniHostHeaderCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AdvancedOptionsType_EnableStrictSniHostHeaderCheck{` +
+		`EnableStrictSniHostHeaderCheck:` + fmt.Sprintf("%#v", this.EnableStrictSniHostHeaderCheck) + `}`}, ", ")
+	return s
+}
+func (this *AdvancedOptionsType_AdditionalDomains) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AdvancedOptionsType_AdditionalDomains{` +
+		`AdditionalDomains:` + fmt.Sprintf("%#v", this.AdditionalDomains) + `}`}, ", ")
+	return s
 }
 func (this *PolicyBasedChallenge) GoString() string {
 	if this == nil {
@@ -12813,7 +17021,7 @@ func (this *SimpleClientSrcRule) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 11)
 	s = append(s, "&http_loadbalancer.SimpleClientSrcRule{")
 	if this.ClientSourceChoice != nil {
 		s = append(s, "ClientSourceChoice: "+fmt.Sprintf("%#v", this.ClientSourceChoice)+",\n")
@@ -12823,6 +17031,9 @@ func (this *SimpleClientSrcRule) GoString() string {
 	}
 	if this.Metadata != nil {
 		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.ActionChoice != nil {
+		s = append(s, "ActionChoice: "+fmt.Sprintf("%#v", this.ActionChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12841,6 +17052,30 @@ func (this *SimpleClientSrcRule_AsNumber) GoString() string {
 	}
 	s := strings.Join([]string{`&http_loadbalancer.SimpleClientSrcRule_AsNumber{` +
 		`AsNumber:` + fmt.Sprintf("%#v", this.AsNumber) + `}`}, ", ")
+	return s
+}
+func (this *SimpleClientSrcRule_SkipProcessing) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SimpleClientSrcRule_SkipProcessing{` +
+		`SkipProcessing:` + fmt.Sprintf("%#v", this.SkipProcessing) + `}`}, ", ")
+	return s
+}
+func (this *SimpleClientSrcRule_WafSkipProcessing) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SimpleClientSrcRule_WafSkipProcessing{` +
+		`WafSkipProcessing:` + fmt.Sprintf("%#v", this.WafSkipProcessing) + `}`}, ", ")
+	return s
+}
+func (this *SimpleClientSrcRule_BotSkipProcessing) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SimpleClientSrcRule_BotSkipProcessing{` +
+		`BotSkipProcessing:` + fmt.Sprintf("%#v", this.BotSkipProcessing) + `}`}, ", ")
 	return s
 }
 func (this *DDoSClientSource) GoString() string {
@@ -12986,11 +17221,351 @@ func (this *ServicePolicyList) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ApiDiscoverySetting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&http_loadbalancer.ApiDiscoverySetting{")
+	if this.LearnFromRedirectTraffic != nil {
+		s = append(s, "LearnFromRedirectTraffic: "+fmt.Sprintf("%#v", this.LearnFromRedirectTraffic)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApiDiscoverySetting_DisableLearnFromRedirectTraffic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{` +
+		`DisableLearnFromRedirectTraffic:` + fmt.Sprintf("%#v", this.DisableLearnFromRedirectTraffic) + `}`}, ", ")
+	return s
+}
+func (this *ApiDiscoverySetting_EnableLearnFromRedirectTraffic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{` +
+		`EnableLearnFromRedirectTraffic:` + fmt.Sprintf("%#v", this.EnableLearnFromRedirectTraffic) + `}`}, ", ")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&http_loadbalancer.SingleLoadBalancerAppSetting{")
+	if this.ApiDiscoveryChoice != nil {
+		s = append(s, "ApiDiscoveryChoice: "+fmt.Sprintf("%#v", this.ApiDiscoveryChoice)+",\n")
+	}
+	if this.DdosDetectionChoice != nil {
+		s = append(s, "DdosDetectionChoice: "+fmt.Sprintf("%#v", this.DdosDetectionChoice)+",\n")
+	}
+	if this.MaliciousUserDetectionChoice != nil {
+		s = append(s, "MaliciousUserDetectionChoice: "+fmt.Sprintf("%#v", this.MaliciousUserDetectionChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SingleLoadBalancerAppSetting_EnableDiscovery) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SingleLoadBalancerAppSetting_EnableDiscovery{` +
+		`EnableDiscovery:` + fmt.Sprintf("%#v", this.EnableDiscovery) + `}`}, ", ")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_DisableDiscovery) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SingleLoadBalancerAppSetting_DisableDiscovery{` +
+		`DisableDiscovery:` + fmt.Sprintf("%#v", this.DisableDiscovery) + `}`}, ", ")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_EnableDdosDetection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SingleLoadBalancerAppSetting_EnableDdosDetection{` +
+		`EnableDdosDetection:` + fmt.Sprintf("%#v", this.EnableDdosDetection) + `}`}, ", ")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_DisableDdosDetection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SingleLoadBalancerAppSetting_DisableDdosDetection{` +
+		`DisableDdosDetection:` + fmt.Sprintf("%#v", this.DisableDdosDetection) + `}`}, ", ")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_EnableMaliciousUserDetection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SingleLoadBalancerAppSetting_EnableMaliciousUserDetection{` +
+		`EnableMaliciousUserDetection:` + fmt.Sprintf("%#v", this.EnableMaliciousUserDetection) + `}`}, ", ")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_DisableMaliciousUserDetection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SingleLoadBalancerAppSetting_DisableMaliciousUserDetection{` +
+		`DisableMaliciousUserDetection:` + fmt.Sprintf("%#v", this.DisableMaliciousUserDetection) + `}`}, ", ")
+	return s
+}
+func (this *ShapeBotDefenseType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&http_loadbalancer.ShapeBotDefenseType{")
+	s = append(s, "RegionalEndpoint: "+fmt.Sprintf("%#v", this.RegionalEndpoint)+",\n")
+	if this.Policy != nil {
+		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ShapeBotDefensePolicyType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&http_loadbalancer.ShapeBotDefensePolicyType{")
+	if this.ProtectedAppEndpoints != nil {
+		s = append(s, "ProtectedAppEndpoints: "+fmt.Sprintf("%#v", this.ProtectedAppEndpoints)+",\n")
+	}
+	if this.JavaScriptChoice != nil {
+		s = append(s, "JavaScriptChoice: "+fmt.Sprintf("%#v", this.JavaScriptChoice)+",\n")
+	}
+	s = append(s, "JsDownloadPath: "+fmt.Sprintf("%#v", this.JsDownloadPath)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ShapeBotDefensePolicyType_DisableJsInsert) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_DisableJsInsert{` +
+		`DisableJsInsert:` + fmt.Sprintf("%#v", this.DisableJsInsert) + `}`}, ", ")
+	return s
+}
+func (this *ShapeBotDefensePolicyType_JsInsertAllPages) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_JsInsertAllPages{` +
+		`JsInsertAllPages:` + fmt.Sprintf("%#v", this.JsInsertAllPages) + `}`}, ", ")
+	return s
+}
+func (this *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_JsInsertAllPagesExcept{` +
+		`JsInsertAllPagesExcept:` + fmt.Sprintf("%#v", this.JsInsertAllPagesExcept) + `}`}, ", ")
+	return s
+}
+func (this *ShapeBotDefensePolicyType_JsInsertionRules) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_JsInsertionRules{` +
+		`JsInsertionRules:` + fmt.Sprintf("%#v", this.JsInsertionRules) + `}`}, ", ")
+	return s
+}
+func (this *AppEndpointType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 14)
+	s = append(s, "&http_loadbalancer.AppEndpointType{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	s = append(s, "HttpMethods: "+fmt.Sprintf("%#v", this.HttpMethods)+",\n")
+	s = append(s, "Protocol: "+fmt.Sprintf("%#v", this.Protocol)+",\n")
+	if this.Path != nil {
+		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	}
+	if this.DomainMatcherChoice != nil {
+		s = append(s, "DomainMatcherChoice: "+fmt.Sprintf("%#v", this.DomainMatcherChoice)+",\n")
+	}
+	if this.AppTrafficTypeChoice != nil {
+		s = append(s, "AppTrafficTypeChoice: "+fmt.Sprintf("%#v", this.AppTrafficTypeChoice)+",\n")
+	}
+	if this.Mitigation != nil {
+		s = append(s, "Mitigation: "+fmt.Sprintf("%#v", this.Mitigation)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AppEndpointType_AnyDomain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_AnyDomain{` +
+		`AnyDomain:` + fmt.Sprintf("%#v", this.AnyDomain) + `}`}, ", ")
+	return s
+}
+func (this *AppEndpointType_Domain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_Domain{` +
+		`Domain:` + fmt.Sprintf("%#v", this.Domain) + `}`}, ", ")
+	return s
+}
+func (this *AppEndpointType_Web) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_Web{` +
+		`Web:` + fmt.Sprintf("%#v", this.Web) + `}`}, ", ")
+	return s
+}
+func (this *AppEndpointType_Mobile) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_Mobile{` +
+		`Mobile:` + fmt.Sprintf("%#v", this.Mobile) + `}`}, ", ")
+	return s
+}
+func (this *AppEndpointType_WebMobile) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_WebMobile{` +
+		`WebMobile:` + fmt.Sprintf("%#v", this.WebMobile) + `}`}, ", ")
+	return s
+}
+func (this *WebMobileTrafficType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&http_loadbalancer.WebMobileTrafficType{")
+	if this.Header != nil {
+		s = append(s, "Header: "+fmt.Sprintf("%#v", this.Header)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ShapeJavaScriptInsertType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&http_loadbalancer.ShapeJavaScriptInsertType{")
+	if this.Rules != nil {
+		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
+	}
+	if this.ExcludeList != nil {
+		s = append(s, "ExcludeList: "+fmt.Sprintf("%#v", this.ExcludeList)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ShapeJavaScriptInsertAllWithExceptionsType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&http_loadbalancer.ShapeJavaScriptInsertAllWithExceptionsType{")
+	s = append(s, "JavascriptLocation: "+fmt.Sprintf("%#v", this.JavascriptLocation)+",\n")
+	if this.ExcludeList != nil {
+		s = append(s, "ExcludeList: "+fmt.Sprintf("%#v", this.ExcludeList)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ShapeJavaScriptInsertAllType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&http_loadbalancer.ShapeJavaScriptInsertAllType{")
+	s = append(s, "JavascriptLocation: "+fmt.Sprintf("%#v", this.JavascriptLocation)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ShapeJavaScriptInsertionRule) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&http_loadbalancer.ShapeJavaScriptInsertionRule{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.DomainMatcherChoice != nil {
+		s = append(s, "DomainMatcherChoice: "+fmt.Sprintf("%#v", this.DomainMatcherChoice)+",\n")
+	}
+	if this.Path != nil {
+		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	}
+	s = append(s, "JavascriptLocation: "+fmt.Sprintf("%#v", this.JavascriptLocation)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ShapeJavaScriptInsertionRule_AnyDomain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ShapeJavaScriptInsertionRule_AnyDomain{` +
+		`AnyDomain:` + fmt.Sprintf("%#v", this.AnyDomain) + `}`}, ", ")
+	return s
+}
+func (this *ShapeJavaScriptInsertionRule_Domain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ShapeJavaScriptInsertionRule_Domain{` +
+		`Domain:` + fmt.Sprintf("%#v", this.Domain) + `}`}, ", ")
+	return s
+}
+func (this *ShapeJavaScriptExclusionRule) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&http_loadbalancer.ShapeJavaScriptExclusionRule{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.DomainMatcherChoice != nil {
+		s = append(s, "DomainMatcherChoice: "+fmt.Sprintf("%#v", this.DomainMatcherChoice)+",\n")
+	}
+	if this.Path != nil {
+		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ShapeJavaScriptExclusionRule_AnyDomain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ShapeJavaScriptExclusionRule_AnyDomain{` +
+		`AnyDomain:` + fmt.Sprintf("%#v", this.AnyDomain) + `}`}, ", ")
+	return s
+}
+func (this *ShapeJavaScriptExclusionRule_Domain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ShapeJavaScriptExclusionRule_Domain{` +
+		`Domain:` + fmt.Sprintf("%#v", this.Domain) + `}`}, ", ")
+	return s
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 51)
+	s := make([]string, 0, 56)
 	s = append(s, "&http_loadbalancer.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -13021,8 +17596,8 @@ func (this *GlobalSpecType) GoString() string {
 	if this.MoreOption != nil {
 		s = append(s, "MoreOption: "+fmt.Sprintf("%#v", this.MoreOption)+",\n")
 	}
-	if this.UserIdentification != nil {
-		s = append(s, "UserIdentification: "+fmt.Sprintf("%#v", this.UserIdentification)+",\n")
+	if this.UserIdChoice != nil {
+		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
 	}
 	if this.RateLimitChoice != nil {
 		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
@@ -13047,6 +17622,12 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.HashPolicyChoice != nil {
 		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
+	}
+	if this.MlConfigChoice != nil {
+		s = append(s, "MlConfigChoice: "+fmt.Sprintf("%#v", this.MlConfigChoice)+",\n")
+	}
+	if this.BotDefenseChoice != nil {
+		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
 	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
@@ -13207,6 +17788,22 @@ func (this *GlobalSpecType_PolicyBasedChallenge) GoString() string {
 		`PolicyBasedChallenge:` + fmt.Sprintf("%#v", this.PolicyBasedChallenge) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_UserIdClientIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_UserIdClientIp{` +
+		`UserIdClientIp:` + fmt.Sprintf("%#v", this.UserIdClientIp) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_UserIdentification) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_UserIdentification{` +
+		`UserIdentification:` + fmt.Sprintf("%#v", this.UserIdentification) + `}`}, ", ")
+	return s
+}
 func (this *GlobalSpecType_DisableRateLimit) GoString() string {
 	if this == nil {
 		return "nil"
@@ -13295,11 +17892,43 @@ func (this *GlobalSpecType_RingHash) GoString() string {
 		`RingHash:` + fmt.Sprintf("%#v", this.RingHash) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_SingleLbApp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_SingleLbApp{` +
+		`SingleLbApp:` + fmt.Sprintf("%#v", this.SingleLbApp) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_MultiLbApp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_MultiLbApp{` +
+		`MultiLbApp:` + fmt.Sprintf("%#v", this.MultiLbApp) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DisableBotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_DisableBotDefense{` +
+		`DisableBotDefense:` + fmt.Sprintf("%#v", this.DisableBotDefense) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_BotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_BotDefense{` +
+		`BotDefense:` + fmt.Sprintf("%#v", this.BotDefense) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 42)
+	s := make([]string, 0, 47)
 	s = append(s, "&http_loadbalancer.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -13327,8 +17956,8 @@ func (this *CreateSpecType) GoString() string {
 	if this.MoreOption != nil {
 		s = append(s, "MoreOption: "+fmt.Sprintf("%#v", this.MoreOption)+",\n")
 	}
-	if this.UserIdentification != nil {
-		s = append(s, "UserIdentification: "+fmt.Sprintf("%#v", this.UserIdentification)+",\n")
+	if this.UserIdChoice != nil {
+		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
 	}
 	if this.RateLimitChoice != nil {
 		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
@@ -13353,6 +17982,12 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.HashPolicyChoice != nil {
 		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
+	}
+	if this.MlConfigChoice != nil {
+		s = append(s, "MlConfigChoice: "+fmt.Sprintf("%#v", this.MlConfigChoice)+",\n")
+	}
+	if this.BotDefenseChoice != nil {
+		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -13477,6 +18112,22 @@ func (this *CreateSpecType_PolicyBasedChallenge) GoString() string {
 		`PolicyBasedChallenge:` + fmt.Sprintf("%#v", this.PolicyBasedChallenge) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_UserIdClientIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_UserIdClientIp{` +
+		`UserIdClientIp:` + fmt.Sprintf("%#v", this.UserIdClientIp) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_UserIdentification) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_UserIdentification{` +
+		`UserIdentification:` + fmt.Sprintf("%#v", this.UserIdentification) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType_DisableRateLimit) GoString() string {
 	if this == nil {
 		return "nil"
@@ -13565,11 +18216,43 @@ func (this *CreateSpecType_RingHash) GoString() string {
 		`RingHash:` + fmt.Sprintf("%#v", this.RingHash) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_SingleLbApp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_SingleLbApp{` +
+		`SingleLbApp:` + fmt.Sprintf("%#v", this.SingleLbApp) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_MultiLbApp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_MultiLbApp{` +
+		`MultiLbApp:` + fmt.Sprintf("%#v", this.MultiLbApp) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DisableBotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_DisableBotDefense{` +
+		`DisableBotDefense:` + fmt.Sprintf("%#v", this.DisableBotDefense) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_BotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_BotDefense{` +
+		`BotDefense:` + fmt.Sprintf("%#v", this.BotDefense) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 42)
+	s := make([]string, 0, 47)
 	s = append(s, "&http_loadbalancer.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -13597,8 +18280,8 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.MoreOption != nil {
 		s = append(s, "MoreOption: "+fmt.Sprintf("%#v", this.MoreOption)+",\n")
 	}
-	if this.UserIdentification != nil {
-		s = append(s, "UserIdentification: "+fmt.Sprintf("%#v", this.UserIdentification)+",\n")
+	if this.UserIdChoice != nil {
+		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
 	}
 	if this.RateLimitChoice != nil {
 		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
@@ -13623,6 +18306,12 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.HashPolicyChoice != nil {
 		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
+	}
+	if this.MlConfigChoice != nil {
+		s = append(s, "MlConfigChoice: "+fmt.Sprintf("%#v", this.MlConfigChoice)+",\n")
+	}
+	if this.BotDefenseChoice != nil {
+		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -13747,6 +18436,22 @@ func (this *ReplaceSpecType_PolicyBasedChallenge) GoString() string {
 		`PolicyBasedChallenge:` + fmt.Sprintf("%#v", this.PolicyBasedChallenge) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_UserIdClientIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_UserIdClientIp{` +
+		`UserIdClientIp:` + fmt.Sprintf("%#v", this.UserIdClientIp) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_UserIdentification) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_UserIdentification{` +
+		`UserIdentification:` + fmt.Sprintf("%#v", this.UserIdentification) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType_DisableRateLimit) GoString() string {
 	if this == nil {
 		return "nil"
@@ -13835,11 +18540,43 @@ func (this *ReplaceSpecType_RingHash) GoString() string {
 		`RingHash:` + fmt.Sprintf("%#v", this.RingHash) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_SingleLbApp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_SingleLbApp{` +
+		`SingleLbApp:` + fmt.Sprintf("%#v", this.SingleLbApp) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_MultiLbApp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_MultiLbApp{` +
+		`MultiLbApp:` + fmt.Sprintf("%#v", this.MultiLbApp) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DisableBotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_DisableBotDefense{` +
+		`DisableBotDefense:` + fmt.Sprintf("%#v", this.DisableBotDefense) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_BotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_BotDefense{` +
+		`BotDefense:` + fmt.Sprintf("%#v", this.BotDefense) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 47)
+	s := make([]string, 0, 52)
 	s = append(s, "&http_loadbalancer.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -13867,8 +18604,8 @@ func (this *GetSpecType) GoString() string {
 	if this.MoreOption != nil {
 		s = append(s, "MoreOption: "+fmt.Sprintf("%#v", this.MoreOption)+",\n")
 	}
-	if this.UserIdentification != nil {
-		s = append(s, "UserIdentification: "+fmt.Sprintf("%#v", this.UserIdentification)+",\n")
+	if this.UserIdChoice != nil {
+		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
 	}
 	if this.RateLimitChoice != nil {
 		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
@@ -13893,6 +18630,12 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.HashPolicyChoice != nil {
 		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
+	}
+	if this.MlConfigChoice != nil {
+		s = append(s, "MlConfigChoice: "+fmt.Sprintf("%#v", this.MlConfigChoice)+",\n")
+	}
+	if this.BotDefenseChoice != nil {
+		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
 	}
 	s = append(s, "HostName: "+fmt.Sprintf("%#v", this.HostName)+",\n")
 	if this.DnsInfo != nil {
@@ -14026,6 +18769,22 @@ func (this *GetSpecType_PolicyBasedChallenge) GoString() string {
 		`PolicyBasedChallenge:` + fmt.Sprintf("%#v", this.PolicyBasedChallenge) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_UserIdClientIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_UserIdClientIp{` +
+		`UserIdClientIp:` + fmt.Sprintf("%#v", this.UserIdClientIp) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_UserIdentification) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_UserIdentification{` +
+		`UserIdentification:` + fmt.Sprintf("%#v", this.UserIdentification) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType_DisableRateLimit) GoString() string {
 	if this == nil {
 		return "nil"
@@ -14112,6 +18871,38 @@ func (this *GetSpecType_RingHash) GoString() string {
 	}
 	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_RingHash{` +
 		`RingHash:` + fmt.Sprintf("%#v", this.RingHash) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_SingleLbApp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_SingleLbApp{` +
+		`SingleLbApp:` + fmt.Sprintf("%#v", this.SingleLbApp) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_MultiLbApp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_MultiLbApp{` +
+		`MultiLbApp:` + fmt.Sprintf("%#v", this.MultiLbApp) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DisableBotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_DisableBotDefense{` +
+		`DisableBotDefense:` + fmt.Sprintf("%#v", this.DisableBotDefense) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_BotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_BotDefense{` +
+		`BotDefense:` + fmt.Sprintf("%#v", this.BotDefense) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -14272,6 +19063,15 @@ func (m *ProxyTypeHttps) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.PathNormalizeChoice != nil {
+		{
+			size := m.PathNormalizeChoice.Size()
+			i -= size
+			if _, err := m.PathNormalizeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ServerHeaderChoice != nil {
 		{
 			size := m.ServerHeaderChoice.Size()
@@ -14386,6 +19186,48 @@ func (m *ProxyTypeHttps_PassThrough) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ProxyTypeHttps_EnablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxyTypeHttps_EnablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnablePathNormalize != nil {
+		{
+			size, err := m.EnablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ProxyTypeHttps_DisablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxyTypeHttps_DisablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisablePathNormalize != nil {
+		{
+			size, err := m.DisablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ProxyTypeHttp) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -14439,6 +19281,15 @@ func (m *ProxyTypeHttpsAutoCerts) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
+	if m.PathNormalizeChoice != nil {
+		{
+			size := m.PathNormalizeChoice.Size()
+			i -= size
+			if _, err := m.PathNormalizeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ServerHeaderChoice != nil {
 		{
 			size := m.ServerHeaderChoice.Size()
@@ -14601,6 +19452,48 @@ func (m *ProxyTypeHttpsAutoCerts_PassThrough) MarshalToSizedBuffer(dAtA []byte) 
 		}
 		i--
 		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ProxyTypeHttpsAutoCerts_EnablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxyTypeHttpsAutoCerts_EnablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnablePathNormalize != nil {
+		{
+			size, err := m.EnablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ProxyTypeHttpsAutoCerts_DisablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxyTypeHttpsAutoCerts_DisablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisablePathNormalize != nil {
+		{
+			size, err := m.DisablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
 	}
 	return len(dAtA) - i, nil
 }
@@ -15854,6 +20747,24 @@ func (m *AdvancedOptionsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		{
+			size := m.StrictSniHostHeaderCheckChoice.Size()
+			i -= size
+			if _, err := m.StrictSniHostHeaderCheckChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.PathNormalizeChoice != nil {
+		{
+			size := m.PathNormalizeChoice.Size()
+			i -= size
+			if _, err := m.PathNormalizeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DisableDefaultErrorPages {
 		i--
 		if m.DisableDefaultErrorPages {
@@ -15995,6 +20906,96 @@ func (m *AdvancedOptionsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AdvancedOptionsType_EnablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AdvancedOptionsType_EnablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnablePathNormalize != nil {
+		{
+			size, err := m.EnablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AdvancedOptionsType_DisablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AdvancedOptionsType_DisablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisablePathNormalize != nil {
+		{
+			size, err := m.DisablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AdvancedOptionsType_EnableStrictSniHostHeaderCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AdvancedOptionsType_EnableStrictSniHostHeaderCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		{
+			size, err := m.EnableStrictSniHostHeaderCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AdvancedOptionsType_AdditionalDomains) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AdvancedOptionsType_AdditionalDomains) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AdditionalDomains != nil {
+		{
+			size, err := m.AdditionalDomains.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *PolicyBasedChallenge) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -16414,6 +21415,15 @@ func (m *SimpleClientSrcRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ActionChoice != nil {
+		{
+			size := m.ActionChoice.Size()
+			i -= size
+			if _, err := m.ActionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.Metadata != nil {
 		{
 			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
@@ -16476,6 +21486,69 @@ func (m *SimpleClientSrcRule_AsNumber) MarshalToSizedBuffer(dAtA []byte) (int, e
 	dAtA[i] = 0x28
 	return len(dAtA) - i, nil
 }
+func (m *SimpleClientSrcRule_SkipProcessing) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SimpleClientSrcRule_SkipProcessing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SkipProcessing != nil {
+		{
+			size, err := m.SkipProcessing.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SimpleClientSrcRule_WafSkipProcessing) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SimpleClientSrcRule_WafSkipProcessing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.WafSkipProcessing != nil {
+		{
+			size, err := m.WafSkipProcessing.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SimpleClientSrcRule_BotSkipProcessing) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SimpleClientSrcRule_BotSkipProcessing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BotSkipProcessing != nil {
+		{
+			size, err := m.BotSkipProcessing.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
 func (m *DDoSClientSource) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -16509,20 +21582,20 @@ func (m *DDoSClientSource) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 	}
 	if len(m.CountryList) > 0 {
-		dAtA71 := make([]byte, len(m.CountryList)*10)
-		var j70 int
+		dAtA82 := make([]byte, len(m.CountryList)*10)
+		var j81 int
 		for _, num := range m.CountryList {
 			for num >= 1<<7 {
-				dAtA71[j70] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA82[j81] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j70++
+				j81++
 			}
-			dAtA71[j70] = uint8(num)
-			j70++
+			dAtA82[j81] = uint8(num)
+			j81++
 		}
-		i -= j70
-		copy(dAtA[i:], dAtA71[:j70])
-		i = encodeVarintTypes(dAtA, i, uint64(j70))
+		i -= j81
+		copy(dAtA[i:], dAtA82[:j81])
+		i = encodeVarintTypes(dAtA, i, uint64(j81))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -16903,6 +21976,995 @@ func (m *ServicePolicyList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ApiDiscoverySetting) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiDiscoverySetting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiDiscoverySetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.LearnFromRedirectTraffic != nil {
+		{
+			size := m.LearnFromRedirectTraffic.Size()
+			i -= size
+			if _, err := m.LearnFromRedirectTraffic.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApiDiscoverySetting_DisableLearnFromRedirectTraffic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiDiscoverySetting_DisableLearnFromRedirectTraffic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableLearnFromRedirectTraffic != nil {
+		{
+			size, err := m.DisableLearnFromRedirectTraffic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiDiscoverySetting_EnableLearnFromRedirectTraffic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiDiscoverySetting_EnableLearnFromRedirectTraffic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableLearnFromRedirectTraffic != nil {
+		{
+			size, err := m.EnableLearnFromRedirectTraffic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SingleLoadBalancerAppSetting) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SingleLoadBalancerAppSetting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SingleLoadBalancerAppSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MaliciousUserDetectionChoice != nil {
+		{
+			size := m.MaliciousUserDetectionChoice.Size()
+			i -= size
+			if _, err := m.MaliciousUserDetectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.DdosDetectionChoice != nil {
+		{
+			size := m.DdosDetectionChoice.Size()
+			i -= size
+			if _, err := m.DdosDetectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ApiDiscoveryChoice != nil {
+		{
+			size := m.ApiDiscoveryChoice.Size()
+			i -= size
+			if _, err := m.ApiDiscoveryChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SingleLoadBalancerAppSetting_EnableDiscovery) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SingleLoadBalancerAppSetting_EnableDiscovery) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableDiscovery != nil {
+		{
+			size, err := m.EnableDiscovery.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SingleLoadBalancerAppSetting_DisableDiscovery) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SingleLoadBalancerAppSetting_DisableDiscovery) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableDiscovery != nil {
+		{
+			size, err := m.DisableDiscovery.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SingleLoadBalancerAppSetting_EnableDdosDetection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SingleLoadBalancerAppSetting_EnableDdosDetection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableDdosDetection != nil {
+		{
+			size, err := m.EnableDdosDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SingleLoadBalancerAppSetting_DisableDdosDetection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SingleLoadBalancerAppSetting_DisableDdosDetection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableDdosDetection != nil {
+		{
+			size, err := m.DisableDdosDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SingleLoadBalancerAppSetting_EnableMaliciousUserDetection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SingleLoadBalancerAppSetting_EnableMaliciousUserDetection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableMaliciousUserDetection != nil {
+		{
+			size, err := m.EnableMaliciousUserDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SingleLoadBalancerAppSetting_DisableMaliciousUserDetection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SingleLoadBalancerAppSetting_DisableMaliciousUserDetection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableMaliciousUserDetection != nil {
+		{
+			size, err := m.DisableMaliciousUserDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ShapeBotDefenseType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ShapeBotDefenseType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeBotDefenseType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Policy != nil {
+		{
+			size, err := m.Policy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.RegionalEndpoint != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RegionalEndpoint))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ShapeBotDefensePolicyType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ShapeBotDefensePolicyType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeBotDefensePolicyType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.JavaScriptChoice != nil {
+		{
+			size := m.JavaScriptChoice.Size()
+			i -= size
+			if _, err := m.JavaScriptChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.JsDownloadPath) > 0 {
+		i -= len(m.JsDownloadPath)
+		copy(dAtA[i:], m.JsDownloadPath)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.JsDownloadPath)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ProtectedAppEndpoints) > 0 {
+		for iNdEx := len(m.ProtectedAppEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ProtectedAppEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ShapeBotDefensePolicyType_DisableJsInsert) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeBotDefensePolicyType_DisableJsInsert) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableJsInsert != nil {
+		{
+			size, err := m.DisableJsInsert.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ShapeBotDefensePolicyType_JsInsertAllPages) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeBotDefensePolicyType_JsInsertAllPages) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.JsInsertAllPages != nil {
+		{
+			size, err := m.JsInsertAllPages.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.JsInsertAllPagesExcept != nil {
+		{
+			size, err := m.JsInsertAllPagesExcept.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ShapeBotDefensePolicyType_JsInsertionRules) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeBotDefensePolicyType_JsInsertionRules) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.JsInsertionRules != nil {
+		{
+			size, err := m.JsInsertionRules.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AppEndpointType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AppEndpointType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppEndpointType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Mitigation != nil {
+		{
+			size, err := m.Mitigation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	if m.AppTrafficTypeChoice != nil {
+		{
+			size := m.AppTrafficTypeChoice.Size()
+			i -= size
+			if _, err := m.AppTrafficTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.DomainMatcherChoice != nil {
+		{
+			size := m.DomainMatcherChoice.Size()
+			i -= size
+			if _, err := m.DomainMatcherChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Path != nil {
+		{
+			size, err := m.Path.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Protocol != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Protocol))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.HttpMethods) > 0 {
+		dAtA111 := make([]byte, len(m.HttpMethods)*10)
+		var j110 int
+		for _, num := range m.HttpMethods {
+			for num >= 1<<7 {
+				dAtA111[j110] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j110++
+			}
+			dAtA111[j110] = uint8(num)
+			j110++
+		}
+		i -= j110
+		copy(dAtA[i:], dAtA111[:j110])
+		i = encodeVarintTypes(dAtA, i, uint64(j110))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AppEndpointType_AnyDomain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppEndpointType_AnyDomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AnyDomain != nil {
+		{
+			size, err := m.AnyDomain.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AppEndpointType_Domain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppEndpointType_Domain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Domain != nil {
+		{
+			size, err := m.Domain.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AppEndpointType_Web) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppEndpointType_Web) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Web != nil {
+		{
+			size, err := m.Web.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AppEndpointType_Mobile) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppEndpointType_Mobile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Mobile != nil {
+		{
+			size, err := m.Mobile.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AppEndpointType_WebMobile) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppEndpointType_WebMobile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.WebMobile != nil {
+		{
+			size, err := m.WebMobile.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *WebMobileTrafficType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *WebMobileTrafficType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *WebMobileTrafficType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Header != nil {
+		{
+			size, err := m.Header.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ShapeJavaScriptInsertType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ShapeJavaScriptInsertType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptInsertType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ExcludeList) > 0 {
+		for iNdEx := len(m.ExcludeList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ExcludeList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ExcludeList) > 0 {
+		for iNdEx := len(m.ExcludeList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ExcludeList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.JavascriptLocation != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptLocation))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ShapeJavaScriptInsertAllType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ShapeJavaScriptInsertAllType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptInsertAllType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.JavascriptLocation != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptLocation))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ShapeJavaScriptInsertionRule) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ShapeJavaScriptInsertionRule) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptInsertionRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.JavascriptLocation != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptLocation))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.Path != nil {
+		{
+			size, err := m.Path.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.DomainMatcherChoice != nil {
+		{
+			size := m.DomainMatcherChoice.Size()
+			i -= size
+			if _, err := m.DomainMatcherChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ShapeJavaScriptInsertionRule_AnyDomain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptInsertionRule_AnyDomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AnyDomain != nil {
+		{
+			size, err := m.AnyDomain.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ShapeJavaScriptInsertionRule_Domain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptInsertionRule_Domain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Domain != nil {
+		{
+			size, err := m.Domain.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ShapeJavaScriptExclusionRule) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ShapeJavaScriptExclusionRule) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptExclusionRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Path != nil {
+		{
+			size, err := m.Path.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.DomainMatcherChoice != nil {
+		{
+			size := m.DomainMatcherChoice.Size()
+			i -= size
+			if _, err := m.DomainMatcherChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ShapeJavaScriptExclusionRule_AnyDomain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptExclusionRule_AnyDomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AnyDomain != nil {
+		{
+			size, err := m.AnyDomain.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ShapeJavaScriptExclusionRule_Domain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeJavaScriptExclusionRule_Domain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Domain != nil {
+		{
+			size, err := m.Domain.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -16989,6 +23051,33 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i--
 		dAtA[i] = 0xc2
+	}
+	if m.UserIdChoice != nil {
+		{
+			size := m.UserIdChoice.Size()
+			i -= size
+			if _, err := m.UserIdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BotDefenseChoice != nil {
+		{
+			size := m.BotDefenseChoice.Size()
+			i -= size
+			if _, err := m.BotDefenseChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.MlConfigChoice != nil {
+		{
+			size := m.MlConfigChoice.Size()
+			i -= size
+			if _, err := m.MlConfigChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.WafChoice != nil {
 		{
@@ -17130,20 +23219,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.UserIdentification != nil {
-		{
-			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
 	}
 	if m.MoreOption != nil {
 		{
@@ -17441,6 +23516,29 @@ func (m *GlobalSpecType_JsChallenge) MarshalToSizedBuffer(dAtA []byte) (int, err
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_UserIdentification) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_UserIdentification) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdentification != nil {
+		{
+			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
 	return len(dAtA) - i, nil
 }
@@ -17874,6 +23972,121 @@ func (m *GlobalSpecType_AppFirewall) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_SingleLbApp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_SingleLbApp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SingleLbApp != nil {
+		{
+			size, err := m.SingleLbApp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_MultiLbApp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_MultiLbApp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MultiLbApp != nil {
+		{
+			size, err := m.MultiLbApp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DisableBotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableBotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableBotDefense != nil {
+		{
+			size, err := m.DisableBotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_BotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_BotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BotDefense != nil {
+		{
+			size, err := m.BotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xd2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_UserIdClientIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_UserIdClientIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdClientIp != nil {
+		{
+			size, err := m.UserIdClientIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -17894,6 +24107,33 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.UserIdChoice != nil {
+		{
+			size := m.UserIdChoice.Size()
+			i -= size
+			if _, err := m.UserIdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BotDefenseChoice != nil {
+		{
+			size := m.BotDefenseChoice.Size()
+			i -= size
+			if _, err := m.BotDefenseChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.MlConfigChoice != nil {
+		{
+			size := m.MlConfigChoice.Size()
+			i -= size
+			if _, err := m.MlConfigChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.WafChoice != nil {
 		{
 			size := m.WafChoice.Size()
@@ -18025,20 +24265,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.UserIdentification != nil {
-		{
-			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
 	}
 	if m.MoreOption != nil {
 		{
@@ -18336,6 +24562,29 @@ func (m *CreateSpecType_JsChallenge) MarshalToSizedBuffer(dAtA []byte) (int, err
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_UserIdentification) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_UserIdentification) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdentification != nil {
+		{
+			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
 	return len(dAtA) - i, nil
 }
@@ -18707,6 +24956,121 @@ func (m *CreateSpecType_AppFirewall) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_SingleLbApp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SingleLbApp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SingleLbApp != nil {
+		{
+			size, err := m.SingleLbApp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_MultiLbApp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_MultiLbApp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MultiLbApp != nil {
+		{
+			size, err := m.MultiLbApp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DisableBotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableBotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableBotDefense != nil {
+		{
+			size, err := m.DisableBotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_BotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_BotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BotDefense != nil {
+		{
+			size, err := m.BotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xd2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_UserIdClientIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_UserIdClientIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdClientIp != nil {
+		{
+			size, err := m.UserIdClientIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -18727,6 +25091,33 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.UserIdChoice != nil {
+		{
+			size := m.UserIdChoice.Size()
+			i -= size
+			if _, err := m.UserIdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BotDefenseChoice != nil {
+		{
+			size := m.BotDefenseChoice.Size()
+			i -= size
+			if _, err := m.BotDefenseChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.MlConfigChoice != nil {
+		{
+			size := m.MlConfigChoice.Size()
+			i -= size
+			if _, err := m.MlConfigChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.WafChoice != nil {
 		{
 			size := m.WafChoice.Size()
@@ -18858,20 +25249,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.UserIdentification != nil {
-		{
-			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
 	}
 	if m.MoreOption != nil {
 		{
@@ -19169,6 +25546,29 @@ func (m *ReplaceSpecType_JsChallenge) MarshalToSizedBuffer(dAtA []byte) (int, er
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_UserIdentification) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_UserIdentification) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdentification != nil {
+		{
+			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
 	return len(dAtA) - i, nil
 }
@@ -19540,6 +25940,121 @@ func (m *ReplaceSpecType_AppFirewall) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_SingleLbApp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SingleLbApp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SingleLbApp != nil {
+		{
+			size, err := m.SingleLbApp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_MultiLbApp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_MultiLbApp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MultiLbApp != nil {
+		{
+			size, err := m.MultiLbApp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DisableBotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableBotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableBotDefense != nil {
+		{
+			size, err := m.DisableBotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_BotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_BotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BotDefense != nil {
+		{
+			size, err := m.BotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xd2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_UserIdClientIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_UserIdClientIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdClientIp != nil {
+		{
+			size, err := m.UserIdClientIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -19612,6 +26127,33 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i--
 		dAtA[i] = 0xca
+	}
+	if m.UserIdChoice != nil {
+		{
+			size := m.UserIdChoice.Size()
+			i -= size
+			if _, err := m.UserIdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BotDefenseChoice != nil {
+		{
+			size := m.BotDefenseChoice.Size()
+			i -= size
+			if _, err := m.BotDefenseChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.MlConfigChoice != nil {
+		{
+			size := m.MlConfigChoice.Size()
+			i -= size
+			if _, err := m.MlConfigChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.WafChoice != nil {
 		{
@@ -19744,20 +26286,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.UserIdentification != nil {
-		{
-			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
 	}
 	if m.MoreOption != nil {
 		{
@@ -20055,6 +26583,29 @@ func (m *GetSpecType_JsChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error)
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_UserIdentification) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_UserIdentification) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdentification != nil {
+		{
+			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
 	return len(dAtA) - i, nil
 }
@@ -20426,6 +26977,121 @@ func (m *GetSpecType_AppFirewall) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_SingleLbApp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SingleLbApp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SingleLbApp != nil {
+		{
+			size, err := m.SingleLbApp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_MultiLbApp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_MultiLbApp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MultiLbApp != nil {
+		{
+			size, err := m.MultiLbApp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DisableBotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableBotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableBotDefense != nil {
+		{
+			size, err := m.DisableBotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_BotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_BotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BotDefense != nil {
+		{
+			size, err := m.BotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xd2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_UserIdClientIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_UserIdClientIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdClientIp != nil {
+		{
+			size, err := m.UserIdClientIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -20515,6 +27181,9 @@ func (m *ProxyTypeHttps) Size() (n int) {
 	if m.ServerHeaderChoice != nil {
 		n += m.ServerHeaderChoice.Size()
 	}
+	if m.PathNormalizeChoice != nil {
+		n += m.PathNormalizeChoice.Size()
+	}
 	return n
 }
 
@@ -20562,6 +27231,30 @@ func (m *ProxyTypeHttps_PassThrough) Size() (n int) {
 	}
 	return n
 }
+func (m *ProxyTypeHttps_EnablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnablePathNormalize != nil {
+		l = m.EnablePathNormalize.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ProxyTypeHttps_DisablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisablePathNormalize != nil {
+		l = m.DisablePathNormalize.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ProxyTypeHttp) Size() (n int) {
 	if m == nil {
 		return 0
@@ -20595,6 +27288,9 @@ func (m *ProxyTypeHttpsAutoCerts) Size() (n int) {
 	}
 	if m.ServerHeaderChoice != nil {
 		n += m.ServerHeaderChoice.Size()
+	}
+	if m.PathNormalizeChoice != nil {
+		n += m.PathNormalizeChoice.Size()
 	}
 	return n
 }
@@ -20663,6 +27359,30 @@ func (m *ProxyTypeHttpsAutoCerts_PassThrough) Size() (n int) {
 	_ = l
 	if m.PassThrough != nil {
 		l = m.PassThrough.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ProxyTypeHttpsAutoCerts_EnablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnablePathNormalize != nil {
+		l = m.EnablePathNormalize.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ProxyTypeHttpsAutoCerts_DisablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisablePathNormalize != nil {
+		l = m.DisablePathNormalize.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -21312,9 +28032,63 @@ func (m *AdvancedOptionsType) Size() (n int) {
 	if m.DisableDefaultErrorPages {
 		n += 2
 	}
+	if m.PathNormalizeChoice != nil {
+		n += m.PathNormalizeChoice.Size()
+	}
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		n += m.StrictSniHostHeaderCheckChoice.Size()
+	}
 	return n
 }
 
+func (m *AdvancedOptionsType_EnablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnablePathNormalize != nil {
+		l = m.EnablePathNormalize.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AdvancedOptionsType_DisablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisablePathNormalize != nil {
+		l = m.DisablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AdvancedOptionsType_EnableStrictSniHostHeaderCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		l = m.EnableStrictSniHostHeaderCheck.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AdvancedOptionsType_AdditionalDomains) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AdditionalDomains != nil {
+		l = m.AdditionalDomains.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *PolicyBasedChallenge) Size() (n int) {
 	if m == nil {
 		return 0
@@ -21524,6 +28298,9 @@ func (m *SimpleClientSrcRule) Size() (n int) {
 		l = m.Metadata.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.ActionChoice != nil {
+		n += m.ActionChoice.Size()
+	}
 	return n
 }
 
@@ -21544,6 +28321,42 @@ func (m *SimpleClientSrcRule_AsNumber) Size() (n int) {
 	var l int
 	_ = l
 	n += 1 + sovTypes(uint64(m.AsNumber))
+	return n
+}
+func (m *SimpleClientSrcRule_SkipProcessing) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SkipProcessing != nil {
+		l = m.SkipProcessing.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SimpleClientSrcRule_WafSkipProcessing) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.WafSkipProcessing != nil {
+		l = m.WafSkipProcessing.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SimpleClientSrcRule_BotSkipProcessing) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BotSkipProcessing != nil {
+		l = m.BotSkipProcessing.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 func (m *DDoSClientSource) Size() (n int) {
@@ -21738,6 +28551,470 @@ func (m *ServicePolicyList) Size() (n int) {
 	return n
 }
 
+func (m *ApiDiscoverySetting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LearnFromRedirectTraffic != nil {
+		n += m.LearnFromRedirectTraffic.Size()
+	}
+	return n
+}
+
+func (m *ApiDiscoverySetting_DisableLearnFromRedirectTraffic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableLearnFromRedirectTraffic != nil {
+		l = m.DisableLearnFromRedirectTraffic.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ApiDiscoverySetting_EnableLearnFromRedirectTraffic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableLearnFromRedirectTraffic != nil {
+		l = m.EnableLearnFromRedirectTraffic.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SingleLoadBalancerAppSetting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiDiscoveryChoice != nil {
+		n += m.ApiDiscoveryChoice.Size()
+	}
+	if m.DdosDetectionChoice != nil {
+		n += m.DdosDetectionChoice.Size()
+	}
+	if m.MaliciousUserDetectionChoice != nil {
+		n += m.MaliciousUserDetectionChoice.Size()
+	}
+	return n
+}
+
+func (m *SingleLoadBalancerAppSetting_EnableDiscovery) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableDiscovery != nil {
+		l = m.EnableDiscovery.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SingleLoadBalancerAppSetting_DisableDiscovery) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableDiscovery != nil {
+		l = m.DisableDiscovery.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SingleLoadBalancerAppSetting_EnableDdosDetection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableDdosDetection != nil {
+		l = m.EnableDdosDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SingleLoadBalancerAppSetting_DisableDdosDetection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableDdosDetection != nil {
+		l = m.DisableDdosDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SingleLoadBalancerAppSetting_EnableMaliciousUserDetection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableMaliciousUserDetection != nil {
+		l = m.EnableMaliciousUserDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SingleLoadBalancerAppSetting_DisableMaliciousUserDetection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableMaliciousUserDetection != nil {
+		l = m.DisableMaliciousUserDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ShapeBotDefenseType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RegionalEndpoint != 0 {
+		n += 1 + sovTypes(uint64(m.RegionalEndpoint))
+	}
+	if m.Policy != nil {
+		l = m.Policy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ShapeBotDefensePolicyType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.ProtectedAppEndpoints) > 0 {
+		for _, e := range m.ProtectedAppEndpoints {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	l = len(m.JsDownloadPath)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.JavaScriptChoice != nil {
+		n += m.JavaScriptChoice.Size()
+	}
+	return n
+}
+
+func (m *ShapeBotDefensePolicyType_DisableJsInsert) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableJsInsert != nil {
+		l = m.DisableJsInsert.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ShapeBotDefensePolicyType_JsInsertAllPages) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.JsInsertAllPages != nil {
+		l = m.JsInsertAllPages.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.JsInsertAllPagesExcept != nil {
+		l = m.JsInsertAllPagesExcept.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ShapeBotDefensePolicyType_JsInsertionRules) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.JsInsertionRules != nil {
+		l = m.JsInsertionRules.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AppEndpointType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.HttpMethods) > 0 {
+		l = 0
+		for _, e := range m.HttpMethods {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	if m.Protocol != 0 {
+		n += 1 + sovTypes(uint64(m.Protocol))
+	}
+	if m.Path != nil {
+		l = m.Path.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DomainMatcherChoice != nil {
+		n += m.DomainMatcherChoice.Size()
+	}
+	if m.AppTrafficTypeChoice != nil {
+		n += m.AppTrafficTypeChoice.Size()
+	}
+	if m.Mitigation != nil {
+		l = m.Mitigation.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AppEndpointType_AnyDomain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AnyDomain != nil {
+		l = m.AnyDomain.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AppEndpointType_Domain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Domain != nil {
+		l = m.Domain.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AppEndpointType_Web) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Web != nil {
+		l = m.Web.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AppEndpointType_Mobile) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Mobile != nil {
+		l = m.Mobile.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AppEndpointType_WebMobile) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.WebMobile != nil {
+		l = m.WebMobile.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *WebMobileTrafficType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ShapeJavaScriptInsertType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Rules) > 0 {
+		for _, e := range m.Rules {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ExcludeList) > 0 {
+		for _, e := range m.ExcludeList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.JavascriptLocation != 0 {
+		n += 1 + sovTypes(uint64(m.JavascriptLocation))
+	}
+	if len(m.ExcludeList) > 0 {
+		for _, e := range m.ExcludeList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ShapeJavaScriptInsertAllType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.JavascriptLocation != 0 {
+		n += 1 + sovTypes(uint64(m.JavascriptLocation))
+	}
+	return n
+}
+
+func (m *ShapeJavaScriptInsertionRule) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DomainMatcherChoice != nil {
+		n += m.DomainMatcherChoice.Size()
+	}
+	if m.Path != nil {
+		l = m.Path.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.JavascriptLocation != 0 {
+		n += 1 + sovTypes(uint64(m.JavascriptLocation))
+	}
+	return n
+}
+
+func (m *ShapeJavaScriptInsertionRule_AnyDomain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AnyDomain != nil {
+		l = m.AnyDomain.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ShapeJavaScriptInsertionRule_Domain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Domain != nil {
+		l = m.Domain.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ShapeJavaScriptExclusionRule) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DomainMatcherChoice != nil {
+		n += m.DomainMatcherChoice.Size()
+	}
+	if m.Path != nil {
+		l = m.Path.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ShapeJavaScriptExclusionRule_AnyDomain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AnyDomain != nil {
+		l = m.AnyDomain.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ShapeJavaScriptExclusionRule_Domain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Domain != nil {
+		l = m.Domain.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -21785,9 +29062,8 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.MoreOption.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.UserIdentification != nil {
-		l = m.UserIdentification.Size()
-		n += 2 + l + sovTypes(uint64(l))
+	if m.UserIdChoice != nil {
+		n += m.UserIdChoice.Size()
 	}
 	if m.RateLimitChoice != nil {
 		n += m.RateLimitChoice.Size()
@@ -21828,6 +29104,12 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.HashPolicyChoice != nil {
 		n += m.HashPolicyChoice.Size()
+	}
+	if m.MlConfigChoice != nil {
+		n += m.MlConfigChoice.Size()
+	}
+	if m.BotDefenseChoice != nil {
+		n += m.BotDefenseChoice.Size()
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
@@ -21972,6 +29254,18 @@ func (m *GlobalSpecType_JsChallenge) Size() (n int) {
 	_ = l
 	if m.JsChallenge != nil {
 		l = m.JsChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_UserIdentification) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdentification != nil {
+		l = m.UserIdentification.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -22202,6 +29496,66 @@ func (m *GlobalSpecType_AppFirewall) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_SingleLbApp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SingleLbApp != nil {
+		l = m.SingleLbApp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_MultiLbApp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MultiLbApp != nil {
+		l = m.MultiLbApp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DisableBotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableBotDefense != nil {
+		l = m.DisableBotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_BotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BotDefense != nil {
+		l = m.BotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_UserIdClientIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdClientIp != nil {
+		l = m.UserIdClientIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -22249,9 +29603,8 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.MoreOption.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.UserIdentification != nil {
-		l = m.UserIdentification.Size()
-		n += 2 + l + sovTypes(uint64(l))
+	if m.UserIdChoice != nil {
+		n += m.UserIdChoice.Size()
 	}
 	if m.RateLimitChoice != nil {
 		n += m.RateLimitChoice.Size()
@@ -22289,6 +29642,12 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.HashPolicyChoice != nil {
 		n += m.HashPolicyChoice.Size()
+	}
+	if m.MlConfigChoice != nil {
+		n += m.MlConfigChoice.Size()
+	}
+	if m.BotDefenseChoice != nil {
+		n += m.BotDefenseChoice.Size()
 	}
 	return n
 }
@@ -22409,6 +29768,18 @@ func (m *CreateSpecType_JsChallenge) Size() (n int) {
 	_ = l
 	if m.JsChallenge != nil {
 		l = m.JsChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_UserIdentification) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdentification != nil {
+		l = m.UserIdentification.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -22605,6 +29976,66 @@ func (m *CreateSpecType_AppFirewall) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_SingleLbApp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SingleLbApp != nil {
+		l = m.SingleLbApp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_MultiLbApp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MultiLbApp != nil {
+		l = m.MultiLbApp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DisableBotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableBotDefense != nil {
+		l = m.DisableBotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_BotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BotDefense != nil {
+		l = m.BotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_UserIdClientIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdClientIp != nil {
+		l = m.UserIdClientIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -22652,9 +30083,8 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.MoreOption.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.UserIdentification != nil {
-		l = m.UserIdentification.Size()
-		n += 2 + l + sovTypes(uint64(l))
+	if m.UserIdChoice != nil {
+		n += m.UserIdChoice.Size()
 	}
 	if m.RateLimitChoice != nil {
 		n += m.RateLimitChoice.Size()
@@ -22692,6 +30122,12 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.HashPolicyChoice != nil {
 		n += m.HashPolicyChoice.Size()
+	}
+	if m.MlConfigChoice != nil {
+		n += m.MlConfigChoice.Size()
+	}
+	if m.BotDefenseChoice != nil {
+		n += m.BotDefenseChoice.Size()
 	}
 	return n
 }
@@ -22812,6 +30248,18 @@ func (m *ReplaceSpecType_JsChallenge) Size() (n int) {
 	_ = l
 	if m.JsChallenge != nil {
 		l = m.JsChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_UserIdentification) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdentification != nil {
+		l = m.UserIdentification.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -23008,6 +30456,66 @@ func (m *ReplaceSpecType_AppFirewall) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_SingleLbApp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SingleLbApp != nil {
+		l = m.SingleLbApp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_MultiLbApp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MultiLbApp != nil {
+		l = m.MultiLbApp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DisableBotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableBotDefense != nil {
+		l = m.DisableBotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_BotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BotDefense != nil {
+		l = m.BotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_UserIdClientIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdClientIp != nil {
+		l = m.UserIdClientIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -23055,9 +30563,8 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.MoreOption.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.UserIdentification != nil {
-		l = m.UserIdentification.Size()
-		n += 2 + l + sovTypes(uint64(l))
+	if m.UserIdChoice != nil {
+		n += m.UserIdChoice.Size()
 	}
 	if m.RateLimitChoice != nil {
 		n += m.RateLimitChoice.Size()
@@ -23095,6 +30602,12 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.HashPolicyChoice != nil {
 		n += m.HashPolicyChoice.Size()
+	}
+	if m.MlConfigChoice != nil {
+		n += m.MlConfigChoice.Size()
+	}
+	if m.BotDefenseChoice != nil {
+		n += m.BotDefenseChoice.Size()
 	}
 	l = len(m.HostName)
 	if l > 0 {
@@ -23235,6 +30748,18 @@ func (m *GetSpecType_JsChallenge) Size() (n int) {
 	_ = l
 	if m.JsChallenge != nil {
 		l = m.JsChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_UserIdentification) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdentification != nil {
+		l = m.UserIdentification.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -23431,6 +30956,66 @@ func (m *GetSpecType_AppFirewall) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_SingleLbApp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SingleLbApp != nil {
+		l = m.SingleLbApp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_MultiLbApp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MultiLbApp != nil {
+		l = m.MultiLbApp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DisableBotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableBotDefense != nil {
+		l = m.DisableBotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_BotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BotDefense != nil {
+		l = m.BotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_UserIdClientIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdClientIp != nil {
+		l = m.UserIdClientIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -23494,6 +31079,7 @@ func (this *ProxyTypeHttps) String() string {
 		`AddHsts:` + fmt.Sprintf("%v", this.AddHsts) + `,`,
 		`TlsParameters:` + strings.Replace(this.TlsParameters.String(), "DownstreamTlsParamsType", "DownstreamTlsParamsType", 1) + `,`,
 		`ServerHeaderChoice:` + fmt.Sprintf("%v", this.ServerHeaderChoice) + `,`,
+		`PathNormalizeChoice:` + fmt.Sprintf("%v", this.PathNormalizeChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -23538,6 +31124,26 @@ func (this *ProxyTypeHttps_PassThrough) String() string {
 	}, "")
 	return s
 }
+func (this *ProxyTypeHttps_EnablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxyTypeHttps_EnablePathNormalize{`,
+		`EnablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.EnablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxyTypeHttps_DisablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxyTypeHttps_DisablePathNormalize{`,
+		`DisablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.DisablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ProxyTypeHttp) String() string {
 	if this == nil {
 		return "nil"
@@ -23558,6 +31164,7 @@ func (this *ProxyTypeHttpsAutoCerts) String() string {
 		`TlsConfig:` + strings.Replace(fmt.Sprintf("%v", this.TlsConfig), "TlsConfig", "views.TlsConfig", 1) + `,`,
 		`MtlsChoice:` + fmt.Sprintf("%v", this.MtlsChoice) + `,`,
 		`ServerHeaderChoice:` + fmt.Sprintf("%v", this.ServerHeaderChoice) + `,`,
+		`PathNormalizeChoice:` + fmt.Sprintf("%v", this.PathNormalizeChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -23618,6 +31225,26 @@ func (this *ProxyTypeHttpsAutoCerts_PassThrough) String() string {
 	}
 	s := strings.Join([]string{`&ProxyTypeHttpsAutoCerts_PassThrough{`,
 		`PassThrough:` + strings.Replace(fmt.Sprintf("%v", this.PassThrough), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxyTypeHttpsAutoCerts_EnablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxyTypeHttpsAutoCerts_EnablePathNormalize{`,
+		`EnablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.EnablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxyTypeHttpsAutoCerts_DisablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxyTypeHttpsAutoCerts_DisablePathNormalize{`,
+		`DisablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.DisablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24112,6 +31739,48 @@ func (this *AdvancedOptionsType) String() string {
 		`Jwt:` + repeatedStringForJwt + `,`,
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
 		`DisableDefaultErrorPages:` + fmt.Sprintf("%v", this.DisableDefaultErrorPages) + `,`,
+		`PathNormalizeChoice:` + fmt.Sprintf("%v", this.PathNormalizeChoice) + `,`,
+		`StrictSniHostHeaderCheckChoice:` + fmt.Sprintf("%v", this.StrictSniHostHeaderCheckChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AdvancedOptionsType_EnablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AdvancedOptionsType_EnablePathNormalize{`,
+		`EnablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.EnablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AdvancedOptionsType_DisablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AdvancedOptionsType_DisablePathNormalize{`,
+		`DisablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.DisablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AdvancedOptionsType_EnableStrictSniHostHeaderCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AdvancedOptionsType_EnableStrictSniHostHeaderCheck{`,
+		`EnableStrictSniHostHeaderCheck:` + strings.Replace(fmt.Sprintf("%v", this.EnableStrictSniHostHeaderCheck), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AdvancedOptionsType_AdditionalDomains) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AdvancedOptionsType_AdditionalDomains{`,
+		`AdditionalDomains:` + strings.Replace(fmt.Sprintf("%v", this.AdditionalDomains), "DomainNameList", "schema.DomainNameList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24275,6 +31944,7 @@ func (this *SimpleClientSrcRule) String() string {
 		`ClientSourceChoice:` + fmt.Sprintf("%v", this.ClientSourceChoice) + `,`,
 		`ExpirationTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.ExpirationTimestamp), "Timestamp", "types.Timestamp", 1) + `,`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`ActionChoice:` + fmt.Sprintf("%v", this.ActionChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24295,6 +31965,36 @@ func (this *SimpleClientSrcRule_AsNumber) String() string {
 	}
 	s := strings.Join([]string{`&SimpleClientSrcRule_AsNumber{`,
 		`AsNumber:` + fmt.Sprintf("%v", this.AsNumber) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SimpleClientSrcRule_SkipProcessing) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SimpleClientSrcRule_SkipProcessing{`,
+		`SkipProcessing:` + strings.Replace(fmt.Sprintf("%v", this.SkipProcessing), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SimpleClientSrcRule_WafSkipProcessing) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SimpleClientSrcRule_WafSkipProcessing{`,
+		`WafSkipProcessing:` + strings.Replace(fmt.Sprintf("%v", this.WafSkipProcessing), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SimpleClientSrcRule_BotSkipProcessing) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SimpleClientSrcRule_BotSkipProcessing{`,
+		`BotSkipProcessing:` + strings.Replace(fmt.Sprintf("%v", this.BotSkipProcessing), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24446,6 +32146,364 @@ func (this *ServicePolicyList) String() string {
 	}, "")
 	return s
 }
+func (this *ApiDiscoverySetting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiDiscoverySetting{`,
+		`LearnFromRedirectTraffic:` + fmt.Sprintf("%v", this.LearnFromRedirectTraffic) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiDiscoverySetting_DisableLearnFromRedirectTraffic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiDiscoverySetting_DisableLearnFromRedirectTraffic{`,
+		`DisableLearnFromRedirectTraffic:` + strings.Replace(fmt.Sprintf("%v", this.DisableLearnFromRedirectTraffic), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiDiscoverySetting_EnableLearnFromRedirectTraffic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiDiscoverySetting_EnableLearnFromRedirectTraffic{`,
+		`EnableLearnFromRedirectTraffic:` + strings.Replace(fmt.Sprintf("%v", this.EnableLearnFromRedirectTraffic), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SingleLoadBalancerAppSetting{`,
+		`ApiDiscoveryChoice:` + fmt.Sprintf("%v", this.ApiDiscoveryChoice) + `,`,
+		`DdosDetectionChoice:` + fmt.Sprintf("%v", this.DdosDetectionChoice) + `,`,
+		`MaliciousUserDetectionChoice:` + fmt.Sprintf("%v", this.MaliciousUserDetectionChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_EnableDiscovery) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SingleLoadBalancerAppSetting_EnableDiscovery{`,
+		`EnableDiscovery:` + strings.Replace(fmt.Sprintf("%v", this.EnableDiscovery), "ApiDiscoverySetting", "ApiDiscoverySetting", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_DisableDiscovery) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SingleLoadBalancerAppSetting_DisableDiscovery{`,
+		`DisableDiscovery:` + strings.Replace(fmt.Sprintf("%v", this.DisableDiscovery), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_EnableDdosDetection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SingleLoadBalancerAppSetting_EnableDdosDetection{`,
+		`EnableDdosDetection:` + strings.Replace(fmt.Sprintf("%v", this.EnableDdosDetection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_DisableDdosDetection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SingleLoadBalancerAppSetting_DisableDdosDetection{`,
+		`DisableDdosDetection:` + strings.Replace(fmt.Sprintf("%v", this.DisableDdosDetection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_EnableMaliciousUserDetection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SingleLoadBalancerAppSetting_EnableMaliciousUserDetection{`,
+		`EnableMaliciousUserDetection:` + strings.Replace(fmt.Sprintf("%v", this.EnableMaliciousUserDetection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SingleLoadBalancerAppSetting_DisableMaliciousUserDetection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SingleLoadBalancerAppSetting_DisableMaliciousUserDetection{`,
+		`DisableMaliciousUserDetection:` + strings.Replace(fmt.Sprintf("%v", this.DisableMaliciousUserDetection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeBotDefenseType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeBotDefenseType{`,
+		`RegionalEndpoint:` + fmt.Sprintf("%v", this.RegionalEndpoint) + `,`,
+		`Policy:` + strings.Replace(this.Policy.String(), "ShapeBotDefensePolicyType", "ShapeBotDefensePolicyType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeBotDefensePolicyType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForProtectedAppEndpoints := "[]*AppEndpointType{"
+	for _, f := range this.ProtectedAppEndpoints {
+		repeatedStringForProtectedAppEndpoints += strings.Replace(f.String(), "AppEndpointType", "AppEndpointType", 1) + ","
+	}
+	repeatedStringForProtectedAppEndpoints += "}"
+	s := strings.Join([]string{`&ShapeBotDefensePolicyType{`,
+		`ProtectedAppEndpoints:` + repeatedStringForProtectedAppEndpoints + `,`,
+		`JsDownloadPath:` + fmt.Sprintf("%v", this.JsDownloadPath) + `,`,
+		`JavaScriptChoice:` + fmt.Sprintf("%v", this.JavaScriptChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeBotDefensePolicyType_DisableJsInsert) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeBotDefensePolicyType_DisableJsInsert{`,
+		`DisableJsInsert:` + strings.Replace(fmt.Sprintf("%v", this.DisableJsInsert), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeBotDefensePolicyType_JsInsertAllPages) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeBotDefensePolicyType_JsInsertAllPages{`,
+		`JsInsertAllPages:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertAllPages), "ShapeJavaScriptInsertAllType", "ShapeJavaScriptInsertAllType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeBotDefensePolicyType_JsInsertAllPagesExcept{`,
+		`JsInsertAllPagesExcept:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertAllPagesExcept), "ShapeJavaScriptInsertAllWithExceptionsType", "ShapeJavaScriptInsertAllWithExceptionsType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeBotDefensePolicyType_JsInsertionRules) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeBotDefensePolicyType_JsInsertionRules{`,
+		`JsInsertionRules:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertionRules), "ShapeJavaScriptInsertType", "ShapeJavaScriptInsertType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppEndpointType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppEndpointType{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`HttpMethods:` + fmt.Sprintf("%v", this.HttpMethods) + `,`,
+		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
+		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "schema.PathMatcherType", 1) + `,`,
+		`DomainMatcherChoice:` + fmt.Sprintf("%v", this.DomainMatcherChoice) + `,`,
+		`AppTrafficTypeChoice:` + fmt.Sprintf("%v", this.AppTrafficTypeChoice) + `,`,
+		`Mitigation:` + strings.Replace(fmt.Sprintf("%v", this.Mitigation), "ShapeBotMitigationAction", "policy.ShapeBotMitigationAction", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppEndpointType_AnyDomain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppEndpointType_AnyDomain{`,
+		`AnyDomain:` + strings.Replace(fmt.Sprintf("%v", this.AnyDomain), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppEndpointType_Domain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppEndpointType_Domain{`,
+		`Domain:` + strings.Replace(fmt.Sprintf("%v", this.Domain), "DomainType", "schema.DomainType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppEndpointType_Web) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppEndpointType_Web{`,
+		`Web:` + strings.Replace(fmt.Sprintf("%v", this.Web), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppEndpointType_Mobile) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppEndpointType_Mobile{`,
+		`Mobile:` + strings.Replace(fmt.Sprintf("%v", this.Mobile), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppEndpointType_WebMobile) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppEndpointType_WebMobile{`,
+		`WebMobile:` + strings.Replace(fmt.Sprintf("%v", this.WebMobile), "WebMobileTrafficType", "WebMobileTrafficType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *WebMobileTrafficType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&WebMobileTrafficType{`,
+		`Header:` + strings.Replace(fmt.Sprintf("%v", this.Header), "HeaderMatcherTypeBasic", "policy.HeaderMatcherTypeBasic", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptInsertType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForRules := "[]*ShapeJavaScriptInsertionRule{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(f.String(), "ShapeJavaScriptInsertionRule", "ShapeJavaScriptInsertionRule", 1) + ","
+	}
+	repeatedStringForRules += "}"
+	repeatedStringForExcludeList := "[]*ShapeJavaScriptExclusionRule{"
+	for _, f := range this.ExcludeList {
+		repeatedStringForExcludeList += strings.Replace(f.String(), "ShapeJavaScriptExclusionRule", "ShapeJavaScriptExclusionRule", 1) + ","
+	}
+	repeatedStringForExcludeList += "}"
+	s := strings.Join([]string{`&ShapeJavaScriptInsertType{`,
+		`Rules:` + repeatedStringForRules + `,`,
+		`ExcludeList:` + repeatedStringForExcludeList + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptInsertAllWithExceptionsType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForExcludeList := "[]*ShapeJavaScriptExclusionRule{"
+	for _, f := range this.ExcludeList {
+		repeatedStringForExcludeList += strings.Replace(f.String(), "ShapeJavaScriptExclusionRule", "ShapeJavaScriptExclusionRule", 1) + ","
+	}
+	repeatedStringForExcludeList += "}"
+	s := strings.Join([]string{`&ShapeJavaScriptInsertAllWithExceptionsType{`,
+		`JavascriptLocation:` + fmt.Sprintf("%v", this.JavascriptLocation) + `,`,
+		`ExcludeList:` + repeatedStringForExcludeList + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptInsertAllType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeJavaScriptInsertAllType{`,
+		`JavascriptLocation:` + fmt.Sprintf("%v", this.JavascriptLocation) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptInsertionRule) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeJavaScriptInsertionRule{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`DomainMatcherChoice:` + fmt.Sprintf("%v", this.DomainMatcherChoice) + `,`,
+		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "schema.PathMatcherType", 1) + `,`,
+		`JavascriptLocation:` + fmt.Sprintf("%v", this.JavascriptLocation) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptInsertionRule_AnyDomain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeJavaScriptInsertionRule_AnyDomain{`,
+		`AnyDomain:` + strings.Replace(fmt.Sprintf("%v", this.AnyDomain), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptInsertionRule_Domain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeJavaScriptInsertionRule_Domain{`,
+		`Domain:` + strings.Replace(fmt.Sprintf("%v", this.Domain), "DomainType", "schema.DomainType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptExclusionRule) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeJavaScriptExclusionRule{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`DomainMatcherChoice:` + fmt.Sprintf("%v", this.DomainMatcherChoice) + `,`,
+		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "schema.PathMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptExclusionRule_AnyDomain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeJavaScriptExclusionRule_AnyDomain{`,
+		`AnyDomain:` + strings.Replace(fmt.Sprintf("%v", this.AnyDomain), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeJavaScriptExclusionRule_Domain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ShapeJavaScriptExclusionRule_Domain{`,
+		`Domain:` + strings.Replace(fmt.Sprintf("%v", this.Domain), "DomainType", "schema.DomainType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -24496,7 +32554,7 @@ func (this *GlobalSpecType) String() string {
 		`AddLocation:` + fmt.Sprintf("%v", this.AddLocation) + `,`,
 		`ChallengeType:` + fmt.Sprintf("%v", this.ChallengeType) + `,`,
 		`MoreOption:` + strings.Replace(this.MoreOption.String(), "AdvancedOptionsType", "AdvancedOptionsType", 1) + `,`,
-		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`UserIdChoice:` + fmt.Sprintf("%v", this.UserIdChoice) + `,`,
 		`RateLimitChoice:` + fmt.Sprintf("%v", this.RateLimitChoice) + `,`,
 		`HostRewriteParams:` + fmt.Sprintf("%v", this.HostRewriteParams) + `,`,
 		`MaliciousUserMitigation:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserMitigation), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
@@ -24506,6 +32564,8 @@ func (this *GlobalSpecType) String() string {
 		`DdosMitigationRules:` + repeatedStringForDdosMitigationRules + `,`,
 		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
+		`MlConfigChoice:` + fmt.Sprintf("%v", this.MlConfigChoice) + `,`,
+		`BotDefenseChoice:` + fmt.Sprintf("%v", this.BotDefenseChoice) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
@@ -24612,6 +32672,16 @@ func (this *GlobalSpecType_JsChallenge) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_JsChallenge{`,
 		`JsChallenge:` + strings.Replace(fmt.Sprintf("%v", this.JsChallenge), "JavascriptChallengeType", "virtual_host.JavascriptChallengeType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_UserIdentification) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_UserIdentification{`,
+		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24806,6 +32876,56 @@ func (this *GlobalSpecType_AppFirewall) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_SingleLbApp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_SingleLbApp{`,
+		`SingleLbApp:` + strings.Replace(fmt.Sprintf("%v", this.SingleLbApp), "SingleLoadBalancerAppSetting", "SingleLoadBalancerAppSetting", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_MultiLbApp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_MultiLbApp{`,
+		`MultiLbApp:` + strings.Replace(fmt.Sprintf("%v", this.MultiLbApp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DisableBotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DisableBotDefense{`,
+		`DisableBotDefense:` + strings.Replace(fmt.Sprintf("%v", this.DisableBotDefense), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_BotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_BotDefense{`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "ShapeBotDefenseType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_UserIdClientIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_UserIdClientIp{`,
+		`UserIdClientIp:` + strings.Replace(fmt.Sprintf("%v", this.UserIdClientIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -24851,7 +32971,7 @@ func (this *CreateSpecType) String() string {
 		`AddLocation:` + fmt.Sprintf("%v", this.AddLocation) + `,`,
 		`ChallengeType:` + fmt.Sprintf("%v", this.ChallengeType) + `,`,
 		`MoreOption:` + strings.Replace(this.MoreOption.String(), "AdvancedOptionsType", "AdvancedOptionsType", 1) + `,`,
-		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`UserIdChoice:` + fmt.Sprintf("%v", this.UserIdChoice) + `,`,
 		`RateLimitChoice:` + fmt.Sprintf("%v", this.RateLimitChoice) + `,`,
 		`MaliciousUserMitigation:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserMitigation), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`WafExclusionRules:` + repeatedStringForWafExclusionRules + `,`,
@@ -24860,6 +32980,8 @@ func (this *CreateSpecType) String() string {
 		`DdosMitigationRules:` + repeatedStringForDdosMitigationRules + `,`,
 		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
+		`MlConfigChoice:` + fmt.Sprintf("%v", this.MlConfigChoice) + `,`,
+		`BotDefenseChoice:` + fmt.Sprintf("%v", this.BotDefenseChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24960,6 +33082,16 @@ func (this *CreateSpecType_JsChallenge) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_JsChallenge{`,
 		`JsChallenge:` + strings.Replace(fmt.Sprintf("%v", this.JsChallenge), "JavascriptChallengeType", "virtual_host.JavascriptChallengeType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_UserIdentification) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_UserIdentification{`,
+		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25124,6 +33256,56 @@ func (this *CreateSpecType_AppFirewall) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_SingleLbApp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_SingleLbApp{`,
+		`SingleLbApp:` + strings.Replace(fmt.Sprintf("%v", this.SingleLbApp), "SingleLoadBalancerAppSetting", "SingleLoadBalancerAppSetting", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_MultiLbApp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_MultiLbApp{`,
+		`MultiLbApp:` + strings.Replace(fmt.Sprintf("%v", this.MultiLbApp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DisableBotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DisableBotDefense{`,
+		`DisableBotDefense:` + strings.Replace(fmt.Sprintf("%v", this.DisableBotDefense), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_BotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_BotDefense{`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "ShapeBotDefenseType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_UserIdClientIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_UserIdClientIp{`,
+		`UserIdClientIp:` + strings.Replace(fmt.Sprintf("%v", this.UserIdClientIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -25169,7 +33351,7 @@ func (this *ReplaceSpecType) String() string {
 		`AddLocation:` + fmt.Sprintf("%v", this.AddLocation) + `,`,
 		`ChallengeType:` + fmt.Sprintf("%v", this.ChallengeType) + `,`,
 		`MoreOption:` + strings.Replace(this.MoreOption.String(), "AdvancedOptionsType", "AdvancedOptionsType", 1) + `,`,
-		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`UserIdChoice:` + fmt.Sprintf("%v", this.UserIdChoice) + `,`,
 		`RateLimitChoice:` + fmt.Sprintf("%v", this.RateLimitChoice) + `,`,
 		`MaliciousUserMitigation:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserMitigation), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`WafExclusionRules:` + repeatedStringForWafExclusionRules + `,`,
@@ -25178,6 +33360,8 @@ func (this *ReplaceSpecType) String() string {
 		`DdosMitigationRules:` + repeatedStringForDdosMitigationRules + `,`,
 		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
+		`MlConfigChoice:` + fmt.Sprintf("%v", this.MlConfigChoice) + `,`,
+		`BotDefenseChoice:` + fmt.Sprintf("%v", this.BotDefenseChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25278,6 +33462,16 @@ func (this *ReplaceSpecType_JsChallenge) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_JsChallenge{`,
 		`JsChallenge:` + strings.Replace(fmt.Sprintf("%v", this.JsChallenge), "JavascriptChallengeType", "virtual_host.JavascriptChallengeType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_UserIdentification) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_UserIdentification{`,
+		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25442,6 +33636,56 @@ func (this *ReplaceSpecType_AppFirewall) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_SingleLbApp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_SingleLbApp{`,
+		`SingleLbApp:` + strings.Replace(fmt.Sprintf("%v", this.SingleLbApp), "SingleLoadBalancerAppSetting", "SingleLoadBalancerAppSetting", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_MultiLbApp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_MultiLbApp{`,
+		`MultiLbApp:` + strings.Replace(fmt.Sprintf("%v", this.MultiLbApp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DisableBotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DisableBotDefense{`,
+		`DisableBotDefense:` + strings.Replace(fmt.Sprintf("%v", this.DisableBotDefense), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_BotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_BotDefense{`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "ShapeBotDefenseType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_UserIdClientIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_UserIdClientIp{`,
+		`UserIdClientIp:` + strings.Replace(fmt.Sprintf("%v", this.UserIdClientIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -25492,7 +33736,7 @@ func (this *GetSpecType) String() string {
 		`AddLocation:` + fmt.Sprintf("%v", this.AddLocation) + `,`,
 		`ChallengeType:` + fmt.Sprintf("%v", this.ChallengeType) + `,`,
 		`MoreOption:` + strings.Replace(this.MoreOption.String(), "AdvancedOptionsType", "AdvancedOptionsType", 1) + `,`,
-		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`UserIdChoice:` + fmt.Sprintf("%v", this.UserIdChoice) + `,`,
 		`RateLimitChoice:` + fmt.Sprintf("%v", this.RateLimitChoice) + `,`,
 		`MaliciousUserMitigation:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserMitigation), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`WafExclusionRules:` + repeatedStringForWafExclusionRules + `,`,
@@ -25501,6 +33745,8 @@ func (this *GetSpecType) String() string {
 		`DdosMitigationRules:` + repeatedStringForDdosMitigationRules + `,`,
 		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
+		`MlConfigChoice:` + fmt.Sprintf("%v", this.MlConfigChoice) + `,`,
+		`BotDefenseChoice:` + fmt.Sprintf("%v", this.BotDefenseChoice) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
@@ -25606,6 +33852,16 @@ func (this *GetSpecType_JsChallenge) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_JsChallenge{`,
 		`JsChallenge:` + strings.Replace(fmt.Sprintf("%v", this.JsChallenge), "JavascriptChallengeType", "virtual_host.JavascriptChallengeType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_UserIdentification) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_UserIdentification{`,
+		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25766,6 +34022,56 @@ func (this *GetSpecType_AppFirewall) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_AppFirewall{`,
 		`AppFirewall:` + strings.Replace(fmt.Sprintf("%v", this.AppFirewall), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_SingleLbApp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_SingleLbApp{`,
+		`SingleLbApp:` + strings.Replace(fmt.Sprintf("%v", this.SingleLbApp), "SingleLoadBalancerAppSetting", "SingleLoadBalancerAppSetting", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_MultiLbApp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_MultiLbApp{`,
+		`MultiLbApp:` + strings.Replace(fmt.Sprintf("%v", this.MultiLbApp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DisableBotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DisableBotDefense{`,
+		`DisableBotDefense:` + strings.Replace(fmt.Sprintf("%v", this.DisableBotDefense), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_BotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_BotDefense{`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "ShapeBotDefenseType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_UserIdClientIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_UserIdClientIp{`,
+		`UserIdClientIp:` + strings.Replace(fmt.Sprintf("%v", this.UserIdClientIp), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -26295,6 +34601,76 @@ func (m *ProxyTypeHttps) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerHeaderChoice = &ProxyTypeHttps_PassThrough{v}
 			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &ProxyTypeHttps_EnablePathNormalize{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &ProxyTypeHttps_DisablePathNormalize{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -26700,6 +35076,76 @@ func (m *ProxyTypeHttpsAutoCerts) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ServerHeaderChoice = &ProxyTypeHttpsAutoCerts_PassThrough{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &ProxyTypeHttpsAutoCerts_EnablePathNormalize{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &ProxyTypeHttpsAutoCerts_DisablePathNormalize{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -29574,6 +38020,146 @@ func (m *AdvancedOptionsType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.DisableDefaultErrorPages = bool(v != 0)
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &AdvancedOptionsType_EnablePathNormalize{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &AdvancedOptionsType_DisablePathNormalize{v}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableStrictSniHostHeaderCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &AdvancedOptionsType_EnableStrictSniHostHeaderCheck{v}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdditionalDomains", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.DomainNameList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &AdvancedOptionsType_AdditionalDomains{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -30436,6 +39022,111 @@ func (m *SimpleClientSrcRule) Unmarshal(dAtA []byte) error {
 			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SkipProcessing", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ActionChoice = &SimpleClientSrcRule_SkipProcessing{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WafSkipProcessing", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ActionChoice = &SimpleClientSrcRule_WafSkipProcessing{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotSkipProcessing", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ActionChoice = &SimpleClientSrcRule_BotSkipProcessing{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -31323,6 +40014,1980 @@ func (m *ServicePolicyList) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *ApiDiscoverySetting) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiDiscoverySetting: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiDiscoverySetting: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableLearnFromRedirectTraffic", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LearnFromRedirectTraffic = &ApiDiscoverySetting_DisableLearnFromRedirectTraffic{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableLearnFromRedirectTraffic", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LearnFromRedirectTraffic = &ApiDiscoverySetting_EnableLearnFromRedirectTraffic{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SingleLoadBalancerAppSetting) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SingleLoadBalancerAppSetting: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SingleLoadBalancerAppSetting: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableDiscovery", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiDiscoverySetting{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ApiDiscoveryChoice = &SingleLoadBalancerAppSetting_EnableDiscovery{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableDiscovery", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ApiDiscoveryChoice = &SingleLoadBalancerAppSetting_DisableDiscovery{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableDdosDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DdosDetectionChoice = &SingleLoadBalancerAppSetting_EnableDdosDetection{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableDdosDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DdosDetectionChoice = &SingleLoadBalancerAppSetting_DisableDdosDetection{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableMaliciousUserDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaliciousUserDetectionChoice = &SingleLoadBalancerAppSetting_EnableMaliciousUserDetection{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableMaliciousUserDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaliciousUserDetectionChoice = &SingleLoadBalancerAppSetting_DisableMaliciousUserDetection{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ShapeBotDefenseType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ShapeBotDefenseType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ShapeBotDefenseType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RegionalEndpoint", wireType)
+			}
+			m.RegionalEndpoint = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RegionalEndpoint |= ShapeBotDefenseRegion(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Policy == nil {
+				m.Policy = &ShapeBotDefensePolicyType{}
+			}
+			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ShapeBotDefensePolicyType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ShapeBotDefensePolicyType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ShapeBotDefensePolicyType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProtectedAppEndpoints", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProtectedAppEndpoints = append(m.ProtectedAppEndpoints, &AppEndpointType{})
+			if err := m.ProtectedAppEndpoints[len(m.ProtectedAppEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JsDownloadPath", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.JsDownloadPath = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableJsInsert", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.JavaScriptChoice = &ShapeBotDefensePolicyType_DisableJsInsert{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertAllPages", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ShapeJavaScriptInsertAllType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.JavaScriptChoice = &ShapeBotDefensePolicyType_JsInsertAllPages{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertAllPagesExcept", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ShapeJavaScriptInsertAllWithExceptionsType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.JavaScriptChoice = &ShapeBotDefensePolicyType_JsInsertAllPagesExcept{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertionRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ShapeJavaScriptInsertType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.JavaScriptChoice = &ShapeBotDefensePolicyType_JsInsertionRules{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AppEndpointType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AppEndpointType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AppEndpointType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.MessageMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType == 0 {
+				var v schema.HttpMethod
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= schema.HttpMethod(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.HttpMethods = append(m.HttpMethods, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.HttpMethods) == 0 {
+					m.HttpMethods = make([]schema.HttpMethod, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v schema.HttpMethod
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= schema.HttpMethod(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.HttpMethods = append(m.HttpMethods, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpMethods", wireType)
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Protocol", wireType)
+			}
+			m.Protocol = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Protocol |= URLScheme(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Path == nil {
+				m.Path = &schema.PathMatcherType{}
+			}
+			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnyDomain", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DomainMatcherChoice = &AppEndpointType_AnyDomain{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.DomainType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DomainMatcherChoice = &AppEndpointType_Domain{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Web", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AppTrafficTypeChoice = &AppEndpointType_Web{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mobile", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AppTrafficTypeChoice = &AppEndpointType_Mobile{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WebMobile", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &WebMobileTrafficType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AppTrafficTypeChoice = &AppEndpointType_WebMobile{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mitigation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Mitigation == nil {
+				m.Mitigation = &policy.ShapeBotMitigationAction{}
+			}
+			if err := m.Mitigation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *WebMobileTrafficType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: WebMobileTrafficType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: WebMobileTrafficType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &policy.HeaderMatcherTypeBasic{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ShapeJavaScriptInsertType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ShapeJavaScriptInsertType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ShapeJavaScriptInsertType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rules = append(m.Rules, &ShapeJavaScriptInsertionRule{})
+			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExcludeList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExcludeList = append(m.ExcludeList, &ShapeJavaScriptExclusionRule{})
+			if err := m.ExcludeList[len(m.ExcludeList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ShapeJavaScriptInsertAllWithExceptionsType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ShapeJavaScriptInsertAllWithExceptionsType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ShapeJavaScriptInsertAllWithExceptionsType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptLocation", wireType)
+			}
+			m.JavascriptLocation = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.JavascriptLocation |= JavaScriptLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExcludeList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExcludeList = append(m.ExcludeList, &ShapeJavaScriptExclusionRule{})
+			if err := m.ExcludeList[len(m.ExcludeList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ShapeJavaScriptInsertAllType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ShapeJavaScriptInsertAllType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ShapeJavaScriptInsertAllType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptLocation", wireType)
+			}
+			m.JavascriptLocation = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.JavascriptLocation |= JavaScriptLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ShapeJavaScriptInsertionRule) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ShapeJavaScriptInsertionRule: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ShapeJavaScriptInsertionRule: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.MessageMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnyDomain", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DomainMatcherChoice = &ShapeJavaScriptInsertionRule_AnyDomain{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.DomainType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DomainMatcherChoice = &ShapeJavaScriptInsertionRule_Domain{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Path == nil {
+				m.Path = &schema.PathMatcherType{}
+			}
+			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptLocation", wireType)
+			}
+			m.JavascriptLocation = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.JavascriptLocation |= JavaScriptLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ShapeJavaScriptExclusionRule) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ShapeJavaScriptExclusionRule: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ShapeJavaScriptExclusionRule: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.MessageMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnyDomain", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DomainMatcherChoice = &ShapeJavaScriptExclusionRule_AnyDomain{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.DomainType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DomainMatcherChoice = &ShapeJavaScriptExclusionRule_Domain{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Path == nil {
+				m.Path = &schema.PathMatcherType{}
+			}
+			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -31923,12 +42588,11 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.UserIdentification == nil {
-				m.UserIdentification = &views.ObjectRefType{}
-			}
-			if err := m.UserIdentification.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.UserIdChoice = &GlobalSpecType_UserIdentification{v}
 			iNdEx = postIndex
 		case 22:
 			if wireType != 2 {
@@ -32764,6 +43428,181 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.WafChoice = &GlobalSpecType_AppFirewall{v}
 			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SingleLbApp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SingleLoadBalancerAppSetting{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MlConfigChoice = &GlobalSpecType_SingleLbApp{v}
+			iNdEx = postIndex
+		case 55:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MultiLbApp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MlConfigChoice = &GlobalSpecType_MultiLbApp{v}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableBotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &GlobalSpecType_DisableBotDefense{v}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ShapeBotDefenseType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &GlobalSpecType_BotDefense{v}
+			iNdEx = postIndex
+		case 60:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserIdClientIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UserIdChoice = &GlobalSpecType_UserIdClientIp{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -33564,12 +44403,11 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.UserIdentification == nil {
-				m.UserIdentification = &views.ObjectRefType{}
-			}
-			if err := m.UserIdentification.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.UserIdChoice = &CreateSpecType_UserIdentification{v}
 			iNdEx = postIndex
 		case 22:
 			if wireType != 2 {
@@ -34303,6 +45141,181 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.WafChoice = &CreateSpecType_AppFirewall{v}
 			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SingleLbApp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SingleLoadBalancerAppSetting{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MlConfigChoice = &CreateSpecType_SingleLbApp{v}
+			iNdEx = postIndex
+		case 55:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MultiLbApp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MlConfigChoice = &CreateSpecType_MultiLbApp{v}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableBotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &CreateSpecType_DisableBotDefense{v}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ShapeBotDefenseType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &CreateSpecType_BotDefense{v}
+			iNdEx = postIndex
+		case 60:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserIdClientIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UserIdChoice = &CreateSpecType_UserIdClientIp{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -34927,12 +45940,11 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.UserIdentification == nil {
-				m.UserIdentification = &views.ObjectRefType{}
-			}
-			if err := m.UserIdentification.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.UserIdChoice = &ReplaceSpecType_UserIdentification{v}
 			iNdEx = postIndex
 		case 22:
 			if wireType != 2 {
@@ -35666,6 +46678,181 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.WafChoice = &ReplaceSpecType_AppFirewall{v}
 			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SingleLbApp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SingleLoadBalancerAppSetting{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MlConfigChoice = &ReplaceSpecType_SingleLbApp{v}
+			iNdEx = postIndex
+		case 55:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MultiLbApp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MlConfigChoice = &ReplaceSpecType_MultiLbApp{v}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableBotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &ReplaceSpecType_DisableBotDefense{v}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ShapeBotDefenseType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &ReplaceSpecType_BotDefense{v}
+			iNdEx = postIndex
+		case 60:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserIdClientIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UserIdChoice = &ReplaceSpecType_UserIdClientIp{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -36290,12 +47477,11 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.UserIdentification == nil {
-				m.UserIdentification = &views.ObjectRefType{}
-			}
-			if err := m.UserIdentification.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.UserIdChoice = &GetSpecType_UserIdentification{v}
 			iNdEx = postIndex
 		case 22:
 			if wireType != 2 {
@@ -37028,6 +48214,181 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.WafChoice = &GetSpecType_AppFirewall{v}
+			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SingleLbApp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SingleLoadBalancerAppSetting{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MlConfigChoice = &GetSpecType_SingleLbApp{v}
+			iNdEx = postIndex
+		case 55:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MultiLbApp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MlConfigChoice = &GetSpecType_MultiLbApp{v}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableBotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &GetSpecType_DisableBotDefense{v}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ShapeBotDefenseType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &GetSpecType_BotDefense{v}
+			iNdEx = postIndex
+		case 60:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserIdClientIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UserIdChoice = &GetSpecType_UserIdClientIp{v}
 			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {

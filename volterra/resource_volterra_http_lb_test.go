@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
@@ -25,6 +26,7 @@ func TestHTTPLB(t *testing.T) {
 		ves_io_schema_uid.ObjectType,
 		ves_io_schema_ns.ObjectType,
 		ves_io_schema_views_rate_limiter_policy.ObjectType,
+		ves_io_schema_app_firewall.ObjectType,
 		ves_io_schema_app_type.ObjectType,
 		ves_io_schema_app_setting.ObjectType,
 	})
@@ -104,6 +106,31 @@ func testConfigHTTPLB(resourceName, name, namespace string) string {
 		    }
 		  }
 		}
+		resource "volterra_app_firewall" "app_fwd_athena" {
+		  name = "%[2]s"
+		  namespace = volterra_namespace.app.name
+		  blocking                  = true
+		  allow_all_response_codes  = true
+		  default_anonymization     = true
+		  use_default_blocking_page = true
+
+		  detection_settings  {
+		    signature_selection_setting {
+		      default_attack_type_settings        = true
+		      high_medium_low_accuracy_signatures = true
+		    }
+
+		    enable_suppression         = true
+		    enable_threat_campaigns    = true
+		    default_violation_settings = true
+		  }
+
+		  bot_protection_setting {
+		    malicious_bot_action  = "BLOCK"
+		    suspicious_bot_action = "REPORT"
+		    good_bot_action       = "REPORT"
+		  }
+		}
 		resource "volterra_http_loadbalancer" "%[1]s" {
 		  name = "%[2]s"
 		  namespace = volterra_namespace.app.name
@@ -116,13 +143,13 @@ func testConfigHTTPLB(resourceName, name, namespace string) string {
 			dns_volterra_managed = false
 		  }
 		  disable_rate_limit = false
-		  disable_waf = false
-		  waf {
-			name = "%[3]s"
+		  app_firewall {
+		    name      = volterra_app_firewall.app_fwd_athena.name
 		  }
 		  no_service_policies = true
 		  round_robin = true
 		  domains = ["http.helloclouds.app"]
+		  multi_lb_app = true
 		  user_identification {
 		    name = volterra_user_identification.%[1]s.name
 		    namespace = "%[3]s"

@@ -127,14 +127,20 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -203,14 +209,20 @@ func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOp
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -280,14 +292,20 @@ func (c *CustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Cont
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":

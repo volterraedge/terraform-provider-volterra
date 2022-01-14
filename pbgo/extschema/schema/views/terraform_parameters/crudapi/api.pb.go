@@ -842,6 +842,239 @@ func (m *ObjectDeleteRsp) GetErr() ErrorCode {
 	return EOK
 }
 
+type StatusObjectListReq struct {
+	// Filters executed on server-side - all types of filters ANDed
+	// Tenants to scope the listing of objects - if empty all tenants considered
+	TenantFilter []string `protobuf:"bytes,10000,rep,name=tenant_filter,json=tenantFilter,proto3" json:"tenant_filter,omitempty"`
+	// Namespaces to scope the listing of objects - if empty all namespaces considered
+	NamespaceFilter []string `protobuf:"bytes,10001,rep,name=namespace_filter,json=namespaceFilter,proto3" json:"namespace_filter,omitempty"`
+	// k8s style label selector expression
+	LabelFilter string `protobuf:"bytes,10002,opt,name=label_filter,json=labelFilter,proto3" json:"label_filter,omitempty"`
+	// TODO: currently even if one specified implementation will return all fields
+	ReportFields []string `protobuf:"bytes,10003,rep,name=report_fields,json=reportFields,proto3" json:"report_fields,omitempty"`
+	// Get the resource_version associated with the list
+	ResourceVersion bool `protobuf:"varint,10004,opt,name=resource_version,json=resourceVersion,proto3" json:"resource_version,omitempty"`
+	// in case of ref-by-name whether to report referred's uid
+	IncludeReferredId bool `protobuf:"varint,10005,opt,name=include_referred_id,json=includeReferredId,proto3" json:"include_referred_id,omitempty"`
+}
+
+func (m *StatusObjectListReq) Reset()      { *m = StatusObjectListReq{} }
+func (*StatusObjectListReq) ProtoMessage() {}
+func (*StatusObjectListReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e77787c8172347bb, []int{11}
+}
+func (m *StatusObjectListReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StatusObjectListReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_StatusObjectListReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *StatusObjectListReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StatusObjectListReq.Merge(m, src)
+}
+func (m *StatusObjectListReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *StatusObjectListReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_StatusObjectListReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StatusObjectListReq proto.InternalMessageInfo
+
+func (m *StatusObjectListReq) GetTenantFilter() []string {
+	if m != nil {
+		return m.TenantFilter
+	}
+	return nil
+}
+
+func (m *StatusObjectListReq) GetNamespaceFilter() []string {
+	if m != nil {
+		return m.NamespaceFilter
+	}
+	return nil
+}
+
+func (m *StatusObjectListReq) GetLabelFilter() string {
+	if m != nil {
+		return m.LabelFilter
+	}
+	return ""
+}
+
+func (m *StatusObjectListReq) GetReportFields() []string {
+	if m != nil {
+		return m.ReportFields
+	}
+	return nil
+}
+
+func (m *StatusObjectListReq) GetResourceVersion() bool {
+	if m != nil {
+		return m.ResourceVersion
+	}
+	return false
+}
+
+func (m *StatusObjectListReq) GetIncludeReferredId() bool {
+	if m != nil {
+		return m.IncludeReferredId
+	}
+	return false
+}
+
+type StatusObjectListRspItem struct {
+	StatusobjectUid string `protobuf:"bytes,10000,opt,name=statusobject_uid,json=statusobjectUid,proto3" json:"statusobject_uid,omitempty"`
+	// If StatusObjectListReq has any specified report_fields, it will appear in below fields
+	Metadata    *schema.StatusMetaType            `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	ObjectRefs  []*schema.ObjectRefType           `protobuf:"bytes,2,rep,name=object_refs,json=objectRefs,proto3" json:"object_refs,omitempty"`
+	PlanStatus  *terraform_parameters.PlanStatus  `protobuf:"bytes,10,opt,name=plan_status,json=planStatus,proto3" json:"plan_status,omitempty"`
+	ApplyStatus *terraform_parameters.ApplyStatus `protobuf:"bytes,11,opt,name=apply_status,json=applyStatus,proto3" json:"apply_status,omitempty"`
+}
+
+func (m *StatusObjectListRspItem) Reset()      { *m = StatusObjectListRspItem{} }
+func (*StatusObjectListRspItem) ProtoMessage() {}
+func (*StatusObjectListRspItem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e77787c8172347bb, []int{12}
+}
+func (m *StatusObjectListRspItem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StatusObjectListRspItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_StatusObjectListRspItem.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *StatusObjectListRspItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StatusObjectListRspItem.Merge(m, src)
+}
+func (m *StatusObjectListRspItem) XXX_Size() int {
+	return m.Size()
+}
+func (m *StatusObjectListRspItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_StatusObjectListRspItem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StatusObjectListRspItem proto.InternalMessageInfo
+
+func (m *StatusObjectListRspItem) GetStatusobjectUid() string {
+	if m != nil {
+		return m.StatusobjectUid
+	}
+	return ""
+}
+
+func (m *StatusObjectListRspItem) GetMetadata() *schema.StatusMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *StatusObjectListRspItem) GetObjectRefs() []*schema.ObjectRefType {
+	if m != nil {
+		return m.ObjectRefs
+	}
+	return nil
+}
+
+func (m *StatusObjectListRspItem) GetPlanStatus() *terraform_parameters.PlanStatus {
+	if m != nil {
+		return m.PlanStatus
+	}
+	return nil
+}
+
+func (m *StatusObjectListRspItem) GetApplyStatus() *terraform_parameters.ApplyStatus {
+	if m != nil {
+		return m.ApplyStatus
+	}
+	return nil
+}
+
+type StatusObjectListRsp struct {
+	Err      ErrorCode                  `protobuf:"varint,10000,opt,name=err,proto3,enum=ves.io.schema.views.terraform_parameters.crudapi.ErrorCode" json:"err,omitempty"`
+	Uids     []string                   `protobuf:"bytes,10001,rep,name=uids,proto3" json:"uids,omitempty"`
+	Items    []*StatusObjectListRspItem `protobuf:"bytes,10002,rep,name=items,proto3" json:"items,omitempty"`
+	Metadata *schema.ListMetaType       `protobuf:"bytes,10003,opt,name=metadata,proto3" json:"metadata,omitempty"`
+}
+
+func (m *StatusObjectListRsp) Reset()      { *m = StatusObjectListRsp{} }
+func (*StatusObjectListRsp) ProtoMessage() {}
+func (*StatusObjectListRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e77787c8172347bb, []int{13}
+}
+func (m *StatusObjectListRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StatusObjectListRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_StatusObjectListRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *StatusObjectListRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StatusObjectListRsp.Merge(m, src)
+}
+func (m *StatusObjectListRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *StatusObjectListRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_StatusObjectListRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StatusObjectListRsp proto.InternalMessageInfo
+
+func (m *StatusObjectListRsp) GetErr() ErrorCode {
+	if m != nil {
+		return m.Err
+	}
+	return EOK
+}
+
+func (m *StatusObjectListRsp) GetUids() []string {
+	if m != nil {
+		return m.Uids
+	}
+	return nil
+}
+
+func (m *StatusObjectListRsp) GetItems() []*StatusObjectListRspItem {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+func (m *StatusObjectListRsp) GetMetadata() *schema.ListMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("ves.io.schema.views.terraform_parameters.crudapi.ErrorCode", ErrorCode_name, ErrorCode_value)
 	golang_proto.RegisterEnum("ves.io.schema.views.terraform_parameters.crudapi.ErrorCode", ErrorCode_name, ErrorCode_value)
@@ -869,6 +1102,12 @@ func init() {
 	golang_proto.RegisterType((*ObjectDeleteReq)(nil), "ves.io.schema.views.terraform_parameters.crudapi.ObjectDeleteReq")
 	proto.RegisterType((*ObjectDeleteRsp)(nil), "ves.io.schema.views.terraform_parameters.crudapi.ObjectDeleteRsp")
 	golang_proto.RegisterType((*ObjectDeleteRsp)(nil), "ves.io.schema.views.terraform_parameters.crudapi.ObjectDeleteRsp")
+	proto.RegisterType((*StatusObjectListReq)(nil), "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListReq")
+	golang_proto.RegisterType((*StatusObjectListReq)(nil), "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListReq")
+	proto.RegisterType((*StatusObjectListRspItem)(nil), "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRspItem")
+	golang_proto.RegisterType((*StatusObjectListRspItem)(nil), "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRspItem")
+	proto.RegisterType((*StatusObjectListRsp)(nil), "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp")
+	golang_proto.RegisterType((*StatusObjectListRsp)(nil), "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp")
 }
 
 func init() {
@@ -879,92 +1118,107 @@ func init() {
 }
 
 var fileDescriptor_e77787c8172347bb = []byte{
-	// 1354 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6f, 0x13, 0x47,
-	0x14, 0xce, 0xd8, 0x21, 0xc1, 0xe3, 0x84, 0x98, 0x01, 0xa9, 0xae, 0x29, 0xab, 0x68, 0xcb, 0x21,
-	0x8a, 0xc4, 0x2e, 0xb8, 0xa5, 0x4a, 0x53, 0x15, 0x9a, 0x04, 0x07, 0x45, 0x80, 0x8d, 0x36, 0xa4,
-	0xad, 0x72, 0x71, 0xd7, 0xf6, 0x8b, 0xd9, 0xb2, 0xde, 0x5d, 0x66, 0xc6, 0x01, 0xab, 0x8a, 0x5a,
-	0xa1, 0x56, 0xaa, 0x2a, 0x55, 0x4a, 0xa0, 0xbf, 0x44, 0xab, 0x0a, 0xa9, 0x97, 0x22, 0x2e, 0x55,
-	0x4f, 0x95, 0x72, 0xc9, 0x11, 0x71, 0x42, 0xf4, 0xc2, 0xb1, 0x38, 0x3d, 0xf4, 0xc8, 0x9f, 0x50,
-	0xed, 0xcc, 0xda, 0xb1, 0x9d, 0xa0, 0xfa, 0x47, 0x22, 0x51, 0x89, 0x8b, 0x35, 0xf3, 0xde, 0xbc,
-	0x6f, 0x66, 0xbe, 0xf7, 0xbd, 0x99, 0x59, 0xe3, 0xc9, 0x65, 0x60, 0x9a, 0xe5, 0xea, 0x2c, 0x7f,
-	0x05, 0x4a, 0xa6, 0xbe, 0x6c, 0xc1, 0x75, 0xa6, 0x73, 0xa0, 0xd4, 0x5c, 0x72, 0x69, 0x29, 0xeb,
-	0x99, 0xd4, 0x2c, 0x01, 0x07, 0xca, 0xf4, 0x3c, 0x2d, 0x17, 0x4c, 0xcf, 0xd2, 0x4d, 0xcf, 0xd2,
-	0x3c, 0xea, 0x72, 0x97, 0x9c, 0x90, 0xb1, 0x9a, 0x8c, 0xd5, 0x44, 0xac, 0xb6, 0x53, 0xac, 0x16,
-	0xc4, 0x26, 0x8e, 0x17, 0x2d, 0x7e, 0xa5, 0x9c, 0xd3, 0xf2, 0x6e, 0x49, 0x2f, 0xba, 0x45, 0x57,
-	0x17, 0x40, 0xb9, 0xf2, 0x92, 0xe8, 0x89, 0x8e, 0x68, 0xc9, 0x09, 0x12, 0xaf, 0x15, 0x5d, 0xb7,
-	0x68, 0x83, 0x2e, 0xa6, 0x75, 0x1c, 0x97, 0x9b, 0xdc, 0x72, 0x1d, 0x16, 0x78, 0x5f, 0x0d, 0xbc,
-	0x75, 0x0c, 0xd3, 0xa9, 0x04, 0xae, 0x23, 0xcd, 0xbb, 0x72, 0xbd, 0xa6, 0xb8, 0x66, 0x27, 0xaf,
-	0x78, 0x50, 0x73, 0x8d, 0x6e, 0x67, 0x23, 0xdb, 0x1c, 0x7c, 0xaa, 0x6d, 0xbe, 0xdc, 0xdc, 0xc7,
-	0x90, 0xe7, 0x41, 0xd8, 0x9b, 0x6d, 0x87, 0x35, 0x2c, 0x47, 0xdd, 0x08, 0xe1, 0x91, 0x8c, 0x80,
-	0x99, 0xa1, 0x60, 0x72, 0x30, 0xe0, 0x1a, 0x99, 0xc5, 0xfb, 0x4b, 0xc0, 0xcd, 0x82, 0xc9, 0xcd,
-	0x38, 0x1a, 0x45, 0x63, 0xd1, 0xe4, 0x51, 0xad, 0x39, 0x0f, 0x32, 0xe2, 0x22, 0x70, 0xf3, 0x72,
-	0xc5, 0x83, 0xe9, 0xe8, 0x9d, 0x95, 0x7a, 0x84, 0x51, 0x6f, 0x91, 0x8f, 0xf0, 0x08, 0xab, 0x30,
-	0x0e, 0xa5, 0x6c, 0x1d, 0x2e, 0x24, 0xe0, 0x5e, 0x6f, 0x81, 0x9b, 0x17, 0xa3, 0x5a, 0x40, 0xc9,
-	0x9d, 0x95, 0xd6, 0x70, 0xe3, 0x80, 0x34, 0x5c, 0xac, 0xcd, 0x90, 0xc1, 0xfd, 0xcc, 0x83, 0x7c,
-	0x3c, 0x2c, 0x60, 0x93, 0x5a, 0xdb, 0x6a, 0x99, 0xf7, 0x20, 0x2f, 0x66, 0x19, 0xbc, 0xb3, 0x22,
-	0x20, 0x0c, 0xf1, 0x3b, 0x99, 0x7c, 0x78, 0x5a, 0x6f, 0x1b, 0x44, 0x2e, 0x58, 0xfd, 0x2d, 0xdc,
-	0x42, 0x21, 0xf3, 0x48, 0x1a, 0x87, 0x81, 0xd2, 0xf8, 0x6a, 0x7a, 0x14, 0x8d, 0x1d, 0x48, 0xbe,
-	0xa3, 0x75, 0x2a, 0x63, 0x2d, 0x45, 0xa9, 0x4b, 0x67, 0xdc, 0x02, 0x18, 0x3e, 0x10, 0x51, 0x30,
-	0x96, 0xc9, 0xce, 0x96, 0xad, 0x42, 0x7c, 0xcd, 0x87, 0x8d, 0x18, 0x11, 0x69, 0x5a, 0xb0, 0x0a,
-	0x2f, 0x53, 0xd6, 0x59, 0xca, 0xee, 0x87, 0x70, 0x4c, 0x36, 0x0d, 0xf0, 0x6c, 0x33, 0x2f, 0x64,
-	0xdf, 0xcc, 0xf1, 0xea, 0x36, 0x8e, 0xc7, 0x71, 0x8c, 0x02, 0x73, 0xcb, 0x34, 0x0f, 0xd9, 0x65,
-	0xa0, 0xcc, 0x72, 0x9d, 0x5a, 0x26, 0x46, 0x6a, 0x8e, 0xf7, 0xa5, 0x7d, 0xd7, 0xf2, 0xf1, 0x42,
-	0xb0, 0xb5, 0x16, 0x6e, 0x65, 0x6b, 0x0f, 0x14, 0xfe, 0x52, 0xc1, 0x1d, 0xe5, 0xe4, 0x1e, 0xc2,
-	0x43, 0xb2, 0x79, 0x0e, 0x78, 0x3b, 0xea, 0x55, 0xf1, 0x90, 0x69, 0xdb, 0xd9, 0x9c, 0x99, 0xbf,
-	0x4a, 0x61, 0x89, 0x49, 0xe5, 0xee, 0x37, 0xa2, 0xa6, 0x6d, 0x4f, 0x07, 0x36, 0x72, 0x0c, 0x0f,
-	0x07, 0xfe, 0xac, 0xb8, 0x23, 0xe2, 0xb7, 0xd2, 0xa3, 0xe1, 0xb1, 0x88, 0x31, 0x14, 0x58, 0xfd,
-	0xc5, 0x33, 0xa2, 0xe3, 0x43, 0x96, 0x93, 0xb7, 0xcb, 0x05, 0xc8, 0x52, 0x58, 0x02, 0x4a, 0xa1,
-	0x90, 0xb5, 0x0a, 0xf1, 0xdb, 0x12, 0xf0, 0x60, 0xe0, 0x33, 0x02, 0xd7, 0x5c, 0x41, 0x7d, 0xd8,
-	0xdf, 0xb8, 0xd6, 0x3d, 0xd0, 0xce, 0x04, 0x1e, 0x02, 0x87, 0x37, 0xed, 0x2d, 0x3c, 0x16, 0x4d,
-	0x1e, 0xd6, 0xe4, 0xf5, 0xad, 0xd5, 0xae, 0x6f, 0x6d, 0xca, 0xa9, 0x18, 0x51, 0x70, 0x78, 0x7d,
-	0xc7, 0x3b, 0xd5, 0xf4, 0xad, 0x3d, 0xae, 0xe9, 0xff, 0x9f, 0x42, 0xc9, 0x02, 0x1e, 0x60, 0xdc,
-	0xe4, 0x65, 0x16, 0xbf, 0xfb, 0x13, 0x12, 0xdc, 0xbe, 0xd5, 0x01, 0xa8, 0x88, 0x94, 0xdb, 0x98,
-	0x0e, 0x6f, 0xac, 0x20, 0x23, 0x00, 0xeb, 0x4a, 0xf8, 0x5f, 0x86, 0xf0, 0xb0, 0x6c, 0x5e, 0xb0,
-	0x98, 0x50, 0xfe, 0x31, 0x3c, 0xcc, 0xc1, 0x31, 0x1d, 0x9e, 0x5d, 0xb2, 0x6c, 0x0e, 0x42, 0x57,
-	0x42, 0xb5, 0xd2, 0x3a, 0x2b, 0x8c, 0x7e, 0xa6, 0x1d, 0xb3, 0x04, 0xcc, 0x33, 0xf3, 0x50, 0x1b,
-	0xb8, 0x26, 0x07, 0x8e, 0xd4, 0x1d, 0xc1, 0x58, 0x15, 0x0f, 0xd9, 0x66, 0x0e, 0xec, 0xda, 0xb8,
-	0x40, 0x11, 0x51, 0x61, 0x0c, 0xc6, 0x1c, 0xc3, 0xc3, 0x14, 0x3c, 0x97, 0xfa, 0xb3, 0x82, 0x5d,
-	0x60, 0xbe, 0xfe, 0xc5, 0xac, 0xd2, 0x3a, 0x2b, 0x8c, 0x3b, 0xea, 0xeb, 0x1b, 0x59, 0x28, 0xdb,
-	0xf4, 0xf5, 0x9c, 0xba, 0xfa, 0xf6, 0xb9, 0x75, 0x75, 0x7f, 0x1f, 0x3e, 0xd8, 0x40, 0x05, 0xf3,
-	0xe6, 0x38, 0x94, 0xfe, 0xf3, 0x20, 0x78, 0x29, 0xe3, 0x5d, 0x96, 0x31, 0x79, 0x05, 0x0f, 0x48,
-	0xa9, 0xd5, 0x9e, 0x03, 0x41, 0x97, 0x1c, 0xc5, 0x91, 0xba, 0xb4, 0x6a, 0x22, 0xda, 0xb2, 0x90,
-	0x43, 0xb8, 0xdf, 0xef, 0xc8, 0x93, 0x33, 0x62, 0x88, 0x0e, 0xb9, 0x82, 0x07, 0x84, 0xcc, 0x98,
-	0xaf, 0x13, 0x7f, 0x89, 0x99, 0xce, 0x8f, 0xc7, 0x6d, 0xa2, 0xd0, 0x2e, 0x08, 0xc8, 0x94, 0xc3,
-	0x69, 0xc5, 0x08, 0xf0, 0x13, 0x6f, 0xe3, 0x68, 0x83, 0x99, 0xc4, 0x70, 0xf8, 0x2a, 0x54, 0x84,
-	0x24, 0x22, 0x86, 0xdf, 0x24, 0x87, 0xf1, 0xbe, 0x65, 0xd3, 0x2e, 0x83, 0xc8, 0x6b, 0xc4, 0x90,
-	0x9d, 0xc9, 0xd0, 0x04, 0xea, 0xaa, 0x70, 0xbf, 0x6a, 0x2e, 0xdc, 0x3d, 0xb8, 0x06, 0x0e, 0xe1,
-	0xfe, 0xb2, 0x55, 0x60, 0xb5, 0xb2, 0x16, 0x1d, 0xb2, 0x88, 0xf7, 0x59, 0x1c, 0x4a, 0xc1, 0x5d,
-	0x16, 0x4d, 0xce, 0xec, 0x02, 0x9d, 0x86, 0x84, 0x24, 0x13, 0x0d, 0xa5, 0x24, 0x92, 0x18, 0x4d,
-	0x1e, 0x69, 0x81, 0xf7, 0xa3, 0x6a, 0xa2, 0xdf, 0x2a, 0x1e, 0xf5, 0x64, 0xed, 0x93, 0xe1, 0x2c,
-	0xd8, 0xc0, 0xdb, 0x79, 0x7e, 0xaa, 0x66, 0x4b, 0xc8, 0xee, 0x13, 0x38, 0x7e, 0x1a, 0x47, 0xea,
-	0x16, 0x32, 0x88, 0xc3, 0xa9, 0xcc, 0xf9, 0x58, 0x1f, 0x19, 0xc6, 0x91, 0x54, 0x3a, 0x73, 0x79,
-	0x36, 0xb3, 0x90, 0x3e, 0x1b, 0x43, 0x24, 0x8a, 0x07, 0x53, 0xa9, 0x0f, 0xe7, 0xe6, 0x2f, 0xcf,
-	0xc7, 0x42, 0x64, 0x08, 0xef, 0x4f, 0x2d, 0xa4, 0xcf, 0xa7, 0x33, 0x1f, 0xa4, 0x63, 0xe1, 0xe4,
-	0xe7, 0x07, 0x70, 0x78, 0xea, 0xd2, 0x1c, 0xf9, 0x2e, 0x84, 0x07, 0xe4, 0xb7, 0x10, 0x99, 0xea,
-	0x96, 0xee, 0xfa, 0xe7, 0x68, 0xa2, 0x57, 0x08, 0xe6, 0xa9, 0x5f, 0xa0, 0x9b, 0x7f, 0xfe, 0x7d,
-	0x3b, 0xf4, 0xa9, 0x7a, 0xb2, 0x6d, 0xd9, 0xea, 0x12, 0x83, 0x4d, 0xa2, 0xf1, 0xc5, 0x73, 0xea,
-	0x74, 0xfb, 0x71, 0x96, 0xc3, 0xa9, 0xeb, 0x1f, 0x37, 0x5c, 0xbf, 0x4e, 0x2d, 0x0e, 0x0d, 0x40,
-	0xe4, 0xf7, 0x10, 0x1e, 0x0c, 0xde, 0xd0, 0x64, 0xba, 0xdb, 0x6d, 0x6d, 0x7d, 0xb2, 0x24, 0x7a,
-	0xc6, 0x60, 0x9e, 0xfa, 0xb3, 0xe4, 0xe6, 0x7b, 0x94, 0x78, 0xb7, 0x53, 0x72, 0xf4, 0x4f, 0xb6,
-	0x14, 0xbb, 0xe2, 0x13, 0x35, 0x9f, 0x48, 0xf7, 0x4c, 0x54, 0x2b, 0x28, 0xf9, 0x25, 0x84, 0xc3,
-	0xe7, 0x80, 0x93, 0xd3, 0xdd, 0x6e, 0x56, 0xbe, 0x90, 0x13, 0x3d, 0xc5, 0x33, 0x4f, 0xfd, 0x11,
-	0x3d, 0xf8, 0x23, 0x24, 0xc9, 0x5a, 0x45, 0xa4, 0x37, 0xb2, 0x16, 0x33, 0xe4, 0x62, 0x57, 0x4c,
-	0x51, 0x30, 0x0b, 0x3b, 0x01, 0x92, 0xaf, 0x43, 0xb8, 0xdf, 0x3f, 0x6c, 0xc8, 0x99, 0x9e, 0x0e,
-	0x38, 0xb8, 0x96, 0x38, 0xd3, 0xe3, 0x09, 0xa9, 0xde, 0xdc, 0x22, 0xea, 0x06, 0xe9, 0xbc, 0xe2,
-	0x16, 0x67, 0xc8, 0x54, 0xaf, 0xdc, 0x30, 0xf2, 0x18, 0x61, 0xec, 0x2f, 0x68, 0x9e, 0x53, 0x30,
-	0x4b, 0x2f, 0x00, 0x2b, 0xef, 0x09, 0x42, 0x26, 0xc9, 0x44, 0xc7, 0x84, 0xe8, 0x4c, 0xec, 0xe1,
-	0x04, 0x22, 0xf7, 0x42, 0x78, 0x40, 0x1e, 0xff, 0xdd, 0x1f, 0xac, 0xf5, 0x1b, 0x27, 0xd1, 0x2b,
-	0x04, 0xf3, 0xd4, 0x1f, 0x64, 0x9a, 0xd7, 0xd0, 0x78, 0x8f, 0xf5, 0x70, 0x69, 0x7c, 0x97, 0x4f,
-	0x8e, 0xc4, 0x8d, 0x8d, 0x75, 0x84, 0x1e, 0xac, 0x23, 0xf4, 0x78, 0x1d, 0x75, 0xfa, 0x58, 0x79,
-	0xb2, 0x8e, 0x50, 0x75, 0x1d, 0x9d, 0xea, 0xee, 0x71, 0x78, 0x17, 0x3d, 0x7a, 0xaa, 0xf4, 0x3d,
-	0x79, 0xaa, 0xf4, 0x3d, 0x7b, 0xaa, 0xa0, 0xcf, 0xaa, 0x0a, 0xfa, 0xb5, 0xaa, 0xa0, 0x07, 0x55,
-	0x05, 0x3d, 0xaa, 0x2a, 0xe8, 0xaf, 0xaa, 0x82, 0xfe, 0xa9, 0x2a, 0x7d, 0xcf, 0xaa, 0x0a, 0x5a,
-	0xdd, 0x54, 0xfa, 0x36, 0x36, 0x15, 0xf4, 0x68, 0x53, 0xe9, 0x7b, 0xb2, 0xa9, 0xf4, 0x2d, 0x2e,
-	0x15, 0x5d, 0xef, 0x6a, 0x51, 0x5b, 0x76, 0x6d, 0x31, 0x8d, 0x56, 0x6e, 0xf8, 0x0b, 0xf7, 0xb8,
-	0x47, 0xdd, 0x65, 0xab, 0x00, 0xf4, 0x78, 0xcd, 0xad, 0x7b, 0xb9, 0xa2, 0xab, 0xc3, 0x0d, 0x1e,
-	0xfc, 0xe7, 0xdb, 0xf6, 0x3f, 0xec, 0xb9, 0x01, 0xf1, 0x49, 0xfc, 0xc6, 0xbf, 0x01, 0x00, 0x00,
-	0xff, 0xff, 0x8e, 0x9b, 0x4f, 0xf6, 0x9c, 0x17, 0x00, 0x00,
+	// 1589 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xdf, 0x6f, 0x13, 0xc7,
+	0x16, 0xce, 0xac, 0x43, 0x82, 0xc7, 0xf9, 0x61, 0x26, 0x48, 0xe4, 0x1a, 0x58, 0x45, 0x7b, 0x79,
+	0x88, 0x22, 0xb1, 0x0b, 0xbe, 0x70, 0x6f, 0x6e, 0xae, 0x08, 0x24, 0xc1, 0x89, 0x22, 0x88, 0x8d,
+	0x36, 0xe4, 0xde, 0xab, 0xbc, 0x98, 0x89, 0x3d, 0x31, 0x7b, 0x59, 0xef, 0x2e, 0x3b, 0xe3, 0x80,
+	0x75, 0x15, 0xb5, 0x42, 0x54, 0xaa, 0x2a, 0xb5, 0x4d, 0xa0, 0xa5, 0x55, 0x5a, 0x55, 0x48, 0x95,
+	0xaa, 0x22, 0x5e, 0xaa, 0x3e, 0x55, 0xca, 0x4b, 0x1e, 0x11, 0x4f, 0x88, 0xbe, 0xa0, 0x3e, 0x15,
+	0x87, 0x07, 0x1e, 0xf9, 0x13, 0xaa, 0x9d, 0xd9, 0x75, 0x6c, 0x27, 0x08, 0xff, 0x48, 0x2a, 0xaa,
+	0xf2, 0x62, 0xed, 0x9e, 0xb3, 0xe7, 0x3b, 0x33, 0xdf, 0x7c, 0xe7, 0xcc, 0xec, 0x1a, 0x8e, 0x2c,
+	0x11, 0xaa, 0x1a, 0xb6, 0x46, 0x33, 0x57, 0x49, 0x1e, 0x6b, 0x4b, 0x06, 0xb9, 0x41, 0x35, 0x46,
+	0x5c, 0x17, 0x2f, 0xda, 0x6e, 0x3e, 0xed, 0x60, 0x17, 0xe7, 0x09, 0x23, 0x2e, 0xd5, 0x32, 0x6e,
+	0x21, 0x8b, 0x1d, 0x43, 0xc3, 0x8e, 0xa1, 0x3a, 0xae, 0xcd, 0x6c, 0x74, 0x42, 0xc4, 0xaa, 0x22,
+	0x56, 0xe5, 0xb1, 0xea, 0x4e, 0xb1, 0xaa, 0x1f, 0x1b, 0x3b, 0x9e, 0x33, 0xd8, 0xd5, 0xc2, 0x82,
+	0x9a, 0xb1, 0xf3, 0x5a, 0xce, 0xce, 0xd9, 0x1a, 0x07, 0x5a, 0x28, 0x2c, 0xf2, 0x3b, 0x7e, 0xc3,
+	0xaf, 0x44, 0x82, 0xd8, 0x91, 0x9c, 0x6d, 0xe7, 0x4c, 0xa2, 0xf1, 0xb4, 0x96, 0x65, 0x33, 0xcc,
+	0x0c, 0xdb, 0xa2, 0xbe, 0xf7, 0x2f, 0xbe, 0xb7, 0x8c, 0x81, 0xad, 0xa2, 0xef, 0x3a, 0x5c, 0x3d,
+	0x2b, 0xdb, 0xa9, 0x8a, 0xab, 0x76, 0xb2, 0xa2, 0x43, 0x02, 0xd7, 0xc0, 0x76, 0x36, 0xd2, 0xd5,
+	0xc1, 0xa7, 0xeb, 0xe6, 0xcb, 0x5e, 0xf8, 0x1f, 0xc9, 0x30, 0x3f, 0xec, 0x54, 0xdd, 0x61, 0x15,
+	0xc3, 0x51, 0x36, 0x24, 0xd8, 0x9b, 0xe2, 0x30, 0x13, 0x2e, 0xc1, 0x8c, 0xe8, 0xe4, 0x3a, 0x9a,
+	0x84, 0xfb, 0xf3, 0x84, 0xe1, 0x2c, 0x66, 0xb8, 0x1f, 0x0c, 0x80, 0xc1, 0x48, 0xfc, 0xa8, 0x5a,
+	0xbd, 0x0e, 0x22, 0x62, 0x86, 0x30, 0x7c, 0xb9, 0xe8, 0x90, 0xf1, 0xc8, 0xda, 0x72, 0x39, 0x42,
+	0x2f, 0x5f, 0xa1, 0x2b, 0xb0, 0x97, 0x16, 0x29, 0x23, 0xf9, 0x74, 0x19, 0x4e, 0xe2, 0x70, 0x7f,
+	0xad, 0x81, 0x9b, 0xe5, 0x4f, 0xd5, 0x80, 0xa2, 0xb5, 0xe5, 0xda, 0x70, 0xbd, 0x47, 0x18, 0x66,
+	0x82, 0x0c, 0x29, 0xd8, 0x4e, 0x1d, 0x92, 0xe9, 0x0f, 0x71, 0xd8, 0xb8, 0x5a, 0xb7, 0x5a, 0x66,
+	0x1d, 0x92, 0xe1, 0x59, 0x3a, 0xd7, 0x96, 0x39, 0x84, 0xce, 0x7f, 0x47, 0xe2, 0x8f, 0x47, 0xb5,
+	0xba, 0x41, 0xc4, 0x80, 0x95, 0x1f, 0x42, 0x35, 0x14, 0x52, 0x07, 0x25, 0x61, 0x88, 0xb8, 0x6e,
+	0xff, 0x4a, 0x72, 0x00, 0x0c, 0xf6, 0xc4, 0xff, 0xa5, 0x36, 0x2a, 0x63, 0x35, 0xe1, 0xba, 0xb6,
+	0x3b, 0x61, 0x67, 0x89, 0xee, 0x01, 0x21, 0x19, 0x42, 0xb1, 0xd8, 0xe9, 0x82, 0x91, 0xed, 0x5f,
+	0xf5, 0x60, 0xc3, 0x7a, 0x58, 0x98, 0xe6, 0x8c, 0xec, 0xbb, 0x25, 0x6b, 0x6c, 0xc9, 0x1e, 0x4a,
+	0x30, 0x2a, 0x2e, 0x75, 0xe2, 0x98, 0x38, 0xc3, 0x65, 0x5f, 0xcd, 0xf1, 0xca, 0x36, 0x8e, 0x87,
+	0x60, 0xd4, 0x25, 0xd4, 0x2e, 0xb8, 0x19, 0x92, 0x5e, 0x22, 0x2e, 0x35, 0x6c, 0x2b, 0x58, 0x89,
+	0xde, 0xc0, 0xf1, 0x6f, 0x61, 0xdf, 0xb5, 0xf5, 0x78, 0x2b, 0xd8, 0x5a, 0x0d, 0xd5, 0xb2, 0xb5,
+	0x07, 0x0a, 0x7f, 0xa7, 0xe0, 0x86, 0xd6, 0xe4, 0x01, 0x80, 0x5d, 0xe2, 0x72, 0x8a, 0xb0, 0x7a,
+	0xd4, 0xab, 0xc0, 0x2e, 0x6c, 0x9a, 0xe9, 0x05, 0x9c, 0xb9, 0xe6, 0x92, 0x45, 0x2a, 0x94, 0xbb,
+	0x5f, 0x8f, 0x60, 0xd3, 0x1c, 0xf7, 0x6d, 0xe8, 0x18, 0xec, 0xf6, 0xfd, 0x69, 0xbe, 0x47, 0xf4,
+	0xdf, 0x49, 0x0e, 0x84, 0x06, 0xc3, 0x7a, 0x97, 0x6f, 0xf5, 0x06, 0x4f, 0x91, 0x06, 0xfb, 0x0c,
+	0x2b, 0x63, 0x16, 0xb2, 0x24, 0xed, 0x92, 0x45, 0xe2, 0xba, 0x24, 0x9b, 0x36, 0xb2, 0xfd, 0x77,
+	0x05, 0xe0, 0x01, 0xdf, 0xa7, 0xfb, 0xae, 0xe9, 0xac, 0xf2, 0xb8, 0xbd, 0x72, 0xac, 0x7b, 0xa0,
+	0x9d, 0x61, 0xd8, 0x45, 0x2c, 0x56, 0x35, 0xb7, 0xd0, 0x60, 0x24, 0x7e, 0x50, 0x15, 0xdb, 0xb7,
+	0x1a, 0x6c, 0xdf, 0xea, 0x98, 0x55, 0xd4, 0x23, 0xc4, 0x62, 0xe5, 0x19, 0xef, 0x54, 0xd3, 0x77,
+	0xf6, 0xb8, 0xa6, 0xff, 0x78, 0x0a, 0x45, 0x73, 0xb0, 0x83, 0x32, 0xcc, 0x0a, 0xb4, 0xff, 0xfe,
+	0xd7, 0x80, 0x73, 0xfb, 0xf7, 0x06, 0x40, 0x79, 0xa4, 0x98, 0xc6, 0x78, 0x68, 0x63, 0x19, 0xe8,
+	0x3e, 0x58, 0x53, 0xc2, 0xff, 0x50, 0x82, 0xdd, 0xe2, 0xf2, 0xa2, 0x41, 0xb9, 0xf2, 0x8f, 0xc1,
+	0x6e, 0x46, 0x2c, 0x6c, 0xb1, 0xf4, 0xa2, 0x61, 0x32, 0xc2, 0x75, 0xc5, 0x55, 0x2b, 0xac, 0x93,
+	0xdc, 0xe8, 0xad, 0xb4, 0x85, 0xf3, 0x84, 0x3a, 0x38, 0x43, 0x82, 0x07, 0x57, 0xc5, 0x83, 0xbd,
+	0x65, 0x87, 0xff, 0xac, 0x02, 0xbb, 0x4c, 0xbc, 0x40, 0xcc, 0xe0, 0x39, 0x5f, 0x11, 0x11, 0x6e,
+	0xf4, 0x9f, 0x39, 0x06, 0xbb, 0x5d, 0xe2, 0xd8, 0xae, 0x97, 0x95, 0x98, 0x59, 0xea, 0xe9, 0x9f,
+	0x67, 0x15, 0xd6, 0x49, 0x6e, 0xdc, 0x51, 0x5f, 0x9f, 0x89, 0x42, 0xd9, 0xa6, 0xaf, 0xd7, 0xd4,
+	0xd5, 0xe7, 0xaf, 0xad, 0xab, 0x87, 0xfb, 0xe0, 0x81, 0x0a, 0x2a, 0xa8, 0x33, 0xcd, 0x48, 0xfe,
+	0x8d, 0x8d, 0xe0, 0x9d, 0x8c, 0x77, 0x59, 0xc6, 0xe8, 0x10, 0xec, 0x10, 0x52, 0x0b, 0x8e, 0x03,
+	0xfe, 0x2d, 0x3a, 0x0a, 0xc3, 0x65, 0x69, 0x05, 0x22, 0xda, 0xb2, 0xa0, 0x3e, 0xd8, 0xee, 0xdd,
+	0x88, 0xce, 0x19, 0xd6, 0xf9, 0x0d, 0xba, 0x0a, 0x3b, 0xb8, 0xcc, 0xa8, 0xa7, 0x13, 0x6f, 0x88,
+	0xa9, 0xc6, 0xdb, 0xe3, 0x36, 0x51, 0xa8, 0x17, 0x39, 0x64, 0xc2, 0x62, 0x6e, 0x51, 0xf7, 0xf1,
+	0x63, 0xff, 0x84, 0x91, 0x0a, 0x33, 0x8a, 0xc2, 0xd0, 0x35, 0x52, 0xe4, 0x92, 0x08, 0xeb, 0xde,
+	0x25, 0x3a, 0x08, 0xf7, 0x2d, 0x61, 0xb3, 0x40, 0xf8, 0xba, 0x86, 0x75, 0x71, 0x33, 0x22, 0x0d,
+	0x83, 0xa6, 0x0a, 0xf7, 0xa3, 0xea, 0xc2, 0xdd, 0x83, 0x6d, 0xa0, 0x0f, 0xb6, 0x17, 0x8c, 0x2c,
+	0x0d, 0xca, 0x9a, 0xdf, 0xa0, 0x79, 0xb8, 0xcf, 0x60, 0x24, 0xef, 0xef, 0x65, 0x91, 0xf8, 0xc4,
+	0x2e, 0xd0, 0xa9, 0x0b, 0x48, 0x34, 0x5c, 0x51, 0x4a, 0x7c, 0x11, 0x23, 0xf1, 0xc3, 0x35, 0xf0,
+	0x5e, 0x54, 0x20, 0xfa, 0xad, 0xe2, 0x51, 0x4e, 0x06, 0xaf, 0x0c, 0xe7, 0x89, 0x49, 0x58, 0x3d,
+	0xc7, 0x4f, 0x05, 0xd7, 0x84, 0xec, 0x3e, 0x81, 0xca, 0x27, 0x12, 0xec, 0xab, 0x94, 0xf9, 0x9f,
+	0xbe, 0xc3, 0xbe, 0x0c, 0xc1, 0x43, 0xdb, 0x08, 0xf1, 0xfb, 0xec, 0x10, 0x8c, 0x8a, 0xfa, 0xdf,
+	0xbe, 0x6a, 0xbd, 0x95, 0x8e, 0xfa, 0x7a, 0xae, 0xc8, 0xf2, 0xa6, 0x9e, 0x3b, 0x03, 0x23, 0x7e,
+	0x36, 0x7e, 0xce, 0x91, 0xb8, 0xa2, 0x8f, 0xec, 0xd8, 0xbe, 0x75, 0x71, 0x5c, 0x1b, 0xef, 0x59,
+	0x5b, 0xae, 0x8c, 0xd1, 0x7d, 0x91, 0xe9, 0xde, 0xe9, 0x87, 0xc0, 0x88, 0x63, 0x62, 0x2b, 0xed,
+	0x37, 0x45, 0xc8, 0x47, 0x76, 0xaa, 0x7e, 0x19, 0x5d, 0x32, 0xb1, 0x25, 0x06, 0xce, 0xd3, 0x54,
+	0x60, 0xe9, 0xd0, 0x29, 0xfb, 0x90, 0x01, 0xbb, 0xb0, 0xe3, 0x98, 0xc5, 0x20, 0x4f, 0x84, 0xe7,
+	0x39, 0x5d, 0x7f, 0x9e, 0x31, 0x2f, 0xda, 0x4f, 0xd4, 0xbb, 0xb6, 0x5c, 0x85, 0xa6, 0x47, 0xf0,
+	0x96, 0x77, 0x64, 0xf8, 0xf1, 0xe8, 0xe9, 0xa6, 0x3a, 0xba, 0x72, 0x6f, 0x27, 0xed, 0xff, 0x5e,
+	0x4d, 0xea, 0x4a, 0x4d, 0x93, 0x9a, 0x6e, 0x3c, 0xcd, 0x6b, 0x64, 0xda, 0x72, 0xab, 0x1a, 0x1a,
+	0x85, 0xe1, 0xf2, 0x14, 0x50, 0x27, 0x0c, 0x25, 0x52, 0x17, 0xa2, 0x6d, 0xa8, 0x1b, 0x86, 0x13,
+	0xc9, 0xd4, 0xe5, 0xc9, 0xd4, 0x5c, 0xf2, 0x7c, 0x14, 0xa0, 0x08, 0xec, 0x4c, 0x24, 0xfe, 0x3b,
+	0x3d, 0x7b, 0x79, 0x36, 0x2a, 0xa1, 0x2e, 0xb8, 0x3f, 0x31, 0x97, 0xbc, 0x90, 0x4c, 0xfd, 0x27,
+	0x19, 0x0d, 0xc5, 0x6f, 0xf7, 0xc0, 0xd0, 0xd8, 0xa5, 0x69, 0x74, 0x4f, 0x82, 0x1d, 0xe2, 0x03,
+	0x09, 0x1a, 0x6b, 0xb6, 0x07, 0x97, 0xbf, 0x51, 0xc5, 0x5a, 0x85, 0xa0, 0x8e, 0xf2, 0x01, 0xb8,
+	0xf5, 0xf3, 0x8b, 0xbb, 0xd2, 0x7b, 0xca, 0xc9, 0xba, 0xf7, 0x32, 0x4d, 0x60, 0xd0, 0x11, 0x30,
+	0x34, 0x3f, 0xa5, 0x8c, 0xd7, 0x1f, 0x67, 0x58, 0xcc, 0xb5, 0xbd, 0x33, 0x08, 0xd3, 0x6e, 0xb8,
+	0x06, 0x23, 0x15, 0x40, 0xe8, 0x47, 0x09, 0x76, 0xfa, 0x2f, 0xd6, 0x68, 0xbc, 0xd9, 0x69, 0x6d,
+	0x7d, 0xc7, 0x88, 0xb5, 0x8c, 0x41, 0x1d, 0xe5, 0x1b, 0xc1, 0xcd, 0x17, 0x20, 0x76, 0xa6, 0x51,
+	0x72, 0xb4, 0xff, 0x6f, 0x35, 0xc4, 0x65, 0x8f, 0xa8, 0xd9, 0x58, 0xb2, 0x65, 0xa2, 0x6a, 0x41,
+	0xd1, 0xb7, 0x12, 0x0c, 0x4d, 0x11, 0x86, 0x46, 0x9b, 0x9d, 0xac, 0x78, 0x6d, 0x8e, 0xb5, 0x14,
+	0x4f, 0x1d, 0xe5, 0x2b, 0xf0, 0xe8, 0x27, 0x49, 0x90, 0xb5, 0x02, 0x50, 0x6b, 0x64, 0xcd, 0xa7,
+	0xd0, 0x4c, 0x53, 0x4c, 0xb9, 0x04, 0x67, 0x77, 0x02, 0x44, 0x1f, 0x4b, 0xb0, 0xdd, 0x2b, 0x6b,
+	0x74, 0xb6, 0xa5, 0x53, 0x0f, 0xb9, 0x1e, 0x3b, 0xdb, 0xe2, 0xb1, 0x49, 0xb9, 0xb5, 0x45, 0xd4,
+	0x4d, 0xd4, 0x78, 0xc5, 0xcd, 0x4f, 0xa0, 0xb1, 0x56, 0xb9, 0xa1, 0xe8, 0x29, 0x80, 0xd0, 0x1b,
+	0xd0, 0x2c, 0x73, 0x09, 0xce, 0xbf, 0x05, 0xac, 0x9c, 0xe3, 0x84, 0x8c, 0xa0, 0xe1, 0x86, 0x09,
+	0xd1, 0x28, 0x9f, 0xc3, 0x09, 0x80, 0x1e, 0x48, 0xb0, 0x43, 0x9c, 0x09, 0x9b, 0x6f, 0xac, 0xe5,
+	0x63, 0x68, 0xac, 0x55, 0x08, 0xea, 0x28, 0x5f, 0x8a, 0x65, 0x5e, 0x05, 0x43, 0x2d, 0xd6, 0xc3,
+	0xa5, 0xa1, 0x5d, 0xee, 0x1c, 0xb1, 0x9b, 0x1b, 0xeb, 0x00, 0x3c, 0x5a, 0x07, 0xe0, 0xe9, 0x3a,
+	0x68, 0xf4, 0x0d, 0xe6, 0xd9, 0x3a, 0x00, 0xa5, 0x75, 0xd0, 0xdc, 0xf9, 0x22, 0xfe, 0x4b, 0x3b,
+	0x0c, 0x0b, 0x83, 0xb7, 0x19, 0x7e, 0x17, 0x14, 0x66, 0x62, 0x17, 0x76, 0x7a, 0x72, 0x3d, 0x96,
+	0xd8, 0x95, 0x03, 0x83, 0xf2, 0xe9, 0x56, 0x91, 0xde, 0x06, 0xe8, 0x1f, 0xf5, 0x93, 0x5f, 0x09,
+	0x46, 0xe7, 0xa7, 0xd1, 0x54, 0xf3, 0xb5, 0x5a, 0x05, 0x85, 0x5e, 0x54, 0x57, 0xec, 0xdb, 0x45,
+	0xd7, 0x24, 0x67, 0xea, 0x1c, 0x1a, 0x6d, 0x92, 0xa8, 0x72, 0x0d, 0xc7, 0xce, 0x6c, 0x08, 0x4d,
+	0x36, 0x27, 0xae, 0xf1, 0xfb, 0xe0, 0xc9, 0x73, 0xb9, 0xed, 0xd9, 0x73, 0xb9, 0xed, 0xd5, 0x73,
+	0x19, 0xbc, 0x5f, 0x92, 0xc1, 0xf7, 0x25, 0x19, 0x3c, 0x2a, 0xc9, 0xe0, 0x49, 0x49, 0x06, 0xbf,
+	0x96, 0x64, 0xf0, 0xb2, 0x24, 0xb7, 0xbd, 0x2a, 0xc9, 0x60, 0x65, 0x53, 0x6e, 0xdb, 0xd8, 0x94,
+	0xc1, 0x93, 0x4d, 0xb9, 0xed, 0xd9, 0xa6, 0xdc, 0x36, 0xbf, 0x98, 0xb3, 0x9d, 0x6b, 0x39, 0x75,
+	0xc9, 0x36, 0x79, 0x1a, 0xb5, 0x50, 0xf1, 0xa7, 0xe1, 0x71, 0xc7, 0xb5, 0x97, 0x8c, 0x2c, 0x71,
+	0x8f, 0x07, 0x6e, 0xcd, 0x59, 0xc8, 0xd9, 0x1a, 0xb9, 0xc9, 0xfc, 0x7f, 0x19, 0xeb, 0xfe, 0x4f,
+	0x77, 0xa1, 0x83, 0x7f, 0x84, 0xfd, 0xdb, 0x6f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x89, 0x3a, 0x31,
+	0xec, 0x0e, 0x1e, 0x00, 0x00,
 }
 
 func (x ErrorCode) String() string {
@@ -1399,6 +1653,144 @@ func (this *ObjectDeleteRsp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *StatusObjectListReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*StatusObjectListReq)
+	if !ok {
+		that2, ok := that.(StatusObjectListReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.TenantFilter) != len(that1.TenantFilter) {
+		return false
+	}
+	for i := range this.TenantFilter {
+		if this.TenantFilter[i] != that1.TenantFilter[i] {
+			return false
+		}
+	}
+	if len(this.NamespaceFilter) != len(that1.NamespaceFilter) {
+		return false
+	}
+	for i := range this.NamespaceFilter {
+		if this.NamespaceFilter[i] != that1.NamespaceFilter[i] {
+			return false
+		}
+	}
+	if this.LabelFilter != that1.LabelFilter {
+		return false
+	}
+	if len(this.ReportFields) != len(that1.ReportFields) {
+		return false
+	}
+	for i := range this.ReportFields {
+		if this.ReportFields[i] != that1.ReportFields[i] {
+			return false
+		}
+	}
+	if this.ResourceVersion != that1.ResourceVersion {
+		return false
+	}
+	if this.IncludeReferredId != that1.IncludeReferredId {
+		return false
+	}
+	return true
+}
+func (this *StatusObjectListRspItem) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*StatusObjectListRspItem)
+	if !ok {
+		that2, ok := that.(StatusObjectListRspItem)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.StatusobjectUid != that1.StatusobjectUid {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.ObjectRefs) != len(that1.ObjectRefs) {
+		return false
+	}
+	for i := range this.ObjectRefs {
+		if !this.ObjectRefs[i].Equal(that1.ObjectRefs[i]) {
+			return false
+		}
+	}
+	if !this.PlanStatus.Equal(that1.PlanStatus) {
+		return false
+	}
+	if !this.ApplyStatus.Equal(that1.ApplyStatus) {
+		return false
+	}
+	return true
+}
+func (this *StatusObjectListRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*StatusObjectListRsp)
+	if !ok {
+		that2, ok := that.(StatusObjectListRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Err != that1.Err {
+		return false
+	}
+	if len(this.Uids) != len(that1.Uids) {
+		return false
+	}
+	for i := range this.Uids {
+		if this.Uids[i] != that1.Uids[i] {
+			return false
+		}
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	return true
+}
 func (this *ObjectCreateReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1599,6 +1991,60 @@ func (this *ObjectDeleteRsp) GoString() string {
 	s := make([]string, 0, 5)
 	s = append(s, "&crudapi.ObjectDeleteRsp{")
 	s = append(s, "Err: "+fmt.Sprintf("%#v", this.Err)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *StatusObjectListReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&crudapi.StatusObjectListReq{")
+	s = append(s, "TenantFilter: "+fmt.Sprintf("%#v", this.TenantFilter)+",\n")
+	s = append(s, "NamespaceFilter: "+fmt.Sprintf("%#v", this.NamespaceFilter)+",\n")
+	s = append(s, "LabelFilter: "+fmt.Sprintf("%#v", this.LabelFilter)+",\n")
+	s = append(s, "ReportFields: "+fmt.Sprintf("%#v", this.ReportFields)+",\n")
+	s = append(s, "ResourceVersion: "+fmt.Sprintf("%#v", this.ResourceVersion)+",\n")
+	s = append(s, "IncludeReferredId: "+fmt.Sprintf("%#v", this.IncludeReferredId)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *StatusObjectListRspItem) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&crudapi.StatusObjectListRspItem{")
+	s = append(s, "StatusobjectUid: "+fmt.Sprintf("%#v", this.StatusobjectUid)+",\n")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.ObjectRefs != nil {
+		s = append(s, "ObjectRefs: "+fmt.Sprintf("%#v", this.ObjectRefs)+",\n")
+	}
+	if this.PlanStatus != nil {
+		s = append(s, "PlanStatus: "+fmt.Sprintf("%#v", this.PlanStatus)+",\n")
+	}
+	if this.ApplyStatus != nil {
+		s = append(s, "ApplyStatus: "+fmt.Sprintf("%#v", this.ApplyStatus)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *StatusObjectListRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&crudapi.StatusObjectListRsp{")
+	s = append(s, "Err: "+fmt.Sprintf("%#v", this.Err)+",\n")
+	s = append(s, "Uids: "+fmt.Sprintf("%#v", this.Uids)+",\n")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1893,6 +2339,142 @@ var _API_serviceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "ListStream",
 			Handler:       _API_ListStream_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "ves.io/schema/views/terraform_parameters/crudapi/api.proto",
+}
+
+// StatusAPIClient is the client API for StatusAPI service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type StatusAPIClient interface {
+	List(ctx context.Context, in *StatusObjectListReq, opts ...grpc.CallOption) (*StatusObjectListRsp, error)
+	ListStream(ctx context.Context, in *StatusObjectListReq, opts ...grpc.CallOption) (StatusAPI_ListStreamClient, error)
+}
+
+type statusAPIClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewStatusAPIClient(cc *grpc.ClientConn) StatusAPIClient {
+	return &statusAPIClient{cc}
+}
+
+func (c *statusAPIClient) List(ctx context.Context, in *StatusObjectListReq, opts ...grpc.CallOption) (*StatusObjectListRsp, error) {
+	out := new(StatusObjectListRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.terraform_parameters.crudapi.StatusAPI/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *statusAPIClient) ListStream(ctx context.Context, in *StatusObjectListReq, opts ...grpc.CallOption) (StatusAPI_ListStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_StatusAPI_serviceDesc.Streams[0], "/ves.io.schema.views.terraform_parameters.crudapi.StatusAPI/ListStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &statusAPIListStreamClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type StatusAPI_ListStreamClient interface {
+	Recv() (*StatusObjectListRsp, error)
+	grpc.ClientStream
+}
+
+type statusAPIListStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *statusAPIListStreamClient) Recv() (*StatusObjectListRsp, error) {
+	m := new(StatusObjectListRsp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// StatusAPIServer is the server API for StatusAPI service.
+type StatusAPIServer interface {
+	List(context.Context, *StatusObjectListReq) (*StatusObjectListRsp, error)
+	ListStream(*StatusObjectListReq, StatusAPI_ListStreamServer) error
+}
+
+// UnimplementedStatusAPIServer can be embedded to have forward compatible implementations.
+type UnimplementedStatusAPIServer struct {
+}
+
+func (*UnimplementedStatusAPIServer) List(ctx context.Context, req *StatusObjectListReq) (*StatusObjectListRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (*UnimplementedStatusAPIServer) ListStream(req *StatusObjectListReq, srv StatusAPI_ListStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListStream not implemented")
+}
+
+func RegisterStatusAPIServer(s *grpc.Server, srv StatusAPIServer) {
+	s.RegisterService(&_StatusAPI_serviceDesc, srv)
+}
+
+func _StatusAPI_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StatusObjectListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatusAPIServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.terraform_parameters.crudapi.StatusAPI/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatusAPIServer).List(ctx, req.(*StatusObjectListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StatusAPI_ListStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(StatusObjectListReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(StatusAPIServer).ListStream(m, &statusAPIListStreamServer{stream})
+}
+
+type StatusAPI_ListStreamServer interface {
+	Send(*StatusObjectListRsp) error
+	grpc.ServerStream
+}
+
+type statusAPIListStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *statusAPIListStreamServer) Send(m *StatusObjectListRsp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+var _StatusAPI_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI",
+	HandlerType: (*StatusAPIServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "List",
+			Handler:    _StatusAPI_List_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ListStream",
+			Handler:       _StatusAPI_ListStream_Handler,
 			ServerStreams: true,
 		},
 	},
@@ -2754,6 +3336,270 @@ func (m *ObjectDeleteRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *StatusObjectListReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *StatusObjectListReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StatusObjectListReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.IncludeReferredId {
+		i--
+		if m.IncludeReferredId {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xf1
+		i--
+		dAtA[i] = 0xa8
+	}
+	if m.ResourceVersion {
+		i--
+		if m.ResourceVersion {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xf1
+		i--
+		dAtA[i] = 0xa0
+	}
+	if len(m.ReportFields) > 0 {
+		for iNdEx := len(m.ReportFields) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ReportFields[iNdEx])
+			copy(dAtA[i:], m.ReportFields[iNdEx])
+			i = encodeVarintApi(dAtA, i, uint64(len(m.ReportFields[iNdEx])))
+			i--
+			dAtA[i] = 0x4
+			i--
+			dAtA[i] = 0xf1
+			i--
+			dAtA[i] = 0x9a
+		}
+	}
+	if len(m.LabelFilter) > 0 {
+		i -= len(m.LabelFilter)
+		copy(dAtA[i:], m.LabelFilter)
+		i = encodeVarintApi(dAtA, i, uint64(len(m.LabelFilter)))
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xf1
+		i--
+		dAtA[i] = 0x92
+	}
+	if len(m.NamespaceFilter) > 0 {
+		for iNdEx := len(m.NamespaceFilter) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NamespaceFilter[iNdEx])
+			copy(dAtA[i:], m.NamespaceFilter[iNdEx])
+			i = encodeVarintApi(dAtA, i, uint64(len(m.NamespaceFilter[iNdEx])))
+			i--
+			dAtA[i] = 0x4
+			i--
+			dAtA[i] = 0xf1
+			i--
+			dAtA[i] = 0x8a
+		}
+	}
+	if len(m.TenantFilter) > 0 {
+		for iNdEx := len(m.TenantFilter) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.TenantFilter[iNdEx])
+			copy(dAtA[i:], m.TenantFilter[iNdEx])
+			i = encodeVarintApi(dAtA, i, uint64(len(m.TenantFilter[iNdEx])))
+			i--
+			dAtA[i] = 0x4
+			i--
+			dAtA[i] = 0xf1
+			i--
+			dAtA[i] = 0x82
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *StatusObjectListRspItem) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *StatusObjectListRspItem) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StatusObjectListRspItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.StatusobjectUid) > 0 {
+		i -= len(m.StatusobjectUid)
+		copy(dAtA[i:], m.StatusobjectUid)
+		i = encodeVarintApi(dAtA, i, uint64(len(m.StatusobjectUid)))
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xf1
+		i--
+		dAtA[i] = 0x82
+	}
+	if m.ApplyStatus != nil {
+		{
+			size, err := m.ApplyStatus.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.PlanStatus != nil {
+		{
+			size, err := m.PlanStatus.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.ObjectRefs) > 0 {
+		for iNdEx := len(m.ObjectRefs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ObjectRefs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *StatusObjectListRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *StatusObjectListRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StatusObjectListRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xf1
+		i--
+		dAtA[i] = 0x9a
+	}
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4
+			i--
+			dAtA[i] = 0xf1
+			i--
+			dAtA[i] = 0x92
+		}
+	}
+	if len(m.Uids) > 0 {
+		for iNdEx := len(m.Uids) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Uids[iNdEx])
+			copy(dAtA[i:], m.Uids[iNdEx])
+			i = encodeVarintApi(dAtA, i, uint64(len(m.Uids[iNdEx])))
+			i--
+			dAtA[i] = 0x4
+			i--
+			dAtA[i] = 0xf1
+			i--
+			dAtA[i] = 0x8a
+		}
+	}
+	if m.Err != 0 {
+		i = encodeVarintApi(dAtA, i, uint64(m.Err))
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xf1
+		i--
+		dAtA[i] = 0x80
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintApi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovApi(v)
 	base := offset
@@ -3069,6 +3915,102 @@ func (m *ObjectDeleteRsp) Size() (n int) {
 	return n
 }
 
+func (m *StatusObjectListReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.TenantFilter) > 0 {
+		for _, s := range m.TenantFilter {
+			l = len(s)
+			n += 3 + l + sovApi(uint64(l))
+		}
+	}
+	if len(m.NamespaceFilter) > 0 {
+		for _, s := range m.NamespaceFilter {
+			l = len(s)
+			n += 3 + l + sovApi(uint64(l))
+		}
+	}
+	l = len(m.LabelFilter)
+	if l > 0 {
+		n += 3 + l + sovApi(uint64(l))
+	}
+	if len(m.ReportFields) > 0 {
+		for _, s := range m.ReportFields {
+			l = len(s)
+			n += 3 + l + sovApi(uint64(l))
+		}
+	}
+	if m.ResourceVersion {
+		n += 4
+	}
+	if m.IncludeReferredId {
+		n += 4
+	}
+	return n
+}
+
+func (m *StatusObjectListRspItem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if len(m.ObjectRefs) > 0 {
+		for _, e := range m.ObjectRefs {
+			l = e.Size()
+			n += 1 + l + sovApi(uint64(l))
+		}
+	}
+	if m.PlanStatus != nil {
+		l = m.PlanStatus.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if m.ApplyStatus != nil {
+		l = m.ApplyStatus.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	l = len(m.StatusobjectUid)
+	if l > 0 {
+		n += 3 + l + sovApi(uint64(l))
+	}
+	return n
+}
+
+func (m *StatusObjectListRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Err != 0 {
+		n += 3 + sovApi(uint64(m.Err))
+	}
+	if len(m.Uids) > 0 {
+		for _, s := range m.Uids {
+			l = len(s)
+			n += 3 + l + sovApi(uint64(l))
+		}
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 3 + l + sovApi(uint64(l))
+		}
+	}
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 3 + l + sovApi(uint64(l))
+	}
+	return n
+}
+
 func sovApi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -3248,6 +4190,58 @@ func (this *ObjectDeleteRsp) String() string {
 	}
 	s := strings.Join([]string{`&ObjectDeleteRsp{`,
 		`Err:` + fmt.Sprintf("%v", this.Err) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *StatusObjectListReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&StatusObjectListReq{`,
+		`TenantFilter:` + fmt.Sprintf("%v", this.TenantFilter) + `,`,
+		`NamespaceFilter:` + fmt.Sprintf("%v", this.NamespaceFilter) + `,`,
+		`LabelFilter:` + fmt.Sprintf("%v", this.LabelFilter) + `,`,
+		`ReportFields:` + fmt.Sprintf("%v", this.ReportFields) + `,`,
+		`ResourceVersion:` + fmt.Sprintf("%v", this.ResourceVersion) + `,`,
+		`IncludeReferredId:` + fmt.Sprintf("%v", this.IncludeReferredId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *StatusObjectListRspItem) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForObjectRefs := "[]*ObjectRefType{"
+	for _, f := range this.ObjectRefs {
+		repeatedStringForObjectRefs += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForObjectRefs += "}"
+	s := strings.Join([]string{`&StatusObjectListRspItem{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "StatusMetaType", "schema.StatusMetaType", 1) + `,`,
+		`ObjectRefs:` + repeatedStringForObjectRefs + `,`,
+		`PlanStatus:` + strings.Replace(fmt.Sprintf("%v", this.PlanStatus), "PlanStatus", "terraform_parameters.PlanStatus", 1) + `,`,
+		`ApplyStatus:` + strings.Replace(fmt.Sprintf("%v", this.ApplyStatus), "ApplyStatus", "terraform_parameters.ApplyStatus", 1) + `,`,
+		`StatusobjectUid:` + fmt.Sprintf("%v", this.StatusobjectUid) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *StatusObjectListRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]*StatusObjectListRspItem{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "StatusObjectListRspItem", "StatusObjectListRspItem", 1) + ","
+	}
+	repeatedStringForItems += "}"
+	s := strings.Join([]string{`&StatusObjectListRsp{`,
+		`Err:` + fmt.Sprintf("%v", this.Err) + `,`,
+		`Uids:` + fmt.Sprintf("%v", this.Uids) + `,`,
+		`Items:` + repeatedStringForItems + `,`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ListMetaType", "schema.ListMetaType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5417,6 +6411,628 @@ func (m *ObjectDeleteRsp) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *StatusObjectListReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: StatusObjectListReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: StatusObjectListReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 10000:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TenantFilter", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TenantFilter = append(m.TenantFilter, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 10001:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NamespaceFilter", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NamespaceFilter = append(m.NamespaceFilter, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 10002:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LabelFilter", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LabelFilter = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10003:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReportFields", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReportFields = append(m.ReportFields, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 10004:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResourceVersion", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.ResourceVersion = bool(v != 0)
+		case 10005:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IncludeReferredId", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IncludeReferredId = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *StatusObjectListRspItem) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: StatusObjectListRspItem: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: StatusObjectListRspItem: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.StatusMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectRefs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ObjectRefs = append(m.ObjectRefs, &schema.ObjectRefType{})
+			if err := m.ObjectRefs[len(m.ObjectRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PlanStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PlanStatus == nil {
+				m.PlanStatus = &terraform_parameters.PlanStatus{}
+			}
+			if err := m.PlanStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApplyStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApplyStatus == nil {
+				m.ApplyStatus = &terraform_parameters.ApplyStatus{}
+			}
+			if err := m.ApplyStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10000:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatusobjectUid", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StatusobjectUid = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *StatusObjectListRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: StatusObjectListRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: StatusObjectListRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 10000:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Err", wireType)
+			}
+			m.Err = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Err |= ErrorCode(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 10001:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Uids", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Uids = append(m.Uids, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 10002:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &StatusObjectListRspItem{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10003:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.ListMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])

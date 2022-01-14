@@ -60,6 +60,33 @@ func (m *SpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return SpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGcSpecDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetGcSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetGcSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "gc_spec." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }

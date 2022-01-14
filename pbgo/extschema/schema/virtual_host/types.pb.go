@@ -890,6 +890,78 @@ func (m *TemporaryUserBlockingType) GetCustomPage() string {
 	return ""
 }
 
+// DNSRecord
+//
+// x-displayName: "DNS Record"
+// Defines a DNS record
+type DNSRecord struct {
+	// Name
+	//
+	// x-displayName: "Name"
+	// Name of the DNS record
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Type
+	//
+	// x-displayName: "Type"
+	// x-example: "CNAME"
+	// Type of the DNS record
+	Type string `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	// Value
+	//
+	// x-displayName: "Value"
+	// DNS record Value
+	Value string `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (m *DNSRecord) Reset()      { *m = DNSRecord{} }
+func (*DNSRecord) ProtoMessage() {}
+func (*DNSRecord) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{6}
+}
+func (m *DNSRecord) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSRecord.Merge(m, src)
+}
+func (m *DNSRecord) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSRecord.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSRecord proto.InternalMessageInfo
+
+func (m *DNSRecord) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DNSRecord) GetType() string {
+	if m != nil {
+		return m.Type
+	}
+	return ""
+}
+
+func (m *DNSRecord) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
 // AutoCertInfoType
 //
 // x-displayName: "Auto Cert Information"
@@ -915,12 +987,19 @@ type AutoCertInfoType struct {
 	// x-displayName: "Auto Cert Issuer"
 	// Issuer of the auto certificate
 	AutoCertIssuer string `protobuf:"bytes,4,opt,name=auto_cert_issuer,json=autoCertIssuer,proto3" json:"auto_cert_issuer,omitempty"`
+	// DNS Records
+	//
+	// x-displayName: "DNS Records"
+	// DNS Records that are to be added by user in their DNS domain.
+	// Currently, this will be populated when auto certificates are
+	// desired but DNS delegation is not enabled.
+	DnsRecords []*DNSRecord `protobuf:"bytes,5,rep,name=dns_records,json=dnsRecords,proto3" json:"dns_records,omitempty"`
 }
 
 func (m *AutoCertInfoType) Reset()      { *m = AutoCertInfoType{} }
 func (*AutoCertInfoType) ProtoMessage() {}
 func (*AutoCertInfoType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{6}
+	return fileDescriptor_df61af5ea37a6592, []int{7}
 }
 func (m *AutoCertInfoType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -973,6 +1052,13 @@ func (m *AutoCertInfoType) GetAutoCertIssuer() string {
 	return ""
 }
 
+func (m *AutoCertInfoType) GetDnsRecords() []*DNSRecord {
+	if m != nil {
+		return m.DnsRecords
+	}
+	return nil
+}
+
 // AuthenticationDetails
 //
 // x-displayName: "Authentication Details"
@@ -1008,7 +1094,7 @@ type AuthenticationDetails struct {
 func (m *AuthenticationDetails) Reset()      { *m = AuthenticationDetails{} }
 func (*AuthenticationDetails) ProtoMessage() {}
 func (*AuthenticationDetails) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{7}
+	return fileDescriptor_df61af5ea37a6592, []int{8}
 }
 func (m *AuthenticationDetails) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1165,7 +1251,7 @@ type PolicyBasedChallenge struct {
 func (m *PolicyBasedChallenge) Reset()      { *m = PolicyBasedChallenge{} }
 func (*PolicyBasedChallenge) ProtoMessage() {}
 func (*PolicyBasedChallenge) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{8}
+	return fileDescriptor_df61af5ea37a6592, []int{9}
 }
 func (m *PolicyBasedChallenge) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1276,6 +1362,79 @@ func (*PolicyBasedChallenge) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// ShapeBotDefenseConfigType
+//
+// x-displayName: "Shape Bot Defense Config for virtual host"
+// This defines various configuration options for Shape Bot Defense per virtual host.
+type ShapeBotDefenseConfigType struct {
+	// Application ID
+	//
+	// x-displayName: "Application ID"
+	// x-example: "707a0c622df8414886a5ca71c46caf2f"
+	// Shape Bot Defense Application ID is used by shared instances.
+	ApplicationId string `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	// API auth key for Shared Shape Instance
+	//
+	// x-displayName: "API auth key"
+	// API auth key for Shared Shape Bot Defense instance. This value is set
+	// on the tenant object from Shape Backend.
+	ApiAuthKey *schema.SecretType `protobuf:"bytes,2,opt,name=api_auth_key,json=apiAuthKey,proto3" json:"api_auth_key,omitempty"`
+	// Shape Instance
+	//
+	// x-displayName: "Shape Instance"
+	// Which Shape insatnce to use
+	Instance []*schema.ObjectRefType `protobuf:"bytes,3,rep,name=instance,proto3" json:"instance,omitempty"`
+}
+
+func (m *ShapeBotDefenseConfigType) Reset()      { *m = ShapeBotDefenseConfigType{} }
+func (*ShapeBotDefenseConfigType) ProtoMessage() {}
+func (*ShapeBotDefenseConfigType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{10}
+}
+func (m *ShapeBotDefenseConfigType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ShapeBotDefenseConfigType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ShapeBotDefenseConfigType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShapeBotDefenseConfigType.Merge(m, src)
+}
+func (m *ShapeBotDefenseConfigType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ShapeBotDefenseConfigType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShapeBotDefenseConfigType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShapeBotDefenseConfigType proto.InternalMessageInfo
+
+func (m *ShapeBotDefenseConfigType) GetApplicationId() string {
+	if m != nil {
+		return m.ApplicationId
+	}
+	return ""
+}
+
+func (m *ShapeBotDefenseConfigType) GetApiAuthKey() *schema.SecretType {
+	if m != nil {
+		return m.ApiAuthKey
+	}
+	return nil
+}
+
+func (m *ShapeBotDefenseConfigType) GetInstance() []*schema.ObjectRefType {
+	if m != nil {
+		return m.Instance
+	}
+	return nil
+}
+
 // GlobalSpecType
 //
 // x-displayName: "Global Configuration Specification"
@@ -1377,7 +1536,7 @@ type GlobalSpecType struct {
 	// Proxy Type
 	//
 	// x-displayName: "Proxy Type"
-	// Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access
+	// Indicates whether the type of proxy is UDP/Secret Management Access
 	Proxy ProxyType `protobuf:"varint,15,opt,name=proxy,proto3,enum=ves.io.schema.virtual_host.ProxyType" json:"proxy,omitempty"`
 	// JSON Web Token authentication (JWT) configuration for requests
 	//
@@ -1600,6 +1759,37 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_AppendServerName
 	//	*GlobalSpecType_PassThrough
 	ServerHeaderChoice isGlobalSpecType_ServerHeaderChoice `protobuf_oneof:"server_header_choice"`
+	// Normalize Path
+	//
+	// x-displayName: "Path normalize"
+	//
+	// Should paths be normalized before any processing of requests.
+	//
+	// In addition to path normalization according to RFC 3986, adjacent slashes in the path
+	// will be merged into one when this flag is enabled.
+	//
+	// It should be noted that normalized path is sent to the origin server.
+	//
+	// For HTTP loadbalancer, this configuration is ignored and path normalization is always enabled
+	//
+	// See Normalization and Comparison <https://tools.ietf.org/html/rfc3986#section-6> for details of normalization.
+	// Note that VER does not perform case normalization <https://tools.ietf.org/html/rfc3986#section-6.2.2.1>
+	//
+	// Types that are valid to be assigned to PathNormalizeChoice:
+	//	*GlobalSpecType_EnablePathNormalize
+	//	*GlobalSpecType_DisablePathNormalize
+	PathNormalizeChoice isGlobalSpecType_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
+	// Strict check of SNI and Host header
+	//
+	// x-displayName: "Strict SNI and Host header check"
+	//
+	// Volterra allows request only if Server Name Indication(SNI) and Host header match.
+	// The domains for which this check needs to be bypassed can be configured here.
+	//
+	// Types that are valid to be assigned to StrictSniHostHeaderCheckChoice:
+	//	*GlobalSpecType_EnableStrictSniHostHeaderCheck
+	//	*GlobalSpecType_AdditionalDomains
+	StrictSniHostHeaderCheckChoice isGlobalSpecType_StrictSniHostHeaderCheckChoice `protobuf_oneof:"strict_sni_host_header_check_choice"`
 	// DNS Volterra Managed
 	//
 	// x-displayName: "DNS Volterra Managed"
@@ -1662,12 +1852,21 @@ type GlobalSpecType struct {
 	// x-displayName: "Volterra Certificates"
 	// Volterra managed certificates. If this field is set, the user cannot specifi the TLS certificates
 	VolterraCert bool `protobuf:"varint,1014,opt,name=volterra_cert,json=volterraCert,proto3" json:"volterra_cert,omitempty"`
+	// Enable the Shape Bot Defense functionality for VirtualHost
+	//
+	// x-displayName: "Shape Bot Defense Config"
+	// Shape Bot Defense configuration for the virtual host.
+	//
+	// Types that are valid to be assigned to BotDefenseChoice:
+	//	*GlobalSpecType_DisableBotDefense
+	//	*GlobalSpecType_BotDefense
+	BotDefenseChoice isGlobalSpecType_BotDefenseChoice `protobuf_oneof:"bot_defense_choice"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{9}
+	return fileDescriptor_df61af5ea37a6592, []int{11}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1710,6 +1909,24 @@ type isGlobalSpecType_ServerHeaderChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_PathNormalizeChoice interface {
+	isGlobalSpecType_PathNormalizeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_StrictSniHostHeaderCheckChoice interface {
+	isGlobalSpecType_StrictSniHostHeaderCheckChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_BotDefenseChoice interface {
+	isGlobalSpecType_BotDefenseChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_NoChallenge struct {
 	NoChallenge *schema.Empty `protobuf:"bytes,31,opt,name=no_challenge,json=noChallenge,proto3,oneof" json:"no_challenge,omitempty"`
@@ -1741,17 +1958,42 @@ type GlobalSpecType_AppendServerName struct {
 type GlobalSpecType_PassThrough struct {
 	PassThrough *schema.Empty `protobuf:"bytes,46,opt,name=pass_through,json=passThrough,proto3,oneof" json:"pass_through,omitempty"`
 }
+type GlobalSpecType_EnablePathNormalize struct {
+	EnablePathNormalize *schema.Empty `protobuf:"bytes,48,opt,name=enable_path_normalize,json=enablePathNormalize,proto3,oneof" json:"enable_path_normalize,omitempty"`
+}
+type GlobalSpecType_DisablePathNormalize struct {
+	DisablePathNormalize *schema.Empty `protobuf:"bytes,49,opt,name=disable_path_normalize,json=disablePathNormalize,proto3,oneof" json:"disable_path_normalize,omitempty"`
+}
+type GlobalSpecType_EnableStrictSniHostHeaderCheck struct {
+	EnableStrictSniHostHeaderCheck *schema.Empty `protobuf:"bytes,51,opt,name=enable_strict_sni_host_header_check,json=enableStrictSniHostHeaderCheck,proto3,oneof" json:"enable_strict_sni_host_header_check,omitempty"`
+}
+type GlobalSpecType_AdditionalDomains struct {
+	AdditionalDomains *schema.DomainNameList `protobuf:"bytes,53,opt,name=additional_domains,json=additionalDomains,proto3,oneof" json:"additional_domains,omitempty"`
+}
+type GlobalSpecType_DisableBotDefense struct {
+	DisableBotDefense *schema.Empty `protobuf:"bytes,1016,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
+}
+type GlobalSpecType_BotDefense struct {
+	BotDefense *ShapeBotDefenseConfigType `protobuf:"bytes,1017,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+}
 
-func (*GlobalSpecType_NoChallenge) isGlobalSpecType_ChallengeType()             {}
-func (*GlobalSpecType_JsChallenge) isGlobalSpecType_ChallengeType()             {}
-func (*GlobalSpecType_CaptchaChallenge) isGlobalSpecType_ChallengeType()        {}
-func (*GlobalSpecType_PolicyBasedChallenge) isGlobalSpecType_ChallengeType()    {}
-func (*GlobalSpecType_NoAuthentication) isGlobalSpecType_AuthenticationChoice() {}
-func (*GlobalSpecType_Authentication) isGlobalSpecType_AuthenticationChoice()   {}
-func (*GlobalSpecType_DefaultHeader) isGlobalSpecType_ServerHeaderChoice()      {}
-func (*GlobalSpecType_ServerName) isGlobalSpecType_ServerHeaderChoice()         {}
-func (*GlobalSpecType_AppendServerName) isGlobalSpecType_ServerHeaderChoice()   {}
-func (*GlobalSpecType_PassThrough) isGlobalSpecType_ServerHeaderChoice()        {}
+func (*GlobalSpecType_NoChallenge) isGlobalSpecType_ChallengeType()                {}
+func (*GlobalSpecType_JsChallenge) isGlobalSpecType_ChallengeType()                {}
+func (*GlobalSpecType_CaptchaChallenge) isGlobalSpecType_ChallengeType()           {}
+func (*GlobalSpecType_PolicyBasedChallenge) isGlobalSpecType_ChallengeType()       {}
+func (*GlobalSpecType_NoAuthentication) isGlobalSpecType_AuthenticationChoice()    {}
+func (*GlobalSpecType_Authentication) isGlobalSpecType_AuthenticationChoice()      {}
+func (*GlobalSpecType_DefaultHeader) isGlobalSpecType_ServerHeaderChoice()         {}
+func (*GlobalSpecType_ServerName) isGlobalSpecType_ServerHeaderChoice()            {}
+func (*GlobalSpecType_AppendServerName) isGlobalSpecType_ServerHeaderChoice()      {}
+func (*GlobalSpecType_PassThrough) isGlobalSpecType_ServerHeaderChoice()           {}
+func (*GlobalSpecType_EnablePathNormalize) isGlobalSpecType_PathNormalizeChoice()  {}
+func (*GlobalSpecType_DisablePathNormalize) isGlobalSpecType_PathNormalizeChoice() {}
+func (*GlobalSpecType_EnableStrictSniHostHeaderCheck) isGlobalSpecType_StrictSniHostHeaderCheckChoice() {
+}
+func (*GlobalSpecType_AdditionalDomains) isGlobalSpecType_StrictSniHostHeaderCheckChoice() {}
+func (*GlobalSpecType_DisableBotDefense) isGlobalSpecType_BotDefenseChoice()               {}
+func (*GlobalSpecType_BotDefense) isGlobalSpecType_BotDefenseChoice()                      {}
 
 func (m *GlobalSpecType) GetChallengeType() isGlobalSpecType_ChallengeType {
 	if m != nil {
@@ -1768,6 +2010,24 @@ func (m *GlobalSpecType) GetAuthenticationChoice() isGlobalSpecType_Authenticati
 func (m *GlobalSpecType) GetServerHeaderChoice() isGlobalSpecType_ServerHeaderChoice {
 	if m != nil {
 		return m.ServerHeaderChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetPathNormalizeChoice() isGlobalSpecType_PathNormalizeChoice {
+	if m != nil {
+		return m.PathNormalizeChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetStrictSniHostHeaderCheckChoice() isGlobalSpecType_StrictSniHostHeaderCheckChoice {
+	if m != nil {
+		return m.StrictSniHostHeaderCheckChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetBotDefenseChoice() isGlobalSpecType_BotDefenseChoice {
+	if m != nil {
+		return m.BotDefenseChoice
 	}
 	return nil
 }
@@ -2054,6 +2314,34 @@ func (m *GlobalSpecType) GetPassThrough() *schema.Empty {
 	return nil
 }
 
+func (m *GlobalSpecType) GetEnablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*GlobalSpecType_EnablePathNormalize); ok {
+		return x.EnablePathNormalize
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDisablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*GlobalSpecType_DisablePathNormalize); ok {
+		return x.DisablePathNormalize
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetEnableStrictSniHostHeaderCheck() *schema.Empty {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*GlobalSpecType_EnableStrictSniHostHeaderCheck); ok {
+		return x.EnableStrictSniHostHeaderCheck
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAdditionalDomains() *schema.DomainNameList {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*GlobalSpecType_AdditionalDomains); ok {
+		return x.AdditionalDomains
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetDnsVolterraManaged() bool {
 	if m != nil {
 		return m.DnsVolterraManaged
@@ -2139,6 +2427,20 @@ func (m *GlobalSpecType) GetVolterraCert() bool {
 	return false
 }
 
+func (m *GlobalSpecType) GetDisableBotDefense() *schema.Empty {
+	if x, ok := m.GetBotDefenseChoice().(*GlobalSpecType_DisableBotDefense); ok {
+		return x.DisableBotDefense
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetBotDefense() *ShapeBotDefenseConfigType {
+	if x, ok := m.GetBotDefenseChoice().(*GlobalSpecType_BotDefense); ok {
+		return x.BotDefense
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2152,6 +2454,12 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_ServerName)(nil),
 		(*GlobalSpecType_AppendServerName)(nil),
 		(*GlobalSpecType_PassThrough)(nil),
+		(*GlobalSpecType_EnablePathNormalize)(nil),
+		(*GlobalSpecType_DisablePathNormalize)(nil),
+		(*GlobalSpecType_EnableStrictSniHostHeaderCheck)(nil),
+		(*GlobalSpecType_AdditionalDomains)(nil),
+		(*GlobalSpecType_DisableBotDefense)(nil),
+		(*GlobalSpecType_BotDefense)(nil),
 	}
 }
 
@@ -2200,12 +2508,20 @@ type CreateSpecType struct {
 	//	*CreateSpecType_AppendServerName
 	//	*CreateSpecType_PassThrough
 	ServerHeaderChoice isCreateSpecType_ServerHeaderChoice `protobuf_oneof:"server_header_choice"`
+	// Types that are valid to be assigned to PathNormalizeChoice:
+	//	*CreateSpecType_EnablePathNormalize
+	//	*CreateSpecType_DisablePathNormalize
+	PathNormalizeChoice isCreateSpecType_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
+	// Types that are valid to be assigned to StrictSniHostHeaderCheckChoice:
+	//	*CreateSpecType_EnableStrictSniHostHeaderCheck
+	//	*CreateSpecType_AdditionalDomains
+	StrictSniHostHeaderCheckChoice isCreateSpecType_StrictSniHostHeaderCheckChoice `protobuf_oneof:"strict_sni_host_header_check_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{10}
+	return fileDescriptor_df61af5ea37a6592, []int{12}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2248,6 +2564,18 @@ type isCreateSpecType_ServerHeaderChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_PathNormalizeChoice interface {
+	isCreateSpecType_PathNormalizeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCreateSpecType_StrictSniHostHeaderCheckChoice interface {
+	isCreateSpecType_StrictSniHostHeaderCheckChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_NoChallenge struct {
 	NoChallenge *schema.Empty `protobuf:"bytes,31,opt,name=no_challenge,json=noChallenge,proto3,oneof" json:"no_challenge,omitempty"`
@@ -2276,16 +2604,33 @@ type CreateSpecType_AppendServerName struct {
 type CreateSpecType_PassThrough struct {
 	PassThrough *schema.Empty `protobuf:"bytes,46,opt,name=pass_through,json=passThrough,proto3,oneof" json:"pass_through,omitempty"`
 }
+type CreateSpecType_EnablePathNormalize struct {
+	EnablePathNormalize *schema.Empty `protobuf:"bytes,48,opt,name=enable_path_normalize,json=enablePathNormalize,proto3,oneof" json:"enable_path_normalize,omitempty"`
+}
+type CreateSpecType_DisablePathNormalize struct {
+	DisablePathNormalize *schema.Empty `protobuf:"bytes,49,opt,name=disable_path_normalize,json=disablePathNormalize,proto3,oneof" json:"disable_path_normalize,omitempty"`
+}
+type CreateSpecType_EnableStrictSniHostHeaderCheck struct {
+	EnableStrictSniHostHeaderCheck *schema.Empty `protobuf:"bytes,51,opt,name=enable_strict_sni_host_header_check,json=enableStrictSniHostHeaderCheck,proto3,oneof" json:"enable_strict_sni_host_header_check,omitempty"`
+}
+type CreateSpecType_AdditionalDomains struct {
+	AdditionalDomains *schema.DomainNameList `protobuf:"bytes,53,opt,name=additional_domains,json=additionalDomains,proto3,oneof" json:"additional_domains,omitempty"`
+}
 
-func (*CreateSpecType_NoChallenge) isCreateSpecType_ChallengeType()             {}
-func (*CreateSpecType_JsChallenge) isCreateSpecType_ChallengeType()             {}
-func (*CreateSpecType_CaptchaChallenge) isCreateSpecType_ChallengeType()        {}
-func (*CreateSpecType_NoAuthentication) isCreateSpecType_AuthenticationChoice() {}
-func (*CreateSpecType_Authentication) isCreateSpecType_AuthenticationChoice()   {}
-func (*CreateSpecType_DefaultHeader) isCreateSpecType_ServerHeaderChoice()      {}
-func (*CreateSpecType_ServerName) isCreateSpecType_ServerHeaderChoice()         {}
-func (*CreateSpecType_AppendServerName) isCreateSpecType_ServerHeaderChoice()   {}
-func (*CreateSpecType_PassThrough) isCreateSpecType_ServerHeaderChoice()        {}
+func (*CreateSpecType_NoChallenge) isCreateSpecType_ChallengeType()                {}
+func (*CreateSpecType_JsChallenge) isCreateSpecType_ChallengeType()                {}
+func (*CreateSpecType_CaptchaChallenge) isCreateSpecType_ChallengeType()           {}
+func (*CreateSpecType_NoAuthentication) isCreateSpecType_AuthenticationChoice()    {}
+func (*CreateSpecType_Authentication) isCreateSpecType_AuthenticationChoice()      {}
+func (*CreateSpecType_DefaultHeader) isCreateSpecType_ServerHeaderChoice()         {}
+func (*CreateSpecType_ServerName) isCreateSpecType_ServerHeaderChoice()            {}
+func (*CreateSpecType_AppendServerName) isCreateSpecType_ServerHeaderChoice()      {}
+func (*CreateSpecType_PassThrough) isCreateSpecType_ServerHeaderChoice()           {}
+func (*CreateSpecType_EnablePathNormalize) isCreateSpecType_PathNormalizeChoice()  {}
+func (*CreateSpecType_DisablePathNormalize) isCreateSpecType_PathNormalizeChoice() {}
+func (*CreateSpecType_EnableStrictSniHostHeaderCheck) isCreateSpecType_StrictSniHostHeaderCheckChoice() {
+}
+func (*CreateSpecType_AdditionalDomains) isCreateSpecType_StrictSniHostHeaderCheckChoice() {}
 
 func (m *CreateSpecType) GetChallengeType() isCreateSpecType_ChallengeType {
 	if m != nil {
@@ -2302,6 +2647,18 @@ func (m *CreateSpecType) GetAuthenticationChoice() isCreateSpecType_Authenticati
 func (m *CreateSpecType) GetServerHeaderChoice() isCreateSpecType_ServerHeaderChoice {
 	if m != nil {
 		return m.ServerHeaderChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetPathNormalizeChoice() isCreateSpecType_PathNormalizeChoice {
+	if m != nil {
+		return m.PathNormalizeChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetStrictSniHostHeaderCheckChoice() isCreateSpecType_StrictSniHostHeaderCheckChoice {
+	if m != nil {
+		return m.StrictSniHostHeaderCheckChoice
 	}
 	return nil
 }
@@ -2544,6 +2901,34 @@ func (m *CreateSpecType) GetPassThrough() *schema.Empty {
 	return nil
 }
 
+func (m *CreateSpecType) GetEnablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*CreateSpecType_EnablePathNormalize); ok {
+		return x.EnablePathNormalize
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDisablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*CreateSpecType_DisablePathNormalize); ok {
+		return x.DisablePathNormalize
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetEnableStrictSniHostHeaderCheck() *schema.Empty {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*CreateSpecType_EnableStrictSniHostHeaderCheck); ok {
+		return x.EnableStrictSniHostHeaderCheck
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAdditionalDomains() *schema.DomainNameList {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*CreateSpecType_AdditionalDomains); ok {
+		return x.AdditionalDomains
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2556,6 +2941,10 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_ServerName)(nil),
 		(*CreateSpecType_AppendServerName)(nil),
 		(*CreateSpecType_PassThrough)(nil),
+		(*CreateSpecType_EnablePathNormalize)(nil),
+		(*CreateSpecType_DisablePathNormalize)(nil),
+		(*CreateSpecType_EnableStrictSniHostHeaderCheck)(nil),
+		(*CreateSpecType_AdditionalDomains)(nil),
 	}
 }
 
@@ -2604,12 +2993,20 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_AppendServerName
 	//	*ReplaceSpecType_PassThrough
 	ServerHeaderChoice isReplaceSpecType_ServerHeaderChoice `protobuf_oneof:"server_header_choice"`
+	// Types that are valid to be assigned to PathNormalizeChoice:
+	//	*ReplaceSpecType_EnablePathNormalize
+	//	*ReplaceSpecType_DisablePathNormalize
+	PathNormalizeChoice isReplaceSpecType_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
+	// Types that are valid to be assigned to StrictSniHostHeaderCheckChoice:
+	//	*ReplaceSpecType_EnableStrictSniHostHeaderCheck
+	//	*ReplaceSpecType_AdditionalDomains
+	StrictSniHostHeaderCheckChoice isReplaceSpecType_StrictSniHostHeaderCheckChoice `protobuf_oneof:"strict_sni_host_header_check_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{11}
+	return fileDescriptor_df61af5ea37a6592, []int{13}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2652,6 +3049,18 @@ type isReplaceSpecType_ServerHeaderChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_PathNormalizeChoice interface {
+	isReplaceSpecType_PathNormalizeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isReplaceSpecType_StrictSniHostHeaderCheckChoice interface {
+	isReplaceSpecType_StrictSniHostHeaderCheckChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_NoChallenge struct {
 	NoChallenge *schema.Empty `protobuf:"bytes,31,opt,name=no_challenge,json=noChallenge,proto3,oneof" json:"no_challenge,omitempty"`
@@ -2680,16 +3089,33 @@ type ReplaceSpecType_AppendServerName struct {
 type ReplaceSpecType_PassThrough struct {
 	PassThrough *schema.Empty `protobuf:"bytes,46,opt,name=pass_through,json=passThrough,proto3,oneof" json:"pass_through,omitempty"`
 }
+type ReplaceSpecType_EnablePathNormalize struct {
+	EnablePathNormalize *schema.Empty `protobuf:"bytes,48,opt,name=enable_path_normalize,json=enablePathNormalize,proto3,oneof" json:"enable_path_normalize,omitempty"`
+}
+type ReplaceSpecType_DisablePathNormalize struct {
+	DisablePathNormalize *schema.Empty `protobuf:"bytes,49,opt,name=disable_path_normalize,json=disablePathNormalize,proto3,oneof" json:"disable_path_normalize,omitempty"`
+}
+type ReplaceSpecType_EnableStrictSniHostHeaderCheck struct {
+	EnableStrictSniHostHeaderCheck *schema.Empty `protobuf:"bytes,51,opt,name=enable_strict_sni_host_header_check,json=enableStrictSniHostHeaderCheck,proto3,oneof" json:"enable_strict_sni_host_header_check,omitempty"`
+}
+type ReplaceSpecType_AdditionalDomains struct {
+	AdditionalDomains *schema.DomainNameList `protobuf:"bytes,53,opt,name=additional_domains,json=additionalDomains,proto3,oneof" json:"additional_domains,omitempty"`
+}
 
-func (*ReplaceSpecType_NoChallenge) isReplaceSpecType_ChallengeType()             {}
-func (*ReplaceSpecType_JsChallenge) isReplaceSpecType_ChallengeType()             {}
-func (*ReplaceSpecType_CaptchaChallenge) isReplaceSpecType_ChallengeType()        {}
-func (*ReplaceSpecType_NoAuthentication) isReplaceSpecType_AuthenticationChoice() {}
-func (*ReplaceSpecType_Authentication) isReplaceSpecType_AuthenticationChoice()   {}
-func (*ReplaceSpecType_DefaultHeader) isReplaceSpecType_ServerHeaderChoice()      {}
-func (*ReplaceSpecType_ServerName) isReplaceSpecType_ServerHeaderChoice()         {}
-func (*ReplaceSpecType_AppendServerName) isReplaceSpecType_ServerHeaderChoice()   {}
-func (*ReplaceSpecType_PassThrough) isReplaceSpecType_ServerHeaderChoice()        {}
+func (*ReplaceSpecType_NoChallenge) isReplaceSpecType_ChallengeType()                {}
+func (*ReplaceSpecType_JsChallenge) isReplaceSpecType_ChallengeType()                {}
+func (*ReplaceSpecType_CaptchaChallenge) isReplaceSpecType_ChallengeType()           {}
+func (*ReplaceSpecType_NoAuthentication) isReplaceSpecType_AuthenticationChoice()    {}
+func (*ReplaceSpecType_Authentication) isReplaceSpecType_AuthenticationChoice()      {}
+func (*ReplaceSpecType_DefaultHeader) isReplaceSpecType_ServerHeaderChoice()         {}
+func (*ReplaceSpecType_ServerName) isReplaceSpecType_ServerHeaderChoice()            {}
+func (*ReplaceSpecType_AppendServerName) isReplaceSpecType_ServerHeaderChoice()      {}
+func (*ReplaceSpecType_PassThrough) isReplaceSpecType_ServerHeaderChoice()           {}
+func (*ReplaceSpecType_EnablePathNormalize) isReplaceSpecType_PathNormalizeChoice()  {}
+func (*ReplaceSpecType_DisablePathNormalize) isReplaceSpecType_PathNormalizeChoice() {}
+func (*ReplaceSpecType_EnableStrictSniHostHeaderCheck) isReplaceSpecType_StrictSniHostHeaderCheckChoice() {
+}
+func (*ReplaceSpecType_AdditionalDomains) isReplaceSpecType_StrictSniHostHeaderCheckChoice() {}
 
 func (m *ReplaceSpecType) GetChallengeType() isReplaceSpecType_ChallengeType {
 	if m != nil {
@@ -2706,6 +3132,18 @@ func (m *ReplaceSpecType) GetAuthenticationChoice() isReplaceSpecType_Authentica
 func (m *ReplaceSpecType) GetServerHeaderChoice() isReplaceSpecType_ServerHeaderChoice {
 	if m != nil {
 		return m.ServerHeaderChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetPathNormalizeChoice() isReplaceSpecType_PathNormalizeChoice {
+	if m != nil {
+		return m.PathNormalizeChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetStrictSniHostHeaderCheckChoice() isReplaceSpecType_StrictSniHostHeaderCheckChoice {
+	if m != nil {
+		return m.StrictSniHostHeaderCheckChoice
 	}
 	return nil
 }
@@ -2948,6 +3386,34 @@ func (m *ReplaceSpecType) GetPassThrough() *schema.Empty {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetEnablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*ReplaceSpecType_EnablePathNormalize); ok {
+		return x.EnablePathNormalize
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDisablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*ReplaceSpecType_DisablePathNormalize); ok {
+		return x.DisablePathNormalize
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetEnableStrictSniHostHeaderCheck() *schema.Empty {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*ReplaceSpecType_EnableStrictSniHostHeaderCheck); ok {
+		return x.EnableStrictSniHostHeaderCheck
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetAdditionalDomains() *schema.DomainNameList {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*ReplaceSpecType_AdditionalDomains); ok {
+		return x.AdditionalDomains
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2960,6 +3426,10 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_ServerName)(nil),
 		(*ReplaceSpecType_AppendServerName)(nil),
 		(*ReplaceSpecType_PassThrough)(nil),
+		(*ReplaceSpecType_EnablePathNormalize)(nil),
+		(*ReplaceSpecType_DisablePathNormalize)(nil),
+		(*ReplaceSpecType_EnableStrictSniHostHeaderCheck)(nil),
+		(*ReplaceSpecType_AdditionalDomains)(nil),
 	}
 }
 
@@ -3008,18 +3478,26 @@ type GetSpecType struct {
 	//	*GetSpecType_AppendServerName
 	//	*GetSpecType_PassThrough
 	ServerHeaderChoice isGetSpecType_ServerHeaderChoice `protobuf_oneof:"server_header_choice"`
-	State              VirtualHostState                 `protobuf:"varint,1003,opt,name=state,proto3,enum=ves.io.schema.virtual_host.VirtualHostState" json:"state,omitempty"`
-	HostName           string                           `protobuf:"bytes,1004,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
-	DnsInfo            []*virtual_host_dns_info.DnsInfo `protobuf:"bytes,1005,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
-	AutoCertState      CertificationState               `protobuf:"varint,1006,opt,name=auto_cert_state,json=autoCertState,proto3,enum=ves.io.schema.virtual_host.CertificationState" json:"auto_cert_state,omitempty"`
-	AutoCertInfo       *AutoCertInfoType                `protobuf:"bytes,1010,opt,name=auto_cert_info,json=autoCertInfo,proto3" json:"auto_cert_info,omitempty"`
-	DisableDnsResolve  bool                             `protobuf:"varint,34,opt,name=disable_dns_resolve,json=disableDnsResolve,proto3" json:"disable_dns_resolve,omitempty"`
+	// Types that are valid to be assigned to PathNormalizeChoice:
+	//	*GetSpecType_EnablePathNormalize
+	//	*GetSpecType_DisablePathNormalize
+	PathNormalizeChoice isGetSpecType_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
+	// Types that are valid to be assigned to StrictSniHostHeaderCheckChoice:
+	//	*GetSpecType_EnableStrictSniHostHeaderCheck
+	//	*GetSpecType_AdditionalDomains
+	StrictSniHostHeaderCheckChoice isGetSpecType_StrictSniHostHeaderCheckChoice `protobuf_oneof:"strict_sni_host_header_check_choice"`
+	State                          VirtualHostState                             `protobuf:"varint,1003,opt,name=state,proto3,enum=ves.io.schema.virtual_host.VirtualHostState" json:"state,omitempty"`
+	HostName                       string                                       `protobuf:"bytes,1004,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
+	DnsInfo                        []*virtual_host_dns_info.DnsInfo             `protobuf:"bytes,1005,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
+	AutoCertState                  CertificationState                           `protobuf:"varint,1006,opt,name=auto_cert_state,json=autoCertState,proto3,enum=ves.io.schema.virtual_host.CertificationState" json:"auto_cert_state,omitempty"`
+	AutoCertInfo                   *AutoCertInfoType                            `protobuf:"bytes,1010,opt,name=auto_cert_info,json=autoCertInfo,proto3" json:"auto_cert_info,omitempty"`
+	DisableDnsResolve              bool                                         `protobuf:"varint,34,opt,name=disable_dns_resolve,json=disableDnsResolve,proto3" json:"disable_dns_resolve,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{12}
+	return fileDescriptor_df61af5ea37a6592, []int{14}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3062,6 +3540,18 @@ type isGetSpecType_ServerHeaderChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_PathNormalizeChoice interface {
+	isGetSpecType_PathNormalizeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGetSpecType_StrictSniHostHeaderCheckChoice interface {
+	isGetSpecType_StrictSniHostHeaderCheckChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_NoChallenge struct {
 	NoChallenge *schema.Empty `protobuf:"bytes,31,opt,name=no_challenge,json=noChallenge,proto3,oneof" json:"no_challenge,omitempty"`
@@ -3090,16 +3580,32 @@ type GetSpecType_AppendServerName struct {
 type GetSpecType_PassThrough struct {
 	PassThrough *schema.Empty `protobuf:"bytes,46,opt,name=pass_through,json=passThrough,proto3,oneof" json:"pass_through,omitempty"`
 }
+type GetSpecType_EnablePathNormalize struct {
+	EnablePathNormalize *schema.Empty `protobuf:"bytes,48,opt,name=enable_path_normalize,json=enablePathNormalize,proto3,oneof" json:"enable_path_normalize,omitempty"`
+}
+type GetSpecType_DisablePathNormalize struct {
+	DisablePathNormalize *schema.Empty `protobuf:"bytes,49,opt,name=disable_path_normalize,json=disablePathNormalize,proto3,oneof" json:"disable_path_normalize,omitempty"`
+}
+type GetSpecType_EnableStrictSniHostHeaderCheck struct {
+	EnableStrictSniHostHeaderCheck *schema.Empty `protobuf:"bytes,51,opt,name=enable_strict_sni_host_header_check,json=enableStrictSniHostHeaderCheck,proto3,oneof" json:"enable_strict_sni_host_header_check,omitempty"`
+}
+type GetSpecType_AdditionalDomains struct {
+	AdditionalDomains *schema.DomainNameList `protobuf:"bytes,53,opt,name=additional_domains,json=additionalDomains,proto3,oneof" json:"additional_domains,omitempty"`
+}
 
-func (*GetSpecType_NoChallenge) isGetSpecType_ChallengeType()             {}
-func (*GetSpecType_JsChallenge) isGetSpecType_ChallengeType()             {}
-func (*GetSpecType_CaptchaChallenge) isGetSpecType_ChallengeType()        {}
-func (*GetSpecType_NoAuthentication) isGetSpecType_AuthenticationChoice() {}
-func (*GetSpecType_Authentication) isGetSpecType_AuthenticationChoice()   {}
-func (*GetSpecType_DefaultHeader) isGetSpecType_ServerHeaderChoice()      {}
-func (*GetSpecType_ServerName) isGetSpecType_ServerHeaderChoice()         {}
-func (*GetSpecType_AppendServerName) isGetSpecType_ServerHeaderChoice()   {}
-func (*GetSpecType_PassThrough) isGetSpecType_ServerHeaderChoice()        {}
+func (*GetSpecType_NoChallenge) isGetSpecType_ChallengeType()                                     {}
+func (*GetSpecType_JsChallenge) isGetSpecType_ChallengeType()                                     {}
+func (*GetSpecType_CaptchaChallenge) isGetSpecType_ChallengeType()                                {}
+func (*GetSpecType_NoAuthentication) isGetSpecType_AuthenticationChoice()                         {}
+func (*GetSpecType_Authentication) isGetSpecType_AuthenticationChoice()                           {}
+func (*GetSpecType_DefaultHeader) isGetSpecType_ServerHeaderChoice()                              {}
+func (*GetSpecType_ServerName) isGetSpecType_ServerHeaderChoice()                                 {}
+func (*GetSpecType_AppendServerName) isGetSpecType_ServerHeaderChoice()                           {}
+func (*GetSpecType_PassThrough) isGetSpecType_ServerHeaderChoice()                                {}
+func (*GetSpecType_EnablePathNormalize) isGetSpecType_PathNormalizeChoice()                       {}
+func (*GetSpecType_DisablePathNormalize) isGetSpecType_PathNormalizeChoice()                      {}
+func (*GetSpecType_EnableStrictSniHostHeaderCheck) isGetSpecType_StrictSniHostHeaderCheckChoice() {}
+func (*GetSpecType_AdditionalDomains) isGetSpecType_StrictSniHostHeaderCheckChoice()              {}
 
 func (m *GetSpecType) GetChallengeType() isGetSpecType_ChallengeType {
 	if m != nil {
@@ -3116,6 +3622,18 @@ func (m *GetSpecType) GetAuthenticationChoice() isGetSpecType_AuthenticationChoi
 func (m *GetSpecType) GetServerHeaderChoice() isGetSpecType_ServerHeaderChoice {
 	if m != nil {
 		return m.ServerHeaderChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetPathNormalizeChoice() isGetSpecType_PathNormalizeChoice {
+	if m != nil {
+		return m.PathNormalizeChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetStrictSniHostHeaderCheckChoice() isGetSpecType_StrictSniHostHeaderCheckChoice {
+	if m != nil {
+		return m.StrictSniHostHeaderCheckChoice
 	}
 	return nil
 }
@@ -3358,6 +3876,34 @@ func (m *GetSpecType) GetPassThrough() *schema.Empty {
 	return nil
 }
 
+func (m *GetSpecType) GetEnablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*GetSpecType_EnablePathNormalize); ok {
+		return x.EnablePathNormalize
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDisablePathNormalize() *schema.Empty {
+	if x, ok := m.GetPathNormalizeChoice().(*GetSpecType_DisablePathNormalize); ok {
+		return x.DisablePathNormalize
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetEnableStrictSniHostHeaderCheck() *schema.Empty {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*GetSpecType_EnableStrictSniHostHeaderCheck); ok {
+		return x.EnableStrictSniHostHeaderCheck
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetAdditionalDomains() *schema.DomainNameList {
+	if x, ok := m.GetStrictSniHostHeaderCheckChoice().(*GetSpecType_AdditionalDomains); ok {
+		return x.AdditionalDomains
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetState() VirtualHostState {
 	if m != nil {
 		return m.State
@@ -3412,6 +3958,10 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_ServerName)(nil),
 		(*GetSpecType_AppendServerName)(nil),
 		(*GetSpecType_PassThrough)(nil),
+		(*GetSpecType_EnablePathNormalize)(nil),
+		(*GetSpecType_DisablePathNormalize)(nil),
+		(*GetSpecType_EnableStrictSniHostHeaderCheck)(nil),
+		(*GetSpecType_AdditionalDomains)(nil),
 	}
 }
 
@@ -3436,12 +3986,16 @@ func init() {
 	golang_proto.RegisterType((*CaptchaChallengeType)(nil), "ves.io.schema.virtual_host.CaptchaChallengeType")
 	proto.RegisterType((*TemporaryUserBlockingType)(nil), "ves.io.schema.virtual_host.TemporaryUserBlockingType")
 	golang_proto.RegisterType((*TemporaryUserBlockingType)(nil), "ves.io.schema.virtual_host.TemporaryUserBlockingType")
+	proto.RegisterType((*DNSRecord)(nil), "ves.io.schema.virtual_host.DNSRecord")
+	golang_proto.RegisterType((*DNSRecord)(nil), "ves.io.schema.virtual_host.DNSRecord")
 	proto.RegisterType((*AutoCertInfoType)(nil), "ves.io.schema.virtual_host.AutoCertInfoType")
 	golang_proto.RegisterType((*AutoCertInfoType)(nil), "ves.io.schema.virtual_host.AutoCertInfoType")
 	proto.RegisterType((*AuthenticationDetails)(nil), "ves.io.schema.virtual_host.AuthenticationDetails")
 	golang_proto.RegisterType((*AuthenticationDetails)(nil), "ves.io.schema.virtual_host.AuthenticationDetails")
 	proto.RegisterType((*PolicyBasedChallenge)(nil), "ves.io.schema.virtual_host.PolicyBasedChallenge")
 	golang_proto.RegisterType((*PolicyBasedChallenge)(nil), "ves.io.schema.virtual_host.PolicyBasedChallenge")
+	proto.RegisterType((*ShapeBotDefenseConfigType)(nil), "ves.io.schema.virtual_host.ShapeBotDefenseConfigType")
+	golang_proto.RegisterType((*ShapeBotDefenseConfigType)(nil), "ves.io.schema.virtual_host.ShapeBotDefenseConfigType")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.virtual_host.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.virtual_host.GlobalSpecType")
 	proto.RegisterMapType((map[uint32]string)(nil), "ves.io.schema.virtual_host.GlobalSpecType.CustomErrorsEntry")
@@ -3468,277 +4022,309 @@ func init() {
 }
 
 var fileDescriptor_df61af5ea37a6592 = []byte{
-	// 4316 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7c, 0xdb, 0x6f, 0x1b, 0x57,
-	0x7e, 0xbf, 0x0e, 0x2f, 0x12, 0x75, 0x48, 0x4a, 0xa3, 0xa3, 0xdb, 0x58, 0xb6, 0xe9, 0xb1, 0x1c,
-	0xdb, 0x8a, 0x32, 0xa6, 0x29, 0x52, 0x72, 0xac, 0x64, 0x9d, 0x2c, 0x29, 0xd2, 0x96, 0xbc, 0x8a,
-	0xad, 0x1d, 0xc9, 0x4e, 0x9c, 0xfd, 0xed, 0x4e, 0x46, 0x33, 0x47, 0xd4, 0xd8, 0xc3, 0x19, 0x66,
-	0x66, 0x28, 0x4b, 0xf9, 0x55, 0x80, 0x91, 0x87, 0x76, 0xd7, 0x0f, 0x45, 0x9a, 0xc7, 0x3c, 0xb5,
-	0xdd, 0x97, 0x42, 0xfb, 0x0f, 0x14, 0xa5, 0x0b, 0x08, 0x01, 0x16, 0x0d, 0xfa, 0x52, 0x17, 0x5d,
-	0xa0, 0x41, 0x9f, 0x12, 0xe5, 0xa1, 0x49, 0x7a, 0xc1, 0x62, 0xbb, 0x2d, 0x82, 0x3c, 0x15, 0xe7,
-	0xcc, 0x0c, 0x39, 0x1c, 0x51, 0xb2, 0x62, 0x2b, 0x01, 0xb2, 0xd5, 0x8b, 0xc1, 0x39, 0xe7, 0x7b,
-	0x3b, 0xb7, 0xef, 0xf9, 0x7c, 0xbe, 0x33, 0x16, 0x3c, 0xb7, 0x86, 0xad, 0xb4, 0x6a, 0x5c, 0xb4,
-	0xe4, 0x55, 0x5c, 0x91, 0x2e, 0xae, 0xa9, 0xa6, 0x5d, 0x93, 0x34, 0x71, 0xd5, 0xb0, 0xec, 0x8b,
-	0xf6, 0x46, 0x15, 0x5b, 0xe9, 0xaa, 0x69, 0xd8, 0x06, 0x1a, 0x71, 0xe4, 0xd2, 0x8e, 0x5c, 0xda,
-	0x2f, 0x37, 0x72, 0xa1, 0xac, 0xda, 0xab, 0xb5, 0xe5, 0xb4, 0x6c, 0x54, 0x2e, 0x96, 0x8d, 0xb2,
-	0x71, 0x91, 0xaa, 0x2c, 0xd7, 0x56, 0xe8, 0x13, 0x7d, 0xa0, 0xbf, 0x1c, 0x53, 0x23, 0x27, 0xca,
-	0x86, 0x51, 0xd6, 0x70, 0x53, 0xca, 0xb2, 0xcd, 0x9a, 0x6c, 0xbb, 0xbd, 0xa7, 0x82, 0xbd, 0xb6,
-	0x5a, 0xc1, 0x96, 0x2d, 0x55, 0xaa, 0xae, 0xc0, 0x58, 0x6b, 0xc4, 0x52, 0xcd, 0x5e, 0xc5, 0xba,
-	0xad, 0xca, 0x92, 0xad, 0x1a, 0xba, 0x3f, 0xe6, 0x91, 0xd3, 0xad, 0x92, 0xb2, 0x56, 0xb3, 0x6c,
-	0x6c, 0xb6, 0x88, 0x0c, 0xb7, 0x8a, 0xe8, 0xd8, 0x0b, 0xe3, 0x78, 0x6b, 0x87, 0x51, 0x25, 0xd6,
-	0xad, 0xf6, 0x21, 0x58, 0xd8, 0x5c, 0x53, 0x65, 0x2c, 0x56, 0x0d, 0x4d, 0x95, 0x37, 0x5a, 0xec,
-	0x1f, 0x6b, 0x95, 0xf4, 0x77, 0x9d, 0x08, 0xcc, 0xbc, 0xa4, 0xa9, 0x8a, 0x64, 0x63, 0xb7, 0x97,
-	0x0b, 0xae, 0x0b, 0xbe, 0x2f, 0xb6, 0x06, 0x91, 0xd9, 0x7b, 0xe5, 0x44, 0x45, 0xb7, 0x44, 0x55,
-	0x5f, 0x31, 0x2e, 0x1a, 0xcb, 0x77, 0xb1, 0x37, 0xb5, 0xa3, 0xbf, 0x04, 0x70, 0xe0, 0xba, 0xb4,
-	0x26, 0x2d, 0xca, 0xa6, 0x5a, 0xb5, 0x67, 0x0c, 0x7d, 0x45, 0x2d, 0x2f, 0x6d, 0x54, 0x31, 0x3a,
-	0x0d, 0x13, 0xb2, 0x24, 0xaf, 0x62, 0xb1, 0x6a, 0xe2, 0x15, 0x75, 0x9d, 0x05, 0x1c, 0x18, 0xeb,
-	0x16, 0xe2, 0xb4, 0x6d, 0x81, 0x36, 0xa1, 0x1f, 0xc0, 0xa4, 0x45, 0xd5, 0x44, 0x99, 0xea, 0xb1,
-	0x21, 0x0e, 0x8c, 0xc5, 0xb3, 0xc3, 0x69, 0x67, 0xb9, 0xd2, 0xde, 0x72, 0xa5, 0x17, 0xe9, 0x62,
-	0x0a, 0x09, 0xcb, 0xe7, 0x04, 0x8d, 0xc3, 0x3e, 0xb9, 0x66, 0xd9, 0x46, 0x45, 0x74, 0x8d, 0xd4,
-	0x4c, 0x8d, 0x0d, 0x53, 0x2f, 0xbd, 0x4e, 0x87, 0x13, 0xd3, 0x2d, 0x53, 0x1b, 0xfd, 0x22, 0x04,
-	0x87, 0x8b, 0x1b, 0xba, 0x54, 0x51, 0x65, 0x01, 0xaf, 0x61, 0xd3, 0xc2, 0x0b, 0xa6, 0xb1, 0xbe,
-	0x41, 0x03, 0xfd, 0x21, 0x3c, 0x61, 0x62, 0xcb, 0xd0, 0xd6, 0xb0, 0x88, 0x75, 0xa5, 0x6a, 0xa8,
-	0xba, 0x2d, 0x2a, 0x8e, 0xac, 0xa4, 0x69, 0x1b, 0x34, 0xf0, 0x98, 0x30, 0xe2, 0xca, 0x94, 0x5c,
-	0x91, 0x62, 0x53, 0x02, 0xdd, 0x81, 0xc3, 0xb4, 0xb7, 0x46, 0xa6, 0x52, 0xd4, 0xb1, 0x7d, 0xdf,
-	0x30, 0xef, 0x89, 0x64, 0x5d, 0xe8, 0x88, 0x7a, 0xb2, 0xa7, 0xd3, 0xad, 0x3b, 0xfd, 0xb6, 0x33,
-	0xaf, 0x37, 0x1c, 0x49, 0x12, 0x85, 0x30, 0xd8, 0xb4, 0xe0, 0x6b, 0x46, 0x22, 0x44, 0xbb, 0x4d,
-	0xb3, 0x61, 0x2e, 0x3c, 0x16, 0xcf, 0x9e, 0x08, 0x58, 0xbd, 0x49, 0xd7, 0x45, 0xc0, 0x2b, 0x44,
-	0xb3, 0x80, 0xb6, 0x36, 0x7b, 0xbd, 0xf5, 0x73, 0xf5, 0x84, 0xbe, 0x5d, 0x4e, 0xd0, 0x75, 0x88,
-	0x64, 0x43, 0xd7, 0xb1, 0x4c, 0x1d, 0x90, 0x73, 0x61, 0xd4, 0x6c, 0x36, 0xca, 0x81, 0xb1, 0x64,
-	0xe1, 0xf8, 0x76, 0x1d, 0x80, 0x7f, 0xa9, 0x83, 0x48, 0x36, 0x93, 0xc9, 0xfc, 0xfc, 0x11, 0xe8,
-	0xf8, 0x9b, 0x2f, 0xb6, 0xc3, 0x9d, 0xe3, 0x11, 0x76, 0xfb, 0x1f, 0x9e, 0x13, 0xfa, 0x9a, 0x6a,
-	0x4b, 0x8e, 0xd6, 0xf5, 0x48, 0x2c, 0xc2, 0x44, 0x47, 0xff, 0x2c, 0x04, 0x7b, 0x67, 0x8c, 0x4a,
-	0xd5, 0xc4, 0x96, 0x45, 0x3a, 0xc9, 0x30, 0x32, 0xb0, 0x47, 0x36, 0x74, 0x1b, 0xeb, 0xb6, 0xa8,
-	0x61, 0xbd, 0x6c, 0xaf, 0xd2, 0x59, 0x4d, 0x16, 0xba, 0x89, 0xc5, 0xc8, 0x78, 0x68, 0x2c, 0x25,
-	0x24, 0x5d, 0x81, 0x79, 0xda, 0x8f, 0x96, 0x60, 0xc2, 0xd3, 0x70, 0x27, 0x32, 0x3c, 0xd6, 0x5d,
-	0x98, 0x20, 0xf2, 0xf0, 0x7d, 0xd0, 0x35, 0x1a, 0x35, 0xc3, 0x63, 0x0f, 0x42, 0xe4, 0xb1, 0xfb,
-	0x7d, 0xd0, 0x39, 0x1a, 0x31, 0x43, 0x1c, 0x20, 0x4f, 0xd1, 0xf7, 0x41, 0x88, 0xc9, 0x7a, 0xbf,
-	0x58, 0x20, 0xc4, 0x5d, 0x33, 0x34, 0x8e, 0x1c, 0x1c, 0x52, 0x54, 0x4b, 0x5a, 0xd6, 0xb0, 0x68,
-	0xe8, 0x22, 0xb6, 0xa5, 0xb2, 0xb8, 0x8a, 0x25, 0x05, 0x9b, 0x74, 0xe3, 0xc4, 0x84, 0x7e, 0xb7,
-	0xf7, 0xa6, 0x5e, 0xb2, 0xa5, 0xf2, 0x2c, 0xed, 0x42, 0x79, 0x78, 0xd2, 0xc4, 0x15, 0x63, 0x0d,
-	0x8b, 0x92, 0x2c, 0xe3, 0xaa, 0x2d, 0x62, 0x5d, 0x36, 0x14, 0x55, 0x6f, 0xe8, 0x46, 0xbc, 0x1d,
-	0x42, 0x84, 0xf2, 0x54, 0xa6, 0xe4, 0x8a, 0x38, 0x26, 0x46, 0xff, 0x22, 0x04, 0x87, 0xc9, 0x29,
-	0x71, 0x37, 0xf0, 0xaa, 0xa4, 0x91, 0x69, 0xc0, 0x34, 0xa6, 0xab, 0xb0, 0xf7, 0xae, 0xe5, 0xed,
-	0x61, 0x05, 0x6b, 0xd2, 0x06, 0xdd, 0x35, 0xc9, 0x42, 0x8a, 0x4c, 0xfd, 0x54, 0x26, 0x93, 0xf9,
-	0xaa, 0x0e, 0x3a, 0xbc, 0xe9, 0xef, 0x1e, 0xef, 0x62, 0x3f, 0xf9, 0x4d, 0x78, 0xec, 0xf3, 0x2e,
-	0x21, 0x79, 0xd7, 0x72, 0x76, 0x78, 0x91, 0x28, 0xa1, 0x02, 0x4c, 0xca, 0x86, 0x71, 0x4f, 0xc5,
-	0x22, 0x5e, 0xaf, 0xaa, 0xe6, 0x06, 0x1d, 0x52, 0xb2, 0x70, 0x92, 0x58, 0xc9, 0x5d, 0x6a, 0x58,
-	0xa1, 0xb3, 0x14, 0x1b, 0xef, 0x64, 0x1f, 0xfc, 0x32, 0x3a, 0x06, 0x84, 0x84, 0xa3, 0x53, 0xa2,
-	0x2a, 0xa8, 0x08, 0xe3, 0xee, 0x99, 0xaa, 0x4a, 0x65, 0x4c, 0x07, 0xd6, 0x5d, 0x38, 0xf3, 0x55,
-	0x1d, 0x44, 0xfe, 0xf2, 0x11, 0x48, 0x4a, 0x96, 0xac, 0xaa, 0x3c, 0xb7, 0x2c, 0x59, 0xf8, 0xd2,
-	0x24, 0x0d, 0xc6, 0xec, 0x62, 0x1f, 0x3c, 0x88, 0xbc, 0x07, 0x80, 0x00, 0x1d, 0xbd, 0x05, 0xa9,
-	0x8c, 0x5f, 0x4a, 0x7f, 0x58, 0x07, 0xe3, 0x70, 0x0c, 0x9e, 0x6a, 0x0e, 0x99, 0x6b, 0x8c, 0x99,
-	0x5b, 0x90, 0x4c, 0xa9, 0x82, 0x6d, 0x6c, 0x5a, 0x28, 0x9a, 0xe5, 0x73, 0xfc, 0xe4, 0xf5, 0x48,
-	0x0c, 0x30, 0xa1, 0xd1, 0x7f, 0x04, 0x70, 0x60, 0x46, 0xaa, 0xda, 0xf2, 0xaa, 0xd4, 0x3a, 0x41,
-	0xbb, 0x06, 0x16, 0x7a, 0xe6, 0x81, 0x85, 0x9f, 0x6e, 0x60, 0xcf, 0x7f, 0x58, 0x07, 0x67, 0xe1,
-	0x19, 0x78, 0xc2, 0x8d, 0xb3, 0xfd, 0xa8, 0xc2, 0x59, 0x3e, 0xe7, 0x8e, 0xe9, 0x3d, 0x00, 0x8f,
-	0x2d, 0xe1, 0x4a, 0xd5, 0x30, 0x25, 0x73, 0xe3, 0x96, 0x85, 0xcd, 0x82, 0x66, 0xc8, 0xf7, 0x54,
-	0xdd, 0x49, 0x91, 0x81, 0xa0, 0xc0, 0xd3, 0x05, 0x75, 0xe1, 0xc3, 0x3a, 0x78, 0x1e, 0x9e, 0x87,
-	0xa3, 0x0d, 0x47, 0x1c, 0xf1, 0xc4, 0x79, 0xae, 0xfc, 0xa1, 0x81, 0x89, 0xd1, 0x3f, 0x0e, 0x41,
-	0x26, 0x5f, 0xb3, 0x8d, 0x19, 0x6c, 0xda, 0x73, 0xfa, 0x8a, 0x41, 0x23, 0xb9, 0x0d, 0x7b, 0xa5,
-	0x9a, 0x6d, 0x88, 0x32, 0x36, 0x6d, 0xd1, 0xb2, 0x25, 0xdb, 0x89, 0xa6, 0x27, 0x9b, 0x4e, 0xef,
-	0x7d, 0x47, 0xa7, 0x89, 0x09, 0x75, 0xc5, 0xbd, 0x25, 0x17, 0x89, 0x96, 0x90, 0x94, 0x5c, 0xd3,
-	0xf4, 0x11, 0x15, 0x21, 0xd3, 0xb4, 0xeb, 0x5b, 0xbd, 0x78, 0x76, 0x64, 0x57, 0x92, 0x5f, 0xf2,
-	0xee, 0x64, 0xa1, 0xc7, 0x33, 0xe2, 0x2e, 0xde, 0x38, 0xec, 0xf3, 0x45, 0x57, 0xa3, 0x69, 0xce,
-	0xcb, 0xf4, 0x0d, 0x7f, 0x4e, 0x33, 0x1a, 0xf3, 0x7b, 0x54, 0x2d, 0xab, 0xe6, 0x9e, 0xcf, 0xee,
-	0xa6, 0xd5, 0x39, 0xda, 0x3a, 0xfa, 0xab, 0x08, 0x1c, 0xcc, 0xb7, 0x5c, 0xf4, 0x45, 0x6c, 0x4b,
-	0xaa, 0x66, 0xa1, 0x37, 0x61, 0x9c, 0x20, 0x00, 0xef, 0x56, 0x02, 0x07, 0xc8, 0xb6, 0xc7, 0xb7,
-	0x36, 0x7b, 0x5a, 0x51, 0x43, 0x23, 0x19, 0x01, 0x01, 0x92, 0x1e, 0xf7, 0xd6, 0xfa, 0x11, 0x1c,
-	0xaa, 0x59, 0x58, 0xa4, 0xf6, 0x9d, 0x8b, 0xd4, 0x73, 0x13, 0xa6, 0xf3, 0x32, 0x10, 0x70, 0x53,
-	0xaa, 0x54, 0xed, 0x8d, 0xd9, 0x0e, 0xa1, 0xbf, 0x66, 0x61, 0x12, 0xad, 0xe3, 0xd6, 0x35, 0xf6,
-	0xe3, 0xc6, 0xc9, 0xa8, 0x92, 0x35, 0xb6, 0xe8, 0x48, 0xe3, 0xd9, 0xf1, 0x80, 0x8d, 0xd6, 0xc0,
-	0xd2, 0x33, 0x54, 0x85, 0xee, 0x0a, 0x6b, 0xb6, 0xc3, 0x3b, 0x28, 0xce, 0x33, 0xba, 0x0a, 0x13,
-	0x26, 0x56, 0x54, 0x93, 0x04, 0x46, 0x2e, 0xd4, 0x4e, 0xba, 0x29, 0x4f, 0x7f, 0x55, 0x07, 0x34,
-	0xd9, 0x46, 0xcd, 0x30, 0xfb, 0x80, 0x9e, 0xb4, 0x88, 0x19, 0x62, 0x80, 0xdb, 0xf4, 0x1e, 0x00,
-	0xb3, 0x40, 0x88, 0x7b, 0x8a, 0xb7, 0x4c, 0x0d, 0xe5, 0x21, 0xd3, 0xb0, 0xe3, 0xde, 0xa6, 0x6c,
-	0xd7, 0x3e, 0x23, 0x04, 0x42, 0xaf, 0x27, 0xef, 0x5e, 0xad, 0x6e, 0x1a, 0x19, 0x84, 0x3d, 0xad,
-	0xab, 0x84, 0xc2, 0x13, 0x7c, 0x16, 0xf6, 0xc1, 0x84, 0xe0, 0xca, 0x73, 0xb7, 0x84, 0x79, 0x04,
-	0xa6, 0x0a, 0xe7, 0xe1, 0x40, 0xcb, 0x6c, 0x88, 0xf2, 0xaa, 0xa1, 0xca, 0x18, 0xf5, 0x6e, 0xd7,
-	0x41, 0xf8, 0x71, 0x1d, 0x84, 0x76, 0xea, 0x20, 0x9c, 0xe3, 0x27, 0x0b, 0xe7, 0x60, 0xbf, 0x7f,
-	0x8c, 0x7e, 0xb9, 0xce, 0xc7, 0x75, 0x10, 0x25, 0x72, 0x97, 0xf8, 0x17, 0xaf, 0x47, 0x62, 0x21,
-	0x26, 0x7c, 0x3d, 0x12, 0x8b, 0x32, 0x9d, 0xa3, 0xbf, 0x8f, 0xc2, 0x81, 0x05, 0x8a, 0xc5, 0x0a,
-	0x92, 0x85, 0x95, 0xc6, 0xc1, 0x47, 0xff, 0x0f, 0x26, 0xee, 0x12, 0x57, 0xee, 0x33, 0x3d, 0x37,
-	0xf1, 0x6c, 0x6e, 0xbf, 0x73, 0xb3, 0xc7, 0x4d, 0x50, 0x88, 0x3c, 0xae, 0x03, 0x20, 0xc4, 0xef,
-	0x5a, 0x4d, 0xeb, 0x32, 0xec, 0x93, 0x9d, 0x5c, 0xe3, 0x73, 0xe1, 0x9c, 0xa0, 0xcc, 0xbe, 0x47,
-	0xb3, 0x4d, 0x22, 0x75, 0xed, 0x33, 0x72, 0xa0, 0x0f, 0x59, 0x70, 0xd8, 0xf6, 0x72, 0x87, 0x58,
-	0xb3, 0xb0, 0x29, 0x2e, 0xbb, 0xb9, 0xc3, 0xdd, 0x94, 0x53, 0xfb, 0xb9, 0xda, 0x33, 0xbf, 0xb9,
-	0xfe, 0x06, 0xed, 0x76, 0x02, 0x68, 0x1a, 0x26, 0x74, 0xc3, 0x37, 0xa8, 0xe8, 0xbe, 0xdb, 0x3f,
-	0xae, 0x1b, 0xcd, 0x78, 0x17, 0xe1, 0x88, 0xa4, 0xdd, 0x97, 0x36, 0x2c, 0x11, 0xeb, 0xf4, 0x2e,
-	0x6f, 0x59, 0x80, 0xce, 0x7d, 0x0d, 0x0d, 0x3b, 0x9a, 0x25, 0xaa, 0x78, 0xdd, 0x37, 0xd3, 0x3f,
-	0x85, 0xa7, 0x5a, 0x8d, 0xee, 0x9e, 0xf7, 0xae, 0x7d, 0x2d, 0x9f, 0xf0, 0x5b, 0x0e, 0xce, 0x3f,
-	0xfa, 0x13, 0x00, 0x8f, 0x55, 0x24, 0x4d, 0x95, 0x55, 0xa3, 0x66, 0x39, 0x93, 0x5c, 0x51, 0x6d,
-	0xb5, 0x4c, 0xb7, 0x34, 0x1b, 0x3b, 0x40, 0x8a, 0xb9, 0xb0, 0xb5, 0xb9, 0xb7, 0x85, 0x8f, 0x37,
-	0xc1, 0xe7, 0x75, 0x00, 0x7c, 0x49, 0x67, 0xb8, 0x21, 0x4b, 0xa6, 0xfd, 0xb5, 0x86, 0x64, 0xe1,
-	0x2c, 0x64, 0x1a, 0x43, 0xf2, 0xb6, 0x7e, 0xdf, 0x76, 0x1d, 0x44, 0x1f, 0xd7, 0x41, 0x64, 0xa7,
-	0x0e, 0xa2, 0x53, 0xbc, 0xb3, 0xf9, 0x09, 0x98, 0xfb, 0xa7, 0xb3, 0xb0, 0xe7, 0x9a, 0x66, 0x2c,
-	0x4b, 0xda, 0x62, 0x15, 0xcb, 0xf4, 0xae, 0xb8, 0x02, 0xbb, 0x14, 0xa3, 0x22, 0xa9, 0xba, 0xe5,
-	0x82, 0xb2, 0x33, 0x7e, 0x50, 0xf6, 0xf3, 0x50, 0x33, 0x08, 0xc6, 0x07, 0xc3, 0x3c, 0x1d, 0x34,
-	0x07, 0x3b, 0x4d, 0xa3, 0x66, 0x63, 0xeb, 0x40, 0x28, 0xb6, 0x7f, 0x6b, 0x33, 0x4a, 0xc5, 0x29,
-	0xf4, 0x7c, 0x1f, 0x84, 0x99, 0x07, 0x21, 0xc1, 0x35, 0x80, 0xee, 0xc0, 0xde, 0xbb, 0x8d, 0xa3,
-	0x44, 0xb9, 0x89, 0x9b, 0x00, 0x33, 0x4f, 0x3a, 0x7d, 0x41, 0xb6, 0x22, 0xf4, 0x34, 0x0d, 0x91,
-	0x4b, 0x11, 0xbd, 0x05, 0x91, 0xa4, 0xac, 0x91, 0xfb, 0xcd, 0x72, 0x39, 0x98, 0x8a, 0x2d, 0x36,
-	0x7a, 0xb0, 0x88, 0x99, 0x80, 0xea, 0x86, 0xd0, 0xd7, 0x68, 0x59, 0x70, 0x6d, 0xa1, 0x35, 0x38,
-	0x64, 0xe2, 0xb7, 0x6b, 0xd8, 0xb2, 0x5d, 0x18, 0x69, 0x89, 0xb6, 0x21, 0x4a, 0x8a, 0xc2, 0x76,
-	0x52, 0x2f, 0x2f, 0x04, 0xbc, 0x38, 0x48, 0xf2, 0x35, 0x49, 0x57, 0xab, 0x35, 0x8d, 0xae, 0xe4,
-	0x4d, 0x4a, 0xdd, 0xa8, 0xd3, 0x81, 0xc6, 0x9c, 0xc7, 0x7c, 0x73, 0xde, 0xef, 0x3a, 0x70, 0x54,
-	0xad, 0x25, 0x23, 0xaf, 0x28, 0x68, 0x9d, 0x92, 0x95, 0xaa, 0xa1, 0x5b, 0x38, 0xe8, 0xb8, 0xeb,
-	0xb0, 0x1c, 0x0f, 0x78, 0x1e, 0x5a, 0x3c, 0xdf, 0x84, 0xc7, 0xda, 0x8c, 0xd8, 0x41, 0xcd, 0x6c,
-	0x1f, 0xdd, 0x4a, 0xed, 0xcd, 0x0d, 0x05, 0xc7, 0x21, 0x50, 0x1d, 0xf4, 0x63, 0x38, 0xd2, 0x6e,
-	0x28, 0xae, 0xc5, 0xd8, 0x3e, 0x16, 0x87, 0x77, 0x05, 0xe8, 0x9a, 0x7c, 0x0d, 0xf6, 0xd8, 0x9a,
-	0xe5, 0x5c, 0x20, 0x14, 0x32, 0xb1, 0xdd, 0x74, 0x47, 0x9d, 0x0b, 0x4c, 0x4a, 0xd1, 0xb8, 0xaf,
-	0x5b, 0xb6, 0x89, 0xa5, 0xca, 0x92, 0x66, 0x39, 0x57, 0x27, 0xdd, 0x47, 0x49, 0xdb, 0x7d, 0x74,
-	0xf0, 0xd6, 0xab, 0x30, 0x42, 0xd9, 0x0b, 0xa4, 0x60, 0xea, 0x85, 0xfd, 0xb6, 0xa5, 0xcb, 0x09,
-	0x67, 0x0d, 0x8b, 0x52, 0x15, 0x81, 0x2a, 0xa2, 0x22, 0x4c, 0x2e, 0xd7, 0x56, 0x56, 0xb0, 0xe9,
-	0xee, 0x24, 0x36, 0x41, 0xc3, 0x39, 0x15, 0xb0, 0x54, 0xa0, 0x32, 0xbe, 0xfd, 0x9c, 0x70, 0xb4,
-	0x9c, 0x1b, 0x0b, 0xbd, 0x04, 0xe3, 0xb2, 0x61, 0x5a, 0x9e, 0x8d, 0x24, 0xb5, 0x71, 0x2c, 0x60,
-	0x63, 0xc6, 0x30, 0x2d, 0x47, 0x5e, 0x80, 0x72, 0xe3, 0x37, 0x7a, 0x19, 0x46, 0xab, 0x84, 0x2b,
-	0xb3, 0xbd, 0x74, 0x0c, 0x67, 0xf7, 0x1b, 0x43, 0x83, 0x54, 0x0b, 0x8e, 0x0e, 0xba, 0x04, 0xc3,
-	0x77, 0xef, 0xdb, 0x2c, 0x73, 0x80, 0x73, 0xd3, 0xb9, 0xb5, 0x49, 0x64, 0x05, 0xf2, 0x0f, 0x9a,
-	0x80, 0xb1, 0xfb, 0xd2, 0x8a, 0xc3, 0xfc, 0x10, 0x8d, 0x76, 0x28, 0xa0, 0xfc, 0xba, 0x44, 0xd5,
-	0x84, 0xae, 0xfb, 0xce, 0x0f, 0x54, 0x86, 0x83, 0x2e, 0xce, 0x10, 0x4d, 0x87, 0xe2, 0x8b, 0x4e,
-	0xdc, 0xfd, 0x4f, 0xbe, 0x90, 0xf7, 0x28, 0x0d, 0x08, 0xfd, 0xca, 0xee, 0x0e, 0x74, 0x1a, 0x26,
-	0x24, 0x45, 0x11, 0x35, 0xc3, 0x81, 0x23, 0xec, 0x00, 0x65, 0x7f, 0x71, 0x49, 0x51, 0xe6, 0xdd,
-	0x26, 0xf4, 0x26, 0x21, 0xd5, 0x0d, 0x06, 0xec, 0x81, 0xb3, 0x41, 0x1a, 0xc8, 0xbe, 0x9b, 0x20,
-	0xc0, 0x9b, 0x09, 0xc9, 0x6e, 0x34, 0xb8, 0x00, 0xed, 0x57, 0x11, 0x98, 0x74, 0x59, 0x03, 0x36,
-	0x4d, 0xc3, 0xb4, 0xd8, 0x21, 0x3a, 0xbb, 0x3f, 0xd8, 0xcf, 0x6e, 0x6b, 0x0a, 0x4f, 0xcf, 0x50,
-	0xfd, 0x12, 0x55, 0x2f, 0xe9, 0xb6, 0xb9, 0x51, 0xf8, 0x3b, 0x02, 0x90, 0x40, 0x5b, 0xda, 0x91,
-	0xf8, 0x00, 0x74, 0x8f, 0x76, 0x8d, 0x47, 0xd9, 0x7f, 0x8e, 0x8c, 0x85, 0xe9, 0x19, 0xfa, 0xc0,
-	0xcb, 0xed, 0x3d, 0x1f, 0x80, 0xf8, 0x78, 0x93, 0x96, 0xec, 0x7c, 0xf2, 0xeb, 0xf0, 0xaf, 0xc1,
-	0xc3, 0x47, 0x60, 0x1b, 0xa0, 0xbf, 0x05, 0x5f, 0xd6, 0xc1, 0x5f, 0x83, 0xd9, 0xa5, 0xa5, 0x05,
-	0x8e, 0x3a, 0xe2, 0x64, 0x43, 0xc1, 0xdc, 0x9a, 0xa4, 0xd5, 0x30, 0x97, 0xe3, 0x27, 0xf9, 0x29,
-	0xce, 0x30, 0xb9, 0x65, 0x6c, 0xdf, 0xc7, 0x58, 0xe7, 0x72, 0x99, 0x0c, 0x27, 0xe9, 0x0a, 0x37,
-	0x35, 0x3d, 0x9d, 0xe6, 0x4a, 0xe5, 0x34, 0x77, 0x9b, 0xca, 0x4d, 0x72, 0x57, 0xb8, 0xc9, 0xf5,
-	0x75, 0x22, 0x29, 0x69, 0x1a, 0x37, 0x99, 0xc9, 0x5c, 0x98, 0x9c, 0x9e, 0xe6, 0x70, 0xc3, 0x9e,
-	0xc5, 0x73, 0x53, 0xdc, 0x15, 0x6e, 0xaa, 0x29, 0x33, 0x95, 0xc9, 0x5c, 0x98, 0x6a, 0x95, 0x49,
-	0x73, 0x77, 0x8c, 0x1a, 0x27, 0x4b, 0x3a, 0x27, 0x69, 0x96, 0xc1, 0x59, 0x55, 0x2c, 0xab, 0x2b,
-	0x1b, 0x9c, 0xa4, 0x73, 0x78, 0x5d, 0x92, 0x6d, 0x9f, 0x28, 0xa7, 0xa9, 0xf7, 0x30, 0x37, 0x99,
-	0x99, 0x4c, 0x93, 0xa1, 0x0c, 0x3c, 0x7c, 0x04, 0x18, 0xd4, 0xb3, 0x53, 0x07, 0xd0, 0x19, 0xc1,
-	0x8c, 0xa1, 0x60, 0xd2, 0x01, 0x1f, 0x3e, 0x02, 0x9d, 0x28, 0xf2, 0x51, 0x1d, 0x74, 0x90, 0xc7,
-	0xce, 0x87, 0x8f, 0x40, 0x28, 0x46, 0x47, 0x9f, 0x7f, 0xf8, 0x08, 0x5c, 0x19, 0x79, 0xf9, 0xcb,
-	0x3a, 0x78, 0x71, 0xd1, 0x36, 0x09, 0xf9, 0x32, 0x31, 0x59, 0x3f, 0x82, 0x5e, 0xf5, 0xb2, 0xeb,
-	0xc9, 0xcb, 0x3d, 0x3c, 0x57, 0xb3, 0x6a, 0x92, 0xa6, 0x6d, 0x70, 0x12, 0xb7, 0x6a, 0x57, 0x34,
-	0x1a, 0x02, 0xb1, 0x72, 0xf2, 0xe1, 0x23, 0x70, 0x6c, 0x64, 0x78, 0xa7, 0x0e, 0xfa, 0x1d, 0xc7,
-	0x82, 0xab, 0xc1, 0x15, 0x0c, 0x65, 0xa3, 0x11, 0xc1, 0x08, 0x89, 0x20, 0xe2, 0x7b, 0xdc, 0x26,
-	0x70, 0x2b, 0x21, 0xfb, 0x16, 0x17, 0x5d, 0x81, 0xc7, 0xbd, 0x82, 0x87, 0x82, 0x57, 0xa4, 0x9a,
-	0x66, 0x3b, 0xbb, 0x86, 0x32, 0x4e, 0x8b, 0x3d, 0x4d, 0xf7, 0x2e, 0xeb, 0x8a, 0x14, 0x1d, 0x09,
-	0xaa, 0x4a, 0xa8, 0xa5, 0x85, 0x7e, 0x08, 0x87, 0x2b, 0xd2, 0xba, 0xd8, 0x9a, 0xb6, 0x45, 0x4b,
-	0x7d, 0x07, 0xb3, 0xc3, 0x2d, 0x05, 0x1c, 0xf6, 0x2d, 0x61, 0xa0, 0x22, 0xad, 0x0b, 0xfe, 0x44,
-	0xbd, 0xa8, 0xbe, 0x83, 0x77, 0xc1, 0xbc, 0x53, 0x07, 0x87, 0x79, 0x3f, 0x0b, 0x20, 0x6b, 0xf6,
-	0x19, 0x91, 0x35, 0xb1, 0xef, 0xc7, 0xd6, 0xb8, 0x1d, 0xb6, 0x3e, 0xf9, 0x2c, 0xd8, 0x7a, 0xb6,
-	0xa3, 0x0d, 0xba, 0x7e, 0x1b, 0x0e, 0x39, 0x79, 0x57, 0x24, 0x67, 0x4a, 0xf1, 0xf9, 0x7a, 0xfe,
-	0xc9, 0xbe, 0xda, 0x51, 0x8e, 0x42, 0x97, 0x8b, 0xf6, 0x66, 0x3b, 0x84, 0x81, 0x6a, 0x3b, 0x4e,
-	0x62, 0xc0, 0x7e, 0x8a, 0x0f, 0x55, 0x85, 0x6c, 0x3c, 0x8f, 0xa1, 0xb3, 0xc7, 0x0e, 0x90, 0x86,
-	0xb9, 0xad, 0xcd, 0x76, 0xba, 0x3e, 0x60, 0x89, 0x48, 0xf7, 0x5c, 0x4b, 0x2f, 0x7a, 0x13, 0x26,
-	0x4c, 0xc9, 0xc6, 0xa2, 0xa6, 0x56, 0x54, 0x1b, 0x9b, 0xec, 0xc8, 0x01, 0x3c, 0x1d, 0xdb, 0xda,
-	0x6c, 0x51, 0xf2, 0xb9, 0x88, 0x93, 0xf6, 0x79, 0xa7, 0x19, 0xfd, 0x7f, 0x78, 0xd2, 0x2f, 0x26,
-	0x4a, 0x9a, 0x66, 0xdc, 0xc7, 0x8a, 0x5b, 0x57, 0xc6, 0x16, 0x7b, 0xfc, 0x00, 0xce, 0x46, 0xb6,
-	0x36, 0x93, 0x6a, 0xd5, 0xd5, 0x11, 0x2d, 0x6c, 0x37, 0xbc, 0x45, 0x84, 0x11, 0x9f, 0xb7, 0xbc,
-	0x63, 0x7c, 0xc1, 0xb5, 0x8d, 0xae, 0x11, 0x3a, 0x6c, 0x9b, 0x1b, 0xde, 0xd5, 0x79, 0x82, 0x2e,
-	0x59, 0x2a, 0xe0, 0x4b, 0x20, 0x22, 0xce, 0x52, 0xf9, 0x89, 0x9c, 0xd9, 0x6c, 0x46, 0x7f, 0xb4,
-	0x37, 0xc7, 0x3a, 0xf3, 0x2c, 0x1c, 0x2b, 0xf9, 0xf1, 0x26, 0x20, 0xde, 0xc8, 0x7e, 0x60, 0xf7,
-	0x24, 0x5b, 0xbf, 0xd8, 0x97, 0x7d, 0x3c, 0x77, 0x80, 0x09, 0xbc, 0xf8, 0x8d, 0xd8, 0x07, 0xbb,
-	0x37, 0xff, 0x40, 0xd7, 0x20, 0x01, 0x49, 0xa2, 0xaa, 0xdb, 0xd8, 0x94, 0x71, 0xd5, 0x66, 0xcf,
-	0xd2, 0xf1, 0x8f, 0x06, 0xdc, 0x2f, 0x69, 0xd6, 0x9c, 0x27, 0xe2, 0x5d, 0x87, 0x09, 0xdb, 0xd7,
-	0x88, 0x66, 0x60, 0x9f, 0x6e, 0x88, 0xad, 0xc5, 0x0d, 0xf6, 0xfc, 0xbe, 0x35, 0x06, 0x46, 0x37,
-	0x02, 0xc5, 0x04, 0x09, 0x06, 0xea, 0x36, 0xec, 0x18, 0xb5, 0x30, 0xb1, 0xdf, 0x72, 0xb4, 0x2d,
-	0x1b, 0xb9, 0x29, 0x00, 0x08, 0x01, 0x83, 0xe8, 0x3c, 0x4c, 0xa8, 0x8a, 0x86, 0x1b, 0xc5, 0x75,
-	0x8e, 0x66, 0xce, 0xc8, 0x57, 0x75, 0xd0, 0x21, 0xc4, 0x49, 0x8f, 0x5b, 0x3f, 0x47, 0x69, 0xd8,
-	0xdf, 0x48, 0xd6, 0xba, 0x25, 0xba, 0x6f, 0x1c, 0xd8, 0x51, 0x9a, 0xa4, 0xfb, 0xbc, 0x24, 0xad,
-	0x5b, 0x82, 0xd3, 0x81, 0x66, 0x60, 0x8f, 0x97, 0xd4, 0xdd, 0x4a, 0xf4, 0x0b, 0x7b, 0x8f, 0xbe,
-	0x40, 0xaf, 0x87, 0xd9, 0x90, 0x90, 0x74, 0x75, 0xdc, 0xea, 0xf6, 0x04, 0x8c, 0x5b, 0xd8, 0x5c,
-	0xc3, 0xa6, 0xa8, 0x4b, 0x15, 0xcc, 0xf2, 0xb4, 0xde, 0xd3, 0xb3, 0xed, 0x2d, 0xa7, 0x19, 0x66,
-	0xff, 0xfc, 0xd5, 0xd9, 0x90, 0x00, 0x1d, 0xa1, 0x1b, 0x52, 0x05, 0xa3, 0x57, 0x20, 0x92, 0xaa,
-	0x55, 0xac, 0x2b, 0xa2, 0x5f, 0xf3, 0xc2, 0x1e, 0x9a, 0x8c, 0x23, 0xbb, 0xd8, 0xd4, 0x7f, 0x15,
-	0x26, 0xaa, 0x92, 0x65, 0x89, 0xf6, 0xaa, 0x69, 0xd4, 0xca, 0xab, 0x6c, 0xfa, 0x00, 0x51, 0xc7,
-	0x89, 0xc6, 0x92, 0xa3, 0x80, 0x26, 0xe0, 0x00, 0x99, 0xa0, 0x35, 0x43, 0xb3, 0xb1, 0x69, 0x4a,
-	0x62, 0x45, 0xd2, 0xa5, 0x32, 0x56, 0xd8, 0xcf, 0xbb, 0xe8, 0x54, 0x21, 0x45, 0xb7, 0x6e, 0xbb,
-	0x7d, 0xaf, 0x39, 0x5d, 0xe8, 0x0d, 0x18, 0x27, 0x2a, 0x1e, 0x73, 0xfd, 0xa2, 0xeb, 0x00, 0x7b,
-	0x9e, 0xdd, 0xda, 0x84, 0x4d, 0x25, 0x3f, 0x03, 0x25, 0xcd, 0x45, 0x97, 0xd0, 0x9e, 0x80, 0xdd,
-	0x8d, 0x8a, 0x23, 0xfb, 0xa5, 0x13, 0x41, 0xcc, 0xab, 0x35, 0xa2, 0x19, 0x18, 0x75, 0xea, 0xa9,
-	0xff, 0xd6, 0x45, 0xf1, 0x33, 0x7f, 0x40, 0x0e, 0xe0, 0x94, 0x53, 0x1d, 0x5d, 0xe2, 0x82, 0xbe,
-	0x82, 0xa3, 0xf3, 0xfc, 0xef, 0x5d, 0xb4, 0x9c, 0x19, 0x23, 0x2d, 0x74, 0x3a, 0x67, 0x61, 0xcc,
-	0x7b, 0x37, 0xc7, 0xfe, 0x87, 0x33, 0xae, 0xfd, 0xbc, 0x34, 0x5e, 0xe4, 0xa5, 0x8b, 0xba, 0x45,
-	0xc8, 0xae, 0xd0, 0xa5, 0x38, 0x3f, 0xd0, 0x4f, 0x76, 0x97, 0x81, 0xff, 0xb3, 0xeb, 0x69, 0xea,
-	0xc0, 0x05, 0x42, 0xb2, 0x02, 0xb5, 0xe0, 0x45, 0x7a, 0xd2, 0xbc, 0xca, 0x2c, 0x09, 0xf6, 0x77,
-	0x4e, 0x41, 0x85, 0x7f, 0xc2, 0x51, 0x6b, 0x29, 0x55, 0x0b, 0x09, 0xc9, 0xd7, 0x82, 0xae, 0xc2,
-	0x04, 0xcd, 0x45, 0xde, 0xba, 0xfe, 0x57, 0x17, 0x65, 0x7d, 0xa3, 0x7b, 0xbc, 0x18, 0xe2, 0xfc,
-	0x2f, 0x86, 0x88, 0xa2, 0xb7, 0x88, 0x35, 0xd8, 0xdf, 0xfa, 0xc6, 0x95, 0xdc, 0x11, 0x16, 0xfb,
-	0xfb, 0x83, 0x6c, 0x93, 0x73, 0x5b, 0x9b, 0x68, 0xb7, 0x72, 0x30, 0x27, 0x46, 0x84, 0x3e, 0x57,
-	0xc8, 0xb9, 0x11, 0x16, 0xb1, 0x6d, 0xa1, 0x0a, 0x1c, 0xd2, 0x0c, 0x49, 0x59, 0x96, 0x34, 0x49,
-	0x97, 0xe9, 0xdd, 0x56, 0x36, 0x4c, 0xd5, 0x5e, 0xad, 0xb0, 0xff, 0xdd, 0x7e, 0xbb, 0xb8, 0xef,
-	0x9b, 0xd3, 0xf3, 0x3e, 0xad, 0xbc, 0xa7, 0xd4, 0x00, 0x06, 0xc2, 0xa0, 0xd6, 0xae, 0x1f, 0x3d,
-	0x07, 0x93, 0x8d, 0x33, 0x43, 0xb7, 0xeb, 0xff, 0x38, 0xdb, 0x35, 0xe1, 0xb5, 0x92, 0x79, 0x1d,
-	0x79, 0x15, 0xf6, 0xed, 0x22, 0x08, 0x88, 0x81, 0xe1, 0x7b, 0xd8, 0x79, 0x19, 0x9a, 0x14, 0xc8,
-	0x4f, 0x34, 0x00, 0xa3, 0x14, 0xcd, 0xd3, 0x72, 0x64, 0xb7, 0xe0, 0x3c, 0xbc, 0x14, 0xba, 0x0c,
-	0x0a, 0xe7, 0x60, 0x4f, 0xb3, 0xc2, 0x44, 0x69, 0xec, 0xc0, 0x76, 0x1d, 0x9c, 0x7a, 0x5c, 0x07,
-	0xa9, 0x9d, 0x3a, 0x88, 0xe5, 0x26, 0xf8, 0xec, 0x24, 0x9f, 0x9d, 0x2e, 0x8c, 0xc3, 0xc1, 0xd6,
-	0x54, 0xe9, 0x2f, 0x47, 0x9d, 0x7f, 0x5c, 0x07, 0xe7, 0x76, 0xea, 0x20, 0x9a, 0x9b, 0xe6, 0x27,
-	0x33, 0x85, 0x1c, 0x1c, 0x70, 0x93, 0x8d, 0x0b, 0x42, 0x5d, 0xd1, 0xe3, 0xdb, 0x75, 0xf0, 0xc2,
-	0x47, 0x75, 0x40, 0x2e, 0xc1, 0xf1, 0x9d, 0x3a, 0x88, 0x4f, 0xe6, 0xf8, 0xc9, 0x49, 0x7e, 0x72,
-	0x8a, 0x9f, 0xbc, 0xe4, 0xbc, 0x84, 0xb9, 0x1e, 0x89, 0xa5, 0x98, 0x53, 0xd7, 0x23, 0xb1, 0x73,
-	0xcc, 0xf9, 0xeb, 0x91, 0xd8, 0x38, 0xf3, 0xc2, 0xe8, 0x6f, 0x06, 0x61, 0xcf, 0x8c, 0x89, 0x25,
-	0x1b, 0x37, 0xaa, 0x5a, 0x6c, 0xa0, 0xaa, 0xd5, 0x2c, 0x58, 0xbd, 0xf2, 0x8d, 0x0a, 0x56, 0x31,
-	0xaf, 0x60, 0xd5, 0xa8, 0x52, 0x7d, 0xfb, 0xa5, 0xa4, 0xb7, 0x0e, 0xb1, 0x94, 0xd4, 0xbe, 0x68,
-	0xb4, 0x7c, 0x98, 0x45, 0xa3, 0x3d, 0xca, 0x43, 0xd3, 0x4f, 0x2c, 0x0f, 0xed, 0x59, 0x08, 0x7a,
-	0xf9, 0xc9, 0x85, 0xa0, 0xef, 0xac, 0xe4, 0xf3, 0x3d, 0xaf, 0xd8, 0x1c, 0x55, 0x5e, 0xf6, 0xac,
-	0xbc, 0x48, 0x4f, 0x51, 0x78, 0x69, 0xcd, 0x32, 0xbb, 0x0b, 0x2f, 0x87, 0x4b, 0xd7, 0xa7, 0x9e,
-	0x40, 0xd7, 0x0f, 0x9f, 0xa3, 0xbf, 0x71, 0x68, 0x1c, 0x3d, 0xc8, 0xce, 0xc5, 0x43, 0x64, 0xe7,
-	0x6d, 0x79, 0x39, 0x7e, 0x7a, 0x92, 0x3c, 0xd4, 0x9e, 0x24, 0xb7, 0xa5, 0xc6, 0x0b, 0x4f, 0x41,
-	0x8d, 0x7b, 0x03, 0xd4, 0xb8, 0x95, 0x10, 0xbf, 0x7d, 0x18, 0x84, 0x98, 0x09, 0x12, 0xe2, 0xef,
-	0x86, 0x06, 0x9f, 0x6e, 0xc7, 0x85, 0x9e, 0x8d, 0x05, 0x55, 0xbe, 0x1d, 0x66, 0xbd, 0x17, 0x95,
-	0x3e, 0x14, 0xd6, 0xf9, 0x93, 0x43, 0x63, 0x9d, 0x6d, 0xf8, 0xe6, 0x95, 0x6f, 0x42, 0x0b, 0x77,
-	0x13, 0xc2, 0xd3, 0x6d, 0x08, 0x61, 0x80, 0x00, 0xa6, 0xf7, 0x26, 0x80, 0x6d, 0x09, 0xdf, 0xf4,
-	0xc1, 0x09, 0x5f, 0x80, 0xea, 0x3d, 0x33, 0x18, 0x7d, 0xe9, 0xa7, 0x7f, 0xff, 0x4a, 0xe0, 0x0d,
-	0xe6, 0xef, 0x5e, 0x99, 0x9b, 0x98, 0xe2, 0xb3, 0x7c, 0x8e, 0x9f, 0xe2, 0xa7, 0xf9, 0x89, 0xcb,
-	0xfc, 0xc4, 0x34, 0x9f, 0xbb, 0xcc, 0x5f, 0xe2, 0x27, 0x5e, 0xe4, 0x5f, 0xe4, 0x2f, 0xf3, 0x13,
-	0x59, 0x7e, 0x22, 0xc7, 0x67, 0x33, 0x7c, 0xf6, 0x32, 0x9f, 0x9d, 0xe0, 0xb3, 0x59, 0x3e, 0x97,
-	0xe3, 0xb3, 0x39, 0x3e, 0x97, 0xe1, 0x73, 0x53, 0x7c, 0xf6, 0x12, 0x9f, 0x7d, 0x91, 0xcf, 0x4e,
-	0xf1, 0xb9, 0x2c, 0x9f, 0x9b, 0x2c, 0x3c, 0xb7, 0x0b, 0xeb, 0xa2, 0x77, 0xbf, 0x06, 0x81, 0xb6,
-	0x42, 0x76, 0x2f, 0xa4, 0x7b, 0xec, 0xdd, 0xaf, 0x41, 0xfb, 0xae, 0x42, 0x66, 0x0f, 0xc4, 0xcb,
-	0xbe, 0xfb, 0x35, 0x68, 0xdb, 0x33, 0xba, 0x33, 0x08, 0x7b, 0x05, 0x5c, 0xd5, 0x24, 0xf9, 0x08,
-	0xd7, 0x1e, 0xe1, 0xda, 0x23, 0x5c, 0x7b, 0x84, 0x6b, 0x0f, 0x84, 0x6b, 0x97, 0xdb, 0xe3, 0xda,
-	0x2b, 0xfb, 0x99, 0x0d, 0xa4, 0x99, 0x23, 0x60, 0x7b, 0x04, 0x6c, 0xff, 0x6f, 0x03, 0xdb, 0x6f,
-	0xad, 0xc8, 0x7f, 0x04, 0x6f, 0x03, 0xf0, 0xf6, 0x50, 0xde, 0x7a, 0x1c, 0x81, 0xdc, 0xef, 0x2b,
-	0xc8, 0xfd, 0x57, 0x16, 0xc6, 0xaf, 0x61, 0xfb, 0x08, 0xe0, 0x1e, 0x01, 0xdc, 0xa3, 0x6f, 0xf5,
-	0x8e, 0x10, 0xf2, 0x77, 0x82, 0x90, 0x7f, 0xd6, 0x1e, 0x21, 0x4f, 0xef, 0xfb, 0xc9, 0x5d, 0x33,
-	0x47, 0x1d, 0xa1, 0xe3, 0x23, 0x74, 0xfc, 0xbd, 0x44, 0xc7, 0xf9, 0xa7, 0x41, 0xc7, 0xdf, 0xb8,
-	0xe0, 0x7b, 0x84, 0x70, 0xff, 0x80, 0x0b, 0xb8, 0xdf, 0xaf, 0x0f, 0x60, 0x5e, 0x3f, 0xac, 0x0f,
-	0x60, 0xbe, 0x93, 0x8f, 0x5f, 0xbe, 0x21, 0x95, 0x7c, 0x76, 0x9a, 0xf1, 0x56, 0x1b, 0x9a, 0x31,
-	0x3f, 0x91, 0xe1, 0xff, 0x20, 0x99, 0xc6, 0xf8, 0xfb, 0x00, 0xf6, 0x06, 0x90, 0x1e, 0xea, 0x87,
-	0xbd, 0xb7, 0xe7, 0x84, 0xa5, 0x5b, 0xf9, 0x79, 0x71, 0xb1, 0x24, 0xdc, 0x9e, 0x9b, 0x29, 0x31,
-	0x1d, 0x68, 0x08, 0xa2, 0xd9, 0xa5, 0xa5, 0x05, 0x71, 0xfe, 0x66, 0xbe, 0x28, 0x16, 0xf2, 0xf3,
-	0xf9, 0x1b, 0x33, 0x25, 0x81, 0x01, 0xa8, 0x17, 0xc6, 0xf3, 0x0b, 0x73, 0xe2, 0xb5, 0xfc, 0x52,
-	0xe9, 0xf5, 0xfc, 0x1d, 0x26, 0x84, 0x06, 0x61, 0xdf, 0xd2, 0x4c, 0x50, 0x2e, 0x8c, 0xba, 0x61,
-	0x74, 0x41, 0xb8, 0xf9, 0xc6, 0x1d, 0x26, 0x82, 0x4e, 0xc1, 0xc1, 0xf9, 0x9b, 0x33, 0xf9, 0x79,
-	0xf1, 0x47, 0x97, 0x17, 0x45, 0xbf, 0x72, 0xd4, 0xf9, 0xbc, 0x7b, 0xfc, 0x17, 0x00, 0x76, 0x37,
-	0xff, 0x76, 0xc1, 0x00, 0x84, 0xd4, 0xb3, 0xa3, 0xde, 0xe1, 0xc8, 0xa0, 0x7e, 0xd8, 0x4d, 0xdc,
-	0x38, 0x8d, 0xc0, 0x6d, 0x3c, 0x01, 0x51, 0xa3, 0x51, 0x7c, 0x7d, 0x6e, 0x69, 0x56, 0x5c, 0xbc,
-	0x31, 0xc7, 0x84, 0xdc, 0xde, 0x41, 0x18, 0x27, 0x86, 0x16, 0x5d, 0xa5, 0xb0, 0xdb, 0x9c, 0x84,
-	0xdd, 0xb7, 0x8a, 0x9e, 0xa5, 0x08, 0x79, 0x5c, 0x7c, 0x2d, 0xef, 0x3e, 0x46, 0xc7, 0x3f, 0x07,
-	0x90, 0x09, 0x9e, 0x58, 0x32, 0x19, 0xde, 0x0c, 0xcd, 0xde, 0x5c, 0x5c, 0x12, 0x85, 0x52, 0xbe,
-	0x78, 0x87, 0xe9, 0x40, 0x67, 0xe1, 0xe9, 0x96, 0xf6, 0x85, 0xd2, 0x8d, 0xe2, 0xdc, 0x8d, 0x6b,
-	0xe2, 0xed, 0x92, 0x30, 0x77, 0x75, 0x6e, 0x26, 0xbf, 0x34, 0x77, 0xf3, 0x06, 0x03, 0xd0, 0x73,
-	0x90, 0x6b, 0x11, 0xf3, 0x77, 0x8b, 0x57, 0xf3, 0x73, 0xf3, 0xa5, 0x22, 0x13, 0x42, 0xe7, 0xe1,
-	0x99, 0xb6, 0xc6, 0x8a, 0x37, 0x16, 0xc5, 0x62, 0x69, 0xbe, 0x74, 0xcd, 0x31, 0x17, 0x46, 0xa7,
-	0xe1, 0xc9, 0xb6, 0x82, 0x79, 0x51, 0x28, 0xcd, 0xdc, 0x14, 0x8a, 0x4c, 0x04, 0x9d, 0x81, 0xa7,
-	0x5a, 0x44, 0x88, 0x0d, 0xaf, 0x5b, 0xcc, 0x17, 0x8b, 0xa5, 0x22, 0x13, 0x1d, 0xaf, 0x87, 0x20,
-	0xda, 0x7d, 0xca, 0xd1, 0x40, 0xf3, 0xff, 0x52, 0x17, 0x9d, 0xe3, 0xa6, 0x30, 0x1d, 0xe8, 0x18,
-	0x1c, 0x2c, 0x7a, 0xdf, 0x07, 0xde, 0xc6, 0x66, 0x43, 0x87, 0x21, 0x4b, 0xd3, 0x9b, 0x6f, 0x26,
-	0x06, 0xd3, 0xc6, 0x0a, 0x13, 0x42, 0x23, 0x70, 0xc8, 0x11, 0x6e, 0xa0, 0x94, 0x05, 0xac, 0x2b,
-	0xaa, 0x5e, 0x66, 0xc2, 0xe8, 0x38, 0x1c, 0x0e, 0xf4, 0x39, 0x16, 0xb1, 0xc2, 0x44, 0xfc, 0xee,
-	0xaf, 0xaa, 0xba, 0xa4, 0xa9, 0xef, 0x60, 0x26, 0x4a, 0x56, 0xa0, 0x19, 0x2a, 0x9e, 0xd3, 0xe9,
-	0x5f, 0x01, 0x61, 0x3a, 0x89, 0xb4, 0xaf, 0xfd, 0x36, 0x6d, 0xed, 0x22, 0xc1, 0x7a, 0x36, 0x6e,
-	0x18, 0x76, 0xbe, 0x5a, 0xd5, 0x54, 0x99, 0x0c, 0x84, 0x89, 0xa1, 0x61, 0xd8, 0xef, 0x75, 0x09,
-	0x0d, 0x90, 0xa0, 0x30, 0xdd, 0x24, 0x28, 0xaf, 0xe3, 0x1a, 0xd6, 0xb1, 0xe9, 0xc0, 0x20, 0x72,
-	0xeb, 0x33, 0x10, 0xf5, 0xc1, 0xa4, 0xd7, 0x49, 0xf3, 0x0c, 0x13, 0x2f, 0xfc, 0x29, 0x78, 0xfc,
-	0x69, 0xaa, 0xe3, 0xe3, 0x4f, 0x53, 0x1d, 0xbf, 0xfd, 0x34, 0x05, 0x1e, 0xec, 0xa4, 0xc0, 0x5f,
-	0xed, 0xa4, 0xc0, 0x47, 0x3b, 0x29, 0xf0, 0x78, 0x27, 0x05, 0x3e, 0xde, 0x49, 0x81, 0x4f, 0x76,
-	0x52, 0xe0, 0xf3, 0x9d, 0x54, 0xc7, 0x6f, 0x77, 0x52, 0xe0, 0xbd, 0xcf, 0x52, 0x1d, 0xdb, 0x9f,
-	0xa5, 0xc0, 0xe3, 0xcf, 0x52, 0x1d, 0x1f, 0x7f, 0x96, 0xea, 0x78, 0x73, 0xa1, 0x6c, 0x54, 0xef,
-	0x95, 0xd3, 0xde, 0x47, 0x6a, 0xe9, 0x9a, 0x75, 0x91, 0xfe, 0x58, 0x31, 0xcc, 0xca, 0x85, 0xaa,
-	0x69, 0xac, 0xa9, 0x0a, 0x36, 0x2f, 0x78, 0xdd, 0x17, 0xab, 0xcb, 0x65, 0xe3, 0x22, 0x5e, 0xb7,
-	0xbd, 0xbf, 0xa4, 0xb2, 0xfb, 0x6f, 0x99, 0x2c, 0x77, 0xd2, 0xff, 0x75, 0x9e, 0xfb, 0xdf, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0x6a, 0xc0, 0x58, 0x11, 0xaa, 0x46, 0x00, 0x00,
+	// 4830 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x4d, 0x50, 0x1c, 0x57,
+	0x7e, 0xe7, 0xcd, 0x07, 0x33, 0xbc, 0xe1, 0xa3, 0x79, 0x80, 0x68, 0x90, 0x84, 0x5a, 0xc8, 0x96,
+	0x58, 0xd4, 0x1a, 0xe6, 0x03, 0x24, 0x61, 0xaf, 0xec, 0x9d, 0x61, 0x90, 0x00, 0x63, 0xc4, 0xf6,
+	0x20, 0xd9, 0xf2, 0x66, 0xb7, 0xdd, 0x74, 0x3f, 0xa0, 0xa5, 0x9e, 0xee, 0x71, 0x77, 0x0f, 0x12,
+	0x4e, 0xa8, 0x52, 0xf9, 0x92, 0x5d, 0x1d, 0x52, 0x8e, 0x8f, 0x3e, 0x25, 0xd9, 0x4b, 0x4a, 0x7b,
+	0xcc, 0x25, 0xc9, 0x28, 0x55, 0xc4, 0x55, 0x9b, 0xb8, 0x72, 0x48, 0x48, 0x55, 0xaa, 0xa2, 0xca,
+	0xc9, 0xc6, 0x17, 0xdb, 0xf9, 0x72, 0x6d, 0x36, 0x59, 0xc5, 0xa7, 0xd4, 0x7b, 0xdd, 0x3d, 0xd3,
+	0x33, 0x0c, 0x23, 0x84, 0xb0, 0x2b, 0x4e, 0xb8, 0xa8, 0xa6, 0xdf, 0xfb, 0x7f, 0xbd, 0x8f, 0xfe,
+	0xbf, 0xff, 0xef, 0xf7, 0x5a, 0xc0, 0xb3, 0xeb, 0xd8, 0x8a, 0xab, 0xc6, 0x98, 0x25, 0xaf, 0xe1,
+	0x82, 0x34, 0xb6, 0xae, 0x9a, 0x76, 0x49, 0xd2, 0xc4, 0x35, 0xc3, 0xb2, 0xc7, 0xec, 0x8d, 0x22,
+	0xb6, 0xe2, 0x45, 0xd3, 0xb0, 0x0d, 0x34, 0xe8, 0xc8, 0xc5, 0x1d, 0xb9, 0xb8, 0x5f, 0x6e, 0xf0,
+	0xc2, 0xaa, 0x6a, 0xaf, 0x95, 0x96, 0xe3, 0xb2, 0x51, 0x18, 0x5b, 0x35, 0x56, 0x8d, 0x31, 0xaa,
+	0xb2, 0x5c, 0x5a, 0xa1, 0x4f, 0xf4, 0x81, 0xfe, 0x72, 0x4c, 0x0d, 0x9e, 0x58, 0x35, 0x8c, 0x55,
+	0x0d, 0x57, 0xa5, 0x2c, 0xdb, 0x2c, 0xc9, 0xb6, 0xdb, 0x7b, 0xaa, 0xbe, 0xd7, 0x56, 0x0b, 0xd8,
+	0xb2, 0xa5, 0x42, 0xd1, 0x15, 0x18, 0xa9, 0x8d, 0x58, 0x2a, 0xd9, 0x6b, 0x58, 0xb7, 0x55, 0x59,
+	0xb2, 0x55, 0x43, 0xf7, 0xc7, 0x3c, 0x78, 0xba, 0x56, 0x52, 0xd6, 0x4a, 0x96, 0x8d, 0xcd, 0x1a,
+	0x91, 0xfe, 0x5a, 0x11, 0x1d, 0x7b, 0x61, 0x1c, 0xaf, 0xed, 0x30, 0x8a, 0xc4, 0xba, 0xd5, 0x38,
+	0x04, 0x0b, 0x9b, 0xeb, 0xaa, 0x8c, 0xc5, 0xa2, 0xa1, 0xa9, 0xf2, 0x46, 0x8d, 0xfd, 0x81, 0x5a,
+	0x49, 0x7f, 0xd7, 0x89, 0xba, 0x99, 0x97, 0x34, 0x55, 0x91, 0x6c, 0xec, 0xf6, 0x72, 0xf5, 0xeb,
+	0x82, 0xef, 0x8a, 0xb5, 0x41, 0x24, 0xf6, 0x5e, 0x39, 0x51, 0xd1, 0x2d, 0x51, 0xd5, 0x57, 0x8c,
+	0x31, 0x63, 0xf9, 0x36, 0xf6, 0xa6, 0x76, 0xf8, 0xe7, 0x00, 0xf6, 0xce, 0x49, 0xeb, 0x52, 0x5e,
+	0x36, 0xd5, 0xa2, 0x3d, 0x65, 0xe8, 0x2b, 0xea, 0xea, 0xd2, 0x46, 0x11, 0xa3, 0xd3, 0xb0, 0x5d,
+	0x96, 0xe4, 0x35, 0x2c, 0x16, 0x4d, 0xbc, 0xa2, 0xde, 0x63, 0x01, 0x07, 0x46, 0xda, 0x84, 0x18,
+	0x6d, 0x5b, 0xa4, 0x4d, 0xe8, 0xfb, 0xb0, 0xc3, 0xa2, 0x6a, 0xa2, 0x4c, 0xf5, 0xd8, 0x00, 0x07,
+	0x46, 0x62, 0xa9, 0xfe, 0xb8, 0xb3, 0x5c, 0x71, 0x6f, 0xb9, 0xe2, 0x79, 0xba, 0x98, 0x42, 0xbb,
+	0xe5, 0x73, 0x82, 0x46, 0x61, 0xb7, 0x5c, 0xb2, 0x6c, 0xa3, 0x20, 0xba, 0x46, 0x4a, 0xa6, 0xc6,
+	0x06, 0xa9, 0x97, 0x2e, 0xa7, 0xc3, 0x89, 0xe9, 0x86, 0xa9, 0x0d, 0x7f, 0x11, 0x80, 0xfd, 0xb9,
+	0x0d, 0x5d, 0x2a, 0xa8, 0xb2, 0x80, 0xd7, 0xb1, 0x69, 0xe1, 0x45, 0xd3, 0xb8, 0xb7, 0x41, 0x03,
+	0xfd, 0x01, 0x3c, 0x61, 0x62, 0xcb, 0xd0, 0xd6, 0xb1, 0x88, 0x75, 0xa5, 0x68, 0xa8, 0xba, 0x2d,
+	0x2a, 0x8e, 0xac, 0xa4, 0x69, 0x1b, 0x34, 0xf0, 0xa8, 0x30, 0xe8, 0xca, 0x4c, 0xbb, 0x22, 0xb9,
+	0xaa, 0x04, 0xba, 0x05, 0xfb, 0x69, 0x6f, 0x89, 0x4c, 0xa5, 0xa8, 0x63, 0xfb, 0xae, 0x61, 0xde,
+	0x11, 0xc9, 0xba, 0xd0, 0x11, 0x75, 0xa6, 0x4e, 0xc7, 0x6b, 0x77, 0xfa, 0x4d, 0x67, 0x5e, 0x17,
+	0x1c, 0x49, 0x12, 0x85, 0xd0, 0x57, 0xb5, 0xe0, 0x6b, 0x46, 0x22, 0x44, 0xbb, 0x4d, 0xb3, 0x41,
+	0x2e, 0x38, 0x12, 0x4b, 0x9d, 0xa8, 0xb3, 0x7a, 0x9d, 0xae, 0x8b, 0x80, 0x57, 0x88, 0x66, 0x16,
+	0x3d, 0xdc, 0xec, 0xf2, 0xd6, 0xcf, 0xd5, 0x13, 0xba, 0x77, 0x39, 0x41, 0x73, 0x10, 0xc9, 0x86,
+	0xae, 0x63, 0x99, 0x3a, 0x20, 0xef, 0x85, 0x51, 0xb2, 0xd9, 0x30, 0x07, 0x46, 0x3a, 0xb2, 0xc7,
+	0xb7, 0xca, 0x00, 0xfc, 0x53, 0x19, 0x84, 0x52, 0x89, 0x44, 0xe2, 0xa7, 0x8f, 0x40, 0xcb, 0x9f,
+	0x7f, 0xb1, 0x15, 0x6c, 0x1d, 0x0d, 0xb1, 0x5b, 0x7f, 0xf7, 0x82, 0xd0, 0x5d, 0x55, 0x5b, 0x72,
+	0xb4, 0xe6, 0x42, 0xd1, 0x10, 0x13, 0x1e, 0xfe, 0xfd, 0x00, 0xec, 0x9a, 0x32, 0x0a, 0x45, 0x13,
+	0x5b, 0x16, 0xe9, 0x24, 0xc3, 0x48, 0xc0, 0x4e, 0xd9, 0xd0, 0x6d, 0xac, 0xdb, 0xa2, 0x86, 0xf5,
+	0x55, 0x7b, 0x8d, 0xce, 0x6a, 0x47, 0xb6, 0x8d, 0x58, 0x0c, 0x8d, 0x06, 0x46, 0x86, 0x84, 0x0e,
+	0x57, 0x60, 0x9e, 0xf6, 0xa3, 0x25, 0xd8, 0xee, 0x69, 0xb8, 0x13, 0x19, 0x1c, 0x69, 0xcb, 0x26,
+	0x89, 0x3c, 0xfc, 0x00, 0x44, 0x86, 0xc3, 0x66, 0x70, 0xe4, 0x7e, 0x80, 0x3c, 0xb6, 0x7d, 0x00,
+	0x5a, 0x87, 0x43, 0x66, 0x80, 0x03, 0xe4, 0x29, 0xfc, 0x01, 0x08, 0x30, 0x29, 0xef, 0x17, 0x0b,
+	0x84, 0x98, 0x6b, 0x86, 0xc6, 0x91, 0x86, 0xc7, 0x14, 0xd5, 0x92, 0x96, 0x35, 0x2c, 0x1a, 0xba,
+	0x88, 0x6d, 0x69, 0x55, 0x5c, 0xc3, 0x92, 0x82, 0x4d, 0xba, 0x71, 0xa2, 0x42, 0x8f, 0xdb, 0x7b,
+	0x5d, 0x9f, 0xb6, 0xa5, 0xd5, 0x19, 0xda, 0x85, 0x32, 0xf0, 0xa4, 0x89, 0x0b, 0xc6, 0x3a, 0x16,
+	0x25, 0x59, 0xc6, 0x45, 0x5b, 0xc4, 0xba, 0x6c, 0x28, 0xaa, 0x5e, 0xd1, 0x0d, 0x79, 0x3b, 0x84,
+	0x08, 0x65, 0xa8, 0xcc, 0xb4, 0x2b, 0xe2, 0x98, 0x18, 0xfe, 0xc3, 0x00, 0xec, 0x27, 0x6f, 0x89,
+	0xbb, 0x81, 0xd7, 0x24, 0x8d, 0x4c, 0x03, 0xa6, 0x31, 0x5d, 0x85, 0x5d, 0xb7, 0x2d, 0x6f, 0x0f,
+	0x2b, 0x58, 0x93, 0x36, 0xe8, 0xae, 0xe9, 0xc8, 0x0e, 0x91, 0xa9, 0x9f, 0x48, 0x24, 0x12, 0x4f,
+	0xca, 0xa0, 0xc5, 0x9b, 0xfe, 0xb6, 0xd1, 0x08, 0xfb, 0xc9, 0x3f, 0x04, 0x47, 0x3e, 0x8f, 0x08,
+	0x1d, 0xb7, 0x2d, 0x67, 0x87, 0xe7, 0x88, 0x12, 0xca, 0xc2, 0x0e, 0xd9, 0x30, 0xee, 0xa8, 0x58,
+	0xc4, 0xf7, 0x8a, 0xaa, 0xb9, 0x41, 0x87, 0xd4, 0x91, 0x3d, 0x49, 0xac, 0xa4, 0x2f, 0x56, 0xac,
+	0xd0, 0x59, 0x8a, 0x8e, 0xb6, 0xb2, 0xf7, 0x7f, 0x1e, 0x1e, 0x01, 0x42, 0xbb, 0xa3, 0x33, 0x4d,
+	0x55, 0x50, 0x0e, 0xc6, 0xdc, 0x77, 0xaa, 0x28, 0xad, 0x62, 0x3a, 0xb0, 0xb6, 0xec, 0x99, 0x27,
+	0x65, 0x10, 0xfa, 0xa3, 0x47, 0xa0, 0x43, 0xb2, 0x64, 0x55, 0xe5, 0xb9, 0x65, 0xc9, 0xc2, 0x17,
+	0xc7, 0x69, 0x30, 0x66, 0x84, 0xbd, 0x7f, 0x3f, 0xf4, 0x3e, 0x00, 0x02, 0x74, 0xf4, 0x16, 0xa5,
+	0x55, 0xfc, 0x52, 0xfc, 0xa3, 0x32, 0x18, 0x85, 0x23, 0xf0, 0x54, 0x75, 0xc8, 0x5c, 0x65, 0xcc,
+	0xdc, 0xa2, 0x64, 0x4a, 0x05, 0x6c, 0x63, 0xd3, 0x42, 0xe1, 0x14, 0x9f, 0xe6, 0xc7, 0xe7, 0x42,
+	0x51, 0xc0, 0x04, 0x86, 0xff, 0x1e, 0xc0, 0xde, 0x29, 0xa9, 0x68, 0xcb, 0x6b, 0x52, 0xed, 0x04,
+	0xed, 0x1a, 0x58, 0xe0, 0xb9, 0x07, 0x16, 0x3c, 0xd8, 0xc0, 0xbe, 0xf7, 0x51, 0x19, 0xbc, 0x08,
+	0xcf, 0xc0, 0x13, 0x6e, 0x9c, 0x8d, 0x47, 0x15, 0x4c, 0xf1, 0x69, 0x77, 0x4c, 0xef, 0x03, 0x38,
+	0xb0, 0x84, 0x0b, 0x45, 0xc3, 0x94, 0xcc, 0x8d, 0x1b, 0x16, 0x36, 0xb3, 0x9a, 0x21, 0xdf, 0x51,
+	0x75, 0x27, 0x45, 0xd6, 0x05, 0x05, 0x0e, 0x16, 0xd4, 0x85, 0x8f, 0xca, 0xe0, 0x7b, 0xf0, 0x1c,
+	0x1c, 0xae, 0x38, 0xe2, 0x88, 0x27, 0xce, 0x73, 0xe5, 0x0f, 0x0d, 0x24, 0x87, 0x67, 0x61, 0x5b,
+	0x6e, 0x21, 0x2f, 0x60, 0xd9, 0x30, 0x15, 0x84, 0x60, 0x48, 0x97, 0x0a, 0xae, 0x6b, 0x81, 0xfe,
+	0x26, 0x6d, 0x95, 0xd4, 0xd5, 0x26, 0xd0, 0xdf, 0xa8, 0x17, 0x86, 0xd7, 0x25, 0xad, 0xe4, 0x4e,
+	0x9c, 0xe0, 0x3c, 0x0c, 0xff, 0x6d, 0x00, 0x32, 0x99, 0x92, 0x6d, 0x4c, 0x61, 0xd3, 0x9e, 0xd5,
+	0x57, 0x0c, 0x3a, 0xa8, 0x9b, 0xb0, 0x4b, 0x2a, 0xd9, 0x86, 0x28, 0x63, 0xd3, 0x16, 0x2d, 0x5b,
+	0xb2, 0x1d, 0xeb, 0x9d, 0xa9, 0x78, 0x7c, 0xef, 0xe3, 0x3e, 0x4e, 0x4c, 0xa8, 0x2b, 0xee, 0x81,
+	0x9b, 0x27, 0x5a, 0x42, 0x87, 0xe4, 0x9a, 0xa6, 0x8f, 0x28, 0x07, 0x99, 0xaa, 0x5d, 0xdf, 0x46,
+	0x88, 0xa5, 0x06, 0x77, 0x9d, 0x17, 0x4b, 0xde, 0xf1, 0x2e, 0x74, 0x7a, 0x46, 0xdc, 0x7d, 0x30,
+	0x0a, 0xbb, 0x7d, 0xd1, 0x95, 0x68, 0xc6, 0xf4, 0x0e, 0x8d, 0x8a, 0x3f, 0xa7, 0x19, 0x8d, 0xf8,
+	0x3d, 0xaa, 0x96, 0x55, 0x72, 0x5f, 0xf5, 0xb6, 0xaa, 0xd5, 0x59, 0xda, 0x8a, 0xae, 0xc2, 0x18,
+	0x39, 0x1d, 0x4d, 0x3a, 0xa9, 0x16, 0x1b, 0xa6, 0xe9, 0xf9, 0xc5, 0x66, 0xe3, 0xad, 0x2c, 0x81,
+	0x00, 0x15, 0xdd, 0x72, 0x7e, 0x5a, 0xc3, 0xbf, 0x08, 0xc1, 0xbe, 0x4c, 0x4d, 0xed, 0x91, 0xc3,
+	0xb6, 0xa4, 0x6a, 0x16, 0x7a, 0x0b, 0xc6, 0x48, 0x51, 0xe2, 0x1d, 0x94, 0x60, 0x1f, 0x07, 0xc0,
+	0xf1, 0x87, 0x9b, 0x9d, 0xb5, 0x85, 0x4c, 0x25, 0x3f, 0x02, 0x01, 0x92, 0x1e, 0xf7, 0x20, 0x7d,
+	0x0d, 0x1e, 0x2b, 0x59, 0x58, 0xa4, 0xf6, 0x9d, 0xb3, 0xdd, 0x73, 0x13, 0xa4, 0xf3, 0xdb, 0x5b,
+	0xe7, 0x66, 0xba, 0x50, 0xb4, 0x37, 0x66, 0x5a, 0x84, 0x9e, 0x92, 0x85, 0x49, 0xb4, 0x8e, 0x5b,
+	0xd7, 0xd8, 0x0f, 0x2b, 0x2f, 0x6b, 0x91, 0x6c, 0x3b, 0x8b, 0xce, 0x58, 0x2c, 0x35, 0x5a, 0x67,
+	0xa3, 0x36, 0xb0, 0xf8, 0x14, 0x55, 0xa1, 0x1b, 0xd5, 0x9a, 0x69, 0xf1, 0xde, 0x5d, 0xe7, 0x19,
+	0x5d, 0x85, 0xed, 0x26, 0x56, 0x54, 0x93, 0x04, 0x46, 0xce, 0xf8, 0x56, 0xfa, 0x9e, 0x9c, 0x7e,
+	0x52, 0x06, 0x34, 0xff, 0x87, 0xcd, 0x20, 0x7b, 0x9f, 0xbe, 0xfc, 0x21, 0x33, 0xc0, 0x00, 0xb7,
+	0xe9, 0x7d, 0x00, 0x66, 0x80, 0x10, 0xf3, 0x14, 0x6f, 0x98, 0x1a, 0xca, 0x40, 0xa6, 0x62, 0xc7,
+	0x3d, 0xe0, 0xd9, 0x48, 0x93, 0x11, 0x02, 0xa1, 0xcb, 0x93, 0x77, 0x4f, 0x7b, 0x37, 0xb3, 0xf5,
+	0xc1, 0xce, 0xda, 0x55, 0x42, 0xc1, 0x24, 0x9f, 0x82, 0xdd, 0xb0, 0x5d, 0x70, 0xe5, 0xb9, 0x1b,
+	0xc2, 0x3c, 0x02, 0x13, 0xd9, 0x73, 0xb0, 0xb7, 0x66, 0x36, 0x44, 0x79, 0xcd, 0x50, 0x65, 0x8c,
+	0xba, 0xb6, 0xca, 0x20, 0xb8, 0x5d, 0x06, 0x81, 0x9d, 0x32, 0x08, 0xa6, 0xf9, 0xf1, 0xec, 0x59,
+	0xd8, 0xe3, 0x1f, 0xa3, 0x5f, 0xae, 0x75, 0xbb, 0x0c, 0xc2, 0x44, 0xee, 0x22, 0x7f, 0x69, 0x2e,
+	0x14, 0x0d, 0x30, 0xc1, 0xb9, 0x50, 0x34, 0xcc, 0xb4, 0x0e, 0xff, 0x3a, 0x0c, 0x7b, 0x17, 0x69,
+	0x79, 0x98, 0x95, 0x2c, 0xac, 0x54, 0x72, 0x11, 0xfa, 0x2d, 0xd8, 0x7e, 0x9b, 0xb8, 0x72, 0x9f,
+	0xe9, 0xfb, 0x17, 0x4b, 0xa5, 0x9b, 0xed, 0xc7, 0x3d, 0x0e, 0xa7, 0x6c, 0x68, 0xbb, 0x0c, 0x80,
+	0x10, 0xbb, 0x6d, 0x55, 0xad, 0xcb, 0xb0, 0x5b, 0x76, 0xd2, 0x9f, 0xcf, 0x85, 0xf3, 0x26, 0x26,
+	0x9a, 0xbe, 0xe2, 0x0d, 0x72, 0xbb, 0x6b, 0x9f, 0x91, 0xeb, 0xfa, 0x90, 0x05, 0xfb, 0x6d, 0x2f,
+	0x9d, 0x89, 0x25, 0x0b, 0x9b, 0xe2, 0xb2, 0x9b, 0xce, 0xdc, 0x4d, 0x39, 0xd1, 0xcc, 0xd5, 0x9e,
+	0x29, 0xd7, 0xf5, 0xd7, 0x67, 0x37, 0x12, 0x40, 0x93, 0xb0, 0x5d, 0x37, 0x7c, 0x83, 0x0a, 0x37,
+	0xdd, 0xfe, 0x31, 0xdd, 0xa8, 0xc6, 0x9b, 0x87, 0x83, 0x92, 0x76, 0x57, 0xda, 0xb0, 0x44, 0xac,
+	0xd3, 0xf2, 0xa2, 0x66, 0x01, 0x5a, 0x9b, 0x1a, 0xea, 0x77, 0x34, 0xa7, 0xa9, 0xe2, 0x9c, 0x6f,
+	0xa6, 0x7f, 0x0c, 0x4f, 0xd5, 0x1a, 0xdd, 0x3d, 0xef, 0x91, 0xa6, 0x96, 0x4f, 0xf8, 0x2d, 0xd7,
+	0xcf, 0x3f, 0xfa, 0x5d, 0x00, 0x07, 0x0a, 0x92, 0xa6, 0xca, 0xaa, 0x51, 0xb2, 0x9c, 0x49, 0x2e,
+	0xa8, 0xb6, 0xba, 0x4a, 0xb7, 0x34, 0x1b, 0xdd, 0x47, 0x8a, 0xb9, 0xf0, 0x70, 0x73, 0x6f, 0x0b,
+	0x8f, 0x37, 0xc1, 0xe7, 0x65, 0x00, 0x7c, 0x49, 0xa7, 0xbf, 0x22, 0x4b, 0xa6, 0xfd, 0xf5, 0x8a,
+	0x64, 0xf6, 0x45, 0xc8, 0x54, 0x86, 0xe4, 0x6d, 0xfd, 0xee, 0xad, 0x32, 0x08, 0x6f, 0x97, 0x41,
+	0x68, 0xa7, 0x0c, 0xc2, 0x13, 0xbc, 0xb3, 0xf9, 0x49, 0x7d, 0xf9, 0xef, 0x00, 0x0e, 0xe4, 0xd7,
+	0xa4, 0x22, 0xce, 0x1a, 0x76, 0x0e, 0xaf, 0x60, 0xdd, 0xc2, 0x3e, 0xd8, 0x31, 0x09, 0x3b, 0xa5,
+	0x62, 0x51, 0x73, 0x5f, 0x4c, 0x51, 0x55, 0xdc, 0x63, 0x15, 0xb9, 0x09, 0x82, 0xe5, 0xbc, 0x4c,
+	0xc1, 0x09, 0x1d, 0x3e, 0xc9, 0x59, 0x05, 0xbd, 0x0c, 0xdb, 0xa5, 0xa2, 0xea, 0xe4, 0xc1, 0x3b,
+	0xd8, 0x3b, 0x5d, 0x06, 0xea, 0x66, 0x20, 0x8f, 0x65, 0x13, 0xd3, 0x6a, 0x52, 0x80, 0x52, 0x51,
+	0x25, 0x89, 0xe0, 0x35, 0xbc, 0x81, 0xde, 0x82, 0x51, 0x55, 0xb7, 0x6c, 0x49, 0x97, 0xf1, 0xbe,
+	0xca, 0x73, 0xee, 0xe1, 0xe6, 0xa0, 0x45, 0x46, 0x21, 0x2e, 0x1b, 0xa4, 0xec, 0xa3, 0xe3, 0x10,
+	0x3d, 0x13, 0x8f, 0x37, 0x81, 0x50, 0xb1, 0x37, 0xfc, 0x67, 0xe7, 0x61, 0xe7, 0x35, 0xcd, 0x58,
+	0x96, 0xb4, 0x7c, 0x11, 0xcb, 0x74, 0x98, 0x57, 0x60, 0x44, 0x31, 0x0a, 0x92, 0xaa, 0x5b, 0x6e,
+	0x65, 0x7c, 0xc6, 0x5f, 0x19, 0xff, 0x34, 0x50, 0x9d, 0x76, 0xc6, 0x57, 0x0b, 0x7b, 0x3a, 0x68,
+	0x16, 0xb6, 0x9a, 0x46, 0xc9, 0xc6, 0xd6, 0xbe, 0x62, 0xed, 0x79, 0xb8, 0x19, 0xa6, 0xe2, 0xb4,
+	0xfe, 0xff, 0x00, 0x04, 0x99, 0xfb, 0x01, 0xc1, 0x35, 0x80, 0x6e, 0xc1, 0xae, 0xdb, 0x95, 0xe4,
+	0x41, 0x01, 0xa2, 0x9b, 0xf2, 0x13, 0x4f, 0xcb, 0x37, 0xf5, 0x90, 0x51, 0xe8, 0xac, 0x1a, 0x22,
+	0xe5, 0x04, 0x7a, 0x1b, 0x22, 0x49, 0x59, 0x27, 0x95, 0x81, 0xe5, 0x02, 0x61, 0x15, 0x7b, 0xa7,
+	0xeb, 0x53, 0x23, 0x66, 0xea, 0x54, 0x37, 0x84, 0xee, 0x4a, 0xcb, 0xa2, 0x6b, 0x0b, 0xad, 0xc3,
+	0x63, 0x26, 0x7e, 0xa7, 0x84, 0x2d, 0xdb, 0xad, 0xe5, 0x2d, 0xd1, 0x36, 0x44, 0x49, 0x51, 0xd8,
+	0x56, 0xea, 0xe5, 0x7c, 0x9d, 0x17, 0xa7, 0x9c, 0x7f, 0x5d, 0xd2, 0xd5, 0x62, 0x49, 0xa3, 0xfb,
+	0xe6, 0x3a, 0xc5, 0xcf, 0xd4, 0x69, 0x6f, 0x65, 0xce, 0xa3, 0xbe, 0x39, 0xef, 0x71, 0x1d, 0x38,
+	0xaa, 0xd6, 0x92, 0x91, 0x51, 0x14, 0x74, 0x8f, 0x22, 0xc6, 0xa2, 0x41, 0xd6, 0xbc, 0xce, 0x71,
+	0xe4, 0xb0, 0x1c, 0xf7, 0x7a, 0x1e, 0x6a, 0x3c, 0x5f, 0x87, 0x03, 0x0d, 0x46, 0xec, 0x40, 0x17,
+	0xb6, 0x9b, 0x6e, 0xa5, 0xc6, 0xe6, 0x8e, 0xd5, 0x8f, 0x43, 0xa0, 0x3a, 0xe8, 0x87, 0x70, 0xb0,
+	0xd1, 0x50, 0x5c, 0x8b, 0xd1, 0x26, 0x16, 0xfb, 0x77, 0x05, 0xe8, 0x9a, 0xcc, 0xc3, 0x4e, 0x5b,
+	0xb3, 0x9c, 0x23, 0x93, 0xd6, 0xad, 0x6c, 0x1b, 0xdd, 0x51, 0x67, 0xeb, 0x26, 0x25, 0x67, 0xdc,
+	0xd5, 0x2d, 0xdb, 0xc4, 0x52, 0x61, 0x49, 0xb3, 0x9c, 0x62, 0xc1, 0x97, 0xe4, 0x3b, 0x6c, 0xb7,
+	0xd1, 0x29, 0x7d, 0x5f, 0x75, 0xcb, 0x5a, 0x48, 0x8b, 0xd1, 0xf3, 0xcd, 0x36, 0xa7, 0x0b, 0xcf,
+	0x67, 0x0c, 0xcb, 0x79, 0xcf, 0x9d, 0x1a, 0x78, 0x0e, 0x76, 0x2c, 0x97, 0x56, 0x56, 0xb0, 0xe9,
+	0xee, 0x27, 0xb6, 0x9d, 0x06, 0x75, 0xaa, 0xce, 0x52, 0x96, 0xca, 0x54, 0x77, 0xb5, 0x1b, 0x4d,
+	0xbb, 0xa3, 0xeb, 0x9c, 0xd7, 0xe8, 0x07, 0x30, 0x26, 0x1b, 0xa6, 0xe5, 0x59, 0xea, 0x68, 0x98,
+	0x69, 0xa6, 0x0c, 0xd3, 0x72, 0xcf, 0x77, 0xc7, 0x06, 0x94, 0x2b, 0x2d, 0xe8, 0x65, 0x18, 0x2e,
+	0x9a, 0xc6, 0xbd, 0x0d, 0xb6, 0x8b, 0x8e, 0xa7, 0x69, 0xb1, 0x59, 0xe1, 0x3a, 0x04, 0x47, 0x07,
+	0x5d, 0x84, 0xc1, 0xdb, 0x77, 0x6d, 0x96, 0xd9, 0xc7, 0x9b, 0xd4, 0xfa, 0x70, 0x93, 0xc8, 0x0a,
+	0xe4, 0x1f, 0x94, 0x84, 0xd1, 0xbb, 0xd2, 0x8a, 0x03, 0xc8, 0x11, 0x8d, 0xf9, 0x58, 0x9d, 0xf2,
+	0x1b, 0x12, 0x55, 0x13, 0x22, 0x77, 0x9d, 0x1f, 0xa8, 0x00, 0xfb, 0xdc, 0x5a, 0x4b, 0x34, 0x1d,
+	0xe6, 0x45, 0x74, 0xe2, 0xee, 0x79, 0x7a, 0x51, 0xb2, 0x07, 0x63, 0xe3, 0xce, 0x46, 0x8f, 0xb2,
+	0xbb, 0x1b, 0x9d, 0x86, 0xed, 0x92, 0xa2, 0x88, 0x9a, 0xe1, 0x64, 0x75, 0xb6, 0x97, 0x42, 0xf3,
+	0x98, 0xa4, 0x28, 0xf3, 0x6e, 0x13, 0xc9, 0x2a, 0x72, 0x95, 0x9e, 0xf0, 0xca, 0xd4, 0x3e, 0x1a,
+	0x4e, 0xd3, 0x6d, 0x51, 0x47, 0x6a, 0xb8, 0x61, 0x74, 0xfb, 0x8c, 0xb9, 0x05, 0xeb, 0x2f, 0x42,
+	0xb0, 0xc3, 0x05, 0x76, 0xd8, 0x34, 0x0d, 0xd3, 0x62, 0x8f, 0xd1, 0x99, 0xfe, 0x7e, 0x33, 0xeb,
+	0xb5, 0x09, 0x3e, 0x3e, 0x45, 0xf5, 0xa7, 0xa9, 0xfa, 0xb4, 0x6e, 0x9b, 0x1b, 0xd9, 0xbf, 0x26,
+	0x05, 0x23, 0x68, 0x88, 0x0c, 0xdb, 0x3f, 0x04, 0x6d, 0xc3, 0x91, 0xd1, 0x30, 0xfb, 0x8f, 0xa1,
+	0x91, 0x20, 0x7d, 0xc3, 0x3e, 0xf4, 0x32, 0x7f, 0xe7, 0x87, 0x20, 0x36, 0x5a, 0x45, 0x8e, 0x3b,
+	0x9f, 0xfc, 0x32, 0xf8, 0x4b, 0xf0, 0xe0, 0x11, 0xd8, 0x02, 0xe8, 0x2f, 0xc0, 0x97, 0x65, 0xf0,
+	0xa7, 0x60, 0x66, 0x69, 0x69, 0x91, 0xa3, 0x8e, 0x38, 0xd9, 0x50, 0x30, 0x47, 0xb1, 0x1d, 0x97,
+	0xe6, 0xc7, 0xf9, 0x09, 0xce, 0x30, 0xb9, 0x65, 0x6c, 0xdf, 0xc5, 0x58, 0xe7, 0xd2, 0x89, 0x04,
+	0x27, 0xe9, 0x0a, 0x37, 0x31, 0x39, 0x19, 0xe7, 0xa6, 0x57, 0xe3, 0xdc, 0x4d, 0x2a, 0x37, 0xce,
+	0x5d, 0xe1, 0xc6, 0xef, 0xdd, 0x23, 0x92, 0x92, 0xa6, 0x71, 0xe3, 0x89, 0xc4, 0x85, 0xf1, 0xc9,
+	0x49, 0x0e, 0x57, 0xec, 0x59, 0x3c, 0x37, 0xc1, 0x5d, 0xe1, 0x26, 0xaa, 0x32, 0x13, 0x89, 0xc4,
+	0x85, 0x89, 0x5a, 0x99, 0x38, 0x77, 0xcb, 0x28, 0x71, 0xb2, 0xa4, 0x73, 0x92, 0x66, 0x19, 0x9c,
+	0x55, 0xc4, 0xb2, 0xba, 0xb2, 0xc1, 0x49, 0x3a, 0x87, 0xef, 0x49, 0xb2, 0xed, 0x13, 0xe5, 0x34,
+	0xf5, 0x0e, 0xe6, 0xc6, 0x13, 0xe3, 0x71, 0x32, 0x94, 0xde, 0x07, 0x8f, 0x00, 0x83, 0x3a, 0x77,
+	0xca, 0x00, 0x3a, 0x23, 0x98, 0x32, 0x14, 0x4c, 0x3a, 0xe0, 0x83, 0x47, 0xa0, 0x15, 0x85, 0x3e,
+	0x2e, 0x83, 0x16, 0xf2, 0xd8, 0xfa, 0xe0, 0x11, 0x08, 0x44, 0xe9, 0xe8, 0x33, 0x0f, 0x1e, 0x81,
+	0x2b, 0x83, 0x2f, 0x7f, 0x59, 0x06, 0x97, 0xf2, 0xb6, 0x49, 0xf0, 0xb1, 0x89, 0xc9, 0xfa, 0x91,
+	0x6a, 0x5e, 0x5f, 0x75, 0x3d, 0x79, 0x99, 0x89, 0xe7, 0x4a, 0x56, 0x49, 0xd2, 0xb4, 0x0d, 0x4e,
+	0xe2, 0xd6, 0xec, 0x82, 0x46, 0x43, 0x20, 0x56, 0x4e, 0x3e, 0x78, 0x04, 0x06, 0x06, 0xfb, 0x77,
+	0xca, 0xa0, 0xc7, 0x71, 0x2c, 0xb8, 0x1a, 0x5c, 0xd6, 0x50, 0x36, 0x2a, 0x11, 0x0c, 0x92, 0x08,
+	0x42, 0xbe, 0xc7, 0x2d, 0x9a, 0x0b, 0x64, 0xdf, 0xe2, 0xa2, 0x2b, 0xf0, 0xb8, 0xc7, 0x49, 0x29,
+	0x78, 0x45, 0x2a, 0x69, 0xb6, 0xb3, 0x6b, 0x28, 0x29, 0x60, 0xb1, 0xa7, 0xe9, 0x0e, 0x66, 0x5d,
+	0x91, 0x9c, 0x23, 0x41, 0x55, 0x09, 0xfa, 0xb7, 0xd0, 0x0f, 0x60, 0x7f, 0x41, 0xba, 0x27, 0xd6,
+	0x26, 0x75, 0xd1, 0x52, 0xdf, 0xc5, 0x6c, 0x7f, 0x0d, 0xc7, 0xc6, 0xbe, 0x2d, 0xf4, 0x16, 0xa4,
+	0x7b, 0x82, 0x3f, 0x8d, 0xe7, 0xd5, 0x77, 0xf1, 0xae, 0xb2, 0xf7, 0xd4, 0xfe, 0xcb, 0xde, 0x9f,
+	0xd4, 0x21, 0x0d, 0xf6, 0x39, 0x91, 0x06, 0xb1, 0xef, 0xc7, 0x1a, 0xb8, 0x11, 0xd6, 0x38, 0xf9,
+	0x3c, 0x58, 0x63, 0xa6, 0xa5, 0x01, 0xda, 0x78, 0x07, 0x1e, 0x73, 0x32, 0xb1, 0x48, 0xde, 0x29,
+	0xc5, 0xe7, 0xeb, 0x7b, 0x4f, 0xf7, 0xd5, 0x08, 0x82, 0x65, 0x23, 0x6e, 0xf5, 0x3b, 0xd3, 0x22,
+	0xf4, 0x16, 0x1b, 0x61, 0x34, 0x03, 0xf6, 0xd0, 0x7a, 0x59, 0x55, 0xc8, 0xc6, 0xf3, 0x98, 0x0f,
+	0x76, 0x60, 0x7f, 0xa5, 0x63, 0x23, 0x5d, 0x5f, 0xa1, 0x8d, 0x48, 0xf7, 0x6c, 0x4d, 0x2f, 0x7a,
+	0x0b, 0xb6, 0x9b, 0x92, 0x8d, 0x45, 0x4d, 0x2d, 0xa8, 0x36, 0x36, 0xd9, 0xc1, 0x7d, 0x78, 0x1a,
+	0x78, 0xb8, 0x59, 0xa3, 0xe4, 0x73, 0x11, 0x23, 0xed, 0xf3, 0x4e, 0x33, 0xfa, 0x6d, 0x78, 0xd2,
+	0x2f, 0x26, 0x4a, 0x9a, 0x66, 0xdc, 0xc5, 0x8a, 0x4b, 0xfd, 0x63, 0x8b, 0x3d, 0xbe, 0x0f, 0x67,
+	0x83, 0x0f, 0x37, 0x3b, 0xd4, 0xa2, 0xab, 0x23, 0x5a, 0xd8, 0xae, 0x78, 0x0b, 0x09, 0x83, 0x3e,
+	0x6f, 0x19, 0xc7, 0xf8, 0xa2, 0x6b, 0x1b, 0x5d, 0x83, 0xed, 0x26, 0xb6, 0xcd, 0x0d, 0xef, 0x30,
+	0x3d, 0x41, 0x97, 0x6c, 0xa8, 0xce, 0x97, 0x40, 0x44, 0x9c, 0xa5, 0xf2, 0x03, 0x5b, 0xb3, 0xda,
+	0x8c, 0x7e, 0x67, 0x6f, 0xcc, 0x79, 0xe6, 0x79, 0x30, 0x67, 0xc7, 0xe3, 0x4d, 0x40, 0xbc, 0x91,
+	0xfd, 0xc0, 0xee, 0x09, 0x3e, 0x7f, 0xd6, 0x14, 0x8d, 0xbd, 0xb0, 0x8f, 0x09, 0x1c, 0x7b, 0x26,
+	0x34, 0xc6, 0xee, 0x8d, 0xc7, 0xd0, 0x35, 0x48, 0x8a, 0x27, 0x51, 0xd5, 0x6d, 0x6c, 0xca, 0xb8,
+	0x68, 0xb3, 0x2f, 0xd2, 0xf1, 0x0f, 0xd7, 0xb9, 0x5f, 0xd2, 0xac, 0x59, 0x4f, 0xc4, 0x3d, 0x14,
+	0x85, 0x76, 0xdb, 0xd7, 0x88, 0xa6, 0x60, 0xb7, 0x6e, 0x88, 0xb5, 0x64, 0x0f, 0x7b, 0xae, 0x29,
+	0xe7, 0xc2, 0xe8, 0x46, 0x1d, 0xb9, 0x22, 0xc1, 0x3a, 0x1e, 0x8b, 0x1d, 0xa1, 0x16, 0x92, 0xcd,
+	0x96, 0xa3, 0x21, 0x8d, 0xe6, 0xa6, 0x00, 0x20, 0xd4, 0x19, 0x44, 0xe7, 0x60, 0xbb, 0xaa, 0x68,
+	0xb8, 0x72, 0xff, 0xc1, 0xd1, 0xcc, 0x19, 0x7a, 0x52, 0x06, 0x2d, 0x42, 0x8c, 0xf4, 0xb8, 0x57,
+	0x1c, 0x28, 0x0e, 0x7b, 0x2a, 0xc9, 0x9a, 0x32, 0x7e, 0xf4, 0x52, 0x88, 0x1d, 0xa6, 0x49, 0xba,
+	0xdb, 0x4b, 0xd2, 0xba, 0x25, 0x38, 0x1d, 0x68, 0x0a, 0x76, 0x7a, 0x49, 0xdd, 0xbd, 0x2c, 0x38,
+	0xbf, 0xf7, 0xe8, 0xb3, 0xf4, 0x78, 0x98, 0x09, 0x08, 0x1d, 0xae, 0x8e, 0x7b, 0x01, 0x91, 0x84,
+	0x31, 0x0b, 0x9b, 0xeb, 0xd8, 0x14, 0x29, 0x59, 0xcb, 0x53, 0x40, 0xdb, 0xb9, 0xe5, 0x2d, 0xa7,
+	0x19, 0x64, 0xff, 0xe0, 0xd5, 0x99, 0x80, 0x00, 0x1d, 0xa1, 0x05, 0xa9, 0x80, 0xd1, 0x2b, 0x10,
+	0x49, 0xc5, 0x22, 0xd6, 0x15, 0xd1, 0xaf, 0x79, 0x61, 0x0f, 0x4d, 0xc6, 0x91, 0xcd, 0x57, 0xf5,
+	0x5f, 0x85, 0xed, 0x45, 0xc9, 0xb2, 0x44, 0x7b, 0xcd, 0x34, 0x4a, 0xab, 0x6b, 0x6c, 0x7c, 0x1f,
+	0x51, 0xc7, 0x88, 0xc6, 0x92, 0xa3, 0x80, 0xe6, 0x60, 0x9f, 0x4b, 0x5a, 0x14, 0x25, 0x7b, 0x4d,
+	0xd4, 0x0d, 0x93, 0x6c, 0xb6, 0x77, 0x31, 0x9b, 0x68, 0xb2, 0xfa, 0x41, 0xa1, 0xc7, 0x51, 0x5a,
+	0x94, 0xec, 0xb5, 0x05, 0x4f, 0x05, 0xcd, 0x57, 0x6f, 0x6d, 0xea, 0x8c, 0x25, 0x9b, 0x1a, 0xeb,
+	0x75, 0xb5, 0x6a, 0xad, 0xa9, 0xf0, 0x8c, 0x1b, 0x99, 0x65, 0x9b, 0xaa, 0x6c, 0x8b, 0x96, 0xae,
+	0x3a, 0x37, 0x9c, 0xee, 0xd9, 0x29, 0xaf, 0x61, 0xf9, 0x0e, 0x9b, 0x6e, 0x36, 0x62, 0x9a, 0xda,
+	0x43, 0xc2, 0x90, 0x63, 0x28, 0x4f, 0xed, 0xe4, 0x75, 0x95, 0x20, 0x06, 0x67, 0xcd, 0xa6, 0x88,
+	0x0d, 0xb4, 0x44, 0x00, 0xac, 0xa2, 0x92, 0x2d, 0x26, 0x69, 0xa2, 0x07, 0xd8, 0x27, 0xa8, 0xe5,
+	0x93, 0xbb, 0xc0, 0x0c, 0xe9, 0x25, 0x93, 0x3f, 0xaf, 0x5a, 0x76, 0xc5, 0x45, 0x77, 0xd5, 0x40,
+	0xce, 0x05, 0xef, 0x49, 0xd8, 0x4b, 0xf6, 0xde, 0xba, 0xa1, 0xd9, 0xd8, 0x34, 0x25, 0xb1, 0x20,
+	0xe9, 0xd2, 0x2a, 0x56, 0xd8, 0xcf, 0x23, 0x74, 0x17, 0x22, 0x45, 0xb7, 0x6e, 0xba, 0x7d, 0xaf,
+	0x3b, 0x5d, 0xe8, 0x4d, 0x87, 0xa0, 0xf6, 0x22, 0xf8, 0x22, 0xb2, 0x8f, 0x74, 0xc2, 0x3e, 0xdc,
+	0x84, 0x55, 0x25, 0x3f, 0xf4, 0x27, 0xcd, 0x5e, 0x30, 0x27, 0x60, 0x5b, 0x85, 0x24, 0x67, 0xbf,
+	0x74, 0x22, 0x88, 0x7a, 0xf4, 0x38, 0x9a, 0x82, 0x61, 0xe7, 0x0a, 0xe0, 0x9f, 0x23, 0x14, 0xa6,
+	0xf0, 0xfb, 0x84, 0x5d, 0xce, 0x0d, 0x80, 0xa3, 0x4b, 0x5c, 0xd0, 0xe5, 0xa1, 0x5b, 0xf8, 0x5f,
+	0x22, 0x94, 0x81, 0x8f, 0x92, 0x16, 0xba, 0x53, 0x67, 0x60, 0xd4, 0xbb, 0x99, 0x66, 0xff, 0xd5,
+	0x19, 0x57, 0x33, 0x2f, 0x95, 0x6b, 0xec, 0x78, 0x4e, 0xb7, 0x66, 0xf5, 0x15, 0x43, 0x88, 0x28,
+	0xce, 0x0f, 0xf4, 0xa3, 0xdd, 0x37, 0x17, 0xff, 0x16, 0x39, 0xc8, 0xd5, 0x45, 0x96, 0xa0, 0xdb,
+	0xba, 0xeb, 0x8b, 0x3c, 0x4d, 0x62, 0xde, 0x65, 0x02, 0x09, 0xf6, 0x57, 0x0e, 0x77, 0xc7, 0x3f,
+	0x25, 0x8b, 0xd5, 0xdc, 0xae, 0x08, 0xed, 0x92, 0xaf, 0x05, 0x5d, 0x85, 0xed, 0x34, 0xcd, 0x7b,
+	0xeb, 0xfa, 0x1f, 0x11, 0x0a, 0xb7, 0x87, 0xf7, 0xb8, 0x16, 0xe5, 0xfc, 0xd7, 0xa2, 0x44, 0xd1,
+	0x5b, 0xc4, 0x12, 0xec, 0xa9, 0xfd, 0xde, 0x80, 0x1c, 0xbf, 0x16, 0xfb, 0xeb, 0xfd, 0x6c, 0x93,
+	0xb3, 0x0f, 0x37, 0xd1, 0x6e, 0xe5, 0xfa, 0xe3, 0x26, 0x2c, 0x74, 0xbb, 0x42, 0xce, 0x61, 0x9b,
+	0xc7, 0xb6, 0x85, 0x0a, 0xf0, 0x98, 0x66, 0x48, 0xca, 0xb2, 0xa4, 0x49, 0xba, 0x4c, 0xcb, 0x86,
+	0x55, 0xc3, 0x54, 0xed, 0xb5, 0x02, 0xfb, 0x9f, 0x8d, 0xb7, 0x8b, 0xfb, 0xb5, 0x45, 0x7c, 0xde,
+	0xa7, 0x95, 0xf1, 0x94, 0x2a, 0x35, 0x97, 0xd0, 0xa7, 0x35, 0xea, 0x47, 0x2f, 0xc0, 0x8e, 0xca,
+	0x3b, 0x43, 0xb7, 0xeb, 0x7f, 0x39, 0xdb, 0xb5, 0xdd, 0x6b, 0xa5, 0x5b, 0x76, 0xb1, 0x9a, 0xe1,
+	0x7d, 0xcc, 0x1c, 0xfb, 0xa4, 0x09, 0xd3, 0x5a, 0xad, 0xf6, 0xc2, 0x95, 0x33, 0xa0, 0x4a, 0x4e,
+	0xa2, 0x65, 0x18, 0xf3, 0x5b, 0xfa, 0xef, 0xc8, 0xd3, 0x8b, 0x89, 0x3d, 0xf9, 0x4d, 0xbf, 0x2b,
+	0xb8, 0x5c, 0x11, 0x18, 0x7c, 0x15, 0x76, 0xef, 0x42, 0x8c, 0x88, 0x81, 0xc1, 0x3b, 0xd8, 0xf9,
+	0x80, 0xa1, 0x43, 0x20, 0x3f, 0xab, 0xf7, 0x78, 0x01, 0xdf, 0x3d, 0xde, 0x4b, 0x81, 0xcb, 0x20,
+	0x7b, 0x16, 0x76, 0x56, 0x29, 0x58, 0xe7, 0xce, 0x6f, 0xab, 0x0c, 0x4e, 0x6d, 0x97, 0xc1, 0xd0,
+	0x4e, 0x19, 0x44, 0xd3, 0x49, 0x3e, 0x35, 0xce, 0xa7, 0x26, 0xb3, 0xa3, 0xb0, 0xaf, 0xf6, 0xec,
+	0xf4, 0xf3, 0xb5, 0xe7, 0xb6, 0xcb, 0xe0, 0xec, 0x4e, 0x19, 0x84, 0xd3, 0x93, 0xfc, 0x78, 0x22,
+	0x9b, 0x86, 0xbd, 0xee, 0xe9, 0x53, 0xc9, 0xac, 0x54, 0xf4, 0xf8, 0x56, 0x19, 0x9c, 0xff, 0xb8,
+	0x0c, 0x48, 0x55, 0x34, 0xba, 0x53, 0x06, 0xb1, 0xf1, 0x34, 0x3f, 0x3e, 0xce, 0x8f, 0x4f, 0xf0,
+	0xe3, 0x17, 0x89, 0x83, 0xda, 0x24, 0xef, 0x77, 0x90, 0xd8, 0x2e, 0x83, 0x31, 0xe2, 0x60, 0xfc,
+	0x32, 0x3f, 0x3e, 0x99, 0xfd, 0x3e, 0x3c, 0xd3, 0x2c, 0x87, 0x7b, 0x9a, 0x7d, 0x5b, 0x65, 0x90,
+	0xde, 0x2e, 0x83, 0x14, 0xa5, 0x92, 0x93, 0xfc, 0x44, 0xfa, 0xab, 0x32, 0x00, 0xd9, 0x24, 0x44,
+	0x7e, 0xee, 0xd5, 0x17, 0xdc, 0x93, 0xc8, 0x76, 0x19, 0xfc, 0x26, 0xb2, 0x53, 0x06, 0x6d, 0xc9,
+	0x44, 0xf2, 0x22, 0x9f, 0x4c, 0x24, 0x2f, 0x11, 0x15, 0xe7, 0x56, 0x77, 0x2e, 0x14, 0x1d, 0x62,
+	0x4e, 0xcd, 0x85, 0xa2, 0x67, 0x99, 0x73, 0x73, 0xa1, 0xe8, 0x28, 0x73, 0x7e, 0x2e, 0x14, 0x1d,
+	0x63, 0x12, 0x73, 0xa1, 0x68, 0x8a, 0x49, 0xcf, 0x85, 0xa2, 0xe3, 0xcc, 0xc4, 0x5c, 0x6b, 0xf4,
+	0x37, 0x11, 0xe6, 0x49, 0x64, 0xf8, 0x4f, 0x06, 0x60, 0xe7, 0x94, 0x89, 0x25, 0x1b, 0x57, 0xb8,
+	0x5b, 0xb6, 0x8e, 0xbb, 0xad, 0xd2, 0xb2, 0xaf, 0x3c, 0x13, 0x2d, 0x1b, 0xf5, 0x68, 0xd9, 0x0a,
+	0x17, 0xfb, 0xcd, 0x13, 0xa6, 0x6f, 0x1f, 0x22, 0x61, 0xda, 0x98, 0x1a, 0x5d, 0x3e, 0x4c, 0x6a,
+	0x74, 0x0f, 0x12, 0x74, 0xf2, 0xa9, 0x24, 0xe8, 0x9e, 0x74, 0xe7, 0xcb, 0x4f, 0xa7, 0x3b, 0xf7,
+	0x26, 0x36, 0x5f, 0x7f, 0x3e, 0x62, 0xb3, 0x9e, 0xd2, 0xcc, 0x1d, 0x8c, 0x91, 0xac, 0xe3, 0x22,
+	0x5f, 0x7a, 0x36, 0x2e, 0xf2, 0xf0, 0x58, 0xc8, 0x03, 0xb0, 0x89, 0xab, 0x87, 0xcf, 0x26, 0x1e,
+	0x98, 0x47, 0x7c, 0xeb, 0x90, 0x78, 0xc4, 0x46, 0x0c, 0xa2, 0x74, 0x00, 0x02, 0xb1, 0x36, 0xcb,
+	0xec, 0x26, 0x10, 0x0f, 0x97, 0x76, 0x9a, 0x78, 0x0a, 0xed, 0x74, 0xf8, 0x5c, 0xd3, 0x9b, 0x87,
+	0xc6, 0x35, 0xd5, 0xb3, 0x4c, 0xe2, 0x21, 0xb2, 0x4c, 0x0d, 0xf9, 0x25, 0x7c, 0x70, 0xb2, 0xe7,
+	0x58, 0x63, 0xb2, 0xa7, 0x21, 0xc5, 0xb3, 0x78, 0x00, 0x8a, 0xa7, 0xab, 0x8e, 0xe2, 0xa9, 0x25,
+	0x76, 0xde, 0x39, 0x0c, 0x62, 0x87, 0xa9, 0x27, 0x76, 0xbe, 0x1d, 0x3a, 0xe7, 0x74, 0x23, 0x4c,
+	0xff, 0x7c, 0x68, 0xbe, 0xf0, 0xcd, 0x30, 0x44, 0x7b, 0x51, 0x42, 0x87, 0xc2, 0x9e, 0xfc, 0xe8,
+	0xd0, 0xd8, 0x93, 0x06, 0xbc, 0xc9, 0x95, 0x67, 0xa1, 0x37, 0x76, 0x13, 0x1b, 0xa7, 0x1b, 0x10,
+	0x1b, 0x75, 0x44, 0x46, 0x7c, 0x6f, 0x22, 0xa3, 0x21, 0x71, 0x31, 0xb9, 0x7f, 0xe2, 0xe2, 0xbb,
+	0x43, 0x59, 0xc8, 0xcf, 0x4d, 0x59, 0xec, 0x83, 0xac, 0x58, 0x38, 0x30, 0x59, 0xd1, 0x90, 0xa6,
+	0x78, 0x6e, 0x48, 0xf2, 0xd2, 0x8f, 0xff, 0xe6, 0x95, 0xba, 0xcf, 0x1e, 0x7e, 0xf5, 0xca, 0x6c,
+	0x72, 0x82, 0x4f, 0xf1, 0x69, 0x7e, 0x82, 0x9f, 0xe4, 0x93, 0x97, 0xf9, 0xe4, 0x24, 0x9f, 0xbe,
+	0xcc, 0x5f, 0xe4, 0x93, 0x97, 0xf8, 0x4b, 0xfc, 0x65, 0x3e, 0x99, 0xe2, 0x93, 0x69, 0x3e, 0x95,
+	0xe0, 0x53, 0x97, 0xf9, 0x54, 0x92, 0x4f, 0xa5, 0xf8, 0x74, 0x9a, 0x4f, 0xa5, 0xf9, 0x74, 0x82,
+	0x4f, 0x4f, 0xf0, 0xa9, 0x8b, 0x7c, 0xea, 0x12, 0x9f, 0x9a, 0xe0, 0xd3, 0x29, 0x3e, 0x3d, 0x9e,
+	0x7d, 0x61, 0x17, 0xe2, 0x41, 0xef, 0x7d, 0x0d, 0xea, 0xda, 0xb2, 0xa9, 0xbd, 0xf0, 0xce, 0xc0,
+	0x7b, 0x5f, 0x83, 0xc6, 0x5d, 0xd9, 0xc4, 0x1e, 0xb8, 0x87, 0x7d, 0xef, 0x6b, 0xd0, 0xb0, 0x87,
+	0x78, 0x69, 0x0c, 0x7a, 0xa8, 0x97, 0x86, 0x5d, 0xd9, 0x85, 0xfd, 0x81, 0x9f, 0x73, 0xef, 0x7d,
+	0x0d, 0xf6, 0x23, 0xe8, 0x47, 0x2f, 0xc3, 0x7f, 0x39, 0x00, 0xbb, 0x04, 0x5c, 0xd4, 0x24, 0xf9,
+	0x08, 0xb6, 0x1c, 0xc1, 0x96, 0x23, 0xd8, 0x72, 0x04, 0x5b, 0xf6, 0x05, 0x5b, 0x96, 0x1b, 0xc3,
+	0x96, 0x2b, 0xcd, 0xcc, 0xd6, 0xa5, 0x99, 0x23, 0xdc, 0x72, 0x84, 0x5b, 0xfe, 0x7f, 0xe3, 0x96,
+	0x6f, 0xec, 0x2e, 0xf2, 0x08, 0xbd, 0xd4, 0xa1, 0x97, 0x43, 0xb9, 0x9c, 0x3d, 0xc2, 0x30, 0x47,
+	0x18, 0xe6, 0x08, 0xc3, 0xfc, 0x2f, 0xc4, 0x30, 0x7f, 0x75, 0x02, 0xc6, 0xae, 0x61, 0xfb, 0x08,
+	0xbf, 0x1c, 0xe1, 0x97, 0xc3, 0xc5, 0x2f, 0xcf, 0xfd, 0x25, 0xf9, 0x11, 0x00, 0xfa, 0xbf, 0x0a,
+	0x80, 0x7e, 0xd2, 0x18, 0x00, 0x4d, 0x36, 0xfd, 0xf0, 0xbb, 0x9a, 0xa3, 0x8e, 0xc0, 0xcf, 0x11,
+	0xf8, 0xf9, 0x4e, 0x82, 0x9f, 0xcc, 0x41, 0xc0, 0xcf, 0x33, 0x5f, 0xd7, 0x1c, 0x01, 0x98, 0xa3,
+	0xeb, 0x97, 0x23, 0xe8, 0xb2, 0x3f, 0xe8, 0xf2, 0xdd, 0xfa, 0xf4, 0xf2, 0x8d, 0xc3, 0xfa, 0xf4,
+	0xf2, 0x5b, 0xf9, 0xec, 0xf2, 0x19, 0x89, 0x97, 0xe7, 0x47, 0x91, 0x6f, 0x37, 0x40, 0x91, 0xf3,
+	0xc9, 0x04, 0x7f, 0x04, 0x24, 0xbf, 0x05, 0x20, 0x39, 0xfa, 0x01, 0x80, 0x5d, 0x75, 0x85, 0x3c,
+	0xea, 0x81, 0x5d, 0x37, 0x67, 0x85, 0xa5, 0x1b, 0x99, 0x79, 0x31, 0x3f, 0x2d, 0xdc, 0x9c, 0x9d,
+	0x9a, 0x66, 0x5a, 0xd0, 0x31, 0x88, 0x66, 0x96, 0x96, 0x16, 0xc5, 0xf9, 0xeb, 0x99, 0x9c, 0x98,
+	0xcd, 0xcc, 0x67, 0x16, 0xa6, 0xa6, 0x05, 0x06, 0xa0, 0x2e, 0x18, 0xcb, 0x2c, 0xce, 0x8a, 0xd7,
+	0x32, 0x4b, 0xd3, 0x6f, 0x64, 0x6e, 0x31, 0x01, 0xd4, 0x07, 0xbb, 0x97, 0xa6, 0xea, 0xe5, 0x82,
+	0xa8, 0x0d, 0x86, 0x17, 0x85, 0xeb, 0x6f, 0xde, 0x62, 0x42, 0xe8, 0x14, 0xec, 0x9b, 0xbf, 0x3e,
+	0x95, 0x99, 0x17, 0x5f, 0xbb, 0x9c, 0x17, 0xfd, 0xca, 0x61, 0xe7, 0xff, 0x90, 0x8d, 0xfe, 0x0c,
+	0xc0, 0xb6, 0xea, 0xdf, 0xb0, 0xea, 0x85, 0x90, 0x7a, 0x76, 0xd4, 0x5b, 0x1c, 0x19, 0xd4, 0x03,
+	0xdb, 0x88, 0x1b, 0xa7, 0x11, 0xb8, 0x8d, 0x27, 0x20, 0xaa, 0x34, 0x8a, 0x6f, 0xcc, 0x2e, 0xcd,
+	0x88, 0xf9, 0x85, 0x59, 0x26, 0xe0, 0xf6, 0xf6, 0xc1, 0x18, 0x31, 0x94, 0x77, 0x95, 0x82, 0x6e,
+	0x73, 0x07, 0x6c, 0xbb, 0x91, 0xf3, 0x2c, 0x85, 0xc8, 0x63, 0xfe, 0xf5, 0x8c, 0xfb, 0x18, 0x1e,
+	0xfd, 0x1c, 0x40, 0xa6, 0x3e, 0x83, 0x90, 0xc9, 0xf0, 0x66, 0x68, 0xe6, 0x7a, 0x7e, 0x49, 0x14,
+	0xa6, 0x33, 0xb9, 0x5b, 0x4c, 0x0b, 0x7a, 0x11, 0x9e, 0xae, 0x69, 0x5f, 0x9c, 0x5e, 0xc8, 0xcd,
+	0x2e, 0x5c, 0x13, 0x6f, 0x4e, 0x0b, 0xb3, 0x57, 0x67, 0xa7, 0x32, 0x4b, 0xb3, 0xd7, 0x17, 0x18,
+	0x80, 0x5e, 0x80, 0x5c, 0x8d, 0x98, 0xbf, 0x5b, 0xbc, 0x9a, 0x99, 0x9d, 0x9f, 0xce, 0x31, 0x01,
+	0x74, 0x0e, 0x9e, 0x69, 0x68, 0x2c, 0xb7, 0x90, 0x17, 0x73, 0xd3, 0xf3, 0xd3, 0xd7, 0x1c, 0x73,
+	0x41, 0x74, 0x1a, 0x9e, 0x6c, 0x28, 0x98, 0x11, 0x85, 0xe9, 0xa9, 0xeb, 0x42, 0x8e, 0x09, 0xa1,
+	0x33, 0xf0, 0x54, 0x8d, 0x08, 0xb1, 0xe1, 0x75, 0x8b, 0x99, 0x5c, 0x6e, 0x3a, 0xc7, 0x84, 0x47,
+	0xcb, 0x01, 0x88, 0x76, 0x67, 0x1d, 0xd4, 0x5b, 0xfd, 0x43, 0x38, 0x39, 0xe7, 0xf5, 0x57, 0x98,
+	0x16, 0x34, 0x00, 0xfb, 0x72, 0xde, 0x97, 0xf2, 0x37, 0xb1, 0x59, 0xd1, 0x61, 0xc8, 0xd2, 0x74,
+	0x65, 0xaa, 0x89, 0xca, 0xb4, 0xb1, 0xc2, 0x04, 0xd0, 0x20, 0x3c, 0xe6, 0x08, 0x57, 0x8a, 0xd0,
+	0x45, 0xac, 0x2b, 0xaa, 0xbe, 0xca, 0x04, 0xd1, 0x71, 0xd8, 0x5f, 0xd7, 0xe7, 0x58, 0xc4, 0x0a,
+	0x13, 0xf2, 0xbb, 0xbf, 0xaa, 0xea, 0xf4, 0xc5, 0x60, 0xc2, 0x64, 0x05, 0xaa, 0xa1, 0xe2, 0x59,
+	0x9d, 0xfe, 0x35, 0x38, 0xa6, 0x95, 0x48, 0xfb, 0xda, 0x6f, 0xd2, 0xd6, 0x08, 0x09, 0xd6, 0xb3,
+	0xb1, 0x60, 0xd8, 0x19, 0xe7, 0x2f, 0x23, 0x2c, 0x6b, 0x98, 0x89, 0xa2, 0x7e, 0xd8, 0xe3, 0x75,
+	0x09, 0x95, 0x1a, 0x50, 0x61, 0xda, 0x48, 0x50, 0x5e, 0xc7, 0x35, 0xac, 0x63, 0xd3, 0xa9, 0x72,
+	0x49, 0x51, 0xc7, 0x40, 0xd4, 0x0d, 0x3b, 0xbc, 0x4e, 0x9a, 0xf7, 0x98, 0x58, 0xf6, 0xf7, 0xc0,
+	0xf6, 0xa7, 0x43, 0x2d, 0x8f, 0x3f, 0x1d, 0x6a, 0xf9, 0xea, 0xd3, 0x21, 0x70, 0x7f, 0x67, 0x08,
+	0xfc, 0xf1, 0xce, 0x10, 0xf8, 0x78, 0x67, 0x08, 0x6c, 0xef, 0x0c, 0x81, 0xc7, 0x3b, 0x43, 0xe0,
+	0x93, 0x9d, 0x21, 0xf0, 0xf9, 0xce, 0x50, 0xcb, 0x57, 0x3b, 0x43, 0xe0, 0xfd, 0xcf, 0x86, 0x5a,
+	0xb6, 0x3e, 0x1b, 0x02, 0xdb, 0x9f, 0x0d, 0xb5, 0x3c, 0xfe, 0x6c, 0xa8, 0xe5, 0xad, 0xc5, 0x55,
+	0xa3, 0x78, 0x67, 0x35, 0xee, 0x7d, 0xae, 0x1d, 0x2f, 0x59, 0x63, 0xf4, 0xc7, 0x8a, 0x61, 0x16,
+	0x2e, 0x14, 0x4d, 0x63, 0x5d, 0x55, 0xb0, 0x79, 0xc1, 0xeb, 0x1e, 0x2b, 0x2e, 0xaf, 0x1a, 0x63,
+	0xf8, 0x9e, 0xed, 0xfd, 0x45, 0xbd, 0xdd, 0x7f, 0xd3, 0x6e, 0xb9, 0x95, 0xfe, 0xc9, 0xa0, 0xf4,
+	0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0x59, 0xd0, 0xcc, 0x19, 0xb2, 0x50, 0x00, 0x00,
 }
 
 func (x VirtualHostType) String() string {
@@ -3956,6 +4542,36 @@ func (this *TemporaryUserBlockingType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DNSRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSRecord)
+	if !ok {
+		that2, ok := that.(DNSRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Type != that1.Type {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
+	}
+	return true
+}
 func (this *AutoCertInfoType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3986,6 +4602,14 @@ func (this *AutoCertInfoType) Equal(that interface{}) bool {
 	}
 	if this.AutoCertIssuer != that1.AutoCertIssuer {
 		return false
+	}
+	if len(this.DnsRecords) != len(that1.DnsRecords) {
+		return false
+	}
+	for i := range this.DnsRecords {
+		if !this.DnsRecords[i].Equal(that1.DnsRecords[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -4251,6 +4875,41 @@ func (this *PolicyBasedChallenge_AlwaysEnableCaptchaChallenge) Equal(that interf
 	}
 	return true
 }
+func (this *ShapeBotDefenseConfigType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ShapeBotDefenseConfigType)
+	if !ok {
+		that2, ok := that.(ShapeBotDefenseConfigType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ApplicationId != that1.ApplicationId {
+		return false
+	}
+	if !this.ApiAuthKey.Equal(that1.ApiAuthKey) {
+		return false
+	}
+	if len(this.Instance) != len(that1.Instance) {
+		return false
+	}
+	for i := range this.Instance {
+		if !this.Instance[i].Equal(that1.Instance[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4452,6 +5111,24 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.ServerHeaderChoice.Equal(that1.ServerHeaderChoice) {
 		return false
 	}
+	if that1.PathNormalizeChoice == nil {
+		if this.PathNormalizeChoice != nil {
+			return false
+		}
+	} else if this.PathNormalizeChoice == nil {
+		return false
+	} else if !this.PathNormalizeChoice.Equal(that1.PathNormalizeChoice) {
+		return false
+	}
+	if that1.StrictSniHostHeaderCheckChoice == nil {
+		if this.StrictSniHostHeaderCheckChoice != nil {
+			return false
+		}
+	} else if this.StrictSniHostHeaderCheckChoice == nil {
+		return false
+	} else if !this.StrictSniHostHeaderCheckChoice.Equal(that1.StrictSniHostHeaderCheckChoice) {
+		return false
+	}
 	if this.DnsVolterraManaged != that1.DnsVolterraManaged {
 		return false
 	}
@@ -4506,6 +5183,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.VolterraCert != that1.VolterraCert {
+		return false
+	}
+	if that1.BotDefenseChoice == nil {
+		if this.BotDefenseChoice != nil {
+			return false
+		}
+	} else if this.BotDefenseChoice == nil {
+		return false
+	} else if !this.BotDefenseChoice.Equal(that1.BotDefenseChoice) {
 		return false
 	}
 	return true
@@ -4750,6 +5436,150 @@ func (this *GlobalSpecType_PassThrough) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_EnablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_EnablePathNormalize)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_EnablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnablePathNormalize.Equal(that1.EnablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DisablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DisablePathNormalize)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DisablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisablePathNormalize.Equal(that1.DisablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_EnableStrictSniHostHeaderCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_EnableStrictSniHostHeaderCheck)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_EnableStrictSniHostHeaderCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableStrictSniHostHeaderCheck.Equal(that1.EnableStrictSniHostHeaderCheck) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_AdditionalDomains) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AdditionalDomains)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AdditionalDomains)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AdditionalDomains.Equal(that1.AdditionalDomains) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DisableBotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DisableBotDefense)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DisableBotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableBotDefense.Equal(that1.DisableBotDefense) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_BotDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_BotDefense)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_BotDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BotDefense.Equal(that1.BotDefense) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4924,6 +5754,24 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.ServerHeaderChoice == nil {
 		return false
 	} else if !this.ServerHeaderChoice.Equal(that1.ServerHeaderChoice) {
+		return false
+	}
+	if that1.PathNormalizeChoice == nil {
+		if this.PathNormalizeChoice != nil {
+			return false
+		}
+	} else if this.PathNormalizeChoice == nil {
+		return false
+	} else if !this.PathNormalizeChoice.Equal(that1.PathNormalizeChoice) {
+		return false
+	}
+	if that1.StrictSniHostHeaderCheckChoice == nil {
+		if this.StrictSniHostHeaderCheckChoice != nil {
+			return false
+		}
+	} else if this.StrictSniHostHeaderCheckChoice == nil {
+		return false
+	} else if !this.StrictSniHostHeaderCheckChoice.Equal(that1.StrictSniHostHeaderCheckChoice) {
 		return false
 	}
 	return true
@@ -5144,6 +5992,102 @@ func (this *CreateSpecType_PassThrough) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_EnablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_EnablePathNormalize)
+	if !ok {
+		that2, ok := that.(CreateSpecType_EnablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnablePathNormalize.Equal(that1.EnablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DisablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DisablePathNormalize)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DisablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisablePathNormalize.Equal(that1.DisablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_EnableStrictSniHostHeaderCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_EnableStrictSniHostHeaderCheck)
+	if !ok {
+		that2, ok := that.(CreateSpecType_EnableStrictSniHostHeaderCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableStrictSniHostHeaderCheck.Equal(that1.EnableStrictSniHostHeaderCheck) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_AdditionalDomains) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AdditionalDomains)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AdditionalDomains)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AdditionalDomains.Equal(that1.AdditionalDomains) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5318,6 +6262,24 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.ServerHeaderChoice == nil {
 		return false
 	} else if !this.ServerHeaderChoice.Equal(that1.ServerHeaderChoice) {
+		return false
+	}
+	if that1.PathNormalizeChoice == nil {
+		if this.PathNormalizeChoice != nil {
+			return false
+		}
+	} else if this.PathNormalizeChoice == nil {
+		return false
+	} else if !this.PathNormalizeChoice.Equal(that1.PathNormalizeChoice) {
+		return false
+	}
+	if that1.StrictSniHostHeaderCheckChoice == nil {
+		if this.StrictSniHostHeaderCheckChoice != nil {
+			return false
+		}
+	} else if this.StrictSniHostHeaderCheckChoice == nil {
+		return false
+	} else if !this.StrictSniHostHeaderCheckChoice.Equal(that1.StrictSniHostHeaderCheckChoice) {
 		return false
 	}
 	return true
@@ -5538,6 +6500,102 @@ func (this *ReplaceSpecType_PassThrough) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_EnablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_EnablePathNormalize)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_EnablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnablePathNormalize.Equal(that1.EnablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DisablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DisablePathNormalize)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DisablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisablePathNormalize.Equal(that1.DisablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_EnableStrictSniHostHeaderCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_EnableStrictSniHostHeaderCheck)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_EnableStrictSniHostHeaderCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableStrictSniHostHeaderCheck.Equal(that1.EnableStrictSniHostHeaderCheck) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_AdditionalDomains) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AdditionalDomains)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AdditionalDomains)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AdditionalDomains.Equal(that1.AdditionalDomains) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5712,6 +6770,24 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.ServerHeaderChoice == nil {
 		return false
 	} else if !this.ServerHeaderChoice.Equal(that1.ServerHeaderChoice) {
+		return false
+	}
+	if that1.PathNormalizeChoice == nil {
+		if this.PathNormalizeChoice != nil {
+			return false
+		}
+	} else if this.PathNormalizeChoice == nil {
+		return false
+	} else if !this.PathNormalizeChoice.Equal(that1.PathNormalizeChoice) {
+		return false
+	}
+	if that1.StrictSniHostHeaderCheckChoice == nil {
+		if this.StrictSniHostHeaderCheckChoice != nil {
+			return false
+		}
+	} else if this.StrictSniHostHeaderCheckChoice == nil {
+		return false
+	} else if !this.StrictSniHostHeaderCheckChoice.Equal(that1.StrictSniHostHeaderCheckChoice) {
 		return false
 	}
 	if this.State != that1.State {
@@ -5955,6 +7031,102 @@ func (this *GetSpecType_PassThrough) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_EnablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_EnablePathNormalize)
+	if !ok {
+		that2, ok := that.(GetSpecType_EnablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnablePathNormalize.Equal(that1.EnablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DisablePathNormalize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DisablePathNormalize)
+	if !ok {
+		that2, ok := that.(GetSpecType_DisablePathNormalize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisablePathNormalize.Equal(that1.DisablePathNormalize) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_EnableStrictSniHostHeaderCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_EnableStrictSniHostHeaderCheck)
+	if !ok {
+		that2, ok := that.(GetSpecType_EnableStrictSniHostHeaderCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableStrictSniHostHeaderCheck.Equal(that1.EnableStrictSniHostHeaderCheck) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_AdditionalDomains) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AdditionalDomains)
+	if !ok {
+		that2, ok := that.(GetSpecType_AdditionalDomains)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AdditionalDomains.Equal(that1.AdditionalDomains) {
+		return false
+	}
+	return true
+}
 func (this *JavaScriptConfigType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -6030,11 +7202,23 @@ func (this *TemporaryUserBlockingType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *DNSRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&virtual_host.DNSRecord{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *AutoCertInfoType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&virtual_host.AutoCertInfoType{")
 	s = append(s, "AutoCertState: "+fmt.Sprintf("%#v", this.AutoCertState)+",\n")
 	if this.AutoCertExpiry != nil {
@@ -6042,6 +7226,9 @@ func (this *AutoCertInfoType) GoString() string {
 	}
 	s = append(s, "AutoCertSubject: "+fmt.Sprintf("%#v", this.AutoCertSubject)+",\n")
 	s = append(s, "AutoCertIssuer: "+fmt.Sprintf("%#v", this.AutoCertIssuer)+",\n")
+	if this.DnsRecords != nil {
+		s = append(s, "DnsRecords: "+fmt.Sprintf("%#v", this.DnsRecords)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6143,11 +7330,27 @@ func (this *PolicyBasedChallenge_AlwaysEnableCaptchaChallenge) GoString() string
 		`AlwaysEnableCaptchaChallenge:` + fmt.Sprintf("%#v", this.AlwaysEnableCaptchaChallenge) + `}`}, ", ")
 	return s
 }
+func (this *ShapeBotDefenseConfigType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&virtual_host.ShapeBotDefenseConfigType{")
+	s = append(s, "ApplicationId: "+fmt.Sprintf("%#v", this.ApplicationId)+",\n")
+	if this.ApiAuthKey != nil {
+		s = append(s, "ApiAuthKey: "+fmt.Sprintf("%#v", this.ApiAuthKey)+",\n")
+	}
+	if this.Instance != nil {
+		s = append(s, "Instance: "+fmt.Sprintf("%#v", this.Instance)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 56)
+	s := make([]string, 0, 62)
 	s = append(s, "&virtual_host.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.Routes != nil {
@@ -6238,6 +7441,12 @@ func (this *GlobalSpecType) GoString() string {
 	if this.ServerHeaderChoice != nil {
 		s = append(s, "ServerHeaderChoice: "+fmt.Sprintf("%#v", this.ServerHeaderChoice)+",\n")
 	}
+	if this.PathNormalizeChoice != nil {
+		s = append(s, "PathNormalizeChoice: "+fmt.Sprintf("%#v", this.PathNormalizeChoice)+",\n")
+	}
+	if this.StrictSniHostHeaderCheckChoice != nil {
+		s = append(s, "StrictSniHostHeaderCheckChoice: "+fmt.Sprintf("%#v", this.StrictSniHostHeaderCheckChoice)+",\n")
+	}
 	s = append(s, "DnsVolterraManaged: "+fmt.Sprintf("%#v", this.DnsVolterraManaged)+",\n")
 	if this.DnsDomains != nil {
 		s = append(s, "DnsDomains: "+fmt.Sprintf("%#v", this.DnsDomains)+",\n")
@@ -6258,6 +7467,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	s = append(s, "LoadbalancerAlgorithm: "+fmt.Sprintf("%#v", this.LoadbalancerAlgorithm)+",\n")
 	s = append(s, "VolterraCert: "+fmt.Sprintf("%#v", this.VolterraCert)+",\n")
+	if this.BotDefenseChoice != nil {
+		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6341,11 +7553,59 @@ func (this *GlobalSpecType_PassThrough) GoString() string {
 		`PassThrough:` + fmt.Sprintf("%#v", this.PassThrough) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_EnablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GlobalSpecType_EnablePathNormalize{` +
+		`EnablePathNormalize:` + fmt.Sprintf("%#v", this.EnablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DisablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GlobalSpecType_DisablePathNormalize{` +
+		`DisablePathNormalize:` + fmt.Sprintf("%#v", this.DisablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_EnableStrictSniHostHeaderCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GlobalSpecType_EnableStrictSniHostHeaderCheck{` +
+		`EnableStrictSniHostHeaderCheck:` + fmt.Sprintf("%#v", this.EnableStrictSniHostHeaderCheck) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_AdditionalDomains) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GlobalSpecType_AdditionalDomains{` +
+		`AdditionalDomains:` + fmt.Sprintf("%#v", this.AdditionalDomains) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DisableBotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GlobalSpecType_DisableBotDefense{` +
+		`DisableBotDefense:` + fmt.Sprintf("%#v", this.DisableBotDefense) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_BotDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GlobalSpecType_BotDefense{` +
+		`BotDefense:` + fmt.Sprintf("%#v", this.BotDefense) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 38)
+	s := make([]string, 0, 42)
 	s = append(s, "&virtual_host.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.Routes != nil {
@@ -6423,6 +7683,12 @@ func (this *CreateSpecType) GoString() string {
 	if this.ServerHeaderChoice != nil {
 		s = append(s, "ServerHeaderChoice: "+fmt.Sprintf("%#v", this.ServerHeaderChoice)+",\n")
 	}
+	if this.PathNormalizeChoice != nil {
+		s = append(s, "PathNormalizeChoice: "+fmt.Sprintf("%#v", this.PathNormalizeChoice)+",\n")
+	}
+	if this.StrictSniHostHeaderCheckChoice != nil {
+		s = append(s, "StrictSniHostHeaderCheckChoice: "+fmt.Sprintf("%#v", this.StrictSniHostHeaderCheckChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6498,11 +7764,43 @@ func (this *CreateSpecType_PassThrough) GoString() string {
 		`PassThrough:` + fmt.Sprintf("%#v", this.PassThrough) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_EnablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CreateSpecType_EnablePathNormalize{` +
+		`EnablePathNormalize:` + fmt.Sprintf("%#v", this.EnablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DisablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CreateSpecType_DisablePathNormalize{` +
+		`DisablePathNormalize:` + fmt.Sprintf("%#v", this.DisablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_EnableStrictSniHostHeaderCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CreateSpecType_EnableStrictSniHostHeaderCheck{` +
+		`EnableStrictSniHostHeaderCheck:` + fmt.Sprintf("%#v", this.EnableStrictSniHostHeaderCheck) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_AdditionalDomains) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CreateSpecType_AdditionalDomains{` +
+		`AdditionalDomains:` + fmt.Sprintf("%#v", this.AdditionalDomains) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 38)
+	s := make([]string, 0, 42)
 	s = append(s, "&virtual_host.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.Routes != nil {
@@ -6580,6 +7878,12 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.ServerHeaderChoice != nil {
 		s = append(s, "ServerHeaderChoice: "+fmt.Sprintf("%#v", this.ServerHeaderChoice)+",\n")
 	}
+	if this.PathNormalizeChoice != nil {
+		s = append(s, "PathNormalizeChoice: "+fmt.Sprintf("%#v", this.PathNormalizeChoice)+",\n")
+	}
+	if this.StrictSniHostHeaderCheckChoice != nil {
+		s = append(s, "StrictSniHostHeaderCheckChoice: "+fmt.Sprintf("%#v", this.StrictSniHostHeaderCheckChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6655,11 +7959,43 @@ func (this *ReplaceSpecType_PassThrough) GoString() string {
 		`PassThrough:` + fmt.Sprintf("%#v", this.PassThrough) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_EnablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.ReplaceSpecType_EnablePathNormalize{` +
+		`EnablePathNormalize:` + fmt.Sprintf("%#v", this.EnablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DisablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.ReplaceSpecType_DisablePathNormalize{` +
+		`DisablePathNormalize:` + fmt.Sprintf("%#v", this.DisablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_EnableStrictSniHostHeaderCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.ReplaceSpecType_EnableStrictSniHostHeaderCheck{` +
+		`EnableStrictSniHostHeaderCheck:` + fmt.Sprintf("%#v", this.EnableStrictSniHostHeaderCheck) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_AdditionalDomains) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.ReplaceSpecType_AdditionalDomains{` +
+		`AdditionalDomains:` + fmt.Sprintf("%#v", this.AdditionalDomains) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 44)
+	s := make([]string, 0, 48)
 	s = append(s, "&virtual_host.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.Routes != nil {
@@ -6736,6 +8072,12 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.ServerHeaderChoice != nil {
 		s = append(s, "ServerHeaderChoice: "+fmt.Sprintf("%#v", this.ServerHeaderChoice)+",\n")
+	}
+	if this.PathNormalizeChoice != nil {
+		s = append(s, "PathNormalizeChoice: "+fmt.Sprintf("%#v", this.PathNormalizeChoice)+",\n")
+	}
+	if this.StrictSniHostHeaderCheckChoice != nil {
+		s = append(s, "StrictSniHostHeaderCheckChoice: "+fmt.Sprintf("%#v", this.StrictSniHostHeaderCheckChoice)+",\n")
 	}
 	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
 	s = append(s, "HostName: "+fmt.Sprintf("%#v", this.HostName)+",\n")
@@ -6820,6 +8162,38 @@ func (this *GetSpecType_PassThrough) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_host.GetSpecType_PassThrough{` +
 		`PassThrough:` + fmt.Sprintf("%#v", this.PassThrough) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_EnablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetSpecType_EnablePathNormalize{` +
+		`EnablePathNormalize:` + fmt.Sprintf("%#v", this.EnablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DisablePathNormalize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetSpecType_DisablePathNormalize{` +
+		`DisablePathNormalize:` + fmt.Sprintf("%#v", this.DisablePathNormalize) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_EnableStrictSniHostHeaderCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetSpecType_EnableStrictSniHostHeaderCheck{` +
+		`EnableStrictSniHostHeaderCheck:` + fmt.Sprintf("%#v", this.EnableStrictSniHostHeaderCheck) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_AdditionalDomains) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetSpecType_AdditionalDomains{` +
+		`AdditionalDomains:` + fmt.Sprintf("%#v", this.AdditionalDomains) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -7098,6 +8472,50 @@ func (m *TemporaryUserBlockingType) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
+func (m *DNSRecord) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Type) > 0 {
+		i -= len(m.Type)
+		copy(dAtA[i:], m.Type)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Type)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AutoCertInfoType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7118,6 +8536,20 @@ func (m *AutoCertInfoType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.DnsRecords) > 0 {
+		for iNdEx := len(m.DnsRecords) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DnsRecords[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
 	if len(m.AutoCertIssuer) > 0 {
 		i -= len(m.AutoCertIssuer)
 		copy(dAtA[i:], m.AutoCertIssuer)
@@ -7429,6 +8861,62 @@ func (m *PolicyBasedChallenge_AlwaysEnableCaptchaChallenge) MarshalToSizedBuffer
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ShapeBotDefenseConfigType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ShapeBotDefenseConfigType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ShapeBotDefenseConfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Instance) > 0 {
+		for iNdEx := len(m.Instance) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Instance[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.ApiAuthKey != nil {
+		{
+			size, err := m.ApiAuthKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ApplicationId) > 0 {
+		i -= len(m.ApplicationId)
+		copy(dAtA[i:], m.ApplicationId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ApplicationId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7449,6 +8937,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.BotDefenseChoice != nil {
+		{
+			size := m.BotDefenseChoice.Size()
+			i -= size
+			if _, err := m.BotDefenseChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.VolterraCert {
 		i--
 		if m.VolterraCert {
@@ -7587,6 +9084,24 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i--
 		dAtA[i] = 0xc0
+	}
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		{
+			size := m.StrictSniHostHeaderCheckChoice.Size()
+			i -= size
+			if _, err := m.StrictSniHostHeaderCheckChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.PathNormalizeChoice != nil {
+		{
+			size := m.PathNormalizeChoice.Size()
+			i -= size
+			if _, err := m.PathNormalizeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.ServerHeaderChoice != nil {
 		{
@@ -8215,6 +9730,144 @@ func (m *GlobalSpecType_PassThrough) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_EnablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_EnablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnablePathNormalize != nil {
+		{
+			size, err := m.EnablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DisablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisablePathNormalize != nil {
+		{
+			size, err := m.DisablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_EnableStrictSniHostHeaderCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_EnableStrictSniHostHeaderCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		{
+			size, err := m.EnableStrictSniHostHeaderCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_AdditionalDomains) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AdditionalDomains) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AdditionalDomains != nil {
+		{
+			size, err := m.AdditionalDomains.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DisableBotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableBotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableBotDefense != nil {
+		{
+			size, err := m.DisableBotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3f
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_BotDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_BotDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BotDefense != nil {
+		{
+			size, err := m.BotDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3f
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8235,6 +9888,24 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		{
+			size := m.StrictSniHostHeaderCheckChoice.Size()
+			i -= size
+			if _, err := m.StrictSniHostHeaderCheckChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.PathNormalizeChoice != nil {
+		{
+			size := m.PathNormalizeChoice.Size()
+			i -= size
+			if _, err := m.PathNormalizeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ServerHeaderChoice != nil {
 		{
 			size := m.ServerHeaderChoice.Size()
@@ -8776,6 +10447,98 @@ func (m *CreateSpecType_PassThrough) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_EnablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnablePathNormalize != nil {
+		{
+			size, err := m.EnablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DisablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisablePathNormalize != nil {
+		{
+			size, err := m.DisablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_EnableStrictSniHostHeaderCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnableStrictSniHostHeaderCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		{
+			size, err := m.EnableStrictSniHostHeaderCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_AdditionalDomains) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AdditionalDomains) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AdditionalDomains != nil {
+		{
+			size, err := m.AdditionalDomains.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8796,6 +10559,24 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		{
+			size := m.StrictSniHostHeaderCheckChoice.Size()
+			i -= size
+			if _, err := m.StrictSniHostHeaderCheckChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.PathNormalizeChoice != nil {
+		{
+			size := m.PathNormalizeChoice.Size()
+			i -= size
+			if _, err := m.PathNormalizeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ServerHeaderChoice != nil {
 		{
 			size := m.ServerHeaderChoice.Size()
@@ -9337,6 +11118,98 @@ func (m *ReplaceSpecType_PassThrough) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_EnablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnablePathNormalize != nil {
+		{
+			size, err := m.EnablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DisablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisablePathNormalize != nil {
+		{
+			size, err := m.DisablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_EnableStrictSniHostHeaderCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnableStrictSniHostHeaderCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		{
+			size, err := m.EnableStrictSniHostHeaderCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_AdditionalDomains) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AdditionalDomains) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AdditionalDomains != nil {
+		{
+			size, err := m.AdditionalDomains.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -9409,6 +11282,24 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i--
 		dAtA[i] = 0xd8
+	}
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		{
+			size := m.StrictSniHostHeaderCheckChoice.Size()
+			i -= size
+			if _, err := m.StrictSniHostHeaderCheckChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.PathNormalizeChoice != nil {
+		{
+			size := m.PathNormalizeChoice.Size()
+			i -= size
+			if _, err := m.PathNormalizeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.ServerHeaderChoice != nil {
 		{
@@ -9956,6 +11847,98 @@ func (m *GetSpecType_PassThrough) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_EnablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnablePathNormalize != nil {
+		{
+			size, err := m.EnablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DisablePathNormalize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisablePathNormalize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisablePathNormalize != nil {
+		{
+			size, err := m.DisablePathNormalize.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_EnableStrictSniHostHeaderCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnableStrictSniHostHeaderCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		{
+			size, err := m.EnableStrictSniHostHeaderCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_AdditionalDomains) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AdditionalDomains) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AdditionalDomains != nil {
+		{
+			size, err := m.AdditionalDomains.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -10084,6 +12067,27 @@ func (m *TemporaryUserBlockingType) Size() (n int) {
 	return n
 }
 
+func (m *DNSRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Type)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *AutoCertInfoType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -10104,6 +12108,12 @@ func (m *AutoCertInfoType) Size() (n int) {
 	l = len(m.AutoCertIssuer)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.DnsRecords) > 0 {
+		for _, e := range m.DnsRecords {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -10241,6 +12251,29 @@ func (m *PolicyBasedChallenge_AlwaysEnableCaptchaChallenge) Size() (n int) {
 	}
 	return n
 }
+func (m *ShapeBotDefenseConfigType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ApplicationId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ApiAuthKey != nil {
+		l = m.ApiAuthKey.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Instance) > 0 {
+		for _, e := range m.Instance {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -10397,6 +12430,12 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.ServerHeaderChoice != nil {
 		n += m.ServerHeaderChoice.Size()
 	}
+	if m.PathNormalizeChoice != nil {
+		n += m.PathNormalizeChoice.Size()
+	}
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		n += m.StrictSniHostHeaderCheckChoice.Size()
+	}
 	if m.DnsVolterraManaged {
 		n += 3
 	}
@@ -10446,6 +12485,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.VolterraCert {
 		n += 3
+	}
+	if m.BotDefenseChoice != nil {
+		n += m.BotDefenseChoice.Size()
 	}
 	return n
 }
@@ -10562,6 +12604,78 @@ func (m *GlobalSpecType_PassThrough) Size() (n int) {
 	_ = l
 	if m.PassThrough != nil {
 		l = m.PassThrough.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_EnablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnablePathNormalize != nil {
+		l = m.EnablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DisablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisablePathNormalize != nil {
+		l = m.DisablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_EnableStrictSniHostHeaderCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		l = m.EnableStrictSniHostHeaderCheck.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_AdditionalDomains) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AdditionalDomains != nil {
+		l = m.AdditionalDomains.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DisableBotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableBotDefense != nil {
+		l = m.DisableBotDefense.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_BotDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BotDefense != nil {
+		l = m.BotDefense.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -10699,6 +12813,12 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.ServerHeaderChoice != nil {
 		n += m.ServerHeaderChoice.Size()
 	}
+	if m.PathNormalizeChoice != nil {
+		n += m.PathNormalizeChoice.Size()
+	}
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		n += m.StrictSniHostHeaderCheckChoice.Size()
+	}
 	return n
 }
 
@@ -10802,6 +12922,54 @@ func (m *CreateSpecType_PassThrough) Size() (n int) {
 	_ = l
 	if m.PassThrough != nil {
 		l = m.PassThrough.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_EnablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnablePathNormalize != nil {
+		l = m.EnablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DisablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisablePathNormalize != nil {
+		l = m.DisablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_EnableStrictSniHostHeaderCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		l = m.EnableStrictSniHostHeaderCheck.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_AdditionalDomains) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AdditionalDomains != nil {
+		l = m.AdditionalDomains.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -10939,6 +13107,12 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.ServerHeaderChoice != nil {
 		n += m.ServerHeaderChoice.Size()
 	}
+	if m.PathNormalizeChoice != nil {
+		n += m.PathNormalizeChoice.Size()
+	}
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		n += m.StrictSniHostHeaderCheckChoice.Size()
+	}
 	return n
 }
 
@@ -11042,6 +13216,54 @@ func (m *ReplaceSpecType_PassThrough) Size() (n int) {
 	_ = l
 	if m.PassThrough != nil {
 		l = m.PassThrough.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_EnablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnablePathNormalize != nil {
+		l = m.EnablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DisablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisablePathNormalize != nil {
+		l = m.DisablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_EnableStrictSniHostHeaderCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		l = m.EnableStrictSniHostHeaderCheck.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_AdditionalDomains) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AdditionalDomains != nil {
+		l = m.AdditionalDomains.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -11182,6 +13404,12 @@ func (m *GetSpecType) Size() (n int) {
 	if m.ServerHeaderChoice != nil {
 		n += m.ServerHeaderChoice.Size()
 	}
+	if m.PathNormalizeChoice != nil {
+		n += m.PathNormalizeChoice.Size()
+	}
+	if m.StrictSniHostHeaderCheckChoice != nil {
+		n += m.StrictSniHostHeaderCheckChoice.Size()
+	}
 	if m.State != 0 {
 		n += 2 + sovTypes(uint64(m.State))
 	}
@@ -11309,6 +13537,54 @@ func (m *GetSpecType_PassThrough) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_EnablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnablePathNormalize != nil {
+		l = m.EnablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DisablePathNormalize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisablePathNormalize != nil {
+		l = m.DisablePathNormalize.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_EnableStrictSniHostHeaderCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableStrictSniHostHeaderCheck != nil {
+		l = m.EnableStrictSniHostHeaderCheck.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_AdditionalDomains) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AdditionalDomains != nil {
+		l = m.AdditionalDomains.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -11392,15 +13668,33 @@ func (this *TemporaryUserBlockingType) String() string {
 	}, "")
 	return s
 }
+func (this *DNSRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSRecord{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AutoCertInfoType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForDnsRecords := "[]*DNSRecord{"
+	for _, f := range this.DnsRecords {
+		repeatedStringForDnsRecords += strings.Replace(f.String(), "DNSRecord", "DNSRecord", 1) + ","
+	}
+	repeatedStringForDnsRecords += "}"
 	s := strings.Join([]string{`&AutoCertInfoType{`,
 		`AutoCertState:` + fmt.Sprintf("%v", this.AutoCertState) + `,`,
 		`AutoCertExpiry:` + strings.Replace(fmt.Sprintf("%v", this.AutoCertExpiry), "Timestamp", "types.Timestamp", 1) + `,`,
 		`AutoCertSubject:` + fmt.Sprintf("%v", this.AutoCertSubject) + `,`,
 		`AutoCertIssuer:` + fmt.Sprintf("%v", this.AutoCertIssuer) + `,`,
+		`DnsRecords:` + repeatedStringForDnsRecords + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11507,6 +13801,23 @@ func (this *PolicyBasedChallenge_AlwaysEnableCaptchaChallenge) String() string {
 	}
 	s := strings.Join([]string{`&PolicyBasedChallenge_AlwaysEnableCaptchaChallenge{`,
 		`AlwaysEnableCaptchaChallenge:` + strings.Replace(fmt.Sprintf("%v", this.AlwaysEnableCaptchaChallenge), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ShapeBotDefenseConfigType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForInstance := "[]*ObjectRefType{"
+	for _, f := range this.Instance {
+		repeatedStringForInstance += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInstance += "}"
+	s := strings.Join([]string{`&ShapeBotDefenseConfigType{`,
+		`ApplicationId:` + fmt.Sprintf("%v", this.ApplicationId) + `,`,
+		`ApiAuthKey:` + strings.Replace(fmt.Sprintf("%v", this.ApiAuthKey), "SecretType", "schema.SecretType", 1) + `,`,
+		`Instance:` + repeatedStringForInstance + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11619,6 +13930,8 @@ func (this *GlobalSpecType) String() string {
 		`TlsIntercept:` + strings.Replace(fmt.Sprintf("%v", this.TlsIntercept), "TlsInterceptionType", "schema.TlsInterceptionType", 1) + `,`,
 		`AuthenticationChoice:` + fmt.Sprintf("%v", this.AuthenticationChoice) + `,`,
 		`ServerHeaderChoice:` + fmt.Sprintf("%v", this.ServerHeaderChoice) + `,`,
+		`PathNormalizeChoice:` + fmt.Sprintf("%v", this.PathNormalizeChoice) + `,`,
+		`StrictSniHostHeaderCheckChoice:` + fmt.Sprintf("%v", this.StrictSniHostHeaderCheckChoice) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`DnsDomains:` + repeatedStringForDnsDomains + `,`,
 		`AutoCert:` + fmt.Sprintf("%v", this.AutoCert) + `,`,
@@ -11631,6 +13944,7 @@ func (this *GlobalSpecType) String() string {
 		`ServicePolicySets:` + repeatedStringForServicePolicySets + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
 		`VolterraCert:` + fmt.Sprintf("%v", this.VolterraCert) + `,`,
+		`BotDefenseChoice:` + fmt.Sprintf("%v", this.BotDefenseChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11735,6 +14049,66 @@ func (this *GlobalSpecType_PassThrough) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_EnablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_EnablePathNormalize{`,
+		`EnablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.EnablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DisablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DisablePathNormalize{`,
+		`DisablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.DisablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_EnableStrictSniHostHeaderCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_EnableStrictSniHostHeaderCheck{`,
+		`EnableStrictSniHostHeaderCheck:` + strings.Replace(fmt.Sprintf("%v", this.EnableStrictSniHostHeaderCheck), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_AdditionalDomains) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AdditionalDomains{`,
+		`AdditionalDomains:` + strings.Replace(fmt.Sprintf("%v", this.AdditionalDomains), "DomainNameList", "schema.DomainNameList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DisableBotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DisableBotDefense{`,
+		`DisableBotDefense:` + strings.Replace(fmt.Sprintf("%v", this.DisableBotDefense), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_BotDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_BotDefense{`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseConfigType", "ShapeBotDefenseConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -11813,6 +14187,8 @@ func (this *CreateSpecType) String() string {
 		`TemporaryUserBlocking:` + strings.Replace(this.TemporaryUserBlocking.String(), "TemporaryUserBlockingType", "TemporaryUserBlockingType", 1) + `,`,
 		`AuthenticationChoice:` + fmt.Sprintf("%v", this.AuthenticationChoice) + `,`,
 		`ServerHeaderChoice:` + fmt.Sprintf("%v", this.ServerHeaderChoice) + `,`,
+		`PathNormalizeChoice:` + fmt.Sprintf("%v", this.PathNormalizeChoice) + `,`,
+		`StrictSniHostHeaderCheckChoice:` + fmt.Sprintf("%v", this.StrictSniHostHeaderCheckChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11907,6 +14283,46 @@ func (this *CreateSpecType_PassThrough) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_EnablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_EnablePathNormalize{`,
+		`EnablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.EnablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DisablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DisablePathNormalize{`,
+		`DisablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.DisablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_EnableStrictSniHostHeaderCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_EnableStrictSniHostHeaderCheck{`,
+		`EnableStrictSniHostHeaderCheck:` + strings.Replace(fmt.Sprintf("%v", this.EnableStrictSniHostHeaderCheck), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_AdditionalDomains) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AdditionalDomains{`,
+		`AdditionalDomains:` + strings.Replace(fmt.Sprintf("%v", this.AdditionalDomains), "DomainNameList", "schema.DomainNameList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -11985,6 +14401,8 @@ func (this *ReplaceSpecType) String() string {
 		`TemporaryUserBlocking:` + strings.Replace(this.TemporaryUserBlocking.String(), "TemporaryUserBlockingType", "TemporaryUserBlockingType", 1) + `,`,
 		`AuthenticationChoice:` + fmt.Sprintf("%v", this.AuthenticationChoice) + `,`,
 		`ServerHeaderChoice:` + fmt.Sprintf("%v", this.ServerHeaderChoice) + `,`,
+		`PathNormalizeChoice:` + fmt.Sprintf("%v", this.PathNormalizeChoice) + `,`,
+		`StrictSniHostHeaderCheckChoice:` + fmt.Sprintf("%v", this.StrictSniHostHeaderCheckChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12079,6 +14497,46 @@ func (this *ReplaceSpecType_PassThrough) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_EnablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_EnablePathNormalize{`,
+		`EnablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.EnablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DisablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DisablePathNormalize{`,
+		`DisablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.DisablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_EnableStrictSniHostHeaderCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_EnableStrictSniHostHeaderCheck{`,
+		`EnableStrictSniHostHeaderCheck:` + strings.Replace(fmt.Sprintf("%v", this.EnableStrictSniHostHeaderCheck), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_AdditionalDomains) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AdditionalDomains{`,
+		`AdditionalDomains:` + strings.Replace(fmt.Sprintf("%v", this.AdditionalDomains), "DomainNameList", "schema.DomainNameList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -12163,6 +14621,8 @@ func (this *GetSpecType) String() string {
 		`TemporaryUserBlocking:` + strings.Replace(this.TemporaryUserBlocking.String(), "TemporaryUserBlockingType", "TemporaryUserBlockingType", 1) + `,`,
 		`AuthenticationChoice:` + fmt.Sprintf("%v", this.AuthenticationChoice) + `,`,
 		`ServerHeaderChoice:` + fmt.Sprintf("%v", this.ServerHeaderChoice) + `,`,
+		`PathNormalizeChoice:` + fmt.Sprintf("%v", this.PathNormalizeChoice) + `,`,
+		`StrictSniHostHeaderCheckChoice:` + fmt.Sprintf("%v", this.StrictSniHostHeaderCheckChoice) + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
@@ -12258,6 +14718,46 @@ func (this *GetSpecType_PassThrough) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_PassThrough{`,
 		`PassThrough:` + strings.Replace(fmt.Sprintf("%v", this.PassThrough), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_EnablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_EnablePathNormalize{`,
+		`EnablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.EnablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DisablePathNormalize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DisablePathNormalize{`,
+		`DisablePathNormalize:` + strings.Replace(fmt.Sprintf("%v", this.DisablePathNormalize), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_EnableStrictSniHostHeaderCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_EnableStrictSniHostHeaderCheck{`,
+		`EnableStrictSniHostHeaderCheck:` + strings.Replace(fmt.Sprintf("%v", this.EnableStrictSniHostHeaderCheck), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AdditionalDomains) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AdditionalDomains{`,
+		`AdditionalDomains:` + strings.Replace(fmt.Sprintf("%v", this.AdditionalDomains), "DomainNameList", "schema.DomainNameList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -13024,6 +15524,155 @@ func (m *TemporaryUserBlockingType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *DNSRecord) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSRecord: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Type = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *AutoCertInfoType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -13171,6 +15820,40 @@ func (m *AutoCertInfoType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.AutoCertIssuer = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsRecords", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsRecords = append(m.DnsRecords, &DNSRecord{})
+			if err := m.DnsRecords[len(m.DnsRecords)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -13693,6 +16376,161 @@ func (m *PolicyBasedChallenge) Unmarshal(dAtA []byte) error {
 			}
 			m.MaliciousUserMitigation = append(m.MaliciousUserMitigation, &schema.ObjectRefType{})
 			if err := m.MaliciousUserMitigation[len(m.MaliciousUserMitigation)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ShapeBotDefenseConfigType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ShapeBotDefenseConfigType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ShapeBotDefenseConfigType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApplicationId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiAuthKey", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiAuthKey == nil {
+				m.ApiAuthKey = &schema.SecretType{}
+			}
+			if err := m.ApiAuthKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Instance", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Instance = append(m.Instance, &schema.ObjectRefType{})
+			if err := m.Instance[len(m.Instance)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -15104,6 +17942,146 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerHeaderChoice = &GlobalSpecType_PassThrough{v}
 			iNdEx = postIndex
+		case 48:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &GlobalSpecType_EnablePathNormalize{v}
+			iNdEx = postIndex
+		case 49:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &GlobalSpecType_DisablePathNormalize{v}
+			iNdEx = postIndex
+		case 51:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableStrictSniHostHeaderCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &GlobalSpecType_EnableStrictSniHostHeaderCheck{v}
+			iNdEx = postIndex
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdditionalDomains", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.DomainNameList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &GlobalSpecType_AdditionalDomains{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DnsVolterraManaged", wireType)
@@ -15423,6 +18401,76 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.VolterraCert = bool(v != 0)
+		case 1016:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableBotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &GlobalSpecType_DisableBotDefense{v}
+			iNdEx = postIndex
+		case 1017:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ShapeBotDefenseConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotDefenseChoice = &GlobalSpecType_BotDefense{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -16637,6 +19685,146 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerHeaderChoice = &CreateSpecType_PassThrough{v}
 			iNdEx = postIndex
+		case 48:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &CreateSpecType_EnablePathNormalize{v}
+			iNdEx = postIndex
+		case 49:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &CreateSpecType_DisablePathNormalize{v}
+			iNdEx = postIndex
+		case 51:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableStrictSniHostHeaderCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &CreateSpecType_EnableStrictSniHostHeaderCheck{v}
+			iNdEx = postIndex
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdditionalDomains", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.DomainNameList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &CreateSpecType_AdditionalDomains{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -17850,6 +21038,146 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ServerHeaderChoice = &ReplaceSpecType_PassThrough{v}
+			iNdEx = postIndex
+		case 48:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &ReplaceSpecType_EnablePathNormalize{v}
+			iNdEx = postIndex
+		case 49:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &ReplaceSpecType_DisablePathNormalize{v}
+			iNdEx = postIndex
+		case 51:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableStrictSniHostHeaderCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &ReplaceSpecType_EnableStrictSniHostHeaderCheck{v}
+			iNdEx = postIndex
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdditionalDomains", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.DomainNameList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &ReplaceSpecType_AdditionalDomains{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -19083,6 +22411,146 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ServerHeaderChoice = &GetSpecType_PassThrough{v}
+			iNdEx = postIndex
+		case 48:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &GetSpecType_EnablePathNormalize{v}
+			iNdEx = postIndex
+		case 49:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisablePathNormalize", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PathNormalizeChoice = &GetSpecType_DisablePathNormalize{v}
+			iNdEx = postIndex
+		case 51:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableStrictSniHostHeaderCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &GetSpecType_EnableStrictSniHostHeaderCheck{v}
+			iNdEx = postIndex
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdditionalDomains", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.DomainNameList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StrictSniHostHeaderCheckChoice = &GetSpecType_AdditionalDomains{v}
 			iNdEx = postIndex
 		case 1003:
 			if wireType != 0 {

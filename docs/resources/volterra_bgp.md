@@ -50,29 +50,23 @@ resource "volterra_bgp" "example" {
     // One of the arguments from this list "external internal" must be set
 
     external {
-      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
-      address = "address"
-
-      asn = "asn"
+      // One of the arguments from this list "subnet_begin_offset subnet_end_offset from_site default_gateway address" must be set
+      from_site = true
+      asn       = "asn"
 
       family_inet {
         // One of the arguments from this list "enable disable" must be set
-        enable = true
+        disable = true
       }
 
       // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
-
-      interface {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-      port = "port"
+      outside_interfaces = true
+      port               = "port"
     }
   }
 
   where {
-    // One of the arguments from this list "site virtual_site" must be set
+    // One of the arguments from this list "virtual_site site" must be set
 
     site {
       network_type = "network_type"

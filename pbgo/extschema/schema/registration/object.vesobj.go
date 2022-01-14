@@ -299,64 +299,68 @@ func (e *DBObject) SetTable(tbl db.Table) {
 }
 
 func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		err               error
-		drInfos, fdrInfos []db.DRefInfo
-	)
+	if e == nil {
+		return nil, nil
+	}
 	refrUID, err := e.Key()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
 	}
-	fdrInfos, err = e.GetSpecDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "Getting Field direct ref info")
-	}
-	for _, dri := range fdrInfos {
-		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
-		dri.DRField = "ves.io.schema.registration.Object." + dri.DRField
-		dri.RefrType = e.Type()
-		dri.RefrUID = refrUID
 
-		// convert any ref_to schema annotation specified by kind value to type value
-		if !strings.HasPrefix(dri.RefdType, "ves.io") {
-			d, err := e.GetDB()
-			if err != nil {
-				return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := e.GetSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.registration.Object." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
+
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
 			}
-			refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
-			if err != nil {
-				return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
-			}
-			dri.RefdType = refdType
 		}
-		drInfos = append(drInfos, dri)
+		drInfos = append(drInfos, fdrInfos...)
 	}
-	fdrInfos, err = e.GetSystemMetadataDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "Getting Field direct ref info")
-	}
-	for _, dri := range fdrInfos {
-		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
-		dri.DRField = "ves.io.schema.registration.Object." + dri.DRField
-		dri.RefrType = e.Type()
-		dri.RefrUID = refrUID
+	if fdrInfos, err := e.GetSystemMetadataDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.registration.Object." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
 
-		// convert any ref_to schema annotation specified by kind value to type value
-		if !strings.HasPrefix(dri.RefdType, "ves.io") {
-			d, err := e.GetDB()
-			if err != nil {
-				return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
 			}
-			refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
-			if err != nil {
-				return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
-			}
-			dri.RefdType = refdType
 		}
-		drInfos = append(drInfos, dri)
+		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	return drInfos, err
+	return drInfos, nil
+
 }
 
 func (e *DBObject) ToStore() store.Entry {
@@ -401,48 +405,38 @@ func NewEntryObject(opts ...db.OpOption) db.Entry {
 
 // GetDRefInfo for the field's type
 func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if e.Spec == nil {
-		return []db.DRefInfo{}, nil
+	if e.GetSpec() == nil {
+		return nil, nil
 	}
 
-	driSet, err = e.Spec.GetDRefInfo()
+	drInfos, err := e.GetSpec().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "spec." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if e.SystemMetadata == nil {
-		return []db.DRefInfo{}, nil
+	if e.GetSystemMetadata() == nil {
+		return nil, nil
 	}
 
-	driSet, err = e.SystemMetadata.GetDRefInfo()
+	drInfos, err := e.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // Implement sro.SRO interface
@@ -708,6 +702,26 @@ func (o *DBObject) IsSpecEqual(other sro.SRO) bool {
 	}
 
 	return o.GetSpec().Equal(otherSpec)
+}
+
+// GetVtrpId returns vtrpId of the object.
+func (o *DBObject) GetVtrpId() string {
+	return o.GetSystemMetadata().GetVtrpId()
+}
+
+// SetVtrpId sets vtrpId of the object.
+func (o *DBObject) SetVtrpId(id string) {
+	o.GetSystemMetadata().SetVtrpId(id)
+}
+
+// GetVtrpStale returns true if the object is stale in Mars
+func (o *DBObject) GetVtrpStale() bool {
+	return o.GetSystemMetadata().GetVtrpStale()
+}
+
+// SetVtrpStale sets vtrpStale on the object
+func (o *DBObject) SetVtrpStale(isStale bool) {
+	o.GetSystemMetadata().SetVtrpStale(isStale)
 }
 
 type ValidateObject struct {

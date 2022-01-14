@@ -79,25 +79,34 @@ func (m *AuthenticationDetails) Validate(ctx context.Context, opts ...db.Validat
 }
 
 func (m *AuthenticationDetails) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAuthConfigDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAuthConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetCookieParamsChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetCookieParamsChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *AuthenticationDetails) GetAuthConfigDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAuthConfig() {
+	refs := m.GetAuthConfig()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("AuthenticationDetails.auth_config[%d] has a nil value", i)
 		}
@@ -112,8 +121,8 @@ func (m *AuthenticationDetails) GetAuthConfigDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAuthConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -138,33 +147,29 @@ func (m *AuthenticationDetails) GetAuthConfigDBEntries(ctx context.Context, d db
 
 // GetDRefInfo for the field's type
 func (m *AuthenticationDetails) GetCookieParamsChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetCookieParamsChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetCookieParamsChoice().(type) {
 	case *AuthenticationDetails_UseAuthObjectConfig:
 
-	case *AuthenticationDetails_CookieParams:
-		odrInfos, err = m.GetCookieParams().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "cookie_params." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AuthenticationDetails_CookieParams:
+		drInfos, err := m.GetCookieParams().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cookie_params." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAuthenticationDetails struct {
@@ -459,6 +464,18 @@ func (v *ValidateAutoCertInfoType) Validate(ctx context.Context, pm interface{},
 		vOpts := append(opts, db.WithValidateField("auto_cert_subject"))
 		if err := fv(ctx, m.GetAutoCertSubject(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_records"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_records"))
+		for idx, item := range m.GetDnsRecords() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -822,6 +839,18 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return nil
 	}
 
+	for idx, e := range m.GetRequestHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting CreateSpecType.request_headers_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting CreateSpecType.response_headers_to_add idx %v", idx)
+		}
+	}
+
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.tls_parameters")
 	}
@@ -861,61 +890,70 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertisePoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAuthenticationChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRateLimiterAllowedPrefixesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRateLimiterAllowedPrefixesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUserIdentificationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWafTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAdvertisePolicies() {
+	refs := m.GetAdvertisePolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.advertise_policies[%d] has a nil value", i)
 		}
@@ -930,8 +968,8 @@ func (m *CreateSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAdvertisePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -956,61 +994,56 @@ func (m *CreateSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAuthenticationChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAuthenticationChoice().(type) {
 	case *CreateSpecType_NoAuthentication:
 
-	case *CreateSpecType_Authentication:
-		odrInfos, err = m.GetAuthentication().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "authentication." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *CreateSpecType_Authentication:
+		drInfos, err := m.GetAuthentication().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAuthentication().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "authentication." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDynamicReverseProxy() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDynamicReverseProxy().GetDRefInfo()
+	drInfos, err := m.GetDynamicReverseProxy().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxy().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "dynamic_reverse_proxy." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *CreateSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRateLimiter() {
+	refs := m.GetRateLimiter()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.rate_limiter[%d] has a nil value", i)
 		}
@@ -1025,8 +1058,8 @@ func (m *CreateSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1050,8 +1083,12 @@ func (m *CreateSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inter
 }
 
 func (m *CreateSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRateLimiterAllowedPrefixes() {
+	refs := m.GetRateLimiterAllowedPrefixes()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.rate_limiter_allowed_prefixes[%d] has a nil value", i)
 		}
@@ -1066,8 +1103,8 @@ func (m *CreateSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo,
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRateLimiterAllowedPrefixesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1091,8 +1128,12 @@ func (m *CreateSpecType) GetRateLimiterAllowedPrefixesDBEntries(ctx context.Cont
 }
 
 func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRoutes() {
+	refs := m.GetRoutes()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.routes[%d] has a nil value", i)
 		}
@@ -1107,8 +1148,8 @@ func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRoutesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1132,8 +1173,12 @@ func (m *CreateSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface)
 }
 
 func (m *CreateSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetUserIdentification() {
+	refs := m.GetUserIdentification()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.user_identification[%d] has a nil value", i)
 		}
@@ -1148,8 +1193,8 @@ func (m *CreateSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetUserIdentificationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1174,25 +1219,20 @@ func (m *CreateSpecType) GetUserIdentificationDBEntries(ctx context.Context, d d
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWafType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWafType().GetDRefInfo()
+	drInfos, err := m.GetWafType().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafType().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateCreateSpecType struct {
@@ -1839,6 +1879,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetPathNormalizeChoice().(type) {
+	case *CreateSpecType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*CreateSpecType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*CreateSpecType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
@@ -1953,6 +2019,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("server_header_choice"),
 				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetStrictSniHostHeaderCheckChoice().(type) {
+	case *CreateSpecType_EnableStrictSniHostHeaderCheck:
+		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.enable_strict_sni_host_header_check"]; exists {
+			val := m.GetStrictSniHostHeaderCheckChoice().(*CreateSpecType_EnableStrictSniHostHeaderCheck).EnableStrictSniHostHeaderCheck
+			vOpts := append(opts,
+				db.WithValidateField("strict_sni_host_header_check_choice"),
+				db.WithValidateField("enable_strict_sni_host_header_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AdditionalDomains:
+		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.additional_domains"]; exists {
+			val := m.GetStrictSniHostHeaderCheckChoice().(*CreateSpecType_AdditionalDomains).AdditionalDomains
+			vOpts := append(opts,
+				db.WithValidateField("strict_sni_host_header_check_choice"),
+				db.WithValidateField("additional_domains"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2180,6 +2272,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
+
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
 	v.FldValidators["buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
@@ -2201,6 +2295,102 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSRecord) DeepCopy() *DNSRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSRecordValidator = func() *ValidateDNSRecord {
+	v := &ValidateDNSRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DNSRecordValidator() db.Validator {
+	return DefaultDNSRecordValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2241,19 +2431,21 @@ func (m *DynamicReverseProxyType) Validate(ctx context.Context, opts ...db.Valid
 }
 
 func (m *DynamicReverseProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetResolutionNetworkDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetResolutionNetworkDRefInfo()
+
 }
 
 func (m *DynamicReverseProxyType) GetResolutionNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetResolutionNetwork() {
+	refs := m.GetResolutionNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("DynamicReverseProxyType.resolution_network[%d] has a nil value", i)
 		}
@@ -2268,8 +2460,8 @@ func (m *DynamicReverseProxyType) GetResolutionNetworkDRefInfo() ([]db.DRefInfo,
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetResolutionNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2409,6 +2601,18 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 		return nil
 	}
 
+	for idx, e := range m.GetRequestHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GetSpecType.request_headers_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GetSpecType.response_headers_to_add idx %v", idx)
+		}
+	}
+
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.tls_parameters")
 	}
@@ -2448,61 +2652,70 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertisePoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAuthenticationChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRateLimiterAllowedPrefixesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRateLimiterAllowedPrefixesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUserIdentificationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWafTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAdvertisePolicies() {
+	refs := m.GetAdvertisePolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.advertise_policies[%d] has a nil value", i)
 		}
@@ -2517,8 +2730,8 @@ func (m *GetSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAdvertisePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2543,61 +2756,56 @@ func (m *GetSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db.In
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAuthenticationChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAuthenticationChoice().(type) {
 	case *GetSpecType_NoAuthentication:
 
-	case *GetSpecType_Authentication:
-		odrInfos, err = m.GetAuthentication().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "authentication." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GetSpecType_Authentication:
+		drInfos, err := m.GetAuthentication().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAuthentication().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "authentication." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDynamicReverseProxy() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDynamicReverseProxy().GetDRefInfo()
+	drInfos, err := m.GetDynamicReverseProxy().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxy().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "dynamic_reverse_proxy." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *GetSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRateLimiter() {
+	refs := m.GetRateLimiter()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.rate_limiter[%d] has a nil value", i)
 		}
@@ -2612,8 +2820,8 @@ func (m *GetSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2637,8 +2845,12 @@ func (m *GetSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Interfac
 }
 
 func (m *GetSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRateLimiterAllowedPrefixes() {
+	refs := m.GetRateLimiterAllowedPrefixes()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.rate_limiter_allowed_prefixes[%d] has a nil value", i)
 		}
@@ -2653,8 +2865,8 @@ func (m *GetSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo, er
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRateLimiterAllowedPrefixesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2678,8 +2890,12 @@ func (m *GetSpecType) GetRateLimiterAllowedPrefixesDBEntries(ctx context.Context
 }
 
 func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRoutes() {
+	refs := m.GetRoutes()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.routes[%d] has a nil value", i)
 		}
@@ -2694,8 +2910,8 @@ func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRoutesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2719,8 +2935,12 @@ func (m *GetSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface) ([
 }
 
 func (m *GetSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetUserIdentification() {
+	refs := m.GetUserIdentification()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.user_identification[%d] has a nil value", i)
 		}
@@ -2735,8 +2955,8 @@ func (m *GetSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetUserIdentificationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2761,25 +2981,20 @@ func (m *GetSpecType) GetUserIdentificationDBEntries(ctx context.Context, d db.I
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWafType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWafType().GetDRefInfo()
+	drInfos, err := m.GetWafType().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafType().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGetSpecType struct {
@@ -3465,6 +3680,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetPathNormalizeChoice().(type) {
+	case *GetSpecType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*GetSpecType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*GetSpecType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
@@ -3592,6 +3833,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetStrictSniHostHeaderCheckChoice().(type) {
+	case *GetSpecType_EnableStrictSniHostHeaderCheck:
+		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.enable_strict_sni_host_header_check"]; exists {
+			val := m.GetStrictSniHostHeaderCheckChoice().(*GetSpecType_EnableStrictSniHostHeaderCheck).EnableStrictSniHostHeaderCheck
+			vOpts := append(opts,
+				db.WithValidateField("strict_sni_host_header_check_choice"),
+				db.WithValidateField("enable_strict_sni_host_header_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AdditionalDomains:
+		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.additional_domains"]; exists {
+			val := m.GetStrictSniHostHeaderCheckChoice().(*GetSpecType_AdditionalDomains).AdditionalDomains
+			vOpts := append(opts,
+				db.WithValidateField("strict_sni_host_header_check_choice"),
+				db.WithValidateField("additional_domains"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3824,6 +4091,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
+
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
 	v.FldValidators["buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
@@ -3866,6 +4135,18 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 		return nil
 	}
 
+	for idx, e := range m.GetRequestHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalSpecType.request_headers_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalSpecType.response_headers_to_add idx %v", idx)
+		}
+	}
+
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.tls_parameters")
 	}
@@ -3876,6 +4157,10 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetAuthentication().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.authentication")
+	}
+
+	if err := m.GetBotDefense().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.bot_defense")
 	}
 
 	return nil
@@ -3909,91 +4194,106 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertisePoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAuthenticationChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDnsDomainsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDnsDomainsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetJwtDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetJwtDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRateLimiterAllowedPrefixesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRateLimiterAllowedPrefixesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetServicePolicySetsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetServicePolicySetsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUserIdentificationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWafTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAdvertisePolicies() {
+	refs := m.GetAdvertisePolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.advertise_policies[%d] has a nil value", i)
 		}
@@ -4008,8 +4308,8 @@ func (m *GlobalSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAdvertisePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4034,73 +4334,100 @@ func (m *GlobalSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAuthenticationChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAuthenticationChoice().(type) {
 	case *GlobalSpecType_NoAuthentication:
 
-	case *GlobalSpecType_Authentication:
-		odrInfos, err = m.GetAuthentication().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "authentication." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_Authentication:
+		drInfos, err := m.GetAuthentication().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAuthentication().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "authentication." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *GlobalSpecType_DisableBotDefense:
+
+		return nil, nil
+
+	case *GlobalSpecType_BotDefense:
+		drInfos, err := m.GetBotDefense().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefense().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetChallengeType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetChallengeType().(type) {
 	case *GlobalSpecType_JsChallenge:
 
+		return nil, nil
+
 	case *GlobalSpecType_CaptchaChallenge:
+
+		return nil, nil
 
 	case *GlobalSpecType_NoChallenge:
 
-	case *GlobalSpecType_PolicyBasedChallenge:
-		odrInfos, err = m.GetPolicyBasedChallenge().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "policy_based_challenge." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_PolicyBasedChallenge:
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetDnsDomainsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetDnsDomains() {
+	refs := m.GetDnsDomains()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.dns_domains[%d] has a nil value", i)
 		}
@@ -4115,8 +4442,8 @@ func (m *GlobalSpecType) GetDnsDomainsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetDnsDomainsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4141,30 +4468,29 @@ func (m *GlobalSpecType) GetDnsDomainsDBEntries(ctx context.Context, d db.Interf
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDynamicReverseProxy() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDynamicReverseProxy().GetDRefInfo()
+	drInfos, err := m.GetDynamicReverseProxy().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxy().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "dynamic_reverse_proxy." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *GlobalSpecType) GetJwtDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetJwt() {
+	refs := m.GetJwt()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.jwt[%d] has a nil value", i)
 		}
@@ -4179,8 +4505,8 @@ func (m *GlobalSpecType) GetJwtDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetJwtDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4204,8 +4530,12 @@ func (m *GlobalSpecType) GetJwtDBEntries(ctx context.Context, d db.Interface) ([
 }
 
 func (m *GlobalSpecType) GetMaliciousUserMitigationDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetMaliciousUserMitigation() {
+	refs := m.GetMaliciousUserMitigation()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.malicious_user_mitigation[%d] has a nil value", i)
 		}
@@ -4220,8 +4550,8 @@ func (m *GlobalSpecType) GetMaliciousUserMitigationDRefInfo() ([]db.DRefInfo, er
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetMaliciousUserMitigationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4245,8 +4575,12 @@ func (m *GlobalSpecType) GetMaliciousUserMitigationDBEntries(ctx context.Context
 }
 
 func (m *GlobalSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRateLimiter() {
+	refs := m.GetRateLimiter()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.rate_limiter[%d] has a nil value", i)
 		}
@@ -4261,8 +4595,8 @@ func (m *GlobalSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4286,8 +4620,12 @@ func (m *GlobalSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inter
 }
 
 func (m *GlobalSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRateLimiterAllowedPrefixes() {
+	refs := m.GetRateLimiterAllowedPrefixes()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.rate_limiter_allowed_prefixes[%d] has a nil value", i)
 		}
@@ -4302,8 +4640,8 @@ func (m *GlobalSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo,
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRateLimiterAllowedPrefixesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4327,8 +4665,12 @@ func (m *GlobalSpecType) GetRateLimiterAllowedPrefixesDBEntries(ctx context.Cont
 }
 
 func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRoutes() {
+	refs := m.GetRoutes()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.routes[%d] has a nil value", i)
 		}
@@ -4343,8 +4685,8 @@ func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRoutesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4368,8 +4710,12 @@ func (m *GlobalSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface)
 }
 
 func (m *GlobalSpecType) GetServicePolicySetsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetServicePolicySets() {
+	refs := m.GetServicePolicySets()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.service_policy_sets[%d] has a nil value", i)
 		}
@@ -4384,8 +4730,8 @@ func (m *GlobalSpecType) GetServicePolicySetsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetServicePolicySetsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4409,8 +4755,12 @@ func (m *GlobalSpecType) GetServicePolicySetsDBEntries(ctx context.Context, d db
 }
 
 func (m *GlobalSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetUserIdentification() {
+	refs := m.GetUserIdentification()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.user_identification[%d] has a nil value", i)
 		}
@@ -4425,8 +4775,8 @@ func (m *GlobalSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetUserIdentificationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4451,25 +4801,20 @@ func (m *GlobalSpecType) GetUserIdentificationDBEntries(ctx context.Context, d d
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWafType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWafType().GetDRefInfo()
+	drInfos, err := m.GetWafType().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafType().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGlobalSpecType struct {
@@ -5170,6 +5515,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetBotDefenseChoice().(type) {
+	case *GlobalSpecType_DisableBotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.disable_bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*GlobalSpecType_DisableBotDefense).DisableBotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("disable_bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*GlobalSpecType_BotDefense).BotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["buffer_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("buffer_policy"))
@@ -5392,6 +5763,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetPathNormalizeChoice().(type) {
+	case *GlobalSpecType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*GlobalSpecType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*GlobalSpecType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
@@ -5527,6 +5924,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetStrictSniHostHeaderCheckChoice().(type) {
+	case *GlobalSpecType_EnableStrictSniHostHeaderCheck:
+		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.enable_strict_sni_host_header_check"]; exists {
+			val := m.GetStrictSniHostHeaderCheckChoice().(*GlobalSpecType_EnableStrictSniHostHeaderCheck).EnableStrictSniHostHeaderCheck
+			vOpts := append(opts,
+				db.WithValidateField("strict_sni_host_header_check_choice"),
+				db.WithValidateField("enable_strict_sni_host_header_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AdditionalDomains:
+		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.additional_domains"]; exists {
+			val := m.GetStrictSniHostHeaderCheckChoice().(*GlobalSpecType_AdditionalDomains).AdditionalDomains
+			vOpts := append(opts,
+				db.WithValidateField("strict_sni_host_header_check_choice"),
+				db.WithValidateField("additional_domains"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5817,7 +6240,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhServicePolicySets := v.ServicePolicySetsValidationRuleHandler
 	rulesServicePolicySets := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.max_items": "5",
 	}
 	vFn, err = vrhServicePolicySets(rulesServicePolicySets)
 	if err != nil {
@@ -5828,9 +6251,13 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
+	v.FldValidators["bot_defense_choice.bot_defense"] = ShapeBotDefenseConfigTypeValidator().Validate
+
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
@@ -6163,19 +6590,21 @@ func (m *PolicyBasedChallenge) Validate(ctx context.Context, opts ...db.Validate
 }
 
 func (m *PolicyBasedChallenge) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetMaliciousUserMitigationDRefInfo()
+
 }
 
 func (m *PolicyBasedChallenge) GetMaliciousUserMitigationDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetMaliciousUserMitigation() {
+	refs := m.GetMaliciousUserMitigation()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("PolicyBasedChallenge.malicious_user_mitigation[%d] has a nil value", i)
 		}
@@ -6190,8 +6619,8 @@ func (m *PolicyBasedChallenge) GetMaliciousUserMitigationDRefInfo() ([]db.DRefIn
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetMaliciousUserMitigationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6429,6 +6858,18 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 		return nil
 	}
 
+	for idx, e := range m.GetRequestHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ReplaceSpecType.request_headers_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ReplaceSpecType.response_headers_to_add idx %v", idx)
+		}
+	}
+
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.tls_parameters")
 	}
@@ -6468,61 +6909,70 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertisePoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAuthenticationChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRateLimiterAllowedPrefixesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRateLimiterAllowedPrefixesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUserIdentificationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWafTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAdvertisePolicies() {
+	refs := m.GetAdvertisePolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.advertise_policies[%d] has a nil value", i)
 		}
@@ -6537,8 +6987,8 @@ func (m *ReplaceSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAdvertisePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6563,61 +7013,56 @@ func (m *ReplaceSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d d
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAuthenticationChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAuthenticationChoice().(type) {
 	case *ReplaceSpecType_NoAuthentication:
 
-	case *ReplaceSpecType_Authentication:
-		odrInfos, err = m.GetAuthentication().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "authentication." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReplaceSpecType_Authentication:
+		drInfos, err := m.GetAuthentication().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAuthentication().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "authentication." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDynamicReverseProxy() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDynamicReverseProxy().GetDRefInfo()
+	drInfos, err := m.GetDynamicReverseProxy().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxy().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "dynamic_reverse_proxy." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *ReplaceSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRateLimiter() {
+	refs := m.GetRateLimiter()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.rate_limiter[%d] has a nil value", i)
 		}
@@ -6632,8 +7077,8 @@ func (m *ReplaceSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6657,8 +7102,12 @@ func (m *ReplaceSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inte
 }
 
 func (m *ReplaceSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRateLimiterAllowedPrefixes() {
+	refs := m.GetRateLimiterAllowedPrefixes()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.rate_limiter_allowed_prefixes[%d] has a nil value", i)
 		}
@@ -6673,8 +7122,8 @@ func (m *ReplaceSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRateLimiterAllowedPrefixesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6698,8 +7147,12 @@ func (m *ReplaceSpecType) GetRateLimiterAllowedPrefixesDBEntries(ctx context.Con
 }
 
 func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRoutes() {
+	refs := m.GetRoutes()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.routes[%d] has a nil value", i)
 		}
@@ -6714,8 +7167,8 @@ func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRoutesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6739,8 +7192,12 @@ func (m *ReplaceSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface
 }
 
 func (m *ReplaceSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetUserIdentification() {
+	refs := m.GetUserIdentification()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.user_identification[%d] has a nil value", i)
 		}
@@ -6755,8 +7212,8 @@ func (m *ReplaceSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error)
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetUserIdentificationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6781,25 +7238,20 @@ func (m *ReplaceSpecType) GetUserIdentificationDBEntries(ctx context.Context, d 
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWafType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWafType().GetDRefInfo()
+	drInfos, err := m.GetWafType().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafType().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateReplaceSpecType struct {
@@ -7446,6 +7898,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetPathNormalizeChoice().(type) {
+	case *ReplaceSpecType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*ReplaceSpecType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*ReplaceSpecType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
@@ -7560,6 +8038,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("server_header_choice"),
 				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetStrictSniHostHeaderCheckChoice().(type) {
+	case *ReplaceSpecType_EnableStrictSniHostHeaderCheck:
+		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.enable_strict_sni_host_header_check"]; exists {
+			val := m.GetStrictSniHostHeaderCheckChoice().(*ReplaceSpecType_EnableStrictSniHostHeaderCheck).EnableStrictSniHostHeaderCheck
+			vOpts := append(opts,
+				db.WithValidateField("strict_sni_host_header_check_choice"),
+				db.WithValidateField("enable_strict_sni_host_header_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AdditionalDomains:
+		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.additional_domains"]; exists {
+			val := m.GetStrictSniHostHeaderCheckChoice().(*ReplaceSpecType_AdditionalDomains).AdditionalDomains
+			vOpts := append(opts,
+				db.WithValidateField("strict_sni_host_header_check_choice"),
+				db.WithValidateField("additional_domains"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -7787,6 +8291,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
+
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
 	v.FldValidators["buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
@@ -7808,6 +8314,205 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ShapeBotDefenseConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ShapeBotDefenseConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ShapeBotDefenseConfigType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetApiAuthKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ShapeBotDefenseConfigType.api_auth_key")
+	}
+
+	return nil
+}
+
+func (m *ShapeBotDefenseConfigType) DeepCopy() *ShapeBotDefenseConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ShapeBotDefenseConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ShapeBotDefenseConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ShapeBotDefenseConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ShapeBotDefenseConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ShapeBotDefenseConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInstanceDRefInfo()
+
+}
+
+func (m *ShapeBotDefenseConfigType) GetInstanceDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetInstance()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ShapeBotDefenseConfigType.instance[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "shape_bot_defense_instance.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "instance",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetInstanceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ShapeBotDefenseConfigType) GetInstanceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "shape_bot_defense_instance.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: shape_bot_defense_instance")
+	}
+	for _, ref := range m.GetInstance() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateShapeBotDefenseConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateShapeBotDefenseConfigType) ApplicationIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for application_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ShapeBotDefenseConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ShapeBotDefenseConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_auth_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_auth_key"))
+		if err := fv(ctx, m.GetApiAuthKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["application_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("application_id"))
+		if err := fv(ctx, m.GetApplicationId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["instance"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("instance"))
+		for idx, item := range m.GetInstance() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultShapeBotDefenseConfigTypeValidator = func() *ValidateShapeBotDefenseConfigType {
+	v := &ValidateShapeBotDefenseConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApplicationId := v.ApplicationIdValidationRuleHandler
+	rulesApplicationId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "32",
+		"ves.io.schema.rules.string.min_len": "32",
+	}
+	vFn, err = vrhApplicationId(rulesApplicationId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotDefenseConfigType.application_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["application_id"] = vFn
+
+	v.FldValidators["api_auth_key"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func ShapeBotDefenseConfigTypeValidator() db.Validator {
+	return DefaultShapeBotDefenseConfigTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -7995,6 +8700,41 @@ func (r *CreateSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) e
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetPathNormalizeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PathNormalizeChoice.(type) {
+	case nil:
+		o.PathNormalizeChoice = nil
+
+	case *CreateSpecType_DisablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *CreateSpecType_EnablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetPathNormalizeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PathNormalizeChoice.(type) {
+	case nil:
+		r.PathNormalizeChoice = nil
+
+	case *GlobalSpecType_DisablePathNormalize:
+		r.PathNormalizeChoice = &CreateSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *GlobalSpecType_EnablePathNormalize:
+		r.PathNormalizeChoice = &CreateSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ServerHeaderChoice.(type) {
 	case nil:
@@ -8041,6 +8781,41 @@ func (r *CreateSpecType) GetServerHeaderChoiceFromGlobalSpecType(o *GlobalSpecTy
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.StrictSniHostHeaderCheckChoice.(type) {
+	case nil:
+		o.StrictSniHostHeaderCheckChoice = nil
+
+	case *CreateSpecType_AdditionalDomains:
+		o.StrictSniHostHeaderCheckChoice = &GlobalSpecType_AdditionalDomains{AdditionalDomains: of.AdditionalDomains}
+
+	case *CreateSpecType_EnableStrictSniHostHeaderCheck:
+		o.StrictSniHostHeaderCheckChoice = &GlobalSpecType_EnableStrictSniHostHeaderCheck{EnableStrictSniHostHeaderCheck: of.EnableStrictSniHostHeaderCheck}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.StrictSniHostHeaderCheckChoice.(type) {
+	case nil:
+		r.StrictSniHostHeaderCheckChoice = nil
+
+	case *GlobalSpecType_AdditionalDomains:
+		r.StrictSniHostHeaderCheckChoice = &CreateSpecType_AdditionalDomains{AdditionalDomains: of.AdditionalDomains}
+
+	case *GlobalSpecType_EnableStrictSniHostHeaderCheck:
+		r.StrictSniHostHeaderCheckChoice = &CreateSpecType_EnableStrictSniHostHeaderCheck{EnableStrictSniHostHeaderCheck: of.EnableStrictSniHostHeaderCheck}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -8059,6 +8834,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
+	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
@@ -8069,6 +8845,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
+	m.GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(f)
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
 	m.TlsParameters = f.GetTlsParameters()
 	m.UserIdentification = f.GetUserIdentification()
@@ -8095,6 +8872,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
+	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
@@ -8105,6 +8883,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
+	m1.SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(f)
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
 	f.TlsParameters = m1.TlsParameters
 	f.UserIdentification = m1.UserIdentification
@@ -8188,6 +8967,41 @@ func (r *GetSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) erro
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetPathNormalizeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PathNormalizeChoice.(type) {
+	case nil:
+		o.PathNormalizeChoice = nil
+
+	case *GetSpecType_DisablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *GetSpecType_EnablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetPathNormalizeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PathNormalizeChoice.(type) {
+	case nil:
+		r.PathNormalizeChoice = nil
+
+	case *GlobalSpecType_DisablePathNormalize:
+		r.PathNormalizeChoice = &GetSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *GlobalSpecType_EnablePathNormalize:
+		r.PathNormalizeChoice = &GetSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ServerHeaderChoice.(type) {
 	case nil:
@@ -8234,6 +9048,41 @@ func (r *GetSpecType) GetServerHeaderChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.StrictSniHostHeaderCheckChoice.(type) {
+	case nil:
+		o.StrictSniHostHeaderCheckChoice = nil
+
+	case *GetSpecType_AdditionalDomains:
+		o.StrictSniHostHeaderCheckChoice = &GlobalSpecType_AdditionalDomains{AdditionalDomains: of.AdditionalDomains}
+
+	case *GetSpecType_EnableStrictSniHostHeaderCheck:
+		o.StrictSniHostHeaderCheckChoice = &GlobalSpecType_EnableStrictSniHostHeaderCheck{EnableStrictSniHostHeaderCheck: of.EnableStrictSniHostHeaderCheck}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.StrictSniHostHeaderCheckChoice.(type) {
+	case nil:
+		r.StrictSniHostHeaderCheckChoice = nil
+
+	case *GlobalSpecType_AdditionalDomains:
+		r.StrictSniHostHeaderCheckChoice = &GetSpecType_AdditionalDomains{AdditionalDomains: of.AdditionalDomains}
+
+	case *GlobalSpecType_EnableStrictSniHostHeaderCheck:
+		r.StrictSniHostHeaderCheckChoice = &GetSpecType_EnableStrictSniHostHeaderCheck{EnableStrictSniHostHeaderCheck: of.EnableStrictSniHostHeaderCheck}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -8256,6 +9105,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.HostName = f.GetHostName()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
+	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
@@ -8267,6 +9117,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Routes = f.GetRoutes()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
 	m.State = f.GetState()
+	m.GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(f)
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
 	m.TlsParameters = f.GetTlsParameters()
 	m.Type = f.GetType()
@@ -8298,6 +9149,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.HostName = m1.HostName
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
+	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
@@ -8309,6 +9161,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Routes = m1.Routes
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
 	f.State = m1.State
+	m1.SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(f)
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
 	f.TlsParameters = m1.TlsParameters
 	f.Type = m1.Type
@@ -8393,6 +9246,41 @@ func (r *ReplaceSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) 
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetPathNormalizeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PathNormalizeChoice.(type) {
+	case nil:
+		o.PathNormalizeChoice = nil
+
+	case *ReplaceSpecType_DisablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *ReplaceSpecType_EnablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetPathNormalizeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PathNormalizeChoice.(type) {
+	case nil:
+		r.PathNormalizeChoice = nil
+
+	case *GlobalSpecType_DisablePathNormalize:
+		r.PathNormalizeChoice = &ReplaceSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *GlobalSpecType_EnablePathNormalize:
+		r.PathNormalizeChoice = &ReplaceSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ServerHeaderChoice.(type) {
 	case nil:
@@ -8439,6 +9327,41 @@ func (r *ReplaceSpecType) GetServerHeaderChoiceFromGlobalSpecType(o *GlobalSpecT
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.StrictSniHostHeaderCheckChoice.(type) {
+	case nil:
+		o.StrictSniHostHeaderCheckChoice = nil
+
+	case *ReplaceSpecType_AdditionalDomains:
+		o.StrictSniHostHeaderCheckChoice = &GlobalSpecType_AdditionalDomains{AdditionalDomains: of.AdditionalDomains}
+
+	case *ReplaceSpecType_EnableStrictSniHostHeaderCheck:
+		o.StrictSniHostHeaderCheckChoice = &GlobalSpecType_EnableStrictSniHostHeaderCheck{EnableStrictSniHostHeaderCheck: of.EnableStrictSniHostHeaderCheck}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.StrictSniHostHeaderCheckChoice.(type) {
+	case nil:
+		r.StrictSniHostHeaderCheckChoice = nil
+
+	case *GlobalSpecType_AdditionalDomains:
+		r.StrictSniHostHeaderCheckChoice = &ReplaceSpecType_AdditionalDomains{AdditionalDomains: of.AdditionalDomains}
+
+	case *GlobalSpecType_EnableStrictSniHostHeaderCheck:
+		r.StrictSniHostHeaderCheckChoice = &ReplaceSpecType_EnableStrictSniHostHeaderCheck{EnableStrictSniHostHeaderCheck: of.EnableStrictSniHostHeaderCheck}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -8457,6 +9380,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
+	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
@@ -8467,6 +9391,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
+	m.GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(f)
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
 	m.TlsParameters = f.GetTlsParameters()
 	m.UserIdentification = f.GetUserIdentification()
@@ -8493,6 +9418,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
+	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
@@ -8503,6 +9429,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
+	m1.SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(f)
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
 	f.TlsParameters = m1.TlsParameters
 	f.UserIdentification = m1.UserIdentification

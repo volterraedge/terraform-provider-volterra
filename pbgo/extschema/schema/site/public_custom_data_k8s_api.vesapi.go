@@ -16,16 +16,17 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
-	k8s_io_api_apps_v1 "k8s.io/api/apps/v1"
-	k8s_io_api_batch_v1 "k8s.io/api/batch/v1"
-	k8s_io_api_batch_v1beta1 "k8s.io/api/batch/v1beta1"
-	k8s_io_api_core_v1 "k8s.io/api/core/v1"
 
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
+
+	k8s_io_api_apps_v1 "k8s.io/api/apps/v1"
+	k8s_io_api_batch_v1 "k8s.io/api/batch/v1"
+	k8s_io_api_batch_v1beta1 "k8s.io/api/batch/v1beta1"
+	k8s_io_api_core_v1 "k8s.io/api/core/v1"
 )
 
 var (
@@ -263,14 +264,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCConfigMapList(ctx context.Context, cal
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -340,14 +347,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCCronJobList(ctx context.Context, callO
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -417,14 +430,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCDaemonSetList(ctx context.Context, cal
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -494,14 +513,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCDeploymentList(ctx context.Context, ca
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -571,14 +596,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCEndpointsList(ctx context.Context, cal
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -648,14 +679,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCJobList(ctx context.Context, callOpts 
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -725,14 +762,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCNamespaceList(ctx context.Context, cal
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -801,14 +844,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCNodeList(ctx context.Context, callOpts
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -877,14 +926,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -954,14 +1009,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeList(ctx context.Conte
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -1030,14 +1091,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts 
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -1107,14 +1174,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCReplicaSetList(ctx context.Context, ca
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -1184,14 +1257,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCSecretList(ctx context.Context, callOp
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -1261,14 +1340,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCServiceList(ctx context.Context, callO
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -1338,14 +1423,20 @@ func (c *CustomDataK8SAPIRestClient) doRPCStatefulSetList(ctx context.Context, c
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -2167,7 +2258,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ConfigMapList"
                         }
@@ -2224,9 +2315,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -2257,7 +2350,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1EndpointsList"
                         }
@@ -2314,9 +2407,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -2347,7 +2442,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.NamespaceList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1NamespaceList"
                         }
@@ -2404,9 +2499,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     }
                 ],
                 "tags": [
@@ -2429,7 +2526,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ConfigMapList"
                         }
@@ -2486,15 +2583,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of configmaps in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2517,7 +2618,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1EndpointsList"
                         }
@@ -2574,15 +2675,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of endpoints in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2605,7 +2710,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PersistentVolumeClaimList"
                         }
@@ -2662,15 +2767,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of PVCs in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2693,7 +2802,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PodList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PodList"
                         }
@@ -2750,15 +2859,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of pods in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2781,7 +2894,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.SecretList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1SecretList"
                         }
@@ -2838,15 +2951,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of secrets in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2869,7 +2986,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ServiceList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ServiceList"
                         }
@@ -2926,15 +3043,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of services in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2957,7 +3078,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.NodeList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1NodeList"
                         }
@@ -3014,9 +3135,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     }
                 ],
                 "tags": [
@@ -3039,7 +3162,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PersistentVolumeClaimList"
                         }
@@ -3096,9 +3219,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3129,7 +3254,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PersistentVolumeList"
                         }
@@ -3186,9 +3311,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     }
                 ],
                 "tags": [
@@ -3211,7 +3338,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PodList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PodList"
                         }
@@ -3268,9 +3395,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3301,7 +3430,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.SecretList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1SecretList"
                         }
@@ -3358,9 +3487,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3391,7 +3522,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ServiceList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ServiceList"
                         }
@@ -3448,9 +3579,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3481,7 +3614,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1DaemonSetList"
                         }
@@ -3538,9 +3671,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3571,7 +3706,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1DeploymentList"
                         }
@@ -3628,9 +3763,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3661,7 +3798,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1DaemonSetList"
                         }
@@ -3718,15 +3855,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of daemon sets in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -3749,7 +3890,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1DeploymentList"
                         }
@@ -3806,15 +3947,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of deployments in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -3837,7 +3982,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ReplicaSetList"
                         }
@@ -3894,15 +4039,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of replication sets in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -3925,7 +4074,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1StatefulSetList"
                         }
@@ -3982,15 +4131,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of stateful sets in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -4013,7 +4166,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ReplicaSetList"
                         }
@@ -4070,9 +4223,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -4103,7 +4258,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1StatefulSetList"
                         }
@@ -4160,9 +4315,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -4193,7 +4350,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.JobList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1JobList"
                         }
@@ -4250,9 +4407,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -4283,7 +4442,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.JobList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1JobList"
                         }
@@ -4340,15 +4499,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of jobs in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -4371,7 +4534,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.CronJobList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1beta1CronJobList"
                         }
@@ -4428,9 +4591,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -4461,7 +4626,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.CronJobList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1beta1CronJobList"
                         }
@@ -4518,15 +4683,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of cronjobs in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -4574,18 +4743,22 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1AWSElasticBlockStoreVolumeSource": {
             "type": "object",
             "description": "Represents a Persistent Disk resource in AWS.\n\nAn AWS EBS disk must exist before mounting to a container. The disk\nmust also be in the same AWS zone as the kubelet. An AWS EBS disk\ncan only be mounted as read/write once. AWS EBS volumes support\nownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.AWSElasticBlockStoreVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n TODO: how do we prevent errors in the filesystem from compromising the machine\n +optional",
                     "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
                 },
                 "partition": {
                     "type": "integer",
+                    "description": " Examples: For volume /dev/sda1, you specify the partition as \"1\".\n Similarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty).\n +optional",
                     "title": "The partition in the volume that you want to mount.\nIf omitted, the default is to mount by volume name.\nExamples: For volume /dev/sda1, you specify the partition as \"1\".\nSimilarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty).\n+optional",
                     "format": "int32"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n +optional",
                     "title": "Specify \"true\" to force and set the ReadOnly property in VolumeMounts to \"true\".\nIf omitted, the default is \"false\".\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n+optional",
                     "format": "boolean"
                 },
@@ -4598,6 +4771,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Affinity": {
             "type": "object",
             "description": "Affinity is a group of affinity scheduling rules.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Affinity",
             "properties": {
                 "nodeAffinity": {
                     "title": "Describes node affinity scheduling rules for the pod.\n+optional",
@@ -4616,6 +4790,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1AttachedVolume": {
             "type": "object",
             "title": "AttachedVolume describes a volume attached to a node",
+            "x-ves-proto-message": "k8s.io.api.core.v1.AttachedVolume",
             "properties": {
                 "devicePath": {
                     "type": "string",
@@ -4630,6 +4805,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1AzureDiskVolumeSource": {
             "type": "object",
             "description": "AzureDisk represents an Azure Data Disk mount on the host and bind mount to the pod.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.AzureDiskVolumeSource",
             "properties": {
                 "cachingMode": {
                     "type": "string",
@@ -4645,6 +4821,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
                 },
                 "kind": {
@@ -4653,6 +4830,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 }
@@ -4661,9 +4839,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1AzureFilePersistentVolumeSource": {
             "type": "object",
             "description": "AzureFile represents an Azure File Service mount on the host and bind mount to the pod.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.AzureFilePersistentVolumeSource",
             "properties": {
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
@@ -4673,6 +4853,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "secretNamespace": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "the namespace of the secret that contains Azure Storage Account Name and Key\ndefault is the same as the Pod\n+optional"
                 },
                 "shareName": {
@@ -4684,9 +4865,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1AzureFileVolumeSource": {
             "type": "object",
             "description": "AzureFile represents an Azure File Service mount on the host and bind mount to the pod.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.AzureFileVolumeSource",
             "properties": {
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
@@ -4703,12 +4886,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1CSIPersistentVolumeSource": {
             "type": "object",
             "title": "Represents storage that is managed by an external CSI volume driver (Beta feature)",
+            "x-ves-proto-message": "k8s.io.api.core.v1.CSIPersistentVolumeSource",
             "properties": {
                 "controllerExpandSecretRef": {
+                    "description": " ControllerExpandVolume call.\n This is an alpha field and requires enabling ExpandCSIVolumes feature gate.\n This field is optional, and may be empty if no secret is required. If the\n secret object contains more than one secret, all secrets are passed.\n +optional",
                     "title": "ControllerExpandSecretRef is a reference to the secret object containing\nsensitive information to pass to the CSI driver to complete the CSI\nControllerExpandVolume call.\nThis is an alpha field and requires enabling ExpandCSIVolumes feature gate.\nThis field is optional, and may be empty if no secret is required. If the\nsecret object contains more than one secret, all secrets are passed.\n+optional",
                     "$ref": "#/definitions/v1SecretReference"
                 },
                 "controllerPublishSecretRef": {
+                    "description": " ControllerPublishVolume and ControllerUnpublishVolume calls.\n This field is optional, and may be empty if no secret is required. If the\n secret object contains more than one secret, all secrets are passed.\n +optional",
                     "title": "ControllerPublishSecretRef is a reference to the secret object containing\nsensitive information to pass to the CSI driver to complete the CSI\nControllerPublishVolume and ControllerUnpublishVolume calls.\nThis field is optional, and may be empty if no secret is required. If the\nsecret object contains more than one secret, all secrets are passed.\n+optional",
                     "$ref": "#/definitions/v1SecretReference"
                 },
@@ -4718,18 +4904,22 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\".\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\".\n+optional"
                 },
                 "nodePublishSecretRef": {
+                    "description": " NodePublishVolume and NodeUnpublishVolume calls.\n This field is optional, and may be empty if no secret is required. If the\n secret object contains more than one secret, all secrets are passed.\n +optional",
                     "title": "NodePublishSecretRef is a reference to the secret object containing\nsensitive information to pass to the CSI driver to complete the CSI\nNodePublishVolume and NodeUnpublishVolume calls.\nThis field is optional, and may be empty if no secret is required. If the\nsecret object contains more than one secret, all secrets are passed.\n+optional",
                     "$ref": "#/definitions/v1SecretReference"
                 },
                 "nodeStageSecretRef": {
+                    "description": " and NodeStageVolume and NodeUnstageVolume calls.\n This field is optional, and may be empty if no secret is required. If the\n secret object contains more than one secret, all secrets are passed.\n +optional",
                     "title": "NodeStageSecretRef is a reference to the secret object containing sensitive\ninformation to pass to the CSI driver to complete the CSI NodeStageVolume\nand NodeStageVolume and NodeUnstageVolume calls.\nThis field is optional, and may be empty if no secret is required. If the\nsecret object contains more than one secret, all secrets are passed.\n+optional",
                     "$ref": "#/definitions/v1SecretReference"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Optional: The value to pass to ControllerPublishVolumeRequest.\nDefaults to false (read/write).\n+optional",
                     "format": "boolean"
                 },
@@ -4739,13 +4929,14 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "volumeHandle": {
                     "type": "string",
-                    "description": "VolumeHandle is the unique volume name returned by the CSI volume\nplugin’s CreateVolume to refer to the volume on all subsequent calls.\nRequired."
+                    "description": " Required."
                 }
             }
         },
         "v1CSIVolumeSource": {
             "type": "object",
             "title": "Represents a source location of a volume to mount, managed by an external CSI driver",
+            "x-ves-proto-message": "k8s.io.api.core.v1.CSIVolumeSource",
             "properties": {
                 "driver": {
                     "type": "string",
@@ -4753,19 +4944,23 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "fsType": {
                     "type": "string",
+                    "description": " which will determine the default filesystem to apply.\n +optional",
                     "title": "Filesystem type to mount. Ex. \"ext4\", \"xfs\", \"ntfs\".\nIf not provided, the empty value is passed to the associated CSI driver\nwhich will determine the default filesystem to apply.\n+optional"
                 },
                 "nodePublishSecretRef": {
+                    "description": " NodePublishVolume and NodeUnpublishVolume calls.\n This field is optional, and  may be empty if no secret is required. If the\n secret object contains more than one secret, all secret references are passed.\n +optional",
                     "title": "NodePublishSecretRef is a reference to the secret object containing\nsensitive information to pass to the CSI driver to complete the CSI\nNodePublishVolume and NodeUnpublishVolume calls.\nThis field is optional, and  may be empty if no secret is required. If the\nsecret object contains more than one secret, all secret references are passed.\n+optional",
                     "$ref": "#/definitions/v1LocalObjectReference"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Specifies a read-only configuration for the volume.\nDefaults to false (read/write).\n+optional",
                     "format": "boolean"
                 },
                 "volumeAttributes": {
                     "type": "object",
+                    "description": " +optional",
                     "title": "VolumeAttributes stores driver-specific properties that are passed to the CSI\ndriver. Consult your driver's documentation for supported values.\n+optional"
                 }
             }
@@ -4773,6 +4968,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Capabilities": {
             "type": "object",
             "description": "Adds and removes POSIX capabilities from running containers.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Capabilities",
             "properties": {
                 "add": {
                     "type": "array",
@@ -4793,6 +4989,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1CephFSPersistentVolumeSource": {
             "type": "object",
             "description": "Represents a Ceph Filesystem mount that lasts the lifetime of a pod\nCephfs volumes do not support ownership management or SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.CephFSPersistentVolumeSource",
             "properties": {
                 "monitors": {
                     "type": "array",
@@ -4807,19 +5004,23 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n +optional",
                     "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional",
                     "format": "boolean"
                 },
                 "secretFile": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
                 },
                 "secretRef": {
+                    "description": " +optional",
                     "title": "Optional: SecretRef is reference to the authentication secret for User, default is empty.\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional",
                     "$ref": "#/definitions/v1SecretReference"
                 },
                 "user": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Optional: User is the rados user name, default is admin\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
                 }
             }
@@ -4827,6 +5028,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1CephFSVolumeSource": {
             "type": "object",
             "description": "Represents a Ceph Filesystem mount that lasts the lifetime of a pod\nCephfs volumes do not support ownership management or SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.CephFSVolumeSource",
             "properties": {
                 "monitors": {
                     "type": "array",
@@ -4841,19 +5043,23 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n +optional",
                     "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional",
                     "format": "boolean"
                 },
                 "secretFile": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
                 },
                 "secretRef": {
+                    "description": " +optional",
                     "title": "Optional: SecretRef is reference to the authentication secret for User, default is empty.\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional",
                     "$ref": "#/definitions/v1LocalObjectReference"
                 },
                 "user": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Optional: User is the rados user name, default is admin\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
                 }
             }
@@ -4861,17 +5067,21 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1CinderPersistentVolumeSource": {
             "type": "object",
             "description": "Represents a cinder volume resource in Openstack.\nA Cinder volume must exist before mounting to a container.\nThe volume must also be in the same region as the kubelet.\nCinder volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.CinderPersistentVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n More info: https://examples.k8s.io/mysql-cinder-pd/README.md\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://examples.k8s.io/mysql-cinder-pd/README.md\n +optional",
                     "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional",
                     "format": "boolean"
                 },
                 "secretRef": {
+                    "description": " +optional",
                     "title": "Optional: points to a secret object containing parameters used to connect\nto OpenStack.\n+optional",
                     "$ref": "#/definitions/v1SecretReference"
                 },
@@ -4884,17 +5094,21 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1CinderVolumeSource": {
             "type": "object",
             "description": "Represents a cinder volume resource in Openstack.\nA Cinder volume must exist before mounting to a container.\nThe volume must also be in the same region as the kubelet.\nCinder volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.CinderVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n More info: https://examples.k8s.io/mysql-cinder-pd/README.md\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://examples.k8s.io/mysql-cinder-pd/README.md\n +optional",
                     "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional",
                     "format": "boolean"
                 },
                 "secretRef": {
+                    "description": " +optional",
                     "title": "Optional: points to a secret object containing parameters used to connect\nto OpenStack.\n+optional",
                     "$ref": "#/definitions/v1LocalObjectReference"
                 },
@@ -4907,9 +5121,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ClientIPConfig": {
             "type": "object",
             "description": "ClientIPConfig represents the configurations of Client IP based session affinity.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ClientIPConfig",
             "properties": {
                 "timeoutSeconds": {
                     "type": "integer",
+                    "description": " Default value is 10800(for 3 hours).\n +optional",
                     "title": "timeoutSeconds specifies the seconds of ClientIP type session sticky time.\nThe value must be \u003e0 \u0026\u0026 \u003c=86400(for 1 day) if ServiceAffinity == \"ClientIP\".\nDefault value is 10800(for 3 hours).\n+optional",
                     "format": "int32"
                 }
@@ -4918,16 +5134,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ConfigMap": {
             "type": "object",
             "description": "ConfigMap holds configuration data for pods to consume.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ConfigMap",
             "properties": {
                 "binaryData": {
                     "type": "object",
+                    "description": " BinaryData can contain byte sequences that are not in the UTF-8 range.\n The keys stored in BinaryData must not overlap with the ones in\n the Data field, this is enforced during validation process.\n Using this field will require 1.10+ apiserver and\n kubelet.\n +optional",
                     "title": "BinaryData contains the binary data.\nEach key must consist of alphanumeric characters, '-', '_' or '.'.\nBinaryData can contain byte sequences that are not in the UTF-8 range.\nThe keys stored in BinaryData must not overlap with the ones in\nthe Data field, this is enforced during validation process.\nUsing this field will require 1.10+ apiserver and\nkubelet.\n+optional"
                 },
                 "data": {
                     "type": "object",
+                    "description": " Values with non-UTF-8 byte sequences must use the BinaryData field.\n The keys stored in Data must not overlap with the keys in\n the BinaryData field, this is enforced during validation process.\n +optional",
                     "title": "Data contains the configuration data.\nEach key must consist of alphanumeric characters, '-', '_' or '.'.\nValues with non-UTF-8 byte sequences must use the BinaryData field.\nThe keys stored in Data must not overlap with the keys in\nthe BinaryData field, this is enforced during validation process.\n+optional"
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 }
@@ -4936,6 +5156,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ConfigMapEnvSource": {
             "type": "object",
             "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment\nvariables with.\n\nThe contents of the target ConfigMap's Data field will represent the\nkey-value pairs as environment variables.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ConfigMapEnvSource",
             "properties": {
                 "localObjectReference": {
                     "description": "The ConfigMap to select from.",
@@ -4951,6 +5172,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ConfigMapKeySelector": {
             "type": "object",
             "description": "Selects a key from a ConfigMap.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ConfigMapKeySelector",
             "properties": {
                 "key": {
                     "type": "string",
@@ -4970,6 +5192,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ConfigMapList": {
             "type": "object",
             "description": "ConfigMapList is a resource containing a list of ConfigMap objects.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ConfigMapList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -4987,6 +5210,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ConfigMapNodeConfigSource": {
             "type": "object",
             "description": "ConfigMapNodeConfigSource contains the information to reference a ConfigMap as a config source for the Node.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ConfigMapNodeConfigSource",
             "properties": {
                 "kubeletConfigKey": {
                     "type": "string",
@@ -5002,10 +5226,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "resourceVersion": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "ResourceVersion is the metadata.ResourceVersion of the referenced ConfigMap.\nThis field is forbidden in Node.Spec, and required in Node.Status.\n+optional"
                 },
                 "uid": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "UID is the metadata.UID of the referenced ConfigMap.\nThis field is forbidden in Node.Spec, and required in Node.Status.\n+optional"
                 }
             }
@@ -5013,9 +5239,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ConfigMapProjection": {
             "type": "object",
             "description": "Adapts a ConfigMap into a projected volume.\n\nThe contents of the target ConfigMap's Data field will be presented in a\nprojected volume as files using the keys in the Data field as the file names,\nunless the items element is populated with specific mappings of keys to paths.\nNote that this is identical to a configmap volume source without the default\nmode.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ConfigMapProjection",
             "properties": {
                 "items": {
                     "type": "array",
+                    "description": " key and content is the value. If specified, the listed keys will be\n projected into the specified paths, and unlisted keys will not be\n present. If a key is specified which is not present in the ConfigMap,\n the volume setup will error unless it is marked optional. Paths must be\n relative and may not contain the '..' path or start with '..'.\n +optional",
                     "title": "If unspecified, each key-value pair in the Data field of the referenced\nConfigMap will be projected into the volume as a file whose name is the\nkey and content is the value. If specified, the listed keys will be\nprojected into the specified paths, and unlisted keys will not be\npresent. If a key is specified which is not present in the ConfigMap,\nthe volume setup will error unless it is marked optional. Paths must be\nrelative and may not contain the '..' path or start with '..'.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1KeyToPath"
@@ -5034,14 +5262,17 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ConfigMapVolumeSource": {
             "type": "object",
             "description": "Adapts a ConfigMap into a volume.\n\nThe contents of the target ConfigMap's Data field will be presented in a\nvolume as files using the keys in the Data field as the file names, unless\nthe items element is populated with specific mappings of keys to paths.\nConfigMap volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ConfigMapVolumeSource",
             "properties": {
                 "defaultMode": {
                     "type": "integer",
+                    "description": " Directories within the path are not affected by this setting.\n This might be in conflict with other options that affect the file\n mode, like fsGroup, and the result can be other mode bits set.\n +optional",
                     "title": "Optional: mode bits to use on created files by default. Must be a\nvalue between 0 and 0777. Defaults to 0644.\nDirectories within the path are not affected by this setting.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional",
                     "format": "int32"
                 },
                 "items": {
                     "type": "array",
+                    "description": " key and content is the value. If specified, the listed keys will be\n projected into the specified paths, and unlisted keys will not be\n present. If a key is specified which is not present in the ConfigMap,\n the volume setup will error unless it is marked optional. Paths must be\n relative and may not contain the '..' path or start with '..'.\n +optional",
                     "title": "If unspecified, each key-value pair in the Data field of the referenced\nConfigMap will be projected into the volume as a file whose name is the\nkey and content is the value. If specified, the listed keys will be\nprojected into the specified paths, and unlisted keys will not be\npresent. If a key is specified which is not present in the ConfigMap,\nthe volume setup will error unless it is marked optional. Paths must be\nrelative and may not contain the '..' path or start with '..'.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1KeyToPath"
@@ -5060,9 +5291,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Container": {
             "type": "object",
             "description": "A single application container that you want to run within a pod.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Container",
             "properties": {
                 "args": {
                     "type": "array",
+                    "description": " Variable references $(VAR_NAME) are expanded using the container's environment. If a variable\n cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\n can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\n regardless of whether the variable exists or not.\n Cannot be updated.\n More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n +optional",
                     "title": "Arguments to the entrypoint.\nThe docker image's CMD is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\ncan be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\nregardless of whether the variable exists or not.\nCannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n+optional",
                     "items": {
                         "type": "string"
@@ -5070,6 +5303,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "command": {
                     "type": "array",
+                    "description": " Variable references $(VAR_NAME) are expanded using the container's environment. If a variable\n cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\n can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\n regardless of whether the variable exists or not.\n Cannot be updated.\n More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n +optional",
                     "title": "Entrypoint array. Not executed within a shell.\nThe docker image's ENTRYPOINT is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\ncan be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\nregardless of whether the variable exists or not.\nCannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n+optional",
                     "items": {
                         "type": "string"
@@ -5077,6 +5311,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "env": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=name\n +patchStrategy=merge",
                     "title": "List of environment variables to set in the container.\nCannot be updated.\n+optional\n+patchMergeKey=name\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1EnvVar"
@@ -5084,6 +5319,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "envFrom": {
                     "type": "array",
+                    "description": " will be reported as an event when the container is starting. When a key exists in multiple\n sources, the value associated with the last source will take precedence.\n Values defined by an Env with a duplicate key will take precedence.\n Cannot be updated.\n +optional",
                     "title": "List of sources to populate environment variables in the container.\nThe keys defined within a source must be a C_IDENTIFIER. All invalid keys\nwill be reported as an event when the container is starting. When a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1EnvFromSource"
@@ -5091,72 +5327,87 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "image": {
                     "type": "string",
+                    "description": " This field is optional to allow higher level config management to default or override\n container images in workload controllers like Deployments and StatefulSets.\n +optional",
                     "title": "Docker image name.\nMore info: https://kubernetes.io/docs/concepts/containers/images\nThis field is optional to allow higher level config management to default or override\ncontainer images in workload controllers like Deployments and StatefulSets.\n+optional"
                 },
                 "imagePullPolicy": {
                     "type": "string",
+                    "description": " Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.\n Cannot be updated.\n More info: https://kubernetes.io/docs/concepts/containers/images#updating-images\n +optional",
                     "title": "Image pull policy.\nOne of Always, Never, IfNotPresent.\nDefaults to Always if :latest tag is specified, or IfNotPresent otherwise.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/containers/images#updating-images\n+optional"
                 },
                 "lifecycle": {
+                    "description": " +optional",
                     "title": "Actions that the management system should take in response to container lifecycle events.\nCannot be updated.\n+optional",
                     "$ref": "#/definitions/v1Lifecycle"
                 },
                 "livenessProbe": {
+                    "description": " Cannot be updated.\n More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n +optional",
                     "title": "Periodic probe of container liveness.\nContainer will be restarted if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional",
                     "$ref": "#/definitions/v1Probe"
                 },
                 "name": {
                     "type": "string",
-                    "description": "Name of the container specified as a DNS_LABEL.\nEach container in a pod must have a unique name (DNS_LABEL).\nCannot be updated."
+                    "description": " Cannot be updated."
                 },
                 "ports": {
                     "type": "array",
+                    "description": " container uses, but is primarily informational. Not specifying a port here\n DOES NOT prevent that port from being exposed. Any port which is\n listening on the default \"0.0.0.0\" address inside a container will be\n accessible from the network.\n Cannot be updated.\n +optional\n +patchMergeKey=containerPort\n +patchStrategy=merge\n +listType=map\n +listMapKey=containerPort\n +listMapKey=protocol",
                     "title": "List of ports to expose from the container. Exposing a port here gives\nthe system additional information about the network connections a\ncontainer uses, but is primarily informational. Not specifying a port here\nDOES NOT prevent that port from being exposed. Any port which is\nlistening on the default \"0.0.0.0\" address inside a container will be\naccessible from the network.\nCannot be updated.\n+optional\n+patchMergeKey=containerPort\n+patchStrategy=merge\n+listType=map\n+listMapKey=containerPort\n+listMapKey=protocol",
                     "items": {
                         "$ref": "#/definitions/v1ContainerPort"
                     }
                 },
                 "readinessProbe": {
+                    "description": " Cannot be updated.\n More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n +optional",
                     "title": "Periodic probe of container service readiness.\nContainer will be removed from service endpoints if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional",
                     "$ref": "#/definitions/v1Probe"
                 },
                 "resources": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n +optional",
                     "title": "Compute Resources required by this container.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n+optional",
                     "$ref": "#/definitions/v1ResourceRequirements"
                 },
                 "securityContext": {
+                    "description": " More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/\n +optional",
                     "title": "Security options the pod should run with.\nMore info: https://kubernetes.io/docs/concepts/policy/security-context/\nMore info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/\n+optional",
                     "$ref": "#/definitions/v1SecurityContext"
                 },
                 "startupProbe": {
+                    "description": " If this probe fails, the Pod will be restarted, just as if the livenessProbe failed.\n This can be used to provide different probe parameters at the beginning of a Pod's lifecycle,\n when it might take a long time to load data or warm a cache, than during steady-state operation.\n This cannot be updated.\n This is an alpha feature enabled by the StartupProbe feature flag.\n More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n +optional",
                     "title": "StartupProbe indicates that the Pod has successfully initialized.\nIf specified, no other probes are executed until this completes successfully.\nIf this probe fails, the Pod will be restarted, just as if the livenessProbe failed.\nThis can be used to provide different probe parameters at the beginning of a Pod's lifecycle,\nwhen it might take a long time to load data or warm a cache, than during steady-state operation.\nThis cannot be updated.\nThis is an alpha feature enabled by the StartupProbe feature flag.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional",
                     "$ref": "#/definitions/v1Probe"
                 },
                 "stdin": {
                     "type": "boolean",
+                    "description": " Default is false.\n +optional",
                     "title": "Whether this container should allocate a buffer for stdin in the container runtime. If this\nis not set, reads from stdin in the container will always result in EOF.\nDefault is false.\n+optional",
                     "format": "boolean"
                 },
                 "stdinOnce": {
                     "type": "boolean",
+                    "description": " sessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the\n first client attaches to stdin, and then remains open and accepts data until the client disconnects,\n at which time stdin is closed and remains closed until the container is restarted. If this\n flag is false, a container processes that reads from stdin will never receive an EOF.\n Default is false\n +optional",
                     "title": "Whether the container runtime should close the stdin channel after it has been opened by\na single attach. When stdin is true the stdin stream will remain open across multiple attach\nsessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the\nfirst client attaches to stdin, and then remains open and accepts data until the client disconnects,\nat which time stdin is closed and remains closed until the container is restarted. If this\nflag is false, a container processes that reads from stdin will never receive an EOF.\nDefault is false\n+optional",
                     "format": "boolean"
                 },
                 "terminationMessagePath": {
                     "type": "string",
+                    "description": " Message written is intended to be brief final status, such as an assertion failure message.\n Will be truncated by the node if greater than 4096 bytes. The total message length across\n all containers will be limited to 12kb.\n Defaults to /dev/termination-log.\n Cannot be updated.\n +optional",
                     "title": "Optional: Path at which the file to which the container's termination message\nwill be written is mounted into the container's filesystem.\nMessage written is intended to be brief final status, such as an assertion failure message.\nWill be truncated by the node if greater than 4096 bytes. The total message length across\nall containers will be limited to 12kb.\nDefaults to /dev/termination-log.\nCannot be updated.\n+optional"
                 },
                 "terminationMessagePolicy": {
                     "type": "string",
+                    "description": " FallbackToLogsOnError will use the last chunk of container log output if the termination\n message file is empty and the container exited with an error.\n The log output is limited to 2048 bytes or 80 lines, whichever is smaller.\n Defaults to File.\n Cannot be updated.\n +optional",
                     "title": "Indicate how the termination message should be populated. File will use the contents of\nterminationMessagePath to populate the container status message on both success and failure.\nFallbackToLogsOnError will use the last chunk of container log output if the termination\nmessage file is empty and the container exited with an error.\nThe log output is limited to 2048 bytes or 80 lines, whichever is smaller.\nDefaults to File.\nCannot be updated.\n+optional"
                 },
                 "tty": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Whether this container should allocate a TTY for itself, also requires 'stdin' to be true.\nDefault is false.\n+optional",
                     "format": "boolean"
                 },
                 "volumeDevices": {
                     "type": "array",
+                    "description": " +patchMergeKey=devicePath\n +patchStrategy=merge\n +optional",
                     "title": "volumeDevices is the list of block devices to be used by the container.\nThis is a beta feature.\n+patchMergeKey=devicePath\n+patchStrategy=merge\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1VolumeDevice"
@@ -5164,6 +5415,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "volumeMounts": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=mountPath\n +patchStrategy=merge",
                     "title": "Pod volumes to mount into the container's filesystem.\nCannot be updated.\n+optional\n+patchMergeKey=mountPath\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1VolumeMount"
@@ -5171,6 +5423,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "workingDir": {
                     "type": "string",
+                    "description": " might be configured in the container image.\n Cannot be updated.\n +optional",
                     "title": "Container's working directory.\nIf not specified, the container runtime's default will be used, which\nmight be configured in the container image.\nCannot be updated.\n+optional"
                 }
             }
@@ -5178,6 +5431,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ContainerImage": {
             "type": "object",
             "title": "Describe a container image",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ContainerImage",
             "properties": {
                 "names": {
                     "type": "array",
@@ -5196,6 +5450,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ContainerPort": {
             "type": "object",
             "description": "ContainerPort represents a network port in a single container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ContainerPort",
             "properties": {
                 "containerPort": {
                     "type": "integer",
@@ -5208,15 +5463,18 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "hostPort": {
                     "type": "integer",
+                    "description": " If HostNetwork is specified, this must match ContainerPort.\n Most containers do not need this.\n +optional",
                     "title": "Number of port to expose on the host.\nIf specified, this must be a valid port number, 0 \u003c x \u003c 65536.\nIf HostNetwork is specified, this must match ContainerPort.\nMost containers do not need this.\n+optional",
                     "format": "int32"
                 },
                 "name": {
                     "type": "string",
+                    "description": " referred to by services.\n +optional",
                     "title": "If specified, this must be an IANA_SVC_NAME and unique within the pod. Each\nnamed port in a pod must have a unique name. Name for the port that can be\nreferred to by services.\n+optional"
                 },
                 "protocol": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Protocol for port. Must be UDP, TCP, or SCTP.\nDefaults to \"TCP\".\n+optional"
                 }
             }
@@ -5224,6 +5482,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ContainerState": {
             "type": "object",
             "description": "ContainerState holds a possible state of container.\nOnly one of its members may be specified.\nIf none of them is specified, the default one is ContainerStateWaiting.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ContainerState",
             "properties": {
                 "running": {
                     "title": "Details about a running container\n+optional",
@@ -5242,6 +5501,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ContainerStateRunning": {
             "type": "object",
             "description": "ContainerStateRunning is a running state of a container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ContainerStateRunning",
             "properties": {
                 "startedAt": {
                     "title": "Time at which the container was last (re-)started\n+optional",
@@ -5252,6 +5512,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ContainerStateTerminated": {
             "type": "object",
             "description": "ContainerStateTerminated is a terminated state of a container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ContainerStateTerminated",
             "properties": {
                 "containerID": {
                     "type": "string",
@@ -5288,6 +5549,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ContainerStateWaiting": {
             "type": "object",
             "description": "ContainerStateWaiting is a waiting state of a container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ContainerStateWaiting",
             "properties": {
                 "message": {
                     "type": "string",
@@ -5302,6 +5564,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ContainerStatus": {
             "type": "object",
             "description": "ContainerStatus contains details for the current status of this container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ContainerStatus",
             "properties": {
                 "containerID": {
                     "type": "string",
@@ -5309,6 +5572,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "image": {
                     "type": "string",
+                    "description": " TODO(dchen1107): Which image the container is running with?",
                     "title": "The image the container is running.\nMore info: https://kubernetes.io/docs/concepts/containers/images\nTODO(dchen1107): Which image the container is running with?"
                 },
                 "imageID": {
@@ -5330,11 +5594,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "restartCount": {
                     "type": "integer",
-                    "description": "The number of times the container has been restarted, currently based on\nthe number of dead containers that have not yet been removed.\nNote that this is calculated from dead containers. But those containers are subject to\ngarbage collection. This value will get capped at 5 by GC.",
+                    "description": " Note that this is calculated from dead containers. But those containers are subject to\n garbage collection. This value will get capped at 5 by GC.",
                     "format": "int32"
                 },
                 "started": {
                     "type": "boolean",
+                    "description": " Resets to false when the container is restarted, or if kubelet loses state temporarily.\n Is always true when no startupProbe is defined.\n +optional",
                     "title": "Specifies whether the container has passed its startup probe.\nInitialized as false, becomes true after startupProbe is considered successful.\nResets to false when the container is restarted, or if kubelet loses state temporarily.\nIs always true when no startupProbe is defined.\n+optional",
                     "format": "boolean"
                 },
@@ -5347,6 +5612,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DaemonEndpoint": {
             "type": "object",
             "description": "DaemonEndpoint contains information about a single Daemon endpoint.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.DaemonEndpoint",
             "properties": {
                 "Port": {
                     "type": "integer",
@@ -5358,16 +5624,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DaemonSet": {
             "type": "object",
             "description": "DaemonSet represents the configuration of a daemon set.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DaemonSet",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "The desired behavior of this daemon set.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1DaemonSetSpec"
                 },
                 "status": {
+                    "description": " Populated by the system.\n Read-only.\n More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n +optional",
                     "title": "The current status of this daemon set. This data may be\nout of date by some window of time.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1DaemonSetStatus"
                 }
@@ -5376,6 +5646,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DaemonSetCondition": {
             "type": "object",
             "description": "DaemonSetCondition describes the state of a DaemonSet at a certain point.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DaemonSetCondition",
             "properties": {
                 "lastTransitionTime": {
                     "title": "Last time the condition transitioned from one status to another.\n+optional",
@@ -5402,6 +5673,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DaemonSetList": {
             "type": "object",
             "description": "DaemonSetList is a collection of daemon sets.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DaemonSetList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -5411,6 +5683,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -5419,22 +5692,27 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DaemonSetSpec": {
             "type": "object",
             "description": "DaemonSetSpec is the specification of a daemon set.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DaemonSetSpec",
             "properties": {
                 "minReadySeconds": {
                     "type": "integer",
+                    "description": " available. Defaults to 0 (pod will be considered available as soon as it\n is ready).\n +optional",
                     "title": "The minimum number of seconds for which a newly created DaemonSet pod should\nbe ready without any of its container crashing, for it to be considered\navailable. Defaults to 0 (pod will be considered available as soon as it\nis ready).\n+optional",
                     "format": "int32"
                 },
                 "revisionHistoryLimit": {
                     "type": "integer",
+                    "description": " Defaults to 10.\n +optional",
                     "title": "The number of old history to retain to allow rollback.\nThis is a pointer to distinguish between explicit zero and not specified.\nDefaults to 10.\n+optional",
                     "format": "int32"
                 },
                 "selector": {
+                    "description": " It must match the pod template's labels.\n More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
                     "title": "A label query over pods that are managed by the daemon set.\nMust match in order to be controlled.\nIt must match the pod template's labels.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
                     "$ref": "#/definitions/v1LabelSelector"
                 },
                 "template": {
+                    "description": " that matches the template's node selector (or on every node if no node\n selector is specified).\n More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#pod-template",
                     "title": "An object that describes the pod that will be created.\nThe DaemonSet will create exactly one copy of this pod on every node\nthat matches the template's node selector (or on every node if no node\nselector is specified).\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#pod-template",
                     "$ref": "#/definitions/v1PodTemplateSpec"
                 },
@@ -5447,14 +5725,17 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DaemonSetStatus": {
             "type": "object",
             "description": "DaemonSetStatus represents the current status of a daemon set.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DaemonSetStatus",
             "properties": {
                 "collisionCount": {
                     "type": "integer",
+                    "description": " create the name for the newest ControllerRevision.\n +optional",
                     "title": "Count of hash collisions for the DaemonSet. The DaemonSet controller\nuses this field as a collision avoidance mechanism when it needs to\ncreate the name for the newest ControllerRevision.\n+optional",
                     "format": "int32"
                 },
                 "conditions": {
                     "type": "array",
+                    "description": " +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "Represents the latest available observations of a DaemonSet's current state.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1DaemonSetCondition"
@@ -5462,21 +5743,25 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "currentNumberScheduled": {
                     "type": "integer",
+                    "description": " More info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
                     "title": "The number of nodes that are running at least 1\ndaemon pod and are supposed to run the daemon pod.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
                     "format": "int32"
                 },
                 "desiredNumberScheduled": {
                     "type": "integer",
+                    "description": " More info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
                     "title": "The total number of nodes that should be running the daemon\npod (including nodes correctly running the daemon pod).\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
                     "format": "int32"
                 },
                 "numberAvailable": {
                     "type": "integer",
+                    "description": " available (ready for at least spec.minReadySeconds)\n +optional",
                     "title": "The number of nodes that should be running the\ndaemon pod and have one or more of the daemon pod running and\navailable (ready for at least spec.minReadySeconds)\n+optional",
                     "format": "int32"
                 },
                 "numberMisscheduled": {
                     "type": "integer",
+                    "description": " More info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
                     "title": "The number of nodes that are running the daemon pod, but are\nnot supposed to run the daemon pod.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
                     "format": "int32"
                 },
@@ -5487,6 +5772,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "numberUnavailable": {
                     "type": "integer",
+                    "description": " (ready for at least spec.minReadySeconds)\n +optional",
                     "title": "The number of nodes that should be running the\ndaemon pod and have none of the daemon pod running and available\n(ready for at least spec.minReadySeconds)\n+optional",
                     "format": "int32"
                 },
@@ -5505,8 +5791,10 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DaemonSetUpdateStrategy": {
             "type": "object",
             "description": "DaemonSetUpdateStrategy is a struct used to control the update strategy for a DaemonSet.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DaemonSetUpdateStrategy",
             "properties": {
                 "rollingUpdate": {
+                    "description": " TODO: Update this to follow our convention for oneOf, whatever we decide it\n to be. Same as Deployment -strategy.rollingUpdate-.\n See https://github.com/kubernetes/kubernetes/issues/35345\n +optional",
                     "title": "Rolling update config params. Present only if type = \"RollingUpdate\".\n---\nTODO: Update this to follow our convention for oneOf, whatever we decide it\nto be. Same as Deployment -strategy.rollingUpdate-.\nSee https://github.com/kubernetes/kubernetes/issues/35345\n+optional",
                     "$ref": "#/definitions/v1RollingUpdateDaemonSet"
                 },
@@ -5519,6 +5807,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Deployment": {
             "type": "object",
             "description": "Deployment enables declarative updates for Pods and ReplicaSets.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.Deployment",
             "properties": {
                 "metadata": {
                     "title": "Standard object metadata.\n+optional",
@@ -5537,6 +5826,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DeploymentCondition": {
             "type": "object",
             "description": "DeploymentCondition describes the state of a deployment at a certain point.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DeploymentCondition",
             "properties": {
                 "lastTransitionTime": {
                     "description": "Last time the condition transitioned from one status to another.",
@@ -5567,6 +5857,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DeploymentList": {
             "type": "object",
             "description": "DeploymentList is a list of Deployments.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DeploymentList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -5584,9 +5875,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DeploymentSpec": {
             "type": "object",
             "description": "DeploymentSpec is the specification of the desired behavior of the Deployment.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DeploymentSpec",
             "properties": {
                 "minReadySeconds": {
                     "type": "integer",
+                    "description": " Defaults to 0 (pod will be considered available as soon as it is ready)\n +optional",
                     "title": "Minimum number of seconds for which a newly created pod should be ready\nwithout any of its container crashing, for it to be considered available.\nDefaults to 0 (pod will be considered available as soon as it is ready)\n+optional",
                     "format": "int32"
                 },
@@ -5597,24 +5890,27 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "progressDeadlineSeconds": {
                     "type": "integer",
-                    "description": "The maximum time in seconds for a deployment to make progress before it\nis considered to be failed. The deployment controller will continue to\nprocess failed deployments and a condition with a ProgressDeadlineExceeded\nreason will be surfaced in the deployment status. Note that progress will\nnot be estimated during the time a deployment is paused. Defaults to 600s.",
+                    "description": " process failed deployments and a condition with a ProgressDeadlineExceeded\n reason will be surfaced in the deployment status. Note that progress will\n not be estimated during the time a deployment is paused. Defaults to 600s.",
                     "format": "int32"
                 },
                 "replicas": {
                     "type": "integer",
+                    "description": " +optional",
                     "title": "Number of desired pods. This is a pointer to distinguish between explicit\nzero and not specified. Defaults to 1.\n+optional",
                     "format": "int32"
                 },
                 "revisionHistoryLimit": {
                     "type": "integer",
+                    "description": " Defaults to 10.\n +optional",
                     "title": "The number of old ReplicaSets to retain to allow rollback.\nThis is a pointer to distinguish between explicit zero and not specified.\nDefaults to 10.\n+optional",
                     "format": "int32"
                 },
                 "selector": {
-                    "description": "Label selector for pods. Existing ReplicaSets whose pods are\nselected by this will be the ones affected by this deployment.\nIt must match the pod template's labels.",
+                    "description": " It must match the pod template's labels.",
                     "$ref": "#/definitions/v1LabelSelector"
                 },
                 "strategy": {
+                    "description": " +patchStrategy=retainKeys",
                     "title": "The deployment strategy to use to replace existing pods with new ones.\n+optional\n+patchStrategy=retainKeys",
                     "$ref": "#/definitions/v1DeploymentStrategy"
                 },
@@ -5627,6 +5923,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DeploymentStatus": {
             "type": "object",
             "description": "DeploymentStatus is the most recently observed status of the Deployment.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DeploymentStatus",
             "properties": {
                 "availableReplicas": {
                     "type": "integer",
@@ -5635,11 +5932,13 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "collisionCount": {
                     "type": "integer",
+                    "description": " newest ReplicaSet.\n +optional",
                     "title": "Count of hash collisions for the Deployment. The Deployment controller uses this\nfield as a collision avoidance mechanism when it needs to create the name for the\nnewest ReplicaSet.\n+optional",
                     "format": "int32"
                 },
                 "conditions": {
                     "type": "array",
+                    "description": " +patchStrategy=merge",
                     "title": "Represents the latest available observations of a deployment's current state.\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1DeploymentCondition"
@@ -5662,6 +5961,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "unavailableReplicas": {
                     "type": "integer",
+                    "description": " either be pods that are running but not yet available or pods that still have not been created.\n +optional",
                     "title": "Total number of unavailable pods targeted by this deployment. This is the total number of\npods that are still required for the deployment to have 100% available capacity. They may\neither be pods that are running but not yet available or pods that still have not been created.\n+optional",
                     "format": "int32"
                 },
@@ -5675,8 +5975,10 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DeploymentStrategy": {
             "type": "object",
             "description": "DeploymentStrategy describes how to replace existing pods with new ones.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.DeploymentStrategy",
             "properties": {
                 "rollingUpdate": {
+                    "description": " ---\n TODO: Update this to follow our convention for oneOf, whatever we decide it\n to be.\n +optional",
                     "title": "Rolling update config params. Present only if DeploymentStrategyType =\nRollingUpdate.\n---\nTODO: Update this to follow our convention for oneOf, whatever we decide it\nto be.\n+optional",
                     "$ref": "#/definitions/v1RollingUpdateDeployment"
                 },
@@ -5689,6 +5991,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DownwardAPIProjection": {
             "type": "object",
             "description": "Represents downward API info for projecting into a projected volume.\nNote that this is identical to a downwardAPI volume source without the default\nmode.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.DownwardAPIProjection",
             "properties": {
                 "items": {
                     "type": "array",
@@ -5702,6 +6005,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DownwardAPIVolumeFile": {
             "type": "object",
             "title": "DownwardAPIVolumeFile represents information to create the file containing the pod field",
+            "x-ves-proto-message": "k8s.io.api.core.v1.DownwardAPIVolumeFile",
             "properties": {
                 "fieldRef": {
                     "title": "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported.\n+optional",
@@ -5709,6 +6013,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "mode": {
                     "type": "integer",
+                    "description": " This might be in conflict with other options that affect the file\n mode, like fsGroup, and the result can be other mode bits set.\n +optional",
                     "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional",
                     "format": "int32"
                 },
@@ -5717,6 +6022,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "title": "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the '..' path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
                 },
                 "resourceFieldRef": {
+                    "description": " +optional",
                     "title": "Selects a resource of the container: only resources limits and requests\n(limits.cpu, limits.memory, requests.cpu and requests.memory) are currently supported.\n+optional",
                     "$ref": "#/definitions/v1ResourceFieldSelector"
                 }
@@ -5725,9 +6031,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1DownwardAPIVolumeSource": {
             "type": "object",
             "description": "DownwardAPIVolumeSource represents a volume containing downward API info.\nDownward API volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.DownwardAPIVolumeSource",
             "properties": {
                 "defaultMode": {
                     "type": "integer",
+                    "description": " Directories within the path are not affected by this setting.\n This might be in conflict with other options that affect the file\n mode, like fsGroup, and the result can be other mode bits set.\n +optional",
                     "title": "Optional: mode bits to use on created files by default. Must be a\nvalue between 0 and 0777. Defaults to 0644.\nDirectories within the path are not affected by this setting.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional",
                     "format": "int32"
                 },
@@ -5743,12 +6051,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EmptyDirVolumeSource": {
             "type": "object",
             "description": "Represents an empty directory for a pod.\nEmpty directory volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EmptyDirVolumeSource",
             "properties": {
                 "medium": {
                     "type": "string",
+                    "description": " Must be an empty string (default) or Memory.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir\n +optional",
                     "title": "What type of storage medium should back this directory.\nThe default is \"\" which means to use the node's default medium.\nMust be an empty string (default) or Memory.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir\n+optional"
                 },
                 "sizeLimit": {
+                    "description": " The maximum usage on memory medium EmptyDir would be the minimum value between\n the SizeLimit specified here and the sum of memory limits of all containers in a pod.\n The default is nil which means that the limit is undefined.\n More info: http://kubernetes.io/docs/user-guide/volumes#emptydir\n +optional",
                     "title": "Total amount of local storage required for this EmptyDir volume.\nThe size limit is also applicable for memory medium.\nThe maximum usage on memory medium EmptyDir would be the minimum value between\nthe SizeLimit specified here and the sum of memory limits of all containers in a pod.\nThe default is nil which means that the limit is undefined.\nMore info: http://kubernetes.io/docs/user-guide/volumes#emptydir\n+optional",
                     "$ref": "#/definitions/resourceQuantity"
                 }
@@ -5757,6 +6068,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EndpointAddress": {
             "type": "object",
             "description": "EndpointAddress is a tuple that describes single IP address.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EndpointAddress",
             "properties": {
                 "hostname": {
                     "type": "string",
@@ -5764,7 +6076,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "The IP of this endpoint.\nMay not be loopback (127.0.0.0/8), link-local (169.254.0.0/16),\nor link-local multicast ((224.0.0.0/24).\nIPv6 is also accepted but not fully supported on all platforms. Also, certain\nkubernetes components, like kube-proxy, are not IPv6 ready.\nTODO: This should allow hostname or IP, See #4447."
+                    "description": " or link-local multicast ((224.0.0.0/24).\n IPv6 is also accepted but not fully supported on all platforms. Also, certain\n kubernetes components, like kube-proxy, are not IPv6 ready.\n TODO: This should allow hostname or IP, See #4447."
                 },
                 "nodeName": {
                     "type": "string",
@@ -5779,9 +6091,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EndpointPort": {
             "type": "object",
             "description": "EndpointPort is a tuple that describes a single port.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EndpointPort",
             "properties": {
                 "name": {
                     "type": "string",
+                    "description": " Must be a DNS_LABEL.\n Optional only if one port is defined.\n +optional",
                     "title": "The name of this port.  This must match the 'name' field in the\ncorresponding ServicePort.\nMust be a DNS_LABEL.\nOptional only if one port is defined.\n+optional"
                 },
                 "port": {
@@ -5791,6 +6105,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "protocol": {
                     "type": "string",
+                    "description": " Default is TCP.\n +optional",
                     "title": "The IP protocol for this port.\nMust be UDP, TCP, or SCTP.\nDefault is TCP.\n+optional"
                 }
             }
@@ -5798,9 +6113,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EndpointSubset": {
             "type": "object",
             "title": "EndpointSubset is a group of addresses with a common set of ports. The\nexpanded set of endpoints is the Cartesian product of Addresses x Ports.\nFor example, given:\n  {\n    Addresses: [{\"ip\": \"10.10.1.1\"}, {\"ip\": \"10.10.2.2\"}],\n    Ports:     [{\"name\": \"a\", \"port\": 8675}, {\"name\": \"b\", \"port\": 309}]\n  }\nThe resulting set of endpoints can be viewed as:\n    a: [ 10.10.1.1:8675, 10.10.2.2:8675 ],\n    b: [ 10.10.1.1:309, 10.10.2.2:309 ]",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EndpointSubset",
             "properties": {
                 "addresses": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "IP addresses which offer the related ports that are marked as ready. These endpoints\nshould be considered safe for load balancers and clients to utilize.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1EndpointAddress"
@@ -5808,6 +6125,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "notReadyAddresses": {
                     "type": "array",
+                    "description": " or have recently failed a liveness check.\n +optional",
                     "title": "IP addresses which offer the related ports but are not currently marked as ready\nbecause they have not yet finished starting, have recently failed a readiness check,\nor have recently failed a liveness check.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1EndpointAddress"
@@ -5825,13 +6143,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Endpoints": {
             "type": "object",
             "title": "Endpoints is a collection of endpoints that implement the actual service. Example:\n  Name: \"mysvc\",\n  Subsets: [\n    {\n      Addresses: [{\"ip\": \"10.10.1.1\"}, {\"ip\": \"10.10.2.2\"}],\n      Ports: [{\"name\": \"a\", \"port\": 8675}, {\"name\": \"b\", \"port\": 309}]\n    },\n    {\n      Addresses: [{\"ip\": \"10.10.3.3\"}],\n      Ports: [{\"name\": \"a\", \"port\": 93}, {\"name\": \"b\", \"port\": 76}]\n    },\n ]",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Endpoints",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "subsets": {
                     "type": "array",
+                    "description": " some of which are ready and some of which are not (because they come from\n different containers) will result in the address being displayed in different\n subsets for the different ports. No address will appear in both Addresses and\n NotReadyAddresses in the same subset.\n Sets of addresses and ports that comprise a service.\n +optional",
                     "title": "The set of all endpoints is the union of all subsets. Addresses are placed into\nsubsets according to the IPs they share. A single address with multiple ports,\nsome of which are ready and some of which are not (because they come from\ndifferent containers) will result in the address being displayed in different\nsubsets for the different ports. No address will appear in both Addresses and\nNotReadyAddresses in the same subset.\nSets of addresses and ports that comprise a service.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1EndpointSubset"
@@ -5842,6 +6163,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EndpointsList": {
             "type": "object",
             "description": "EndpointsList is a list of endpoints.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EndpointsList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -5851,6 +6173,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -5859,6 +6182,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EnvFromSource": {
             "type": "object",
             "title": "EnvFromSource represents the source of a set of ConfigMaps",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EnvFromSource",
             "properties": {
                 "configMapRef": {
                     "title": "The ConfigMap to select from\n+optional",
@@ -5877,6 +6201,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EnvVar": {
             "type": "object",
             "description": "EnvVar represents an environment variable present in a Container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EnvVar",
             "properties": {
                 "name": {
                     "type": "string",
@@ -5884,6 +6209,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "value": {
                     "type": "string",
+                    "description": " any service environment variables. If a variable cannot be resolved,\n the reference in the input string will be unchanged. The $(VAR_NAME)\n syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped\n references will never be expanded, regardless of whether the variable\n exists or not.\n Defaults to \"\".\n +optional",
                     "title": "Variable references $(VAR_NAME) are expanded\nusing the previous defined environment variables in the container and\nany service environment variables. If a variable cannot be resolved,\nthe reference in the input string will be unchanged. The $(VAR_NAME)\nsyntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped\nreferences will never be expanded, regardless of whether the variable\nexists or not.\nDefaults to \"\".\n+optional"
                 },
                 "valueFrom": {
@@ -5895,16 +6221,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EnvVarSource": {
             "type": "object",
             "description": "EnvVarSource represents a source for the value of an EnvVar.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EnvVarSource",
             "properties": {
                 "configMapKeyRef": {
                     "title": "Selects a key of a ConfigMap.\n+optional",
                     "$ref": "#/definitions/v1ConfigMapKeySelector"
                 },
                 "fieldRef": {
+                    "description": " +optional",
                     "title": "Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations,\nspec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.\n+optional",
                     "$ref": "#/definitions/v1ObjectFieldSelector"
                 },
                 "resourceFieldRef": {
+                    "description": " +optional",
                     "title": "Selects a resource of the container: only resources limits and requests\n(limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.\n+optional",
                     "$ref": "#/definitions/v1ResourceFieldSelector"
                 },
@@ -5917,13 +6246,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EphemeralContainer": {
             "type": "object",
             "description": "An EphemeralContainer is a container that may be added temporarily to an existing pod for\nuser-initiated activities such as debugging. Ephemeral containers have no resource or\nscheduling guarantees, and they will not be restarted when they exit or when a pod is\nremoved or restarted. If an ephemeral container causes a pod to exceed its resource\nallocation, the pod may be evicted.\nEphemeral containers may not be added by directly updating the pod spec. They must be added\nvia the pod's ephemeralcontainers subresource, and they will appear in the pod spec\nonce added.\nThis is an alpha feature enabled by the EphemeralContainers feature flag.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EphemeralContainer",
             "properties": {
                 "ephemeralContainerCommon": {
-                    "description": "Ephemeral containers have all of the fields of Container, plus additional fields\nspecific to ephemeral containers. Fields in common with Container are in the\nfollowing inlined struct so than an EphemeralContainer may easily be converted\nto a Container.",
+                    "description": " following inlined struct so than an EphemeralContainer may easily be converted\n to a Container.",
                     "$ref": "#/definitions/v1EphemeralContainerCommon"
                 },
                 "targetContainerName": {
                     "type": "string",
+                    "description": " If not set then the ephemeral container is run in whatever namespaces are shared\n for the pod. Note that the container runtime must support this feature.\n +optional",
                     "title": "If set, the name of the container from PodSpec that this ephemeral container targets.\nThe ephemeral container will be run in the namespaces (IPC, PID, etc) of this container.\nIf not set then the ephemeral container is run in whatever namespaces are shared\nfor the pod. Note that the container runtime must support this feature.\n+optional"
                 }
             }
@@ -5931,9 +6262,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1EphemeralContainerCommon": {
             "type": "object",
             "description": "EphemeralContainerCommon is a copy of all fields in Container to be inlined in\nEphemeralContainer. This separate type allows easy conversion from EphemeralContainer\nto Container and allows separate documentation for the fields of EphemeralContainer.\nWhen a new field is added to Container it must be added here as well.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.EphemeralContainerCommon",
             "properties": {
                 "args": {
                     "type": "array",
+                    "description": " Variable references $(VAR_NAME) are expanded using the container's environment. If a variable\n cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\n can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\n regardless of whether the variable exists or not.\n Cannot be updated.\n More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n +optional",
                     "title": "Arguments to the entrypoint.\nThe docker image's CMD is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\ncan be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\nregardless of whether the variable exists or not.\nCannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n+optional",
                     "items": {
                         "type": "string"
@@ -5941,6 +6274,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "command": {
                     "type": "array",
+                    "description": " Variable references $(VAR_NAME) are expanded using the container's environment. If a variable\n cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\n can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\n regardless of whether the variable exists or not.\n Cannot be updated.\n More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n +optional",
                     "title": "Entrypoint array. Not executed within a shell.\nThe docker image's ENTRYPOINT is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\ncan be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\nregardless of whether the variable exists or not.\nCannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n+optional",
                     "items": {
                         "type": "string"
@@ -5948,6 +6282,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "env": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=name\n +patchStrategy=merge",
                     "title": "List of environment variables to set in the container.\nCannot be updated.\n+optional\n+patchMergeKey=name\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1EnvVar"
@@ -5955,6 +6290,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "envFrom": {
                     "type": "array",
+                    "description": " will be reported as an event when the container is starting. When a key exists in multiple\n sources, the value associated with the last source will take precedence.\n Values defined by an Env with a duplicate key will take precedence.\n Cannot be updated.\n +optional",
                     "title": "List of sources to populate environment variables in the container.\nThe keys defined within a source must be a C_IDENTIFIER. All invalid keys\nwill be reported as an event when the container is starting. When a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1EnvFromSource"
@@ -5966,6 +6302,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "imagePullPolicy": {
                     "type": "string",
+                    "description": " Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.\n Cannot be updated.\n More info: https://kubernetes.io/docs/concepts/containers/images#updating-images\n +optional",
                     "title": "Image pull policy.\nOne of Always, Never, IfNotPresent.\nDefaults to Always if :latest tag is specified, or IfNotPresent otherwise.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/containers/images#updating-images\n+optional"
                 },
                 "lifecycle": {
@@ -5992,6 +6329,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1Probe"
                 },
                 "resources": {
+                    "description": " +optional",
                     "title": "Resources are not allowed for ephemeral containers. Ephemeral containers use spare resources\nalready allocated to the pod.\n+optional",
                     "$ref": "#/definitions/v1ResourceRequirements"
                 },
@@ -6005,29 +6343,35 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "stdin": {
                     "type": "boolean",
+                    "description": " Default is false.\n +optional",
                     "title": "Whether this container should allocate a buffer for stdin in the container runtime. If this\nis not set, reads from stdin in the container will always result in EOF.\nDefault is false.\n+optional",
                     "format": "boolean"
                 },
                 "stdinOnce": {
                     "type": "boolean",
+                    "description": " sessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the\n first client attaches to stdin, and then remains open and accepts data until the client disconnects,\n at which time stdin is closed and remains closed until the container is restarted. If this\n flag is false, a container processes that reads from stdin will never receive an EOF.\n Default is false\n +optional",
                     "title": "Whether the container runtime should close the stdin channel after it has been opened by\na single attach. When stdin is true the stdin stream will remain open across multiple attach\nsessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the\nfirst client attaches to stdin, and then remains open and accepts data until the client disconnects,\nat which time stdin is closed and remains closed until the container is restarted. If this\nflag is false, a container processes that reads from stdin will never receive an EOF.\nDefault is false\n+optional",
                     "format": "boolean"
                 },
                 "terminationMessagePath": {
                     "type": "string",
+                    "description": " Message written is intended to be brief final status, such as an assertion failure message.\n Will be truncated by the node if greater than 4096 bytes. The total message length across\n all containers will be limited to 12kb.\n Defaults to /dev/termination-log.\n Cannot be updated.\n +optional",
                     "title": "Optional: Path at which the file to which the container's termination message\nwill be written is mounted into the container's filesystem.\nMessage written is intended to be brief final status, such as an assertion failure message.\nWill be truncated by the node if greater than 4096 bytes. The total message length across\nall containers will be limited to 12kb.\nDefaults to /dev/termination-log.\nCannot be updated.\n+optional"
                 },
                 "terminationMessagePolicy": {
                     "type": "string",
+                    "description": " FallbackToLogsOnError will use the last chunk of container log output if the termination\n message file is empty and the container exited with an error.\n The log output is limited to 2048 bytes or 80 lines, whichever is smaller.\n Defaults to File.\n Cannot be updated.\n +optional",
                     "title": "Indicate how the termination message should be populated. File will use the contents of\nterminationMessagePath to populate the container status message on both success and failure.\nFallbackToLogsOnError will use the last chunk of container log output if the termination\nmessage file is empty and the container exited with an error.\nThe log output is limited to 2048 bytes or 80 lines, whichever is smaller.\nDefaults to File.\nCannot be updated.\n+optional"
                 },
                 "tty": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Whether this container should allocate a TTY for itself, also requires 'stdin' to be true.\nDefault is false.\n+optional",
                     "format": "boolean"
                 },
                 "volumeDevices": {
                     "type": "array",
+                    "description": " +patchMergeKey=devicePath\n +patchStrategy=merge\n +optional",
                     "title": "volumeDevices is the list of block devices to be used by the container.\nThis is a beta feature.\n+patchMergeKey=devicePath\n+patchStrategy=merge\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1VolumeDevice"
@@ -6035,6 +6379,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "volumeMounts": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=mountPath\n +patchStrategy=merge",
                     "title": "Pod volumes to mount into the container's filesystem.\nCannot be updated.\n+optional\n+patchMergeKey=mountPath\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1VolumeMount"
@@ -6042,6 +6387,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "workingDir": {
                     "type": "string",
+                    "description": " might be configured in the container image.\n Cannot be updated.\n +optional",
                     "title": "Container's working directory.\nIf not specified, the container runtime's default will be used, which\nmight be configured in the container image.\nCannot be updated.\n+optional"
                 }
             }
@@ -6049,9 +6395,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ExecAction": {
             "type": "object",
             "description": "ExecAction describes a \"run in container\" action.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ExecAction",
             "properties": {
                 "command": {
                     "type": "array",
+                    "description": " not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\n a shell, you need to explicitly call out to that shell.\n Exit status of 0 is treated as live/healthy and non-zero is unhealthy.\n +optional",
                     "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional",
                     "items": {
                         "type": "string"
@@ -6062,9 +6410,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1FCVolumeSource": {
             "type": "object",
             "description": "Represents a Fibre Channel volume.\nFibre Channel volumes can only be mounted as read/write once.\nFibre Channel volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.FCVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n TODO: how do we prevent errors in the filesystem from compromising the machine\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
                 },
                 "lun": {
@@ -6074,6 +6424,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
@@ -6086,6 +6437,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "wwids": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "Optional: FC volume world wide identifiers (wwids)\nEither wwids or combination of targetWWNs and lun must be set, but not both simultaneously.\n+optional",
                     "items": {
                         "type": "string"
@@ -6107,6 +6459,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1FlexPersistentVolumeSource": {
             "type": "object",
             "description": "FlexPersistentVolumeSource represents a generic persistent volume resource that is\nprovisioned/attached using an exec based plugin.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.FlexPersistentVolumeSource",
             "properties": {
                 "driver": {
                     "type": "string",
@@ -6114,6 +6467,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\". The default filesystem depends on FlexVolume script.\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". The default filesystem depends on FlexVolume script.\n+optional"
                 },
                 "options": {
@@ -6122,10 +6476,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
                 "secretRef": {
+                    "description": " empty if no secret object is specified. If the secret object\n contains more than one secret, all secrets are passed to the plugin\n scripts.\n +optional",
                     "title": "Optional: SecretRef is reference to the secret object containing\nsensitive information to pass to the plugin scripts. This may be\nempty if no secret object is specified. If the secret object\ncontains more than one secret, all secrets are passed to the plugin\nscripts.\n+optional",
                     "$ref": "#/definitions/v1SecretReference"
                 }
@@ -6134,6 +6490,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1FlexVolumeSource": {
             "type": "object",
             "description": "FlexVolume represents a generic volume resource that is\nprovisioned/attached using an exec based plugin.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.FlexVolumeSource",
             "properties": {
                 "driver": {
                     "type": "string",
@@ -6141,6 +6498,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\". The default filesystem depends on FlexVolume script.\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". The default filesystem depends on FlexVolume script.\n+optional"
                 },
                 "options": {
@@ -6149,10 +6507,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
                 "secretRef": {
+                    "description": " empty if no secret object is specified. If the secret object\n contains more than one secret, all secrets are passed to the plugin\n scripts.\n +optional",
                     "title": "Optional: SecretRef is reference to the secret object containing\nsensitive information to pass to the plugin scripts. This may be\nempty if no secret object is specified. If the secret object\ncontains more than one secret, all secrets are passed to the plugin\nscripts.\n+optional",
                     "$ref": "#/definitions/v1LocalObjectReference"
                 }
@@ -6161,9 +6521,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1FlockerVolumeSource": {
             "type": "object",
             "description": "Represents a Flocker volume mounted by the Flocker agent.\nOne and only one of datasetName and datasetUUID should be set.\nFlocker volumes do not support ownership management or SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.FlockerVolumeSource",
             "properties": {
                 "datasetName": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Name of the dataset stored as metadata -\u003e name on the dataset for Flocker\nshould be considered as deprecated\n+optional"
                 },
                 "datasetUUID": {
@@ -6175,13 +6537,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1GCEPersistentDiskVolumeSource": {
             "type": "object",
             "description": "Represents a Persistent Disk resource in Google Compute Engine.\n\nA GCE PD must exist before mounting to a container. The disk must\nalso be in the same GCE project and zone as the kubelet. A GCE PD\ncan only be mounted as read/write once or read-only many times. GCE\nPDs support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.GCEPersistentDiskVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n TODO: how do we prevent errors in the filesystem from compromising the machine\n +optional",
                     "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
                 },
                 "partition": {
                     "type": "integer",
+                    "description": " Examples: For volume /dev/sda1, you specify the partition as \"1\".\n Similarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty).\n More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n +optional",
                     "title": "The partition in the volume that you want to mount.\nIf omitted, the default is to mount by volume name.\nExamples: For volume /dev/sda1, you specify the partition as \"1\".\nSimilarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty).\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional",
                     "format": "int32"
                 },
@@ -6191,6 +6556,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n +optional",
                     "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional",
                     "format": "boolean"
                 }
@@ -6199,9 +6565,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1GitRepoVolumeSource": {
             "type": "object",
             "description": "Represents a volume that is populated with the contents of a git repository.\nGit repo volumes do not support ownership management.\nGit repo volumes support SELinux relabeling.\n\nDEPRECATED: GitRepo is deprecated. To provision a container with a git repo, mount an\nEmptyDir into an InitContainer that clones the repo using git, then mount the EmptyDir\ninto the Pod's container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.GitRepoVolumeSource",
             "properties": {
                 "directory": {
                     "type": "string",
+                    "description": " git repository.  Otherwise, if specified, the volume will contain the git repository in\n the subdirectory with the given name.\n +optional",
                     "title": "Target directory name.\nMust not contain or start with '..'.  If '.' is supplied, the volume directory will be the\ngit repository.  Otherwise, if specified, the volume will contain the git repository in\nthe subdirectory with the given name.\n+optional"
                 },
                 "repository": {
@@ -6217,6 +6585,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1GlusterfsPersistentVolumeSource": {
             "type": "object",
             "description": "Represents a Glusterfs mount that lasts the lifetime of a pod.\nGlusterfs volumes do not support ownership management or SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.GlusterfsPersistentVolumeSource",
             "properties": {
                 "endpoints": {
                     "type": "string",
@@ -6224,6 +6593,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "endpointsNamespace": {
                     "type": "string",
+                    "description": " More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n +optional",
                     "title": "EndpointsNamespace is the namespace that contains Glusterfs endpoint.\nIf this field is empty, the EndpointNamespace defaults to the same namespace as the bound PVC.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n+optional"
                 },
                 "path": {
@@ -6232,6 +6602,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n +optional",
                     "title": "ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n+optional",
                     "format": "boolean"
                 }
@@ -6240,6 +6611,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1GlusterfsVolumeSource": {
             "type": "object",
             "description": "Represents a Glusterfs mount that lasts the lifetime of a pod.\nGlusterfs volumes do not support ownership management or SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.GlusterfsVolumeSource",
             "properties": {
                 "endpoints": {
                     "type": "string",
@@ -6251,6 +6623,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n +optional",
                     "title": "ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n+optional",
                     "format": "boolean"
                 }
@@ -6259,9 +6632,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1HTTPGetAction": {
             "type": "object",
             "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.HTTPGetAction",
             "properties": {
                 "host": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
                 },
                 "httpHeaders": {
@@ -6276,11 +6651,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "title": "Path to access on the HTTP server.\n+optional"
                 },
                 "port": {
-                    "description": "Name or number of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+                    "description": " Name must be an IANA_SVC_NAME.",
                     "$ref": "#/definitions/intstrIntOrString"
                 },
                 "scheme": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
                 }
             }
@@ -6288,6 +6664,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1HTTPHeader": {
             "type": "object",
             "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+            "x-ves-proto-message": "k8s.io.api.core.v1.HTTPHeader",
             "properties": {
                 "name": {
                     "type": "string",
@@ -6302,8 +6679,10 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Handler": {
             "type": "object",
             "description": "Handler defines a specific action that should be taken\nTODO: pass structured data to these actions, and document that data here.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Handler",
             "properties": {
                 "exec": {
+                    "description": " +optional",
                     "title": "One and only one of the following should be specified.\nExec specifies the action to take.\n+optional",
                     "$ref": "#/definitions/v1ExecAction"
                 },
@@ -6312,6 +6691,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1HTTPGetAction"
                 },
                 "tcpSocket": {
+                    "description": " TODO: implement a realistic TCP lifecycle hook\n +optional",
                     "title": "TCPSocket specifies an action involving a TCP port.\nTCP hooks not yet supported\nTODO: implement a realistic TCP lifecycle hook\n+optional",
                     "$ref": "#/definitions/v1TCPSocketAction"
                 }
@@ -6320,6 +6700,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1HostAlias": {
             "type": "object",
             "description": "HostAlias holds the mapping between IP and hostnames that will be injected as an entry in the\npod's hosts file.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.HostAlias",
             "properties": {
                 "hostnames": {
                     "type": "array",
@@ -6337,13 +6718,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1HostPathVolumeSource": {
             "type": "object",
             "description": "Represents a host path mapped into a pod.\nHost path volumes do not support ownership management or SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.HostPathVolumeSource",
             "properties": {
                 "path": {
                     "type": "string",
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath",
                     "title": "Path of the directory on the host.\nIf the path is a symlink, it will follow the link to the real path.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath"
                 },
                 "type": {
                     "type": "string",
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n +optional",
                     "title": "Type for HostPath Volume\nDefaults to \"\"\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n+optional"
                 }
             }
@@ -6351,6 +6735,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ISCSIPersistentVolumeSource": {
             "type": "object",
             "description": "ISCSIPersistentVolumeSource represents an ISCSI disk.\nISCSI volumes can only be mounted as read/write once.\nISCSI volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ISCSIPersistentVolumeSource",
             "properties": {
                 "chapAuthDiscovery": {
                     "type": "boolean",
@@ -6364,10 +6749,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "fsType": {
                     "type": "string",
+                    "description": " Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi\n TODO: how do we prevent errors in the filesystem from compromising the machine\n +optional",
                     "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
                 },
                 "initiatorName": {
                     "type": "string",
+                    "description": " \u003ctarget portal\u003e:\u003cvolume name\u003e will be created for the connection.\n +optional",
                     "title": "Custom iSCSI Initiator Name.\nIf initiatorName is specified with iscsiInterface simultaneously, new iSCSI interface\n\u003ctarget portal\u003e:\u003cvolume name\u003e will be created for the connection.\n+optional"
                 },
                 "iqn": {
@@ -6376,6 +6763,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "iscsiInterface": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "iSCSI Interface Name that uses an iSCSI transport.\nDefaults to 'default' (tcp).\n+optional"
                 },
                 "lun": {
@@ -6385,6 +6773,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "portals": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "iSCSI Target Portal List. The Portal is either an IP or ip_addr:port if the port\nis other than default (typically TCP ports 860 and 3260).\n+optional",
                     "items": {
                         "type": "string"
@@ -6392,6 +6781,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\n+optional",
                     "format": "boolean"
                 },
@@ -6408,6 +6798,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ISCSIVolumeSource": {
             "type": "object",
             "description": "Represents an ISCSI disk.\nISCSI volumes can only be mounted as read/write once.\nISCSI volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ISCSIVolumeSource",
             "properties": {
                 "chapAuthDiscovery": {
                     "type": "boolean",
@@ -6421,10 +6812,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "fsType": {
                     "type": "string",
+                    "description": " Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi\n TODO: how do we prevent errors in the filesystem from compromising the machine\n +optional",
                     "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
                 },
                 "initiatorName": {
                     "type": "string",
+                    "description": " \u003ctarget portal\u003e:\u003cvolume name\u003e will be created for the connection.\n +optional",
                     "title": "Custom iSCSI Initiator Name.\nIf initiatorName is specified with iscsiInterface simultaneously, new iSCSI interface\n\u003ctarget portal\u003e:\u003cvolume name\u003e will be created for the connection.\n+optional"
                 },
                 "iqn": {
@@ -6433,6 +6826,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "iscsiInterface": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "iSCSI Interface Name that uses an iSCSI transport.\nDefaults to 'default' (tcp).\n+optional"
                 },
                 "lun": {
@@ -6442,6 +6836,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "portals": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "iSCSI Target Portal List. The portal is either an IP or ip_addr:port if the port\nis other than default (typically TCP ports 860 and 3260).\n+optional",
                     "items": {
                         "type": "string"
@@ -6449,6 +6844,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\n+optional",
                     "format": "boolean"
                 },
@@ -6465,16 +6861,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Job": {
             "type": "object",
             "description": "Job represents the configuration of a single job.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1.Job",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Specification of the desired behavior of a job.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1JobSpec"
                 },
                 "status": {
+                    "description": " +optional",
                     "title": "Current status of a job.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1JobStatus"
                 }
@@ -6483,6 +6883,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1JobCondition": {
             "type": "object",
             "description": "JobCondition describes current state of a job.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1.JobCondition",
             "properties": {
                 "lastProbeTime": {
                     "title": "Last time the condition was checked.\n+optional",
@@ -6513,6 +6914,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1JobList": {
             "type": "object",
             "description": "JobList is a collection of jobs.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1.JobList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -6522,6 +6924,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -6530,33 +6933,40 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1JobSpec": {
             "type": "object",
             "description": "JobSpec describes how the job execution will look like.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1.JobSpec",
             "properties": {
                 "activeDeadlineSeconds": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Specifies the duration in seconds relative to the startTime that the job may be active\nbefore the system tries to terminate it; value must be positive integer\n+optional",
                     "format": "int64"
                 },
                 "backoffLimit": {
                     "type": "integer",
+                    "description": " +optional",
                     "title": "Specifies the number of retries before marking this job failed.\nDefaults to 6\n+optional",
                     "format": "int32"
                 },
                 "completions": {
                     "type": "integer",
+                    "description": " pod signals the success of all pods, and allows parallelism to have any positive\n value.  Setting to 1 means that parallelism is limited to 1 and the success of that\n pod signals the success of the job.\n More info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n +optional",
                     "title": "Specifies the desired number of successfully finished pods the\njob should be run with.  Setting to nil means that the success of any\npod signals the success of all pods, and allows parallelism to have any positive\nvalue.  Setting to 1 means that parallelism is limited to 1 and the success of that\npod signals the success of the job.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n+optional",
                     "format": "int32"
                 },
                 "manualSelector": {
                     "type": "boolean",
+                    "description": " When false or unset, the system pick labels unique to this job\n and appends those labels to the pod template.  When true,\n the user is responsible for picking unique labels and specifying\n the selector.  Failure to pick a unique label may cause this\n and other jobs to not function correctly.  However, You may see\n -manualSelector=true- in jobs that were created with the old -extensions/v1beta1-\n API.\n More info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#specifying-your-own-pod-selector\n +optional",
                     "title": "manualSelector controls generation of pod labels and pod selectors.\nLeave -manualSelector- unset unless you are certain what you are doing.\nWhen false or unset, the system pick labels unique to this job\nand appends those labels to the pod template.  When true,\nthe user is responsible for picking unique labels and specifying\nthe selector.  Failure to pick a unique label may cause this\nand other jobs to not function correctly.  However, You may see\n-manualSelector=true- in jobs that were created with the old -extensions/v1beta1-\nAPI.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#specifying-your-own-pod-selector\n+optional",
                     "format": "boolean"
                 },
                 "parallelism": {
                     "type": "integer",
+                    "description": " be less than this number when ((.spec.completions - .status.successful) \u003c .spec.parallelism),\n i.e. when the work left to do is less than max parallelism.\n More info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n +optional",
                     "title": "Specifies the maximum desired number of pods the job should\nrun at any given time. The actual number of pods running in steady state will\nbe less than this number when ((.spec.completions - .status.successful) \u003c .spec.parallelism),\ni.e. when the work left to do is less than max parallelism.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n+optional",
                     "format": "int32"
                 },
                 "selector": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors\n +optional",
                     "title": "A label query over pods that should match the pod count.\nNormally, the system sets this field for you.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors\n+optional",
                     "$ref": "#/definitions/v1LabelSelector"
                 },
@@ -6566,6 +6976,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "ttlSecondsAfterFinished": {
                     "type": "integer",
+                    "description": " ttlSecondsAfterFinished after the Job finishes, it is eligible to be\n automatically deleted. When the Job is being deleted, its lifecycle\n guarantees (e.g. finalizers) will be honored. If this field is unset,\n the Job won't be automatically deleted. If this field is set to zero,\n the Job becomes eligible to be deleted immediately after it finishes.\n This field is alpha-level and is only honored by servers that enable the\n TTLAfterFinished feature.\n +optional",
                     "title": "ttlSecondsAfterFinished limits the lifetime of a Job that has finished\nexecution (either Complete or Failed). If this field is set,\nttlSecondsAfterFinished after the Job finishes, it is eligible to be\nautomatically deleted. When the Job is being deleted, its lifecycle\nguarantees (e.g. finalizers) will be honored. If this field is unset,\nthe Job won't be automatically deleted. If this field is set to zero,\nthe Job becomes eligible to be deleted immediately after it finishes.\nThis field is alpha-level and is only honored by servers that enable the\nTTLAfterFinished feature.\n+optional",
                     "format": "int32"
                 }
@@ -6574,6 +6985,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1JobStatus": {
             "type": "object",
             "description": "JobStatus represents the current state of a Job.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1.JobStatus",
             "properties": {
                 "active": {
                     "type": "integer",
@@ -6581,11 +6993,13 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "format": "int32"
                 },
                 "completionTime": {
+                    "description": " It is represented in RFC3339 form and is in UTC.\n +optional",
                     "title": "Represents time when the job was completed. It is not guaranteed to\nbe set in happens-before order across separate operations.\nIt is represented in RFC3339 form and is in UTC.\n+optional",
                     "$ref": "#/definitions/v1Time"
                 },
                 "conditions": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "The latest available observations of an object's current state.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1JobCondition"
@@ -6597,6 +7011,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "format": "int32"
                 },
                 "startTime": {
+                    "description": " It is represented in RFC3339 form and is in UTC.\n +optional",
                     "title": "Represents time when the job was acknowledged by the job controller.\nIt is not guaranteed to be set in happens-before order across separate operations.\nIt is represented in RFC3339 form and is in UTC.\n+optional",
                     "$ref": "#/definitions/v1Time"
                 },
@@ -6610,6 +7025,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1KeyToPath": {
             "type": "object",
             "description": "Maps a string key to a path within a volume.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.KeyToPath",
             "properties": {
                 "key": {
                     "type": "string",
@@ -6617,12 +7033,13 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "mode": {
                     "type": "integer",
+                    "description": " This might be in conflict with other options that affect the file\n mode, like fsGroup, and the result can be other mode bits set.\n +optional",
                     "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional",
                     "format": "int32"
                 },
                 "path": {
                     "type": "string",
-                    "description": "The relative path of the file to map the key to.\nMay not be an absolute path.\nMay not contain the path element '..'.\nMay not start with the string '..'."
+                    "description": " May not contain the path element '..'.\n May not start with the string '..'."
                 }
             }
         },
@@ -6667,12 +7084,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Lifecycle": {
             "type": "object",
             "description": "Lifecycle describes actions that the management system should take in response to container lifecycle\nevents. For the PostStart and PreStop lifecycle handlers, management of the container blocks\nuntil the action is complete, unless the container process fails, in which case the handler is aborted.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Lifecycle",
             "properties": {
                 "postStart": {
+                    "description": " Other management of the container blocks until the hook completes.\n More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks\n +optional",
                     "title": "PostStart is called immediately after a container is created. If the handler fails,\nthe container is terminated and restarted according to its restart policy.\nOther management of the container blocks until the hook completes.\nMore info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks\n+optional",
                     "$ref": "#/definitions/v1Handler"
                 },
                 "preStop": {
+                    "description": " preemption, resource contention, etc. The handler is not called if the\n container crashes or exits. The reason for termination is passed to the\n handler. The Pod's termination grace period countdown begins before the\n PreStop hooked is executed. Regardless of the outcome of the handler, the\n container will eventually terminate within the Pod's termination grace\n period. Other management of the container blocks until the hook completes\n or until the termination grace period is reached.\n More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks\n +optional",
                     "title": "PreStop is called immediately before a container is terminated due to an\nAPI request or management event such as liveness/startup probe failure,\npreemption, resource contention, etc. The handler is not called if the\ncontainer crashes or exits. The reason for termination is passed to the\nhandler. The Pod's termination grace period countdown begins before the\nPreStop hooked is executed. Regardless of the outcome of the handler, the\ncontainer will eventually terminate within the Pod's termination grace\nperiod. Other management of the container blocks until the hook completes\nor until the termination grace period is reached.\nMore info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks\n+optional",
                     "$ref": "#/definitions/v1Handler"
                 }
@@ -6704,13 +7124,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1LoadBalancerIngress": {
             "type": "object",
             "description": "LoadBalancerIngress represents the status of a load-balancer ingress point:\ntraffic intended for the service should be sent to an ingress point.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.LoadBalancerIngress",
             "properties": {
                 "hostname": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Hostname is set for load-balancer ingress points that are DNS based\n(typically AWS load-balancers)\n+optional"
                 },
                 "ip": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "IP is set for load-balancer ingress points that are IP based\n(typically GCE or OpenStack load-balancers)\n+optional"
                 }
             }
@@ -6718,9 +7141,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1LoadBalancerStatus": {
             "type": "object",
             "description": "LoadBalancerStatus represents the status of a load-balancer.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.LoadBalancerStatus",
             "properties": {
                 "ingress": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "Ingress is a list containing ingress points for the load-balancer.\nTraffic intended for the service should be sent to these ingress points.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1LoadBalancerIngress"
@@ -6731,9 +7156,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1LocalObjectReference": {
             "type": "object",
             "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.LocalObjectReference",
             "properties": {
                 "name": {
                     "type": "string",
+                    "description": " TODO: Add other useful fields. apiVersion, kind, uid?\n +optional",
                     "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
                 }
             }
@@ -6741,9 +7168,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1LocalVolumeSource": {
             "type": "object",
             "title": "Local represents directly-attached storage with node affinity (Beta feature)",
+            "x-ves-proto-message": "k8s.io.api.core.v1.LocalVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Must be a filesystem type supported by the host operating system.\n Ex. \"ext4\", \"xfs\", \"ntfs\". The default value is to auto-select a fileystem if unspecified.\n +optional",
                     "title": "Filesystem type to mount.\nIt applies only when the Path is a block device.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". The default value is to auto-select a fileystem if unspecified.\n+optional"
                 },
                 "path": {
@@ -6785,6 +7214,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NFSVolumeSource": {
             "type": "object",
             "description": "Represents an NFS mount that lasts the lifetime of a pod.\nNFS volumes do not support ownership management or SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NFSVolumeSource",
             "properties": {
                 "path": {
                     "type": "string",
@@ -6792,6 +7222,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " Defaults to false.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs\n +optional",
                     "title": "ReadOnly here will force\nthe NFS export to be mounted with read-only permissions.\nDefaults to false.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#nfs\n+optional",
                     "format": "boolean"
                 },
@@ -6804,16 +7235,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Namespace": {
             "type": "object",
             "description": "Namespace provides a scope for Names.\nUse of multiple namespaces is optional.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Namespace",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Spec defines the behavior of the Namespace.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1NamespaceSpec"
                 },
                 "status": {
+                    "description": " +optional",
                     "title": "Status describes the current status of a Namespace.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1NamespaceStatus"
                 }
@@ -6822,6 +7257,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NamespaceCondition": {
             "type": "object",
             "description": "NamespaceCondition contains details about state of namespace.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NamespaceCondition",
             "properties": {
                 "lastTransitionTime": {
                     "title": "+optional",
@@ -6848,6 +7284,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NamespaceList": {
             "type": "object",
             "description": "NamespaceList is a list of Namespaces.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NamespaceList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -6857,6 +7294,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -6865,9 +7303,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NamespaceSpec": {
             "type": "object",
             "description": "NamespaceSpec describes the attributes on a Namespace.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NamespaceSpec",
             "properties": {
                 "finalizers": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "Finalizers is an opaque list of values that must be empty to permanently remove object from storage.\nMore info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/\n+optional",
                     "items": {
                         "type": "string"
@@ -6878,9 +7318,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NamespaceStatus": {
             "type": "object",
             "description": "NamespaceStatus is information about the current status of a Namespace.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NamespaceStatus",
             "properties": {
                 "conditions": {
                     "type": "array",
+                    "description": " +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "Represents the latest available observations of a namespace's current state.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1NamespaceCondition"
@@ -6888,6 +7330,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "phase": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Phase is the current lifecycle phase of the namespace.\nMore info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/\n+optional"
                 }
             }
@@ -6895,16 +7338,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Node": {
             "type": "object",
             "description": "Node is a worker node in Kubernetes.\nEach node will have a unique identifier in the cache (i.e. in etcd).",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Node",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Spec defines the behavior of a node.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1NodeSpec"
                 },
                 "status": {
+                    "description": " Read-only.\n More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n +optional",
                     "title": "Most recently observed status of the node.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1NodeStatus"
                 }
@@ -6913,6 +7360,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeAddress": {
             "type": "object",
             "description": "NodeAddress contains information for the node's address.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeAddress",
             "properties": {
                 "address": {
                     "type": "string",
@@ -6927,15 +7375,18 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeAffinity": {
             "type": "object",
             "description": "Node affinity is a group of node affinity scheduling rules.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeAffinity",
             "properties": {
                 "preferredDuringSchedulingIgnoredDuringExecution": {
                     "type": "array",
+                    "description": " a node that violates one or more of the expressions. The node that is\n most preferred is the one with the greatest sum of weights, i.e.\n for each node that meets all of the scheduling requirements (resource\n request, requiredDuringScheduling affinity expressions, etc.),\n compute a sum by iterating through the elements of this field and adding\n \"weight\" to the sum if the node matches the corresponding matchExpressions; the\n node(s) with the highest sum are the most preferred.\n +optional",
                     "title": "The scheduler will prefer to schedule pods to nodes that satisfy\nthe affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node matches the corresponding matchExpressions; the\nnode(s) with the highest sum are the most preferred.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1PreferredSchedulingTerm"
                     }
                 },
                 "requiredDuringSchedulingIgnoredDuringExecution": {
+                    "description": " If the affinity requirements specified by this field cease to be met\n at some point during pod execution (e.g. due to an update), the system\n may or may not try to eventually evict the pod from its node.\n +optional",
                     "title": "If the affinity requirements specified by this field are not met at\nscheduling time, the pod will not be scheduled onto the node.\nIf the affinity requirements specified by this field cease to be met\nat some point during pod execution (e.g. due to an update), the system\nmay or may not try to eventually evict the pod from its node.\n+optional",
                     "$ref": "#/definitions/v1NodeSelector"
                 }
@@ -6944,6 +7395,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeCondition": {
             "type": "object",
             "description": "NodeCondition contains condition information for a node.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeCondition",
             "properties": {
                 "lastHeartbeatTime": {
                     "title": "Last time we got an update on a given condition.\n+optional",
@@ -6974,6 +7426,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeConfigSource": {
             "type": "object",
             "description": "NodeConfigSource specifies a source of node configuration. Exactly one subfield (excluding metadata) must be non-nil.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeConfigSource",
             "properties": {
                 "configMap": {
                     "title": "ConfigMap is a reference to a Node's ConfigMap",
@@ -6984,20 +7437,25 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeConfigStatus": {
             "type": "object",
             "description": "NodeConfigStatus describes the status of the config assigned by Node.Spec.ConfigSource.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeConfigStatus",
             "properties": {
                 "active": {
+                    "description": " or the current LastKnownGood config, depending on whether attempting to use the\n Assigned config results in an error.\n +optional",
                     "title": "Active reports the checkpointed config the node is actively using.\nActive will represent either the current version of the Assigned config,\nor the current LastKnownGood config, depending on whether attempting to use the\nAssigned config results in an error.\n+optional",
                     "$ref": "#/definitions/v1NodeConfigSource"
                 },
                 "assigned": {
+                    "description": " config payload to local disk, along with a record indicating intended\n config. The node refers to this record to choose its config checkpoint, and\n reports this record in Assigned. Assigned only updates in the status after\n the record has been checkpointed to disk. When the Kubelet is restarted,\n it tries to make the Assigned config the Active config by loading and\n validating the checkpointed payload identified by Assigned.\n +optional",
                     "title": "Assigned reports the checkpointed config the node will try to use.\nWhen Node.Spec.ConfigSource is updated, the node checkpoints the associated\nconfig payload to local disk, along with a record indicating intended\nconfig. The node refers to this record to choose its config checkpoint, and\nreports this record in Assigned. Assigned only updates in the status after\nthe record has been checkpointed to disk. When the Kubelet is restarted,\nit tries to make the Assigned config the Active config by loading and\nvalidating the checkpointed payload identified by Assigned.\n+optional",
                     "$ref": "#/definitions/v1NodeConfigSource"
                 },
                 "error": {
                     "type": "string",
+                    "description": " record, attempting to checkpoint the payload associated with Spec.ConfigSource, attempting\n to load or validate the Assigned config, etc.\n Errors may occur at different points while syncing config. Earlier errors (e.g. download or\n checkpointing errors) will not result in a rollback to LastKnownGood, and may resolve across\n Kubelet retries. Later errors (e.g. loading or validating a checkpointed config) will result in\n a rollback to LastKnownGood. In the latter case, it is usually possible to resolve the error\n by fixing the config assigned in Spec.ConfigSource.\n You can find additional information for debugging by searching the error message in the Kubelet log.\n Error is a human-readable description of the error state; machines can check whether or not Error\n is empty, but should not rely on the stability of the Error text across Kubelet versions.\n +optional",
                     "title": "Error describes any problems reconciling the Spec.ConfigSource to the Active config.\nErrors may occur, for example, attempting to checkpoint Spec.ConfigSource to the local Assigned\nrecord, attempting to checkpoint the payload associated with Spec.ConfigSource, attempting\nto load or validate the Assigned config, etc.\nErrors may occur at different points while syncing config. Earlier errors (e.g. download or\ncheckpointing errors) will not result in a rollback to LastKnownGood, and may resolve across\nKubelet retries. Later errors (e.g. loading or validating a checkpointed config) will result in\na rollback to LastKnownGood. In the latter case, it is usually possible to resolve the error\nby fixing the config assigned in Spec.ConfigSource.\nYou can find additional information for debugging by searching the error message in the Kubelet log.\nError is a human-readable description of the error state; machines can check whether or not Error\nis empty, but should not rely on the stability of the Error text across Kubelet versions.\n+optional"
                 },
                 "lastKnownGood": {
+                    "description": " The Assigned config becomes the LastKnownGood config when the node determines\n that the Assigned config is stable and correct.\n This is currently implemented as a 10-minute soak period starting when the local\n record of Assigned config is updated. If the Assigned config is Active at the end\n of this period, it becomes the LastKnownGood. Note that if Spec.ConfigSource is\n reset to nil (use local defaults), the LastKnownGood is also immediately reset to nil,\n because the local default config is always assumed good.\n You should not make assumptions about the node's method of determining config stability\n and correctness, as this may change or become configurable in the future.\n +optional",
                     "title": "LastKnownGood reports the checkpointed config the node will fall back to\nwhen it encounters an error attempting to use the Assigned config.\nThe Assigned config becomes the LastKnownGood config when the node determines\nthat the Assigned config is stable and correct.\nThis is currently implemented as a 10-minute soak period starting when the local\nrecord of Assigned config is updated. If the Assigned config is Active at the end\nof this period, it becomes the LastKnownGood. Note that if Spec.ConfigSource is\nreset to nil (use local defaults), the LastKnownGood is also immediately reset to nil,\nbecause the local default config is always assumed good.\nYou should not make assumptions about the node's method of determining config stability\nand correctness, as this may change or become configurable in the future.\n+optional",
                     "$ref": "#/definitions/v1NodeConfigSource"
                 }
@@ -7006,6 +7464,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeDaemonEndpoints": {
             "type": "object",
             "description": "NodeDaemonEndpoints lists ports opened by daemons running on the Node.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeDaemonEndpoints",
             "properties": {
                 "kubeletEndpoint": {
                     "title": "Endpoint on which Kubelet is listening.\n+optional",
@@ -7016,6 +7475,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeList": {
             "type": "object",
             "description": "NodeList is the whole list of all Nodes which have been registered with master.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -7025,6 +7485,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -7033,6 +7494,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeSelector": {
             "type": "object",
             "description": "A node selector represents the union of the results of one or more label queries\nover a set of nodes; that is, it represents the OR of the selectors represented\nby the node selector terms.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeSelector",
             "properties": {
                 "nodeSelectorTerms": {
                     "type": "array",
@@ -7046,6 +7508,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeSelectorRequirement": {
             "type": "object",
             "description": "A node selector requirement is a selector that contains values, a key, and an operator\nthat relates the key and values.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeSelectorRequirement",
             "properties": {
                 "key": {
                     "type": "string",
@@ -7057,6 +7520,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "values": {
                     "type": "array",
+                    "description": " the values array must be empty. If the operator is Gt or Lt, the values\n array must have a single element, which will be interpreted as an integer.\n This array is replaced during a strategic merge patch.\n +optional",
                     "title": "An array of string values. If the operator is In or NotIn,\nthe values array must be non-empty. If the operator is Exists or DoesNotExist,\nthe values array must be empty. If the operator is Gt or Lt, the values\narray must have a single element, which will be interpreted as an integer.\nThis array is replaced during a strategic merge patch.\n+optional",
                     "items": {
                         "type": "string"
@@ -7067,6 +7531,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeSelectorTerm": {
             "type": "object",
             "description": "A null or empty node selector term matches no objects. The requirements of\nthem are ANDed.\nThe TopologySelectorTerm type implements a subset of the NodeSelectorTerm.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeSelectorTerm",
             "properties": {
                 "matchExpressions": {
                     "type": "array",
@@ -7087,13 +7552,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeSpec": {
             "type": "object",
             "description": "NodeSpec describes the attributes that a node is created with.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeSpec",
             "properties": {
                 "configSource": {
+                    "description": " +optional",
                     "title": "If specified, the source to get node configuration from\nThe DynamicKubeletConfig feature gate must be enabled for the Kubelet to use this field\n+optional",
                     "$ref": "#/definitions/v1NodeConfigSource"
                 },
                 "externalID": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Deprecated. Not all kubelets will set this field. Remove field after 1.13.\nsee: https://issues.k8s.io/61966\n+optional"
                 },
                 "podCIDR": {
@@ -7102,6 +7570,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "podCIDRs": {
                     "type": "array",
+                    "description": " each of IPv4 and IPv6.\n +optional\n +patchStrategy=merge",
                     "title": "podCIDRs represents the IP ranges assigned to the node for usage by Pods on that node. If this\nfield is specified, the 0th entry must match the podCIDR field. It may contain at most 1 value for\neach of IPv4 and IPv6.\n+optional\n+patchStrategy=merge",
                     "items": {
                         "type": "string"
@@ -7120,6 +7589,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "unschedulable": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Unschedulable controls node schedulability of new pods. By default, node is schedulable.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#manual-node-administration\n+optional",
                     "format": "boolean"
                 }
@@ -7128,9 +7598,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeStatus": {
             "type": "object",
             "description": "NodeStatus is information about the current status of a node.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeStatus",
             "properties": {
                 "addresses": {
                     "type": "array",
+                    "description": " More info: https://kubernetes.io/docs/concepts/nodes/node/#addresses\n Note: This field is declared as mergeable, but the merge key is not sufficiently\n unique, which can cause data corruption when it is merged. Callers should instead\n use a full-replacement patch. See http://pr.k8s.io/79391 for an example.\n +optional\n +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "List of addresses reachable to the node.\nQueried from cloud provider, if available.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#addresses\nNote: This field is declared as mergeable, but the merge key is not sufficiently\nunique, which can cause data corruption when it is merged. Callers should instead\nuse a full-replacement patch. See http://pr.k8s.io/79391 for an example.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1NodeAddress"
@@ -7138,14 +7610,17 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "allocatable": {
                     "type": "object",
+                    "description": " +optional",
                     "title": "Allocatable represents the resources of a node that are available for scheduling.\nDefaults to Capacity.\n+optional"
                 },
                 "capacity": {
                     "type": "object",
+                    "description": " +optional",
                     "title": "Capacity represents the total resources of a node.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity\n+optional"
                 },
                 "conditions": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "Conditions is an array of current observed node conditions.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#condition\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1NodeCondition"
@@ -7167,11 +7642,13 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "nodeInfo": {
+                    "description": " +optional",
                     "title": "Set of ids/uuids to uniquely identify the node.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#info\n+optional",
                     "$ref": "#/definitions/v1NodeSystemInfo"
                 },
                 "phase": {
                     "type": "string",
+                    "description": " The field is never populated, and now is deprecated.\n +optional",
                     "title": "NodePhase is the recently observed lifecycle phase of the node.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#phase\nThe field is never populated, and now is deprecated.\n+optional"
                 },
                 "volumesAttached": {
@@ -7193,6 +7670,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1NodeSystemInfo": {
             "type": "object",
             "description": "NodeSystemInfo is a set of ids/uuids to uniquely identify the node.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.NodeSystemInfo",
             "properties": {
                 "architecture": {
                     "type": "string",
@@ -7220,6 +7698,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "machineID": {
                     "type": "string",
+                    "description": " machine-id: http://man7.org/linux/man-pages/man5/machine-id.5.html",
                     "title": "MachineID reported by the node. For unique machine identification\nin the cluster this field is preferred. Learn more from man(5)\nmachine-id: http://man7.org/linux/man-pages/man5/machine-id.5.html"
                 },
                 "operatingSystem": {
@@ -7232,6 +7711,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "systemUUID": {
                     "type": "string",
+                    "description": " https://access.redhat.com/documentation/en-US/Red_Hat_Subscription_Management/1/html/RHSM/getting-system-uuid.html",
                     "title": "SystemUUID reported by the node. For unique machine identification\nMachineID is preferred. This field is specific to Red Hat hosts\nhttps://access.redhat.com/documentation/en-US/Red_Hat_Subscription_Management/1/html/RHSM/getting-system-uuid.html"
                 }
             }
@@ -7239,6 +7719,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ObjectFieldSelector": {
             "type": "object",
             "description": "ObjectFieldSelector selects an APIVersioned field of an object.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ObjectFieldSelector",
             "properties": {
                 "apiVersion": {
                     "type": "string",
@@ -7334,6 +7815,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ObjectReference": {
             "type": "object",
             "title": "ObjectReference contains enough information to let you inspect or modify the referred object.\n+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ObjectReference",
             "properties": {
                 "apiVersion": {
                     "type": "string",
@@ -7341,26 +7823,32 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "fieldPath": {
                     "type": "string",
+                    "description": " For example, if the object reference is to a container within a pod, this would take on a value like:\n \"spec.containers{name}\" (where \"name\" refers to the name of the container that triggered\n the event) or if no container name is specified \"spec.containers[2]\" (container with\n index 2 in this pod). This syntax is chosen only to have some well-defined way of\n referencing a part of an object.\n TODO: this design is not final and this field is subject to change in the future.\n +optional",
                     "title": "If referring to a piece of an object instead of an entire object, this string\nshould contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].\nFor example, if the object reference is to a container within a pod, this would take on a value like:\n\"spec.containers{name}\" (where \"name\" refers to the name of the container that triggered\nthe event) or if no container name is specified \"spec.containers[2]\" (container with\nindex 2 in this pod). This syntax is chosen only to have some well-defined way of\nreferencing a part of an object.\nTODO: this design is not final and this field is subject to change in the future.\n+optional"
                 },
                 "kind": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Kind of the referent.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional"
                 },
                 "name": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional"
                 },
                 "namespace": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Namespace of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/\n+optional"
                 },
                 "resourceVersion": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Specific resourceVersion to which this reference is made, if any.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency\n+optional"
                 },
                 "uid": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "UID of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids\n+optional"
                 }
             }
@@ -7400,16 +7888,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolume": {
             "type": "object",
             "title": "PersistentVolume (PV) is a storage resource provisioned by an administrator.\nIt is analogous to a node.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolume",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes\n +optional",
                     "title": "Spec defines a specification of a persistent volume owned by the cluster.\nProvisioned by an administrator.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes\n+optional",
                     "$ref": "#/definitions/v1PersistentVolumeSpec"
                 },
                 "status": {
+                    "description": " Read-only.\n More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes\n +optional",
                     "title": "Status represents the current information/status for the persistent volume.\nPopulated by the system.\nRead-only.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes\n+optional",
                     "$ref": "#/definitions/v1PersistentVolumeStatus"
                 }
@@ -7418,16 +7910,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeClaim": {
             "type": "object",
             "title": "PersistentVolumeClaim is a user's request for and claim to a persistent volume",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeClaim",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Spec defines the desired characteristics of a volume requested by a pod author.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims\n+optional",
                     "$ref": "#/definitions/v1PersistentVolumeClaimSpec"
                 },
                 "status": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims\n +optional",
                     "title": "Status represents the current information/status of a persistent volume claim.\nRead-only.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims\n+optional",
                     "$ref": "#/definitions/v1PersistentVolumeClaimStatus"
                 }
@@ -7436,6 +7932,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeClaimCondition": {
             "type": "object",
             "title": "PersistentVolumeClaimCondition contails details about state of pvc",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeClaimCondition",
             "properties": {
                 "lastProbeTime": {
                     "title": "Last time we probed the condition.\n+optional",
@@ -7451,6 +7948,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
+                    "description": " persistent volume is being resized.\n +optional",
                     "title": "Unique, this should be a short, machine understandable string that gives the reason\nfor condition's last transition. If it reports \"ResizeStarted\" that means the underlying\npersistent volume is being resized.\n+optional"
                 },
                 "status": {
@@ -7464,6 +7962,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeClaimList": {
             "type": "object",
             "description": "PersistentVolumeClaimList is a list of PersistentVolumeClaim items.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeClaimList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -7473,6 +7972,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -7481,19 +7981,23 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeClaimSpec": {
             "type": "object",
             "title": "PersistentVolumeClaimSpec describes the common attributes of storage devices\nand allows a Source for provider-specific attributes",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeClaimSpec",
             "properties": {
                 "accessModes": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "AccessModes contains the desired access modes the volume should have.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1\n+optional",
                     "items": {
                         "type": "string"
                     }
                 },
                 "dataSource": {
+                    "description": " If the provisioner can support VolumeSnapshot data source, it will create\n a new volume and data will be restored to the volume at the same time.\n If the provisioner does not support VolumeSnapshot data source, volume will\n not be created and the failure will be reported as an event.\n In the future, we plan to support more data source types and the behavior\n of the provisioner may change.\n +optional",
                     "title": "This field requires the VolumeSnapshotDataSource alpha feature gate to be\nenabled and currently VolumeSnapshot is the only supported data source.\nIf the provisioner can support VolumeSnapshot data source, it will create\na new volume and data will be restored to the volume at the same time.\nIf the provisioner does not support VolumeSnapshot data source, volume will\nnot be created and the failure will be reported as an event.\nIn the future, we plan to support more data source types and the behavior\nof the provisioner may change.\n+optional",
                     "$ref": "#/definitions/v1TypedLocalObjectReference"
                 },
                 "resources": {
+                    "description": " +optional",
                     "title": "Resources represents the minimum resources the volume should have.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources\n+optional",
                     "$ref": "#/definitions/v1ResourceRequirements"
                 },
@@ -7503,10 +8007,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "storageClassName": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Name of the StorageClass required by the claim.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1\n+optional"
                 },
                 "volumeMode": {
                     "type": "string",
+                    "description": " This is a beta feature.\n +optional",
                     "title": "volumeMode defines what type of volume is required by the claim.\nValue of Filesystem is implied when not included in claim spec.\nThis is a beta feature.\n+optional"
                 },
                 "volumeName": {
@@ -7518,9 +8024,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeClaimStatus": {
             "type": "object",
             "description": "PersistentVolumeClaimStatus is the current status of a persistent volume claim.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeClaimStatus",
             "properties": {
                 "accessModes": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "AccessModes contains the actual access modes the volume backing the PVC has.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1\n+optional",
                     "items": {
                         "type": "string"
@@ -7532,6 +8040,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "conditions": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "Current Condition of persistent volume claim. If underlying persistent volume is being\nresized then the Condition will be set to 'ResizeStarted'.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1PersistentVolumeClaimCondition"
@@ -7546,6 +8055,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeClaimVolumeSource": {
             "type": "object",
             "description": "PersistentVolumeClaimVolumeSource references the user's PVC in the same namespace.\nThis volume finds the bound PV and mounts that volume for the pod. A\nPersistentVolumeClaimVolumeSource is, essentially, a wrapper around another\ntype of volume that is owned by someone else (the system).",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeClaimVolumeSource",
             "properties": {
                 "claimName": {
                     "type": "string",
@@ -7553,6 +8063,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Will force the ReadOnly setting in VolumeMounts.\nDefault false.\n+optional",
                     "format": "boolean"
                 }
@@ -7561,6 +8072,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeList": {
             "type": "object",
             "description": "PersistentVolumeList is a list of PersistentVolume items.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -7570,6 +8082,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -7578,8 +8091,10 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeSource": {
             "type": "object",
             "description": "PersistentVolumeSource is similar to VolumeSource but meant for the\nadministrator who creates PVs. Exactly one of its members must be set.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeSource",
             "properties": {
                 "awsElasticBlockStore": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n +optional",
                     "title": "AWSElasticBlockStore represents an AWS Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n+optional",
                     "$ref": "#/definitions/v1AWSElasticBlockStoreVolumeSource"
                 },
@@ -7596,6 +8111,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1CephFSPersistentVolumeSource"
                 },
                 "cinder": {
+                    "description": " +optional",
                     "title": "Cinder represents a cinder volume attached and mounted on kubelets host machine.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional",
                     "$ref": "#/definitions/v1CinderPersistentVolumeSource"
                 },
@@ -7608,6 +8124,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1FCVolumeSource"
                 },
                 "flexVolume": {
+                    "description": " +optional",
                     "title": "FlexVolume represents a generic volume resource that is\nprovisioned/attached using an exec based plugin.\n+optional",
                     "$ref": "#/definitions/v1FlexPersistentVolumeSource"
                 },
@@ -7616,18 +8133,22 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1FlockerVolumeSource"
                 },
                 "gcePersistentDisk": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n +optional",
                     "title": "GCEPersistentDisk represents a GCE Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod. Provisioned by an admin.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional",
                     "$ref": "#/definitions/v1GCEPersistentDiskVolumeSource"
                 },
                 "glusterfs": {
+                    "description": " More info: https://examples.k8s.io/volumes/glusterfs/README.md\n +optional",
                     "title": "Glusterfs represents a Glusterfs volume that is attached to a host and\nexposed to the pod. Provisioned by an admin.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md\n+optional",
                     "$ref": "#/definitions/v1GlusterfsPersistentVolumeSource"
                 },
                 "hostPath": {
+                    "description": " This is useful for single-node development and testing only!\n On-host storage is not supported in any way and WILL NOT WORK in a multi-node cluster.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n +optional",
                     "title": "HostPath represents a directory on the host.\nProvisioned by a developer or tester.\nThis is useful for single-node development and testing only!\nOn-host storage is not supported in any way and WILL NOT WORK in a multi-node cluster.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n+optional",
                     "$ref": "#/definitions/v1HostPathVolumeSource"
                 },
                 "iscsi": {
+                    "description": " +optional",
                     "title": "ISCSI represents an ISCSI Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod. Provisioned by an admin.\n+optional",
                     "$ref": "#/definitions/v1ISCSIPersistentVolumeSource"
                 },
@@ -7636,6 +8157,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1LocalVolumeSource"
                 },
                 "nfs": {
+                    "description": " +optional",
                     "title": "NFS represents an NFS mount on the host. Provisioned by an admin.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#nfs\n+optional",
                     "$ref": "#/definitions/v1NFSVolumeSource"
                 },
@@ -7652,6 +8174,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1QuobyteVolumeSource"
                 },
                 "rbd": {
+                    "description": " +optional",
                     "title": "RBD represents a Rados Block Device mount on the host that shares a pod's lifetime.\nMore info: https://examples.k8s.io/volumes/rbd/README.md\n+optional",
                     "$ref": "#/definitions/v1RBDPersistentVolumeSource"
                 },
@@ -7660,6 +8183,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1ScaleIOPersistentVolumeSource"
                 },
                 "storageos": {
+                    "description": " +optional",
                     "title": "StorageOS represents a StorageOS volume that is attached to the kubelet's host machine and mounted into the pod\nMore info: https://examples.k8s.io/volumes/storageos/README.md\n+optional",
                     "$ref": "#/definitions/v1StorageOSPersistentVolumeSource"
                 },
@@ -7672,9 +8196,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeSpec": {
             "type": "object",
             "description": "PersistentVolumeSpec is the specification of a persistent volume.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeSpec",
             "properties": {
                 "accessModes": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "AccessModes contains all ways the volume can be mounted.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes\n+optional",
                     "items": {
                         "type": "string"
@@ -7682,25 +8208,30 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "capacity": {
                     "type": "object",
+                    "description": " +optional",
                     "title": "A description of the persistent volume's resources and capacity.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity\n+optional"
                 },
                 "claimRef": {
+                    "description": " claim.VolumeName is the authoritative bind between PV and PVC.\n More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#binding\n +optional",
                     "title": "ClaimRef is part of a bi-directional binding between PersistentVolume and PersistentVolumeClaim.\nExpected to be non-nil when bound.\nclaim.VolumeName is the authoritative bind between PV and PVC.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#binding\n+optional",
                     "$ref": "#/definitions/v1ObjectReference"
                 },
                 "mountOptions": {
                     "type": "array",
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options\n +optional",
                     "title": "A list of mount options, e.g. [\"ro\", \"soft\"]. Not validated - mount will\nsimply fail if one is invalid.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options\n+optional",
                     "items": {
                         "type": "string"
                     }
                 },
                 "nodeAffinity": {
+                    "description": " +optional",
                     "title": "NodeAffinity defines constraints that limit what nodes this volume can be accessed from.\nThis field influences the scheduling of pods that use this volume.\n+optional",
                     "$ref": "#/definitions/v1VolumeNodeAffinity"
                 },
                 "persistentVolumeReclaimPolicy": {
                     "type": "string",
+                    "description": " for dynamically provisioned PersistentVolumes), and Recycle (deprecated).\n Recycle must be supported by the volume plugin underlying this PersistentVolume.\n More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#reclaiming\n +optional",
                     "title": "What happens to a persistent volume when released from its claim.\nValid options are Retain (default for manually created PersistentVolumes), Delete (default\nfor dynamically provisioned PersistentVolumes), and Recycle (deprecated).\nRecycle must be supported by the volume plugin underlying this PersistentVolume.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#reclaiming\n+optional"
                 },
                 "persistentVolumeSource": {
@@ -7709,10 +8240,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "storageClassName": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Name of StorageClass to which this persistent volume belongs. Empty value\nmeans that this volume does not belong to any StorageClass.\n+optional"
                 },
                 "volumeMode": {
                     "type": "string",
+                    "description": " This is a beta feature.\n +optional",
                     "title": "volumeMode defines if a volume is intended to be used with a formatted filesystem\nor to remain in raw block state. Value of Filesystem is implied when not included in spec.\nThis is a beta feature.\n+optional"
                 }
             }
@@ -7720,6 +8253,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PersistentVolumeStatus": {
             "type": "object",
             "description": "PersistentVolumeStatus is the current status of a persistent volume.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PersistentVolumeStatus",
             "properties": {
                 "message": {
                     "type": "string",
@@ -7727,10 +8261,12 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "phase": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Phase indicates if a volume is available, bound to a claim, or released by a claim.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#phase\n+optional"
                 },
                 "reason": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Reason is a brief CamelCase string that describes any failure and is meant\nfor machine parsing and tidy display in the CLI.\n+optional"
                 }
             }
@@ -7738,10 +8274,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PhotonPersistentDiskVolumeSource": {
             "type": "object",
             "description": "Represents a Photon Controller persistent disk resource.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PhotonPersistentDiskVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
-                    "description": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified."
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified."
                 },
                 "pdID": {
                     "type": "string",
@@ -7752,16 +8289,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Pod": {
             "type": "object",
             "description": "Pod is a collection of containers that can run on a host. This resource is created\nby clients and scheduled onto hosts.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Pod",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Specification of the desired behavior of the pod.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1PodSpec"
                 },
                 "status": {
+                    "description": " Populated by the system.\n Read-only.\n More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n +optional",
                     "title": "Most recently observed status of the pod.\nThis data may not be up to date.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1PodStatus"
                 }
@@ -7770,9 +8311,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodAffinity": {
             "type": "object",
             "description": "Pod affinity is a group of inter pod affinity scheduling rules.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodAffinity",
             "properties": {
                 "preferredDuringSchedulingIgnoredDuringExecution": {
                     "type": "array",
+                    "description": " a node that violates one or more of the expressions. The node that is\n most preferred is the one with the greatest sum of weights, i.e.\n for each node that meets all of the scheduling requirements (resource\n request, requiredDuringScheduling affinity expressions, etc.),\n compute a sum by iterating through the elements of this field and adding\n \"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\n node(s) with the highest sum are the most preferred.\n +optional",
                     "title": "The scheduler will prefer to schedule pods to nodes that satisfy\nthe affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1WeightedPodAffinityTerm"
@@ -7780,6 +8323,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "requiredDuringSchedulingIgnoredDuringExecution": {
                     "type": "array",
+                    "description": " If the affinity requirements specified by this field cease to be met\n at some point during pod execution (e.g. due to a pod label update), the\n system may or may not try to eventually evict the pod from its node.\n When there are multiple elements, the lists of nodes corresponding to each\n podAffinityTerm are intersected, i.e. all terms must be satisfied.\n +optional",
                     "title": "If the affinity requirements specified by this field are not met at\nscheduling time, the pod will not be scheduled onto the node.\nIf the affinity requirements specified by this field cease to be met\nat some point during pod execution (e.g. due to a pod label update), the\nsystem may or may not try to eventually evict the pod from its node.\nWhen there are multiple elements, the lists of nodes corresponding to each\npodAffinityTerm are intersected, i.e. all terms must be satisfied.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1PodAffinityTerm"
@@ -7790,6 +8334,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodAffinityTerm": {
             "type": "object",
             "title": "Defines a set of pods (namely those matching the labelSelector\nrelative to the given namespace(s)) that this pod should be\nco-located (affinity) or not co-located (anti-affinity) with,\nwhere co-located is defined as running on a node whose value of\nthe label with key \u003ctopologyKey\u003e matches that of any node on which\na pod of the set of pods is running",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodAffinityTerm",
             "properties": {
                 "labelSelector": {
                     "title": "A label query over a set of resources, in this case pods.\n+optional",
@@ -7797,6 +8342,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "namespaces": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "namespaces specifies which namespaces the labelSelector applies to (matches against);\nnull or empty list means \"this pod's namespace\"\n+optional",
                     "items": {
                         "type": "string"
@@ -7804,16 +8350,18 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "topologyKey": {
                     "type": "string",
-                    "description": "This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods matching\nthe labelSelector in the specified namespaces, where co-located is defined as running on a node\nwhose value of the label with key topologyKey matches that of any node on which any of the\nselected pods is running.\nEmpty topologyKey is not allowed."
+                    "description": " whose value of the label with key topologyKey matches that of any node on which any of the\n selected pods is running.\n Empty topologyKey is not allowed."
                 }
             }
         },
         "v1PodAntiAffinity": {
             "type": "object",
             "description": "Pod anti affinity is a group of inter pod anti affinity scheduling rules.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodAntiAffinity",
             "properties": {
                 "preferredDuringSchedulingIgnoredDuringExecution": {
                     "type": "array",
+                    "description": " a node that violates one or more of the expressions. The node that is\n most preferred is the one with the greatest sum of weights, i.e.\n for each node that meets all of the scheduling requirements (resource\n request, requiredDuringScheduling anti-affinity expressions, etc.),\n compute a sum by iterating through the elements of this field and adding\n \"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\n node(s) with the highest sum are the most preferred.\n +optional",
                     "title": "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1WeightedPodAffinityTerm"
@@ -7821,6 +8369,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "requiredDuringSchedulingIgnoredDuringExecution": {
                     "type": "array",
+                    "description": " If the anti-affinity requirements specified by this field cease to be met\n at some point during pod execution (e.g. due to a pod label update), the\n system may or may not try to eventually evict the pod from its node.\n When there are multiple elements, the lists of nodes corresponding to each\n podAffinityTerm are intersected, i.e. all terms must be satisfied.\n +optional",
                     "title": "If the anti-affinity requirements specified by this field are not met at\nscheduling time, the pod will not be scheduled onto the node.\nIf the anti-affinity requirements specified by this field cease to be met\nat some point during pod execution (e.g. due to a pod label update), the\nsystem may or may not try to eventually evict the pod from its node.\nWhen there are multiple elements, the lists of nodes corresponding to each\npodAffinityTerm are intersected, i.e. all terms must be satisfied.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1PodAffinityTerm"
@@ -7831,6 +8380,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodCondition": {
             "type": "object",
             "description": "PodCondition contains details for the current condition of this pod.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodCondition",
             "properties": {
                 "lastProbeTime": {
                     "title": "Last time we probed the condition.\n+optional",
@@ -7850,6 +8400,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
+                    "description": " More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions",
                     "title": "Status is the status of the condition.\nCan be True, False, Unknown.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions"
                 },
                 "type": {
@@ -7861,9 +8412,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodDNSConfig": {
             "type": "object",
             "description": "PodDNSConfig defines the DNS parameters of a pod in addition to\nthose generated from DNSPolicy.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodDNSConfig",
             "properties": {
                 "nameservers": {
                     "type": "array",
+                    "description": " Duplicated nameservers will be removed.\n +optional",
                     "title": "A list of DNS name server IP addresses.\nThis will be appended to the base nameservers generated from DNSPolicy.\nDuplicated nameservers will be removed.\n+optional",
                     "items": {
                         "type": "string"
@@ -7871,6 +8424,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "options": {
                     "type": "array",
+                    "description": " Duplicated entries will be removed. Resolution options given in Options\n will override those that appear in the base DNSPolicy.\n +optional",
                     "title": "A list of DNS resolver options.\nThis will be merged with the base options generated from DNSPolicy.\nDuplicated entries will be removed. Resolution options given in Options\nwill override those that appear in the base DNSPolicy.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1PodDNSConfigOption"
@@ -7878,6 +8432,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "searches": {
                     "type": "array",
+                    "description": " Duplicated search paths will be removed.\n +optional",
                     "title": "A list of DNS search domains for host-name lookup.\nThis will be appended to the base search paths generated from DNSPolicy.\nDuplicated search paths will be removed.\n+optional",
                     "items": {
                         "type": "string"
@@ -7888,6 +8443,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodDNSConfigOption": {
             "type": "object",
             "description": "PodDNSConfigOption defines DNS resolver options of a pod.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodDNSConfigOption",
             "properties": {
                 "name": {
                     "type": "string",
@@ -7902,6 +8458,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodIP": {
             "type": "object",
             "description": "IP address information for entries in the (plural) PodIPs field.\nEach entry includes:\n   IP: An IP address allocated to the pod. Routable at least within the cluster.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodIP",
             "properties": {
                 "ip": {
                     "type": "string",
@@ -7912,6 +8469,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodList": {
             "type": "object",
             "description": "PodList is a list of Pods.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -7921,6 +8479,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -7929,6 +8488,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodReadinessGate": {
             "type": "object",
             "title": "PodReadinessGate contains the reference to a pod condition",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodReadinessGate",
             "properties": {
                 "conditionType": {
                     "type": "string",
@@ -7939,34 +8499,40 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodSecurityContext": {
             "type": "object",
             "description": "PodSecurityContext holds pod-level security attributes and common container settings.\nSome fields are also present in container.securityContext.  Field values of\ncontainer.securityContext take precedence over field values of PodSecurityContext.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodSecurityContext",
             "properties": {
                 "fsGroup": {
                     "type": "string",
-                    "description": "1. The owning GID will be the FSGroup\n2. The setgid bit is set (new files created in the volume will be owned by FSGroup)\n3. The permission bits are OR'd with rw-rw----\n\nIf unset, the Kubelet will not modify the ownership and permissions of any volume.\n+optional",
+                    "description": " to be owned by the pod:\n\n 1. The owning GID will be the FSGroup\n 2. The setgid bit is set (new files created in the volume will be owned by FSGroup)\n 3. The permission bits are OR'd with rw-rw----\n\n If unset, the Kubelet will not modify the ownership and permissions of any volume.\n +optional",
                     "title": "A special supplemental group that applies to all containers in a pod.\nSome volume types allow the Kubelet to change the ownership of that volume\nto be owned by the pod:",
                     "format": "int64"
                 },
                 "runAsGroup": {
                     "type": "string",
+                    "description": " May also be set in SecurityContext.  If set in both SecurityContext and\n PodSecurityContext, the value specified in SecurityContext takes precedence\n for that container.\n +optional",
                     "title": "The GID to run the entrypoint of the container process.\nUses runtime default if unset.\nMay also be set in SecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence\nfor that container.\n+optional",
                     "format": "int64"
                 },
                 "runAsNonRoot": {
                     "type": "boolean",
+                    "description": " does not run as UID 0 (root) and fail to start the container if it does.\n If unset or false, no such validation will be performed.\n May also be set in SecurityContext.  If set in both SecurityContext and\n PodSecurityContext, the value specified in SecurityContext takes precedence.\n +optional",
                     "title": "Indicates that the container must run as a non-root user.\nIf true, the Kubelet will validate the image at runtime to ensure that it\ndoes not run as UID 0 (root) and fail to start the container if it does.\nIf unset or false, no such validation will be performed.\nMay also be set in SecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional",
                     "format": "boolean"
                 },
                 "runAsUser": {
                     "type": "string",
+                    "description": " May also be set in SecurityContext.  If set in both SecurityContext and\n PodSecurityContext, the value specified in SecurityContext takes precedence\n for that container.\n +optional",
                     "title": "The UID to run the entrypoint of the container process.\nDefaults to user specified in image metadata if unspecified.\nMay also be set in SecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence\nfor that container.\n+optional",
                     "format": "int64"
                 },
                 "seLinuxOptions": {
+                    "description": " container.  May also be set in SecurityContext.  If set in\n both SecurityContext and PodSecurityContext, the value specified in SecurityContext\n takes precedence for that container.\n +optional",
                     "title": "The SELinux context to be applied to all containers.\nIf unspecified, the container runtime will allocate a random SELinux context for each\ncontainer.  May also be set in SecurityContext.  If set in\nboth SecurityContext and PodSecurityContext, the value specified in SecurityContext\ntakes precedence for that container.\n+optional",
                     "$ref": "#/definitions/v1SELinuxOptions"
                 },
                 "supplementalGroups": {
                     "type": "array",
+                    "description": " any container.\n +optional",
                     "title": "A list of groups applied to the first process run in each container, in addition\nto the container's primary GID.  If unspecified, no groups will be added to\nany container.\n+optional",
                     "items": {
                         "type": "string",
@@ -7975,12 +8541,14 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "sysctls": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported\nsysctls (by the container runtime) might fail to launch.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1Sysctl"
                     }
                 },
                 "windowsOptions": {
+                    "description": " If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.\n +optional",
                     "title": "The Windows specific settings applied to all containers.\nIf unspecified, the options within a container's SecurityContext will be used.\nIf set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional",
                     "$ref": "#/definitions/v1WindowsSecurityContextOptions"
                 }
@@ -7989,9 +8557,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodSpec": {
             "type": "object",
             "description": "PodSpec is a description of a pod.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodSpec",
             "properties": {
                 "activeDeadlineSeconds": {
                     "type": "string",
+                    "description": " Value must be a positive integer.\n +optional",
                     "title": "Optional duration in seconds the pod may be active on the node relative to\nStartTime before the system will actively try to mark it failed and kill associated containers.\nValue must be a positive integer.\n+optional",
                     "format": "int64"
                 },
@@ -8006,26 +8576,31 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "containers": {
                     "type": "array",
+                    "description": " There must be at least one container in a Pod.\n Cannot be updated.\n +patchMergeKey=name\n +patchStrategy=merge",
                     "title": "List of containers belonging to the pod.\nContainers cannot currently be added or removed.\nThere must be at least one container in a Pod.\nCannot be updated.\n+patchMergeKey=name\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1Container"
                     }
                 },
                 "dnsConfig": {
+                    "description": " configuration based on DNSPolicy.\n +optional",
                     "title": "Specifies the DNS parameters of a pod.\nParameters specified here will be merged to the generated DNS\nconfiguration based on DNSPolicy.\n+optional",
                     "$ref": "#/definitions/v1PodDNSConfig"
                 },
                 "dnsPolicy": {
                     "type": "string",
+                    "description": " Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'.\n DNS parameters given in DNSConfig will be merged with the policy selected with DNSPolicy.\n To have DNS options set along with hostNetwork, you have to specify DNS policy\n explicitly to 'ClusterFirstWithHostNet'.\n +optional",
                     "title": "Set DNS policy for the pod.\nDefaults to \"ClusterFirst\".\nValid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'.\nDNS parameters given in DNSConfig will be merged with the policy selected with DNSPolicy.\nTo have DNS options set along with hostNetwork, you have to specify DNS policy\nexplicitly to 'ClusterFirstWithHostNet'.\n+optional"
                 },
                 "enableServiceLinks": {
                     "type": "boolean",
+                    "description": " Optional: Defaults to true.\n +optional",
                     "title": "EnableServiceLinks indicates whether information about services should be injected into pod's\nenvironment variables, matching the syntax of Docker links.\nOptional: Defaults to true.\n+optional",
                     "format": "boolean"
                 },
                 "ephemeralContainers": {
                     "type": "array",
+                    "description": " creating a pod, and it cannot be modified by updating the pod spec. In order to add an\n ephemeral container to an existing pod, use the pod's ephemeralcontainers subresource.\n This field is alpha-level and is only honored by servers that enable the EphemeralContainers feature.\n +optional\n +patchMergeKey=name\n +patchStrategy=merge",
                     "title": "List of ephemeral containers run in this pod. Ephemeral containers may be run in an existing\npod to perform user-initiated actions such as debugging. This list cannot be specified when\ncreating a pod, and it cannot be modified by updating the pod spec. In order to add an\nephemeral container to an existing pod, use the pod's ephemeralcontainers subresource.\nThis field is alpha-level and is only honored by servers that enable the EphemeralContainers feature.\n+optional\n+patchMergeKey=name\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1EphemeralContainer"
@@ -8033,6 +8608,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "hostAliases": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=ip\n +patchStrategy=merge",
                     "title": "HostAliases is an optional list of hosts and IPs that will be injected into the pod's hosts\nfile if specified. This is only valid for non-hostNetwork pods.\n+optional\n+patchMergeKey=ip\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1HostAlias"
@@ -8040,25 +8616,30 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "hostIPC": {
                     "type": "boolean",
+                    "description": " +k8s:conversion-gen=false\n +optional",
                     "title": "Use the host's ipc namespace.\nOptional: Default to false.\n+k8s:conversion-gen=false\n+optional",
                     "format": "boolean"
                 },
                 "hostNetwork": {
                     "type": "boolean",
+                    "description": " Default to false.\n +k8s:conversion-gen=false\n +optional",
                     "title": "Host networking requested for this pod. Use the host's network namespace.\nIf this option is set, the ports that will be used must be specified.\nDefault to false.\n+k8s:conversion-gen=false\n+optional",
                     "format": "boolean"
                 },
                 "hostPID": {
                     "type": "boolean",
+                    "description": " +k8s:conversion-gen=false\n +optional",
                     "title": "Use the host's pid namespace.\nOptional: Default to false.\n+k8s:conversion-gen=false\n+optional",
                     "format": "boolean"
                 },
                 "hostname": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Specifies the hostname of the Pod\nIf not specified, the pod's hostname will be set to a system-defined value.\n+optional"
                 },
                 "imagePullSecrets": {
                     "type": "array",
+                    "description": " in the case of docker, only DockerConfig type secrets are honored.\n More info: https://kubernetes.io/docs/concepts/containers/images#specifying-imagepullsecrets-on-a-pod\n +optional\n +patchMergeKey=name\n +patchStrategy=merge",
                     "title": "ImagePullSecrets is an optional list of references to secrets in the same namespace to use for pulling any of the images used by this PodSpec.\nIf specified, these secrets will be passed to individual puller implementations for them to use. For example,\nin the case of docker, only DockerConfig type secrets are honored.\nMore info: https://kubernetes.io/docs/concepts/containers/images#specifying-imagepullsecrets-on-a-pod\n+optional\n+patchMergeKey=name\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1LocalObjectReference"
@@ -8066,6 +8647,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "initContainers": {
                     "type": "array",
+                    "description": " init container fails, the pod is considered to have failed and is handled according\n to its restartPolicy. The name for an init container or normal container must be\n unique among all containers.\n Init containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.\n The resourceRequirements of an init container are taken into account during scheduling\n by finding the highest request/limit for each resource type, and then using the max of\n of that value or the sum of the normal containers. Limits are applied to init containers\n in a similar fashion.\n Init containers cannot currently be added or removed.\n Cannot be updated.\n More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/\n +patchMergeKey=name\n +patchStrategy=merge",
                     "title": "List of initialization containers belonging to the pod.\nInit containers are executed in order prior to containers being started. If any\ninit container fails, the pod is considered to have failed and is handled according\nto its restartPolicy. The name for an init container or normal container must be\nunique among all containers.\nInit containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.\nThe resourceRequirements of an init container are taken into account during scheduling\nby finding the highest request/limit for each resource type, and then using the max of\nof that value or the sum of the normal containers. Limits are applied to init containers\nin a similar fashion.\nInit containers cannot currently be added or removed.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/\n+patchMergeKey=name\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1Container"
@@ -8073,31 +8655,38 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "nodeName": {
                     "type": "string",
+                    "description": " requirements.\n +optional",
                     "title": "NodeName is a request to schedule this pod onto a specific node. If it is non-empty,\nthe scheduler simply schedules this pod onto that node, assuming that it fits resource\nrequirements.\n+optional"
                 },
                 "nodeSelector": {
                     "type": "object",
+                    "description": " More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/\n +optional",
                     "title": "NodeSelector is a selector which must be true for the pod to fit on a node.\nSelector which must match a node's labels for the pod to be scheduled on that node.\nMore info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/\n+optional"
                 },
                 "overhead": {
                     "type": "object",
+                    "description": " the RuntimeClass admission controller is enabled, overhead must not be set in Pod create requests.\n The RuntimeClass admission controller will reject Pod create requests which have the overhead already\n set. If RuntimeClass is configured and selected in the PodSpec, Overhead will be set to the value\n defined in the corresponding RuntimeClass, otherwise it will remain unset and treated as zero.\n More info: https://git.k8s.io/enhancements/keps/sig-node/20190226-pod-overhead.md\n This field is alpha-level as of Kubernetes v1.16, and is only honored by servers that enable the PodOverhead feature.\n +optional",
                     "title": "Overhead represents the resource overhead associated with running a pod for a given RuntimeClass.\nThis field will be autopopulated at admission time by the RuntimeClass admission controller. If\nthe RuntimeClass admission controller is enabled, overhead must not be set in Pod create requests.\nThe RuntimeClass admission controller will reject Pod create requests which have the overhead already\nset. If RuntimeClass is configured and selected in the PodSpec, Overhead will be set to the value\ndefined in the corresponding RuntimeClass, otherwise it will remain unset and treated as zero.\nMore info: https://git.k8s.io/enhancements/keps/sig-node/20190226-pod-overhead.md\nThis field is alpha-level as of Kubernetes v1.16, and is only honored by servers that enable the PodOverhead feature.\n+optional"
                 },
                 "preemptionPolicy": {
                     "type": "string",
+                    "description": " Defaults to PreemptLowerPriority if unset.\n This field is alpha-level and is only honored by servers that enable the NonPreemptingPriority feature.\n +optional",
                     "title": "PreemptionPolicy is the Policy for preempting pods with lower priority.\nOne of Never, PreemptLowerPriority.\nDefaults to PreemptLowerPriority if unset.\nThis field is alpha-level and is only honored by servers that enable the NonPreemptingPriority feature.\n+optional"
                 },
                 "priority": {
                     "type": "integer",
+                    "description": " prevents users from setting this field. The admission controller populates\n this field from PriorityClassName.\n The higher the value, the higher the priority.\n +optional",
                     "title": "The priority value. Various system components use this field to find the\npriority of the pod. When Priority Admission Controller is enabled, it\nprevents users from setting this field. The admission controller populates\nthis field from PriorityClassName.\nThe higher the value, the higher the priority.\n+optional",
                     "format": "int32"
                 },
                 "priorityClassName": {
                     "type": "string",
+                    "description": " highest priorities with the former being the highest priority. Any other\n name must be defined by creating a PriorityClass object with that name.\n If not specified, the pod priority will be default or zero if there is no\n default.\n +optional",
                     "title": "If specified, indicates the pod's priority. \"system-node-critical\" and\n\"system-cluster-critical\" are two special keywords which indicate the\nhighest priorities with the former being the highest priority. Any other\nname must be defined by creating a PriorityClass object with that name.\nIf not specified, the pod priority will be default or zero if there is no\ndefault.\n+optional"
                 },
                 "readinessGates": {
                     "type": "array",
+                    "description": " all conditions specified in the readiness gates have status equal to \"True\"\n More info: https://git.k8s.io/enhancements/keps/sig-network/0007-pod-ready%2B%2B.md\n +optional",
                     "title": "If specified, all readiness gates will be evaluated for pod readiness.\nA pod is ready when all its containers are ready AND\nall conditions specified in the readiness gates have status equal to \"True\"\nMore info: https://git.k8s.io/enhancements/keps/sig-network/0007-pod-ready%2B%2B.md\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1PodReadinessGate"
@@ -8105,39 +8694,48 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "restartPolicy": {
                     "type": "string",
+                    "description": " Default to Always.\n More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy\n +optional",
                     "title": "Restart policy for all containers within the pod.\nOne of Always, OnFailure, Never.\nDefault to Always.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy\n+optional"
                 },
                 "runtimeClassName": {
                     "type": "string",
+                    "description": " If unset or empty, the \"legacy\" RuntimeClass will be used, which is an implicit class with an\n empty definition that uses the default runtime handler.\n More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md\n This is a beta feature as of Kubernetes v1.14.\n +optional",
                     "title": "RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used\nto run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run.\nIf unset or empty, the \"legacy\" RuntimeClass will be used, which is an implicit class with an\nempty definition that uses the default runtime handler.\nMore info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md\nThis is a beta feature as of Kubernetes v1.14.\n+optional"
                 },
                 "schedulerName": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "If specified, the pod will be dispatched by specified scheduler.\nIf not specified, the pod will be dispatched by default scheduler.\n+optional"
                 },
                 "securityContext": {
+                    "description": " +optional",
                     "title": "SecurityContext holds pod-level security attributes and common container settings.\nOptional: Defaults to empty.  See type description for default values of each field.\n+optional",
                     "$ref": "#/definitions/v1PodSecurityContext"
                 },
                 "serviceAccount": {
                     "type": "string",
+                    "description": " +k8s:conversion-gen=false\n +optional",
                     "title": "DeprecatedServiceAccount is a depreciated alias for ServiceAccountName.\nDeprecated: Use serviceAccountName instead.\n+k8s:conversion-gen=false\n+optional"
                 },
                 "serviceAccountName": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "ServiceAccountName is the name of the ServiceAccount to use to run this pod.\nMore info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/\n+optional"
                 },
                 "shareProcessNamespace": {
                     "type": "boolean",
+                    "description": " in the same pod, and the first process in each container will not be assigned PID 1.\n HostPID and ShareProcessNamespace cannot both be set.\n Optional: Default to false.\n +k8s:conversion-gen=false\n +optional",
                     "title": "Share a single process namespace between all of the containers in a pod.\nWhen this is set containers will be able to view and signal processes from other containers\nin the same pod, and the first process in each container will not be assigned PID 1.\nHostPID and ShareProcessNamespace cannot both be set.\nOptional: Default to false.\n+k8s:conversion-gen=false\n+optional",
                     "format": "boolean"
                 },
                 "subdomain": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "If specified, the fully qualified Pod hostname will be \"\u003chostname\u003e.\u003csubdomain\u003e.\u003cpod namespace\u003e.svc.\u003ccluster domain\u003e\".\nIf not specified, the pod will not have a domainname at all.\n+optional"
                 },
                 "terminationGracePeriodSeconds": {
                     "type": "string",
+                    "description": " If this value is nil, the default grace period will be used instead.\n The grace period is the duration in seconds after the processes running in the pod are sent\n a termination signal and the time when the processes are forcibly halted with a kill signal.\n Set this value longer than the expected cleanup time for your process.\n Defaults to 30 seconds.\n +optional",
                     "title": "Optional duration in seconds the pod needs to terminate gracefully. May be decreased in delete request.\nValue must be non-negative integer. The value zero indicates delete immediately.\nIf this value is nil, the default grace period will be used instead.\nThe grace period is the duration in seconds after the processes running in the pod are sent\na termination signal and the time when the processes are forcibly halted with a kill signal.\nSet this value longer than the expected cleanup time for your process.\nDefaults to 30 seconds.\n+optional",
                     "format": "int64"
                 },
@@ -8150,6 +8748,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "topologySpreadConstraints": {
                     "type": "array",
+                    "description": " This field is alpha-level and is only honored by clusters that enables the EvenPodsSpread\n feature.\n All topologySpreadConstraints are ANDed.\n +optional\n +patchMergeKey=topologyKey\n +patchStrategy=merge\n +listType=map\n +listMapKey=topologyKey\n +listMapKey=whenUnsatisfiable",
                     "title": "TopologySpreadConstraints describes how a group of pods ought to spread across topology\ndomains. Scheduler will schedule pods in a way which abides by the constraints.\nThis field is alpha-level and is only honored by clusters that enables the EvenPodsSpread\nfeature.\nAll topologySpreadConstraints are ANDed.\n+optional\n+patchMergeKey=topologyKey\n+patchStrategy=merge\n+listType=map\n+listMapKey=topologyKey\n+listMapKey=whenUnsatisfiable",
                     "items": {
                         "$ref": "#/definitions/v1TopologySpreadConstraint"
@@ -8157,6 +8756,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "volumes": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=name\n +patchStrategy=merge,retainKeys",
                     "title": "List of volumes that can be mounted by containers belonging to the pod.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes\n+optional\n+patchMergeKey=name\n+patchStrategy=merge,retainKeys",
                     "items": {
                         "$ref": "#/definitions/v1Volume"
@@ -8167,9 +8767,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodStatus": {
             "type": "object",
             "description": "PodStatus represents information about the status of a pod. Status may trail the actual\nstate of a system, especially if the node that hosts the pod cannot contact the control\nplane.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodStatus",
             "properties": {
                 "conditions": {
                     "type": "array",
+                    "description": " +optional\n +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "Current service state of pod.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1PodCondition"
@@ -8177,6 +8779,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "containerStatuses": {
                     "type": "array",
+                    "description": " More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-and-container-status\n +optional",
                     "title": "The list has one entry per container in the manifest. Each entry is currently the output\nof -docker inspect-.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-and-container-status\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1ContainerStatus"
@@ -8184,6 +8787,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "ephemeralContainerStatuses": {
                     "type": "array",
+                    "description": " +optional",
                     "title": "Status for any ephemeral containers that have run in this pod.\nThis field is alpha-level and is only populated by servers that enable the EphemeralContainers feature.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1ContainerStatus"
@@ -8195,6 +8799,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "initContainerStatuses": {
                     "type": "array",
+                    "description": " startTime set.\n More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-and-container-status",
                     "title": "The list has one entry per init container in the manifest. The most recent successful\ninit container will have ready = true, the most recently started container will have\nstartTime set.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-and-container-status",
                     "items": {
                         "$ref": "#/definitions/v1ContainerStatus"
@@ -8206,19 +8811,22 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "nominatedNodeName": {
                     "type": "string",
+                    "description": " This field does not guarantee that the pod will be scheduled on this node. Scheduler may decide\n to place the pod elsewhere if other nodes become available sooner. Scheduler may also decide to\n give the resources on this node to a higher priority pod that is created after preemption.\n As a result, this field may be different than PodSpec.nodeName when the pod is\n scheduled.\n +optional",
                     "title": "nominatedNodeName is set only when this pod preempts other pods on the node, but it cannot be\nscheduled right away as preemption victims receive their graceful termination periods.\nThis field does not guarantee that the pod will be scheduled on this node. Scheduler may decide\nto place the pod elsewhere if other nodes become available sooner. Scheduler may also decide to\ngive the resources on this node to a higher priority pod that is created after preemption.\nAs a result, this field may be different than PodSpec.nodeName when the pod is\nscheduled.\n+optional"
                 },
                 "phase": {
                     "type": "string",
-                    "description": "Pending: The pod has been accepted by the Kubernetes system, but one or more of the\ncontainer images has not been created. This includes time before being scheduled as\nwell as time spent downloading images over the network, which could take a while.\nRunning: The pod has been bound to a node, and all of the containers have been created.\nAt least one container is still running, or is in the process of starting or restarting.\nSucceeded: All containers in the pod have terminated in success, and will not be restarted.\nFailed: All containers in the pod have terminated, and at least one container has\nterminated in failure. The container either exited with non-zero status or was terminated\nby the system.\nUnknown: For some reason the state of the pod could not be obtained, typically due to an\nerror in communicating with the host of the pod.\n\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-phase\n+optional",
+                    "description": " arrays contain more detail about the pod's status.\n There are five possible phase values:\n\n Pending: The pod has been accepted by the Kubernetes system, but one or more of the\n container images has not been created. This includes time before being scheduled as\n well as time spent downloading images over the network, which could take a while.\n Running: The pod has been bound to a node, and all of the containers have been created.\n At least one container is still running, or is in the process of starting or restarting.\n Succeeded: All containers in the pod have terminated in success, and will not be restarted.\n Failed: All containers in the pod have terminated, and at least one container has\n terminated in failure. The container either exited with non-zero status or was terminated\n by the system.\n Unknown: For some reason the state of the pod could not be obtained, typically due to an\n error in communicating with the host of the pod.\n\n More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-phase\n +optional",
                     "title": "The phase of a Pod is a simple, high-level summary of where the Pod is in its lifecycle.\nThe conditions array, the reason and message fields, and the individual container status\narrays contain more detail about the pod's status.\nThere are five possible phase values:"
                 },
                 "podIP": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "IP address allocated to the pod. Routable at least within the cluster.\nEmpty if not yet allocated.\n+optional"
                 },
                 "podIPs": {
                     "type": "array",
+                    "description": " is empty if no IPs have been allocated yet.\n +optional\n +patchStrategy=merge\n +patchMergeKey=ip",
                     "title": "podIPs holds the IP addresses allocated to the pod. If this field is specified, the 0th entry must\nmatch the podIP field. Pods may be allocated at most 1 value for each of IPv4 and IPv6. This list\nis empty if no IPs have been allocated yet.\n+optional\n+patchStrategy=merge\n+patchMergeKey=ip",
                     "items": {
                         "$ref": "#/definitions/v1PodIP"
@@ -8226,13 +8834,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "qosClass": {
                     "type": "string",
+                    "description": " More info: https://git.k8s.io/community/contributors/design-proposals/node/resource-qos.md\n +optional",
                     "title": "The Quality of Service (QOS) classification assigned to the pod based on resource requirements\nSee PodQOSClass type for available QOS classes\nMore info: https://git.k8s.io/community/contributors/design-proposals/node/resource-qos.md\n+optional"
                 },
                 "reason": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "A brief CamelCase message indicating details about why the pod is in this state.\ne.g. 'Evicted'\n+optional"
                 },
                 "startTime": {
+                    "description": " +optional",
                     "title": "RFC 3339 date and time at which the object was acknowledged by the Kubelet.\nThis is before the Kubelet pulled the container image(s) for the pod.\n+optional",
                     "$ref": "#/definitions/v1Time"
                 }
@@ -8241,12 +8852,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PodTemplateSpec": {
             "type": "object",
             "title": "PodTemplateSpec describes the data a pod should have when created from a template",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PodTemplateSpec",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Specification of the desired behavior of the pod.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1PodSpec"
                 }
@@ -8255,13 +8869,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PortworxVolumeSource": {
             "type": "object",
             "description": "PortworxVolumeSource represents a Portworx volume resource.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PortworxVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
-                    "description": "FSType represents the filesystem type to mount\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\". Implicitly inferred to be \"ext4\" if unspecified."
+                    "description": " Ex. \"ext4\", \"xfs\". Implicitly inferred to be \"ext4\" if unspecified."
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
@@ -8274,6 +8890,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1PreferredSchedulingTerm": {
             "type": "object",
             "description": "An empty preferred scheduling term matches all objects with implicit weight 0\n(i.e. it's a no-op). A null preferred scheduling term matches no objects (i.e. is also a no-op).",
+            "x-ves-proto-message": "k8s.io.api.core.v1.PreferredSchedulingTerm",
             "properties": {
                 "preference": {
                     "description": "A node selector term, associated with the corresponding weight.",
@@ -8289,9 +8906,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Probe": {
             "type": "object",
             "description": "Probe describes a health check to be performed against a container to determine whether it is\nalive or ready to receive traffic.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Probe",
             "properties": {
                 "failureThreshold": {
                     "type": "integer",
+                    "description": " +optional",
                     "title": "Minimum consecutive failures for the probe to be considered failed after having succeeded.\nDefaults to 3. Minimum value is 1.\n+optional",
                     "format": "int32"
                 },
@@ -8301,21 +8920,25 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "initialDelaySeconds": {
                     "type": "integer",
+                    "description": " +optional",
                     "title": "Number of seconds after the container has started before liveness probes are initiated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional",
                     "format": "int32"
                 },
                 "periodSeconds": {
                     "type": "integer",
+                    "description": " +optional",
                     "title": "How often (in seconds) to perform the probe.\nDefault to 10 seconds. Minimum value is 1.\n+optional",
                     "format": "int32"
                 },
                 "successThreshold": {
                     "type": "integer",
+                    "description": " +optional",
                     "title": "Minimum consecutive successes for the probe to be considered successful after having failed.\nDefaults to 1. Must be 1 for liveness and startup. Minimum value is 1.\n+optional",
                     "format": "int32"
                 },
                 "timeoutSeconds": {
                     "type": "integer",
+                    "description": " More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n +optional",
                     "title": "Number of seconds after which the probe times out.\nDefaults to 1 second. Minimum value is 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional",
                     "format": "int32"
                 }
@@ -8324,9 +8947,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ProjectedVolumeSource": {
             "type": "object",
             "title": "Represents a projected volume source",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ProjectedVolumeSource",
             "properties": {
                 "defaultMode": {
                     "type": "integer",
+                    "description": " Directories within the path are not affected by this setting.\n This might be in conflict with other options that affect the file\n mode, like fsGroup, and the result can be other mode bits set.\n +optional",
                     "title": "Mode bits to use on created files by default. Must be a value between\n0 and 0777.\nDirectories within the path are not affected by this setting.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional",
                     "format": "int32"
                 },
@@ -8342,26 +8967,32 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1QuobyteVolumeSource": {
             "type": "object",
             "description": "Represents a Quobyte mount that lasts the lifetime of a pod.\nQuobyte volumes do not support ownership management or SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.QuobyteVolumeSource",
             "properties": {
                 "group": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Group to map volume access to\nDefault is no group\n+optional"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "ReadOnly here will force the Quobyte volume to be mounted with read-only permissions.\nDefaults to false.\n+optional",
                     "format": "boolean"
                 },
                 "registry": {
                     "type": "string",
+                    "description": " which acts as the central registry for volumes",
                     "title": "Registry represents a single or multiple Quobyte Registry services\nspecified as a string as host:port pair (multiple entries are separated with commas)\nwhich acts as the central registry for volumes"
                 },
                 "tenant": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Tenant owning the given Quobyte volume in the Backend\nUsed with dynamically provisioned Quobyte volumes, value is set by the plugin\n+optional"
                 },
                 "user": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "User to map volume access to\nDefaults to serivceaccount user\n+optional"
                 },
                 "volume": {
@@ -8373,9 +9004,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1RBDPersistentVolumeSource": {
             "type": "object",
             "description": "Represents a Rados Block Device mount that lasts the lifetime of a pod.\nRBD volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.RBDPersistentVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#rbd\n TODO: how do we prevent errors in the filesystem from compromising the machine\n +optional",
                     "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#rbd\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
                 },
                 "image": {
@@ -8384,6 +9017,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "keyring": {
                     "type": "string",
+                    "description": " More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "Keyring is the path to key ring for RBDUser.\nDefault is /etc/ceph/keyring.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
                 },
                 "monitors": {
@@ -8395,19 +9029,23 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "pool": {
                     "type": "string",
+                    "description": " More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "The rados pool name.\nDefault is rbd.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional",
                     "format": "boolean"
                 },
                 "secretRef": {
+                    "description": " Default is nil.\n More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "SecretRef is name of the authentication secret for RBDUser. If provided\noverrides keyring.\nDefault is nil.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional",
                     "$ref": "#/definitions/v1SecretReference"
                 },
                 "user": {
                     "type": "string",
+                    "description": " More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "The rados user name.\nDefault is admin.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
                 }
             }
@@ -8415,9 +9053,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1RBDVolumeSource": {
             "type": "object",
             "description": "Represents a Rados Block Device mount that lasts the lifetime of a pod.\nRBD volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.RBDVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#rbd\n TODO: how do we prevent errors in the filesystem from compromising the machine\n +optional",
                     "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#rbd\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
                 },
                 "image": {
@@ -8426,6 +9066,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "keyring": {
                     "type": "string",
+                    "description": " More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "Keyring is the path to key ring for RBDUser.\nDefault is /etc/ceph/keyring.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
                 },
                 "monitors": {
@@ -8437,19 +9078,23 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "pool": {
                     "type": "string",
+                    "description": " More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "The rados pool name.\nDefault is rbd.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional",
                     "format": "boolean"
                 },
                 "secretRef": {
+                    "description": " Default is nil.\n More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "SecretRef is name of the authentication secret for RBDUser. If provided\noverrides keyring.\nDefault is nil.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional",
                     "$ref": "#/definitions/v1LocalObjectReference"
                 },
                 "user": {
                     "type": "string",
+                    "description": " More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n +optional",
                     "title": "The rados user name.\nDefault is admin.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
                 }
             }
@@ -8457,16 +9102,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ReplicaSet": {
             "type": "object",
             "description": "ReplicaSet ensures that a specified number of pod replicas are running at any given time.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.ReplicaSet",
             "properties": {
                 "metadata": {
+                    "description": " Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n +optional",
                     "title": "If the Labels of a ReplicaSet are empty, they are defaulted to\nbe the same as the Pod(s) that the ReplicaSet manages.\nStandard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Spec defines the specification of the desired behavior of the ReplicaSet.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1ReplicaSetSpec"
                 },
                 "status": {
+                    "description": " Populated by the system.\n Read-only.\n More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n +optional",
                     "title": "Status is the most recently observed status of the ReplicaSet.\nThis data may be out of date by some window of time.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1ReplicaSetStatus"
                 }
@@ -8475,6 +9124,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ReplicaSetCondition": {
             "type": "object",
             "description": "ReplicaSetCondition describes the state of a replica set at a certain point.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.ReplicaSetCondition",
             "properties": {
                 "lastTransitionTime": {
                     "title": "The last time the condition transitioned from one status to another.\n+optional",
@@ -8501,6 +9151,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ReplicaSetList": {
             "type": "object",
             "description": "ReplicaSetList is a collection of ReplicaSets.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.ReplicaSetList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -8510,6 +9161,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -8518,22 +9170,27 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ReplicaSetSpec": {
             "type": "object",
             "description": "ReplicaSetSpec is the specification of a ReplicaSet.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.ReplicaSetSpec",
             "properties": {
                 "minReadySeconds": {
                     "type": "integer",
+                    "description": " Defaults to 0 (pod will be considered available as soon as it is ready)\n +optional",
                     "title": "Minimum number of seconds for which a newly created pod should be ready\nwithout any of its container crashing, for it to be considered available.\nDefaults to 0 (pod will be considered available as soon as it is ready)\n+optional",
                     "format": "int32"
                 },
                 "replicas": {
                     "type": "integer",
+                    "description": " Defaults to 1.\n More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/#what-is-a-replicationcontroller\n +optional",
                     "title": "Replicas is the number of desired replicas.\nThis is a pointer to distinguish between explicit zero and unspecified.\nDefaults to 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/#what-is-a-replicationcontroller\n+optional",
                     "format": "int32"
                 },
                 "selector": {
+                    "description": " It must match the pod template's labels.\n More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
                     "title": "Selector is a label query over pods that should match the replica count.\nLabel keys and values that must match in order to be controlled by this replica set.\nIt must match the pod template's labels.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
                     "$ref": "#/definitions/v1LabelSelector"
                 },
                 "template": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#pod-template\n +optional",
                     "title": "Template is the object that describes the pod that will be created if\ninsufficient replicas are detected.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#pod-template\n+optional",
                     "$ref": "#/definitions/v1PodTemplateSpec"
                 }
@@ -8542,6 +9199,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ReplicaSetStatus": {
             "type": "object",
             "description": "ReplicaSetStatus represents the current status of a ReplicaSet.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.ReplicaSetStatus",
             "properties": {
                 "availableReplicas": {
                     "type": "integer",
@@ -8550,6 +9208,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "conditions": {
                     "type": "array",
+                    "description": " +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "Represents the latest available observations of a replica set's current state.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1ReplicaSetCondition"
@@ -8580,6 +9239,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ResourceFieldSelector": {
             "type": "object",
             "title": "ResourceFieldSelector represents container resources (cpu, memory) and their output format",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ResourceFieldSelector",
             "properties": {
                 "containerName": {
                     "type": "string",
@@ -8598,13 +9258,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ResourceRequirements": {
             "type": "object",
             "description": "ResourceRequirements describes the compute resource requirements.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ResourceRequirements",
             "properties": {
                 "limits": {
                     "type": "object",
+                    "description": " +optional",
                     "title": "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n+optional"
                 },
                 "requests": {
                     "type": "object",
+                    "description": " otherwise to an implementation-defined value.\n More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n +optional",
                     "title": "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to an implementation-defined value.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n+optional"
                 }
             }
@@ -8612,8 +9275,10 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1RollingUpdateDaemonSet": {
             "type": "object",
             "description": "Spec to control the desired behavior of daemon set rolling update.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.RollingUpdateDaemonSet",
             "properties": {
                 "maxUnavailable": {
+                    "description": " number of DaemonSet pods at the start of the update (ex: 10%). Absolute\n number is calculated from percentage by rounding up.\n This cannot be 0.\n Default value is 1.\n Example: when this is set to 30%, at most 30% of the total number of nodes\n that should be running the daemon pod (i.e. status.desiredNumberScheduled)\n can have their pods stopped for an update at any given\n time. The update starts by stopping at most 30% of those DaemonSet pods\n and then brings up new DaemonSet pods in their place. Once the new pods\n are available, it then proceeds onto other DaemonSet pods, thus ensuring\n that at least 70% of original number of DaemonSet pods are available at\n all times during the update.\n +optional",
                     "title": "The maximum number of DaemonSet pods that can be unavailable during the\nupdate. Value can be an absolute number (ex: 5) or a percentage of total\nnumber of DaemonSet pods at the start of the update (ex: 10%). Absolute\nnumber is calculated from percentage by rounding up.\nThis cannot be 0.\nDefault value is 1.\nExample: when this is set to 30%, at most 30% of the total number of nodes\nthat should be running the daemon pod (i.e. status.desiredNumberScheduled)\ncan have their pods stopped for an update at any given\ntime. The update starts by stopping at most 30% of those DaemonSet pods\nand then brings up new DaemonSet pods in their place. Once the new pods\nare available, it then proceeds onto other DaemonSet pods, thus ensuring\nthat at least 70% of original number of DaemonSet pods are available at\nall times during the update.\n+optional",
                     "$ref": "#/definitions/intstrIntOrString"
                 }
@@ -8622,12 +9287,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1RollingUpdateDeployment": {
             "type": "object",
             "description": "Spec to control the desired behavior of rolling update.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.RollingUpdateDeployment",
             "properties": {
                 "maxSurge": {
+                    "description": " Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%).\n This can not be 0 if MaxUnavailable is 0.\n Absolute number is calculated from percentage by rounding up.\n Defaults to 25%.\n Example: when this is set to 30%, the new ReplicaSet can be scaled up immediately when\n the rolling update starts, such that the total number of old and new pods do not exceed\n 130% of desired pods. Once old pods have been killed,\n new ReplicaSet can be scaled up further, ensuring that total number of pods running\n at any time during the update is at most 130% of desired pods.\n +optional",
                     "title": "The maximum number of pods that can be scheduled above the desired number of\npods.\nValue can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%).\nThis can not be 0 if MaxUnavailable is 0.\nAbsolute number is calculated from percentage by rounding up.\nDefaults to 25%.\nExample: when this is set to 30%, the new ReplicaSet can be scaled up immediately when\nthe rolling update starts, such that the total number of old and new pods do not exceed\n130% of desired pods. Once old pods have been killed,\nnew ReplicaSet can be scaled up further, ensuring that total number of pods running\nat any time during the update is at most 130% of desired pods.\n+optional",
                     "$ref": "#/definitions/intstrIntOrString"
                 },
                 "maxUnavailable": {
+                    "description": " Absolute number is calculated from percentage by rounding down.\n This can not be 0 if MaxSurge is 0.\n Defaults to 25%.\n Example: when this is set to 30%, the old ReplicaSet can be scaled down to 70% of desired pods\n immediately when the rolling update starts. Once new pods are ready, old ReplicaSet\n can be scaled down further, followed by scaling up the new ReplicaSet, ensuring\n that the total number of pods available at all times during the update is at\n least 70% of desired pods.\n +optional",
                     "title": "The maximum number of pods that can be unavailable during the update.\nValue can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%).\nAbsolute number is calculated from percentage by rounding down.\nThis can not be 0 if MaxSurge is 0.\nDefaults to 25%.\nExample: when this is set to 30%, the old ReplicaSet can be scaled down to 70% of desired pods\nimmediately when the rolling update starts. Once new pods are ready, old ReplicaSet\ncan be scaled down further, followed by scaling up the new ReplicaSet, ensuring\nthat the total number of pods available at all times during the update is at\nleast 70% of desired pods.\n+optional",
                     "$ref": "#/definitions/intstrIntOrString"
                 }
@@ -8636,9 +9304,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1RollingUpdateStatefulSetStrategy": {
             "type": "object",
             "description": "RollingUpdateStatefulSetStrategy is used to communicate parameter for RollingUpdateStatefulSetStrategyType.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.RollingUpdateStatefulSetStrategy",
             "properties": {
                 "partition": {
                     "type": "integer",
+                    "description": " Default value is 0.\n +optional",
                     "title": "Partition indicates the ordinal at which the StatefulSet should be\npartitioned.\nDefault value is 0.\n+optional",
                     "format": "int32"
                 }
@@ -8647,6 +9317,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SELinuxOptions": {
             "type": "object",
             "title": "SELinuxOptions are the labels to be applied to the container",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SELinuxOptions",
             "properties": {
                 "level": {
                     "type": "string",
@@ -8669,9 +9340,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ScaleIOPersistentVolumeSource": {
             "type": "object",
             "title": "ScaleIOPersistentVolumeSource represents a persistent ScaleIO volume",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ScaleIOPersistentVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\".\n Default is \"xfs\"\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\".\nDefault is \"xfs\"\n+optional"
                 },
                 "gateway": {
@@ -8684,6 +9357,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
@@ -8698,6 +9372,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "storageMode": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned.\nDefault is ThinProvisioned.\n+optional"
                 },
                 "storagePool": {
@@ -8717,9 +9392,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ScaleIOVolumeSource": {
             "type": "object",
             "title": "ScaleIOVolumeSource represents a persistent ScaleIO volume",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ScaleIOVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\".\n Default is \"xfs\".\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\".\nDefault is \"xfs\".\n+optional"
                 },
                 "gateway": {
@@ -8732,6 +9409,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
@@ -8746,6 +9424,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "storageMode": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned.\nDefault is ThinProvisioned.\n+optional"
                 },
                 "storagePool": {
@@ -8765,17 +9444,21 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Secret": {
             "type": "object",
             "description": "Secret holds secret data of a certain type. The total bytes of the values in\nthe Data field must be less than MaxSecretSize bytes.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Secret",
             "properties": {
                 "data": {
                     "type": "object",
+                    "description": " base64 encoded string, representing the arbitrary (possibly non-string)\n data value here. Described in https://tools.ietf.org/html/rfc4648#section-4\n +optional",
                     "title": "Data contains the secret data. Each key must consist of alphanumeric\ncharacters, '-', '_' or '.'. The serialized form of the secret data is a\nbase64 encoded string, representing the arbitrary (possibly non-string)\ndata value here. Described in https://tools.ietf.org/html/rfc4648#section-4\n+optional"
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "stringData": {
                     "type": "object",
+                    "description": " All keys and values are merged into the data field on write, overwriting any existing values.\n It is never output when reading from the API.\n +k8s:conversion-gen=false\n +optional",
                     "title": "stringData allows specifying non-binary secret data in string form.\nIt is provided as a write-only convenience method.\nAll keys and values are merged into the data field on write, overwriting any existing values.\nIt is never output when reading from the API.\n+k8s:conversion-gen=false\n+optional"
                 },
                 "type": {
@@ -8787,6 +9470,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SecretEnvSource": {
             "type": "object",
             "description": "SecretEnvSource selects a Secret to populate the environment\nvariables with.\n\nThe contents of the target Secret's Data field will represent the\nkey-value pairs as environment variables.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SecretEnvSource",
             "properties": {
                 "localObjectReference": {
                     "description": "The Secret to select from.",
@@ -8802,6 +9486,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SecretKeySelector": {
             "type": "object",
             "description": "SecretKeySelector selects a key of a Secret.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SecretKeySelector",
             "properties": {
                 "key": {
                     "type": "string",
@@ -8821,6 +9506,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SecretList": {
             "type": "object",
             "description": "SecretList is a list of Secret.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SecretList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -8830,6 +9516,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -8838,9 +9525,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SecretProjection": {
             "type": "object",
             "description": "Adapts a secret into a projected volume.\n\nThe contents of the target Secret's Data field will be presented in a\nprojected volume as files using the keys in the Data field as the file names.\nNote that this is identical to a secret volume source without the default\nmode.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SecretProjection",
             "properties": {
                 "items": {
                     "type": "array",
+                    "description": " key and content is the value. If specified, the listed keys will be\n projected into the specified paths, and unlisted keys will not be\n present. If a key is specified which is not present in the Secret,\n the volume setup will error unless it is marked optional. Paths must be\n relative and may not contain the '..' path or start with '..'.\n +optional",
                     "title": "If unspecified, each key-value pair in the Data field of the referenced\nSecret will be projected into the volume as a file whose name is the\nkey and content is the value. If specified, the listed keys will be\nprojected into the specified paths, and unlisted keys will not be\npresent. If a key is specified which is not present in the Secret,\nthe volume setup will error unless it is marked optional. Paths must be\nrelative and may not contain the '..' path or start with '..'.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1KeyToPath"
@@ -8859,6 +9548,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SecretReference": {
             "type": "object",
             "title": "SecretReference represents a Secret Reference. It has enough information to retrieve secret\nin any namespace",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SecretReference",
             "properties": {
                 "name": {
                     "type": "string",
@@ -8873,14 +9563,17 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SecretVolumeSource": {
             "type": "object",
             "description": "Adapts a Secret into a volume.\n\nThe contents of the target Secret's Data field will be presented in a volume\nas files using the keys in the Data field as the file names.\nSecret volumes support ownership management and SELinux relabeling.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SecretVolumeSource",
             "properties": {
                 "defaultMode": {
                     "type": "integer",
+                    "description": " Directories within the path are not affected by this setting.\n This might be in conflict with other options that affect the file\n mode, like fsGroup, and the result can be other mode bits set.\n +optional",
                     "title": "Optional: mode bits to use on created files by default. Must be a\nvalue between 0 and 0777. Defaults to 0644.\nDirectories within the path are not affected by this setting.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional",
                     "format": "int32"
                 },
                 "items": {
                     "type": "array",
+                    "description": " key and content is the value. If specified, the listed keys will be\n projected into the specified paths, and unlisted keys will not be\n present. If a key is specified which is not present in the Secret,\n the volume setup will error unless it is marked optional. Paths must be\n relative and may not contain the '..' path or start with '..'.\n +optional",
                     "title": "If unspecified, each key-value pair in the Data field of the referenced\nSecret will be projected into the volume as a file whose name is the\nkey and content is the value. If specified, the listed keys will be\nprojected into the specified paths, and unlisted keys will not be\npresent. If a key is specified which is not present in the Secret,\nthe volume setup will error unless it is marked optional. Paths must be\nrelative and may not contain the '..' path or start with '..'.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1KeyToPath"
@@ -8893,6 +9586,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "secretName": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Name of the secret in the pod's namespace to use.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#secret\n+optional"
                 }
             }
@@ -8900,50 +9594,61 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SecurityContext": {
             "type": "object",
             "description": "SecurityContext holds security configuration that will be applied to a container.\nSome fields are present in both SecurityContext and PodSecurityContext.  When both\nare set, the values in SecurityContext take precedence.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SecurityContext",
             "properties": {
                 "allowPrivilegeEscalation": {
                     "type": "boolean",
+                    "description": " the no_new_privs flag will be set on the container process.\n AllowPrivilegeEscalation is true always when the container is:\n 1) run as Privileged\n 2) has CAP_SYS_ADMIN\n +optional",
                     "title": "AllowPrivilegeEscalation controls whether a process can gain more\nprivileges than its parent process. This bool directly controls if\nthe no_new_privs flag will be set on the container process.\nAllowPrivilegeEscalation is true always when the container is:\n1) run as Privileged\n2) has CAP_SYS_ADMIN\n+optional",
                     "format": "boolean"
                 },
                 "capabilities": {
+                    "description": " +optional",
                     "title": "The capabilities to add/drop when running containers.\nDefaults to the default set of capabilities granted by the container runtime.\n+optional",
                     "$ref": "#/definitions/v1Capabilities"
                 },
                 "privileged": {
                     "type": "boolean",
+                    "description": " Defaults to false.\n +optional",
                     "title": "Run container in privileged mode.\nProcesses in privileged containers are essentially equivalent to root on the host.\nDefaults to false.\n+optional",
                     "format": "boolean"
                 },
                 "procMount": {
                     "type": "string",
+                    "description": " readonly paths and masked paths.\n This requires the ProcMountType feature flag to be enabled.\n +optional",
                     "title": "procMount denotes the type of proc mount to use for the containers.\nThe default is DefaultProcMount which uses the container runtime defaults for\nreadonly paths and masked paths.\nThis requires the ProcMountType feature flag to be enabled.\n+optional"
                 },
                 "readOnlyRootFilesystem": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Whether this container has a read-only root filesystem.\nDefault is false.\n+optional",
                     "format": "boolean"
                 },
                 "runAsGroup": {
                     "type": "string",
+                    "description": " May also be set in PodSecurityContext.  If set in both SecurityContext and\n PodSecurityContext, the value specified in SecurityContext takes precedence.\n +optional",
                     "title": "The GID to run the entrypoint of the container process.\nUses runtime default if unset.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional",
                     "format": "int64"
                 },
                 "runAsNonRoot": {
                     "type": "boolean",
+                    "description": " does not run as UID 0 (root) and fail to start the container if it does.\n If unset or false, no such validation will be performed.\n May also be set in PodSecurityContext.  If set in both SecurityContext and\n PodSecurityContext, the value specified in SecurityContext takes precedence.\n +optional",
                     "title": "Indicates that the container must run as a non-root user.\nIf true, the Kubelet will validate the image at runtime to ensure that it\ndoes not run as UID 0 (root) and fail to start the container if it does.\nIf unset or false, no such validation will be performed.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional",
                     "format": "boolean"
                 },
                 "runAsUser": {
                     "type": "string",
+                    "description": " May also be set in PodSecurityContext.  If set in both SecurityContext and\n PodSecurityContext, the value specified in SecurityContext takes precedence.\n +optional",
                     "title": "The UID to run the entrypoint of the container process.\nDefaults to user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional",
                     "format": "int64"
                 },
                 "seLinuxOptions": {
+                    "description": " container.  May also be set in PodSecurityContext.  If set in both SecurityContext and\n PodSecurityContext, the value specified in SecurityContext takes precedence.\n +optional",
                     "title": "The SELinux context to be applied to the container.\nIf unspecified, the container runtime will allocate a random SELinux context for each\ncontainer.  May also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional",
                     "$ref": "#/definitions/v1SELinuxOptions"
                 },
                 "windowsOptions": {
+                    "description": " If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.\n +optional",
                     "title": "The Windows specific settings applied to all containers.\nIf unspecified, the options from the PodSecurityContext will be used.\nIf set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional",
                     "$ref": "#/definitions/v1WindowsSecurityContextOptions"
                 }
@@ -8952,16 +9657,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Service": {
             "type": "object",
             "description": "Service is a named abstraction of software service (for example, mysql) consisting of local port\n(for example 3306) that the proxy listens on, and the selector that determines which pods\nwill answer requests sent through the proxy.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Service",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Spec defines the behavior of a service.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1ServiceSpec"
                 },
                 "status": {
+                    "description": " Read-only.\n More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n +optional",
                     "title": "Most recently observed status of the service.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1ServiceStatus"
                 }
@@ -8970,13 +9679,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ServiceAccountTokenProjection": {
             "type": "object",
             "description": "ServiceAccountTokenProjection represents a projected service account token\nvolume. This projection can be used to insert a service account token into\nthe pods runtime filesystem for use against APIs (Kubernetes API Server or\notherwise).",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ServiceAccountTokenProjection",
             "properties": {
                 "audience": {
                     "type": "string",
+                    "description": " token, and otherwise should reject the token. The audience defaults to the\n identifier of the apiserver.\n +optional",
                     "title": "Audience is the intended audience of the token. A recipient of a token\nmust identify itself with an identifier specified in the audience of the\ntoken, and otherwise should reject the token. The audience defaults to the\nidentifier of the apiserver.\n+optional"
                 },
                 "expirationSeconds": {
                     "type": "string",
+                    "description": " plugin will proactively rotate the service account token. The kubelet will\n start trying to rotate the token if the token is older than 80 percent of\n its time to live or if the token is older than 24 hours.Defaults to 1 hour\n and must be at least 10 minutes.\n +optional",
                     "title": "ExpirationSeconds is the requested duration of validity of the service\naccount token. As the token approaches expiration, the kubelet volume\nplugin will proactively rotate the service account token. The kubelet will\nstart trying to rotate the token if the token is older than 80 percent of\nits time to live or if the token is older than 24 hours.Defaults to 1 hour\nand must be at least 10 minutes.\n+optional",
                     "format": "int64"
                 },
@@ -8989,6 +9701,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ServiceList": {
             "type": "object",
             "description": "ServiceList holds a list of services.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ServiceList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -8998,6 +9711,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -9006,13 +9720,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ServicePort": {
             "type": "object",
             "description": "ServicePort contains information on service's port.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ServicePort",
             "properties": {
                 "name": {
                     "type": "string",
+                    "description": " the endpoints for a Service, this must match the 'name' field in the\n EndpointPort.\n Optional if only one ServicePort is defined on this service.\n +optional",
                     "title": "The name of this port within the service. This must be a DNS_LABEL.\nAll ports within a ServiceSpec must have unique names. When considering\nthe endpoints for a Service, this must match the 'name' field in the\nEndpointPort.\nOptional if only one ServicePort is defined on this service.\n+optional"
                 },
                 "nodePort": {
                     "type": "integer",
+                    "description": " if unused or else creation of the service will fail.\n Default is to auto-allocate a port if the ServiceType of this Service requires one.\n More info: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport\n +optional",
                     "title": "The port on each node on which this service is exposed when type=NodePort or LoadBalancer.\nUsually assigned by the system. If specified, it will be allocated to the service\nif unused or else creation of the service will fail.\nDefault is to auto-allocate a port if the ServiceType of this Service requires one.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport\n+optional",
                     "format": "int32"
                 },
@@ -9023,9 +9740,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "protocol": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "The IP protocol for this port. Supports \"TCP\", \"UDP\", and \"SCTP\".\nDefault is TCP.\n+optional"
                 },
                 "targetPort": {
+                    "description": " If this is a string, it will be looked up as a named port in the\n target Pod's container ports. If this is not specified, the value\n of the 'port' field is used (an identity map).\n This field is ignored for services with clusterIP=None, and should be\n omitted or set equal to the 'port' field.\n More info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service\n +optional",
                     "title": "Number or name of the port to access on the pods targeted by the service.\nNumber must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.\nIf this is a string, it will be looked up as a named port in the\ntarget Pod's container ports. If this is not specified, the value\nof the 'port' field is used (an identity map).\nThis field is ignored for services with clusterIP=None, and should be\nomitted or set equal to the 'port' field.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service\n+optional",
                     "$ref": "#/definitions/intstrIntOrString"
                 }
@@ -9034,13 +9753,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ServiceSpec": {
             "type": "object",
             "description": "ServiceSpec describes the attributes that a user creates on a service.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ServiceSpec",
             "properties": {
                 "clusterIP": {
                     "type": "string",
+                    "description": " use by others, it will be allocated to the service; otherwise, creation\n of the service will fail. This field can not be changed through updates.\n Valid values are \"None\", empty string (\"\"), or a valid IP address. \"None\"\n can be specified for headless services when proxying is not required.\n Only applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if\n type is ExternalName.\n More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n +optional",
                     "title": "clusterIP is the IP address of the service and is usually assigned\nrandomly by the master. If an address is specified manually and is not in\nuse by others, it will be allocated to the service; otherwise, creation\nof the service will fail. This field can not be changed through updates.\nValid values are \"None\", empty string (\"\"), or a valid IP address. \"None\"\ncan be specified for headless services when proxying is not required.\nOnly applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if\ntype is ExternalName.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n+optional"
                 },
                 "externalIPs": {
                     "type": "array",
+                    "description": " Kubernetes.  The user is responsible for ensuring that traffic arrives\n at a node with this IP.  A common example is external load-balancers\n that are not part of the Kubernetes system.\n +optional",
                     "title": "externalIPs is a list of IP addresses for which nodes in the cluster\nwill also accept traffic for this service.  These IPs are not managed by\nKubernetes.  The user is responsible for ensuring that traffic arrives\nat a node with this IP.  A common example is external load-balancers\nthat are not part of the Kubernetes system.\n+optional",
                     "items": {
                         "type": "string"
@@ -9048,27 +9770,33 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "externalName": {
                     "type": "string",
+                    "description": " Must be a valid RFC-1123 hostname (https://tools.ietf.org/html/rfc1123)\n and requires Type to be ExternalName.\n +optional",
                     "title": "externalName is the external reference that kubedns or equivalent will\nreturn as a CNAME record for this service. No proxying will be involved.\nMust be a valid RFC-1123 hostname (https://tools.ietf.org/html/rfc1123)\nand requires Type to be ExternalName.\n+optional"
                 },
                 "externalTrafficPolicy": {
                     "type": "string",
+                    "description": " client source IP and avoids a second hop for LoadBalancer and Nodeport\n type services, but risks potentially imbalanced traffic spreading.\n \"Cluster\" obscures the client source IP and may cause a second hop to\n another node, but should have good overall load-spreading.\n +optional",
                     "title": "externalTrafficPolicy denotes if this Service desires to route external\ntraffic to node-local or cluster-wide endpoints. \"Local\" preserves the\nclient source IP and avoids a second hop for LoadBalancer and Nodeport\ntype services, but risks potentially imbalanced traffic spreading.\n\"Cluster\" obscures the client source IP and may cause a second hop to\nanother node, but should have good overall load-spreading.\n+optional"
                 },
                 "healthCheckNodePort": {
                     "type": "integer",
+                    "description": " backend with the allocated nodePort. Will use user-specified nodePort value\n if specified by the client. Only effects when Type is set to LoadBalancer\n and ExternalTrafficPolicy is set to Local.\n +optional",
                     "title": "healthCheckNodePort specifies the healthcheck nodePort for the service.\nIf not specified, HealthCheckNodePort is created by the service api\nbackend with the allocated nodePort. Will use user-specified nodePort value\nif specified by the client. Only effects when Type is set to LoadBalancer\nand ExternalTrafficPolicy is set to Local.\n+optional",
                     "format": "int32"
                 },
                 "ipFamily": {
                     "type": "string",
+                    "description": " available in the cluster.  If no IP family is requested, the cluster's primary IP family will be used.\n Other IP fields (loadBalancerIP, loadBalancerSourceRanges, externalIPs) and controllers which\n allocate external load-balancers should use the same IP family.  Endpoints for this Service will be of\n this family.  This field is immutable after creation. Assigning a ServiceIPFamily not available in the\n cluster (e.g. IPv6 in IPv4 only cluster) is an error condition and will fail during clusterIP assignment.\n +optional",
                     "title": "ipFamily specifies whether this Service has a preference for a particular IP family (e.g. IPv4 vs.\nIPv6).  If a specific IP family is requested, the clusterIP field will be allocated from that family, if it is\navailable in the cluster.  If no IP family is requested, the cluster's primary IP family will be used.\nOther IP fields (loadBalancerIP, loadBalancerSourceRanges, externalIPs) and controllers which\nallocate external load-balancers should use the same IP family.  Endpoints for this Service will be of\nthis family.  This field is immutable after creation. Assigning a ServiceIPFamily not available in the\ncluster (e.g. IPv6 in IPv4 only cluster) is an error condition and will fail during clusterIP assignment.\n+optional"
                 },
                 "loadBalancerIP": {
                     "type": "string",
+                    "description": " This feature depends on whether the underlying cloud-provider supports specifying\n the loadBalancerIP when a load balancer is created.\n This field will be ignored if the cloud-provider does not support the feature.\n +optional",
                     "title": "Only applies to Service Type: LoadBalancer\nLoadBalancer will get created with the IP specified in this field.\nThis feature depends on whether the underlying cloud-provider supports specifying\nthe loadBalancerIP when a load balancer is created.\nThis field will be ignored if the cloud-provider does not support the feature.\n+optional"
                 },
                 "loadBalancerSourceRanges": {
                     "type": "array",
+                    "description": " cloud-provider does not support the feature.\"\n More info: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/\n +optional",
                     "title": "If specified and supported by the platform, this will restrict traffic through the cloud-provider\nload-balancer will be restricted to the specified client IPs. This field will be ignored if the\ncloud-provider does not support the feature.\"\nMore info: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/\n+optional",
                     "items": {
                         "type": "string"
@@ -9076,6 +9804,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "ports": {
                     "type": "array",
+                    "description": " +patchMergeKey=port\n +patchStrategy=merge\n +listType=map\n +listMapKey=port\n +listMapKey=protocol",
                     "title": "The list of ports that are exposed by this service.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n+patchMergeKey=port\n+patchStrategy=merge\n+listType=map\n+listMapKey=port\n+listMapKey=protocol",
                     "items": {
                         "$ref": "#/definitions/v1ServicePort"
@@ -9083,15 +9812,18 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "publishNotReadyAddresses": {
                     "type": "boolean",
+                    "description": " the Service. The default value is false.\n The primary use case for setting this field is to use a StatefulSet's Headless Service\n to propagate SRV records for its Pods without respect to their readiness for purpose\n of peer discovery.\n +optional",
                     "title": "publishNotReadyAddresses, when set to true, indicates that DNS implementations\nmust publish the notReadyAddresses of subsets for the Endpoints associated with\nthe Service. The default value is false.\nThe primary use case for setting this field is to use a StatefulSet's Headless Service\nto propagate SRV records for its Pods without respect to their readiness for purpose\nof peer discovery.\n+optional",
                     "format": "boolean"
                 },
                 "selector": {
                     "type": "object",
+                    "description": " external process managing its endpoints, which Kubernetes will not\n modify. Only applies to types ClusterIP, NodePort, and LoadBalancer.\n Ignored if type is ExternalName.\n More info: https://kubernetes.io/docs/concepts/services-networking/service/\n +optional",
                     "title": "Route service traffic to pods with label keys and values matching this\nselector. If empty or not present, the service is assumed to have an\nexternal process managing its endpoints, which Kubernetes will not\nmodify. Only applies to types ClusterIP, NodePort, and LoadBalancer.\nIgnored if type is ExternalName.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/\n+optional"
                 },
                 "sessionAffinity": {
                     "type": "string",
+                    "description": " Must be ClientIP or None.\n Defaults to None.\n More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n +optional",
                     "title": "Supports \"ClientIP\" and \"None\". Used to maintain session affinity.\nEnable client IP based session affinity.\nMust be ClientIP or None.\nDefaults to None.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n+optional"
                 },
                 "sessionAffinityConfig": {
@@ -9100,6 +9832,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "topologyKeys": {
                     "type": "array",
+                    "description": " when accessing this Service, it can not be used at the same time as\n externalTrafficPolicy=Local.\n Topology keys must be valid label keys and at most 16 keys may be specified.\n Endpoints are chosen based on the first topology key with available backends.\n If this field is specified and all entries have no backends that match\n the topology of the client, the service has no backends for that client\n and connections should fail.\n The special value \"*\" may be used to mean \"any topology\". This catch-all\n value, if used, only makes sense as the last value in the list.\n If this is not specified or empty, no topology constraints will be applied.\n +optional",
                     "title": "topologyKeys is a preference-order list of topology keys which\nimplementations of services should use to preferentially sort endpoints\nwhen accessing this Service, it can not be used at the same time as\nexternalTrafficPolicy=Local.\nTopology keys must be valid label keys and at most 16 keys may be specified.\nEndpoints are chosen based on the first topology key with available backends.\nIf this field is specified and all entries have no backends that match\nthe topology of the client, the service has no backends for that client\nand connections should fail.\nThe special value \"*\" may be used to mean \"any topology\". This catch-all\nvalue, if used, only makes sense as the last value in the list.\nIf this is not specified or empty, no topology constraints will be applied.\n+optional",
                     "items": {
                         "type": "string"
@@ -9107,6 +9840,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "type": {
                     "type": "string",
+                    "description": " \"ExternalName\" maps to the specified externalName.\n \"ClusterIP\" allocates a cluster-internal IP address for load-balancing to\n endpoints. Endpoints are determined by the selector or if that is not\n specified, by manual construction of an Endpoints object. If clusterIP is\n \"None\", no virtual IP is allocated and the endpoints are published as a\n set of endpoints rather than a stable IP.\n \"NodePort\" builds on ClusterIP and allocates a port on every node which\n routes to the clusterIP.\n \"LoadBalancer\" builds on NodePort and creates an\n external load-balancer (if supported in the current cloud) which routes\n to the clusterIP.\n More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types\n +optional",
                     "title": "type determines how the Service is exposed. Defaults to ClusterIP. Valid\noptions are ExternalName, ClusterIP, NodePort, and LoadBalancer.\n\"ExternalName\" maps to the specified externalName.\n\"ClusterIP\" allocates a cluster-internal IP address for load-balancing to\nendpoints. Endpoints are determined by the selector or if that is not\nspecified, by manual construction of an Endpoints object. If clusterIP is\n\"None\", no virtual IP is allocated and the endpoints are published as a\nset of endpoints rather than a stable IP.\n\"NodePort\" builds on ClusterIP and allocates a port on every node which\nroutes to the clusterIP.\n\"LoadBalancer\" builds on NodePort and creates an\nexternal load-balancer (if supported in the current cloud) which routes\nto the clusterIP.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types\n+optional"
                 }
             }
@@ -9114,8 +9848,10 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1ServiceStatus": {
             "type": "object",
             "description": "ServiceStatus represents the current status of a service.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.ServiceStatus",
             "properties": {
                 "loadBalancer": {
+                    "description": " +optional",
                     "title": "LoadBalancer contains the current status of the load-balancer,\nif one is present.\n+optional",
                     "$ref": "#/definitions/v1LoadBalancerStatus"
                 }
@@ -9124,6 +9860,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1SessionAffinityConfig": {
             "type": "object",
             "description": "SessionAffinityConfig represents the configurations of session affinity.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.SessionAffinityConfig",
             "properties": {
                 "clientIP": {
                     "title": "clientIP contains the configurations of Client IP based session affinity.\n+optional",
@@ -9134,6 +9871,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1StatefulSet": {
             "type": "object",
             "description": "StatefulSet represents a set of pods with consistent identities.\nIdentities are defined as:\n - Network: A single stable DNS and hostname.\n - Storage: As many VolumeClaims as requested.\nThe StatefulSet guarantees that a given network identity will always\nmap to the same storage identity.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.StatefulSet",
             "properties": {
                 "metadata": {
                     "title": "+optional",
@@ -9144,6 +9882,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1StatefulSetSpec"
                 },
                 "status": {
+                    "description": " +optional",
                     "title": "Status is the current status of Pods in this StatefulSet. This data\nmay be out of date by some window of time.\n+optional",
                     "$ref": "#/definitions/v1StatefulSetStatus"
                 }
@@ -9152,6 +9891,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1StatefulSetCondition": {
             "type": "object",
             "description": "StatefulSetCondition describes the state of a statefulset at a certain point.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.StatefulSetCondition",
             "properties": {
                 "lastTransitionTime": {
                     "title": "Last time the condition transitioned from one status to another.\n+optional",
@@ -9178,6 +9918,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1StatefulSetList": {
             "type": "object",
             "description": "StatefulSetList is a collection of StatefulSets.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.StatefulSetList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -9194,39 +9935,44 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1StatefulSetSpec": {
             "type": "object",
             "description": "A StatefulSetSpec is the specification of a StatefulSet.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.StatefulSetSpec",
             "properties": {
                 "podManagementPolicy": {
                     "type": "string",
+                    "description": " -OrderedReady-, where pods are created in increasing order (pod-0, then\n pod-1, etc) and the controller will wait until each pod is ready before\n continuing. When scaling down, the pods are removed in the opposite order.\n The alternative policy is -Parallel- which will create pods in parallel\n to match the desired scale without waiting, and on scale down will delete\n all pods at once.\n +optional",
                     "title": "podManagementPolicy controls how pods are created during initial scale up,\nwhen replacing pods on nodes, or when scaling down. The default policy is\n-OrderedReady-, where pods are created in increasing order (pod-0, then\npod-1, etc) and the controller will wait until each pod is ready before\ncontinuing. When scaling down, the pods are removed in the opposite order.\nThe alternative policy is -Parallel- which will create pods in parallel\nto match the desired scale without waiting, and on scale down will delete\nall pods at once.\n+optional"
                 },
                 "replicas": {
                     "type": "integer",
+                    "description": " same Template, but individual replicas also have a consistent identity.\n If unspecified, defaults to 1.\n TODO: Consider a rename of this field.\n +optional",
                     "title": "replicas is the desired number of replicas of the given Template.\nThese are replicas in the sense that they are instantiations of the\nsame Template, but individual replicas also have a consistent identity.\nIf unspecified, defaults to 1.\nTODO: Consider a rename of this field.\n+optional",
                     "format": "int32"
                 },
                 "revisionHistoryLimit": {
                     "type": "integer",
-                    "description": "revisionHistoryLimit is the maximum number of revisions that will\nbe maintained in the StatefulSet's revision history. The revision history\nconsists of all revisions not represented by a currently applied\nStatefulSetSpec version. The default value is 10.",
+                    "description": " consists of all revisions not represented by a currently applied\n StatefulSetSpec version. The default value is 10.",
                     "format": "int32"
                 },
                 "selector": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
                     "title": "selector is a label query over pods that should match the replica count.\nIt must match the pod template's labels.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
                     "$ref": "#/definitions/v1LabelSelector"
                 },
                 "serviceName": {
                     "type": "string",
-                    "description": "serviceName is the name of the service that governs this StatefulSet.\nThis service must exist before the StatefulSet, and is responsible for\nthe network identity of the set. Pods get DNS/hostnames that follow the\npattern: pod-specific-string.serviceName.default.svc.cluster.local\nwhere \"pod-specific-string\" is managed by the StatefulSet controller."
+                    "description": " the network identity of the set. Pods get DNS/hostnames that follow the\n pattern: pod-specific-string.serviceName.default.svc.cluster.local\n where \"pod-specific-string\" is managed by the StatefulSet controller."
                 },
                 "template": {
-                    "description": "template is the object that describes the pod that will be created if\ninsufficient replicas are detected. Each pod stamped out by the StatefulSet\nwill fulfill this Template, but have a unique identity from the rest\nof the StatefulSet.",
+                    "description": " will fulfill this Template, but have a unique identity from the rest\n of the StatefulSet.",
                     "$ref": "#/definitions/v1PodTemplateSpec"
                 },
                 "updateStrategy": {
-                    "description": "updateStrategy indicates the StatefulSetUpdateStrategy that will be\nemployed to update Pods in the StatefulSet when a revision is made to\nTemplate.",
+                    "description": " Template.",
                     "$ref": "#/definitions/v1StatefulSetUpdateStrategy"
                 },
                 "volumeClaimTemplates": {
                     "type": "array",
+                    "description": " claims in a way that maintains the identity of a pod. Every claim in\n this list must have at least one matching (by name) volumeMount in one\n container in the template. A claim in this list takes precedence over\n any volumes in the template, with the same name.\n TODO: Define the behavior if a claim already exists with the same name.\n +optional",
                     "title": "volumeClaimTemplates is a list of claims that pods are allowed to reference.\nThe StatefulSet controller is responsible for mapping network identities to\nclaims in a way that maintains the identity of a pod. Every claim in\nthis list must have at least one matching (by name) volumeMount in one\ncontainer in the template. A claim in this list takes precedence over\nany volumes in the template, with the same name.\nTODO: Define the behavior if a claim already exists with the same name.\n+optional",
                     "items": {
                         "$ref": "#/definitions/v1PersistentVolumeClaim"
@@ -9237,14 +9983,17 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1StatefulSetStatus": {
             "type": "object",
             "description": "StatefulSetStatus represents the current state of a StatefulSet.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.StatefulSetStatus",
             "properties": {
                 "collisionCount": {
                     "type": "integer",
+                    "description": " newest ControllerRevision.\n +optional",
                     "title": "collisionCount is the count of hash collisions for the StatefulSet. The StatefulSet controller\nuses this field as a collision avoidance mechanism when it needs to create the name for the\nnewest ControllerRevision.\n+optional",
                     "format": "int32"
                 },
                 "conditions": {
                     "type": "array",
+                    "description": " +patchMergeKey=type\n +patchStrategy=merge",
                     "title": "Represents the latest available observations of a statefulset's current state.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
                     "items": {
                         "$ref": "#/definitions/v1StatefulSetCondition"
@@ -9261,6 +10010,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "observedGeneration": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "observedGeneration is the most recent generation observed for this StatefulSet. It corresponds to the\nStatefulSet's generation, which is updated on mutation by the API Server.\n+optional",
                     "format": "int64"
                 },
@@ -9288,6 +10038,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1StatefulSetUpdateStrategy": {
             "type": "object",
             "description": "StatefulSetUpdateStrategy indicates the strategy that the StatefulSet\ncontroller will use to perform updates. It includes any additional parameters\nnecessary to perform the update for the indicated strategy.",
+            "x-ves-proto-message": "k8s.io.api.apps.v1.StatefulSetUpdateStrategy",
             "properties": {
                 "rollingUpdate": {
                     "title": "RollingUpdate is used to communicate parameters when Type is RollingUpdateStatefulSetStrategyType.\n+optional",
@@ -9295,6 +10046,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "type": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Type indicates the type of the StatefulSetUpdateStrategy.\nDefault is RollingUpdate.\n+optional"
                 }
             }
@@ -9302,17 +10054,21 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1StorageOSPersistentVolumeSource": {
             "type": "object",
             "description": "Represents a StorageOS persistent volume resource.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.StorageOSPersistentVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
                 "secretRef": {
+                    "description": " +optional",
                     "title": "SecretRef specifies the secret to use for obtaining the StorageOS API\ncredentials.  If not specified, default values will be attempted.\n+optional",
                     "$ref": "#/definitions/v1ObjectReference"
                 },
@@ -9322,6 +10078,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "volumeNamespace": {
                     "type": "string",
+                    "description": " Kubernetes name scoping to be mirrored within StorageOS for tighter integration.\n Set VolumeName to any name to override the default behaviour.\n Set to \"default\" if you are not using namespaces within StorageOS.\n Namespaces that do not pre-exist within StorageOS will be created.\n +optional",
                     "title": "VolumeNamespace specifies the scope of the volume within StorageOS.  If no\nnamespace is specified then the Pod's namespace will be used.  This allows the\nKubernetes name scoping to be mirrored within StorageOS for tighter integration.\nSet VolumeName to any name to override the default behaviour.\nSet to \"default\" if you are not using namespaces within StorageOS.\nNamespaces that do not pre-exist within StorageOS will be created.\n+optional"
                 }
             }
@@ -9329,17 +10086,21 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1StorageOSVolumeSource": {
             "type": "object",
             "description": "Represents a StorageOS persistent volume resource.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.StorageOSVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
                     "format": "boolean"
                 },
                 "secretRef": {
+                    "description": " +optional",
                     "title": "SecretRef specifies the secret to use for obtaining the StorageOS API\ncredentials.  If not specified, default values will be attempted.\n+optional",
                     "$ref": "#/definitions/v1LocalObjectReference"
                 },
@@ -9349,6 +10110,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "volumeNamespace": {
                     "type": "string",
+                    "description": " Kubernetes name scoping to be mirrored within StorageOS for tighter integration.\n Set VolumeName to any name to override the default behaviour.\n Set to \"default\" if you are not using namespaces within StorageOS.\n Namespaces that do not pre-exist within StorageOS will be created.\n +optional",
                     "title": "VolumeNamespace specifies the scope of the volume within StorageOS.  If no\nnamespace is specified then the Pod's namespace will be used.  This allows the\nKubernetes name scoping to be mirrored within StorageOS for tighter integration.\nSet VolumeName to any name to override the default behaviour.\nSet to \"default\" if you are not using namespaces within StorageOS.\nNamespaces that do not pre-exist within StorageOS will be created.\n+optional"
                 }
             }
@@ -9356,6 +10118,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Sysctl": {
             "type": "object",
             "title": "Sysctl defines a kernel parameter to be set",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Sysctl",
             "properties": {
                 "name": {
                     "type": "string",
@@ -9370,13 +10133,14 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1TCPSocketAction": {
             "type": "object",
             "title": "TCPSocketAction describes an action based on opening a socket",
+            "x-ves-proto-message": "k8s.io.api.core.v1.TCPSocketAction",
             "properties": {
                 "host": {
                     "type": "string",
                     "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
                 },
                 "port": {
-                    "description": "Number or name of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+                    "description": " Name must be an IANA_SVC_NAME.",
                     "$ref": "#/definitions/intstrIntOrString"
                 }
             }
@@ -9384,16 +10148,18 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Taint": {
             "type": "object",
             "description": "The node this Taint is attached to has the \"effect\" on\nany pod that does not tolerate the Taint.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Taint",
             "properties": {
                 "effect": {
                     "type": "string",
-                    "description": "Required. The effect of the taint on pods\nthat do not tolerate the taint.\nValid effects are NoSchedule, PreferNoSchedule and NoExecute."
+                    "description": " Valid effects are NoSchedule, PreferNoSchedule and NoExecute."
                 },
                 "key": {
                     "type": "string",
                     "description": "Required. The taint key to be applied to a node."
                 },
                 "timeAdded": {
+                    "description": " +optional",
                     "title": "TimeAdded represents the time at which the taint was added.\nIt is only written for NoExecute taints.\n+optional",
                     "$ref": "#/definitions/v1Time"
                 },
@@ -9422,26 +10188,32 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Toleration": {
             "type": "object",
             "description": "The pod this Toleration is attached to tolerates any taint that matches\nthe triple \u003ckey,value,effect\u003e using the matching operator \u003coperator\u003e.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Toleration",
             "properties": {
                 "effect": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Effect indicates the taint effect to match. Empty means match all taint effects.\nWhen specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.\n+optional"
                 },
                 "key": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Key is the taint key that the toleration applies to. Empty means match all taint keys.\nIf the key is empty, operator must be Exists; this combination means to match all values and all keys.\n+optional"
                 },
                 "operator": {
                     "type": "string",
+                    "description": " Exists is equivalent to wildcard for value, so that a pod can\n tolerate all taints of a particular category.\n +optional",
                     "title": "Operator represents a key's relationship to the value.\nValid operators are Exists and Equal. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.\n+optional"
                 },
                 "tolerationSeconds": {
                     "type": "string",
+                    "description": " it is not set, which means tolerate the taint forever (do not evict). Zero and\n negative values will be treated as 0 (evict immediately) by the system.\n +optional",
                     "title": "TolerationSeconds represents the period of time the toleration (which must be\nof effect NoExecute, otherwise this field is ignored) tolerates the taint. By default,\nit is not set, which means tolerate the taint forever (do not evict). Zero and\nnegative values will be treated as 0 (evict immediately) by the system.\n+optional",
                     "format": "int64"
                 },
                 "value": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Value is the taint value the toleration matches to.\nIf the operator is Exists, the value should be empty, otherwise just a regular string.\n+optional"
                 }
             }
@@ -9449,32 +10221,36 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1TopologySpreadConstraint": {
             "type": "object",
             "description": "TopologySpreadConstraint specifies how to spread matching pods among the given topology.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.TopologySpreadConstraint",
             "properties": {
                 "labelSelector": {
+                    "description": " in their corresponding topology domain.\n +optional",
                     "title": "LabelSelector is used to find matching pods.\nPods that match this label selector are counted to determine the number of pods\nin their corresponding topology domain.\n+optional",
                     "$ref": "#/definitions/v1LabelSelector"
                 },
                 "maxSkew": {
                     "type": "integer",
-                    "description": "MaxSkew describes the degree to which pods may be unevenly distributed.\nIt's the maximum permitted difference between the number of matching pods in\nany two topology domains of a given topology type.\nFor example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same\nlabelSelector spread as 1/1/0:\n+-------+-------+-------+\n| zone1 | zone2 | zone3 |\n+-------+-------+-------+\n|   P   |   P   |       |\n+-------+-------+-------+\n- if MaxSkew is 1, incoming pod can only be scheduled to zone3 to become 1/1/1;\nscheduling it onto zone1(zone2) would make the ActualSkew(2-0) on zone1(zone2)\nviolate MaxSkew(1).\n- if MaxSkew is 2, incoming pod can be scheduled onto any zone.\nIt's a required field. Default value is 1 and 0 is not allowed.",
+                    "description": " any two topology domains of a given topology type.\n For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same\n labelSelector spread as 1/1/0:\n +-------+-------+-------+\n | zone1 | zone2 | zone3 |\n +-------+-------+-------+\n |   P   |   P   |       |\n +-------+-------+-------+\n - if MaxSkew is 1, incoming pod can only be scheduled to zone3 to become 1/1/1;\n scheduling it onto zone1(zone2) would make the ActualSkew(2-0) on zone1(zone2)\n violate MaxSkew(1).\n - if MaxSkew is 2, incoming pod can be scheduled onto any zone.\n It's a required field. Default value is 1 and 0 is not allowed.",
                     "format": "int32"
                 },
                 "topologyKey": {
                     "type": "string",
-                    "description": "TopologyKey is the key of node labels. Nodes that have a label with this key\nand identical values are considered to be in the same topology.\nWe consider each \u003ckey, value\u003e as a \"bucket\", and try to put balanced number\nof pods into each bucket.\nIt's a required field."
+                    "description": " We consider each \u003ckey, value\u003e as a \"bucket\", and try to put balanced number\n of pods into each bucket.\n It's a required field."
                 },
                 "whenUnsatisfiable": {
                     "type": "string",
-                    "description": "WhenUnsatisfiable indicates how to deal with a pod if it doesn't satisfy\nthe spread constraint.\n- DoNotSchedule (default) tells the scheduler not to schedule it\n- ScheduleAnyway tells the scheduler to still schedule it\nIt's considered as \"Unsatisfiable\" if and only if placing incoming pod on any\ntopology violates \"MaxSkew\".\nFor example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same\nlabelSelector spread as 3/1/1:\n+-------+-------+-------+\n| zone1 | zone2 | zone3 |\n+-------+-------+-------+\n| P P P |   P   |   P   |\n+-------+-------+-------+\nIf WhenUnsatisfiable is set to DoNotSchedule, incoming pod can only be scheduled\nto zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies\nMaxSkew(1). In other words, the cluster can still be imbalanced, but scheduler\nwon't make it *more* imbalanced.\nIt's a required field."
+                    "description": " - DoNotSchedule (default) tells the scheduler not to schedule it\n - ScheduleAnyway tells the scheduler to still schedule it\n It's considered as \"Unsatisfiable\" if and only if placing incoming pod on any\n topology violates \"MaxSkew\".\n For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same\n labelSelector spread as 3/1/1:\n +-------+-------+-------+\n | zone1 | zone2 | zone3 |\n +-------+-------+-------+\n | P P P |   P   |   P   |\n +-------+-------+-------+\n If WhenUnsatisfiable is set to DoNotSchedule, incoming pod can only be scheduled\n to zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies\n MaxSkew(1). In other words, the cluster can still be imbalanced, but scheduler\n won't make it *more* imbalanced.\n It's a required field."
                 }
             }
         },
         "v1TypedLocalObjectReference": {
             "type": "object",
             "description": "TypedLocalObjectReference contains enough information to let you locate the\ntyped referenced object inside the same namespace.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.TypedLocalObjectReference",
             "properties": {
                 "apiGroup": {
                     "type": "string",
+                    "description": " For any other third-party types, APIGroup is required.\n +optional",
                     "title": "APIGroup is the group for the resource being referenced.\nIf APIGroup is not specified, the specified Kind must be in the core API group.\nFor any other third-party types, APIGroup is required.\n+optional"
                 },
                 "kind": {
@@ -9490,13 +10266,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1Volume": {
             "type": "object",
             "description": "Volume represents a named volume in a pod that may be accessed by any container in the pod.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Volume",
             "properties": {
                 "name": {
                     "type": "string",
+                    "description": " More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                     "title": "Volume's name.\nMust be a DNS_LABEL and unique within the pod.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                 },
                 "volumeSource": {
-                    "description": "VolumeSource represents the location and type of the mounted volume.\nIf not specified, the Volume is implied to be an EmptyDir.\nThis implied behavior is deprecated and will be removed in a future version.",
+                    "description": " This implied behavior is deprecated and will be removed in a future version.",
                     "$ref": "#/definitions/v1VolumeSource"
                 }
             }
@@ -9504,6 +10282,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1VolumeDevice": {
             "type": "object",
             "description": "volumeDevice describes a mapping of a raw block device within a container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.VolumeDevice",
             "properties": {
                 "devicePath": {
                     "type": "string",
@@ -9518,6 +10297,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1VolumeMount": {
             "type": "object",
             "description": "VolumeMount describes a mounting of a Volume within a container.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.VolumeMount",
             "properties": {
                 "mountPath": {
                     "type": "string",
@@ -9525,6 +10305,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "mountPropagation": {
                     "type": "string",
+                    "description": " When not set, MountPropagationNone is used.\n This field is beta in 1.10.\n +optional",
                     "title": "mountPropagation determines how mounts are propagated from the host\nto container and the other way around.\nWhen not set, MountPropagationNone is used.\nThis field is beta in 1.10.\n+optional"
                 },
                 "name": {
@@ -9533,15 +10314,18 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "readOnly": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "Mounted read-only if true, read-write otherwise (false or unspecified).\nDefaults to false.\n+optional",
                     "format": "boolean"
                 },
                 "subPath": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Path within the volume from which the container's volume should be mounted.\nDefaults to \"\" (volume's root).\n+optional"
                 },
                 "subPathExpr": {
                     "type": "string",
+                    "description": " Defaults to \"\" (volume's root).\n SubPathExpr and SubPath are mutually exclusive.\n +optional",
                     "title": "Expanded path within the volume from which the container's volume should be mounted.\nBehaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment.\nDefaults to \"\" (volume's root).\nSubPathExpr and SubPath are mutually exclusive.\n+optional"
                 }
             }
@@ -9549,6 +10333,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1VolumeNodeAffinity": {
             "type": "object",
             "description": "VolumeNodeAffinity defines constraints that limit what nodes this volume can be accessed from.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.VolumeNodeAffinity",
             "properties": {
                 "required": {
                     "description": "Required specifies hard node constraints that must be met.",
@@ -9559,6 +10344,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1VolumeProjection": {
             "type": "object",
             "title": "Projection that may be projected along with other supported volume types",
+            "x-ves-proto-message": "k8s.io.api.core.v1.VolumeProjection",
             "properties": {
                 "configMap": {
                     "title": "information about the configMap data to project\n+optional",
@@ -9581,8 +10367,10 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1VolumeSource": {
             "type": "object",
             "description": "Represents the source of a volume to mount.\nOnly one of its members may be specified.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.VolumeSource",
             "properties": {
                 "awsElasticBlockStore": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n +optional",
                     "title": "AWSElasticBlockStore represents an AWS Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n+optional",
                     "$ref": "#/definitions/v1AWSElasticBlockStoreVolumeSource"
                 },
@@ -9599,6 +10387,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1CephFSVolumeSource"
                 },
                 "cinder": {
+                    "description": " +optional",
                     "title": "Cinder represents a cinder volume attached and mounted on kubelets host machine.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional",
                     "$ref": "#/definitions/v1CinderVolumeSource"
                 },
@@ -9615,6 +10404,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1DownwardAPIVolumeSource"
                 },
                 "emptyDir": {
+                    "description": " +optional",
                     "title": "EmptyDir represents a temporary directory that shares a pod's lifetime.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir\n+optional",
                     "$ref": "#/definitions/v1EmptyDirVolumeSource"
                 },
@@ -9623,6 +10413,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1FCVolumeSource"
                 },
                 "flexVolume": {
+                    "description": " +optional",
                     "title": "FlexVolume represents a generic volume resource that is\nprovisioned/attached using an exec based plugin.\n+optional",
                     "$ref": "#/definitions/v1FlexVolumeSource"
                 },
@@ -9631,30 +10422,37 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1FlockerVolumeSource"
                 },
                 "gcePersistentDisk": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n +optional",
                     "title": "GCEPersistentDisk represents a GCE Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional",
                     "$ref": "#/definitions/v1GCEPersistentDiskVolumeSource"
                 },
                 "gitRepo": {
+                    "description": " EmptyDir into an InitContainer that clones the repo using git, then mount the EmptyDir\n into the Pod's container.\n +optional",
                     "title": "GitRepo represents a git repository at a particular revision.\nDEPRECATED: GitRepo is deprecated. To provision a container with a git repo, mount an\nEmptyDir into an InitContainer that clones the repo using git, then mount the EmptyDir\ninto the Pod's container.\n+optional",
                     "$ref": "#/definitions/v1GitRepoVolumeSource"
                 },
                 "glusterfs": {
+                    "description": " +optional",
                     "title": "Glusterfs represents a Glusterfs mount on the host that shares a pod's lifetime.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md\n+optional",
                     "$ref": "#/definitions/v1GlusterfsVolumeSource"
                 },
                 "hostPath": {
+                    "description": " used for system agents or other privileged things that are allowed\n to see the host machine. Most containers will NOT need this.\n More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n ---\n TODO(jonesdl) We need to restrict who can use host directory mounts and who can/can not\n mount host directories as read/write.\n +optional",
                     "title": "HostPath represents a pre-existing file or directory on the host\nmachine that is directly exposed to the container. This is generally\nused for system agents or other privileged things that are allowed\nto see the host machine. Most containers will NOT need this.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n---\nTODO(jonesdl) We need to restrict who can use host directory mounts and who can/can not\nmount host directories as read/write.\n+optional",
                     "$ref": "#/definitions/v1HostPathVolumeSource"
                 },
                 "iscsi": {
+                    "description": " More info: https://examples.k8s.io/volumes/iscsi/README.md\n +optional",
                     "title": "ISCSI represents an ISCSI Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod.\nMore info: https://examples.k8s.io/volumes/iscsi/README.md\n+optional",
                     "$ref": "#/definitions/v1ISCSIVolumeSource"
                 },
                 "nfs": {
+                    "description": " +optional",
                     "title": "NFS represents an NFS mount on the host that shares a pod's lifetime\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#nfs\n+optional",
                     "$ref": "#/definitions/v1NFSVolumeSource"
                 },
                 "persistentVolumeClaim": {
+                    "description": " More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims\n +optional",
                     "title": "PersistentVolumeClaimVolumeSource represents a reference to a\nPersistentVolumeClaim in the same namespace.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims\n+optional",
                     "$ref": "#/definitions/v1PersistentVolumeClaimVolumeSource"
                 },
@@ -9675,6 +10473,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1QuobyteVolumeSource"
                 },
                 "rbd": {
+                    "description": " +optional",
                     "title": "RBD represents a Rados Block Device mount on the host that shares a pod's lifetime.\nMore info: https://examples.k8s.io/volumes/rbd/README.md\n+optional",
                     "$ref": "#/definitions/v1RBDVolumeSource"
                 },
@@ -9683,6 +10482,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "$ref": "#/definitions/v1ScaleIOVolumeSource"
                 },
                 "secret": {
+                    "description": " +optional",
                     "title": "Secret represents a secret that should populate this volume.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#secret\n+optional",
                     "$ref": "#/definitions/v1SecretVolumeSource"
                 },
@@ -9699,9 +10499,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1VsphereVirtualDiskVolumeSource": {
             "type": "object",
             "description": "Represents a vSphere volume resource.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.VsphereVirtualDiskVolumeSource",
             "properties": {
                 "fsType": {
                     "type": "string",
+                    "description": " Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n +optional",
                     "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
                 },
                 "storagePolicyID": {
@@ -9721,6 +10523,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1WeightedPodAffinityTerm": {
             "type": "object",
             "title": "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)",
+            "x-ves-proto-message": "k8s.io.api.core.v1.WeightedPodAffinityTerm",
             "properties": {
                 "podAffinityTerm": {
                     "description": "Required. A pod affinity term, associated with the corresponding weight.",
@@ -9736,17 +10539,21 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1WindowsSecurityContextOptions": {
             "type": "object",
             "description": "WindowsSecurityContextOptions contain Windows-specific options and credentials.",
+            "x-ves-proto-message": "k8s.io.api.core.v1.WindowsSecurityContextOptions",
             "properties": {
                 "gmsaCredentialSpec": {
                     "type": "string",
+                    "description": " GMSA credential spec named by the GMSACredentialSpecName field.\n This field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.\n +optional",
                     "title": "GMSACredentialSpec is where the GMSA admission webhook\n(https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the\nGMSA credential spec named by the GMSACredentialSpecName field.\nThis field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.\n+optional"
                 },
                 "gmsaCredentialSpecName": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "GMSACredentialSpecName is the name of the GMSA credential spec to use.\nThis field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.\n+optional"
                 },
                 "runAsUserName": {
                     "type": "string",
+                    "description": " May also be set in PodSecurityContext. If set in both SecurityContext and\n PodSecurityContext, the value specified in SecurityContext takes precedence.\n This field is beta-level and may be disabled with the WindowsRunAsUserName feature flag.\n +optional",
                     "title": "The UserName in Windows to run the entrypoint of the container process.\nDefaults to the user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext. If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nThis field is beta-level and may be disabled with the WindowsRunAsUserName feature flag.\n+optional"
                 }
             }
@@ -9754,16 +10561,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1beta1CronJob": {
             "type": "object",
             "description": "CronJob represents the configuration of a single cron job.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1beta1.CronJob",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Specification of the desired behavior of a cron job, including the schedule.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1beta1CronJobSpec"
                 },
                 "status": {
+                    "description": " +optional",
                     "title": "Current status of a cron job.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1beta1CronJobStatus"
                 }
@@ -9772,6 +10583,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1beta1CronJobList": {
             "type": "object",
             "description": "CronJobList is a collection of cron jobs.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1beta1.CronJobList",
             "properties": {
                 "items": {
                     "type": "array",
@@ -9781,6 +10593,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     }
                 },
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
                 }
@@ -9789,13 +10602,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1beta1CronJobSpec": {
             "type": "object",
             "description": "CronJobSpec describes how the job execution will look like and when it will actually run.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1beta1.CronJobSpec",
             "properties": {
                 "concurrencyPolicy": {
                     "type": "string",
+                    "description": " - \"Allow\" (default): allows CronJobs to run concurrently;\n - \"Forbid\": forbids concurrent runs, skipping next run if previous run hasn't finished yet;\n - \"Replace\": cancels currently running job and replaces it with a new one\n +optional",
                     "title": "Specifies how to treat concurrent executions of a Job.\nValid values are:\n- \"Allow\" (default): allows CronJobs to run concurrently;\n- \"Forbid\": forbids concurrent runs, skipping next run if previous run hasn't finished yet;\n- \"Replace\": cancels currently running job and replaces it with a new one\n+optional"
                 },
                 "failedJobsHistoryLimit": {
                     "type": "integer",
+                    "description": " Defaults to 1.\n +optional",
                     "title": "The number of failed finished jobs to retain.\nThis is a pointer to distinguish between explicit zero and not specified.\nDefaults to 1.\n+optional",
                     "format": "int32"
                 },
@@ -9809,16 +10625,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "startingDeadlineSeconds": {
                     "type": "string",
+                    "description": " +optional",
                     "title": "Optional deadline in seconds for starting the job if it misses scheduled\ntime for any reason.  Missed jobs executions will be counted as failed ones.\n+optional",
                     "format": "int64"
                 },
                 "successfulJobsHistoryLimit": {
                     "type": "integer",
+                    "description": " Defaults to 3.\n +optional",
                     "title": "The number of successful finished jobs to retain.\nThis is a pointer to distinguish between explicit zero and not specified.\nDefaults to 3.\n+optional",
                     "format": "int32"
                 },
                 "suspend": {
                     "type": "boolean",
+                    "description": " +optional",
                     "title": "This flag tells the controller to suspend subsequent executions, it does\nnot apply to already started executions.  Defaults to false.\n+optional",
                     "format": "boolean"
                 }
@@ -9827,6 +10646,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1beta1CronJobStatus": {
             "type": "object",
             "description": "CronJobStatus represents the current state of a cron job.",
+            "x-ves-proto-message": "k8s.io.api.batch.v1beta1.CronJobStatus",
             "properties": {
                 "active": {
                     "type": "array",
@@ -9844,12 +10664,15 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "v1beta1JobTemplateSpec": {
             "type": "object",
             "title": "JobTemplateSpec describes the data a Job should have when created from a template",
+            "x-ves-proto-message": "k8s.io.api.batch.v1beta1.JobTemplateSpec",
             "properties": {
                 "metadata": {
+                    "description": " +optional",
                     "title": "Standard object's metadata of the jobs created from this template.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ObjectMeta"
                 },
                 "spec": {
+                    "description": " +optional",
                     "title": "Specification of the desired behavior of the job.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
                     "$ref": "#/definitions/v1JobSpec"
                 }

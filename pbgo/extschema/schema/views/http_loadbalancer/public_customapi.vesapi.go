@@ -105,14 +105,20 @@ func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *ser
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -394,7 +400,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "ioschemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",

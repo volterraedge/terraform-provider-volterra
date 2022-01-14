@@ -1386,6 +1386,50 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *ServiceSlugChoice_Safe:
+		if fv, exists := v.FldValidators["choice.safe"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Safe).Safe
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("safe"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_ClientSideDefense:
+		if fv, exists := v.FldValidators["choice.client_side_defense"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_BotDefense:
+		if fv, exists := v.FldValidators["choice.bot_defense"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_BotDefense).BotDefense
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_ObjectStore:
+		if fv, exists := v.FldValidators["choice.object_store"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_ObjectStore).ObjectStore
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("object_store"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

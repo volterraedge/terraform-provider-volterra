@@ -22,44 +22,106 @@ resource "volterra_discovery" "example" {
 
   // One of the arguments from this list "discovery_k8s discovery_consul" must be set
 
-  discovery_k8s {
+  discovery_consul {
     access_info {
-      // One of the arguments from this list "kubeconfig_url connection_info in_cluster" must be set
+      connection_info {
+        api_server = "api.acme.com:4430"
 
-      kubeconfig_url {
-        blindfold_secret_info_internal {
-          decryption_provider = "decryption_provider"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "store_provider"
-        }
+        tls_info {
+          ca_certificate_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
 
-        secret_encoding_type = "secret_encoding_type"
+            secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-        blindfold_secret_info {
-          decryption_provider = "decryption_provider"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "store_provider"
+            blindfold_secret_info {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+          }
+
+          certificate = "certificate"
+
+          certificate_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+
+            secret_encoding_type = "secret_encoding_type"
+
+            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+            blindfold_secret_info {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+          }
+
+          key_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+
+            secret_encoding_type = "secret_encoding_type"
+
+            // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+
+            clear_secret_info {
+              provider = "box-provider"
+              url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            }
+          }
+
+          server_name    = "k8s.acme.com"
+          trusted_ca_url = "trusted_ca_url"
         }
       }
 
-      // One of the arguments from this list "isolated reachable" must be set
-      reachable = true
+      http_basic_auth_info {
+        passwd_url {
+          blindfold_secret_info_internal {
+            decryption_provider = "decryption_provider"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "store_provider"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+          blindfold_secret_info {
+            decryption_provider = "decryption_provider"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "store_provider"
+          }
+        }
+
+        user_name = "Joe"
+      }
+
+      scheme = "scheme"
     }
 
     publish_info {
-      // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
-
-      publish {
-        namespace = "namespace"
-      }
+      // One of the arguments from this list "publish disable" must be set
+      disable = true
     }
   }
   where {
     // One of the arguments from this list "virtual_network site virtual_site" must be set
 
-    site {
+    virtual_site {
       network_type = "network_type"
 
       ref {
@@ -138,7 +200,7 @@ Volterra Secret. URL to fetch the server CA certificate file.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -154,7 +216,7 @@ Volterra Secret. URL to fetch the client certificate file.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -162,7 +224,7 @@ Volterra Secret. URL to fetch the client certificate file.
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -214,7 +276,7 @@ The data may be optionally secured using BlindFold..
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -230,7 +292,7 @@ Volterra Secret. URL for password, needs to be fetched from this path.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 

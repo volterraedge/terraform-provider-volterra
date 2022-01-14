@@ -441,19 +441,21 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSiteDRefInfo()
+
 }
 
 func (m *GlobalSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetSite() {
+	refs := m.GetSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.site[%d] has a nil value", i)
 		}
@@ -468,8 +470,8 @@ func (m *GlobalSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

@@ -64,37 +64,61 @@ func (m *ObjectCreateReq) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ObjectCreateReq) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ObjectCreateReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectCreateReq) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateObjectCreateReq struct {
@@ -198,37 +222,61 @@ func (m *ObjectCreateRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ObjectCreateRsp) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ObjectCreateRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectCreateRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateObjectCreateRsp struct {
@@ -614,38 +662,61 @@ func (m *ObjectGetRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) err
 }
 
 func (m *ObjectGetRsp) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ObjectGetRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectGetRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateObjectGetRsp struct {
@@ -923,39 +994,34 @@ func (m *ObjectListRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 }
 
 func (m *ObjectListRsp) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetItemsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetItemsDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectListRsp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetItems() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateObjectListRsp struct {
@@ -1072,38 +1138,61 @@ func (m *ObjectListRspItem) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *ObjectListRspItem) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ObjectListRspItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectListRspItem) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateObjectListRspItem struct {
@@ -1266,6 +1355,33 @@ func (m *ObjectReplaceReq) Validate(ctx context.Context, opts ...db.ValidateOpt)
 	return ObjectReplaceReqValidator().Validate(ctx, m, opts...)
 }
 
+func (m *ObjectReplaceReq) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSpecDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ObjectReplaceReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateObjectReplaceReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1374,37 +1490,61 @@ func (m *ObjectReplaceRsp) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *ObjectReplaceRsp) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ObjectReplaceRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectReplaceRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateObjectReplaceRsp struct {
@@ -1477,6 +1617,366 @@ var DefaultObjectReplaceRspValidator = func() *ValidateObjectReplaceRsp {
 
 func ObjectReplaceRspValidator() db.Validator {
 	return DefaultObjectReplaceRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StatusObjectListReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StatusObjectListReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StatusObjectListReq) DeepCopy() *StatusObjectListReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StatusObjectListReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StatusObjectListReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StatusObjectListReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StatusObjectListReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStatusObjectListReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStatusObjectListReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StatusObjectListReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StatusObjectListReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["include_referred_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("include_referred_id"))
+		if err := fv(ctx, m.GetIncludeReferredId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["label_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("label_filter"))
+		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_filter"))
+		for idx, item := range m.GetNamespaceFilter() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["report_fields"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("report_fields"))
+		for idx, item := range m.GetReportFields() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["resource_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("resource_version"))
+		if err := fv(ctx, m.GetResourceVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_filter"))
+		for idx, item := range m.GetTenantFilter() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStatusObjectListReqValidator = func() *ValidateStatusObjectListReq {
+	v := &ValidateStatusObjectListReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func StatusObjectListReqValidator() db.Validator {
+	return DefaultStatusObjectListReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StatusObjectListRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StatusObjectListRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StatusObjectListRsp) DeepCopy() *StatusObjectListRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StatusObjectListRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StatusObjectListRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StatusObjectListRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StatusObjectListRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStatusObjectListRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStatusObjectListRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StatusObjectListRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StatusObjectListRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["err"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("err"))
+		if err := fv(ctx, m.GetErr(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uids"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uids"))
+		for idx, item := range m.GetUids() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStatusObjectListRspValidator = func() *ValidateStatusObjectListRsp {
+	v := &ValidateStatusObjectListRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func StatusObjectListRspValidator() db.Validator {
+	return DefaultStatusObjectListRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StatusObjectListRspItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StatusObjectListRspItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StatusObjectListRspItem) DeepCopy() *StatusObjectListRspItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StatusObjectListRspItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StatusObjectListRspItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StatusObjectListRspItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StatusObjectListRspItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStatusObjectListRspItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStatusObjectListRspItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StatusObjectListRspItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StatusObjectListRspItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apply_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apply_status"))
+		if err := fv(ctx, m.GetApplyStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["object_refs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("object_refs"))
+		for idx, item := range m.GetObjectRefs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["plan_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("plan_status"))
+		if err := fv(ctx, m.GetPlanStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["statusobject_uid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("statusobject_uid"))
+		if err := fv(ctx, m.GetStatusobjectUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStatusObjectListRspItemValidator = func() *ValidateStatusObjectListRspItem {
+	v := &ValidateStatusObjectListRspItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func StatusObjectListRspItemValidator() db.Validator {
+	return DefaultStatusObjectListRspItemValidator
 }
 
 func (m *ObjectCreateReq) FromObject(e db.Entry) {
@@ -1605,4 +2105,26 @@ func (m *ObjectReplaceRsp) ToObject(e db.Entry) {
 	f.Metadata = m1.Metadata
 	f.Spec = m1.Spec
 	f.SystemMetadata = m1.SystemMetadata
+}
+
+func (m *StatusObjectListRspItem) FromStatusObject(e db.Entry) {
+	f := e.DeepCopy().(*ves_io_schema_views_terraform_parameters.DBStatusObject)
+	_ = f
+	m.ApplyStatus = f.GetApplyStatus()
+	m.Metadata = f.GetMetadata()
+	m.ObjectRefs = f.GetObjectRefs()
+	m.PlanStatus = f.GetPlanStatus()
+
+}
+
+func (m *StatusObjectListRspItem) ToStatusObject(e db.Entry) {
+	m1 := m.DeepCopy()
+	_ = m1
+	f := e.(*ves_io_schema_views_terraform_parameters.DBStatusObject)
+	_ = f
+	f.ApplyStatus = m1.ApplyStatus
+	f.Metadata = m1.Metadata
+	f.ObjectRefs = m1.ObjectRefs
+	f.PlanStatus = m1.PlanStatus
+
 }

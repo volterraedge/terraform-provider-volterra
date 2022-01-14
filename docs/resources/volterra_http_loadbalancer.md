@@ -20,24 +20,32 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
+  // One of the arguments from this list "advertise_custom do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
 
-  // One of the arguments from this list "policy_based_challenge no_challenge js_challenge captcha_challenge" must be set
-  no_challenge = true
+  advertise_custom {
+    advertise_where {
+      // One of the arguments from this list "site virtual_site vk8s_service virtual_network" must be set
 
-  domains = ["www.foo.com"]
+      site {
+        ip      = "ip"
+        network = "network"
 
-  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
+        site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
 
-  ring_hash {
-    hash_policy {
-      // One of the arguments from this list "header_name cookie source_ip" must be set
-      header_name = "host"
-
-      terminal = true
+      // One of the arguments from this list "use_default_port port" must be set
+      use_default_port = true
     }
   }
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
+  domains = ["www.foo.com"]
+  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
+  round_robin = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -45,23 +53,28 @@ resource "volterra_http_loadbalancer" "example" {
     dns_volterra_managed = true
   }
 
-  // One of the arguments from this list "disable_rate_limit rate_limit" must be set
+  // One of the arguments from this list "single_lb_app multi_lb_app" must be set
 
-  rate_limit {
-    // One of the arguments from this list "custom_ip_allowed_list no_ip_allowed_list ip_allowed_list" must be set
-    no_ip_allowed_list = true
+  single_lb_app {
+    // One of the arguments from this list "enable_discovery disable_discovery" must be set
 
-    // One of the arguments from this list "no_policies policies" must be set
-    no_policies = true
-
-    rate_limiter {
-      burst_multiplier = "burst_multiplier"
-      total_number     = "total_number"
-      unit             = "unit"
+    enable_discovery {
+      // One of the arguments from this list "enable_learn_from_redirect_traffic disable_learn_from_redirect_traffic" must be set
+      disable_learn_from_redirect_traffic = true
     }
+
+    // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
+    enable_ddos_detection = true
+
+    // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
+    enable_malicious_user_detection = true
   }
+  // One of the arguments from this list "disable_rate_limit rate_limit" must be set
+  disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  service_policies_from_namespace = true
+  no_service_policies = true
+  // One of the arguments from this list "user_identification user_id_client_ip" must be set
+  user_id_client_ip = true
   // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
   disable_waf = true
 }
@@ -99,6 +112,10 @@ Argument Reference
 
 `blocked_clients` - (Optional) Rules that specify the clients to be blocked. See [Blocked Clients ](#blocked-clients) below for details.
 
+`bot_defense` - (Optional) Shape Bot Defense intent configuration object. See [Bot Defense ](#bot-defense) below for details.
+
+`disable_bot_defense` - (Optional) No Shape Bot Defense configuration for this load balancer (bool).
+
 `captcha_challenge` - (Optional) Configure Captcha challenge on this load balancer. See [Captcha Challenge ](#captcha-challenge) below for details.
 
 `js_challenge` - (Optional) Configure Javascript challenge on this load balancer. See [Js Challenge ](#js-challenge) below for details.
@@ -135,6 +152,10 @@ Argument Reference
 
 `malicious_user_mitigation` - (Optional) The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.. See [ref](#ref) below for details.
 
+`multi_lb_app` - (Optional) ML config is shared among multiple HTTP Load Balancers. It should be set externally (bool).
+
+`single_lb_app` - (Optional) ML Config applied on this Load Balancer. See [Single Lb App ](#single-lb-app) below for details.
+
 `more_option` - (Optional) More options like header manipulation, compression etc.. See [More Option ](#more-option) below for details.
 
 `disable_rate_limit` - (Optional) Rate limiting is not currently enabled for this loadbalancer (bool).
@@ -149,9 +170,11 @@ Argument Reference
 
 `service_policies_from_namespace` - (Optional) Apply the service policies configured as part of the namespace service policy set (bool).
 
-`trusted_clients` - (Optional) WAF processing is skipped for trusted clients. See [Trusted Clients ](#trusted-clients) below for details.
+`trusted_clients` - (Optional) WAF or/and Bot processing can be skipped for trusted clients. See [Trusted Clients ](#trusted-clients) below for details.
 
-`user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
+`user_id_client_ip` - (Optional) Use the Client IP address as the user identifier. (bool).
+
+`user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier.. See [ref](#ref) below for details.
 
 `app_firewall` - (Optional) Reference to App Firewall configuration object. See [ref](#ref) below for details.
 
@@ -168,6 +191,12 @@ Argument Reference
 Apply the specified list of service policies and bypass the namespace service policy set.
 
 `policies` - (Required) An ordered list of references to service_policy objects.. See [ref](#ref) below for details.
+
+### Additional Domains
+
+Wildcard names are supported in the suffix or prefix form.
+
+`domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
 
 ### Advanced Options
 
@@ -267,49 +296,23 @@ Challenge rules can be used to selectively disable Captcha challenge or enable J
 
 Challenge rules can be used to selectively disable Javascript challenge or enable Captcha challenge for some requests..
 
-### Any Asn
-
-any_asn.
-
-### Any Client
-
-any_client.
-
 ### Any Domain
 
-Apply this waf exclusion rule for any domain.
+Any Domain..
 
-### Any Ip
+### App Firewall Detection Control
 
-any_ip.
+App Firewall detection changes to be applied for this request.
 
-### Arg Matchers
+`exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
 
-arg_matchers.
-
-`invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
-
-`check_not_present` - (Optional) Check that the argument is not present. (bool).
-
-`check_present` - (Optional) Check that the argument is present. (bool).
-
-`item` - (Optional) Criteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Item ](#item) below for details.
-
-`presence` - (Optional) Check if the arg is present or absent. (`Bool`).
-
-`name` - (Required) A case-sensitive JSON path in the HTTP request body. (`String`).
+`exclude_violation_contexts` - (Optional) App Firewall violation contexts to be excluded for this request. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
 
 ### Asn List
 
-asn_list.
+The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB..
 
 `as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
-
-### Asn Matcher
-
-asn_matcher.
-
-`asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
 
 ### Auto Host Rewrite
 
@@ -345,11 +348,21 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Block
 
-Block user for a duration determined by the expiration time.
+Block bot request and send response with custom content..
+
+`body` - (Optional) E.g. "<p> Your request was blocked </p>". Base64 encoded string for this html is "LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==" (`String`).
+
+`status` - (Optional) HTTP Status code to respond with (`String`).
 
 ### Blocked Clients
 
 Rules that specify the clients to be blocked.
+
+`bot_skip_processing` - (Optional) Skip Bot processing for clients matching this rule. (bool).
+
+`skip_processing` - (Optional) Skip both WAF and Bot processing for clients matching this rule. (bool).
+
+`waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (bool).
 
 `as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
 
@@ -359,15 +372,17 @@ Rules that specify the clients to be blocked.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
-### Body Matcher
+### Bot Defense
 
-body_matcher.
+Shape Bot Defense intent configuration object.
 
-`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
+`policy` - (Required) Shape Bot Defense Policy.. See [Policy ](#policy) below for details.
 
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+`regional_endpoint` - (Required) x-required (`String`).
 
-`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
+### Bot Skip Processing
+
+Skip Bot processing for clients matching this rule..
 
 ### Buffer Policy
 
@@ -397,35 +412,19 @@ Configure captcha challenge parameters.
 
 ### Check Not Present
 
-Check that the argument is not present..
+Check that the header is not present..
 
 ### Check Present
 
-Check that the argument is present..
+Check that the header is present..
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
-
-### Client Name Matcher
-
-client_name_matcher.
-
-`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
-
-### Client Selector
-
-client_selector.
-
-`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
 ### Common Buffering
 
@@ -456,22 +455,6 @@ Hash based on cookie.
 `path` - (Optional) will be set for the cookie (`String`).
 
 `ttl` - (Optional) be a session cookie. TTL value is in milliseconds (`Int`).
-
-### Cookie Matchers
-
-cookie_matchers.
-
-`invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
-
-`check_not_present` - (Optional) Check that the cookie is not present. (bool).
-
-`check_present` - (Optional) Check that the cookie is present. (bool).
-
-`item` - (Optional) Criteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Item ](#item) below for details.
-
-`presence` - (Optional) Check if the cookie is present or absent. (`Bool`).
-
-`name` - (Required) A case-sensitive cookie name. (`String`).
 
 ### Cookie Stickiness
 
@@ -504,6 +487,12 @@ resources from a server at a different origin.
 `max_age` - (Optional) Specifies the content for the access-control-max-age header (`String`).
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
+
+### Custom Hash Algorithms
+
+Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
 ### Custom Ip Allowed List
 
@@ -581,6 +570,8 @@ Origin Pools used when no route is specified (default route).
 
 `pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
+`priority` - (Optional) made active as per the increasing priority. (`Int`).
+
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
 
 ### Default Security
@@ -605,17 +596,41 @@ A direct response route matches on path and/or HTTP method and responds directly
 
 `route_direct_response` - (Optional) Send direct response. See [Route Direct Response ](#route-direct-response) below for details.
 
-### Disable Challenge
+### Disable Ddos Detection
 
-Disable the challenge type selected in PolicyBasedChallenge.
+Disable DDoS Detection.
+
+### Disable Discovery
+
+Disable API discovery.
 
 ### Disable Host Rewrite
 
 Host header is not modified.
 
+### Disable Js Insert
+
+Disable JavaScript insertion..
+
+### Disable Learn From Redirect Traffic
+
+Disable learning API patterns from traffic with redirect response codes 3xx.
+
+### Disable Malicious User Detection
+
+Disable malicious user detection.
+
 ### Disable Mirroring
 
 Disable Mirroring of request.
+
+### Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
+
+### Disable Path Normalize
+
+Path normalization is disabled.
 
 ### Disable Prefix Rewrite
 
@@ -637,25 +652,75 @@ Websocket upgrade is disabled.
 
 configuration..
 
-### Domain Matcher
+### Domain
 
-domain_matcher.
+Domain matcher..
 
-`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
+`exact_value` - (Optional) Exact domain name. (`String`).
 
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+`regex_value` - (Optional) Regular Expression value for the domain name (`String`).
 
-### Enable Captcha Challenge
+`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
-Enable captcha challenge.
+### Enable Ddos Detection
 
-### Enable Javascript Challenge
+Enable DDoS Detection.
 
-Enable javascript challenge.
+### Enable Discovery
+
+Enable API discovery.
+
+`disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (bool).
+
+`enable_learn_from_redirect_traffic` - (Optional) Enable learning API patterns from traffic with redirect response codes 3xx (bool).
+
+### Enable Learn From Redirect Traffic
+
+Enable learning API patterns from traffic with redirect response codes 3xx.
+
+### Enable Malicious User Detection
+
+Enable malicious user detection.
+
+### Enable Path Normalize
+
+Path normalization is enabled.
 
 ### Enable Spdy
 
 SPDY upgrade is enabled.
+
+### Enable Strict Sni Host Header Check
+
+Enable strict SNI and Host header check".
+
+### Exclude List
+
+Optional JavaScript insertions exclude list of domain and path matchers..
+
+`any_domain` - (Optional) Any Domain. (bool).
+
+`domain` - (Optional) Domain matcher.. See [Domain ](#domain) below for details.
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`path` - (Required) URI path matcher.. See [Path ](#path) below for details.
+
+### Exclude Signature Contexts
+
+App Firewall signature contexts to be excluded for this request.
+
+`signature_id` - (Required) App Firewall signature ID (`Int`).
+
+### Exclude Violation Contexts
+
+App Firewall violation contexts to be excluded for this request.
+
+`exclude_violation` - (Required) App Firewall violation type (`String`).
+
+### Flag
+
+Flag the request while not taking any invasive actions..
 
 ### Hash Policy
 
@@ -669,19 +734,15 @@ route the request.
 
 `terminal` - (Optional) Specify if its a terminal policy (`Bool`).
 
-### Headers
+### Header
 
-headers.
-
-`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+Header that is used by mobile traffic..
 
 `check_not_present` - (Optional) Check that the header is not present. (bool).
 
 `check_present` - (Optional) Check that the header is present. (bool).
 
 `item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Item ](#item) below for details.
-
-`presence` - (Optional) Check if the header is present or absent. (`Bool`).
 
 `name` - (Required) A case-insensitive HTTP header name. (`String`).
 
@@ -691,14 +752,6 @@ HTTP Load balancer..
 
 `dns_volterra_managed` - (Optional) This requires the domain to be delegated to Volterra using the Delegated Domain feature. (`Bool`).
 
-### Http Method
-
-http_method.
-
-`invert_matcher` - (Optional) Invert the match result. (`Bool`).
-
-`methods` - (Optional) x-example: "['GET', 'POST', 'DELETE']" (`List of Strings`).
-
 ### Https
 
 User is responsible for managing DNS to this Load Balancer..
@@ -706,6 +759,10 @@ User is responsible for managing DNS to this Load Balancer..
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
 `http_redirect` - (Optional) Redirect HTTP traffic to corresponding HTTPS (`Bool`).
+
+`disable_path_normalize` - (Optional) Path normalization is disabled (bool).
+
+`enable_path_normalize` - (Optional) Path normalization is enabled (bool).
 
 `append_server_name` - (Optional) If Server Header is already present it is not overwritten. It is just passed. (`String`).
 
@@ -729,6 +786,10 @@ DNS records will be managed by Volterra..
 
 `use_mtls` - (Optional) mTLS with clients is enabled. See [Use Mtls ](#use-mtls) below for details.
 
+`disable_path_normalize` - (Optional) Path normalization is disabled (bool).
+
+`enable_path_normalize` - (Optional) Path normalization is enabled (bool).
+
 `append_server_name` - (Optional) If Server Header is already present it is not overwritten. It is just passed. (`String`).
 
 `default_header` - (Optional) Specifies that the default value of "volt-adc" should be used for Server Header (bool).
@@ -745,17 +806,9 @@ List of IP(s) for which rate limiting will be disabled..
 
 `prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
 
-### Ip Matcher
-
-ip_matcher.
-
-`invert_matcher` - (Optional) Invert the match result. (`Bool`).
-
-`prefix_sets` - (Required) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
-
 ### Ip Prefix List
 
-ip_prefix_list.
+IPv4 prefix string..
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
@@ -763,7 +816,7 @@ ip_prefix_list.
 
 ### Item
 
-Criteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher..
+Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher..
 
 `exact_values` - (Optional) A list of exact values to match the input against. (`String`).
 
@@ -801,6 +854,28 @@ Configure Javascript challenge parameters.
 
 `js_script_delay` - (Optional) Delay introduced by Javascript, in milliseconds. (`Int`).
 
+### Js Insert All Pages
+
+Insert Shape Bot Defense JavaScript in all pages..
+
+`javascript_location` - (Optional) Defines where to insert Shape JavaScript in HTML page. (`String`).
+
+### Js Insert All Pages Except
+
+Insert Shape Bot Defense JavaScript in all pages with the exceptions..
+
+`exclude_list` - (Optional) Optional JavaScript insertions exclude list of domain and path matchers.. See [Exclude List ](#exclude-list) below for details.
+
+`javascript_location` - (Optional) Defines where to insert Shape JavaScript in HTML page. (`String`).
+
+### Js Insertion Rules
+
+Specify custom JavaScript insertion rules..
+
+`exclude_list` - (Optional) Optional JavaScript insertions exclude list of domain and path matchers.. See [Exclude List ](#exclude-list) below for details.
+
+`rules` - (Required) Required list of pages to insert Shape Client JavaScript.. See [Rules ](#rules) below for details.
+
 ### Low Security
 
 Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
@@ -827,6 +902,22 @@ useful for logging. For example, *cluster1* becomes *cluster1-shadow*..
 
 `percent` - (Required) Percentage of requests to be mirrored. See [Percent ](#percent) below for details.
 
+### Mitigation
+
+Mitigation action..
+
+`block` - (Optional) Block bot request and send response with custom content.. See [Block ](#block) below for details.
+
+`flag` - (Optional) Flag the request while not taking any invasive actions. (bool).
+
+`none` - (Optional) No mitigation actions. (bool).
+
+`redirect` - (Optional) Redirect bot request to a custom URI.. See [Redirect ](#redirect) below for details.
+
+### Mobile
+
+Mobile application traffic type..
+
 ### More Option
 
 More options like header manipulation, compression etc..
@@ -847,6 +938,10 @@ More options like header manipulation, compression etc..
 
 `max_request_header_size` - (Optional) such loadbalancers is used for all the loadbalancers in question. (`Int`).
 
+`disable_path_normalize` - (Optional) Path normalization is disabled (bool).
+
+`enable_path_normalize` - (Optional) Path normalization is enabled (bool).
+
 `request_headers_to_add` - (Optional) Headers specified at this level are applied after headers from matched Route are applied. See [Request Headers To Add ](#request-headers-to-add) below for details.
 
 `request_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP request being sent towards upstream. (`String`).
@@ -854,6 +949,10 @@ More options like header manipulation, compression etc..
 `response_headers_to_add` - (Optional) Headers specified at this level are applied after headers from matched Route are applied. See [Response Headers To Add ](#response-headers-to-add) below for details.
 
 `response_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP response being sent towards downstream. (`String`).
+
+`additional_domains` - (Optional) Wildcard names are supported in the suffix or prefix form. See [Additional Domains ](#additional-domains) below for details.
+
+`enable_strict_sni_host_header_check` - (Optional) Enable strict SNI and Host header check" (bool).
 
 ### No Challenge
 
@@ -871,6 +970,10 @@ mTLS with clients is not enabled.
 
 Do not apply additional rate limiter policies..
 
+### None
+
+No mitigation actions..
+
 ### Origin Pools
 
 Origin Pools for this route.
@@ -881,6 +984,8 @@ Origin Pools for this route.
 
 `pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
+`priority` - (Optional) made active as per the increasing priority. (`Int`).
+
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
 
 ### Pass Through
@@ -889,15 +994,13 @@ appended..
 
 ### Path
 
-path.
+URI path matcher..
 
-`exact_values` - (Optional) A list of exact path values to match the input HTTP path against. (`String`).
+`path` - (Optional) Exact path value to match (`String`).
 
-`prefix_values` - (Optional) A list of path prefix values to match the input HTTP path against. (`String`).
+`prefix` - (Optional) Path prefix to match (`String`).
 
-`regex_values` - (Optional) A list of regular expressions to match the input HTTP path against. (`String`).
-
-`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
+`regex` - (Optional) Regular expression of path match (`String`).
 
 ### Percent
 
@@ -912,6 +1015,22 @@ Percentage of requests to be mirrored.
 to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP loadbalancer is honored..
 
 `policies` - (Required) Ordered list of rate limiter policies.. See [ref](#ref) below for details.
+
+### Policy
+
+Shape Bot Defense Policy..
+
+`disable_js_insert` - (Optional) Disable JavaScript insertion. (bool).
+
+`js_insert_all_pages` - (Optional) Insert Shape Bot Defense JavaScript in all pages.. See [Js Insert All Pages ](#js-insert-all-pages) below for details.
+
+`js_insert_all_pages_except` - (Optional) Insert Shape Bot Defense JavaScript in all pages with the exceptions.. See [Js Insert All Pages Except ](#js-insert-all-pages-except) below for details.
+
+`js_insertion_rules` - (Optional) Specify custom JavaScript insertion rules.. See [Js Insertion Rules ](#js-insertion-rules) below for details.
+
+`js_download_path` - (Optional) Customize path to Shape Client JavaScript. If not specified, default `/common.js` (`String`).
+
+`protected_app_endpoints` - (Required) List of protected application endpoints (max 128 items).. See [Protected App Endpoints ](#protected-app-endpoints) below for details.
 
 ### Policy Based Challenge
 
@@ -951,27 +1070,35 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
-### Query Params
+### Protected App Endpoints
 
-query_params.
+List of protected application endpoints (max 128 items)..
 
-`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+`mobile` - (Optional) Mobile application traffic type. (bool).
 
-`key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
+`web` - (Optional) Web application traffic type. (bool).
 
-`check_not_present` - (Optional) Check that the query parameter is not present. (bool).
+`web_mobile` - (Optional) Web and mobile Application traffic type.. See [Web Mobile ](#web-mobile) below for details.
 
-`check_present` - (Optional) Check that the query parameter is present. (bool).
+`any_domain` - (Optional) Any Domain. (bool).
 
-`item` - (Optional) criteria in the matcher.. See [Item ](#item) below for details.
+`domain` - (Optional) Domain matcher.. See [Domain ](#domain) below for details.
 
-`presence` - (Optional) Check if the query parameter is present or absent. (`Bool`).
+`http_methods` - (Required) List of HTTP methods. (`List of Strings`).
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`mitigation` - (Required) Mitigation action.. See [Mitigation ](#mitigation) below for details.
+
+`path` - (Required) Matching URI path of the route.. See [Path ](#path) below for details.
+
+`protocol` - (Optional) Protocol. (`String`).
 
 ### Rate Limit
 
@@ -998,6 +1125,12 @@ Requests to the virtual_host are rate limited based on the parameters specified 
 `total_number` - (Required) The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period. (`Int`).
 
 `unit` - (Required) Unit for the period per which the rate limit is applied. (`String`).
+
+### Redirect
+
+Redirect bot request to a custom URI..
+
+`uri` - (Optional) URI location for redirect may be relative or absolute. (`String`).
 
 ### Redirect Route
 
@@ -1031,7 +1164,9 @@ Headers specified at this level are applied after headers from matched Route are
 
 `name` - (Required) Name of the HTTP header. (`String`).
 
-`value` - (Required) Value of the HTTP header. (`String`).
+`secret_value` - (Optional) Secret Value of the HTTP header.. See [Secret Value ](#secret-value) below for details.
+
+`value` - (Optional) Value of the HTTP header. (`String`).
 
 ### Response Headers To Add
 
@@ -1041,7 +1176,9 @@ Headers specified at this level are applied after headers from matched Route are
 
 `name` - (Required) Name of the HTTP header. (`String`).
 
-`value` - (Required) Value of the HTTP header. (`String`).
+`secret_value` - (Optional) Secret Value of the HTTP header.. See [Secret Value ](#secret-value) below for details.
+
+`value` - (Optional) Value of the HTTP header. (`String`).
 
 ### Retain All Params
 
@@ -1121,11 +1258,33 @@ list challenge rules to be used in policy based challenge.
 
 ### Rules
 
-these rules can be used to disable challenge or launch a different challenge for requests that match the specified conditions.
+Required list of pages to insert Shape Client JavaScript..
+
+`any_domain` - (Optional) Any Domain. (bool).
+
+`domain` - (Optional) Domain matcher.. See [Domain ](#domain) below for details.
+
+`javascript_location` - (Optional) Defines where to insert Shape JavaScript in HTML page. (`String`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
-`spec` - (Required) Specification for the rule including match predicates and actions.. See [Spec ](#spec) below for details.
+`path` - (Required) URI path matcher.. See [Path ](#path) below for details.
+
+### Secret Value
+
+Secret Value of the HTTP header..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Simple Route
 
@@ -1145,6 +1304,22 @@ A simple route matches on path and/or HTTP method and forwards the matching traf
 
 `path` - (Optional) URI path of route. See [Path ](#path) below for details.
 
+### Single Lb App
+
+ML Config applied on this Load Balancer.
+
+`disable_discovery` - (Optional) Disable API discovery (bool).
+
+`enable_discovery` - (Optional) Enable API discovery. See [Enable Discovery ](#enable-discovery) below for details.
+
+`disable_ddos_detection` - (Optional) Disable DDoS Detection (bool).
+
+`enable_ddos_detection` - (Optional) Enable DDoS Detection (bool).
+
+`disable_malicious_user_detection` - (Optional) Disable malicious user detection (bool).
+
+`enable_malicious_user_detection` - (Optional) Enable malicious user detection (bool).
+
 ### Site
 
 Advertise on a customer site and a given network. .
@@ -1155,55 +1330,9 @@ Advertise on a customer site and a given network. .
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
-### Spec
+### Skip Processing
 
-Specification for the rule including match predicates and actions..
-
-`arg_matchers` - (Optional)arg_matchers. See [Arg Matchers ](#arg-matchers) below for details.
-
-`any_asn` - (Optional)any_asn (bool).
-
-`asn_list` - (Optional)asn_list. See [Asn List ](#asn-list) below for details.
-
-`asn_matcher` - (Optional)asn_matcher. See [Asn Matcher ](#asn-matcher) below for details.
-
-`body_matcher` - (Optional)body_matcher. See [Body Matcher ](#body-matcher) below for details.
-
-`disable_challenge` - (Optional) Disable the challenge type selected in PolicyBasedChallenge (bool).
-
-`enable_captcha_challenge` - (Optional) Enable captcha challenge (bool).
-
-`enable_javascript_challenge` - (Optional) Enable javascript challenge (bool).
-
-`any_client` - (Optional)any_client (bool).
-
-`client_name` - (Optional)client_name (`String`).
-
-`client_name_matcher` - (Optional)client_name_matcher. See [Client Name Matcher ](#client-name-matcher) below for details.
-
-`client_selector` - (Optional)client_selector. See [Client Selector ](#client-selector) below for details.
-
-`cookie_matchers` - (Optional)cookie_matchers. See [Cookie Matchers ](#cookie-matchers) below for details.
-
-`domain_matcher` - (Optional)domain_matcher. See [Domain Matcher ](#domain-matcher) below for details.
-
-`expiration_timestamp` - (Optional)expiration_timestamp (`String`).
-
-`headers` - (Optional)headers. See [Headers ](#headers) below for details.
-
-`http_method` - (Optional)http_method. See [Http Method ](#http-method) below for details.
-
-`any_ip` - (Optional)any_ip (bool).
-
-`ip_matcher` - (Optional)ip_matcher. See [Ip Matcher ](#ip-matcher) below for details.
-
-`ip_prefix_list` - (Optional)ip_prefix_list. See [Ip Prefix List ](#ip-prefix-list) below for details.
-
-`path` - (Optional)path. See [Path ](#path) below for details.
-
-`query_params` - (Optional)query_params. See [Query Params ](#query-params) below for details.
-
-`tls_fingerprint_matcher` - (Optional)tls_fingerprint_matcher. See [Tls Fingerprint Matcher ](#tls-fingerprint-matcher) below for details.
+Skip both WAF and Bot processing for clients matching this rule..
 
 ### Specific Hash Policy
 
@@ -1231,6 +1360,12 @@ Set of TLS certificates.
 
 `description` - (Optional) Description for the certificate (`String`).
 
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Tls Config
@@ -1247,7 +1382,7 @@ Configuration for TLS parameters such as min/max TLS version and ciphers.
 
 ### Tls Fingerprint Matcher
 
-tls_fingerprint_matcher.
+The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints..
 
 `classes` - (Optional) A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against. (`List of Strings`).
 
@@ -1269,7 +1404,13 @@ TLS parameters for downstream connections..
 
 ### Trusted Clients
 
-WAF processing is skipped for trusted clients.
+WAF or/and Bot processing can be skipped for trusted clients.
+
+`bot_skip_processing` - (Optional) Skip Bot processing for clients matching this rule. (bool).
+
+`skip_processing` - (Optional) Skip both WAF and Bot processing for clients matching this rule. (bool).
+
+`waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (bool).
 
 `as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
 
@@ -1288,6 +1429,10 @@ For HTTP, default is 80. For HTTPS/SNI, default is 443..
 mTLS with clients is enabled.
 
 `trusted_ca_url` - (Required) The URL for a trust store (`String`).
+
+### Use System Defaults
+
+Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Vault Secret Info
 
@@ -1333,7 +1478,9 @@ Advertise on vK8s Service Network on RE..
 
 Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation.
 
-`any_domain` - (Optional) Apply this waf exclusion rule for any domain (bool).
+`app_firewall_detection_control` - (Optional) App Firewall detection changes to be applied for this request. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
+
+`any_domain` - (Optional) Apply this WAF exclusion rule for any domain (bool).
 
 `domain_regex` - (Optional) Domain to be matched (`String`).
 
@@ -1346,6 +1493,20 @@ Rules that specify the match conditions and the corresponding WAF_RULE_IDs which
 `methods` - (Optional) methods to be matched (`List of Strings`).
 
 `path_regex` - (Required) path regex to be matched (`String`).
+
+### Waf Skip Processing
+
+Skip WAF processing for clients matching this rule..
+
+### Web
+
+Web application traffic type..
+
+### Web Mobile
+
+Web and mobile Application traffic type..
+
+`header` - (Required) Header that is used by mobile traffic.. See [Header ](#header) below for details.
 
 ### Web Socket Config
 

@@ -77,37 +77,30 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetLocalIpDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetLocalIpDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetLocalIp() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetLocalIp().GetDRefInfo()
+	drInfos, err := m.GetLocalIp().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLocalIp().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "local_ip." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateCreateSpecType struct {
@@ -324,37 +317,30 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetLocalIpDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetLocalIpDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetLocalIp() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetLocalIp().GetDRefInfo()
+	drInfos, err := m.GetLocalIp().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLocalIp().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "local_ip." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGetSpecType struct {
@@ -571,37 +557,30 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetLocalIpDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetLocalIpDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetLocalIp() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetLocalIp().GetDRefInfo()
+	drInfos, err := m.GetLocalIp().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLocalIp().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "local_ip." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGlobalSpecType struct {
@@ -804,19 +783,21 @@ func (m *InterfaceType) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 }
 
 func (m *InterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetLocalIntfDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetLocalIntfDRefInfo()
+
 }
 
 func (m *InterfaceType) GetLocalIntfDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetLocalIntf() {
+	refs := m.GetLocalIntf()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("InterfaceType.local_intf[%d] has a nil value", i)
 		}
@@ -831,8 +812,8 @@ func (m *InterfaceType) GetLocalIntfDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetLocalIntfDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1086,45 +1067,39 @@ func (m *LocalIpAddressSelector) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *LocalIpAddressSelector) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetTypeDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetTypeDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *LocalIpAddressSelector) GetTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetType().(type) {
 	case *LocalIpAddressSelector_Intf:
-		odrInfos, err = m.GetIntf().GetDRefInfo()
+		drInfos, err := m.GetIntf().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIntf().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "intf." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "intf." + dri.DRField
 		}
+		return drInfos, err
 
 	case *LocalIpAddressSelector_IpAddress:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateLocalIpAddressSelector struct {
@@ -1712,37 +1687,30 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetLocalIpDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetLocalIpDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetLocalIp() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetLocalIp().GetDRefInfo()
+	drInfos, err := m.GetLocalIp().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLocalIp().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "local_ip." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateReplaceSpecType struct {

@@ -729,6 +729,15 @@ func (v *ValidateSyncServerParamsType) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["vtrp_graceful_restart_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vtrp_graceful_restart_params"))
+		if err := fv(ctx, m.GetVtrpGracefulRestartParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -868,4 +877,109 @@ var DefaultUseragentTypeValidator = func() *ValidateUseragentType {
 
 func UseragentTypeValidator() db.Validator {
 	return DefaultUseragentTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VTRPGracefulRestartParamsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VTRPGracefulRestartParamsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VTRPGracefulRestartParamsType) DeepCopy() *VTRPGracefulRestartParamsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VTRPGracefulRestartParamsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VTRPGracefulRestartParamsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VTRPGracefulRestartParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VTRPGracefulRestartParamsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVTRPGracefulRestartParamsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVTRPGracefulRestartParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VTRPGracefulRestartParamsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VTRPGracefulRestartParamsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["gr_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gr_enabled"))
+		if err := fv(ctx, m.GetGrEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gr_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gr_time"))
+		if err := fv(ctx, m.GetGrTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["llgr_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("llgr_enabled"))
+		if err := fv(ctx, m.GetLlgrEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["llgr_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("llgr_time"))
+		if err := fv(ctx, m.GetLlgrTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVTRPGracefulRestartParamsTypeValidator = func() *ValidateVTRPGracefulRestartParamsType {
+	v := &ValidateVTRPGracefulRestartParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VTRPGracefulRestartParamsTypeValidator() db.Validator {
+	return DefaultVTRPGracefulRestartParamsTypeValidator
 }

@@ -2573,6 +2573,38 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "app_firewallAppFirewallViolationType": {
+            "type": "string",
+            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal",
+            "title": "App Firewall Violation Type",
+            "enum": [
+                "VIOL_NONE",
+                "VIOL_FILETYPE",
+                "VIOL_METHOD",
+                "VIOL_MANDATORY_HEADER",
+                "VIOL_HTTP_RESPONSE_STATUS",
+                "VIOL_REQUEST_MAX_LENGTH",
+                "VIOL_FILE_UPLOAD",
+                "VIOL_FILE_UPLOAD_IN_BODY",
+                "VIOL_XML_MALFORMED",
+                "VIOL_JSON_MALFORMED",
+                "VIOL_ASM_COOKIE_MODIFIED",
+                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
+                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
+                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
+                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
+                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
+                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
+                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
+            ],
+            "default": "VIOL_NONE",
+            "x-displayname": "App Firewall Violation Type",
+            "x-ves-proto-enum": "ves.io.schema.app_firewall.AppFirewallViolationType"
+        },
         "crudapiErrorCode": {
             "type": "string",
             "enum": [
@@ -2765,8 +2797,15 @@ var APISwaggerJSON string = `{
             "description": "This defines various options to define a route",
             "title": "Advanced options",
             "x-displayname": "Advanced Options",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
+            "x-ves-oneof-field-strict_sni_host_header_check_choice": "[\"additional_domains\",\"enable_strict_sni_host_header_check\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.AdvancedOptionsType",
             "properties": {
+                "additional_domains": {
+                    "description": "Exclusive with [enable_strict_sni_host_header_check]\nx-displayName: \"Additional Domains\"\nx-example: \"www.foo.com\"\n\nA list of additional domains that will be matched to loadbalancer.\nThese domains are not used for SNI match.\nWildcard names are supported in the suffix or prefix form",
+                    "title": "Additional Domains",
+                    "$ref": "#/definitions/schemaDomainNameList"
+                },
                 "buffer_policy": {
                     "description": " Some upstream applications are not capable of handling streamed data and high network latency.\n This config enables buffering the entire request before sending to upstream application. We can\n specify the maximum buffer size and buffer interval with this config.",
                     "title": "Buffer configuration for requests",
@@ -2791,6 +2830,21 @@ var APISwaggerJSON string = `{
                     "title": "Disable the use of default Volterra error pages",
                     "format": "boolean",
                     "x-displayname": "Disable Default Error Pages"
+                },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\nx-displayName: \"Disable path normalization\"\nPath normalization is disabled",
+                    "title": "Disable Path normalization",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\nx-displayName: \"Enable path normalization\"\nPath normalization is enabled",
+                    "title": "Enable Path normalization",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_strict_sni_host_header_check": {
+                    "description": "Exclusive with [additional_domains]\nx-displayName: \"Enable strict SNI and Host header check\"\n\nEnable strict SNI and Host header check\"",
+                    "title": "Strict check of Host header and SNI is enabled",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "idle_timeout": {
                     "type": "integer",
@@ -2859,6 +2913,100 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Remove Response Headers",
                     "x-ves-example": "host"
+                }
+            }
+        },
+        "http_loadbalancerApiDiscoverySetting": {
+            "type": "object",
+            "description": "Specifies the settings used for API discovery",
+            "title": "API Discovery Setting",
+            "x-displayname": "API Discovery Setting",
+            "x-ves-oneof-field-learn_from_redirect_traffic": "[\"disable_learn_from_redirect_traffic\",\"enable_learn_from_redirect_traffic\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ApiDiscoverySetting",
+            "properties": {
+                "disable_learn_from_redirect_traffic": {
+                    "description": "Exclusive with [enable_learn_from_redirect_traffic]\nx-displayName: \"Disable Learning From Redirect Traffic\"\nDisable learning API patterns from traffic with redirect response codes 3xx",
+                    "title": "Disable learning from redirected request traffic",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_learn_from_redirect_traffic": {
+                    "description": "Exclusive with [disable_learn_from_redirect_traffic]\nx-displayName: \"Enable Learning From Redirect Traffic\"\nEnable learning API patterns from traffic with redirect response codes 3xx",
+                    "title": "Enable learning from redirected request traffic",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "http_loadbalancerAppEndpointType": {
+            "type": "object",
+            "description": "Application Endpoint.",
+            "title": "AppEndpointType",
+            "x-displayname": "Application Endpoint",
+            "x-ves-displayorder": "1,2,3,5,4,8,12",
+            "x-ves-oneof-field-app_traffic_type_choice": "[\"mobile\",\"web\",\"web_mobile\"]",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.AppEndpointType",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [domain]\nx-displayName: \"Any Domain\"\nAny Domain.",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\nx-displayName: \"Domain\"\nDomain matcher.",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType"
+                },
+                "http_methods": {
+                    "type": "array",
+                    "description": " List of HTTP methods.\nRequired: YES",
+                    "title": "HTTP Methods",
+                    "items": {
+                        "$ref": "#/definitions/schemaHttpMethod"
+                    },
+                    "x-displayname": "HTTP Methods",
+                    "x-ves-required": "true"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
+                "mitigation": {
+                    "description": " Mitigation action.\nRequired: YES",
+                    "title": "Mitigation",
+                    "$ref": "#/definitions/policyShapeBotMitigationAction",
+                    "x-displayname": "Bot Traffic Mitigation",
+                    "x-ves-required": "true"
+                },
+                "mobile": {
+                    "description": "Exclusive with [web web_mobile]\nx-displayName: \"Mobile Traffic\"\nMobile application traffic type.",
+                    "title": "MobileTrafficType",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "path": {
+                    "description": " Matching URI path of the route.\nRequired: YES",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true"
+                },
+                "protocol": {
+                    "description": " Protocol.",
+                    "title": "Protocol",
+                    "$ref": "#/definitions/http_loadbalancerURLScheme",
+                    "x-displayname": "Protocol"
+                },
+                "web": {
+                    "description": "Exclusive with [mobile web_mobile]\nx-displayName: \"Web Traffic\"\nWeb application traffic type.",
+                    "title": "WebTrafficType",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "web_mobile": {
+                    "description": "Exclusive with [mobile web]\nx-displayName: \"Web and Mobile Traffic\"\nWeb and mobile Application traffic type.",
+                    "title": "WebMobileTrafficType",
+                    "$ref": "#/definitions/http_loadbalancerWebMobileTrafficType"
                 }
             }
         },
@@ -3030,6 +3178,19 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerJavaScriptLocation": {
+            "type": "string",
+            "description": "All inside networks.\n\nInsert JavaScript after \u003chead\u003e tag\nInsert JavaScript after \u003c/title\u003e tag.\nInsert JavaScript before first \u003cscript\u003e tag",
+            "title": "JavaScriptLocation",
+            "enum": [
+                "AFTER_HEAD",
+                "AFTER_TITLE_END",
+                "BEFORE_SCRIPT"
+            ],
+            "default": "AFTER_HEAD",
+            "x-displayname": "JavaScript Location",
+            "x-ves-proto-enum": "ves.io.schema.views.http_loadbalancer.JavaScriptLocation"
+        },
         "http_loadbalancerProxyTypeHttp": {
             "type": "object",
             "description": "Choice for selecting HTTP proxy",
@@ -3052,7 +3213,8 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "BYOC HTTPS Choice",
             "x-displayname": "BYOC HTTPS Choice",
-            "x-ves-displayorder": "1,2,3,4",
+            "x-ves-displayorder": "1,2,3,4,9",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ProxyTypeHttps",
             "properties": {
@@ -3071,6 +3233,16 @@ var APISwaggerJSON string = `{
                 "default_header": {
                     "description": "Exclusive with [append_server_name pass_through server_name]\nx-displayName: \"Default value for Server header\"\nSpecifies that the default value of \"volt-adc\" should be used for Server Header",
                     "title": "default_header",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\nx-displayName: \"Disable path normalization\"\nPath normalization is disabled",
+                    "title": "Disable Path normalization",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\nx-displayName: \"Enable path normalization\"\nPath normalization is enabled",
+                    "title": "Enable Path normalization",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "http_redirect": {
@@ -3102,8 +3274,9 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "HTTPS with Auto Certs Choice",
             "x-displayname": "HTTPS with Auto Certs Choice",
-            "x-ves-displayorder": "1,2,4,3,7",
+            "x-ves-displayorder": "1,2,4,3,7,12",
             "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts",
             "properties": {
@@ -3122,6 +3295,16 @@ var APISwaggerJSON string = `{
                 "default_header": {
                     "description": "Exclusive with [append_server_name pass_through server_name]\nx-displayName: \"Default value for Server header\"\nSpecifies that the default value of \"volt-adc\" should be used for Server Header",
                     "title": "default_header",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\nx-displayName: \"Disable path normalization\"\nPath normalization is disabled",
+                    "title": "Disable Path normalization",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\nx-displayName: \"Enable path normalization\"\nPath normalization is enabled",
+                    "title": "Enable Path normalization",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "http_redirect": {
@@ -3526,12 +3709,237 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerShapeBotDefensePolicyType": {
+            "type": "object",
+            "description": "This defines various configuration options for Shape Bot Defense policy.",
+            "title": "ShapeShapeBotDefensePolicyType",
+            "x-displayname": "Shape Bot Defense Policy",
+            "x-ves-oneof-field-java_script_choice": "[\"disable_js_insert\",\"js_insert_all_pages\",\"js_insert_all_pages_except\",\"js_insertion_rules\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ShapeBotDefensePolicyType",
+            "properties": {
+                "disable_js_insert": {
+                    "description": "Exclusive with [js_insert_all_pages js_insert_all_pages_except js_insertion_rules]\nx-displayName: \"Disable JavaScript Insertion\"\nDisable JavaScript insertion.",
+                    "title": "Disable JavaScript Insertion",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "js_download_path": {
+                    "type": "string",
+                    "description": "\n Customize path to Shape Client JavaScript. If not specified, default -/common.js-",
+                    "title": "js_download_path",
+                    "x-displayname": "JavaScript Download Path"
+                },
+                "js_insert_all_pages": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages_except js_insertion_rules]\nx-displayName: \"Insert JavaScript in All Pages\"\nInsert Shape Bot Defense JavaScript in all pages.",
+                    "title": "Insert JavaScript in All Pages",
+                    "$ref": "#/definitions/http_loadbalancerShapeJavaScriptInsertAllType"
+                },
+                "js_insert_all_pages_except": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages js_insertion_rules]\nx-displayName: \"Insert JavaScript in All Pages with the Exceptions\"\nInsert Shape Bot Defense JavaScript in all pages with the exceptions.",
+                    "title": "Insert JavaScript in All Pages with the Exceptions",
+                    "$ref": "#/definitions/http_loadbalancerShapeJavaScriptInsertAllWithExceptionsType"
+                },
+                "js_insertion_rules": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages js_insert_all_pages_except]\nx-displayName: \"Custom JavaScript Insertion Rules\"\nSpecify custom JavaScript insertion rules.",
+                    "title": "Custom JavaScript Insertion Rules",
+                    "$ref": "#/definitions/http_loadbalancerShapeJavaScriptInsertType"
+                },
+                "protected_app_endpoints": {
+                    "type": "array",
+                    "description": " List of protected application endpoints (max 128 items).\nRequired: YES",
+                    "title": "AppEndpointType",
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerAppEndpointType"
+                    },
+                    "x-displayname": "App Endpoint Type",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "http_loadbalancerShapeBotDefenseRegion": {
+            "type": "string",
+            "description": "Defines a selection for Shape Bot Defense regional endpoint\n\n - AUTO: AUTO\n\nAutomatic selection based on client IP address\n - US: US\n\nUS regional endpoint\n - EU: EU\n\nEuropean Union regional endpoint\n - ASIA: ASIA\n\nAsia regional endpoint",
+            "title": "ShapeBotDefenseRegion",
+            "enum": [
+                "AUTO",
+                "US",
+                "EU",
+                "ASIA"
+            ],
+            "default": "AUTO",
+            "x-displayname": "Bot Defense Region",
+            "x-ves-proto-enum": "ves.io.schema.views.http_loadbalancer.ShapeBotDefenseRegion"
+        },
+        "http_loadbalancerShapeBotDefenseType": {
+            "type": "object",
+            "description": "This defines various configuration options for Shape Bot Defense Policy.",
+            "title": "ShapeBotDefenseType",
+            "x-displayname": "Shape Bot Defense",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ShapeBotDefenseType",
+            "properties": {
+                "policy": {
+                    "description": " Shape Bot Defense Policy.\nRequired: YES",
+                    "title": "ShapeBotDefensePolicyType",
+                    "$ref": "#/definitions/http_loadbalancerShapeBotDefensePolicyType",
+                    "x-displayname": "Shape Bot Defense Policy",
+                    "x-ves-required": "true"
+                },
+                "regional_endpoint": {
+                    "description": " Specify Shape Bot Defense regional endpoint to use\nRequired: YES",
+                    "title": "Shape Bot Defense Regional Endpoint",
+                    "$ref": "#/definitions/http_loadbalancerShapeBotDefenseRegion",
+                    "x-displayname": "Shape Bot Defense Regional Endpoint",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "http_loadbalancerShapeJavaScriptExclusionRule": {
+            "type": "object",
+            "description": "Define JavaScript insertion exclusion rule",
+            "title": "ShapeJavaScriptExclusionRule",
+            "x-displayname": "JavaScript Insertion Exclusion Rule",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptExclusionRule",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [domain]\nx-displayName: \"Any Domain\"\nAny Domain.",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\nx-displayName: \"Domain\"\nDomain matcher.",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
+                "path": {
+                    "description": " URI path matcher.\nRequired: YES",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "http_loadbalancerShapeJavaScriptInsertAllType": {
+            "type": "object",
+            "description": "Insert Shape Bot Defense JavaScript in all pages",
+            "title": "ShapeJavaScriptInsertAllType",
+            "x-displayname": "Insert Shape Bot Defense JavaScript in All Pages",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllType",
+            "properties": {
+                "javascript_location": {
+                    "description": " Defines where to insert Shape JavaScript in HTML page.",
+                    "title": "javascript_location",
+                    "$ref": "#/definitions/http_loadbalancerJavaScriptLocation",
+                    "x-displayname": "JavaScript Location"
+                }
+            }
+        },
+        "http_loadbalancerShapeJavaScriptInsertAllWithExceptionsType": {
+            "type": "object",
+            "description": "Insert Shape Bot Defense JavaScript in all pages  with the exceptions",
+            "title": "ShapeJavaScriptInsertAllWithExceptionsType",
+            "x-displayname": "Insert JavaScript in All Pages with the Exceptions",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllWithExceptionsType",
+            "properties": {
+                "exclude_list": {
+                    "type": "array",
+                    "description": " Optional JavaScript insertions exclude list of domain and path matchers.",
+                    "title": "exclude_list",
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerShapeJavaScriptExclusionRule"
+                    },
+                    "x-displayname": "Exclude Pages"
+                },
+                "javascript_location": {
+                    "description": " Defines where to insert Shape JavaScript in HTML page.",
+                    "title": "javascript_location",
+                    "$ref": "#/definitions/http_loadbalancerJavaScriptLocation",
+                    "x-displayname": "JavaScript Location"
+                }
+            }
+        },
+        "http_loadbalancerShapeJavaScriptInsertType": {
+            "type": "object",
+            "description": "This defines custom JavaScript insertion rules for Shape Bot Defense Policy.",
+            "title": "ShapeJavaScriptInsertType",
+            "x-displayname": "JavaScript Custom Insertion Rules",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertType",
+            "properties": {
+                "exclude_list": {
+                    "type": "array",
+                    "description": " Optional JavaScript insertions exclude list of domain and path matchers.",
+                    "title": "exclude_list",
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerShapeJavaScriptExclusionRule"
+                    },
+                    "x-displayname": "Exclude Paths"
+                },
+                "rules": {
+                    "type": "array",
+                    "description": " Required list of pages to insert Shape Client JavaScript.\nRequired: YES",
+                    "title": "rules",
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerShapeJavaScriptInsertionRule"
+                    },
+                    "x-displayname": "JavaScript Insertions",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "http_loadbalancerShapeJavaScriptInsertionRule": {
+            "type": "object",
+            "description": "This defines a rule for Shape JavaScript insertion.",
+            "title": "ShapeJavaScriptInsertionRule",
+            "x-displayname": "Shape JavaScript Insertion Rule",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertionRule",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [domain]\nx-displayName: \"Any Domain\"\nAny Domain.",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\nx-displayName: \"Domain\"\nDomain matcher.",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType"
+                },
+                "javascript_location": {
+                    "description": " Defines where to insert Shape JavaScript in HTML page.",
+                    "title": "javascript_location",
+                    "$ref": "#/definitions/http_loadbalancerJavaScriptLocation",
+                    "x-displayname": "JavaScript Location"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
+                "path": {
+                    "description": " URI path matcher.\nRequired: YES",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "http_loadbalancerSimpleClientSrcRule": {
             "type": "object",
             "description": "Simple client source rule specifies the sources to be blocked or trusted (skip WAF)",
             "title": "SimpleClientSrcRule",
             "x-displayname": "Simple Client Src Rule",
-            "x-ves-displayorder": "10,3,9",
+            "x-ves-displayorder": "10,3,11,9",
+            "x-ves-oneof-field-action_choice": "[\"bot_skip_processing\",\"skip_processing\",\"waf_skip_processing\"]",
             "x-ves-oneof-field-client_source_choice": "[\"as_number\",\"ip_prefix\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule",
             "properties": {
@@ -3540,6 +3948,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [ip_prefix]\nx-displayName: \"AS Number\"\nx-required\nx-example: \"4683\"\nRFC 6793 defined 4-byte AS number",
                     "title": "as number",
                     "format": "int64"
+                },
+                "bot_skip_processing": {
+                    "description": "Exclusive with [skip_processing waf_skip_processing]\nx-displayName: \"Skip Bot Processing\"\nSkip Bot processing for clients matching this rule.",
+                    "title": "Skip Bot Processing",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "expiration_timestamp": {
                     "type": "string",
@@ -3560,6 +3973,58 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaMessageMetaType",
                     "x-displayname": "Metadata",
                     "x-ves-required": "true"
+                },
+                "skip_processing": {
+                    "description": "Exclusive with [bot_skip_processing waf_skip_processing]\nx-displayName: \"Skip Both\"\nSkip both WAF and Bot processing for clients matching this rule.",
+                    "title": "Skip Both",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "waf_skip_processing": {
+                    "description": "Exclusive with [bot_skip_processing skip_processing]\nx-displayName: \"Skip WAF Processing\"\nSkip WAF processing for clients matching this rule.",
+                    "title": "Skip WAF Processing",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "http_loadbalancerSingleLoadBalancerAppSetting": {
+            "type": "object",
+            "description": "Specific settings for Machine learning analysis on this HTTP LB, independently from other LBs.",
+            "title": "Single load balancer app setting",
+            "x-displayname": "Single LoadBalancer App Setting",
+            "x-ves-oneof-field-api_discovery_choice": "[\"disable_discovery\",\"enable_discovery\"]",
+            "x-ves-oneof-field-ddos_detection_choice": "[\"disable_ddos_detection\",\"enable_ddos_detection\"]",
+            "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SingleLoadBalancerAppSetting",
+            "properties": {
+                "disable_ddos_detection": {
+                    "description": "Exclusive with [enable_ddos_detection]\nx-displayName: \"Disable DDoS Detection\"\nDisable DDoS Detection",
+                    "title": "Disable DDoS detection",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable_discovery": {
+                    "description": "Exclusive with [enable_discovery]\nx-displayName: \"Disable API Discovery\"\nDisable API discovery",
+                    "title": "Disable API discovery",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable_malicious_user_detection": {
+                    "description": "Exclusive with [enable_malicious_user_detection]\nx-displayName: \"Disable Malicious User Detection\"\nDisable malicious user detection",
+                    "title": "Disable malicious user detection",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_ddos_detection": {
+                    "description": "Exclusive with [disable_ddos_detection]\nx-displayName: \"Enable DDoS Detection\"\nEnable DDoS Detection",
+                    "title": "Enable DDoS detection",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_discovery": {
+                    "description": "Exclusive with [disable_discovery]\nx-displayName: \"Enable API Discovery\"\nEnable API discovery",
+                    "title": "Enable API discovery",
+                    "$ref": "#/definitions/http_loadbalancerApiDiscoverySetting"
+                },
+                "enable_malicious_user_detection": {
+                    "description": "Exclusive with [disable_malicious_user_detection]\nx-displayName: \"Enable Malicious User Detection\"\nEnable malicious user detection",
+                    "title": "Enable malicious user detection",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -3596,9 +4061,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerURLScheme": {
+            "type": "string",
+            "description": "SchemeType is used to indicate URL scheme.\n\n - BOTH: BOTH\n\nURL scheme for https:// or http://.\n - HTTP: HTTP\n\nURL scheme http:// only.\n - HTTPS: HTTPS\n\nURL scheme https:// only.",
+            "title": "URLSchemeType",
+            "enum": [
+                "BOTH",
+                "HTTP",
+                "HTTPS"
+            ],
+            "default": "BOTH",
+            "x-displayname": "URL Scheme",
+            "x-ves-proto-enum": "ves.io.schema.views.http_loadbalancer.URLScheme"
+        },
+        "http_loadbalancerWebMobileTrafficType": {
+            "type": "object",
+            "description": "Web and Mobile traffic type",
+            "title": "WebMobileTrafficType",
+            "x-displayname": "Web and Mobile traffic type",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.WebMobileTrafficType",
+            "properties": {
+                "header": {
+                    "description": " Header that is used by mobile traffic.\nRequired: YES",
+                    "title": "Mobile header",
+                    "$ref": "#/definitions/policyHeaderMatcherTypeBasic",
+                    "x-displayname": "Header",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "ioschemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -3663,6 +4157,68 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Exclusive with [path prefix]\nx-displayName: \"Regex\"\nRegular expression of path match",
                     "title": "regex"
+                }
+            }
+        },
+        "policyAppFirewallDetectionControl": {
+            "type": "object",
+            "description": "App Firewall detection changes to be applied for this request",
+            "title": "App Firewall Detection Control",
+            "x-displayname": "App Firewall Detection Control",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallDetectionControl",
+            "properties": {
+                "exclude_signature_contexts": {
+                    "type": "array",
+                    "description": " App Firewall signature contexts to be excluded for this request",
+                    "title": "Exclude Signature Contexts",
+                    "items": {
+                        "$ref": "#/definitions/policyAppFirewallSignatureContext"
+                    },
+                    "x-displayname": "Exclude App Firewall Signature Contexts"
+                },
+                "exclude_violation_contexts": {
+                    "type": "array",
+                    "description": " App Firewall violation contexts to be excluded for this request",
+                    "title": "Exclude Violation Contexts",
+                    "items": {
+                        "$ref": "#/definitions/policyAppFirewallViolationContext"
+                    },
+                    "x-displayname": "Exclude App Firewall Violation Contexts"
+                }
+            }
+        },
+        "policyAppFirewallSignatureContext": {
+            "type": "object",
+            "description": "App Firewall signature context changes to be applied for this request",
+            "title": "App Firewall Signature Context",
+            "x-displayname": "App Firewall Signature Context",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallSignatureContext",
+            "properties": {
+                "signature_id": {
+                    "type": "integer",
+                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\nRequired: YES",
+                    "title": "SignatureID",
+                    "format": "int64",
+                    "x-displayname": "SignatureID",
+                    "x-ves-example": "10000001",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "policyAppFirewallViolationContext": {
+            "type": "object",
+            "description": "App Firewall violation context changes to be applied for this request",
+            "title": "App Firewall Violation Context",
+            "x-displayname": "App Firewall Violation Context",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
+            "properties": {
+                "exclude_violation": {
+                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\nRequired: YES",
+                    "title": "ViolationType",
+                    "$ref": "#/definitions/app_firewallAppFirewallViolationType",
+                    "x-displayname": "Violation Type",
+                    "x-ves-example": "VIOL_MANDATORY_HEADER",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -4064,6 +4620,40 @@ var APISwaggerJSON string = `{
             "x-displayname": "Country Code",
             "x-ves-proto-enum": "ves.io.schema.policy.CountryCode"
         },
+        "policyHeaderMatcherTypeBasic": {
+            "type": "object",
+            "description": "A header matcher specifies the name of a single HTTP header and the criteria for the input request to match it. The input has a list of actual values for each\nheader name in the original HTTP request.\nA header matcher can check for one of the following:\n* Presence or absence of the header in the input\n* At least one of the values for the header in the input satisfies the MatcherType item",
+            "title": "HeaderMatcherTypeBasic",
+            "x-displayname": "Header Matcher",
+            "x-ves-displayorder": "1,6",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.HeaderMatcherTypeBasic",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the header is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the header is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Accept-Encoding\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Header Name",
+                    "x-ves-example": "Accept-Encoding",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "policyHttpMethodMatcherType": {
             "type": "object",
             "description": "A http method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list.\nThe result of the match based on the method list is inverted if invert_matcher is true.",
@@ -4169,7 +4759,7 @@ var APISwaggerJSON string = `{
                 },
                 "transformers": {
                     "type": "array",
-                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching. \n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
                     "title": "transformers",
                     "items": {
                         "$ref": "#/definitions/policyTransformer"
@@ -4234,19 +4824,92 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyShapeBotBlockMitigationActionType": {
+            "type": "object",
+            "description": "Block request and respond with custom content.",
+            "title": "ShapeBotBlockMitigationActionType",
+            "x-displayname": "Block bot mitigation",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotBlockMitigationActionType",
+            "properties": {
+                "body": {
+                    "type": "string",
+                    "description": " Custom body message is of type uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Your request was blocked\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Your request was blocked \u003c/p\u003e\". Base64 encoded string for this html is \"LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"\n\nExample: - \"string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"-",
+                    "title": "body",
+                    "x-displayname": "Body",
+                    "x-ves-example": "string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg=="
+                },
+                "status": {
+                    "description": " HTTP Status code to respond with",
+                    "title": "Status",
+                    "$ref": "#/definitions/schemaHttpStatusCode",
+                    "x-displayname": "Status"
+                }
+            }
+        },
+        "policyShapeBotMitigationAction": {
+            "type": "object",
+            "description": "Modify Shape Bot  behavior for a matching request.",
+            "title": "ShapeBotMitigationAction",
+            "x-displayname": "Shape Bot Mitigation Action",
+            "x-ves-oneof-field-action_type": "[\"block\",\"flag\",\"none\",\"redirect\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotMitigationAction",
+            "properties": {
+                "block": {
+                    "description": "Exclusive with [flag none redirect]\nx-displayName: \"Block\"\nBlock bot request and send response with custom content.",
+                    "title": "Block",
+                    "$ref": "#/definitions/policyShapeBotBlockMitigationActionType"
+                },
+                "flag": {
+                    "description": "Exclusive with [block none redirect]\nx-displayName: \"Flag\"\nFlag the request while not taking any invasive actions.",
+                    "title": "Flag",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "none": {
+                    "description": "Exclusive with [block flag redirect]\nx-displayName: \"No Action\"\nNo mitigation actions.",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "redirect": {
+                    "description": "Exclusive with [block flag none]\nx-displayName: \"Redirect\"\nRedirect bot request to a custom URI.",
+                    "title": "Redirect",
+                    "$ref": "#/definitions/policyShapeBotRedirectMitigationActionType"
+                }
+            }
+        },
+        "policyShapeBotRedirectMitigationActionType": {
+            "type": "object",
+            "description": "Redirect request to a custom URI.",
+            "title": "ShapeBotRedirectMitigationTypeAction",
+            "x-displayname": "Redirect bot mitigation",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotRedirectMitigationActionType",
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "description": " URI location for redirect may be relative or absolute.\n\nExample: - Enter URI-",
+                    "title": "URI",
+                    "x-displayname": "URI"
+                }
+            }
+        },
         "policySimpleWafExclusionRule": {
             "type": "object",
             "description": "Simple WAF exclusion rule specifies a simple set of match conditions to be matched to skip a list of WAF rule ids",
             "title": "SimpleWafExclusionRule",
             "x-displayname": "Simple WAF Exclusion Rule",
-            "x-ves-displayorder": "10,3,6,7,8,9",
+            "x-ves-displayorder": "10,3,6,7,11,9",
             "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"domain_regex\"]",
             "x-ves-proto-message": "ves.io.schema.policy.SimpleWafExclusionRule",
             "properties": {
                 "any_domain": {
-                    "description": "Exclusive with [domain_regex]\nx-displayName: \"Any Domain\"\nApply this waf exclusion rule for any domain",
+                    "description": "Exclusive with [domain_regex]\nx-displayName: \"Any Domain\"\nApply this WAF exclusion rule for any domain",
                     "title": "Any domain",
                     "$ref": "#/definitions/schemaEmpty"
+                },
+                "app_firewall_detection_control": {
+                    "description": " App Firewall detection changes to be applied for this request",
+                    "title": "App Firewall Detection control",
+                    "$ref": "#/definitions/policyAppFirewallDetectionControl",
+                    "x-displayname": "App Firewall Detection Control"
                 },
                 "domain_regex": {
                     "type": "string",
@@ -4399,7 +5062,7 @@ var APISwaggerJSON string = `{
             "description": "A tuple consisting of a rate limit period unit and the total number of allowed requests for that period.",
             "title": "RateLimitValue",
             "x-displayname": "Rate Limit Value",
-            "x-ves-displayorder": "2,1",
+            "x-ves-displayorder": "2,1,3",
             "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitValue",
             "properties": {
                 "burst_multiplier": {
@@ -4746,7 +5409,7 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.  \n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
                     "title": "URL",
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
@@ -4789,7 +5452,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -4889,6 +5552,50 @@ var APISwaggerJSON string = `{
             "x-displayname": "Denominator",
             "x-ves-proto-enum": "ves.io.schema.DenominatorType"
         },
+        "schemaDomainNameList": {
+            "type": "object",
+            "description": "List of domain names used for Host header matching",
+            "title": "List of Domain names",
+            "x-displayname": "Domain name list",
+            "x-ves-proto-message": "ves.io.schema.DomainNameList",
+            "properties": {
+                "domains": {
+                    "type": "array",
+                    "description": "\n A list of domain names that will be matched to loadbalancer.\n These domains are not used for SNI match.\n Wildcard names are supported in the suffix or prefix form.\n\nExample: - \"www.foo.com\"-",
+                    "title": "Domains",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Domain names",
+                    "x-ves-example": "www.foo.com"
+                }
+            }
+        },
+        "schemaDomainType": {
+            "type": "object",
+            "description": "Domains names",
+            "title": "Domains",
+            "x-displayname": "Domains",
+            "x-ves-oneof-field-domain_choice": "[\"exact_value\",\"regex_value\",\"suffix_value\"]",
+            "x-ves-proto-message": "ves.io.schema.DomainType",
+            "properties": {
+                "exact_value": {
+                    "type": "string",
+                    "description": "Exclusive with [regex_value suffix_value]\nx-displayName: \"Exact Value\"\nx-example: \"abc.zyz.com\"\nExact domain name.",
+                    "title": "exact value"
+                },
+                "regex_value": {
+                    "type": "string",
+                    "description": "Exclusive with [exact_value suffix_value]\nx-displayName: \"Regex Values of Domains\"\nx-example: \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"\nRegular Expression value for the domain name",
+                    "title": "regex values of Domains"
+                },
+                "suffix_value": {
+                    "type": "string",
+                    "description": "Exclusive with [exact_value regex_value]\nx-displayName: \"Suffix Value\"\nx-example: \"xyz.com\"\nSuffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"",
+                    "title": "suffix value"
+                }
+            }
+        },
         "schemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
@@ -4922,11 +5629,44 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaHashAlgorithm": {
+            "type": "string",
+            "description": "Specifies the Hash Algorithm to be used\n\nInvalid hash algorithm\nsha256 hash algorithm\nsha1 hash algorithm",
+            "title": "HashAlgoritm",
+            "enum": [
+                "INVALID_HASH_ALGORITHM",
+                "SHA256",
+                "SHA1"
+            ],
+            "default": "INVALID_HASH_ALGORITHM",
+            "x-displayname": "Hash Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.HashAlgorithm"
+        },
+        "schemaHashAlgorithms": {
+            "type": "object",
+            "description": "Specifies the hash algorithms to be used",
+            "title": "HashAlgorithms",
+            "x-displayname": "Hash Algorithms",
+            "x-ves-proto-message": "ves.io.schema.HashAlgorithms",
+            "properties": {
+                "hash_algorithms": {
+                    "type": "array",
+                    "description": " Ordered list of hash algorithms to be used.\nRequired: YES",
+                    "title": "Hash Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaHashAlgorithm"
+                    },
+                    "x-displayname": "Hash Algorithms",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "schemaHeaderManipulationOptionType": {
             "type": "object",
             "description": "HTTP header is a key-value pair.\nThe name acts as key of HTTP header\nThe value acts as the data/value of HTTP header\nExample HTTP header\n    Host: user.volterra.com\nIn the above example, Host is the name or key of HTTP header\nIn the above example, user.volterra.com is the value of HTTP header",
             "title": "HeaderManipulationOptionType",
             "x-displayname": "Header Manipulation Option",
+            "x-ves-oneof-field-value_choice": "[\"secret_value\",\"value\"]",
             "x-ves-proto-message": "ves.io.schema.HeaderManipulationOptionType",
             "properties": {
                 "append": {
@@ -4943,12 +5683,15 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Name",
                     "x-ves-required": "true"
                 },
+                "secret_value": {
+                    "description": "Exclusive with [value]\nx-displayName: \"Secret Value\"\nSecret Value of the HTTP header.",
+                    "title": "Secret Value",
+                    "$ref": "#/definitions/schemaSecretType"
+                },
                 "value": {
                     "type": "string",
-                    "description": " Value of the HTTP header.\nRequired: YES",
-                    "title": "value",
-                    "x-displayname": "Value",
-                    "x-ves-required": "true"
+                    "description": "Exclusive with [secret_value]\nx-displayName: \"Value\"\nValue of the HTTP header.",
+                    "title": "value"
                 }
             }
         },
@@ -4971,6 +5714,73 @@ var APISwaggerJSON string = `{
             "default": "ANY",
             "x-displayname": "HTTP Method",
             "x-ves-proto-enum": "ves.io.schema.HttpMethod"
+        },
+        "schemaHttpStatusCode": {
+            "type": "string",
+            "description": "HTTP response status codes\n\nEmptyStatusCode response codes means it is not specified\nCONTINUE code\nOK code\nCreated status code\nAccepted status code\nNonAuthoritativeInformation status code\nNoContent status code\nResetContent status code\nPartialContent status code\nMultiStatus status code\nAlreadyReported status code\nIMUsed status code\nMultipleChoices status code\nMovedPermanently status code\nFound status code\nSeeOther status code\nNotModified status code\nUseProxy status code\nTemporaryRedirect status code\nPermanentRedirect status code\nBadRequest status code\nUnauthorized status code\nPaymentRequired status code\nForbidden status code\nNotFound status code\nMethodNotAllowed status code\nNotAcceptable status code\nProxyAuthenticationRequired status code\nRequestTimeout status code\nConflict status code\nGone status code\nLengthRequired status code\nPreconditionFailed status code\nPayloadTooLarge status code\nURITooLong status code\nUnsupportedMediaType status code\nRangeNotSatisfiable status code\nExpectationFailed status code\nMisdirectedRequest status code\nUnprocessableEntity status code\nLocked status code\nFailedDependency status code\nUpgradeRequired status code\nPreconditionRequired status code\nTooManyRequests status code\nRequestHeaderFieldsTooLarge status code\nInternalServerError status code\nNotImplemented status code\nBadGateway status code\nServiceUnavailable status code\nGatewayTimeout status code\nHTTPVersionNotSupported status code\nVariantAlsoNegotiates status code\nInsufficientStorage status code\nLoopDetected status code\nNotExtended status code\nNetworkAuthenticationRequired status code",
+            "title": "HttpStatusCode",
+            "enum": [
+                "EmptyStatusCode",
+                "Continue",
+                "OK",
+                "Created",
+                "Accepted",
+                "NonAuthoritativeInformation",
+                "NoContent",
+                "ResetContent",
+                "PartialContent",
+                "MultiStatus",
+                "AlreadyReported",
+                "IMUsed",
+                "MultipleChoices",
+                "MovedPermanently",
+                "Found",
+                "SeeOther",
+                "NotModified",
+                "UseProxy",
+                "TemporaryRedirect",
+                "PermanentRedirect",
+                "BadRequest",
+                "Unauthorized",
+                "PaymentRequired",
+                "Forbidden",
+                "NotFound",
+                "MethodNotAllowed",
+                "NotAcceptable",
+                "ProxyAuthenticationRequired",
+                "RequestTimeout",
+                "Conflict",
+                "Gone",
+                "LengthRequired",
+                "PreconditionFailed",
+                "PayloadTooLarge",
+                "URITooLong",
+                "UnsupportedMediaType",
+                "RangeNotSatisfiable",
+                "ExpectationFailed",
+                "MisdirectedRequest",
+                "UnprocessableEntity",
+                "Locked",
+                "FailedDependency",
+                "UpgradeRequired",
+                "PreconditionRequired",
+                "TooManyRequests",
+                "RequestHeaderFieldsTooLarge",
+                "InternalServerError",
+                "NotImplemented",
+                "BadGateway",
+                "ServiceUnavailable",
+                "GatewayTimeout",
+                "HTTPVersionNotSupported",
+                "VariantAlsoNegotiates",
+                "InsufficientStorage",
+                "LoopDetected",
+                "NotExtended",
+                "NetworkAuthenticationRequired"
+            ],
+            "default": "EmptyStatusCode",
+            "x-displayname": "HTTP Status Code",
+            "x-ves-proto-enum": "ves.io.schema.HttpStatusCode"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -5013,7 +5823,7 @@ var APISwaggerJSON string = `{
         },
         "schemaLabelSelectorType": {
             "type": "object",
-            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to\na set of other objects(called selectees) based on the value of expresssions.\nA label selector is a label query over a set of resources. An empty label selector matches all objects.\nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression.\nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
             "title": "LabelSelectorType",
             "x-displayname": "Label Selector",
             "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
@@ -5125,14 +5935,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -5213,7 +6023,7 @@ var APISwaggerJSON string = `{
                 },
                 "retry_on": {
                     "type": "string",
-                    "description": " Specifies the conditions under which retry takes place. \n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
                     "title": "retry_on",
                     "x-displayname": "Retry On",
                     "x-ves-example": "5xx"
@@ -5322,7 +6132,7 @@ var APISwaggerJSON string = `{
                 },
                 "status_id": {
                     "type": "string",
-                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
                     "title": "status_id",
                     "x-displayname": "Status ID"
                 },
@@ -5335,22 +6145,29 @@ var APISwaggerJSON string = `{
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "description": " Origin of this status exchanged by VTRP.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
             "default": "STATUS_DO_NOT_PUBLISH",
-            "x-displayname": "Publish",
+            "x-displayname": "Status Publish Type",
             "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
@@ -5421,7 +6238,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -5437,7 +6254,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -5506,6 +6323,13 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -5514,7 +6338,7 @@ var APISwaggerJSON string = `{
             "description": "Handle to fetch certificate and key",
             "title": "TlsCertificateType",
             "x-displayname": "TLS Certificate",
-            "x-ves-displayorder": "1,4,5",
+            "x-ves-oneof-field-ocsp_stapling_choice": "[\"custom_hash_algorithms\",\"disable_ocsp_stapling\",\"use_system_defaults\"]",
             "x-ves-proto-message": "ves.io.schema.TlsCertificateType",
             "properties": {
                 "certificate_url": {
@@ -5524,11 +6348,21 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Certificate URL",
                     "x-ves-required": "true"
                 },
+                "custom_hash_algorithms": {
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "title": "Use Custom Order for Hash Algorithms",
+                    "$ref": "#/definitions/schemaHashAlgorithms"
+                },
                 "description": {
                     "type": "string",
                     "description": " Description for the certificate",
                     "title": "description",
                     "x-displayname": "Description"
+                },
+                "disable_ocsp_stapling": {
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "title": "Disable OCSP Stapling",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\nRequired: YES",
@@ -5536,6 +6370,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Private Key",
                     "x-ves-required": "true"
+                },
+                "use_system_defaults": {
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with Volterra default settings",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -5739,9 +6578,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Regex Values",
                     "x-ves-example": "['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"
                 },
+                "suffix_values": {
+                    "type": "array",
+                    "description": " A list of path suffix values to match the input HTTP path against.\n\nExample: - \"['.exe', '.shtml', '.wmz']\"-",
+                    "title": "Suffix values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Suffix Values",
+                    "x-ves-example": "['.exe', '.shtml', '.wmz']"
+                },
                 "transformers": {
                     "type": "array",
-                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching. \n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
                     "title": "transformers",
                     "items": {
                         "$ref": "#/definitions/policyTransformer"
@@ -6018,7 +6867,7 @@ var APISwaggerJSON string = `{
         },
         "viewsOriginPoolWithWeight": {
             "type": "object",
-            "description": "This defines a combination of origin pool with weight",
+            "description": "This defines a combination of origin pool with weight and priority",
             "title": "OriginPoolWithWeight",
             "x-displayname": "Origin Pool with Weight",
             "x-ves-oneof-field-pool_choice": "[\"cluster\",\"pool\"]",
@@ -6039,6 +6888,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [cluster]\nx-displayName: \"Origin Pool\"\nx-required\nSimple, commonly used pool parameters with origin pool",
                     "title": "Pool",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "priority": {
+                    "type": "integer",
+                    "description": " Priority of this origin pool, valid only with multiple origin pools.\n Value of 0 will make the pool as lowest priority origin pool\n Priority of 1 means highest priority and is considered active.\n When active origin pool is not available, lower priority origin pools are\n made active as per the increasing priority.",
+                    "title": "Priority",
+                    "format": "int64",
+                    "x-displayname": "Priority"
                 },
                 "weight": {
                     "type": "integer",
@@ -6302,12 +7158,15 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-bot_defense_choice": "[\"bot_defense\",\"disable_bot_defense\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
+            "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
+            "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\",\"waf\",\"waf_rule\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GlobalSpecType",
             "properties": {
@@ -6370,6 +7229,11 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Client Blocking Rules"
                 },
+                "bot_defense": {
+                    "description": "Exclusive with [disable_bot_defense]\nx-displayName: \"Specify Shape Bot Defense Configuration\"\nShape Bot Defense intent configuration object",
+                    "title": "Shape Bot Defense",
+                    "$ref": "#/definitions/http_loadbalancerShapeBotDefenseType"
+                },
                 "captcha_challenge": {
                     "description": "Exclusive with [js_challenge no_challenge policy_based_challenge]\nx-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on this load balancer",
                     "title": "Captcha Challenge",
@@ -6403,6 +7267,11 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
                     },
                     "x-displayname": "Origin Pools"
+                },
+                "disable_bot_defense": {
+                    "description": "Exclusive with [bot_defense]\nx-displayName: \"Disable Shape Bot Defense\"\nNo Shape Bot Defense configuration for this load balancer",
+                    "title": "Disable Shape Bot Defense",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "disable_host_rewrite": {
                     "description": "Exclusive with [auto_host_rewrite host_rewrite]\nx-displayName: \"Disable Host Rewrite\"\nHost header is not modified",
@@ -6493,6 +7362,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/http_loadbalancerAdvancedOptionsType",
                     "x-displayname": "More Options"
                 },
+                "multi_lb_app": {
+                    "description": "Exclusive with [single_lb_app]\nx-displayName: \"Multi Load Balancer Application\"\nML config is shared among multiple HTTP Load Balancers. It should be set externally",
+                    "title": "Multi load balancer application",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "no_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge policy_based_challenge]\nx-displayName: \"No Challenge\"\nNo challenge is enabled for this load balancer",
                     "title": "No Challenge",
@@ -6542,6 +7416,11 @@ var APISwaggerJSON string = `{
                     "title": "Apply Namespace Service Policies",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "single_lb_app": {
+                    "description": "Exclusive with [multi_lb_app]\nx-displayName: \"Single Load Balancer Application\"\nML Config applied on this Load Balancer",
+                    "title": "Single load balancer application",
+                    "$ref": "#/definitions/http_loadbalancerSingleLoadBalancerAppSetting"
+                },
                 "source_ip_stickiness": {
                     "description": "Exclusive with [cookie_stickiness least_active random ring_hash round_robin]\nx-displayName: \"Source IP Stickiness\"\nRequest are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
                     "title": "Source IP Stickiness",
@@ -6555,18 +7434,22 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_clients": {
                     "type": "array",
-                    "description": " Rules that specify the clients to be trusted.\n WAF processing is skipped for trusted clients",
+                    "description": " Rules that specify the clients to be trusted.\n WAF or/and Bot processing can be skipped for trusted clients",
                     "title": "Trusted Client Rules",
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerSimpleClientSrcRule"
                     },
                     "x-displayname": "Trusted Client Rules"
                 },
+                "user_id_client_ip": {
+                    "description": "Exclusive with [user_identification]\nx-displayName: \"Client IP Address\"\nUse the Client IP address as the user identifier.",
+                    "title": "user_id_client_ip",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "user_identification": {
-                    "description": " A reference to user_identification object.\n The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.",
+                    "description": "Exclusive with [user_id_client_ip]\nx-displayName: \"User Identification Policy\"\nA reference to user_identification object.\nThe rules in the user_identification object are evaluated to determine the user identifier.",
                     "title": "user_identification",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "User Identification Policy"
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",
@@ -6765,6 +7648,15 @@ var APISwaggerJSON string = `{
                     "description": " Subject of the auto certificate",
                     "title": "Auto Cert Subject",
                     "x-displayname": "Auto Cert Subject"
+                },
+                "dns_records": {
+                    "type": "array",
+                    "description": " DNS Records that are to be added by user in their DNS domain.\n Currently, this will be populated when auto certificates are\n desired but DNS delegation is not enabled.",
+                    "title": "DNS Records",
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostDNSRecord"
+                    },
+                    "x-displayname": "DNS Records"
                 }
             }
         },
@@ -6855,6 +7747,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostDNSRecord": {
+            "type": "object",
+            "description": "Defines a DNS record",
+            "title": "DNSRecord",
+            "x-displayname": "DNS Record",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.DNSRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the DNS record",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of the DNS record\n\nExample: - \"CNAME\"-",
+                    "title": "Type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "CNAME"
+                },
+                "value": {
+                    "type": "string",
+                    "description": " DNS record Value",
+                    "title": "Value",
+                    "x-displayname": "Value"
+                }
+            }
+        },
         "virtual_hostJavaScriptConfigType": {
             "type": "object",
             "description": "Custom JavaScript Configuration. Custom JavaScript code can be executed at various stages of request processing.",
@@ -6884,7 +7804,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostJavascriptChallengeType": {
             "type": "object",
-            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow \nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
+            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow\nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
             "title": "JavascriptChallengeType",
             "x-displayname": "Javascript Challenge Parameters",
             "x-ves-proto-message": "ves.io.schema.virtual_host.JavascriptChallengeType",
@@ -6914,7 +7834,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostTemporaryUserBlockingType": {
             "type": "object",
-            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for \nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user. \nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
+            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for\nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user.\nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
             "title": "TemporaryUserBlockingType",
             "x-displayname": "Temporary User Blocking",
             "x-ves-proto-message": "ves.io.schema.virtual_host.TemporaryUserBlockingType",

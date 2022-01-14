@@ -89,6 +89,46 @@ func (v *ValidateAWSTGWInfoConfigType) VpcIdValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSTGWInfoConfigType) SubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSSubnetIdsType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.AWSSubnetIdsTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for subnet_ids")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AWSSubnetIdsType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AWSSubnetIdsType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated subnet_ids")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items subnet_ids")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSTGWInfoConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSTGWInfoConfigType)
 	if !ok {
@@ -101,6 +141,14 @@ func (v *ValidateAWSTGWInfoConfigType) Validate(ctx context.Context, pm interfac
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["subnet_ids"]; exists {
+		vOpts := append(opts, db.WithValidateField("subnet_ids"))
+		if err := fv(ctx, m.GetSubnetIds(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["tgw_id"]; exists {
@@ -159,6 +207,18 @@ var DefaultAWSTGWInfoConfigTypeValidator = func() *ValidateAWSTGWInfoConfigType 
 		panic(errMsg)
 	}
 	v.FldValidators["vpc_id"] = vFn
+
+	vrhSubnetIds := v.SubnetIdsValidationRuleHandler
+	rulesSubnetIds := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhSubnetIds(rulesSubnetIds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWInfoConfigType.subnet_ids: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subnet_ids"] = vFn
 
 	return v
 }()
@@ -270,6 +330,22 @@ func (v *ValidateAWSVPNTunnelConfigType) NodeIdValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPNTunnelConfigType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(VPNTunnelType)
+		return int32(i)
+	}
+	// VPNTunnelType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, VPNTunnelType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPNTunnelConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSVPNTunnelConfigType)
 	if !ok {
@@ -305,6 +381,15 @@ func (v *ValidateAWSVPNTunnelConfigType) Validate(ctx context.Context, pm interf
 	if fv, exists := v.FldValidators["tunnel_remote_ip"]; exists {
 		vOpts := append(opts, db.WithValidateField("tunnel_remote_ip"))
 		if err := fv(ctx, m.GetTunnelRemoteIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -366,6 +451,17 @@ var DefaultAWSVPNTunnelConfigTypeValidator = func() *ValidateAWSVPNTunnelConfigT
 	}
 	v.FldValidators["node_id"] = vFn
 
+	vrhType := v.TypeValidationRuleHandler
+	rulesType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhType(rulesType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPNTunnelConfigType.type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["type"] = vFn
+
 	return v
 }()
 
@@ -411,19 +507,21 @@ func (m *ActiveServicePoliciesType) Validate(ctx context.Context, opts ...db.Val
 }
 
 func (m *ActiveServicePoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetServicePoliciesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetServicePoliciesDRefInfo()
+
 }
 
 func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetServicePolicies() {
+	vrefs := m.GetServicePolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("ActiveServicePoliciesType.service_policies[%d] has a nil value", i)
 		}
@@ -439,8 +537,8 @@ func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfo() ([]db.DRefInfo,
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetServicePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -624,62 +722,62 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAwsParametersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAwsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTgwSecurityDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTgwSecurityDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAwsParameters() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetAwsParameters().GetDRefInfo()
+	drInfos, err := m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "aws_parameters." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *CreateSpecType_LogReceiver:
 
@@ -689,7 +787,7 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -697,11 +795,11 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -742,48 +840,38 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetTgwSecurity() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetTgwSecurity().GetDRefInfo()
+	drInfos, err := m.GetTgwSecurity().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTgwSecurity().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "tgw_security." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetVnConfig() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetVnConfig().GetDRefInfo()
+	drInfos, err := m.GetVnConfig().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "vn_config." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateCreateSpecType struct {
@@ -1242,62 +1330,62 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAwsParametersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAwsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTgwSecurityDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTgwSecurityDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAwsParameters() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetAwsParameters().GetDRefInfo()
+	drInfos, err := m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "aws_parameters." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *GetSpecType_LogReceiver:
 
@@ -1307,7 +1395,7 @@ func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -1315,11 +1403,11 @@ func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1360,48 +1448,38 @@ func (m *GetSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.I
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetTgwSecurity() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetTgwSecurity().GetDRefInfo()
+	drInfos, err := m.GetTgwSecurity().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTgwSecurity().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "tgw_security." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetVnConfig() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetVnConfig().GetDRefInfo()
+	drInfos, err := m.GetVnConfig().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "vn_config." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGetSpecType struct {
@@ -1891,74 +1969,74 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAwsParametersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAwsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTfParamsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTfParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTgwSecurityDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTgwSecurityDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAwsParameters() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetAwsParameters().GetDRefInfo()
+	drInfos, err := m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "aws_parameters." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GlobalSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *GlobalSpecType_LogReceiver:
 
@@ -1968,7 +2046,7 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -1976,11 +2054,11 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2020,7 +2098,6 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 }
 
 func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetTfParams()
 	if vref == nil {
@@ -2028,16 +2105,16 @@ func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("terraform_parameters.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "terraform_parameters.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "tf_params",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetTfParamsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2071,29 +2148,23 @@ func (m *GlobalSpecType) GetTfParamsDBEntries(ctx context.Context, d db.Interfac
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetTgwSecurity() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetTgwSecurity().GetDRefInfo()
+	drInfos, err := m.GetTgwSecurity().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTgwSecurity().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "tgw_security." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -2101,16 +2172,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2144,25 +2215,20 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetVnConfig() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetVnConfig().GetDRefInfo()
+	drInfos, err := m.GetVnConfig().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "vn_config." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGlobalSpecType struct {
@@ -2687,33 +2753,38 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTgwSecurityDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTgwSecurityDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *ReplaceSpecType_LogReceiver:
 
@@ -2723,7 +2794,7 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error)
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -2731,11 +2802,11 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error)
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2776,48 +2847,38 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d 
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetTgwSecurity() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetTgwSecurity().GetDRefInfo()
+	drInfos, err := m.GetTgwSecurity().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTgwSecurity().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "tgw_security." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetVnConfig() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetVnConfig().GetDRefInfo()
+	drInfos, err := m.GetVnConfig().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "vn_config." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateReplaceSpecType struct {
@@ -2842,6 +2903,27 @@ func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_parameters")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ServicesVPCReplaceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -2860,6 +2942,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["aws_parameters"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_parameters"))
+		if err := fv(ctx, m.GetAwsParameters(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2974,6 +3065,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
+	vrhAwsParameters := v.AwsParametersValidationRuleHandler
+	rulesAwsParameters := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAwsParameters(rulesAwsParameters)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.aws_parameters: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aws_parameters"] = vFn
+
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
@@ -3029,123 +3131,120 @@ func (m *SecurityConfigType) Validate(ctx context.Context, opts ...db.ValidateOp
 }
 
 func (m *SecurityConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEastWestServicePolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEastWestServicePolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *SecurityConfigType) GetEastWestServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetEastWestServicePolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetEastWestServicePolicyChoice().(type) {
 	case *SecurityConfigType_NoEastWestPolicy:
 
+		return nil, nil
+
 	case *SecurityConfigType_ActiveEastWestServicePolicies:
-		odrInfos, err = m.GetActiveEastWestServicePolicies().GetDRefInfo()
+		drInfos, err := m.GetActiveEastWestServicePolicies().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetActiveEastWestServicePolicies().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_east_west_service_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_east_west_service_policies." + dri.DRField
 		}
+		return drInfos, err
 
 	case *SecurityConfigType_EastWestServicePolicyAllowAll:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *SecurityConfigType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetForwardProxyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetForwardProxyChoice().(type) {
 	case *SecurityConfigType_NoForwardProxy:
 
+		return nil, nil
+
 	case *SecurityConfigType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
+		return drInfos, err
 
 	case *SecurityConfigType_ForwardProxyAllowAll:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *SecurityConfigType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *SecurityConfigType_NoNetworkPolicy:
 
-	case *SecurityConfigType_ActiveNetworkPolicies:
-		odrInfos, err = m.GetActiveNetworkPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_network_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *SecurityConfigType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateSecurityConfigType struct {
@@ -3383,6 +3482,188 @@ func SecurityConfigTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ServicesVPCReplaceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServicesVPCReplaceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServicesVPCReplaceType) DeepCopy() *ServicesVPCReplaceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServicesVPCReplaceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServicesVPCReplaceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServicesVPCReplaceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServicesVPCReplaceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateServicesVPCReplaceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServicesVPCReplaceType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for worker_nodes")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) WorkerNodesNodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NodesPerAz, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
+	}
+	return oValidatorFn_NodesPerAz, nil
+}
+func (v *ValidateServicesVPCReplaceType) WorkerNodesTotalNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TotalNodes, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for total_nodes")
+	}
+	return oValidatorFn_TotalNodes, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServicesVPCReplaceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServicesVPCReplaceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["worker_nodes"]; exists {
+		val := m.GetWorkerNodes()
+		vOpts := append(opts,
+			db.WithValidateField("worker_nodes"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWorkerNodes().(type) {
+	case *ServicesVPCReplaceType_NodesPerAz:
+		if fv, exists := v.FldValidators["worker_nodes.nodes_per_az"]; exists {
+			val := m.GetWorkerNodes().(*ServicesVPCReplaceType_NodesPerAz).NodesPerAz
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("nodes_per_az"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCReplaceType_TotalNodes:
+		if fv, exists := v.FldValidators["worker_nodes.total_nodes"]; exists {
+			val := m.GetWorkerNodes().(*ServicesVPCReplaceType_TotalNodes).TotalNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("total_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCReplaceType_NoWorkerNodes:
+		if fv, exists := v.FldValidators["worker_nodes.no_worker_nodes"]; exists {
+			val := m.GetWorkerNodes().(*ServicesVPCReplaceType_NoWorkerNodes).NoWorkerNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("no_worker_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServicesVPCReplaceTypeValidator = func() *ValidateServicesVPCReplaceType {
+	v := &ValidateServicesVPCReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
+	rulesWorkerNodes := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWorkerNodes(rulesWorkerNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.worker_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["worker_nodes"] = vFn
+
+	vrhWorkerNodesNodesPerAz := v.WorkerNodesNodesPerAzValidationRuleHandler
+	rulesWorkerNodesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "21",
+	}
+	vFnMap["worker_nodes.nodes_per_az"], err = vrhWorkerNodesNodesPerAz(rulesWorkerNodesNodesPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ServicesVPCReplaceType.worker_nodes_nodes_per_az: %s", err)
+		panic(errMsg)
+	}
+	vrhWorkerNodesTotalNodes := v.WorkerNodesTotalNodesValidationRuleHandler
+	rulesWorkerNodesTotalNodes := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "61",
+	}
+	vFnMap["worker_nodes.total_nodes"], err = vrhWorkerNodesTotalNodes(rulesWorkerNodesTotalNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ServicesVPCReplaceType.worker_nodes_total_nodes: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
+	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
+
+	return v
+}()
+
+func ServicesVPCReplaceTypeValidator() db.Validator {
+	return DefaultServicesVPCReplaceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ServicesVPCType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3419,19 +3700,15 @@ func (m *ServicesVPCType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ServicesVPCType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDeploymentDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDeploymentDRefInfo()
+
 }
 
 func (m *ServicesVPCType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDeployment().(type) {
 	case *ServicesVPCType_AwsCred:
 
@@ -3441,7 +3718,7 @@ func (m *ServicesVPCType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("cloud_credentials.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "cloud_credentials.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -3449,13 +3726,15 @@ func (m *ServicesVPCType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "aws_cred",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *ServicesVPCType_Assisted:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetDeploymentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4768,119 +5047,112 @@ func (m *VnConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *VnConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInsideStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *VnConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetGlobalNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetGlobalNetworkChoice().(type) {
 	case *VnConfiguration_NoGlobalNetwork:
 
-	case *VnConfiguration_GlobalNetworkList:
-		odrInfos, err = m.GetGlobalNetworkList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "global_network_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *VnConfiguration_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *VnConfiguration) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInsideStaticRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInsideStaticRouteChoice().(type) {
 	case *VnConfiguration_NoInsideStaticRoutes:
 
-	case *VnConfiguration_InsideStaticRoutes:
-		odrInfos, err = m.GetInsideStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "inside_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *VnConfiguration_InsideStaticRoutes:
+		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "inside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *VnConfiguration) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOutsideStaticRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetOutsideStaticRouteChoice().(type) {
 	case *VnConfiguration_NoOutsideStaticRoutes:
 
-	case *VnConfiguration_OutsideStaticRoutes:
-		odrInfos, err = m.GetOutsideStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "outside_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *VnConfiguration_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateVnConfiguration struct {
@@ -5291,6 +5563,16 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.Address = f.GetAddress()
+
+	if f.GetAwsParameters() != nil {
+		if m.AwsParameters == nil {
+			m.AwsParameters = &ServicesVPCReplaceType{}
+		}
+		m.AwsParameters.FromServicesVPCType(f.GetAwsParameters())
+	} else {
+		m.AwsParameters = nil
+	}
+
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.TgwSecurity = f.GetTgwSecurity()
@@ -5305,9 +5587,79 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	f.Address = m1.Address
+
+	if m1.AwsParameters != nil {
+		if f.AwsParameters == nil {
+			f.AwsParameters = &ServicesVPCType{}
+		}
+	} else if f.AwsParameters != nil {
+		f.AwsParameters = nil
+	}
+
+	if m1.AwsParameters != nil {
+		m1.AwsParameters.ToServicesVPCType(f.AwsParameters)
+	}
+
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
 	f.VpcAttachments = m1.VpcAttachments
+}
+
+// create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
+func (r *ServicesVPCReplaceType) SetWorkerNodesToServicesVPCType(o *ServicesVPCType) error {
+	switch of := r.WorkerNodes.(type) {
+	case nil:
+		o.WorkerNodes = nil
+
+	case *ServicesVPCReplaceType_NoWorkerNodes:
+		o.WorkerNodes = &ServicesVPCType_NoWorkerNodes{NoWorkerNodes: of.NoWorkerNodes}
+
+	case *ServicesVPCReplaceType_NodesPerAz:
+		o.WorkerNodes = &ServicesVPCType_NodesPerAz{NodesPerAz: of.NodesPerAz}
+
+	case *ServicesVPCReplaceType_TotalNodes:
+		o.WorkerNodes = &ServicesVPCType_TotalNodes{TotalNodes: of.TotalNodes}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ServicesVPCReplaceType) GetWorkerNodesFromServicesVPCType(o *ServicesVPCType) error {
+	switch of := o.WorkerNodes.(type) {
+	case nil:
+		r.WorkerNodes = nil
+
+	case *ServicesVPCType_NoWorkerNodes:
+		r.WorkerNodes = &ServicesVPCReplaceType_NoWorkerNodes{NoWorkerNodes: of.NoWorkerNodes}
+
+	case *ServicesVPCType_NodesPerAz:
+		r.WorkerNodes = &ServicesVPCReplaceType_NodesPerAz{NodesPerAz: of.NodesPerAz}
+
+	case *ServicesVPCType_TotalNodes:
+		r.WorkerNodes = &ServicesVPCReplaceType_TotalNodes{TotalNodes: of.TotalNodes}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *ServicesVPCReplaceType) FromServicesVPCType(f *ServicesVPCType) {
+	if f == nil {
+		return
+	}
+	m.GetWorkerNodesFromServicesVPCType(f)
+}
+
+func (m *ServicesVPCReplaceType) ToServicesVPCType(f *ServicesVPCType) {
+	m1 := m.DeepCopy()
+	_ = m1
+	if f == nil {
+		return
+	}
+	m1.SetWorkerNodesToServicesVPCType(f)
 }

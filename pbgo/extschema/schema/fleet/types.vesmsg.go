@@ -65,39 +65,34 @@ func (m *BGPConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *BGPConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetPeersDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *BGPConfiguration) GetPeersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPeers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateBGPConfiguration struct {
@@ -391,75 +386,80 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInsideVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInsideVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkConnectorsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkConnectorsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkFirewallDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkFirewallDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStorageInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStorageInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStorageStaticRoutesChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUsbPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *CreateSpecType_NoDcClusterGroup:
+
+		return nil, nil
 
 	case *CreateSpecType_DcClusterGroup:
 
@@ -469,7 +469,7 @@ func (m *CreateSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dc_cluster_group.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "dc_cluster_group.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -477,7 +477,7 @@ func (m *CreateSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error
 			DRField:    "dc_cluster_group",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *CreateSpecType_DcClusterGroupInside:
 
@@ -487,7 +487,7 @@ func (m *CreateSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dc_cluster_group.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "dc_cluster_group.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -495,11 +495,11 @@ func (m *CreateSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error
 			DRField:    "dc_cluster_group_inside",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetDcClusterGroupChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -563,8 +563,12 @@ func (m *CreateSpecType) GetDcClusterGroupChoiceDBEntries(ctx context.Context, d
 }
 
 func (m *CreateSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetInsideVirtualNetwork() {
+	refs := m.GetInsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.inside_virtual_network[%d] has a nil value", i)
 		}
@@ -579,8 +583,8 @@ func (m *CreateSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -605,50 +609,47 @@ func (m *CreateSpecType) GetInsideVirtualNetworkDBEntries(ctx context.Context, d
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *CreateSpecType_InterfaceList:
-		odrInfos, err = m.GetInterfaceList().GetDRefInfo()
+		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_DeviceList:
-		odrInfos, err = m.GetDeviceList().GetDRefInfo()
+		drInfos, err := m.GetDeviceList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "device_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "device_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_DefaultConfig:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *CreateSpecType_LogReceiver:
 
@@ -658,7 +659,7 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -666,11 +667,11 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -710,8 +711,12 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 }
 
 func (m *CreateSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkConnectors() {
+	refs := m.GetNetworkConnectors()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.network_connectors[%d] has a nil value", i)
 		}
@@ -726,8 +731,8 @@ func (m *CreateSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkConnectorsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -751,8 +756,12 @@ func (m *CreateSpecType) GetNetworkConnectorsDBEntries(ctx context.Context, d db
 }
 
 func (m *CreateSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkFirewall() {
+	refs := m.GetNetworkFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.network_firewall[%d] has a nil value", i)
 		}
@@ -767,8 +776,8 @@ func (m *CreateSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkFirewallDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -792,8 +801,12 @@ func (m *CreateSpecType) GetNetworkFirewallDBEntries(ctx context.Context, d db.I
 }
 
 func (m *CreateSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetOutsideVirtualNetwork() {
+	refs := m.GetOutsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.outside_virtual_network[%d] has a nil value", i)
 		}
@@ -808,8 +821,8 @@ func (m *CreateSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, erro
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetOutsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -834,73 +847,67 @@ func (m *CreateSpecType) GetOutsideVirtualNetworkDBEntries(ctx context.Context, 
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetStorageInterfaceChoice().(type) {
 	case *CreateSpecType_NoStorageInterfaces:
 
-	case *CreateSpecType_StorageInterfaceList:
-		odrInfos, err = m.GetStorageInterfaceList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "storage_interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *CreateSpecType_StorageInterfaceList:
+		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_interface_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageStaticRoutesChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetStorageStaticRoutesChoice().(type) {
 	case *CreateSpecType_NoStorageStaticRoutes:
 
-	case *CreateSpecType_StorageStaticRoutes:
-		odrInfos, err = m.GetStorageStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "storage_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *CreateSpecType_StorageStaticRoutes:
+		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *CreateSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetUsbPolicyChoice().(type) {
 	case *CreateSpecType_DenyAllUsb:
 
+		return nil, nil
+
 	case *CreateSpecType_AllowAllUsb:
+
+		return nil, nil
 
 	case *CreateSpecType_UsbPolicy:
 
@@ -910,7 +917,7 @@ func (m *CreateSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("usb_policy.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "usb_policy.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -918,11 +925,11 @@ func (m *CreateSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "usb_policy",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetUsbPolicyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1714,6 +1721,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetVmChoice().(type) {
+	case *CreateSpecType_DisableVm:
+		if fv, exists := v.FldValidators["vm_choice.disable_vm"]; exists {
+			val := m.GetVmChoice().(*CreateSpecType_DisableVm).DisableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("disable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableVm:
+		if fv, exists := v.FldValidators["vm_choice.enable_vm"]; exists {
+			val := m.GetVmChoice().(*CreateSpecType_EnableVm).EnableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("enable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -1993,43 +2026,35 @@ func (m *DeviceInstanceType) Validate(ctx context.Context, opts ...db.ValidateOp
 }
 
 func (m *DeviceInstanceType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDeviceInstanceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDeviceInstanceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *DeviceInstanceType) GetDeviceInstanceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDeviceInstance() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDeviceInstance().(type) {
 	case *DeviceInstanceType_NetworkDevice:
-		odrInfos, err = m.GetNetworkDevice().GetDRefInfo()
+		drInfos, err := m.GetNetworkDevice().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetNetworkDevice().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "network_device." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "network_device." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateDeviceInstanceType struct {
@@ -3979,39 +4004,34 @@ func (m *FleetDeviceListType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *FleetDeviceListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDevicesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDevicesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *FleetDeviceListType) GetDevicesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDevices() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetDevices() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDevices() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("devices[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateFleetDeviceListType struct {
@@ -4152,19 +4172,21 @@ func (m *FleetInterfaceListType) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *FleetInterfaceListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfacesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfacesDRefInfo()
+
 }
 
 func (m *FleetInterfaceListType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetInterfaces() {
+	vrefs := m.GetInterfaces()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("FleetInterfaceListType.interfaces[%d] has a nil value", i)
 		}
@@ -4180,8 +4202,8 @@ func (m *FleetInterfaceListType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInterfacesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5364,39 +5386,34 @@ func (m *FleetStorageStaticRoutesListType) Validate(ctx context.Context, opts ..
 }
 
 func (m *FleetStorageStaticRoutesListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetStorageRoutesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetStorageRoutesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *FleetStorageStaticRoutesListType) GetStorageRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStorageRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStorageRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("storage_routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateFleetStorageStaticRoutesListType struct {
@@ -5622,75 +5639,80 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInsideVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInsideVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkConnectorsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkConnectorsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkFirewallDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkFirewallDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStorageInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStorageInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStorageStaticRoutesChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUsbPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *GetSpecType_NoDcClusterGroup:
+
+		return nil, nil
 
 	case *GetSpecType_DcClusterGroup:
 
@@ -5700,7 +5722,7 @@ func (m *GetSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dc_cluster_group.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "dc_cluster_group.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -5708,7 +5730,7 @@ func (m *GetSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "dc_cluster_group",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *GetSpecType_DcClusterGroupInside:
 
@@ -5718,7 +5740,7 @@ func (m *GetSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dc_cluster_group.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "dc_cluster_group.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -5726,11 +5748,11 @@ func (m *GetSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "dc_cluster_group_inside",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetDcClusterGroupChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5794,8 +5816,12 @@ func (m *GetSpecType) GetDcClusterGroupChoiceDBEntries(ctx context.Context, d db
 }
 
 func (m *GetSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetInsideVirtualNetwork() {
+	refs := m.GetInsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.inside_virtual_network[%d] has a nil value", i)
 		}
@@ -5810,8 +5836,8 @@ func (m *GetSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5836,50 +5862,47 @@ func (m *GetSpecType) GetInsideVirtualNetworkDBEntries(ctx context.Context, d db
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *GetSpecType_InterfaceList:
-		odrInfos, err = m.GetInterfaceList().GetDRefInfo()
+		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_DeviceList:
-		odrInfos, err = m.GetDeviceList().GetDRefInfo()
+		drInfos, err := m.GetDeviceList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "device_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "device_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_DefaultConfig:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *GetSpecType_LogReceiver:
 
@@ -5889,7 +5912,7 @@ func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -5897,11 +5920,11 @@ func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5941,8 +5964,12 @@ func (m *GetSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.I
 }
 
 func (m *GetSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkConnectors() {
+	refs := m.GetNetworkConnectors()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.network_connectors[%d] has a nil value", i)
 		}
@@ -5957,8 +5984,8 @@ func (m *GetSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkConnectorsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5982,8 +6009,12 @@ func (m *GetSpecType) GetNetworkConnectorsDBEntries(ctx context.Context, d db.In
 }
 
 func (m *GetSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkFirewall() {
+	refs := m.GetNetworkFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.network_firewall[%d] has a nil value", i)
 		}
@@ -5998,8 +6029,8 @@ func (m *GetSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkFirewallDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6023,8 +6054,12 @@ func (m *GetSpecType) GetNetworkFirewallDBEntries(ctx context.Context, d db.Inte
 }
 
 func (m *GetSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetOutsideVirtualNetwork() {
+	refs := m.GetOutsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.outside_virtual_network[%d] has a nil value", i)
 		}
@@ -6039,8 +6074,8 @@ func (m *GetSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetOutsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6065,73 +6100,67 @@ func (m *GetSpecType) GetOutsideVirtualNetworkDBEntries(ctx context.Context, d d
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetStorageInterfaceChoice().(type) {
 	case *GetSpecType_NoStorageInterfaces:
 
-	case *GetSpecType_StorageInterfaceList:
-		odrInfos, err = m.GetStorageInterfaceList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "storage_interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GetSpecType_StorageInterfaceList:
+		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_interface_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageStaticRoutesChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetStorageStaticRoutesChoice().(type) {
 	case *GetSpecType_NoStorageStaticRoutes:
 
-	case *GetSpecType_StorageStaticRoutes:
-		odrInfos, err = m.GetStorageStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "storage_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GetSpecType_StorageStaticRoutes:
+		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GetSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetUsbPolicyChoice().(type) {
 	case *GetSpecType_DenyAllUsb:
 
+		return nil, nil
+
 	case *GetSpecType_AllowAllUsb:
+
+		return nil, nil
 
 	case *GetSpecType_UsbPolicy:
 
@@ -6141,7 +6170,7 @@ func (m *GetSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("usb_policy.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "usb_policy.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -6149,11 +6178,11 @@ func (m *GetSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "usb_policy",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetUsbPolicyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6945,6 +6974,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetVmChoice().(type) {
+	case *GetSpecType_DisableVm:
+		if fv, exists := v.FldValidators["vm_choice.disable_vm"]; exists {
+			val := m.GetVmChoice().(*GetSpecType_DisableVm).DisableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("disable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableVm:
+		if fv, exists := v.FldValidators["vm_choice.enable_vm"]; exists {
+			val := m.GetVmChoice().(*GetSpecType_EnableVm).EnableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("enable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -7238,105 +7293,110 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDevicesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDevicesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInsideVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInsideVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetK8SClusterDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetK8SClusterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLocalControlPlaneDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLocalControlPlaneDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkConnectorsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkConnectorsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkFirewallDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkFirewallDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSingleSiteDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSingleSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStorageInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStorageInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStorageStaticRoutesChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUsbPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *GlobalSpecType_NoDcClusterGroup:
+
+		return nil, nil
 
 	case *GlobalSpecType_DcClusterGroup:
 
@@ -7346,7 +7406,7 @@ func (m *GlobalSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dc_cluster_group.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "dc_cluster_group.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -7354,7 +7414,7 @@ func (m *GlobalSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error
 			DRField:    "dc_cluster_group",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *GlobalSpecType_DcClusterGroupInside:
 
@@ -7364,7 +7424,7 @@ func (m *GlobalSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dc_cluster_group.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "dc_cluster_group.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -7372,11 +7432,11 @@ func (m *GlobalSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error
 			DRField:    "dc_cluster_group_inside",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetDcClusterGroupChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7441,32 +7501,33 @@ func (m *GlobalSpecType) GetDcClusterGroupChoiceDBEntries(ctx context.Context, d
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDevicesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDevices() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetDevices() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDevices() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("devices[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetInsideVirtualNetwork() {
+	refs := m.GetInsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.inside_virtual_network[%d] has a nil value", i)
 		}
@@ -7481,8 +7542,8 @@ func (m *GlobalSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7507,39 +7568,36 @@ func (m *GlobalSpecType) GetInsideVirtualNetworkDBEntries(ctx context.Context, d
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *GlobalSpecType_InterfaceList:
-		odrInfos, err = m.GetInterfaceList().GetDRefInfo()
+		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_LegacyDevices:
 
+		return nil, nil
+
 	case *GlobalSpecType_DefaultInterfaces:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetK8SClusterDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetK8SCluster()
 	if vref == nil {
@@ -7547,16 +7605,16 @@ func (m *GlobalSpecType) GetK8SClusterDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("k8s_cluster.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "k8s_cluster.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "k8s_cluster",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetK8SClusterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7590,32 +7648,27 @@ func (m *GlobalSpecType) GetK8SClusterDBEntries(ctx context.Context, d db.Interf
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetLocalControlPlaneDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetLocalControlPlane() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetLocalControlPlane().GetDRefInfo()
+	drInfos, err := m.GetLocalControlPlane().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLocalControlPlane().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "local_control_plane." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GlobalSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *GlobalSpecType_LogReceiver:
 
@@ -7625,7 +7678,7 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -7633,11 +7686,11 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7677,8 +7730,12 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 }
 
 func (m *GlobalSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkConnectors() {
+	refs := m.GetNetworkConnectors()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.network_connectors[%d] has a nil value", i)
 		}
@@ -7693,8 +7750,8 @@ func (m *GlobalSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkConnectorsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7718,8 +7775,12 @@ func (m *GlobalSpecType) GetNetworkConnectorsDBEntries(ctx context.Context, d db
 }
 
 func (m *GlobalSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkFirewall() {
+	refs := m.GetNetworkFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.network_firewall[%d] has a nil value", i)
 		}
@@ -7734,8 +7795,8 @@ func (m *GlobalSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkFirewallDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7759,8 +7820,12 @@ func (m *GlobalSpecType) GetNetworkFirewallDBEntries(ctx context.Context, d db.I
 }
 
 func (m *GlobalSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetOutsideVirtualNetwork() {
+	refs := m.GetOutsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.outside_virtual_network[%d] has a nil value", i)
 		}
@@ -7775,8 +7840,8 @@ func (m *GlobalSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, erro
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetOutsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7800,8 +7865,12 @@ func (m *GlobalSpecType) GetOutsideVirtualNetworkDBEntries(ctx context.Context, 
 }
 
 func (m *GlobalSpecType) GetSingleSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetSingleSite() {
+	refs := m.GetSingleSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.single_site[%d] has a nil value", i)
 		}
@@ -7816,8 +7885,8 @@ func (m *GlobalSpecType) GetSingleSiteDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetSingleSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7842,73 +7911,67 @@ func (m *GlobalSpecType) GetSingleSiteDBEntries(ctx context.Context, d db.Interf
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetStorageInterfaceChoice().(type) {
 	case *GlobalSpecType_NoStorageInterfaces:
 
-	case *GlobalSpecType_StorageInterfaceList:
-		odrInfos, err = m.GetStorageInterfaceList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "storage_interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_StorageInterfaceList:
+		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_interface_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageStaticRoutesChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetStorageStaticRoutesChoice().(type) {
 	case *GlobalSpecType_NoStorageStaticRoutes:
 
-	case *GlobalSpecType_StorageStaticRoutes:
-		odrInfos, err = m.GetStorageStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "storage_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_StorageStaticRoutes:
+		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetUsbPolicyChoice().(type) {
 	case *GlobalSpecType_DenyAllUsb:
 
+		return nil, nil
+
 	case *GlobalSpecType_AllowAllUsb:
+
+		return nil, nil
 
 	case *GlobalSpecType_UsbPolicy:
 
@@ -7918,7 +7981,7 @@ func (m *GlobalSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("usb_policy.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "usb_policy.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -7926,11 +7989,11 @@ func (m *GlobalSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "usb_policy",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetUsbPolicyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7972,7 +8035,6 @@ func (m *GlobalSpecType) GetUsbPolicyChoiceDBEntries(ctx context.Context, d db.I
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -7980,16 +8042,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -8558,6 +8620,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetFlowExporterChoice().(type) {
+	case *GlobalSpecType_DisableFlowExport:
+		if fv, exists := v.FldValidators["flow_exporter_choice.disable_flow_export"]; exists {
+			val := m.GetFlowExporterChoice().(*GlobalSpecType_DisableFlowExport).DisableFlowExport
+			vOpts := append(opts,
+				db.WithValidateField("flow_exporter_choice"),
+				db.WithValidateField("disable_flow_export"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableFlowExport:
+		if fv, exists := v.FldValidators["flow_exporter_choice.enable_flow_export"]; exists {
+			val := m.GetFlowExporterChoice().(*GlobalSpecType_EnableFlowExport).EnableFlowExport
+			vOpts := append(opts,
+				db.WithValidateField("flow_exporter_choice"),
+				db.WithValidateField("enable_flow_export"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["generated_yamls"]; exists {
 		vOpts := append(opts, db.WithValidateField("generated_yamls"))
 		if err := fv(ctx, m.GetGeneratedYamls(), vOpts...); err != nil {
@@ -8963,6 +9051,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetVmChoice().(type) {
+	case *GlobalSpecType_DisableVm:
+		if fv, exists := v.FldValidators["vm_choice.disable_vm"]; exists {
+			val := m.GetVmChoice().(*GlobalSpecType_DisableVm).DisableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("disable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableVm:
+		if fv, exists := v.FldValidators["vm_choice.enable_vm"]; exists {
+			val := m.GetVmChoice().(*GlobalSpecType_EnableVm).EnableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("enable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -9199,8 +9313,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhGeneratedYamls := v.GeneratedYamlsValidationRuleHandler
 	rulesGeneratedYamls := map[string]string{
-		"ves.io.schema.rules.string.max_len": "4096",
-		"ves.io.schema.rules.string.uri_ref": "true",
+		"ves.io.schema.rules.repeated.items.string.max_len": "4096",
+		"ves.io.schema.rules.repeated.items.string.uri_ref": "true",
 	}
 	vFn, err = vrhGeneratedYamls(rulesGeneratedYamls)
 	if err != nil {
@@ -9281,37 +9395,30 @@ func (m *LocalControlPlaneType) Validate(ctx context.Context, opts ...db.Validat
 }
 
 func (m *LocalControlPlaneType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetBgpConfigDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetBgpConfigDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *LocalControlPlaneType) GetBgpConfigDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetBgpConfig() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetBgpConfig().GetDRefInfo()
+	drInfos, err := m.GetBgpConfig().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetBgpConfig().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "bgp_config." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateLocalControlPlaneType struct {
@@ -9458,19 +9565,21 @@ func (m *NetworkingDeviceInstanceType) Validate(ctx context.Context, opts ...db.
 }
 
 func (m *NetworkingDeviceInstanceType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfaceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfaceDRefInfo()
+
 }
 
 func (m *NetworkingDeviceInstanceType) GetInterfaceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetInterface() {
+	refs := m.GetInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("NetworkingDeviceInstanceType.interface[%d] has a nil value", i)
 		}
@@ -9485,8 +9594,8 @@ func (m *NetworkingDeviceInstanceType) GetInterfaceDRefInfo() ([]db.DRefInfo, er
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10468,75 +10577,80 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInsideVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInsideVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkConnectorsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkConnectorsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkFirewallDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkFirewallDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStorageInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStorageInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStorageStaticRoutesChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUsbPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *ReplaceSpecType_NoDcClusterGroup:
+
+		return nil, nil
 
 	case *ReplaceSpecType_DcClusterGroup:
 
@@ -10546,7 +10660,7 @@ func (m *ReplaceSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, erro
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dc_cluster_group.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "dc_cluster_group.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -10554,7 +10668,7 @@ func (m *ReplaceSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, erro
 			DRField:    "dc_cluster_group",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *ReplaceSpecType_DcClusterGroupInside:
 
@@ -10564,7 +10678,7 @@ func (m *ReplaceSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, erro
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dc_cluster_group.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "dc_cluster_group.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -10572,11 +10686,11 @@ func (m *ReplaceSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, erro
 			DRField:    "dc_cluster_group_inside",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetDcClusterGroupChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10640,8 +10754,12 @@ func (m *ReplaceSpecType) GetDcClusterGroupChoiceDBEntries(ctx context.Context, 
 }
 
 func (m *ReplaceSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetInsideVirtualNetwork() {
+	refs := m.GetInsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.inside_virtual_network[%d] has a nil value", i)
 		}
@@ -10656,8 +10774,8 @@ func (m *ReplaceSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, erro
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10682,50 +10800,47 @@ func (m *ReplaceSpecType) GetInsideVirtualNetworkDBEntries(ctx context.Context, 
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *ReplaceSpecType_InterfaceList:
-		odrInfos, err = m.GetInterfaceList().GetDRefInfo()
+		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_DeviceList:
-		odrInfos, err = m.GetDeviceList().GetDRefInfo()
+		drInfos, err := m.GetDeviceList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "device_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "device_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_DefaultConfig:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *ReplaceSpecType_LogReceiver:
 
@@ -10735,7 +10850,7 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error)
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -10743,11 +10858,11 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error)
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10787,8 +10902,12 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d 
 }
 
 func (m *ReplaceSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkConnectors() {
+	refs := m.GetNetworkConnectors()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.network_connectors[%d] has a nil value", i)
 		}
@@ -10803,8 +10922,8 @@ func (m *ReplaceSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkConnectorsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10828,8 +10947,12 @@ func (m *ReplaceSpecType) GetNetworkConnectorsDBEntries(ctx context.Context, d d
 }
 
 func (m *ReplaceSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkFirewall() {
+	refs := m.GetNetworkFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.network_firewall[%d] has a nil value", i)
 		}
@@ -10844,8 +10967,8 @@ func (m *ReplaceSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkFirewallDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10869,8 +10992,12 @@ func (m *ReplaceSpecType) GetNetworkFirewallDBEntries(ctx context.Context, d db.
 }
 
 func (m *ReplaceSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetOutsideVirtualNetwork() {
+	refs := m.GetOutsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.outside_virtual_network[%d] has a nil value", i)
 		}
@@ -10885,8 +11012,8 @@ func (m *ReplaceSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, err
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetOutsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10911,73 +11038,67 @@ func (m *ReplaceSpecType) GetOutsideVirtualNetworkDBEntries(ctx context.Context,
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetStorageInterfaceChoice().(type) {
 	case *ReplaceSpecType_NoStorageInterfaces:
 
-	case *ReplaceSpecType_StorageInterfaceList:
-		odrInfos, err = m.GetStorageInterfaceList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "storage_interface_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReplaceSpecType_StorageInterfaceList:
+		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_interface_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStorageStaticRoutesChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetStorageStaticRoutesChoice().(type) {
 	case *ReplaceSpecType_NoStorageStaticRoutes:
 
-	case *ReplaceSpecType_StorageStaticRoutes:
-		odrInfos, err = m.GetStorageStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "storage_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReplaceSpecType_StorageStaticRoutes:
+		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *ReplaceSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetUsbPolicyChoice().(type) {
 	case *ReplaceSpecType_DenyAllUsb:
 
+		return nil, nil
+
 	case *ReplaceSpecType_AllowAllUsb:
+
+		return nil, nil
 
 	case *ReplaceSpecType_UsbPolicy:
 
@@ -10987,7 +11108,7 @@ func (m *ReplaceSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("usb_policy.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "usb_policy.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -10995,11 +11116,11 @@ func (m *ReplaceSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "usb_policy",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetUsbPolicyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -11764,6 +11885,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("usb_policy_choice"),
 				db.WithValidateField("usb_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetVmChoice().(type) {
+	case *ReplaceSpecType_DisableVm:
+		if fv, exists := v.FldValidators["vm_choice.disable_vm"]; exists {
+			val := m.GetVmChoice().(*ReplaceSpecType_DisableVm).DisableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("disable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableVm:
+		if fv, exists := v.FldValidators["vm_choice.enable_vm"]; exists {
+			val := m.GetVmChoice().(*ReplaceSpecType_EnableVm).EnableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("enable_vm"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -15588,6 +15735,75 @@ func VGPUConfigurationValidator() db.Validator {
 	return DefaultVGPUConfigurationValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *VMConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VMConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VMConfiguration) DeepCopy() *VMConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VMConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VMConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VMConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VMConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVMConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVMConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VMConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VMConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVMConfigurationValidator = func() *ValidateVMConfiguration {
+	v := &ValidateVMConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VMConfigurationValidator() db.Validator {
+	return DefaultVMConfigurationValidator
+}
+
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetBondChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.BondChoice.(type) {
@@ -15921,6 +16137,41 @@ func (r *CreateSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetVmChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VmChoice.(type) {
+	case nil:
+		o.VmChoice = nil
+
+	case *CreateSpecType_DisableVm:
+		o.VmChoice = &GlobalSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *CreateSpecType_EnableVm:
+		o.VmChoice = &GlobalSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VmChoice.(type) {
+	case nil:
+		r.VmChoice = nil
+
+	case *GlobalSpecType_DisableVm:
+		r.VmChoice = &CreateSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *GlobalSpecType_EnableVm:
+		r.VmChoice = &CreateSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -15942,6 +16193,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageStaticRoutesChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
+	m.GetVmChoiceFromGlobalSpecType(f)
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -15968,6 +16220,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageStaticRoutesChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
+	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 
@@ -16304,6 +16557,41 @@ func (r *GetSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) er
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetVmChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VmChoice.(type) {
+	case nil:
+		o.VmChoice = nil
+
+	case *GetSpecType_DisableVm:
+		o.VmChoice = &GlobalSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *GetSpecType_EnableVm:
+		o.VmChoice = &GlobalSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VmChoice.(type) {
+	case nil:
+		r.VmChoice = nil
+
+	case *GlobalSpecType_DisableVm:
+		r.VmChoice = &GetSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *GlobalSpecType_EnableVm:
+		r.VmChoice = &GetSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -16325,6 +16613,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageStaticRoutesChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
+	m.GetVmChoiceFromGlobalSpecType(f)
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -16351,6 +16640,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageStaticRoutesChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
+	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 
@@ -16687,6 +16977,41 @@ func (r *ReplaceSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetVmChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VmChoice.(type) {
+	case nil:
+		o.VmChoice = nil
+
+	case *ReplaceSpecType_DisableVm:
+		o.VmChoice = &GlobalSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *ReplaceSpecType_EnableVm:
+		o.VmChoice = &GlobalSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VmChoice.(type) {
+	case nil:
+		r.VmChoice = nil
+
+	case *GlobalSpecType_DisableVm:
+		r.VmChoice = &ReplaceSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *GlobalSpecType_EnableVm:
+		r.VmChoice = &ReplaceSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -16707,6 +17032,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageStaticRoutesChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
+	m.GetVmChoiceFromGlobalSpecType(f)
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -16732,5 +17058,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageStaticRoutesChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
+	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }

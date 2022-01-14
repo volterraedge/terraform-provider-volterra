@@ -31,9 +31,10 @@ resource "volterra_container_registry" "example" {
 
     // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-    clear_secret_info {
-      provider = "box-provider"
-      url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+    blindfold_secret_info {
+      decryption_provider = "decryption_provider"
+      location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+      store_provider      = "store_provider"
     }
   }
 
@@ -92,7 +93,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -108,7 +109,7 @@ Password for the above username.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 

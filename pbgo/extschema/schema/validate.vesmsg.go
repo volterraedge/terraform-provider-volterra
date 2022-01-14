@@ -3265,6 +3265,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *StringRules_EtldPlusOne:
+		if fv, exists := v.FldValidators["well_known.etld_plus_one"]; exists {
+			val := m.GetWellKnown().(*StringRules_EtldPlusOne).EtldPlusOne
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("etld_plus_one"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

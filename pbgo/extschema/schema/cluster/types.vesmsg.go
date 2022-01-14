@@ -283,25 +283,34 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEndpointsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpointsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetEndpoints() {
+	refs := m.GetEndpoints()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.endpoints[%d] has a nil value", i)
 		}
@@ -316,8 +325,8 @@ func (m *CreateSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetEndpointsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -341,8 +350,12 @@ func (m *CreateSpecType) GetEndpointsDBEntries(ctx context.Context, d db.Interfa
 }
 
 func (m *CreateSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetHealthChecks() {
+	refs := m.GetHealthChecks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.health_checks[%d] has a nil value", i)
 		}
@@ -357,8 +370,8 @@ func (m *CreateSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1027,25 +1040,34 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEndpointsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpointsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetEndpoints() {
+	refs := m.GetEndpoints()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.endpoints[%d] has a nil value", i)
 		}
@@ -1060,8 +1082,8 @@ func (m *GetSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetEndpointsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1085,8 +1107,12 @@ func (m *GetSpecType) GetEndpointsDBEntries(ctx context.Context, d db.Interface)
 }
 
 func (m *GetSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetHealthChecks() {
+	refs := m.GetHealthChecks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.health_checks[%d] has a nil value", i)
 		}
@@ -1101,8 +1127,8 @@ func (m *GetSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1633,25 +1659,34 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEndpointsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpointsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetEndpoints() {
+	refs := m.GetEndpoints()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.endpoints[%d] has a nil value", i)
 		}
@@ -1666,8 +1701,8 @@ func (m *GlobalSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetEndpointsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1691,8 +1726,12 @@ func (m *GlobalSpecType) GetEndpointsDBEntries(ctx context.Context, d db.Interfa
 }
 
 func (m *GlobalSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetHealthChecks() {
+	refs := m.GetHealthChecks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.health_checks[%d] has a nil value", i)
 		}
@@ -1707,8 +1746,8 @@ func (m *GlobalSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2562,25 +2601,34 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetEndpointsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetEndpointsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetEndpoints() {
+	refs := m.GetEndpoints()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.endpoints[%d] has a nil value", i)
 		}
@@ -2595,8 +2643,8 @@ func (m *ReplaceSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetEndpointsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2620,8 +2668,12 @@ func (m *ReplaceSpecType) GetEndpointsDBEntries(ctx context.Context, d db.Interf
 }
 
 func (m *ReplaceSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetHealthChecks() {
+	refs := m.GetHealthChecks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.health_checks[%d] has a nil value", i)
 		}
@@ -2636,8 +2688,8 @@ func (m *ReplaceSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

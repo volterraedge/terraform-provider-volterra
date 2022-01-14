@@ -41,6 +41,9 @@ import (
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
 	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
+	ves_io_schema_addon_service "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac/addon_service"
+	ves_io_schema_navigation_tile "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac/navigation_tile"
+	ves_io_schema_plan "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac/plan"
 	ves_io_schema_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer"
 	ves_io_schema_protocol_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer"
 	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
@@ -49,9 +52,11 @@ import (
 	ves_io_schema_secret_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy"
 	ves_io_schema_secret_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	ves_io_schema_site_mesh_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group"
 	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
 	ves_io_schema_user_identification "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
+	ves_io_schema_api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	ves_io_schema_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
@@ -63,6 +68,7 @@ import (
 	ves_io_schema_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 	ves_io_schema_voltstack_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
+	ves_io_schema_workload "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/workload"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	ves_io_schema_virtual_k8s "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s"
 	ves_io_schema_virtual_network "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
@@ -78,6 +84,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_advertise_policy":          resourceVolterraAdvertisePolicy(),
 		"volterra_alert_policy":              resourceVolterraAlertPolicy(),
 		"volterra_alert_receiver":            resourceVolterraAlertReceiver(),
+		"volterra_app_firewall":              resourceVolterraAppFirewall(),
 		"volterra_app_setting":               resourceVolterraAppSetting(),
 		"volterra_app_type":                  resourceVolterraAppType(),
 		"volterra_bgp":                       resourceVolterraBgp(),
@@ -104,35 +111,41 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_network_firewall":          resourceVolterraNetworkFirewall(),
 		"volterra_network_policy":            resourceVolterraNetworkPolicy(),
 		"volterra_network_policy_rule":       resourceVolterraNetworkPolicyRule(),
-		"volterra_policer":                   resourceVolterraPolicer(),
-		"volterra_protocol_policer":          resourceVolterraProtocolPolicer(),
-		"volterra_rate_limiter":              resourceVolterraRateLimiter(),
-		"volterra_role":                      resourceVolterraRole(),
-		"volterra_route":                     resourceVolterraRoute(),
-		"volterra_secret_policy":             resourceVolterraSecretPolicy(),
-		"volterra_secret_policy_rule":        resourceVolterraSecretPolicyRule(),
-		"volterra_service_policy_rule":       resourceVolterraServicePolicyRule(),
-		"volterra_usb_policy":                resourceVolterraUsbPolicy(),
-		"volterra_user":                      resourceVolterraUser(),
-		"volterra_user_identification":       resourceVolterraUserIdentification(),
-		"volterra_aws_tgw_site":              resourceVolterraAwsTgwSite(),
-		"volterra_aws_vpc_site":              resourceVolterraAwsVpcSite(),
-		"volterra_azure_vnet_site":           resourceVolterraAzureVnetSite(),
-		"volterra_forward_proxy_policy":      resourceVolterraForwardProxyPolicy(),
-		"volterra_gcp_vpc_site":              resourceVolterraGcpVpcSite(),
-		"volterra_http_loadbalancer":         resourceVolterraHttpLoadbalancer(),
-		"volterra_network_policy_view":       resourceVolterraNetworkPolicyView(),
-		"volterra_origin_pool":               resourceVolterraOriginPool(),
-		"volterra_rate_limiter_policy":       resourceVolterraRateLimiterPolicy(),
-		"volterra_tcp_loadbalancer":          resourceVolterraTcpLoadbalancer(),
-		"volterra_voltstack_site":            resourceVolterraVoltstackSite(),
-		"volterra_virtual_host":              resourceVolterraVirtualHost(),
-		"volterra_virtual_k8s":               resourceVolterraVirtualK8S(),
-		"volterra_virtual_network":           resourceVolterraVirtualNetwork(),
-		"volterra_virtual_site":              resourceVolterraVirtualSite(),
-		"volterra_waf":                       resourceVolterraWaf(),
-		"volterra_waf_rule_list":             resourceVolterraWafRuleList(),
-		"volterra_waf_rules":                 resourceVolterraWafRules(),
+		//"volterra_addon_service":             resourceVolterraAddonService(),
+		//"volterra_navigation_tile":           resourceVolterraNavigationTile(),
+		//"volterra_plan":                      resourceVolterraPlan(),
+		"volterra_policer":              resourceVolterraPolicer(),
+		"volterra_protocol_policer":     resourceVolterraProtocolPolicer(),
+		"volterra_rate_limiter":         resourceVolterraRateLimiter(),
+		"volterra_role":                 resourceVolterraRole(),
+		"volterra_route":                resourceVolterraRoute(),
+		"volterra_secret_policy":        resourceVolterraSecretPolicy(),
+		"volterra_secret_policy_rule":   resourceVolterraSecretPolicyRule(),
+		"volterra_service_policy_rule":  resourceVolterraServicePolicyRule(),
+		"volterra_site_mesh_group":      resourceVolterraSiteMeshGroup(),
+		"volterra_usb_policy":           resourceVolterraUsbPolicy(),
+		"volterra_user":                 resourceVolterraUser(),
+		"volterra_user_identification":  resourceVolterraUserIdentification(),
+		"volterra_api_definition":       resourceVolterraApiDefinition(),
+		"volterra_aws_tgw_site":         resourceVolterraAwsTgwSite(),
+		"volterra_aws_vpc_site":         resourceVolterraAwsVpcSite(),
+		"volterra_azure_vnet_site":      resourceVolterraAzureVnetSite(),
+		"volterra_forward_proxy_policy": resourceVolterraForwardProxyPolicy(),
+		"volterra_gcp_vpc_site":         resourceVolterraGcpVpcSite(),
+		"volterra_http_loadbalancer":    resourceVolterraHttpLoadbalancer(),
+		"volterra_network_policy_view":  resourceVolterraNetworkPolicyView(),
+		"volterra_origin_pool":          resourceVolterraOriginPool(),
+		"volterra_rate_limiter_policy":  resourceVolterraRateLimiterPolicy(),
+		"volterra_tcp_loadbalancer":     resourceVolterraTcpLoadbalancer(),
+		"volterra_voltstack_site":       resourceVolterraVoltstackSite(),
+		//"volterra_workload":                  resourceVolterraWorkload(),
+		"volterra_virtual_host":    resourceVolterraVirtualHost(),
+		"volterra_virtual_k8s":     resourceVolterraVirtualK8S(),
+		"volterra_virtual_network": resourceVolterraVirtualNetwork(),
+		"volterra_virtual_site":    resourceVolterraVirtualSite(),
+		"volterra_waf":             resourceVolterraWaf(),
+		"volterra_waf_rule_list":   resourceVolterraWafRuleList(),
+		"volterra_waf_rules":       resourceVolterraWafRules(),
 	}
 }
 
@@ -170,6 +183,9 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_network_firewall.ObjectType,
 		ves_io_schema_network_policy.ObjectType,
 		ves_io_schema_network_policy_rule.ObjectType,
+		ves_io_schema_addon_service.ObjectType,
+		ves_io_schema_navigation_tile.ObjectType,
+		ves_io_schema_plan.ObjectType,
 		ves_io_schema_policer.ObjectType,
 		ves_io_schema_protocol_policer.ObjectType,
 		ves_io_schema_rate_limiter.ObjectType,
@@ -178,9 +194,11 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_secret_policy.ObjectType,
 		ves_io_schema_secret_policy_rule.ObjectType,
 		ves_io_schema_service_policy_rule.ObjectType,
+		ves_io_schema_site_mesh_group.ObjectType,
 		ves_io_schema_usb_policy.ObjectType,
 		ves_io_schema_user.ObjectType,
 		ves_io_schema_user_identification.ObjectType,
+		ves_io_schema_api_definition.ObjectType,
 		ves_io_schema_aws_tgw_site.ObjectType,
 		ves_io_schema_aws_vpc_site.ObjectType,
 		ves_io_schema_azure_vnet_site.ObjectType,
@@ -192,6 +210,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_rate_limiter_policy.ObjectType,
 		ves_io_schema_tcp_loadbalancer.ObjectType,
 		ves_io_schema_voltstack_site.ObjectType,
+		ves_io_schema_workload.ObjectType,
 		ves_io_schema_virtual_host.ObjectType,
 		ves_io_schema_virtual_k8s.ObjectType,
 		ves_io_schema_virtual_network.ObjectType,

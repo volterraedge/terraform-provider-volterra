@@ -12,6 +12,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"gopkg.volterra.us/stdlib/codec"
 
 	ves_io_schema_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
@@ -59,6 +60,15 @@ func resourceVolterraSetVPNTunnels() *schema.Resource {
 								Type: schema.TypeString,
 							},
 						},
+						"type": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "HUB",
+							ValidateFunc: validation.StringInSlice([]string{
+								"HUB",
+								"SERVICES",
+							}, false),
+						},
 					},
 				},
 			},
@@ -100,6 +110,9 @@ func resourceVolterraSetVPNTunnelsCreate(d *schema.ResourceData, meta interface{
 				for _, v := range val.([]interface{}) {
 					vpnTunnelConfig.TunnelRemoteIp = append(vpnTunnelConfig.TunnelRemoteIp, v.(string))
 				}
+				vpnType := intfVPNTunnelsMapStrToI["type"]
+				vpnTunnelConfig.Type = ves_io_schema_tgw_site.VPNTunnelType(
+					ves_io_schema_tgw_site.VPNTunnelType_value[vpnType.(string)])
 				vpnTunnelConfigList = append(vpnTunnelConfigList, vpnTunnelConfig)
 			}
 		}
@@ -160,6 +173,9 @@ func resourceVolterraSetVPNTunnelsUpdate(d *schema.ResourceData, meta interface{
 				for _, v := range val.([]interface{}) {
 					vpnTunnelConfig.TunnelRemoteIp = append(vpnTunnelConfig.TunnelRemoteIp, v.(string))
 				}
+				vpnType := intfVPNTunnelsMapStrToI["type"]
+				vpnTunnelConfig.Type = ves_io_schema_tgw_site.VPNTunnelType(
+					ves_io_schema_tgw_site.VPNTunnelType_value[vpnType.(string)])
 				vpnTunnelConfigList = append(vpnTunnelConfigList, vpnTunnelConfig)
 			}
 		}

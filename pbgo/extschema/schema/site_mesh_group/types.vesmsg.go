@@ -63,25 +63,34 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHubDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHubDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetHub() {
+	refs := m.GetHub()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.hub[%d] has a nil value", i)
 		}
@@ -96,8 +105,8 @@ func (m *CreateSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -121,8 +130,12 @@ func (m *CreateSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([
 }
 
 func (m *CreateSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVirtualSite() {
+	refs := m.GetVirtualSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.virtual_site[%d] has a nil value", i)
 		}
@@ -137,8 +150,8 @@ func (m *CreateSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -431,25 +444,34 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHubDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHubDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetHub() {
+	refs := m.GetHub()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.hub[%d] has a nil value", i)
 		}
@@ -464,8 +486,8 @@ func (m *GetSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -489,8 +511,12 @@ func (m *GetSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([]db
 }
 
 func (m *GetSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVirtualSite() {
+	refs := m.GetVirtualSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.virtual_site[%d] has a nil value", i)
 		}
@@ -505,8 +531,8 @@ func (m *GetSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -799,25 +825,34 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHubDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHubDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetHub() {
+	refs := m.GetHub()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.hub[%d] has a nil value", i)
 		}
@@ -832,8 +867,8 @@ func (m *GlobalSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -857,8 +892,12 @@ func (m *GlobalSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([
 }
 
 func (m *GlobalSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVirtualSite() {
+	refs := m.GetVirtualSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.virtual_site[%d] has a nil value", i)
 		}
@@ -873,8 +912,8 @@ func (m *GlobalSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1167,25 +1206,34 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHubDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHubDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetHub() {
+	refs := m.GetHub()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.hub[%d] has a nil value", i)
 		}
@@ -1200,8 +1248,8 @@ func (m *ReplaceSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1225,8 +1273,12 @@ func (m *ReplaceSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) (
 }
 
 func (m *ReplaceSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVirtualSite() {
+	refs := m.GetVirtualSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.virtual_site[%d] has a nil value", i)
 		}
@@ -1241,8 +1293,8 @@ func (m *ReplaceSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

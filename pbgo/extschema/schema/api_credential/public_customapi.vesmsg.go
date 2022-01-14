@@ -103,15 +103,6 @@ func (v *ValidateCreateRequest) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
-	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
-		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -377,15 +368,6 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 
 		vOpts := append(opts, db.WithValidateField("expiration_days"))
 		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
-		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1005,9 +987,12 @@ func (m *GetResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
+	if m == nil {
+		return nil, nil
+	}
 
-	return drInfos, nil
+	return nil, nil
+
 }
 
 type ValidateGetResponse struct {
@@ -1432,15 +1417,6 @@ func (v *ValidateRenewRequest) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("expiration_days"))
 		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
-		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
 

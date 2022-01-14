@@ -2803,6 +2803,21 @@ func resourceVolterraFleet() *schema.Resource {
 				},
 			},
 
+			"disable_vm": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_vm": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{},
+				},
+			},
+
 			"volterra_software_version": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -6452,6 +6467,28 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 		}
 
+	}
+
+	//vm_choice
+
+	vmChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_vm"); ok && !vmChoiceTypeFound {
+
+		vmChoiceTypeFound = true
+
+		if v.(bool) {
+			vmChoiceInt := &ves_io_schema_fleet.CreateSpecType_DisableVm{}
+			vmChoiceInt.DisableVm = &ves_io_schema.Empty{}
+			createSpec.VmChoice = vmChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_vm"); ok && !vmChoiceTypeFound {
+
+		vmChoiceTypeFound = true
+		_ = v
 	}
 
 	//volterra_software_version
@@ -10114,6 +10151,26 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 		}
 
+	}
+
+	vmChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_vm"); ok && !vmChoiceTypeFound {
+
+		vmChoiceTypeFound = true
+
+		if v.(bool) {
+			vmChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_DisableVm{}
+			vmChoiceInt.DisableVm = &ves_io_schema.Empty{}
+			updateSpec.VmChoice = vmChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_vm"); ok && !vmChoiceTypeFound {
+
+		vmChoiceTypeFound = true
+		_ = v
 	}
 
 	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
