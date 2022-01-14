@@ -122,6 +122,11 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"gcp_labels": {
+				Type:     schema.TypeMap,
+				Optional: true,
+			},
+
 			"gcp_region": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -2555,6 +2560,16 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 		createSpec.DiskSize =
 			uint32(v.(int))
 
+	}
+
+	//gcp_labels
+	if v, ok := d.GetOk("gcp_labels"); ok && !isIntfNil(v) {
+
+		ms := map[string]string{}
+		for k, v := range v.(map[string]interface{}) {
+			ms[k] = v.(string)
+		}
+		createSpec.GcpLabels = ms
 	}
 
 	//gcp_region

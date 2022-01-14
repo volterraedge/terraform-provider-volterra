@@ -2249,7 +2249,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/system/site/{site}/api/v1/configmaps": {
             "get": {

@@ -166,6 +166,8 @@ Optional. TLS parameters to use. If not specified, will take from Virtual Host c
 
 `common_params` - (Optional) Common TLS parameters used in both upstream and downstream connections. See [Common Params ](#common-params) below for details.
 
+`crl` - (Optional) Used to ensure that the client presented certificate is not revoked as per the CRL. See [ref](#ref) below for details.
+
 `require_client_certificate` - (Optional) certificate. (`Bool`).
 
 ### Use System Defaults

@@ -287,7 +287,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/log_receivers/{name}/test": {
             "post": {
@@ -407,11 +407,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace in which the log receiver is configured\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Namespace in which the log receiver is configured\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

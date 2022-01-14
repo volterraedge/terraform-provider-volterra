@@ -263,7 +263,7 @@ func local_request_CustomAPI_GetObject_0(ctx context.Context, marshaler runtime.
 }
 
 var (
-	filter_CustomAPI_ListObjects_0 = &utilities.DoubleArray{Encoding: map[string]int{"namespace": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_CustomAPI_ListObjects_0 = &utilities.DoubleArray{Encoding: map[string]int{"namespace": 0, "object_type": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_CustomAPI_ListObjects_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -286,6 +286,17 @@ func request_CustomAPI_ListObjects_0(ctx context.Context, marshaler runtime.Mars
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["object_type"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "object_type")
+	}
+
+	protoReq.ObjectType, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "object_type", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -320,6 +331,17 @@ func local_request_CustomAPI_ListObjects_0(ctx context.Context, marshaler runtim
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["object_type"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "object_type")
+	}
+
+	protoReq.ObjectType, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "object_type", err)
 	}
 
 	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_CustomAPI_ListObjects_0); err != nil {
@@ -833,7 +855,7 @@ var (
 
 	pattern_CustomAPI_GetObject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"public", "namespaces", "namespace", "stored_objects", "object_type", "name", "version"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomAPI_ListObjects_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"public", "namespaces", "namespace", "stored_objects"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomAPI_ListObjects_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"public", "namespaces", "namespace", "stored_objects", "object_type"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_CustomAPI_DeleteObject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"public", "namespaces", "namespace", "stored_objects", "object_type", "name", "version"}, "", runtime.AssumeColonVerbOpt(false)))
 

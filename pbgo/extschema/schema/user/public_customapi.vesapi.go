@@ -45,6 +45,15 @@ func (c *CustomAPIGrpcClient) doRPCAcceptTOS(ctx context.Context, yamlReq string
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCAddUserToGroup(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UserGroupRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.UserGroupRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.AddUserToGroup(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCAssignRole(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &AssignRoleRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,6 +105,15 @@ func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opt
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.ListUserRoleRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.List(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCRemoveUserFromGroup(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UserGroupRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.UserGroupRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.RemoveUserFromGroup(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -176,6 +194,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AcceptTOS"] = ccl.doRPCAcceptTOS
 
+	rpcFns["AddUserToGroup"] = ccl.doRPCAddUserToGroup
+
 	rpcFns["AssignRole"] = ccl.doRPCAssignRole
 
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
@@ -187,6 +207,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetTOS"] = ccl.doRPCGetTOS
 
 	rpcFns["List"] = ccl.doRPCList
+
+	rpcFns["RemoveUserFromGroup"] = ccl.doRPCRemoveUserFromGroup
 
 	rpcFns["Replace"] = ccl.doRPCReplace
 
@@ -285,6 +307,89 @@ func (c *CustomAPIRestClient) doRPCAcceptTOS(ctx context.Context, callOpts *serv
 	pbRsp := &AcceptTOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.AcceptTOSResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCAddUserToGroup(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UserGroupRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.UserGroupRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("group", fmt.Sprintf("%v", req.Group))
+		q.Add("username", fmt.Sprintf("%v", req.Username))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &Empty{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -502,6 +607,7 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 		_ = q
 		q.Add("email", fmt.Sprintf("%v", req.Email))
 		q.Add("first_name", fmt.Sprintf("%v", req.FirstName))
+		q.Add("groups", fmt.Sprintf("%v", req.Groups))
 		q.Add("idm_type", fmt.Sprintf("%v", req.IdmType))
 		q.Add("last_name", fmt.Sprintf("%v", req.LastName))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
@@ -796,6 +902,89 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCRemoveUserFromGroup(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UserGroupRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.UserGroupRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("group", fmt.Sprintf("%v", req.Group))
+		q.Add("username", fmt.Sprintf("%v", req.Username))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &Empty{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -837,6 +1026,7 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 		_ = q
 		q.Add("email", fmt.Sprintf("%v", req.Email))
 		q.Add("first_name", fmt.Sprintf("%v", req.FirstName))
+		q.Add("groups", fmt.Sprintf("%v", req.Groups))
 		q.Add("idm_type", fmt.Sprintf("%v", req.IdmType))
 		q.Add("last_name", fmt.Sprintf("%v", req.LastName))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
@@ -1238,6 +1428,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AcceptTOS"] = ccl.doRPCAcceptTOS
 
+	rpcFns["AddUserToGroup"] = ccl.doRPCAddUserToGroup
+
 	rpcFns["AssignRole"] = ccl.doRPCAssignRole
 
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
@@ -1249,6 +1441,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["GetTOS"] = ccl.doRPCGetTOS
 
 	rpcFns["List"] = ccl.doRPCList
+
+	rpcFns["RemoveUserFromGroup"] = ccl.doRPCRemoveUserFromGroup
 
 	rpcFns["Replace"] = ccl.doRPCReplace
 
@@ -1313,6 +1507,50 @@ func (c *CustomAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequ
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.AcceptTOSResponse", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) AddUserToGroup(ctx context.Context, in *UserGroupRequest, opts ...grpc.CallOption) (*Empty, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *Empty
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.UserGroupRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.AddUserToGroup' operation on 'user'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AddUserToGroup"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.AddUserToGroup(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
 }
@@ -1580,6 +1818,50 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListUserRoleReques
 
 	return rsp, nil
 }
+func (c *CustomAPIInprocClient) RemoveUserFromGroup(ctx context.Context, in *UserGroupRequest, opts ...grpc.CallOption) (*Empty, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *Empty
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.UserGroupRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.RemoveUserFromGroup' operation on 'user'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.RemoveUserFromGroup"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RemoveUserFromGroup(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
+
+	return rsp, nil
+}
 func (c *CustomAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest, opts ...grpc.CallOption) (*Object, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -1832,7 +2114,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/custom/idm/user/sync": {
             "post": {
@@ -1918,10 +2200,178 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.user.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/custom/namespaces/system/users/group_add": {
+            "post": {
+                "summary": "Add user to the group",
+                "description": "Assign existing user to specific group.",
+                "operationId": "ves.io.schema.user.CustomAPI.AddUserToGroup",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/schemauserEmpty"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userUserGroupRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-AddUserToGroup"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AddUserToGroup"
+            },
+            "x-displayname": "User",
+            "x-ves-proto-service": "ves.io.schema.user.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/custom/namespaces/system/users/group_remove": {
+            "post": {
+                "summary": "Add user to the group",
+                "description": "Assign existing user to specific group.",
+                "operationId": "ves.io.schema.user.CustomAPI.RemoveUserFromGroup",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/schemauserEmpty"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userUserGroupRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-RemoveUserFromGroup"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.RemoveUserFromGroup"
+            },
+            "x-displayname": "User",
+            "x-ves-proto-service": "ves.io.schema.user.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/custom/namespaces/{namespace}/accept_tos": {
             "post": {
                 "summary": "Accept TOS request",
-                "description": "Accept TOS updates accepted version",
+                "description": "Accept TOS updates version of accepted terms of service.",
                 "operationId": "ves.io.schema.user.CustomAPI.AcceptTOS",
                 "responses": {
                     "200": {
@@ -2074,7 +2524,7 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "Namespace\n\nx-example: \"value\"\nNamespace the requesting user is calling the action from",
+                        "description": "Namespace\n\nx-example: \"system\"\nNamespace the requesting user is calling the action from",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -2105,7 +2555,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/custom/namespaces/{namespace}/send_password_email": {
             "post": {
                 "summary": "Send password email",
-                "description": "SendPasswordEmail allows admin user to send password email for the users to update their password.",
+                "description": "SendPasswordEmail allows admin user to trigger send password email for a user to update user's password.\nDeprecated: use ResetPasswordByAdmin RPC instead",
                 "operationId": "ves.io.schema.user.CustomAPI.SendPasswordEmail",
                 "responses": {
                     "200": {
@@ -2280,7 +2730,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/user_roles": {
             "get": {
-                "summary": "User with roles list",
+                "summary": "List User with roles",
                 "description": "List enumerates users and their namespace roles for this tenant",
                 "operationId": "ves.io.schema.user.CustomAPI.List",
                 "responses": {
@@ -2359,7 +2809,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.List"
             },
             "post": {
-                "summary": "User with roles create",
+                "summary": "Create User with roles",
                 "description": "Create creates a user and namespace roles binding for this user",
                 "operationId": "ves.io.schema.user.CustomAPI.Create",
                 "responses": {
@@ -2421,7 +2871,7 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "namespace\n\nx-example: \"value\"\nTenant's namespace (system)",
+                        "description": "namespace\n\nx-example: \"system\"\nAll users of a tenant must be created in tenant's system namespace.",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -2446,7 +2896,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Create"
             },
             "put": {
-                "summary": "User with roles update",
+                "summary": "Update User with roles",
                 "description": "Replace updates user and namespace roles for this user",
                 "operationId": "ves.io.schema.user.CustomAPI.Replace",
                 "responses": {
@@ -2508,7 +2958,7 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "namespace\n\nx-example: \"value\"\nTenant's namespace (system)",
+                        "description": "namespace\n\nx-example: \"system\"\nAll users of a tenant must be created in tenant's system namespace.",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -2538,7 +2988,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/user_roles/{name}": {
             "post": {
-                "summary": "User with roles update",
+                "summary": "Update User with roles",
                 "description": "Replace updates user and namespace roles for this user",
                 "operationId": "ves.io.schema.user.CustomAPI.Replace",
                 "responses": {
@@ -2600,7 +3050,7 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "namespace\n\nx-example: \"value\"\nTenant's namespace (system)",
+                        "description": "namespace\n\nx-example: \"system\"\nAll users of a tenant must be created in tenant's system namespace.",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -2608,11 +3058,11 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "name",
-                        "description": "name\n\nx-example: \"value\"\nuser spec (name and so on)",
+                        "description": "Username\n\nx-example: \"user1@company.com\"\nThis is an optional field meant to be used as username.\nInside Volterra's UAM, email is already treated as user's username\nand as best practice, recommendation is to keep this same as email field.\nif not specified, this field will be set same as email field.",
                         "in": "path",
                         "required": true,
                         "type": "string",
-                        "x-displayname": "Name"
+                        "x-displayname": "Username"
                     },
                     {
                         "name": "body",
@@ -2638,7 +3088,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/users/cascade_delete": {
             "post": {
-                "summary": "CascadeDelete",
+                "summary": "CascadeDelete User",
                 "description": "CascadeDelete deletes the user and associated namespace roles for this user.\nUse this only if the user and its referenced objects need to be wiped out altogether.\nNote: users will always be in the system namespace.",
                 "operationId": "ves.io.schema.user.CustomAPI.CascadeDelete",
                 "responses": {
@@ -2730,8 +3180,8 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/whoami": {
             "get": {
-                "summary": "User information details retrieval",
-                "description": "Get fetches user information based on the username header from the request context",
+                "summary": "Get User information details",
+                "description": "Get fetches user information based on the username header from the request context\nthis API is also called as WhoAmI",
                 "operationId": "ves.io.schema.user.CustomAPI.Get",
                 "responses": {
                     "200": {
@@ -2815,7 +3265,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/custom/password/admin_reset": {
             "post": {
                 "summary": "Reset password by admin",
-                "description": "Reset password by admin resets password for user specified in request.\nThis request is meant to be executed by the tenant's admin.",
+                "description": "Reset password by admin resets password for a user specified in request payload.\nThis request is meant to be executed by the tenant's admin.",
                 "operationId": "ves.io.schema.user.CustomAPI.ResetPasswordByAdmin",
                 "responses": {
                     "200": {
@@ -2982,9 +3432,9 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "ioschemaAddonServiceAccess": {
+        "schemaAddonServiceAccess": {
             "type": "string",
-            "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nPlan based access control denied.\nThis means current plan doesnt allow this addon service.",
+            "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\nThis can mean that addon service is not subscribed or is in pending subscription.\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nPlan based access control denied.\nThis means current plan doesnt allow this addon service.",
             "title": "AddonServiceAccess",
             "enum": [
                 "AS_AC_NONE",
@@ -3053,10 +3503,16 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3082,11 +3538,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3261,12 +3720,16 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3388,23 +3851,6 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "schemauserAddonServiceAccess": {
-            "type": "object",
-            "description": "x-displayName: \"Addon Service Access\"\ndisplays current state of an addon servie and access for an user.",
-            "title": "AddonServiceAccess",
-            "properties": {
-                "access": {
-                    "description": "x-displayName: \"Access control status\"\nAccess evaluation result - pbac-deny, rbac-deny or allowed.",
-                    "title": "access",
-                    "$ref": "#/definitions/ioschemaAddonServiceAccess"
-                },
-                "state": {
-                    "description": "x-displayName: \"Addon Service State\"\nAddon service current state",
-                    "title": "state",
-                    "$ref": "#/definitions/schemaAddonServiceState"
-                }
-            }
-        },
         "schemauserEmpty": {
             "type": "object",
             "description": "Empty is a message without actual content/body.",
@@ -3442,19 +3888,36 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Accept TOS Response",
             "x-ves-proto-message": "ves.io.schema.user.AcceptTOSResponse"
         },
+        "userAddonServiceStatus": {
+            "type": "object",
+            "description": "x-displayName: \"Addon Service Status\"\ndisplays current state and access of an addon servie for the user of tenant.",
+            "title": "AddonServiceStatus",
+            "properties": {
+                "access": {
+                    "description": "x-displayName: \"Access control status\"\nAccess evaluation result - pbac-deny, rbac-deny or allowed.",
+                    "title": "access",
+                    "$ref": "#/definitions/schemaAddonServiceAccess"
+                },
+                "state": {
+                    "description": "x-displayName: \"Addon Service State\"\nAddon service current state",
+                    "title": "state",
+                    "$ref": "#/definitions/schemaAddonServiceState"
+                }
+            }
+        },
         "userAssignRoleRequest": {
             "type": "object",
-            "description": "Allows user role in namespace assignment",
+            "description": "Allows assigning user's role in a namespace or set of namespaces.",
             "title": "Assign role",
             "x-displayname": "Assign Role",
             "x-ves-proto-message": "ves.io.schema.user.AssignRoleRequest",
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace the requesting user is calling the action from\n\nExample: - \"value\"-",
+                    "description": " Namespace the requesting user is calling the action from\n\nExample: - \"system\"-",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "system"
                 },
                 "namespaces_role": {
                     "description": " namespace role to assign",
@@ -3464,13 +3927,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "username": {
                     "type": "array",
-                    "description": " name of the users we want to assign the role to (we query the tenant/system_namespace for the usernames)\n\nExample: - \"value\"-",
+                    "description": " Username of the user that needs the role assigned.\n ideally this will be the email address of the user (which is by default treated as username)\n check Create RPC UserRoleRequest for more details.\n\nExample: - \"user1@company.com\"-",
                     "title": "Username",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Username",
-                    "x-ves-example": "value"
+                    "x-ves-example": "user1@company.com"
                 }
             }
         },
@@ -3593,11 +4056,14 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "description": " email of the user requesting for\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " email of the user requesting for\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "email of the user",
                     "x-displayname": "Email",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3696,9 +4162,9 @@ var CustomAPISwaggerJSON string = `{
         },
         "userGetUserRoleResponse": {
             "type": "object",
-            "description": "Allows user and roles retrieval",
-            "title": "User role",
-            "x-displayname": "User Role",
+            "description": "Detailed information about user including role assigments and other details for tenant.",
+            "title": "Get User Detail Response",
+            "x-displayname": "User Detail Response",
             "x-ves-proto-message": "ves.io.schema.user.GetUserRoleResponse",
             "properties": {
                 "active_plan_transition_uid": {
@@ -3707,11 +4173,11 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Active plan transition id",
                     "x-displayname": "Active plan transition id"
                 },
-                "addon_service_access": {
+                "addon_service_status": {
                     "type": "object",
-                    "description": " Addon service status and access for the user.",
-                    "title": "Addon Service Access",
-                    "x-displayname": "Addon Service Access"
+                    "description": " Addon service state and access for the user.",
+                    "title": "Addon Service Status",
+                    "x-displayname": "Addon Service Status"
                 },
                 "billing_flags": {
                     "type": "array",
@@ -3802,9 +4268,9 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " name of the user\n\nExample: - \"value\"-",
+                    "description": " Username of the user\n\nExample: - \"value\"-",
                     "title": "Name",
-                    "x-displayname": "Name",
+                    "x-displayname": "Username",
                     "x-ves-example": "value"
                 },
                 "namespace": {
@@ -3925,6 +4391,15 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "First Name",
                     "x-ves-example": "value"
                 },
+                "groups": {
+                    "type": "array",
+                    "description": " Reference to the user groups.",
+                    "title": "Groups",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Groups"
+                },
                 "idm_type": {
                     "description": " Type of the identity management who is managing this user.",
                     "title": "IDM Type",
@@ -3933,7 +4408,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "last_login_timestamp": {
                     "type": "string",
-                    "description": " Last successful login timestamp of the user .",
+                    "description": " Last successful login timestamp of the user.",
                     "title": "last_login_timestamp",
                     "format": "date-time",
                     "x-displayname": "Last Login Timestamp"
@@ -3975,11 +4450,12 @@ var CustomAPISwaggerJSON string = `{
         },
         "userIdmType": {
             "type": "string",
-            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: Volterra Managed Local user\nVolterra managed local user. Full user life cycle is managed by volterra UAM and Identity.",
+            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: Volterra Managed Local user\nVolterra managed local user. Full user life cycle is managed by volterra UAM and Identity.\n - SCIM: SCIM User\nExternally managed user imported into UAM by SCIM protocol.",
             "title": "IDM Type",
             "enum": [
                 "SSO",
-                "VOLTERRA_MANAGED"
+                "VOLTERRA_MANAGED",
+                "SCIM"
             ],
             "default": "SSO",
             "x-displayname": "Identity Management Type",
@@ -4075,10 +4551,10 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace of the user object (namespace where the user object is stored).\n\nExample: - \"value\"-",
+                    "description": " Namespace of the user object (namespace where the user object is stored).\n\nExample: - \"system\"-",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "system"
                 },
                 "namespace_roles": {
                     "type": "array",
@@ -4126,19 +4602,25 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace the role applies to\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Namespace the role applies to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "role": {
                     "type": "string",
-                    "description": " Users role for this namespace\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Users role for this namespace\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Role",
                     "x-displayname": "Role",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -4204,11 +4686,14 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "description": " Email of user for which password will be reset.\n\nExample: - \"john@example.com\"-\nRequired: YES",
+                    "description": " Email of user for which password will be reset.\n\nExample: - \"john@example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Email",
                     "x-displayname": "Email",
                     "x-ves-example": "john@example.com",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -4221,11 +4706,14 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "description": " email of the user requesting for\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " email of the user requesting for\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "email of the user",
                     "x-displayname": "Email",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -4269,6 +4757,39 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "userUserGroupRequest": {
+            "type": "object",
+            "description": "Used for adding or removing specific user to/from group.",
+            "title": "User group request",
+            "x-displayname": "User group request",
+            "x-ves-proto-message": "ves.io.schema.user.UserGroupRequest",
+            "properties": {
+                "group": {
+                    "type": "string",
+                    "description": " Uid of the group.\n\nExample: - \"6880314b-d82d-4f0b-93c9-1e2ce1a9e2d0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "Group",
+                    "maxLength": 64,
+                    "x-displayname": "Group",
+                    "x-ves-example": "6880314b-d82d-4f0b-93c9-1e2ce1a9e2d0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "username": {
+                    "type": "string",
+                    "description": " Username of the user who should be associated with the group.\n\nExample: - \"test@email.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 320\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "Username",
+                    "minLength": 1,
+                    "maxLength": 320,
+                    "x-displayname": "Username",
+                    "x-ves-example": "test@email.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "320",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                }
+            }
+        },
         "userUserRoleRequest": {
             "type": "object",
             "description": "Allows creation of a user along with their roles in namespaces.",
@@ -4278,47 +4799,66 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "description": " user's email\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " user's email\n\nExample: - \"user1@company.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "email",
                     "x-displayname": "Email Address",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-example": "user1@company.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "first_name": {
                     "type": "string",
-                    "description": " User's first name\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " User's first name\n\nExample: - \"Dan\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "first name",
                     "x-displayname": "First Name",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-example": "Dan",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "groups": {
+                    "type": "array",
+                    "description": " Group list must be associated to this user.\n\nExample: - \"[\"e40581e1-be77-4bca-a1cd-a2c478bf509e\"]\"-",
+                    "title": "Groups",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-example": "[\"e40581e1-be77-4bca-a1cd-a2c478bf509e\"]"
                 },
                 "idm_type": {
-                    "description": " Type of the Identity management",
+                    "description": " Type of the Identity management required for the user.\n if SSO is not enabled, set this to VOLTERRA_MANAGED\n VOLTERRA_MANGED user is a local user fully managed by Volterra's User Access Management.",
                     "title": "IDM Type",
                     "$ref": "#/definitions/userIdmType",
                     "x-displayname": "Identity Management Type"
                 },
                 "last_name": {
                     "type": "string",
-                    "description": " User's last name\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " User's last name\n\nExample: - \"Brown\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "last name",
                     "x-displayname": "Last Name",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-example": "Brown",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "name": {
                     "type": "string",
-                    "description": " user spec (name and so on)\n\nExample: - \"value\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "value"
+                    "description": " This is an optional field meant to be used as username.\n Inside Volterra's UAM, email is already treated as user's username\n and as best practice, recommendation is to keep this same as email field.\n if not specified, this field will be set same as email field.\n\nExample: - \"user1@company.com\"-",
+                    "title": "Username",
+                    "x-displayname": "Username",
+                    "x-ves-example": "user1@company.com"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Tenant's namespace (system)\n\nExample: - \"value\"-",
+                    "description": " All users of a tenant must be created in tenant's system namespace.\n\nExample: - \"system\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "system"
                 },
                 "namespace_roles": {
                     "type": "array",

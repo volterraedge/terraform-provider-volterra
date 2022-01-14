@@ -26,7 +26,7 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
 
-  // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
+  // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
@@ -34,13 +34,13 @@ resource "volterra_voltstack_site" "example" {
 
   master_nodes = ["master-0"]
 
-  // One of the arguments from this list "default_network_config custom_network_config" must be set
+  // One of the arguments from this list "custom_network_config default_network_config" must be set
   default_network_config = true
 
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
 
-  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
@@ -111,6 +111,10 @@ Argument Reference
 `deny_all_usb` - (Optional) All USB devices are denied (bool).
 
 `usb_policy` - (Optional) Allow only specific USB devices. See [ref](#ref) below for details.
+
+`disable_vm` - (Optional) VMs support is not enabled for this fleet (bool).
+
+`enable_vm` - (Optional) VMs support is enabled for this fleet. See [Enable Vm ](#enable-vm) below for details.
 
 `volterra_certified_hw` - (Required) Name for generic server certified hardware to form this voltstack site. (`String`).
 
@@ -463,6 +467,10 @@ Enable NVIDIA vGPU hosted on VMware.
 `server_address` - (Optional) Set License Server Address (`String`).
 
 `server_port` - (Optional) Set License Server port number (`Int`).
+
+### Enable Vm
+
+VMs support is enabled for this fleet.
 
 ### Ethernet Interface
 

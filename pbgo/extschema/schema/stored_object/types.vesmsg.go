@@ -136,6 +136,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["content_transport"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_transport"))
+		if err := fv(ctx, m.GetContentTransport(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["content_url_in_storage"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_url_in_storage"))
+		if err := fv(ctx, m.GetContentUrlInStorage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))

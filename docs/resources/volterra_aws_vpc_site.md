@@ -32,11 +32,11 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
+      // One of the arguments from this list "custom_ports use_http_port use_https_port use_http_https_port" must be set
       use_http_port = true
     }
 
@@ -112,6 +112,8 @@ Argument Reference
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
+
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
 
 `vpc` - (Optional) Choice of using existing VPC or create new VPC. See [Vpc ](#vpc) below for details.
 

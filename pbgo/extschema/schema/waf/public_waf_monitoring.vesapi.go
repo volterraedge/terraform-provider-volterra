@@ -727,7 +727,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/wafs/metrics/client/rule_hits": {
             "post": {

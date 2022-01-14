@@ -715,7 +715,7 @@ var ApiepCustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/learnt_schema": {
             "get": {

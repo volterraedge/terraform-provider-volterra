@@ -15,7 +15,7 @@ import (
 
 func TestGCPVPCSiteState(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{
 		ves_io_schema_cloud_cred.ObjectType,
 		ves_io_schema_gcp_vpc_site.ObjectType,
 	})

@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.route/Object/{object_uid}": {
             "get": {
@@ -2784,11 +2784,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-\nRequired: YES",
+                    "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Name",
                     "x-ves-example": "userid",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "path": {
                     "type": "string",
@@ -2815,13 +2822,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "routes": {
                     "type": "array",
-                    "description": " List of routes to match for incoming request\nRequired: YES",
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "routes",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/routeRouteType"
                     },
                     "x-displayname": "Routes",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 }
             }
         },
@@ -2867,13 +2879,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cluster": {
                     "type": "array",
-                    "description": " Specifies the cluster to which the requests will be mirrored. The cluster object\n referred here must be present.\nRequired: YES",
+                    "description": " Specifies the cluster to which the requests will be mirrored. The cluster object\n referred here must be present.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "cluster",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Mirror Destination Cluster",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "percent": {
                     "description": " Percentage of requests to be mirrored",
@@ -2892,26 +2909,37 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cluster": {
                     "type": "array",
-                    "description": " Indicates the upstream cluster to which the request should be sent. If the cluster\n does not exist ServiceUnavailable response will be sent\nRequired: YES",
+                    "description": " Indicates the upstream cluster to which the request should be sent. If the cluster\n does not exist ServiceUnavailable response will be sent\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "cluster",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Cluster",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "endpoint_subsets": {
                     "type": "object",
-                    "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoints which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing",
+                    "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoints which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
                     "title": "endpoint_subsets",
-                    "x-displayname": "Endpoint Subsets"
+                    "x-displayname": "Endpoint Subsets",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.max_pairs": "16"
+                    }
                 },
                 "priority": {
                     "type": "integer",
-                    "description": " Priority of this cluster, valid only with multiple destinations are configured.\n Value of 0 will make the cluster as lowest priority upstream cluster\n Priority of 1 means highest priority and is considered active.\n When active cluster is not available, lower priority clusters are\n made active as per the increasing priority.",
+                    "description": " Priority of this cluster, valid only with multiple destinations are configured.\n Value of 0 will make the cluster as lowest priority upstream cluster\n Priority of 1 means highest priority and is considered active.\n When active cluster is not available, lower priority clusters are\n made active as per the increasing priority.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Priority",
                     "format": "int64",
-                    "x-displayname": "Priority"
+                    "x-displayname": "Priority",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 },
                 "weight": {
                     "type": "integer",
@@ -2952,13 +2980,18 @@ var APISwaggerJSON string = `{
                 },
                 "destinations": {
                     "type": "array",
-                    "description": " When requests have to distributed among multiple upstream clusters,\n multiple destinations are configured, each having its own cluster and weight.\n Traffic is distributed among clusters based on the weight configured.\n\n Example:\n    destinations:\n    - cluster:\n      - kind: ves.io.vega.cfg.adc.cluster.Object\n        uid: cluster-1\n     weight: 20\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-2\n     weight: 30\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-3\n     weight: 50\n\n This indicates that out of every 100 requests, 50 goes to cluster-3, 30 to\n cluster-2 and 20 to cluster-1\n\n When single destination is configured, weight is ignored. All the requests are\n sent to the cluster specified in the destination\nRequired: YES",
+                    "description": " When requests have to distributed among multiple upstream clusters,\n multiple destinations are configured, each having its own cluster and weight.\n Traffic is distributed among clusters based on the weight configured.\n\n Example:\n    destinations:\n    - cluster:\n      - kind: ves.io.vega.cfg.adc.cluster.Object\n        uid: cluster-1\n     weight: 20\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-2\n     weight: 30\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-3\n     weight: 50\n\n This indicates that out of every 100 requests, 50 goes to cluster-3, 30 to\n cluster-2 and 20 to cluster-1\n\n When single destination is configured, weight is ignored. All the requests are\n sent to the cluster specified in the destination\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "destinations",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/routeRouteDestination"
                     },
                     "x-displayname": "Destination Origin pools (clusters)",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 },
                 "do_not_retract_cluster": {
                     "description": "Exclusive with [retract_cluster]\nx-displayName: \"Disable cluster retraction\"\nWhen this option is configured, cluster with no healthy\nendpoints is not retracted from route having weighted cluster\nconfiguration.",
@@ -2967,18 +3000,25 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint_subsets": {
                     "type": "object",
-                    "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoint's which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing",
+                    "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoint's which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
                     "title": "endpoint_subsets",
-                    "x-displayname": "Endpoint Subsets"
+                    "x-displayname": "Endpoint Subsets",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.max_pairs": "16"
+                    }
                 },
                 "hash_policy": {
                     "type": "array",
-                    "description": " Specifies a list of hash policies to use for ring hash load balancing. Each\n hash policy is evaluated individually and the combined result is used to\n route the request",
+                    "description": " Specifies a list of hash policies to use for ring hash load balancing. Each\n hash policy is evaluated individually and the combined result is used to\n route the request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
                     "title": "hash_policy",
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/routeHashPolicyType"
                     },
-                    "x-displayname": "Hash Policy"
+                    "x-displayname": "Hash Policy",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
+                    }
                 },
                 "host_rewrite": {
                     "type": "string",
@@ -2993,10 +3033,15 @@ var APISwaggerJSON string = `{
                 },
                 "prefix_rewrite": {
                     "type": "string",
-                    "description": " prefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped\n with its value. When using regex path matching, the entire path (not including\n the query string) will be swapped with this value. This option allows application\n URLs to be rooted at a different path from those exposed at the reverse proxy layer.\n\n Example :\n   gcSpec:\n     routes:\n     - match:\n       - headers: []\n         path:\n           prefix : /register/\n         query_params: []\n       - headers: []\n          path:\n           prefix: /register\n         query_params: []\n       routeDestination:\n         prefixRewrite: \"/\"\n         destinations:\n         - cluster:\n           - kind: cluster.Object\n             uid: cluster-1\n\n Having above entries in the config, requests to /register will be stripped to /,\n while requests to /register/public will be stripped to /public\n\nExample: - \"/\"-",
+                    "description": " prefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped\n with its value. When using regex path matching, the entire path (not including\n the query string) will be swapped with this value. This option allows application\n URLs to be rooted at a different path from those exposed at the reverse proxy layer.\n\n Example :\n   gcSpec:\n     routes:\n     - match:\n       - headers: []\n         path:\n           prefix : /register/\n         query_params: []\n       - headers: []\n          path:\n           prefix: /register\n         query_params: []\n       routeDestination:\n         prefixRewrite: \"/\"\n         destinations:\n         - cluster:\n           - kind: cluster.Object\n             uid: cluster-1\n\n Having above entries in the config, requests to /register will be stripped to /,\n while requests to /register/public will be stripped to /public\n\nExample: - \"/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "prefix_rewrite",
+                    "maxLength": 256,
                     "x-displayname": "Prefix Rewrite",
-                    "x-ves-example": "/"
+                    "x-ves-example": "/",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "priority": {
                     "description": " Priority routing for each route. Different connection pools are used based on the priority of the route.\n Also, circuit-breaker configuration at destination cluster is chosen based on the route priority.",
@@ -3045,36 +3090,42 @@ var APISwaggerJSON string = `{
             "properties": {
                 "response_body": {
                     "type": "string",
-                    "description": " response body to send\n\nExample: - \"OK\"-",
+                    "description": " response body to send\n\nExample: - \"OK\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 4096\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "response_body",
+                    "minLength": 1,
+                    "maxLength": 4096,
                     "x-displayname": "Response Body",
-                    "x-ves-example": "OK"
+                    "x-ves-example": "OK",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "4096",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "response_code": {
                     "type": "integer",
-                    "description": " response code to send\n\nExample: - 200-",
+                    "description": " response code to send\n\nExample: - 200-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 100\n  ves.io.schema.rules.uint32.lte: 599\n",
                     "title": "response_code",
                     "format": "int64",
-                    "x-displayname": "Response Code"
+                    "x-displayname": "Response Code",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "100",
+                        "ves.io.schema.rules.uint32.lte": "599"
+                    }
                 }
             }
         },
         "routeRouteQueryParams": {
             "type": "object",
-            "description": "Query params keys to strip while manipulating the HTTP request",
+            "description": "x-displayName: \"Query Parameters\"\nQuery params keys to strip while manipulating the HTTP request",
             "title": "RouteQueryParams",
-            "x-displayname": "Query Parameters",
-            "x-ves-proto-message": "ves.io.schema.route.RouteQueryParams",
             "properties": {
                 "query_params": {
                     "type": "array",
-                    "description": " Query params keys to strip while manipulating the HTTP request\n\nExample: - \"userid\"-",
+                    "description": "x-displayName: \"Query Parameters\"\nx-example: \"userid\"\nQuery params keys to strip while manipulating the HTTP request",
                     "title": "query_params",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "Query Parameters",
-                    "x-ves-example": "userid"
+                    }
                 }
             }
         },
@@ -3084,15 +3135,9 @@ var APISwaggerJSON string = `{
             "title": "RouteRedirect",
             "x-displayname": "Redirect",
             "x-ves-displayorder": "3,1,2,6,7",
-            "x-ves-oneof-field-query_params": "[\"all_params\",\"remove_all_params\",\"retain_all_params\",\"strip_query_params\"]",
+            "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"retain_all_params\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteRedirect",
             "properties": {
-                "all_params": {
-                    "type": "boolean",
-                    "description": "Exclusive with [remove_all_params retain_all_params strip_query_params]\nx-displayName: \"Remove All Parameters Enable/Disable\"\nx-example: true\nIf true, it indicates that during redirection, the query portion of the URL will\nbe removed. Default value is false, which means query portion of the URL will NOT be removed",
-                    "title": "all_params",
-                    "format": "boolean"
-                },
                 "host_redirect": {
                     "type": "string",
                     "description": " swap host part of incoming URL in redirect URL\n\nExample: - \"one.ves.io\"-",
@@ -3102,39 +3147,45 @@ var APISwaggerJSON string = `{
                 },
                 "path_redirect": {
                     "type": "string",
-                    "description": " swap path part of incoming URL in redirect URL\n\nExample: - \"/api/register\"-",
+                    "description": " swap path part of incoming URL in redirect URL\n\nExample: - \"/api/register\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "path_redirect",
+                    "maxLength": 256,
                     "x-displayname": "Path",
-                    "x-ves-example": "/api/register"
+                    "x-ves-example": "/api/register",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "proto_redirect": {
                     "type": "string",
-                    "description": " swap protocol part of incoming URL in redirect URL\n The protocol can be swapped with either http or https\n When incoming-proto option is specified, swapping of protocol is not done.\n\nExample: - \"https\"-",
+                    "description": " swap protocol part of incoming URL in redirect URL\n The protocol can be swapped with either http or https\n When incoming-proto option is specified, swapping of protocol is not done.\n\nExample: - \"https\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"incoming-proto\\\",\\\"http\\\",\\\"https\\\"]\n",
                     "title": "proto_redirect",
                     "x-displayname": "Protocol",
-                    "x-ves-example": "https"
+                    "x-ves-example": "https",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"incoming-proto\\\",\\\"http\\\",\\\"https\\\"]"
+                    }
                 },
                 "remove_all_params": {
-                    "description": "Exclusive with [all_params retain_all_params strip_query_params]\nx-displayName: \"Remove All Parameters\"\nRemove all query parameters",
+                    "description": "Exclusive with [retain_all_params]\nx-displayName: \"Remove All Parameters\"\nRemove all query parameters",
                     "title": "Remove All Params",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "response_code": {
                     "type": "integer",
-                    "description": " The HTTP status code to use in the redirect response. The default response\n code is MOVED_PERMANENTLY (301).\n\nExample: - 303-",
+                    "description": " The HTTP status code to use in the redirect response. The default response\n code is MOVED_PERMANENTLY (301).\n\nExample: - 303-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
                     "title": "response_code",
                     "format": "int64",
-                    "x-displayname": "Response Code"
+                    "x-displayname": "Response Code",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "599"
+                    }
                 },
                 "retain_all_params": {
-                    "description": "Exclusive with [all_params remove_all_params strip_query_params]\nx-displayName: \"Retain All Parameters\"\nRetain all query parameters",
+                    "description": "Exclusive with [remove_all_params]\nx-displayName: \"Retain All Parameters\"\nRetain all query parameters",
                     "title": "Retain All Params",
                     "$ref": "#/definitions/schemaEmpty"
-                },
-                "strip_query_params": {
-                    "description": "Exclusive with [all_params remove_all_params retain_all_params]\nx-displayName: \"Query Parameters to Remove\"\nSpecifies the list of query params to be removed. Not supported",
-                    "title": "strip_query_params",
-                    "$ref": "#/definitions/routeRouteQueryParams"
                 }
             }
         },
@@ -3147,13 +3198,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-route_action": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteType",
             "properties": {
-                "disable_custom_script": {
-                    "type": "boolean",
-                    "description": " disable execution of Javascript at route level, if it is configured at virtual-host level\n\nExample: - true-",
-                    "title": "disable_custom_script",
-                    "format": "boolean",
-                    "x-displayname": "Disable Custom Script"
-                },
                 "disable_location_add": {
                     "type": "boolean",
                     "description": " disables append of x-volterra-location = \u003cre-site-name\u003e at route level, if it is configured at\n virtual-host level. This configuration is ignored on CE sites.\n\nExample: - true-",
@@ -3163,50 +3207,78 @@ var APISwaggerJSON string = `{
                 },
                 "match": {
                     "type": "array",
-                    "description": " route match condition",
+                    "description": " route match condition\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "match",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaRouteMatch"
                     },
-                    "x-displayname": "Match"
+                    "x-displayname": "Match",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 },
                 "request_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP requests being sent towards upstream.\n Headers specified at this level are applied before headers from the\n enclosing VirtualHost object level",
+                    "description": " Headers are key-value pairs to be added to HTTP requests being sent towards upstream.\n Headers specified at this level are applied before headers from the\n enclosing VirtualHost object level\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "Headers to add in request",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
-                    "x-displayname": "Request Headers to Add"
+                    "x-displayname": "Request Headers to Add",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
                 },
                 "request_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-",
+                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "Header to be removed from request",
+                    "maxItems": 32,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
                     },
                     "x-displayname": "Request Headers to Remove",
-                    "x-ves-example": "host"
+                    "x-ves-example": "host",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
                 },
                 "response_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied before headers from the\n enclosing VirtualHost object level",
+                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied before headers from the\n enclosing VirtualHost object level\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "Headers to add in response",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
-                    "x-displayname": "Response Headers to Add"
+                    "x-displayname": "Response Headers to Add",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
                 },
                 "response_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-",
+                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "Header to be removed from response",
+                    "maxItems": 32,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
                     },
                     "x-displayname": "Response Headers to Remove",
-                    "x-ves-example": "host"
+                    "x-ves-example": "host",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
                 },
                 "route_destination": {
                     "description": "Exclusive with [route_direct_response route_redirect]\nx-displayName: \"Destination List\"\nSend request to one of the destination from list of destinations",
@@ -3323,20 +3395,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Websocket Configuration",
             "x-ves-proto-message": "ves.io.schema.route.WebsocketConfigType",
             "properties": {
-                "idle_timeout": {
-                    "type": "integer",
-                    "description": " Idle Timeout for Websocket in milli seconds. After timeout, connection will be closed\n\nExample: - 2000-",
-                    "title": "idle_timeout",
-                    "format": "int64",
-                    "x-displayname": "Idle Timeout"
-                },
-                "max_connect_attempts": {
-                    "type": "integer",
-                    "description": " The maximum number of unsuccessful connection attempts that will be made before\n giving up. Default is 1\n\nExample: - 5-",
-                    "title": "max_connect_attempts",
-                    "format": "int64",
-                    "x-displayname": "Maximum Connection Attempts"
-                },
                 "use_websocket": {
                     "type": "boolean",
                     "description": " Specifies that the HTTP client connection to this route is allowed to upgrade to\n a WebSocket connection\n\nExample: - true-",
@@ -3380,12 +3438,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "app_firewall": {
                     "type": "array",
-                    "description": " References to an Application Firewall configuration object",
+                    "description": " References to an Application Firewall configuration object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "app_firewall",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Application Firewall"
+                    "x-displayname": "Application Firewall",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3405,11 +3467,15 @@ var APISwaggerJSON string = `{
                 },
                 "location": {
                     "type": "string",
-                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Location",
                     "x-displayname": "Location",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
@@ -3436,19 +3502,14 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_bytes": {
                     "type": "integer",
-                    "description": " The maximum request size that the filter will buffer before the connection\n manager will stop buffering and return a RequestEntityTooLarge (413) response.\n\nExample: - \"2048\"-",
+                    "description": " The maximum request size that the filter will buffer before the connection\n manager will stop buffering and return a RequestEntityTooLarge (413) response.\n\nExample: - \"2048\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 10485760\n",
                     "title": "max_request_bytes",
                     "format": "int64",
                     "x-displayname": "Max Request Bytes",
-                    "x-ves-example": "2048"
-                },
-                "max_request_time": {
-                    "type": "integer",
-                    "description": " The maximum number of seconds that the filter will wait for a complete\n request before returning a RequestTimeout (408) response\n\nExample: - \"30\"-",
-                    "title": "max_request_time",
-                    "format": "int64",
-                    "x-displayname": "Max Request Time",
-                    "x-ves-example": "30"
+                    "x-ves-example": "2048",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "10485760"
+                    }
                 }
             }
         },
@@ -3469,11 +3530,17 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
+                    "maxLength": 131072,
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -3512,17 +3579,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3555,21 +3628,40 @@ var APISwaggerJSON string = `{
                 },
                 "allow_origin": {
                     "type": "array",
-                    "description": " Specifies the origins that will be allowed to do CORS requests.\n An origin is allowed if either allow_origin or allow_origin_regex match",
+                    "description": " Specifies the origins that will be allowed to do CORS requests.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "allow_origin",
+                    "maxItems": 128,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
                     },
-                    "x-displayname": "Allow Origin"
+                    "x-displayname": "Allow Origin",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "allow_origin_regex": {
                     "type": "array",
-                    "description": " Specifies regex patterns that match allowed origins.\n An origin is allowed if either allow_origin or allow_origin_regex match",
+                    "description": " Specifies regex patterns that match allowed origins.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "allow_origin_regex",
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
                     },
-                    "x-displayname": "Allow Origin Regex"
+                    "x-displayname": "Allow Origin Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.items.string.regex": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "disabled": {
                     "type": "boolean",
@@ -3584,18 +3676,16 @@ var APISwaggerJSON string = `{
                     "title": "expose_headers",
                     "x-displayname": "Expose Headers"
                 },
-                "max_age": {
-                    "type": "string",
-                    "description": " Specifies the content for the access-control-max-age header",
-                    "title": "max_age",
-                    "x-displayname": "Max Age"
-                },
                 "maximum_age": {
                     "type": "integer",
-                    "description": " Specifies the content for the access-control-max-age header in seconds.\n This indicates the maximum number of seconds the results can be cached\n A value of -1 will disable caching.\n Maximum permitted value is 86400 seconds (24 hours)",
+                    "description": " Specifies the content for the access-control-max-age header in seconds.\n This indicates the maximum number of seconds the results can be cached\n A value of -1 will disable caching.\n Maximum permitted value is 86400 seconds (24 hours)\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 86400\n",
                     "title": "maximum_age",
                     "format": "int32",
-                    "x-displayname": "Maximum Age"
+                    "x-displayname": "Maximum Age",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "-1",
+                        "ves.io.schema.rules.int32.lte": "86400"
+                    }
                 }
             }
         },
@@ -3628,20 +3718,26 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.FractionalPercent",
             "properties": {
                 "denominator": {
-                    "description": " Samples per denominator. numerator part per 100 or 10000 ro 1000000\nRequired: YES",
+                    "description": " Samples per denominator. numerator part per 100 or 10000 ro 1000000\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "denominator",
                     "$ref": "#/definitions/schemaDenominatorType",
                     "x-displayname": "Denominator",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "numerator": {
                     "type": "integer",
-                    "description": " sampled parts per denominator. If denominator was 10000, then value of 5 will be 5 in 10000\n\nExample: - \"5\"-\nRequired: YES",
+                    "description": " sampled parts per denominator. If denominator was 10000, then value of 5 will be 5 in 10000\n\nExample: - \"5\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "numerator",
                     "format": "int64",
                     "x-displayname": "Numerator",
                     "x-ves-example": "5",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3662,10 +3758,15 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the HTTP header.\nRequired: YES",
+                    "description": " Name of the HTTP header.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "name",
+                    "maxLength": 256,
                     "x-displayname": "Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "secret_value": {
                     "description": "Exclusive with [value]\nx-displayName: \"Secret Value\"\nSecret Value of the HTTP header.",
@@ -3721,7 +3822,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpMethod": {
             "type": "string",
-            "description": "Specifies the HTTP method used to acess a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
             "title": "HttpMethod",
             "enum": [
                 "ANY",
@@ -3783,16 +3884,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3803,10 +3895,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3832,11 +3930,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3961,10 +4062,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "base_interval": {
                     "type": "integer",
-                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - 5-",
+                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - 5-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "base_interval",
                     "format": "int64",
-                    "x-displayname": "Base Retry Interval"
+                    "x-displayname": "Base Retry Interval",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0"
+                    }
                 },
                 "max_interval": {
                     "type": "integer",
@@ -3991,44 +4095,54 @@ var APISwaggerJSON string = `{
                 },
                 "num_retries": {
                     "type": "integer",
-                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - 3-",
+                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - 3-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
                     "title": "num_retries",
                     "format": "int64",
-                    "x-displayname": "Number of Retries"
+                    "x-displayname": "Number of Retries",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "8"
+                    }
                 },
                 "per_try_timeout": {
                     "type": "integer",
-                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - 1000-",
+                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
                     "title": "per_try_timeout",
                     "format": "int64",
-                    "x-displayname": "Per Try Timeout"
+                    "x-displayname": "Per Try Timeout",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "600000"
+                    }
                 },
                 "retriable_status_codes": {
                     "type": "array",
-                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - 403-",
+                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - 403-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Retriable status Code",
+                    "maxItems": 16,
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
-                    "x-displayname": "Status Code to Retry"
+                    "x-displayname": "Status Code to Retry",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "retry_condition": {
                     "type": "array",
-                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]\n  ves.io.schema.rules.repeated.max_items: 6\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "retry_condition",
+                    "maxItems": 6,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Retry Condition",
-                    "x-ves-example": "5xx"
-                },
-                "retry_on": {
-                    "type": "string",
-                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
-                    "title": "retry_on",
-                    "x-displayname": "Retry On",
-                    "x-ves-example": "5xx"
+                    "x-ves-example": "5xx",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]",
+                        "ves.io.schema.rules.repeated.max_items": "6",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4042,12 +4156,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "headers": {
                     "type": "array",
-                    "description": " List of (key, value) headers",
+                    "description": " List of (key, value) headers\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "headers",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderMatcherType"
                     },
-                    "x-displayname": "Headers"
+                    "x-displayname": "Headers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "http_method": {
                     "description": " The name of the HTTP Method (GET, PUT, POST, etc)",
@@ -4063,12 +4182,17 @@ var APISwaggerJSON string = `{
                 },
                 "query_params": {
                     "type": "array",
-                    "description": " List of (key, value) query parameters",
+                    "description": " List of (key, value) query parameters\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "query_params",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaQueryParameterMatcherType"
                     },
-                    "x-displayname": "Query Parameters"
+                    "x-displayname": "Query Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4086,55 +4210,31 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
                 "EncodingBase64"
             ],
-            "default": "EncodingNone",
-            "x-displayname": "Secret Encoding",
-            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+            "default": "EncodingNone"
         },
         "schemaSecretType": {
             "type": "object",
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
-                },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
-                },
-                "vault_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -4310,12 +4410,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -4377,48 +4481,34 @@ var APISwaggerJSON string = `{
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
-            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
             "title": "VaultSecretInfoType",
-            "x-displayname": "Vault Secret",
-            "x-ves-displayorder": "1,2,3,4,5",
-            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
-                    "title": "Key",
-                    "x-displayname": "Key",
-                    "x-ves-example": "key_pem"
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
                 },
                 "location": {
                     "type": "string",
-                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
-                    "title": "Location",
-                    "x-displayname": "Location",
-                    "x-ves-example": "v1/data/vhost_key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
                 },
                 "provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
-                    "title": "Provider",
-                    "x-displayname": "Provider",
-                    "x-ves-example": "vault-vh-provider",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
                 },
                 "secret_encoding": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
                     "title": "secret_encoding",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
+                    "$ref": "#/definitions/schemaSecretEncodingType"
                 },
                 "version": {
                     "type": "integer",
-                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
                     "title": "Version",
-                    "format": "int64",
-                    "x-displayname": "Version",
-                    "x-ves-example": "1"
+                    "format": "int64"
                 }
             }
         },
@@ -4461,37 +4551,31 @@ var APISwaggerJSON string = `{
         },
         "schemaWafRefType": {
             "type": "object",
-            "description": "A reference to the WAF configuration object",
+            "description": "x-displayName: \"WAF Reference\"\nA reference to the WAF configuration object",
             "title": "WafRefType",
-            "x-displayname": "WAF Reference",
-            "x-ves-proto-message": "ves.io.schema.WafRefType",
             "properties": {
                 "waf": {
                     "type": "array",
-                    "description": " A direct reference to web application firewall configuration object",
+                    "description": "x-displayName: \"WAF\"\nA direct reference to web application firewall configuration object",
                     "title": "waf",
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "WAF"
+                    }
                 }
             }
         },
         "schemaWafRulesRefType": {
             "type": "object",
-            "description": "A list of references to the waf_rules configuration objects",
+            "description": "x-displayName: \"WAF Rules Reference\"\nA list of references to the waf_rules configuration objects",
             "title": "WafRulesRefType",
-            "x-displayname": "WAF Rules Reference",
-            "x-ves-proto-message": "ves.io.schema.WafRulesRefType",
             "properties": {
                 "waf_rules": {
                     "type": "array",
-                    "description": " References to a set of WAF Rules configuration object",
+                    "description": "x-displayName: \"WAF Rules\"\nReferences to a set of WAF Rules configuration object",
                     "title": "waf_rules",
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "WAF Rules"
+                    }
                 }
             }
         },
@@ -4500,40 +4584,25 @@ var APISwaggerJSON string = `{
             "description": "WAF instance will be pointing to either Waf object (high level) or waf_rules Object",
             "title": "WafType",
             "x-displayname": "WAF Instance",
-            "x-ves-oneof-field-ref_type": "[\"app_firewall\",\"waf\",\"waf_rules\"]",
+            "x-ves-oneof-field-ref_type": "[\"app_firewall\"]",
             "x-ves-proto-message": "ves.io.schema.WafType",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with [waf waf_rules]\nx-displayName: \"Application Firewall\"\nA direct reference to an Application Firewall configuration object",
+                    "description": "Exclusive with []\nx-displayName: \"Application Firewall\"\nA direct reference to an Application Firewall configuration object",
                     "title": "app_firewall",
                     "$ref": "#/definitions/schemaAppFirewallRefType"
-                },
-                "waf": {
-                    "description": "Exclusive with [app_firewall waf_rules]\nx-displayName: \"WAF\"\nA WAF object direct reference",
-                    "title": "waf",
-                    "$ref": "#/definitions/schemaWafRefType"
-                },
-                "waf_rules": {
-                    "description": "Exclusive with [app_firewall waf]\nx-displayName: \"WAF Rules\"\nA set of direct references of WAF Rules objects",
-                    "title": "waf_rules",
-                    "$ref": "#/definitions/schemaWafRulesRefType"
                 }
             }
         },
         "schemaWingmanSecretInfoType": {
             "type": "object",
-            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
             "title": "WingmanSecretInfoType",
-            "x-displayname": "Wingman Secret",
-            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "ChargeBack-API-Key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
                 }
             }
         }

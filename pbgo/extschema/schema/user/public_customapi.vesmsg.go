@@ -1157,10 +1157,10 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
-	if fv, exists := v.FldValidators["addon_service_access"]; exists {
+	if fv, exists := v.FldValidators["addon_service_status"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("addon_service_access"))
-		for key, value := range m.GetAddonServiceAccess() {
+		vOpts := append(opts, db.WithValidateField("addon_service_status"))
+		for key, value := range m.GetAddonServiceStatus() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
 			if err := fv(ctx, value, vOpts...); err != nil {
 				return err
@@ -2316,6 +2316,144 @@ func SendPasswordEmailResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *UserGroupRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UserGroupRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UserGroupRequest) DeepCopy() *UserGroupRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UserGroupRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UserGroupRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UserGroupRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UserGroupRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUserGroupRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUserGroupRequest) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUserGroupRequest) GroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for group")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUserGroupRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UserGroupRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UserGroupRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("group"))
+		if err := fv(ctx, m.GetGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["username"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("username"))
+		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUserGroupRequestValidator = func() *ValidateUserGroupRequest {
+	v := &ValidateUserGroupRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUsername := v.UsernameValidationRuleHandler
+	rulesUsername := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "320",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhUsername(rulesUsername)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UserGroupRequest.username: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["username"] = vFn
+
+	vrhGroup := v.GroupValidationRuleHandler
+	rulesGroup := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhGroup(rulesGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UserGroupRequest.group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["group"] = vFn
+
+	return v
+}()
+
+func UserGroupRequestValidator() db.Validator {
+	return DefaultUserGroupRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *UserRoleRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2413,6 +2551,18 @@ func (v *ValidateUserRoleRequest) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["groups"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("groups"))
+		for idx, item := range m.GetGroups() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}

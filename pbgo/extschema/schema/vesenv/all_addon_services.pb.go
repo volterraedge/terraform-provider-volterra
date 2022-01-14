@@ -6,8 +6,12 @@ package vesenv
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
+	io "io"
 	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
 	strconv "strconv"
+	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -113,9 +117,109 @@ func (NavigationTileName) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_24b1043c1548ccb0, []int{1}
 }
 
+// AddonServiceChoice enumerates all the well-known addon_service.Objects in a VES environment
+type AddonServiceChoice struct {
+	// Types that are valid to be assigned to Choice:
+	//	*AddonServiceChoice_VesIoVolterraDefault
+	//	*AddonServiceChoice_ShapeBot
+	//	*AddonServiceChoice_ShapeRecognize
+	Choice isAddonServiceChoice_Choice `protobuf_oneof:"choice"`
+}
+
+func (m *AddonServiceChoice) Reset()      { *m = AddonServiceChoice{} }
+func (*AddonServiceChoice) ProtoMessage() {}
+func (*AddonServiceChoice) Descriptor() ([]byte, []int) {
+	return fileDescriptor_24b1043c1548ccb0, []int{0}
+}
+func (m *AddonServiceChoice) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AddonServiceChoice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AddonServiceChoice.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AddonServiceChoice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddonServiceChoice.Merge(m, src)
+}
+func (m *AddonServiceChoice) XXX_Size() int {
+	return m.Size()
+}
+func (m *AddonServiceChoice) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddonServiceChoice.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddonServiceChoice proto.InternalMessageInfo
+
+type isAddonServiceChoice_Choice interface {
+	isAddonServiceChoice_Choice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AddonServiceChoice_VesIoVolterraDefault struct {
+	VesIoVolterraDefault bool `protobuf:"varint,1,opt,name=ves_io_volterra_default,json=vesIoVolterraDefault,proto3,oneof" json:"ves_io_volterra_default,omitempty"`
+}
+type AddonServiceChoice_ShapeBot struct {
+	ShapeBot bool `protobuf:"varint,2,opt,name=shape_bot,json=shapeBot,proto3,oneof" json:"shape_bot,omitempty"`
+}
+type AddonServiceChoice_ShapeRecognize struct {
+	ShapeRecognize bool `protobuf:"varint,3,opt,name=shape_recognize,json=shapeRecognize,proto3,oneof" json:"shape_recognize,omitempty"`
+}
+
+func (*AddonServiceChoice_VesIoVolterraDefault) isAddonServiceChoice_Choice() {}
+func (*AddonServiceChoice_ShapeBot) isAddonServiceChoice_Choice()             {}
+func (*AddonServiceChoice_ShapeRecognize) isAddonServiceChoice_Choice()       {}
+
+func (m *AddonServiceChoice) GetChoice() isAddonServiceChoice_Choice {
+	if m != nil {
+		return m.Choice
+	}
+	return nil
+}
+
+func (m *AddonServiceChoice) GetVesIoVolterraDefault() bool {
+	if x, ok := m.GetChoice().(*AddonServiceChoice_VesIoVolterraDefault); ok {
+		return x.VesIoVolterraDefault
+	}
+	return false
+}
+
+func (m *AddonServiceChoice) GetShapeBot() bool {
+	if x, ok := m.GetChoice().(*AddonServiceChoice_ShapeBot); ok {
+		return x.ShapeBot
+	}
+	return false
+}
+
+func (m *AddonServiceChoice) GetShapeRecognize() bool {
+	if x, ok := m.GetChoice().(*AddonServiceChoice_ShapeRecognize); ok {
+		return x.ShapeRecognize
+	}
+	return false
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AddonServiceChoice) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AddonServiceChoice_VesIoVolterraDefault)(nil),
+		(*AddonServiceChoice_ShapeBot)(nil),
+		(*AddonServiceChoice_ShapeRecognize)(nil),
+	}
+}
+
 func init() {
 	proto.RegisterEnum("ves.io.schema.vesenv.AddonServiceName", AddonServiceName_name, AddonServiceName_value)
 	proto.RegisterEnum("ves.io.schema.vesenv.NavigationTileName", NavigationTileName_name, NavigationTileName_value)
+	proto.RegisterType((*AddonServiceChoice)(nil), "ves.io.schema.vesenv.AddonServiceChoice")
 }
 
 func init() {
@@ -123,30 +227,46 @@ func init() {
 }
 
 var fileDescriptor_24b1043c1548ccb0 = []byte{
-	// 366 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x91, 0xbd, 0x6a, 0xeb, 0x30,
-	0x00, 0x85, 0xad, 0xe5, 0x0e, 0x9a, 0x8c, 0xc9, 0x0f, 0xf7, 0x07, 0x71, 0xe9, 0x18, 0x88, 0x3d,
-	0xa4, 0x7d, 0x00, 0x25, 0x56, 0x5a, 0x17, 0xe3, 0x94, 0xc8, 0x0d, 0xb4, 0x8b, 0x70, 0x12, 0xd5,
-	0x35, 0x75, 0x22, 0x63, 0xbb, 0xa2, 0x4b, 0x21, 0x53, 0xe7, 0x3e, 0x46, 0x1f, 0xa5, 0x63, 0xc6,
-	0x8c, 0x8d, 0xb2, 0x74, 0xcc, 0x23, 0x14, 0xc7, 0xa9, 0x21, 0x25, 0x9b, 0x38, 0xfa, 0x74, 0xf4,
-	0xc1, 0x81, 0x6d, 0xc9, 0x33, 0x33, 0x12, 0x56, 0x36, 0xb9, 0xe7, 0xb3, 0xc0, 0x92, 0x3c, 0xe3,
-	0x73, 0x69, 0x05, 0x71, 0xcc, 0x82, 0xe9, 0x54, 0xcc, 0x59, 0xc6, 0x53, 0x19, 0x4d, 0x78, 0x66,
-	0x26, 0xa9, 0xc8, 0x85, 0x51, 0x2b, 0x71, 0xb3, 0xc4, 0xcd, 0x12, 0xff, 0x73, 0x72, 0xb4, 0x44,
-	0x24, 0x79, 0x24, 0xe6, 0xfb, 0x97, 0xad, 0x67, 0xa8, 0xe3, 0xa2, 0x91, 0x96, 0x85, 0x5e, 0x30,
-	0xe3, 0x46, 0x0d, 0xea, 0x98, 0xb2, 0xd1, 0xc0, 0xf5, 0xc9, 0x70, 0x88, 0x59, 0x17, 0x53, 0xa2,
-	0x6b, 0x46, 0x03, 0x1a, 0x98, 0x32, 0x7a, 0x81, 0xaf, 0x08, 0xb3, 0xc9, 0xc8, 0xe9, 0x11, 0xe6,
-	0xd8, 0x7a, 0xc7, 0xf8, 0x0f, 0xff, 0x55, 0x79, 0xcf, 0x75, 0x88, 0xe7, 0x33, 0xea, 0xd8, 0x05,
-	0xd3, 0x27, 0x1e, 0x25, 0xfa, 0xa9, 0xf1, 0x1b, 0xd6, 0x2b, 0x82, 0xe2, 0x3e, 0x61, 0xd8, 0xc3,
-	0xee, 0x0d, 0xf5, 0xf5, 0xb3, 0xd6, 0x0b, 0x80, 0x86, 0x17, 0xc8, 0x28, 0x0c, 0x0a, 0x29, 0x3f,
-	0x8a, 0x4b, 0x83, 0xbf, 0xb0, 0xe9, 0xf9, 0xac, 0xe7, 0x0e, 0xae, 0x6d, 0x86, 0x3d, 0x9b, 0x11,
-	0xfb, 0x9c, 0x30, 0xea, 0xf8, 0x84, 0x96, 0x22, 0xc5, 0x1f, 0x3f, 0x44, 0xea, 0x85, 0x48, 0x95,
-	0x1f, 0x13, 0x69, 0x14, 0x22, 0x15, 0x71, 0x20, 0xd2, 0xec, 0x2e, 0xc0, 0x72, 0x8d, 0xb4, 0xd5,
-	0x1a, 0x69, 0xdb, 0x35, 0x02, 0x0b, 0x85, 0xc0, 0x9b, 0x42, 0xe0, 0x5d, 0x21, 0xb0, 0x54, 0x08,
-	0x7c, 0x28, 0x04, 0x3e, 0x15, 0xd2, 0xb6, 0x0a, 0x81, 0xd7, 0x0d, 0xd2, 0x96, 0x1b, 0xa4, 0xad,
-	0x36, 0x48, 0xbb, 0xbd, 0x0c, 0x45, 0xf2, 0x10, 0x9a, 0x52, 0xc4, 0x39, 0x4f, 0xd3, 0xc0, 0x7c,
-	0xcc, 0xac, 0xdd, 0xe1, 0x4e, 0xa4, 0xb3, 0x76, 0x92, 0x0a, 0x19, 0x4d, 0x79, 0xda, 0xfe, 0xbe,
-	0xb6, 0x92, 0x71, 0x28, 0x2c, 0xfe, 0x94, 0xef, 0x17, 0x39, 0x18, 0x66, 0xfc, 0x6b, 0xb7, 0x48,
-	0xe7, 0x2b, 0x00, 0x00, 0xff, 0xff, 0x26, 0xd5, 0x29, 0x98, 0xfc, 0x01, 0x00, 0x00,
+	// 614 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x92, 0x3d, 0x6f, 0xd3, 0x40,
+	0x1c, 0xc6, 0xed, 0x22, 0x55, 0xc5, 0x03, 0x44, 0x56, 0x5f, 0x42, 0x41, 0x56, 0x55, 0x75, 0x40,
+	0x95, 0x2e, 0x2f, 0x8e, 0x5f, 0xc5, 0xe4, 0xc4, 0x6e, 0x13, 0x88, 0x5c, 0x14, 0x9b, 0x4a, 0xb0,
+	0x9c, 0xee, 0xec, 0x73, 0x6a, 0x91, 0xe4, 0x22, 0xdb, 0xb5, 0x00, 0x09, 0xa9, 0x03, 0x62, 0xe6,
+	0x63, 0xf0, 0x1d, 0xba, 0x75, 0x62, 0xec, 0xd8, 0x91, 0x3a, 0x0b, 0x63, 0x3f, 0x02, 0xf2, 0x4b,
+	0x22, 0x8a, 0xba, 0x59, 0xff, 0xfb, 0x3d, 0xcf, 0x3d, 0xfe, 0xdf, 0xc3, 0x81, 0x94, 0xc4, 0x8d,
+	0x90, 0x36, 0x63, 0xef, 0x8c, 0x4c, 0x51, 0x33, 0x25, 0x31, 0x99, 0xa5, 0x4d, 0x34, 0x99, 0x40,
+	0xe4, 0xfb, 0x74, 0x06, 0x63, 0x12, 0xa5, 0xa1, 0x47, 0xe2, 0xc6, 0x3c, 0xa2, 0x09, 0xe5, 0x37,
+	0x4b, 0xbc, 0x51, 0xe2, 0x8d, 0x12, 0xdf, 0xdd, 0x7f, 0xd0, 0x84, 0xce, 0x93, 0x90, 0xce, 0x2a,
+	0xe5, 0xfe, 0x62, 0x8d, 0xe3, 0x8d, 0xdc, 0xd2, 0x29, 0x1d, 0x7b, 0x67, 0x34, 0xf4, 0x08, 0xff,
+	0x8d, 0xe5, 0x76, 0x52, 0x12, 0xc3, 0x90, 0xc2, 0x94, 0x4e, 0x12, 0x12, 0x45, 0x08, 0xfa, 0x24,
+	0x40, 0xe7, 0x93, 0xa4, 0xce, 0xee, 0xb1, 0x2f, 0x37, 0xba, 0x6f, 0xae, 0x2e, 0xeb, 0xc7, 0x05,
+	0x04, 0x42, 0x0a, 0x96, 0x10, 0xa8, 0x20, 0xfe, 0x40, 0x45, 0x2a, 0xf2, 0xb1, 0x26, 0x03, 0x45,
+	0xc1, 0x6d, 0x20, 0xf9, 0xed, 0x0e, 0xc0, 0x58, 0x45, 0xa0, 0xed, 0x11, 0x55, 0xd3, 0xd5, 0x96,
+	0xa6, 0x28, 0xad, 0xdd, 0xf5, 0xf8, 0x73, 0x9c, 0x90, 0x69, 0x9f, 0x19, 0xe5, 0x7f, 0x30, 0xa0,
+	0xa7, 0x95, 0x8d, 0x59, 0xb9, 0xb8, 0xdc, 0xe3, 0xf8, 0x0c, 0xcd, 0x09, 0xc4, 0x34, 0xa9, 0xaf,
+	0x15, 0xf7, 0xca, 0x57, 0x97, 0xf5, 0x76, 0x35, 0x06, 0x98, 0x26, 0xfc, 0x41, 0x4b, 0x94, 0x65,
+	0x2c, 0xf9, 0x3a, 0xd0, 0x35, 0xac, 0x03, 0x49, 0xd4, 0x35, 0xa0, 0xcb, 0x92, 0x0a, 0x3a, 0x8a,
+	0xd2, 0x12, 0x65, 0xac, 0x61, 0x8c, 0x70, 0x9f, 0x19, 0x6d, 0x14, 0x92, 0x2e, 0x4d, 0xf8, 0x80,
+	0x7b, 0x5a, 0xba, 0x46, 0xc4, 0xa3, 0xe3, 0x59, 0xf8, 0x85, 0xd4, 0x1f, 0x15, 0xde, 0xaf, 0xae,
+	0x2e, 0xeb, 0x6a, 0x75, 0x08, 0x56, 0x87, 0xfc, 0x81, 0xee, 0x79, 0x48, 0x0b, 0x14, 0x1f, 0x28,
+	0x81, 0xdc, 0x01, 0x52, 0x5b, 0x0a, 0x80, 0xae, 0x88, 0x08, 0x10, 0x2c, 0x2a, 0xb2, 0xd7, 0x6a,
+	0x89, 0x81, 0xa8, 0xf4, 0x99, 0xd1, 0x93, 0x42, 0x38, 0x5a, 0xea, 0xba, 0x1b, 0xdc, 0xba, 0x57,
+	0xac, 0xf3, 0xf0, 0x2b, 0x57, 0xfb, 0x77, 0xc9, 0x36, 0x9a, 0x12, 0x7e, 0x93, 0xab, 0x19, 0x0e,
+	0x3c, 0x3d, 0x19, 0xba, 0xd6, 0x68, 0x64, 0xc0, 0xae, 0xe1, 0x58, 0x35, 0x86, 0xdf, 0xe6, 0x78,
+	0xc3, 0x81, 0x4e, 0xdf, 0x78, 0x6b, 0x41, 0xd3, 0x3a, 0x1d, 0xf4, 0x2c, 0x38, 0x30, 0x6b, 0x1d,
+	0x7e, 0x8f, 0x7b, 0xb1, 0x9a, 0xf7, 0x86, 0x03, 0xcb, 0x76, 0xa1, 0x33, 0x30, 0x73, 0xe6, 0xc8,
+	0xb2, 0x1d, 0xab, 0x26, 0xf1, 0xcf, 0xb8, 0xad, 0x15, 0xe1, 0x18, 0x47, 0x16, 0x34, 0x6c, 0x63,
+	0xf8, 0xde, 0x71, 0x6b, 0xf2, 0xe1, 0x77, 0x96, 0xe3, 0x6d, 0x94, 0x86, 0x63, 0x94, 0x3f, 0xbd,
+	0x1b, 0x4e, 0xca, 0x04, 0xcf, 0xb9, 0x1d, 0xdb, 0x85, 0xbd, 0xe1, 0xc9, 0x3b, 0x13, 0x1a, 0xb6,
+	0x09, 0x2d, 0xf3, 0xd8, 0x82, 0xce, 0xc0, 0xb5, 0x9c, 0x32, 0x48, 0x7e, 0xc7, 0x7f, 0x41, 0xb6,
+	0xf2, 0x20, 0xab, 0xf9, 0x43, 0x41, 0xb6, 0xf3, 0x20, 0x2b, 0xe2, 0x5e, 0x90, 0x9d, 0xee, 0x05,
+	0x7b, 0x7d, 0x2b, 0x30, 0x37, 0xb7, 0x02, 0x73, 0x77, 0x2b, 0xb0, 0x17, 0x99, 0xc0, 0xfe, 0xcc,
+	0x04, 0xf6, 0x57, 0x26, 0xb0, 0xd7, 0x99, 0xc0, 0xfe, 0xce, 0x04, 0xf6, 0x4f, 0x26, 0x30, 0x77,
+	0x99, 0xc0, 0xfe, 0x58, 0x08, 0xcc, 0xf5, 0x42, 0x60, 0x6e, 0x16, 0x02, 0xf3, 0xe1, 0xf5, 0x98,
+	0xce, 0x3f, 0x8e, 0x1b, 0xcb, 0x92, 0x35, 0xce, 0xe3, 0x66, 0xf1, 0x11, 0xd0, 0x68, 0x0a, 0xe6,
+	0x11, 0x4d, 0x43, 0x9f, 0x44, 0xab, 0x0e, 0x36, 0xe7, 0x78, 0x4c, 0x9b, 0xe4, 0x53, 0x52, 0xf5,
+	0xfe, 0x5e, 0xfd, 0xf1, 0x7a, 0xd1, 0xfb, 0xce, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x16, 0x34,
+	0x0c, 0x06, 0x62, 0x03, 0x00, 0x00,
 }
 
 func (x AddonServiceName) String() string {
@@ -163,3 +283,537 @@ func (x NavigationTileName) String() string {
 	}
 	return strconv.Itoa(int(x))
 }
+func (this *AddonServiceChoice) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AddonServiceChoice)
+	if !ok {
+		that2, ok := that.(AddonServiceChoice)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.Choice == nil {
+		if this.Choice != nil {
+			return false
+		}
+	} else if this.Choice == nil {
+		return false
+	} else if !this.Choice.Equal(that1.Choice) {
+		return false
+	}
+	return true
+}
+func (this *AddonServiceChoice_VesIoVolterraDefault) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AddonServiceChoice_VesIoVolterraDefault)
+	if !ok {
+		that2, ok := that.(AddonServiceChoice_VesIoVolterraDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.VesIoVolterraDefault != that1.VesIoVolterraDefault {
+		return false
+	}
+	return true
+}
+func (this *AddonServiceChoice_ShapeBot) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AddonServiceChoice_ShapeBot)
+	if !ok {
+		that2, ok := that.(AddonServiceChoice_ShapeBot)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ShapeBot != that1.ShapeBot {
+		return false
+	}
+	return true
+}
+func (this *AddonServiceChoice_ShapeRecognize) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AddonServiceChoice_ShapeRecognize)
+	if !ok {
+		that2, ok := that.(AddonServiceChoice_ShapeRecognize)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ShapeRecognize != that1.ShapeRecognize {
+		return false
+	}
+	return true
+}
+func (this *AddonServiceChoice) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&vesenv.AddonServiceChoice{")
+	if this.Choice != nil {
+		s = append(s, "Choice: "+fmt.Sprintf("%#v", this.Choice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AddonServiceChoice_VesIoVolterraDefault) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.AddonServiceChoice_VesIoVolterraDefault{` +
+		`VesIoVolterraDefault:` + fmt.Sprintf("%#v", this.VesIoVolterraDefault) + `}`}, ", ")
+	return s
+}
+func (this *AddonServiceChoice_ShapeBot) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.AddonServiceChoice_ShapeBot{` +
+		`ShapeBot:` + fmt.Sprintf("%#v", this.ShapeBot) + `}`}, ", ")
+	return s
+}
+func (this *AddonServiceChoice_ShapeRecognize) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.AddonServiceChoice_ShapeRecognize{` +
+		`ShapeRecognize:` + fmt.Sprintf("%#v", this.ShapeRecognize) + `}`}, ", ")
+	return s
+}
+func valueToGoStringAllAddonServices(v interface{}, typ string) string {
+	rv := reflect.ValueOf(v)
+	if rv.IsNil() {
+		return "nil"
+	}
+	pv := reflect.Indirect(rv).Interface()
+	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
+}
+func (m *AddonServiceChoice) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AddonServiceChoice) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AddonServiceChoice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Choice != nil {
+		{
+			size := m.Choice.Size()
+			i -= size
+			if _, err := m.Choice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AddonServiceChoice_VesIoVolterraDefault) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AddonServiceChoice_VesIoVolterraDefault) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.VesIoVolterraDefault {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x8
+	return len(dAtA) - i, nil
+}
+func (m *AddonServiceChoice_ShapeBot) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AddonServiceChoice_ShapeBot) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.ShapeBot {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x10
+	return len(dAtA) - i, nil
+}
+func (m *AddonServiceChoice_ShapeRecognize) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AddonServiceChoice_ShapeRecognize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.ShapeRecognize {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	return len(dAtA) - i, nil
+}
+func encodeVarintAllAddonServices(dAtA []byte, offset int, v uint64) int {
+	offset -= sovAllAddonServices(v)
+	base := offset
+	for v >= 1<<7 {
+		dAtA[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	dAtA[offset] = uint8(v)
+	return base
+}
+func (m *AddonServiceChoice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Choice != nil {
+		n += m.Choice.Size()
+	}
+	return n
+}
+
+func (m *AddonServiceChoice_VesIoVolterraDefault) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2
+	return n
+}
+func (m *AddonServiceChoice_ShapeBot) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2
+	return n
+}
+func (m *AddonServiceChoice_ShapeRecognize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2
+	return n
+}
+
+func sovAllAddonServices(x uint64) (n int) {
+	return (math_bits.Len64(x|1) + 6) / 7
+}
+func sozAllAddonServices(x uint64) (n int) {
+	return sovAllAddonServices(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (this *AddonServiceChoice) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AddonServiceChoice{`,
+		`Choice:` + fmt.Sprintf("%v", this.Choice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AddonServiceChoice_VesIoVolterraDefault) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AddonServiceChoice_VesIoVolterraDefault{`,
+		`VesIoVolterraDefault:` + fmt.Sprintf("%v", this.VesIoVolterraDefault) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AddonServiceChoice_ShapeBot) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AddonServiceChoice_ShapeBot{`,
+		`ShapeBot:` + fmt.Sprintf("%v", this.ShapeBot) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AddonServiceChoice_ShapeRecognize) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AddonServiceChoice_ShapeRecognize{`,
+		`ShapeRecognize:` + fmt.Sprintf("%v", this.ShapeRecognize) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func valueToStringAllAddonServices(v interface{}) string {
+	rv := reflect.ValueOf(v)
+	if rv.IsNil() {
+		return "nil"
+	}
+	pv := reflect.Indirect(rv).Interface()
+	return fmt.Sprintf("*%v", pv)
+}
+func (m *AddonServiceChoice) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAllAddonServices
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AddonServiceChoice: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AddonServiceChoice: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VesIoVolterraDefault", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllAddonServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &AddonServiceChoice_VesIoVolterraDefault{b}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShapeBot", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllAddonServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &AddonServiceChoice_ShapeBot{b}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShapeRecognize", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllAddonServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &AddonServiceChoice_ShapeRecognize{b}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAllAddonServices(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAllAddonServices
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAllAddonServices
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipAllAddonServices(dAtA []byte) (n int, err error) {
+	l := len(dAtA)
+	iNdEx := 0
+	depth := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowAllAddonServices
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowAllAddonServices
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if dAtA[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+		case 1:
+			iNdEx += 8
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowAllAddonServices
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if length < 0 {
+				return 0, ErrInvalidLengthAllAddonServices
+			}
+			iNdEx += length
+		case 3:
+			depth++
+		case 4:
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupAllAddonServices
+			}
+			depth--
+		case 5:
+			iNdEx += 4
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthAllAddonServices
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
+	}
+	return 0, io.ErrUnexpectedEOF
+}
+
+var (
+	ErrInvalidLengthAllAddonServices        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowAllAddonServices          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupAllAddonServices = fmt.Errorf("proto: unexpected end of group")
+)

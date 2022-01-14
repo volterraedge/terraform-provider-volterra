@@ -5611,10 +5611,10 @@ var DefaultUpstreamTlsValidationContextValidator = func() *ValidateUpstreamTlsVa
 
 	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
 	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "131072",
-		"ves.io.schema.rules.string.min_bytes": "1",
-		"ves.io.schema.rules.string.uri_ref":   "true",
+		"ves.io.schema.rules.message.required":      "true",
+		"ves.io.schema.rules.string.max_bytes":      "131072",
+		"ves.io.schema.rules.string.min_bytes":      "1",
+		"ves.io.schema.rules.string.truststore_url": "true",
 	}
 	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
 	if err != nil {

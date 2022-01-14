@@ -429,7 +429,7 @@ var UpgradeAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/sites/{name}/upgrade_os": {
             "post": {
@@ -642,27 +642,36 @@ var UpgradeAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Site name\n\nExample: - \"ce398\"-\nRequired: YES",
+                    "description": " Site name\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "ce398",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Site namespace\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Site namespace\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "version": {
                     "type": "string",
-                    "description": " Version to upgraded to\n\nExample: - \"7.2003.20\"-\nRequired: YES",
+                    "description": " Version to upgraded to\n\nExample: - \"7.2003.20\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "SW/OS Version",
                     "x-displayname": "Version",
                     "x-ves-example": "7.2003.20",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -682,27 +691,36 @@ var UpgradeAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Site name\n\nExample: - \"ce398\"-\nRequired: YES",
+                    "description": " Site name\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "ce398",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Site namespace\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Site namespace\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "version": {
                     "type": "string",
-                    "description": " Version to upgraded to\n\nExample: - \"crt-20201010-600\"-\nRequired: YES",
+                    "description": " Version to upgraded to\n\nExample: - \"crt-20201010-600\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "SW/OS Version",
                     "x-displayname": "Version",
                     "x-ves-example": "crt-20201010-600",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

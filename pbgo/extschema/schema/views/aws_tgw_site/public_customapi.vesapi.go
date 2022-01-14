@@ -711,7 +711,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/aws_tgw_site/{name}/set_tgw_info": {
             "post": {
@@ -1124,72 +1124,71 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "subnet_ids": {
                     "type": "array",
-                    "description": " AWS Subnet Ids used by volterra site\nRequired: YES",
+                    "description": " AWS Subnet Ids used by volterra site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 0, 1,3\n",
                     "title": "AWS Subnet Ids Info",
                     "items": {
                         "$ref": "#/definitions/viewsAWSSubnetIdsType"
                     },
                     "x-displayname": "AWS Subnet Ids",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0, 1,3"
+                    }
                 },
                 "tgw_id": {
                     "type": "string",
-                    "description": " TGW ID populated by AWS\n\nExample: - \"tgw-12345678\"-\nRequired: YES",
+                    "description": " TGW ID populated by AWS\n\nExample: - \"tgw-12345678\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
                     "title": "TGW ID",
                     "x-displayname": "TGW ID",
                     "x-ves-example": "tgw-12345678",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.pattern": "^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
                 },
                 "vpc_id": {
                     "type": "string",
-                    "description": " VPC ID where the volterra site exists\n\nExample: - \"vpc-12345678\"-\nRequired: YES",
+                    "description": " VPC ID where the volterra site exists\n\nExample: - \"vpc-12345678\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
                     "title": "VPC ID",
                     "x-displayname": "VPC ID",
                     "x-ves-example": "vpc-12345678",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
                 }
             }
         },
         "aws_tgw_siteAWSVPNTunnelConfigType": {
             "type": "object",
-            "description": "Remote IP for VPN tunnels of a node",
+            "description": "x-displayName: \"AWS VPN Tunnel Config\"\nRemote IP for VPN tunnels of a node",
             "title": "AWS VPN Tunnel Config",
-            "x-displayname": "AWS VPN Tunnel Config",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSVPNTunnelConfigType",
             "properties": {
                 "node_id": {
                     "type": "string",
-                    "description": " Volterra Node ID for which this tunnel is configured\n\nExample: - \"ves-node-id-xxxxxx\"-\nRequired: YES",
-                    "title": "Volterra Node ID",
-                    "x-displayname": "Volterra Node ID",
-                    "x-ves-example": "ves-node-id-xxxxxx",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Volterra Node ID\"\nx-example: \"ves-node-id-xxxxxx\"\nx-required\nVolterra Node ID for which this tunnel is configured",
+                    "title": "Volterra Node ID"
                 },
                 "node_name": {
                     "type": "string",
-                    "description": " Name of the node for which this tunnel is configured\n\nExample: - \"master-0\"-\nRequired: YES",
-                    "title": "Name of the Node",
-                    "x-displayname": "Name of the Node",
-                    "x-ves-example": "master-0",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name of the Node\"\nx-example: \"master-0\"\nx-required\nName of the node for which this tunnel is configured",
+                    "title": "Name of the Node"
                 },
                 "tunnel_remote_ip": {
                     "type": "array",
-                    "description": " Remote IP(s) for up to two tunnels\n\nExample: - \"3.4.5.6\"-\nRequired: YES",
+                    "description": "x-displayName: \"Remote IP(s)\"\nx-example: \"3.4.5.6\"\nx-required\nRemote IP(s) for up to two tunnels",
                     "title": "Remote IP(s)",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "Remote IP(s)",
-                    "x-ves-example": "3.4.5.6",
-                    "x-ves-required": "true"
+                    }
                 },
                 "type": {
-                    "description": " VPN Tunnel Type\nRequired: YES",
+                    "description": "x-displayName: \"VPN Tunnel Type\"\nx-required\nVPN Tunnel Type",
                     "title": "VPN Tunnel Type",
-                    "$ref": "#/definitions/aws_tgw_siteVPNTunnelType",
-                    "x-displayname": "VPN Tunnel Type",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/aws_tgw_siteVPNTunnelType"
                 }
             }
         },
@@ -1252,13 +1251,16 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "vip_params_per_az": {
                     "type": "array",
-                    "description": " VIP Parameters per AZ\n\nExample: - \"master-0\"-",
+                    "description": " VIP Parameters per AZ\n\nExample: - \"master-0\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
                     "title": "VIP Params Per AZ",
                     "items": {
                         "$ref": "#/definitions/sitePublishVIPParamsPerAz"
                     },
                     "x-displayname": "VIP Params Per AZ",
-                    "x-ves-example": "master-0"
+                    "x-ves-example": "master-0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                    }
                 }
             }
         },
@@ -1324,15 +1326,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "default"
-                },
-                "tunnels": {
-                    "type": "array",
-                    "description": " AWS VPN Tunner Config",
-                    "title": "AWS VPN tunnel config",
-                    "items": {
-                        "$ref": "#/definitions/aws_tgw_siteAWSVPNTunnelConfigType"
-                    },
-                    "x-displayname": "AWS VPN Tunnel Config"
                 }
             }
         },
@@ -1360,15 +1353,13 @@ var CustomAPISwaggerJSON string = `{
         },
         "aws_tgw_siteVPNTunnelType": {
             "type": "string",
-            "description": "This defines VPN Tunnel type for which the config exists\n\nVPN Tunnel Type - HUB\nVPN Tunnel Type - Services",
+            "description": "x-displayName: \"VPN Tunnel Type\"\nThis defines VPN Tunnel type for which the config exists\n\n - HUB: x-displayName: \"VPN Tunnel Hub\"\nVPN Tunnel Type - HUB\n - SERVICES: x-displayName: \"VPN Tunnel Services\"\nVPN Tunnel Type - Services",
             "title": "VPN Tunnel Type",
             "enum": [
                 "HUB",
                 "SERVICES"
             ],
-            "default": "HUB",
-            "x-displayname": "VPN Tunnel Type",
-            "x-ves-proto-enum": "ves.io.schema.views.aws_tgw_site.VPNTunnelType"
+            "default": "HUB"
         },
         "sitePublishVIPParamsPerAz": {
             "type": "object",
@@ -1379,45 +1370,71 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\"]\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
-                    "x-ves-example": "us-east-2a"
+                    "x-ves-example": "us-east-2a",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\"]"
+                    }
                 },
                 "inside_vip": {
                     "type": "array",
-                    "description": " List of Inside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-",
+                    "description": " List of Inside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Inside VIP(s)",
+                    "maxItems": 3,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Inside VIP(s)",
-                    "x-ves-example": "192.168.0.156"
+                    "x-ves-example": "192.168.0.156",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv4": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "inside_vip_cname": {
                     "type": "string",
-                    "description": " CNAME value for the inside VIP,\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-",
+                    "description": " CNAME value for the inside VIP,\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Inside VIP CNAME",
+                    "maxLength": 256,
                     "x-displayname": "Inside VIP CNAME",
-                    "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                    "x-ves-example": "test.56670-387196482.useast2.ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "outside_vip": {
                     "type": "array",
-                    "description": " List of Outside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-\nRequired: YES",
+                    "description": " List of Outside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Outside VIP(s)",
+                    "minItems": 1,
+                    "maxItems": 3,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Outside VIP(s)",
                     "x-ves-example": "192.168.0.156",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "outside_vip_cname": {
                     "type": "string",
-                    "description": " CNAME value for the outside VIP\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-",
+                    "description": " CNAME value for the outside VIP\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Outside VIP CNAME",
+                    "maxLength": 256,
                     "x-displayname": "Outside VIP CNAME",
-                    "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                    "x-ves-example": "test.56670-387196482.useast2.ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
@@ -1430,32 +1447,51 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\"]\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-west-2a",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\"]"
+                    }
                 },
                 "inside_subnet_id": {
                     "type": "string",
-                    "description": " Inside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "description": " Inside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
                     "title": "Inside Subnet ID",
+                    "maxLength": 64,
                     "x-displayname": "Inside Subnet ID",
-                    "x-ves-example": "subnet-12345678901234567"
+                    "x-ves-example": "subnet-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
                 },
                 "outside_subnet_id": {
                     "type": "string",
-                    "description": " Outside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "description": " Outside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
                     "title": "Outside Subnet ID",
+                    "maxLength": 64,
                     "x-displayname": "Outside Subnet ID",
-                    "x-ves-example": "subnet-12345678901234567"
+                    "x-ves-example": "subnet-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
                 },
                 "workload_subnet_id": {
                     "type": "string",
-                    "description": " Workload subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "description": " Workload subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
                     "title": "Workload Subnet ID",
+                    "maxLength": 64,
                     "x-displayname": "Workload Subnet ID",
-                    "x-ves-example": "subnet-12345678901234567"
+                    "x-ves-example": "subnet-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
                 }
             }
         }

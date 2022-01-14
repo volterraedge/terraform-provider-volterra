@@ -3105,7 +3105,7 @@ var DefaultRestConfigTypeValidator = func() *ValidateRestConfigType {
 	rulesApiServer := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.hostport":  "true",
-		"ves.io.schema.rules.string.max_len":   "70",
+		"ves.io.schema.rules.string.max_len":   "262",
 	}
 	vFn, err = vrhApiServer(rulesApiServer)
 	if err != nil {

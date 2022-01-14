@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.views.forward_proxy_policy/Object/{object_uid}": {
             "get": {
@@ -2766,12 +2766,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "tls_list": {
                     "type": "array",
-                    "description": " Domains in SNI for TLS connections",
+                    "description": " Domains in SNI for TLS connections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "TLS Domains",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaDomainType"
                     },
-                    "x-displayname": "TLS Domains"
+                    "x-displayname": "TLS Domains",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2782,15 +2787,19 @@ var APISwaggerJSON string = `{
             "x-displayname": "Forward Proxy Rule",
             "x-ves-oneof-field-destination_choice": "[\"all_destinations\",\"dst_asn_list\",\"dst_asn_set\",\"dst_ip_prefix_set\",\"dst_label_selector\",\"dst_prefix_list\",\"http_list\",\"tls_list\",\"url_category_list\"]",
             "x-ves-oneof-field-http_connect_choice": "[\"no_http_connect_port\",\"port_matcher\"]",
-            "x-ves-oneof-field-source_choice": "[\"all_sources\",\"inside_sources\",\"interface\",\"ip_prefix_set\",\"label_selector\",\"namespace\",\"prefix_list\"]",
+            "x-ves-oneof-field-source_choice": "[\"all_sources\",\"ip_prefix_set\",\"label_selector\",\"prefix_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.ForwardProxyAdvancedRuleType",
             "properties": {
                 "action": {
-                    "description": " Action to be enforced if the input request matches the rule.\nRequired: YES",
+                    "description": " Action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n  ves.io.schema.rules.message.required: true\n",
                     "title": "action",
                     "$ref": "#/definitions/policyRuleAction",
                     "x-displayname": "Action",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "all_destinations": {
                     "description": "Exclusive with [dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"All Destinations\"\nMatch on all destinations",
@@ -2798,7 +2807,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "all_sources": {
-                    "description": "Exclusive with [inside_sources interface ip_prefix_set label_selector namespace prefix_list]\nx-displayName: \"All Sources\"\nAny source that matches 0/0 ip prefix",
+                    "description": "Exclusive with [ip_prefix_set label_selector prefix_list]\nx-displayName: \"All Sources\"\nAny source that matches 0/0 ip prefix",
                     "title": "All Sources",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2832,37 +2841,25 @@ var APISwaggerJSON string = `{
                     "title": "HTTP URLs",
                     "$ref": "#/definitions/forward_proxy_policyURLListType"
                 },
-                "inside_sources": {
-                    "description": "Exclusive with [all_sources interface ip_prefix_set label_selector namespace prefix_list]\nx-displayName: \"Endpoints Reachable via all Inside Interfaces\"\nAll ip prefixes that are reachable via inside interfaces are chosen as Endpoints",
-                    "title": "All Source Reachable via all inside interfaces",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "interface": {
-                    "description": "Exclusive with [all_sources inside_sources ip_prefix_set label_selector namespace prefix_list]\nx-displayName: \"Endpoints Reachable via an Interfaces\"\nAll ip prefixes that are reachable via an interfaces are chosen as Endpoints",
-                    "title": "All Endpoints Reachable via an interfaces",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [all_sources inside_sources interface label_selector namespace prefix_list]\nx-displayName: \"IP Prefix Set\"\nAll ip prefixes that are in a given ip prefix set.",
+                    "description": "Exclusive with [all_sources label_selector prefix_list]\nx-displayName: \"IP Prefix Set\"\nAll ip prefixes that are in a given ip prefix set.",
                     "title": "IP Prefix Set",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "label_selector": {
-                    "description": "Exclusive with [all_sources inside_sources interface ip_prefix_set namespace prefix_list]\nx-displayName: \"Source Label Selector\"\nx-example: \"app != web\"\nSources is set of prefixes determined by label selector expression",
+                    "description": "Exclusive with [all_sources ip_prefix_set prefix_list]\nx-displayName: \"Source Label Selector\"\nx-example: \"app != web\"\nSources is set of prefixes determined by label selector expression",
                     "title": "Source Label selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },
                 "metadata": {
-                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
                     "$ref": "#/definitions/schemaMessageMetaType",
                     "x-displayname": "Metadata",
-                    "x-ves-required": "true"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": "Exclusive with [all_sources inside_sources interface ip_prefix_set label_selector prefix_list]\nx-displayName: \"Endpoints of a Namespace\"\nAll ip prefixes that are of a namespace are chosen as Endpoints",
-                    "title": "All sources of a Namespace"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "no_http_connect_port": {
                     "description": "Exclusive with [port_matcher]\nx-displayName: \"Do Not Match\"\nIgnore destination ports for connections",
@@ -2875,23 +2872,9 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyPortMatcherType"
                 },
                 "prefix_list": {
-                    "description": "Exclusive with [all_sources inside_sources interface ip_prefix_set label_selector namespace]\nx-displayName: \"IPv4 Prefix List\"\nx-example: \"192.168.20.0/24\"\nlist of ip prefixes that are representing source of traffic seen by proxy",
+                    "description": "Exclusive with [all_sources ip_prefix_set label_selector]\nx-displayName: \"IPv4 Prefix List\"\nx-example: \"192.168.20.0/24\"\nlist of ip prefixes that are representing source of traffic seen by proxy",
                     "title": "ipv4 prefix list",
                     "$ref": "#/definitions/viewsPrefixStringListType"
-                },
-                "rule_description": {
-                    "type": "string",
-                    "description": " Human readable description for the rule\n\nExample: - \"Rule to block example.com\"-",
-                    "title": "Description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Rule to block example.com"
-                },
-                "rule_name": {
-                    "type": "string",
-                    "description": " Rule Name that will be used to query metrics for this rule.\n\nExample: - \"my-policy-allow-github.com\"-",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "my-policy-allow-github.com"
                 },
                 "tls_list": {
                     "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list url_category_list]\nx-displayName: \"TLS Domains\"\nDomains in SNI for TLS connections",
@@ -2914,13 +2897,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " List of custom rules\nRequired: YES",
+                    "description": " List of custom rules\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "rules",
+                    "minItems": 1,
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/forward_proxy_policyForwardProxyAdvancedRuleType"
                     },
                     "x-displayname": "Custom Rule List",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
                 }
             }
         },
@@ -2950,30 +2941,45 @@ var APISwaggerJSON string = `{
                 },
                 "dest_list": {
                     "type": "array",
-                    "description": " L4 destinations for non-HTTP and non-TLS connections and TLS connections without SNI",
+                    "description": " L4 destinations for non-HTTP and non-TLS connections and TLS connections without SNI\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "L4 Destinations",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaL4DestType"
                     },
-                    "x-displayname": "L4 Destination List"
+                    "x-displayname": "L4 Destination List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "http_list": {
                     "type": "array",
-                    "description": " URLs for HTTP connections",
+                    "description": " URLs for HTTP connections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "HTTP URLs",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/forward_proxy_policyURLType"
                     },
-                    "x-displayname": "HTTP URLs"
+                    "x-displayname": "HTTP URLs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "tls_list": {
                     "type": "array",
-                    "description": " Domains in SNI for TLS connections",
+                    "description": " Domains in SNI for TLS connections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "TLS Domains",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaDomainType"
                     },
-                    "x-displayname": "TLS Domains"
+                    "x-displayname": "TLS Domains",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3030,13 +3036,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "url_categories": {
                     "type": "array",
-                    "description": " List of url categories to be selected\nRequired: YES",
+                    "description": " List of url categories to be selected\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "URL Categories",
+                    "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyURLCategory"
                     },
                     "x-displayname": "URL Categories",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3046,12 +3058,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "http_list": {
                     "type": "array",
-                    "description": " URLs for HTTP connections",
+                    "description": " URLs for HTTP connections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "HTTP URLs",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/forward_proxy_policyURLType"
                     },
-                    "x-displayname": "HTTP URLs"
+                    "x-displayname": "HTTP URLs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3154,15 +3171,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "as numbers",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "x-displayname": "AS Numbers",
                     "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3182,14 +3207,21 @@ var APISwaggerJSON string = `{
                 },
                 "ports": {
                     "type": "array",
-                    "description": " A list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\n to be part of the range.\n\nExample: - \"8000-8191\"-\nRequired: YES",
+                    "description": " A list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\n to be part of the range.\n\nExample: - \"8000-8191\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.port_range: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "port ranges",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "8000-8191",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.port_range": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3377,17 +3409,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3471,21 +3509,38 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port_ranges": {
                     "type": "string",
-                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\nRequired: YES",
+                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
                     "title": "port_ranges",
+                    "minLength": 1,
+                    "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range_list": "true"
+                    }
                 },
                 "prefixes": {
                     "type": "array",
-                    "description": " Destination IPv4 prefixes.\nRequired: YES",
+                    "description": " Destination IPv4 prefixes.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "prefixes",
+                    "minItems": 1,
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefixes",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3498,14 +3553,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "expressions": {
                     "type": "array",
-                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\nRequired: YES",
+                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.k8s_label_selector: true\n  ves.io.schema.rules.repeated.items.string.max_len: 4096\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "expressions",
+                    "maxItems": 1,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096
                     },
                     "x-displayname": "Selector Expression",
                     "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.k8s_label_selector": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "4096",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3514,16 +3579,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaMessageMetaType": {
             "type": "object",
@@ -3534,26 +3590,28 @@ var APISwaggerJSON string = `{
             "properties": {
                 "description": {
                     "type": "string",
-                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "description",
+                    "maxLength": 256,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
                     "title": "name",
+                    "minLength": 1,
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
                 }
             }
         },
@@ -3566,10 +3624,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3595,11 +3659,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3789,12 +3856,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3900,25 +3971,40 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "namespace",
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "tenant",
+                    "maxLength": 64,
                     "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },
@@ -3931,14 +4017,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv4 prefix list",
+                    "minItems": 1,
+                    "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3990,12 +4085,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all allow_list deny_list]\nx-displayName: \"Custom Rule List\"\nList of custom rules",
                     "title": "List of custom rules",
                     "$ref": "#/definitions/forward_proxy_policyForwardProxyRuleListType"
-                },
-                "view_internal": {
-                    "description": " Reference to view internal object",
-                    "title": "view_internal",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "View Internal"
                 }
             }
         }

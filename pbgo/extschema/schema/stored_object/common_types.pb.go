@@ -10,11 +10,12 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	io "io"
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -29,6 +30,40 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// QueryType
+//
+// x-displayName: "Query Type"
+// The type of search query needs to be performed. Could be EXACT_MATCH or PREFIX_MATCH.
+// EXACT_MATCH returns the objects with exact match on the name filed, while PREFIX_MATCH returns the list of object having the 'name' as prefix. Default is EXACT_MATCH.
+type QueryType int32
+
+const (
+	// EXACT_MATCH
+	//
+	// x-displayName: "EXACT MATCH"
+	// Returns list of objects with exact match on the name filed.
+	EXACT_MATCH QueryType = 0
+	// PREFIX_MATCH
+	//
+	// x-displayName: "PREFIX MATCH"
+	// Returns the list of object matching the 'name' prefix.
+	PREFIX_MATCH QueryType = 1
+)
+
+var QueryType_name = map[int32]string{
+	0: "EXACT_MATCH",
+	1: "PREFIX_MATCH",
+}
+
+var QueryType_value = map[string]int32{
+	"EXACT_MATCH":  0,
+	"PREFIX_MATCH": 1,
+}
+
+func (QueryType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_26a4f37803eefdf5, []int{0}
+}
 
 // CreateObjectRequest
 //
@@ -59,7 +94,6 @@ type CreateObjectRequest struct {
 	// contents
 	//
 	// x-displayName: "Object Contents"
-	// x-required
 	// contents of the stored object.
 	//
 	// Types that are valid to be assigned to Contents:
@@ -194,11 +228,21 @@ func (*CreateObjectRequest) XXX_OneofWrappers() []interface{} {
 // x-displayName: "Create Object Response"
 // Response message for CreateObject API
 type CreateObjectResponse struct {
-	// spec
+	// metadata
 	//
-	// x-displayName: "Stored Object"
-	// Stored object specs
-	Spec *StoredObjectDescriptor `protobuf:"bytes,1,opt,name=spec,proto3" json:"spec,omitempty"`
+	// x-displayName: "Metadata"
+	// Stored object metadata
+	Metadata *StoredObjectDescriptor `protobuf:"bytes,2,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// additional info
+	//
+	// x-displayName: "Additional Info"
+	// x-example: "value"
+	// Additional Info for create response
+	//
+	// Types that are valid to be assigned to AdditionalInfo:
+	//	*CreateObjectResponse_NoAdditionalInfo
+	//	*CreateObjectResponse_PresignedUrl
+	AdditionalInfo isCreateObjectResponse_AdditionalInfo `protobuf_oneof:"additional_info"`
 }
 
 func (m *CreateObjectResponse) Reset()      { *m = CreateObjectResponse{} }
@@ -229,11 +273,57 @@ func (m *CreateObjectResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateObjectResponse proto.InternalMessageInfo
 
-func (m *CreateObjectResponse) GetSpec() *StoredObjectDescriptor {
+type isCreateObjectResponse_AdditionalInfo interface {
+	isCreateObjectResponse_AdditionalInfo()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateObjectResponse_NoAdditionalInfo struct {
+	NoAdditionalInfo *schema.Empty `protobuf:"bytes,4,opt,name=no_additional_info,json=noAdditionalInfo,proto3,oneof" json:"no_additional_info,omitempty"`
+}
+type CreateObjectResponse_PresignedUrl struct {
+	PresignedUrl *PreSignedUrl `protobuf:"bytes,5,opt,name=presigned_url,json=presignedUrl,proto3,oneof" json:"presigned_url,omitempty"`
+}
+
+func (*CreateObjectResponse_NoAdditionalInfo) isCreateObjectResponse_AdditionalInfo() {}
+func (*CreateObjectResponse_PresignedUrl) isCreateObjectResponse_AdditionalInfo()     {}
+
+func (m *CreateObjectResponse) GetAdditionalInfo() isCreateObjectResponse_AdditionalInfo {
 	if m != nil {
-		return m.Spec
+		return m.AdditionalInfo
 	}
 	return nil
+}
+
+func (m *CreateObjectResponse) GetMetadata() *StoredObjectDescriptor {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *CreateObjectResponse) GetNoAdditionalInfo() *schema.Empty {
+	if x, ok := m.GetAdditionalInfo().(*CreateObjectResponse_NoAdditionalInfo); ok {
+		return x.NoAdditionalInfo
+	}
+	return nil
+}
+
+func (m *CreateObjectResponse) GetPresignedUrl() *PreSignedUrl {
+	if x, ok := m.GetAdditionalInfo().(*CreateObjectResponse_PresignedUrl); ok {
+		return x.PresignedUrl
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateObjectResponse) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateObjectResponse_NoAdditionalInfo)(nil),
+		(*CreateObjectResponse_PresignedUrl)(nil),
+	}
 }
 
 // GetObjectRequest
@@ -331,6 +421,11 @@ func (m *GetObjectRequest) GetVersion() string {
 // x-displayName: "Get Object Response"
 // Response message for GetObject API
 type GetObjectResponse struct {
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// Stored object metadata
+	Metadata *StoredObjectDescriptor `protobuf:"bytes,6,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// contents
 	//
 	// x-displayName: "Contents"
@@ -340,7 +435,14 @@ type GetObjectResponse struct {
 	// Types that are valid to be assigned to Contents:
 	//	*GetObjectResponse_StringValue
 	//	*GetObjectResponse_BytesValue
+	//	*GetObjectResponse_PresignedUrl
 	Contents isGetObjectResponse_Contents `protobuf_oneof:"contents"`
+	// content_format
+	//
+	// x-displayName: "Content Format"
+	// x-example: "json, yaml"
+	// The optional content format associated with object
+	ContentFormat string `protobuf:"bytes,4,opt,name=content_format,json=contentFormat,proto3" json:"content_format,omitempty"`
 }
 
 func (m *GetObjectResponse) Reset()      { *m = GetObjectResponse{} }
@@ -384,13 +486,24 @@ type GetObjectResponse_StringValue struct {
 type GetObjectResponse_BytesValue struct {
 	BytesValue []byte `protobuf:"bytes,2,opt,name=bytes_value,json=bytesValue,proto3,oneof" json:"bytes_value,omitempty"`
 }
+type GetObjectResponse_PresignedUrl struct {
+	PresignedUrl *PreSignedUrl `protobuf:"bytes,5,opt,name=presigned_url,json=presignedUrl,proto3,oneof" json:"presigned_url,omitempty"`
+}
 
-func (*GetObjectResponse_StringValue) isGetObjectResponse_Contents() {}
-func (*GetObjectResponse_BytesValue) isGetObjectResponse_Contents()  {}
+func (*GetObjectResponse_StringValue) isGetObjectResponse_Contents()  {}
+func (*GetObjectResponse_BytesValue) isGetObjectResponse_Contents()   {}
+func (*GetObjectResponse_PresignedUrl) isGetObjectResponse_Contents() {}
 
 func (m *GetObjectResponse) GetContents() isGetObjectResponse_Contents {
 	if m != nil {
 		return m.Contents
+	}
+	return nil
+}
+
+func (m *GetObjectResponse) GetMetadata() *StoredObjectDescriptor {
+	if m != nil {
+		return m.Metadata
 	}
 	return nil
 }
@@ -409,12 +522,164 @@ func (m *GetObjectResponse) GetBytesValue() []byte {
 	return nil
 }
 
+func (m *GetObjectResponse) GetPresignedUrl() *PreSignedUrl {
+	if x, ok := m.GetContents().(*GetObjectResponse_PresignedUrl); ok {
+		return x.PresignedUrl
+	}
+	return nil
+}
+
+func (m *GetObjectResponse) GetContentFormat() string {
+	if m != nil {
+		return m.ContentFormat
+	}
+	return ""
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetObjectResponse) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetObjectResponse_StringValue)(nil),
 		(*GetObjectResponse_BytesValue)(nil),
+		(*GetObjectResponse_PresignedUrl)(nil),
 	}
+}
+
+// PreSignedUrl
+//
+// x-displayName: "Pre Signed Url"
+// Pre signed url
+type PreSignedUrl struct {
+	// storage_provider_choice
+	//
+	// x-displayName: "storage_provider_choice"
+	// x-example: "value"
+	// Storage provider choice and relevant data
+	//
+	// Types that are valid to be assigned to StorageProviderChoice:
+	//	*PreSignedUrl_Aws
+	StorageProviderChoice isPreSignedUrl_StorageProviderChoice `protobuf_oneof:"storage_provider_choice"`
+}
+
+func (m *PreSignedUrl) Reset()      { *m = PreSignedUrl{} }
+func (*PreSignedUrl) ProtoMessage() {}
+func (*PreSignedUrl) Descriptor() ([]byte, []int) {
+	return fileDescriptor_26a4f37803eefdf5, []int{4}
+}
+func (m *PreSignedUrl) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PreSignedUrl) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PreSignedUrl) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PreSignedUrl.Merge(m, src)
+}
+func (m *PreSignedUrl) XXX_Size() int {
+	return m.Size()
+}
+func (m *PreSignedUrl) XXX_DiscardUnknown() {
+	xxx_messageInfo_PreSignedUrl.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PreSignedUrl proto.InternalMessageInfo
+
+type isPreSignedUrl_StorageProviderChoice interface {
+	isPreSignedUrl_StorageProviderChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type PreSignedUrl_Aws struct {
+	Aws *PresignedUrlData `protobuf:"bytes,2,opt,name=aws,proto3,oneof" json:"aws,omitempty"`
+}
+
+func (*PreSignedUrl_Aws) isPreSignedUrl_StorageProviderChoice() {}
+
+func (m *PreSignedUrl) GetStorageProviderChoice() isPreSignedUrl_StorageProviderChoice {
+	if m != nil {
+		return m.StorageProviderChoice
+	}
+	return nil
+}
+
+func (m *PreSignedUrl) GetAws() *PresignedUrlData {
+	if x, ok := m.GetStorageProviderChoice().(*PreSignedUrl_Aws); ok {
+		return x.Aws
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*PreSignedUrl) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*PreSignedUrl_Aws)(nil),
+	}
+}
+
+// PresignedUrlData
+//
+// x-displayName: "Pre Signed Url Data"
+// Pre signed url data
+type PresignedUrlData struct {
+	// url
+	//
+	// x-displayName: "url"
+	// The url to upload or download the resource
+	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	// method
+	//
+	// x-displayName: "method"
+	// The method of the request matched to that url
+	Method schema.HttpMethod `protobuf:"varint,2,opt,name=method,proto3,enum=ves.io.schema.HttpMethod" json:"method,omitempty"`
+}
+
+func (m *PresignedUrlData) Reset()      { *m = PresignedUrlData{} }
+func (*PresignedUrlData) ProtoMessage() {}
+func (*PresignedUrlData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_26a4f37803eefdf5, []int{5}
+}
+func (m *PresignedUrlData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PresignedUrlData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PresignedUrlData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PresignedUrlData.Merge(m, src)
+}
+func (m *PresignedUrlData) XXX_Size() int {
+	return m.Size()
+}
+func (m *PresignedUrlData) XXX_DiscardUnknown() {
+	xxx_messageInfo_PresignedUrlData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PresignedUrlData proto.InternalMessageInfo
+
+func (m *PresignedUrlData) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
+func (m *PresignedUrlData) GetMethod() schema.HttpMethod {
+	if m != nil {
+		return m.Method
+	}
+	return schema.ANY
 }
 
 // ListOfObjectsRequest
@@ -441,12 +706,23 @@ type ListObjectsRequest struct {
 	// x-example: "volt-api-specs"
 	// Optional query parameter. Name of the stored_object
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// query_type
+	//
+	// x-displayName: "Query Type"
+	// Optional query parameter. The type of search query needs to be performed. Could be EXACT_MATCH or PREFIX_MATCH.
+	// EXACT_MATCH returns the objects with exact match on the name filed, while PREFIX_MATCH returns the list of object matching the 'name' prefix. Default is EXACT_MATCH.
+	QueryType QueryType `protobuf:"varint,4,opt,name=query_type,json=queryType,proto3,enum=ves.io.schema.stored_object.QueryType" json:"query_type,omitempty"`
+	// latest_version_only
+	//
+	// x-displayName: "Latest Versions Only"
+	// Optional query parameter. If passed, returns only latest version of the objects.
+	LatestVersionOnly bool `protobuf:"varint,5,opt,name=latest_version_only,json=latestVersionOnly,proto3" json:"latest_version_only,omitempty"`
 }
 
 func (m *ListObjectsRequest) Reset()      { *m = ListObjectsRequest{} }
 func (*ListObjectsRequest) ProtoMessage() {}
 func (*ListObjectsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{4}
+	return fileDescriptor_26a4f37803eefdf5, []int{6}
 }
 func (m *ListObjectsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -492,6 +768,20 @@ func (m *ListObjectsRequest) GetName() string {
 	return ""
 }
 
+func (m *ListObjectsRequest) GetQueryType() QueryType {
+	if m != nil {
+		return m.QueryType
+	}
+	return EXACT_MATCH
+}
+
+func (m *ListObjectsRequest) GetLatestVersionOnly() bool {
+	if m != nil {
+		return m.LatestVersionOnly
+	}
+	return false
+}
+
 // ListOfObjectsResponse
 //
 // x-displayName: "List Objects Response"
@@ -519,7 +809,7 @@ type StoredObjectDescriptor struct {
 func (m *StoredObjectDescriptor) Reset()      { *m = StoredObjectDescriptor{} }
 func (*StoredObjectDescriptor) ProtoMessage() {}
 func (*StoredObjectDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{5}
+	return fileDescriptor_26a4f37803eefdf5, []int{7}
 }
 func (m *StoredObjectDescriptor) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -565,6 +855,162 @@ func (m *StoredObjectDescriptor) GetCreationTimestamp() *types.Timestamp {
 	return nil
 }
 
+// VersionDescriptor
+//
+// x-displayName: "Version Descriptor"
+// Descriptor for store object version.
+type VersionDescriptor struct {
+	// version
+	//
+	// x-displayName: "Version"
+	// Version of the stored object.
+	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
+	// description
+	//
+	// x-displayName: "description"
+	// Optional field, the Description for the object
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// creation_timestamp
+	//
+	// x-displayName: "Creation Timestamp"
+	// x-required
+	// Creation date & time for the object
+	CreationTimestamp *types.Timestamp `protobuf:"bytes,3,opt,name=creation_timestamp,json=creationTimestamp,proto3" json:"creation_timestamp,omitempty"`
+	// url
+	//
+	// x-displayName: "Url"
+	// x-required
+	// Url of the stored object
+	Url string `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
+	// latest_version
+	//
+	// x-displayName: "Latest Version"
+	// A tag representing if this is the latest version for the object.
+	LatestVersion bool `protobuf:"varint,5,opt,name=latest_version,json=latestVersion,proto3" json:"latest_version,omitempty"`
+}
+
+func (m *VersionDescriptor) Reset()      { *m = VersionDescriptor{} }
+func (*VersionDescriptor) ProtoMessage() {}
+func (*VersionDescriptor) Descriptor() ([]byte, []int) {
+	return fileDescriptor_26a4f37803eefdf5, []int{8}
+}
+func (m *VersionDescriptor) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VersionDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VersionDescriptor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VersionDescriptor.Merge(m, src)
+}
+func (m *VersionDescriptor) XXX_Size() int {
+	return m.Size()
+}
+func (m *VersionDescriptor) XXX_DiscardUnknown() {
+	xxx_messageInfo_VersionDescriptor.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VersionDescriptor proto.InternalMessageInfo
+
+func (m *VersionDescriptor) GetVersion() string {
+	if m != nil {
+		return m.Version
+	}
+	return ""
+}
+
+func (m *VersionDescriptor) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *VersionDescriptor) GetCreationTimestamp() *types.Timestamp {
+	if m != nil {
+		return m.CreationTimestamp
+	}
+	return nil
+}
+
+func (m *VersionDescriptor) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
+func (m *VersionDescriptor) GetLatestVersion() bool {
+	if m != nil {
+		return m.LatestVersion
+	}
+	return false
+}
+
+// ListItemDescriptor
+//
+// x-displayName: "List Item Descriptor"
+// A descriptor for list response item.
+type ListItemDescriptor struct {
+	// name
+	//
+	// x-displayName: "Object Name"
+	// Name of the stored object.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// versions
+	//
+	// x-displayName: "Versions"
+	// Available versions for the stored object.
+	Versions []*VersionDescriptor `protobuf:"bytes,2,rep,name=versions,proto3" json:"versions,omitempty"`
+}
+
+func (m *ListItemDescriptor) Reset()      { *m = ListItemDescriptor{} }
+func (*ListItemDescriptor) ProtoMessage() {}
+func (*ListItemDescriptor) Descriptor() ([]byte, []int) {
+	return fileDescriptor_26a4f37803eefdf5, []int{9}
+}
+func (m *ListItemDescriptor) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListItemDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ListItemDescriptor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListItemDescriptor.Merge(m, src)
+}
+func (m *ListItemDescriptor) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListItemDescriptor) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListItemDescriptor.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListItemDescriptor proto.InternalMessageInfo
+
+func (m *ListItemDescriptor) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *ListItemDescriptor) GetVersions() []*VersionDescriptor {
+	if m != nil {
+		return m.Versions
+	}
+	return nil
+}
+
 // ListObjectsResponse
 //
 // x-displayName: "List Objects Response"
@@ -573,14 +1019,14 @@ type ListObjectsResponse struct {
 	// list of store object descriptors
 	//
 	// x-displayName: "Stored Object Descriptors"
-	// Stored Object Names
-	Items []*StoredObjectDescriptor `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	// Stored object names and available versions for each object.
+	Items []*ListItemDescriptor `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
 }
 
 func (m *ListObjectsResponse) Reset()      { *m = ListObjectsResponse{} }
 func (*ListObjectsResponse) ProtoMessage() {}
 func (*ListObjectsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{6}
+	return fileDescriptor_26a4f37803eefdf5, []int{10}
 }
 func (m *ListObjectsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -605,7 +1051,7 @@ func (m *ListObjectsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListObjectsResponse proto.InternalMessageInfo
 
-func (m *ListObjectsResponse) GetItems() []*StoredObjectDescriptor {
+func (m *ListObjectsResponse) GetItems() []*ListItemDescriptor {
 	if m != nil {
 		return m.Items
 	}
@@ -655,7 +1101,7 @@ type DeleteObjectRequest struct {
 func (m *DeleteObjectRequest) Reset()      { *m = DeleteObjectRequest{} }
 func (*DeleteObjectRequest) ProtoMessage() {}
 func (*DeleteObjectRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{7}
+	return fileDescriptor_26a4f37803eefdf5, []int{11}
 }
 func (m *DeleteObjectRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -731,7 +1177,7 @@ type DeleteObjectResponse struct {
 func (m *DeleteObjectResponse) Reset()      { *m = DeleteObjectResponse{} }
 func (*DeleteObjectResponse) ProtoMessage() {}
 func (*DeleteObjectResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{8}
+	return fileDescriptor_26a4f37803eefdf5, []int{12}
 }
 func (m *DeleteObjectResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -764,6 +1210,8 @@ func (m *DeleteObjectResponse) GetDeletedObjects() []string {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.stored_object.QueryType", QueryType_name, QueryType_value)
+	golang_proto.RegisterEnum("ves.io.schema.stored_object.QueryType", QueryType_name, QueryType_value)
 	proto.RegisterType((*CreateObjectRequest)(nil), "ves.io.schema.stored_object.CreateObjectRequest")
 	golang_proto.RegisterType((*CreateObjectRequest)(nil), "ves.io.schema.stored_object.CreateObjectRequest")
 	proto.RegisterType((*CreateObjectResponse)(nil), "ves.io.schema.stored_object.CreateObjectResponse")
@@ -772,10 +1220,18 @@ func init() {
 	golang_proto.RegisterType((*GetObjectRequest)(nil), "ves.io.schema.stored_object.GetObjectRequest")
 	proto.RegisterType((*GetObjectResponse)(nil), "ves.io.schema.stored_object.GetObjectResponse")
 	golang_proto.RegisterType((*GetObjectResponse)(nil), "ves.io.schema.stored_object.GetObjectResponse")
+	proto.RegisterType((*PreSignedUrl)(nil), "ves.io.schema.stored_object.PreSignedUrl")
+	golang_proto.RegisterType((*PreSignedUrl)(nil), "ves.io.schema.stored_object.PreSignedUrl")
+	proto.RegisterType((*PresignedUrlData)(nil), "ves.io.schema.stored_object.PresignedUrlData")
+	golang_proto.RegisterType((*PresignedUrlData)(nil), "ves.io.schema.stored_object.PresignedUrlData")
 	proto.RegisterType((*ListObjectsRequest)(nil), "ves.io.schema.stored_object.ListObjectsRequest")
 	golang_proto.RegisterType((*ListObjectsRequest)(nil), "ves.io.schema.stored_object.ListObjectsRequest")
 	proto.RegisterType((*StoredObjectDescriptor)(nil), "ves.io.schema.stored_object.StoredObjectDescriptor")
 	golang_proto.RegisterType((*StoredObjectDescriptor)(nil), "ves.io.schema.stored_object.StoredObjectDescriptor")
+	proto.RegisterType((*VersionDescriptor)(nil), "ves.io.schema.stored_object.VersionDescriptor")
+	golang_proto.RegisterType((*VersionDescriptor)(nil), "ves.io.schema.stored_object.VersionDescriptor")
+	proto.RegisterType((*ListItemDescriptor)(nil), "ves.io.schema.stored_object.ListItemDescriptor")
+	golang_proto.RegisterType((*ListItemDescriptor)(nil), "ves.io.schema.stored_object.ListItemDescriptor")
 	proto.RegisterType((*ListObjectsResponse)(nil), "ves.io.schema.stored_object.ListObjectsResponse")
 	golang_proto.RegisterType((*ListObjectsResponse)(nil), "ves.io.schema.stored_object.ListObjectsResponse")
 	proto.RegisterType((*DeleteObjectRequest)(nil), "ves.io.schema.stored_object.DeleteObjectRequest")
@@ -792,68 +1248,99 @@ func init() {
 }
 
 var fileDescriptor_26a4f37803eefdf5 = []byte{
-	// 940 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xd8, 0x4e, 0xe2, 0x8c, 0x43, 0x48, 0x37, 0x11, 0xb2, 0x92, 0xb0, 0x71, 0x97, 0x88,
-	0x3a, 0xb4, 0xde, 0x2d, 0xce, 0x09, 0x21, 0x08, 0x4d, 0xa2, 0xfe, 0x12, 0x12, 0x62, 0xa9, 0x7a,
-	0xc0, 0x4a, 0xcd, 0x7a, 0xfd, 0xb2, 0x99, 0xe2, 0xdd, 0x59, 0x66, 0xc6, 0x6e, 0x93, 0x36, 0x52,
-	0xfe, 0x03, 0xe0, 0xce, 0x8d, 0x0b, 0x7f, 0x03, 0xb9, 0xe4, 0x82, 0xd4, 0xa3, 0x8f, 0x39, 0x12,
-	0x47, 0x95, 0xe0, 0xd6, 0x3f, 0x01, 0xcd, 0xcc, 0x2e, 0xe9, 0x86, 0x60, 0x21, 0xd4, 0x53, 0x4e,
-	0x3b, 0x3f, 0xde, 0xf7, 0xed, 0x9b, 0xf7, 0x7d, 0x6f, 0x76, 0xb1, 0xdd, 0x07, 0x6e, 0x13, 0xea,
-	0x70, 0x7f, 0x07, 0x42, 0xcf, 0xe1, 0x82, 0x32, 0xe8, 0xb4, 0x68, 0xfb, 0x31, 0xf8, 0xc2, 0xf1,
-	0x69, 0x18, 0xd2, 0xa8, 0x25, 0x76, 0x63, 0xe0, 0x76, 0xcc, 0xa8, 0xa0, 0xc6, 0x82, 0x8e, 0xb7,
-	0x75, 0xbc, 0x9d, 0x89, 0x9f, 0xaf, 0x07, 0x44, 0xec, 0xf4, 0xda, 0xb6, 0x4f, 0x43, 0x27, 0xa0,
-	0x01, 0x75, 0x14, 0xa6, 0xdd, 0xdb, 0x56, 0x33, 0x35, 0x51, 0x23, 0xcd, 0x35, 0xbf, 0x14, 0x50,
-	0x1a, 0x74, 0xe1, 0x2c, 0x4a, 0x90, 0x10, 0xb8, 0xf0, 0xc2, 0x38, 0x09, 0x58, 0xc8, 0x26, 0x47,
-	0x63, 0x41, 0x68, 0x94, 0x64, 0x32, 0xbf, 0x98, 0xdd, 0xec, 0x7b, 0x5d, 0xd2, 0xf1, 0x04, 0x24,
-	0xbb, 0xd5, 0x73, 0xbb, 0x04, 0x9e, 0xb4, 0x32, 0x78, 0xeb, 0x65, 0x01, 0xcf, 0x6e, 0x30, 0xf0,
-	0x04, 0x7c, 0xa1, 0xb2, 0x77, 0xe1, 0xbb, 0x1e, 0x70, 0x61, 0x2c, 0xe2, 0xc9, 0xc8, 0x0b, 0x81,
-	0xc7, 0x9e, 0x0f, 0x15, 0x54, 0x45, 0xb5, 0x49, 0xf7, 0x6c, 0xc1, 0x00, 0x5c, 0xd6, 0x87, 0x55,
-	0x55, 0xa9, 0xe4, 0xe5, 0xfe, 0xfa, 0xe6, 0xaf, 0x7f, 0x1e, 0x15, 0xd6, 0xd8, 0x27, 0xee, 0xc7,
-	0x4d, 0x8b, 0x3f, 0xf1, 0x82, 0x00, 0x98, 0x75, 0xa3, 0x6a, 0xf9, 0xc0, 0x04, 0xd9, 0x26, 0xbe,
-	0x27, 0x40, 0x4e, 0x1f, 0x7b, 0x7d, 0x8f, 0xfb, 0x8c, 0xc4, 0x42, 0xce, 0x76, 0x44, 0xd8, 0x95,
-	0xcf, 0x00, 0x22, 0x60, 0xc4, 0xb7, 0xb6, 0x5c, 0xac, 0x89, 0x1f, 0xec, 0xc6, 0x60, 0x6c, 0xe0,
-	0xa2, 0x7c, 0x67, 0xa5, 0xa0, 0xf8, 0x1d, 0xc9, 0x3f, 0xc6, 0x0a, 0x95, 0x83, 0xa2, 0x1c, 0x55,
-	0x99, 0xd9, 0x58, 0xac, 0x35, 0xbd, 0xfa, 0xde, 0x56, 0xad, 0x59, 0xf7, 0xea, 0x7b, 0x37, 0xeb,
-	0x1f, 0x6d, 0x7d, 0xd0, 0x4c, 0x06, 0x2b, 0x6b, 0x2b, 0xae, 0x02, 0x1b, 0xab, 0x78, 0x8a, 0x0b,
-	0x46, 0xa2, 0xa0, 0xd5, 0xf7, 0xba, 0x3d, 0xa8, 0x14, 0x15, 0xd9, 0xf4, 0x8b, 0x7d, 0x24, 0x59,
-	0xc6, 0x59, 0xb1, 0x72, 0x70, 0xf0, 0xd9, 0xdd, 0x9c, 0x5b, 0xd6, 0x51, 0x0f, 0x65, 0x90, 0xf1,
-	0x21, 0x2e, 0xb7, 0x77, 0x05, 0xf0, 0x04, 0x33, 0x56, 0x45, 0xb5, 0xa9, 0x33, 0xcc, 0x5e, 0x8a,
-	0xc1, 0x2a, 0x48, 0x43, 0x5c, 0x3c, 0xed, 0xd3, 0x48, 0x40, 0x24, 0x5a, 0xdb, 0x94, 0x85, 0x9e,
-	0xa8, 0x4c, 0xa8, 0x37, 0x5d, 0x97, 0x90, 0xf7, 0xd9, 0xb2, 0x6b, 0x35, 0x2d, 0x55, 0x00, 0x4e,
-	0x23, 0xf9, 0xdc, 0xf5, 0xf4, 0xd1, 0xc5, 0x53, 0x55, 0x89, 0x36, 0x89, 0xac, 0x2d, 0xf7, 0xad,
-	0x84, 0xe2, 0xb6, 0x62, 0x30, 0x6e, 0xe0, 0x72, 0x07, 0x74, 0xb5, 0x08, 0x8d, 0x2a, 0x25, 0x45,
-	0x88, 0xcf, 0xea, 0xe0, 0xbe, 0xbe, 0xbd, 0x3e, 0x87, 0x4b, 0x09, 0x9c, 0x1b, 0xa5, 0xa3, 0x43,
-	0x54, 0x1c, 0x1c, 0xa2, 0xf1, 0xfb, 0xc5, 0xd2, 0xf8, 0xcc, 0x84, 0xd5, 0xc2, 0x73, 0x59, 0x99,
-	0x79, 0x4c, 0x23, 0x0e, 0xc6, 0x1d, 0x5c, 0xe4, 0x31, 0xf8, 0x4a, 0xe2, 0x72, 0x63, 0xd5, 0x1e,
-	0x61, 0x6c, 0xfb, 0x2b, 0x35, 0xd3, 0x04, 0x9b, 0xc9, 0x7b, 0x29, 0x73, 0x15, 0x81, 0xf5, 0x53,
-	0x1e, 0xcf, 0xdc, 0x01, 0x71, 0x59, 0x5d, 0xf4, 0x29, 0x9e, 0xe8, 0x03, 0xe3, 0x52, 0x05, 0x6d,
-	0xa0, 0x65, 0x89, 0x5e, 0x62, 0xef, 0x36, 0x16, 0x1e, 0xd5, 0xfa, 0xcf, 0x1f, 0xae, 0x34, 0x65,
-	0xfc, 0xf5, 0x5a, 0x5d, 0x3d, 0x9f, 0x35, 0xf6, 0x57, 0x9e, 0xad, 0xee, 0x2f, 0xbb, 0x29, 0xc8,
-	0xfa, 0x11, 0xe1, 0x2b, 0xaf, 0x95, 0x27, 0xa9, 0xfe, 0xcd, 0x73, 0xde, 0x54, 0x25, 0x5a, 0x2f,
-	0x8f, 0x30, 0xa6, 0x9d, 0x35, 0x66, 0x5e, 0x19, 0xb3, 0xfc, 0xaf, 0xae, 0xfc, 0x87, 0x27, 0xd0,
-	0xe0, 0x10, 0x15, 0xee, 0x17, 0x4b, 0x85, 0x99, 0xa2, 0xf5, 0x12, 0x61, 0xe3, 0x73, 0xc2, 0x93,
-	0xa4, 0xf8, 0x7f, 0x13, 0x8d, 0x5c, 0x24, 0xda, 0x5d, 0x99, 0xc0, 0x06, 0xbb, 0xe5, 0xae, 0x69,
-	0x8f, 0xbf, 0x19, 0xe1, 0x6e, 0x67, 0x84, 0x6b, 0x64, 0x85, 0x7b, 0x8f, 0x5d, 0x6d, 0x2c, 0x8d,
-	0x12, 0xee, 0xf9, 0xa3, 0x65, 0xad, 0x9d, 0xf5, 0x33, 0xc2, 0xef, 0x5c, 0xec, 0x5d, 0x63, 0x06,
-	0x17, 0x7a, 0xac, 0x9b, 0x9c, 0x52, 0x0e, 0xcf, 0xb7, 0x5c, 0x7e, 0x64, 0xcb, 0x19, 0xf7, 0xb0,
-	0xe1, 0xcb, 0xb6, 0x22, 0xf2, 0x03, 0x91, 0xde, 0xdb, 0x2a, 0xe1, 0x72, 0x63, 0xde, 0xd6, 0x37,
-	0xbb, 0x9d, 0xde, 0xec, 0xf6, 0x83, 0x34, 0xc2, 0xbd, 0x92, 0xa2, 0xfe, 0x5e, 0xb2, 0xbe, 0xc1,
-	0xb3, 0x19, 0x31, 0x12, 0x8b, 0xdc, 0xc3, 0x63, 0x44, 0x40, 0xc8, 0x2b, 0xa8, 0x5a, 0xf8, 0xbf,
-	0x1d, 0xaa, 0x19, 0xac, 0xdf, 0xf2, 0x78, 0x76, 0x13, 0xba, 0x70, 0x79, 0xef, 0xfa, 0x5b, 0xe7,
-	0xbb, 0xf4, 0x9a, 0x44, 0x5b, 0xac, 0xda, 0x30, 0x47, 0x74, 0xa9, 0x74, 0x4a, 0x8a, 0x33, 0xae,
-	0xe2, 0xa9, 0x6d, 0xca, 0x7c, 0x68, 0x75, 0x54, 0xa5, 0xd4, 0xd5, 0x5f, 0x72, 0xcb, 0x6a, 0x4d,
-	0x17, 0xcf, 0x5a, 0xc3, 0x73, 0xd9, 0x32, 0x26, 0x52, 0x5d, 0xc3, 0x6f, 0x6b, 0x50, 0xaa, 0x87,
-	0x16, 0x6d, 0xd2, 0x9d, 0x4e, 0x96, 0x13, 0x6d, 0xd7, 0xbf, 0x47, 0x83, 0x13, 0x33, 0x77, 0x7c,
-	0x62, 0xe6, 0x5e, 0x9d, 0x98, 0xe8, 0x60, 0x68, 0xa2, 0x5f, 0x86, 0x26, 0x7a, 0x31, 0x34, 0xd1,
-	0x60, 0x68, 0xa2, 0xe3, 0xa1, 0x89, 0x7e, 0x1f, 0x9a, 0xe8, 0x8f, 0xa1, 0x99, 0x7b, 0x35, 0x34,
-	0xd1, 0x0f, 0xa7, 0x66, 0xee, 0xe8, 0xd4, 0x44, 0x83, 0x53, 0x33, 0x77, 0x7c, 0x6a, 0xe6, 0xbe,
-	0xfe, 0x32, 0xa0, 0xf1, 0xb7, 0x81, 0xdd, 0xa7, 0x5d, 0x01, 0x8c, 0x79, 0x76, 0x8f, 0x3b, 0x6a,
-	0x20, 0x3f, 0x3b, 0xf5, 0x98, 0xd1, 0x3e, 0xe9, 0x00, 0xab, 0xa7, 0xdb, 0x4e, 0xdc, 0x0e, 0xa8,
-	0x03, 0x4f, 0x45, 0xfa, 0x73, 0x73, 0xc1, 0x3f, 0x4e, 0x7b, 0x5c, 0x79, 0x74, 0xf5, 0xaf, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0x73, 0xf7, 0x18, 0xb3, 0x09, 0x09, 0x00, 0x00,
+	// 1327 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x57, 0xcf, 0x6f, 0x1b, 0xc5,
+	0x17, 0xf7, 0xda, 0x6e, 0xea, 0xcc, 0xa6, 0x89, 0x33, 0x89, 0xbe, 0x5f, 0x37, 0x69, 0xb7, 0x61,
+	0xe9, 0x0f, 0x87, 0xc6, 0xeb, 0xd6, 0x41, 0xe2, 0xc7, 0x01, 0x48, 0x9a, 0x94, 0x24, 0x10, 0xa5,
+	0xdd, 0xa6, 0xa1, 0xa2, 0x6a, 0x57, 0xe3, 0xf5, 0x64, 0xb3, 0x65, 0x77, 0x67, 0x3b, 0x3b, 0x76,
+	0x6a, 0xda, 0x4a, 0xf9, 0x03, 0x90, 0xe0, 0xc8, 0x11, 0x89, 0x4b, 0xff, 0x06, 0x72, 0x29, 0x9c,
+	0x7a, 0xe0, 0x90, 0x63, 0x25, 0x0e, 0x50, 0xe7, 0x02, 0xb7, 0xfe, 0x09, 0x68, 0x66, 0xd6, 0x76,
+	0xd6, 0x09, 0x86, 0x43, 0x11, 0x52, 0x4f, 0x9e, 0x99, 0xf7, 0x79, 0x6f, 0x3e, 0xf3, 0xde, 0xfb,
+	0xcc, 0xac, 0x81, 0xd1, 0xc0, 0x91, 0xe1, 0x92, 0x72, 0x64, 0x6f, 0x61, 0x1f, 0x95, 0x23, 0x46,
+	0x28, 0xae, 0x59, 0xa4, 0x7a, 0x0f, 0xdb, 0xac, 0x6c, 0x13, 0xdf, 0x27, 0x81, 0xc5, 0x9a, 0x21,
+	0x8e, 0x8c, 0x90, 0x12, 0x46, 0xe0, 0xa4, 0xc4, 0x1b, 0x12, 0x6f, 0x24, 0xf0, 0x13, 0x25, 0xc7,
+	0x65, 0x5b, 0xf5, 0xaa, 0x61, 0x13, 0xbf, 0xec, 0x10, 0x87, 0x94, 0x85, 0x4f, 0xb5, 0xbe, 0x29,
+	0x66, 0x62, 0x22, 0x46, 0x32, 0xd6, 0xc4, 0x19, 0x87, 0x10, 0xc7, 0xc3, 0x5d, 0x14, 0x73, 0x7d,
+	0x1c, 0x31, 0xe4, 0x87, 0x31, 0x60, 0x32, 0x49, 0x8e, 0x84, 0xcc, 0x25, 0x41, 0xcc, 0x64, 0xe2,
+	0x64, 0xd2, 0x78, 0x80, 0xe4, 0xc4, 0xa9, 0xa4, 0xa9, 0x81, 0x3c, 0xb7, 0x86, 0x18, 0x8e, 0xad,
+	0x53, 0x3d, 0x56, 0x17, 0x6f, 0x5b, 0x89, 0xd0, 0xfa, 0x57, 0x59, 0x30, 0x76, 0x85, 0x62, 0xc4,
+	0xf0, 0x9a, 0x38, 0x98, 0x89, 0xef, 0xd7, 0x71, 0xc4, 0xe0, 0x29, 0x30, 0x18, 0x20, 0x1f, 0x47,
+	0x21, 0xb2, 0x71, 0x41, 0x99, 0x52, 0x8a, 0x83, 0x66, 0x77, 0x01, 0x46, 0x40, 0x95, 0x79, 0x10,
+	0x09, 0x2b, 0xa4, 0xb9, 0x7d, 0xde, 0xfc, 0xe1, 0x8f, 0xa7, 0x99, 0x55, 0xfa, 0x89, 0xb9, 0x7c,
+	0x5b, 0x8f, 0xb6, 0x91, 0xe3, 0x60, 0xaa, 0xcf, 0x4c, 0xe9, 0x36, 0xa6, 0xcc, 0xdd, 0x74, 0x6d,
+	0xc4, 0x30, 0x9f, 0xde, 0x43, 0x0d, 0x14, 0xd9, 0xd4, 0x0d, 0x19, 0x9f, 0x6d, 0x31, 0xdf, 0xe3,
+	0xbf, 0x0e, 0x0e, 0x30, 0x75, 0x6d, 0x3e, 0xac, 0xba, 0x4e, 0x49, 0x06, 0xd7, 0xef, 0x98, 0x40,
+	0x8e, 0xd6, 0x9b, 0x21, 0x86, 0x97, 0x41, 0x96, 0x33, 0x28, 0x64, 0xc4, 0x6e, 0xa7, 0xf9, 0x6e,
+	0xc7, 0x68, 0xa6, 0xb0, 0x93, 0xe5, 0xa3, 0x2c, 0x4d, 0xe7, 0x95, 0x78, 0xe9, 0xbb, 0xb4, 0x62,
+	0x0a, 0x28, 0x9c, 0x05, 0x43, 0x11, 0xa3, 0x6e, 0xe0, 0x58, 0x0d, 0xe4, 0xd5, 0x71, 0x21, 0x2b,
+	0x5c, 0x87, 0x9f, 0x3d, 0x16, 0xd0, 0x01, 0x9a, 0x2d, 0xec, 0xec, 0x7c, 0xb4, 0x94, 0x32, 0x55,
+	0x89, 0xda, 0xe0, 0x20, 0x78, 0x19, 0xa8, 0xd5, 0x26, 0xc3, 0x51, 0xec, 0x73, 0x6c, 0x4a, 0x29,
+	0x0e, 0x75, 0x7d, 0xbe, 0x6c, 0xfb, 0x00, 0x01, 0x92, 0x2e, 0x26, 0x18, 0xb6, 0x49, 0xc0, 0x70,
+	0xc0, 0xac, 0x4d, 0x42, 0x7d, 0xc4, 0x0a, 0xc7, 0xc5, 0x4e, 0x17, 0xb9, 0xcb, 0x79, 0x7a, 0xd6,
+	0xd4, 0x6f, 0xeb, 0xe2, 0xf0, 0x11, 0x09, 0xf8, 0x6f, 0x13, 0xc9, 0x63, 0xb3, 0x07, 0x4c, 0x1e,
+	0x39, 0xd0, 0xef, 0x98, 0x27, 0xe2, 0x10, 0x57, 0x45, 0x04, 0x38, 0x03, 0xd4, 0x1a, 0x96, 0x99,
+	0x72, 0x49, 0x50, 0xc8, 0x89, 0x80, 0xa0, 0x7b, 0x6a, 0xf3, 0xa0, 0xf9, 0xfd, 0xe9, 0x9f, 0x76,
+	0x95, 0x73, 0x60, 0x04, 0xe4, 0x56, 0x31, 0x43, 0x35, 0xc4, 0x10, 0xcc, 0xcc, 0xce, 0xbc, 0x0b,
+	0x20, 0x50, 0x6f, 0x86, 0x1e, 0x41, 0xb5, 0xa9, 0xab, 0xae, 0x87, 0x61, 0xe6, 0xed, 0x99, 0x77,
+	0xe6, 0xc7, 0x41, 0x2e, 0xde, 0x29, 0x82, 0xb9, 0xa7, 0xbb, 0x4a, 0x76, 0x6f, 0x57, 0x19, 0x58,
+	0xc9, 0xe6, 0x06, 0xf2, 0xc7, 0xf5, 0x27, 0x69, 0x30, 0x9e, 0x6c, 0x87, 0x28, 0x24, 0x41, 0x84,
+	0xe1, 0x1a, 0xc8, 0xf9, 0x71, 0x64, 0x51, 0x6e, 0xb5, 0x32, 0x6b, 0xf4, 0xd1, 0x87, 0x71, 0x43,
+	0xcc, 0x64, 0x90, 0x85, 0x98, 0x27, 0xa1, 0x66, 0x27, 0x08, 0x5c, 0x00, 0x30, 0x20, 0x16, 0xaa,
+	0xd5, 0x5c, 0xce, 0x1f, 0x79, 0x96, 0x1b, 0x6c, 0x12, 0x51, 0x20, 0xb5, 0x32, 0xde, 0x13, 0x7a,
+	0xd1, 0x0f, 0x59, 0x73, 0x29, 0x65, 0xe6, 0x03, 0x32, 0xd7, 0x71, 0x58, 0x0e, 0x36, 0x09, 0xbc,
+	0x06, 0x4e, 0x84, 0x14, 0x47, 0xae, 0x13, 0xe0, 0x9a, 0x55, 0xa7, 0x9e, 0xa8, 0x96, 0x5a, 0x99,
+	0xee, 0xcb, 0xed, 0x1a, 0xc5, 0x37, 0x84, 0xc7, 0x4d, 0xea, 0x2d, 0xa5, 0xcc, 0xa1, 0x4e, 0x84,
+	0x9b, 0xd4, 0x9b, 0x9f, 0x04, 0x23, 0x3d, 0xa4, 0x3a, 0x49, 0xca, 0xac, 0x64, 0x73, 0x4a, 0x3e,
+	0xbd, 0x92, 0xcd, 0x65, 0xf2, 0x59, 0xfd, 0xdb, 0x34, 0xc8, 0x7f, 0x8c, 0xd9, 0xeb, 0x28, 0x9b,
+	0x0f, 0xc0, 0xf1, 0x06, 0xa6, 0x11, 0x6f, 0x3b, 0xa9, 0x98, 0xb3, 0x1c, 0x72, 0x86, 0x9e, 0xae,
+	0x4c, 0xde, 0x2d, 0x36, 0x1e, 0x6d, 0x4c, 0xdf, 0xbe, 0x54, 0x7a, 0xef, 0xce, 0xc5, 0x62, 0x49,
+	0xfc, 0x3e, 0xac, 0x3c, 0x9e, 0x7e, 0x38, 0xfb, 0xf8, 0xac, 0xd9, 0x76, 0xd2, 0x7f, 0x49, 0x83,
+	0xd1, 0x03, 0xa9, 0x39, 0xa2, 0x85, 0x06, 0x5e, 0x45, 0x0b, 0x5d, 0xea, 0x51, 0xb7, 0xc8, 0xf7,
+	0xbc, 0xda, 0x47, 0xda, 0x46, 0x52, 0xda, 0x69, 0x21, 0x6d, 0xf5, 0xaf, 0x75, 0xfd, 0xca, 0xdb,
+	0x0b, 0x9e, 0x3b, 0x74, 0x53, 0x88, 0x0c, 0xf7, 0x88, 0xff, 0x90, 0x46, 0x95, 0xb8, 0xfd, 0x78,
+	0xe3, 0x3d, 0x02, 0x43, 0x07, 0xb7, 0x80, 0x73, 0x20, 0x83, 0xb6, 0xa3, 0x58, 0x95, 0xa5, 0xbf,
+	0xa3, 0xd6, 0xa1, 0xb2, 0x80, 0x18, 0x5a, 0x4a, 0x99, 0xdc, 0x77, 0xfe, 0x4d, 0xf0, 0x7f, 0x0e,
+	0x44, 0x0e, 0xb6, 0x42, 0x4a, 0x1a, 0x6e, 0x0d, 0x53, 0xcb, 0xde, 0x22, 0xae, 0x8d, 0xc5, 0xee,
+	0xe9, 0xbd, 0x5d, 0x45, 0x91, 0xcd, 0xaf, 0x7f, 0x06, 0xf2, 0xbd, 0x51, 0x60, 0x1e, 0x64, 0x78,
+	0x72, 0x64, 0xbf, 0xf3, 0x21, 0xbc, 0x0c, 0x06, 0x7c, 0xcc, 0xb6, 0x48, 0x4d, 0xd0, 0x1a, 0xae,
+	0x9c, 0xec, 0xa1, 0xb5, 0xc4, 0x58, 0xb8, 0x2a, 0x00, 0x66, 0x0c, 0xd4, 0x7f, 0x4e, 0x03, 0xf8,
+	0xa9, 0x1b, 0xc5, 0x5d, 0x13, 0xfd, 0x33, 0x45, 0x6d, 0x1f, 0xa5, 0xa8, 0x0d, 0x5e, 0xd0, 0xeb,
+	0x74, 0xcd, 0x5c, 0x95, 0xb7, 0xee, 0xbf, 0xa1, 0xaa, 0x62, 0x42, 0x55, 0xe3, 0x49, 0x55, 0x25,
+	0xc4, 0xb4, 0x08, 0xc0, 0xfd, 0x3a, 0xa6, 0x4d, 0xc9, 0x30, 0x2b, 0xd2, 0x71, 0xbe, 0x6f, 0x95,
+	0xae, 0x73, 0x38, 0xdf, 0xc5, 0x1c, 0xbc, 0xdf, 0x1e, 0x42, 0x03, 0x8c, 0x79, 0x88, 0xe1, 0x88,
+	0x59, 0xb1, 0xca, 0x2c, 0x12, 0x78, 0x4d, 0xd1, 0x90, 0x39, 0x73, 0x54, 0x9a, 0x36, 0xa4, 0x65,
+	0x2d, 0xf0, 0x9a, 0xfa, 0xf7, 0x0a, 0xf8, 0xdf, 0xd1, 0x0a, 0x3a, 0xa2, 0x5c, 0x3d, 0x6f, 0x4d,
+	0xba, 0xef, 0x5b, 0x03, 0x97, 0x01, 0xb4, 0xf9, 0x1b, 0xc1, 0x49, 0x74, 0xbe, 0x63, 0x44, 0x26,
+	0xd4, 0xca, 0x84, 0x21, 0xbf, 0x74, 0x8c, 0xf6, 0x97, 0x8e, 0xb1, 0xde, 0x46, 0x98, 0xa3, 0x6d,
+	0xaf, 0xce, 0x92, 0xfe, 0xab, 0x02, 0x46, 0x63, 0xd6, 0x07, 0x08, 0x16, 0xba, 0xf7, 0x8f, 0x24,
+	0xd9, 0x9e, 0xfe, 0x67, 0x44, 0xdb, 0x39, 0xcb, 0x76, 0x73, 0x76, 0x0e, 0x0c, 0x27, 0x0b, 0x12,
+	0xd7, 0xe2, 0x44, 0xa2, 0x16, 0x3a, 0x93, 0x5d, 0xbd, 0xcc, 0xb0, 0x7f, 0xe0, 0x84, 0x30, 0x6e,
+	0x1f, 0x79, 0x3c, 0xd9, 0x28, 0x2b, 0x20, 0x17, 0x47, 0xe2, 0x62, 0xce, 0x14, 0xd5, 0x8a, 0xd1,
+	0xb7, 0x4d, 0x0e, 0xe5, 0xcd, 0xec, 0xf8, 0xeb, 0x55, 0x30, 0x96, 0xd0, 0x52, 0x7c, 0x05, 0x2f,
+	0x82, 0x63, 0x2e, 0xc3, 0x7e, 0x3b, 0x7e, 0xb9, 0x6f, 0xfc, 0xc3, 0xb4, 0x4d, 0xe9, 0x1d, 0xdf,
+	0x04, 0x3f, 0xa6, 0xc1, 0xd8, 0x02, 0xf6, 0xf0, 0xeb, 0xf9, 0xe9, 0x38, 0xd7, 0xfb, 0x06, 0x5e,
+	0xe0, 0x10, 0x9d, 0x4e, 0x55, 0xb4, 0x3e, 0x6f, 0xe0, 0xa3, 0xbb, 0xdd, 0x67, 0x10, 0xbe, 0x01,
+	0x86, 0x36, 0x09, 0xb5, 0xb1, 0x55, 0x13, 0x59, 0x8a, 0xfb, 0x43, 0x15, 0x6b, 0x32, 0x71, 0xfa,
+	0x87, 0x60, 0x3c, 0x99, 0xc2, 0xb8, 0x50, 0x17, 0xc0, 0x88, 0x74, 0x6a, 0x57, 0x23, 0x2a, 0x28,
+	0x53, 0x99, 0xe2, 0xa0, 0x39, 0x1c, 0x2f, 0xc7, 0x95, 0x7d, 0xcb, 0x00, 0x83, 0x9d, 0xeb, 0x02,
+	0x8e, 0x00, 0x75, 0xf1, 0xd6, 0xdc, 0x95, 0x75, 0x6b, 0x75, 0x6e, 0xfd, 0xca, 0x52, 0x3e, 0x05,
+	0xf3, 0x60, 0xe8, 0x9a, 0xb9, 0x78, 0x75, 0xf9, 0x56, 0xbc, 0xa2, 0xcc, 0x7f, 0xad, 0xec, 0xbd,
+	0xd0, 0x52, 0xcf, 0x5f, 0x68, 0xa9, 0x97, 0x2f, 0x34, 0x65, 0xa7, 0xa5, 0x29, 0x4f, 0x5a, 0x9a,
+	0xf2, 0xac, 0xa5, 0x29, 0x7b, 0x2d, 0x4d, 0x79, 0xde, 0xd2, 0x94, 0xdf, 0x5a, 0x9a, 0xf2, 0x7b,
+	0x4b, 0x4b, 0xbd, 0x6c, 0x69, 0xca, 0x37, 0xfb, 0x5a, 0xea, 0xe9, 0xbe, 0xa6, 0xec, 0xed, 0x6b,
+	0xa9, 0xe7, 0xfb, 0x5a, 0xea, 0xf3, 0xeb, 0x0e, 0x09, 0xbf, 0x70, 0x8c, 0x06, 0xf1, 0x18, 0xa6,
+	0x14, 0x19, 0xf5, 0xa8, 0x2c, 0x06, 0xfc, 0x2d, 0x2b, 0xb5, 0x9f, 0x8e, 0x52, 0xdb, 0x5c, 0x0e,
+	0xab, 0x0e, 0x29, 0xe3, 0x07, 0xac, 0xfd, 0x97, 0xeb, 0x88, 0x7f, 0x5e, 0xd5, 0x01, 0x21, 0xc0,
+	0xd9, 0x3f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x7e, 0x17, 0x37, 0xf4, 0x9f, 0x0d, 0x00, 0x00,
 }
 
+func (x QueryType) String() string {
+	s, ok := QueryType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *CreateObjectRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -966,7 +1453,64 @@ func (this *CreateObjectResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Spec.Equal(that1.Spec) {
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if that1.AdditionalInfo == nil {
+		if this.AdditionalInfo != nil {
+			return false
+		}
+	} else if this.AdditionalInfo == nil {
+		return false
+	} else if !this.AdditionalInfo.Equal(that1.AdditionalInfo) {
+		return false
+	}
+	return true
+}
+func (this *CreateObjectResponse_NoAdditionalInfo) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateObjectResponse_NoAdditionalInfo)
+	if !ok {
+		that2, ok := that.(CreateObjectResponse_NoAdditionalInfo)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoAdditionalInfo.Equal(that1.NoAdditionalInfo) {
+		return false
+	}
+	return true
+}
+func (this *CreateObjectResponse_PresignedUrl) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateObjectResponse_PresignedUrl)
+	if !ok {
+		that2, ok := that.(CreateObjectResponse_PresignedUrl)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.PresignedUrl.Equal(that1.PresignedUrl) {
 		return false
 	}
 	return true
@@ -1023,6 +1567,9 @@ func (this *GetObjectResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
 	if that1.Contents == nil {
 		if this.Contents != nil {
 			return false
@@ -1030,6 +1577,9 @@ func (this *GetObjectResponse) Equal(that interface{}) bool {
 	} else if this.Contents == nil {
 		return false
 	} else if !this.Contents.Equal(that1.Contents) {
+		return false
+	}
+	if this.ContentFormat != that1.ContentFormat {
 		return false
 	}
 	return true
@@ -1082,6 +1632,111 @@ func (this *GetObjectResponse_BytesValue) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetObjectResponse_PresignedUrl) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetObjectResponse_PresignedUrl)
+	if !ok {
+		that2, ok := that.(GetObjectResponse_PresignedUrl)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.PresignedUrl.Equal(that1.PresignedUrl) {
+		return false
+	}
+	return true
+}
+func (this *PreSignedUrl) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PreSignedUrl)
+	if !ok {
+		that2, ok := that.(PreSignedUrl)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.StorageProviderChoice == nil {
+		if this.StorageProviderChoice != nil {
+			return false
+		}
+	} else if this.StorageProviderChoice == nil {
+		return false
+	} else if !this.StorageProviderChoice.Equal(that1.StorageProviderChoice) {
+		return false
+	}
+	return true
+}
+func (this *PreSignedUrl_Aws) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PreSignedUrl_Aws)
+	if !ok {
+		that2, ok := that.(PreSignedUrl_Aws)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Aws.Equal(that1.Aws) {
+		return false
+	}
+	return true
+}
+func (this *PresignedUrlData) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PresignedUrlData)
+	if !ok {
+		that2, ok := that.(PresignedUrlData)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Url != that1.Url {
+		return false
+	}
+	if this.Method != that1.Method {
+		return false
+	}
+	return true
+}
 func (this *ListObjectsRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1108,6 +1763,12 @@ func (this *ListObjectsRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Name != that1.Name {
+		return false
+	}
+	if this.QueryType != that1.QueryType {
+		return false
+	}
+	if this.LatestVersionOnly != that1.LatestVersionOnly {
 		return false
 	}
 	return true
@@ -1139,6 +1800,74 @@ func (this *StoredObjectDescriptor) Equal(that interface{}) bool {
 	}
 	if !this.CreationTimestamp.Equal(that1.CreationTimestamp) {
 		return false
+	}
+	return true
+}
+func (this *VersionDescriptor) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VersionDescriptor)
+	if !ok {
+		that2, ok := that.(VersionDescriptor)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Version != that1.Version {
+		return false
+	}
+	if this.Description != that1.Description {
+		return false
+	}
+	if !this.CreationTimestamp.Equal(that1.CreationTimestamp) {
+		return false
+	}
+	if this.Url != that1.Url {
+		return false
+	}
+	if this.LatestVersion != that1.LatestVersion {
+		return false
+	}
+	return true
+}
+func (this *ListItemDescriptor) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListItemDescriptor)
+	if !ok {
+		that2, ok := that.(ListItemDescriptor)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Versions) != len(that1.Versions) {
+		return false
+	}
+	for i := range this.Versions {
+		if !this.Versions[i].Equal(that1.Versions[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1273,13 +2002,32 @@ func (this *CreateObjectResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&stored_object.CreateObjectResponse{")
-	if this.Spec != nil {
-		s = append(s, "Spec: "+fmt.Sprintf("%#v", this.Spec)+",\n")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.AdditionalInfo != nil {
+		s = append(s, "AdditionalInfo: "+fmt.Sprintf("%#v", this.AdditionalInfo)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *CreateObjectResponse_NoAdditionalInfo) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.CreateObjectResponse_NoAdditionalInfo{` +
+		`NoAdditionalInfo:` + fmt.Sprintf("%#v", this.NoAdditionalInfo) + `}`}, ", ")
+	return s
+}
+func (this *CreateObjectResponse_PresignedUrl) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.CreateObjectResponse_PresignedUrl{` +
+		`PresignedUrl:` + fmt.Sprintf("%#v", this.PresignedUrl) + `}`}, ", ")
+	return s
 }
 func (this *GetObjectRequest) GoString() string {
 	if this == nil {
@@ -1298,11 +2046,15 @@ func (this *GetObjectResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 9)
 	s = append(s, "&stored_object.GetObjectResponse{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
 	if this.Contents != nil {
 		s = append(s, "Contents: "+fmt.Sprintf("%#v", this.Contents)+",\n")
 	}
+	s = append(s, "ContentFormat: "+fmt.Sprintf("%#v", this.ContentFormat)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1322,15 +2074,56 @@ func (this *GetObjectResponse_BytesValue) GoString() string {
 		`BytesValue:` + fmt.Sprintf("%#v", this.BytesValue) + `}`}, ", ")
 	return s
 }
+func (this *GetObjectResponse_PresignedUrl) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.GetObjectResponse_PresignedUrl{` +
+		`PresignedUrl:` + fmt.Sprintf("%#v", this.PresignedUrl) + `}`}, ", ")
+	return s
+}
+func (this *PreSignedUrl) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&stored_object.PreSignedUrl{")
+	if this.StorageProviderChoice != nil {
+		s = append(s, "StorageProviderChoice: "+fmt.Sprintf("%#v", this.StorageProviderChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *PreSignedUrl_Aws) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.PreSignedUrl_Aws{` +
+		`Aws:` + fmt.Sprintf("%#v", this.Aws) + `}`}, ", ")
+	return s
+}
+func (this *PresignedUrlData) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&stored_object.PresignedUrlData{")
+	s = append(s, "Url: "+fmt.Sprintf("%#v", this.Url)+",\n")
+	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *ListObjectsRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&stored_object.ListObjectsRequest{")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "ObjectType: "+fmt.Sprintf("%#v", this.ObjectType)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "QueryType: "+fmt.Sprintf("%#v", this.QueryType)+",\n")
+	s = append(s, "LatestVersionOnly: "+fmt.Sprintf("%#v", this.LatestVersionOnly)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1344,6 +2137,35 @@ func (this *StoredObjectDescriptor) GoString() string {
 	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
 	if this.CreationTimestamp != nil {
 		s = append(s, "CreationTimestamp: "+fmt.Sprintf("%#v", this.CreationTimestamp)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *VersionDescriptor) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&stored_object.VersionDescriptor{")
+	s = append(s, "Version: "+fmt.Sprintf("%#v", this.Version)+",\n")
+	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	if this.CreationTimestamp != nil {
+		s = append(s, "CreationTimestamp: "+fmt.Sprintf("%#v", this.CreationTimestamp)+",\n")
+	}
+	s = append(s, "Url: "+fmt.Sprintf("%#v", this.Url)+",\n")
+	s = append(s, "LatestVersion: "+fmt.Sprintf("%#v", this.LatestVersion)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ListItemDescriptor) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&stored_object.ListItemDescriptor{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.Versions != nil {
+		s = append(s, "Versions: "+fmt.Sprintf("%#v", this.Versions)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1509,9 +2331,18 @@ func (m *CreateObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Spec != nil {
+	if m.AdditionalInfo != nil {
 		{
-			size, err := m.Spec.MarshalToSizedBuffer(dAtA[:i])
+			size := m.AdditionalInfo.Size()
+			i -= size
+			if _, err := m.AdditionalInfo.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1519,11 +2350,53 @@ func (m *CreateObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 	}
 	return len(dAtA) - i, nil
 }
 
+func (m *CreateObjectResponse_NoAdditionalInfo) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateObjectResponse_NoAdditionalInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoAdditionalInfo != nil {
+		{
+			size, err := m.NoAdditionalInfo.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateObjectResponse_PresignedUrl) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateObjectResponse_PresignedUrl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.PresignedUrl != nil {
+		{
+			size, err := m.PresignedUrl.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetObjectRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1595,6 +2468,18 @@ func (m *GetObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
 	if m.Contents != nil {
 		{
 			size := m.Contents.Size()
@@ -1603,6 +2488,13 @@ func (m *GetObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if len(m.ContentFormat) > 0 {
+		i -= len(m.ContentFormat)
+		copy(dAtA[i:], m.ContentFormat)
+		i = encodeVarintCommonTypes(dAtA, i, uint64(len(m.ContentFormat)))
+		i--
+		dAtA[i] = 0x22
 	}
 	return len(dAtA) - i, nil
 }
@@ -1637,6 +2529,115 @@ func (m *GetObjectResponse_BytesValue) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetObjectResponse_PresignedUrl) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetObjectResponse_PresignedUrl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.PresignedUrl != nil {
+		{
+			size, err := m.PresignedUrl.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *PreSignedUrl) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PreSignedUrl) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PreSignedUrl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.StorageProviderChoice != nil {
+		{
+			size := m.StorageProviderChoice.Size()
+			i -= size
+			if _, err := m.StorageProviderChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PreSignedUrl_Aws) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PreSignedUrl_Aws) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Aws != nil {
+		{
+			size, err := m.Aws.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *PresignedUrlData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PresignedUrlData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PresignedUrlData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Method != 0 {
+		i = encodeVarintCommonTypes(dAtA, i, uint64(m.Method))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Url) > 0 {
+		i -= len(m.Url)
+		copy(dAtA[i:], m.Url)
+		i = encodeVarintCommonTypes(dAtA, i, uint64(len(m.Url)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *ListObjectsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1657,6 +2658,21 @@ func (m *ListObjectsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.LatestVersionOnly {
+		i--
+		if m.LatestVersionOnly {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.QueryType != 0 {
+		i = encodeVarintCommonTypes(dAtA, i, uint64(m.QueryType))
+		i--
+		dAtA[i] = 0x20
+	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
 		copy(dAtA[i:], m.Name)
@@ -1730,6 +2746,116 @@ func (m *StoredObjectDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
+func (m *VersionDescriptor) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VersionDescriptor) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VersionDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.LatestVersion {
+		i--
+		if m.LatestVersion {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.Url) > 0 {
+		i -= len(m.Url)
+		copy(dAtA[i:], m.Url)
+		i = encodeVarintCommonTypes(dAtA, i, uint64(len(m.Url)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.CreationTimestamp != nil {
+		{
+			size, err := m.CreationTimestamp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintCommonTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Version) > 0 {
+		i -= len(m.Version)
+		copy(dAtA[i:], m.Version)
+		i = encodeVarintCommonTypes(dAtA, i, uint64(len(m.Version)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ListItemDescriptor) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListItemDescriptor) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListItemDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Versions) > 0 {
+		for iNdEx := len(m.Versions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Versions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintCommonTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *ListObjectsResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1761,7 +2887,7 @@ func (m *ListObjectsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintCommonTypes(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
 		}
 	}
 	return len(dAtA) - i, nil
@@ -1931,13 +3057,40 @@ func (m *CreateObjectResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Spec != nil {
-		l = m.Spec.Size()
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
 		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	if m.AdditionalInfo != nil {
+		n += m.AdditionalInfo.Size()
 	}
 	return n
 }
 
+func (m *CreateObjectResponse_NoAdditionalInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoAdditionalInfo != nil {
+		l = m.NoAdditionalInfo.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateObjectResponse_PresignedUrl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PresignedUrl != nil {
+		l = m.PresignedUrl.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetObjectRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1972,6 +3125,14 @@ func (m *GetObjectResponse) Size() (n int) {
 	if m.Contents != nil {
 		n += m.Contents.Size()
 	}
+	l = len(m.ContentFormat)
+	if l > 0 {
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1997,6 +3158,58 @@ func (m *GetObjectResponse_BytesValue) Size() (n int) {
 	}
 	return n
 }
+func (m *GetObjectResponse_PresignedUrl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PresignedUrl != nil {
+		l = m.PresignedUrl.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+func (m *PreSignedUrl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.StorageProviderChoice != nil {
+		n += m.StorageProviderChoice.Size()
+	}
+	return n
+}
+
+func (m *PreSignedUrl_Aws) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Aws != nil {
+		l = m.Aws.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+func (m *PresignedUrlData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Url)
+	if l > 0 {
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	if m.Method != 0 {
+		n += 1 + sovCommonTypes(uint64(m.Method))
+	}
+	return n
+}
+
 func (m *ListObjectsRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2014,6 +3227,12 @@ func (m *ListObjectsRequest) Size() (n int) {
 	l = len(m.Name)
 	if l > 0 {
 		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	if m.QueryType != 0 {
+		n += 1 + sovCommonTypes(uint64(m.QueryType))
+	}
+	if m.LatestVersionOnly {
+		n += 2
 	}
 	return n
 }
@@ -2035,6 +3254,53 @@ func (m *StoredObjectDescriptor) Size() (n int) {
 	if m.CreationTimestamp != nil {
 		l = m.CreationTimestamp.Size()
 		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *VersionDescriptor) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Version)
+	if l > 0 {
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	if m.CreationTimestamp != nil {
+		l = m.CreationTimestamp.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	l = len(m.Url)
+	if l > 0 {
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	if m.LatestVersion {
+		n += 2
+	}
+	return n
+}
+
+func (m *ListItemDescriptor) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	if len(m.Versions) > 0 {
+		for _, e := range m.Versions {
+			l = e.Size()
+			n += 1 + l + sovCommonTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -2143,7 +3409,28 @@ func (this *CreateObjectResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateObjectResponse{`,
-		`Spec:` + strings.Replace(this.Spec.String(), "StoredObjectDescriptor", "StoredObjectDescriptor", 1) + `,`,
+		`Metadata:` + strings.Replace(this.Metadata.String(), "StoredObjectDescriptor", "StoredObjectDescriptor", 1) + `,`,
+		`AdditionalInfo:` + fmt.Sprintf("%v", this.AdditionalInfo) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateObjectResponse_NoAdditionalInfo) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateObjectResponse_NoAdditionalInfo{`,
+		`NoAdditionalInfo:` + strings.Replace(fmt.Sprintf("%v", this.NoAdditionalInfo), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateObjectResponse_PresignedUrl) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateObjectResponse_PresignedUrl{`,
+		`PresignedUrl:` + strings.Replace(fmt.Sprintf("%v", this.PresignedUrl), "PreSignedUrl", "PreSignedUrl", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2167,6 +3454,8 @@ func (this *GetObjectResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetObjectResponse{`,
 		`Contents:` + fmt.Sprintf("%v", this.Contents) + `,`,
+		`ContentFormat:` + fmt.Sprintf("%v", this.ContentFormat) + `,`,
+		`Metadata:` + strings.Replace(this.Metadata.String(), "StoredObjectDescriptor", "StoredObjectDescriptor", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2191,6 +3480,47 @@ func (this *GetObjectResponse_BytesValue) String() string {
 	}, "")
 	return s
 }
+func (this *GetObjectResponse_PresignedUrl) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetObjectResponse_PresignedUrl{`,
+		`PresignedUrl:` + strings.Replace(fmt.Sprintf("%v", this.PresignedUrl), "PreSignedUrl", "PreSignedUrl", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PreSignedUrl) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PreSignedUrl{`,
+		`StorageProviderChoice:` + fmt.Sprintf("%v", this.StorageProviderChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PreSignedUrl_Aws) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PreSignedUrl_Aws{`,
+		`Aws:` + strings.Replace(fmt.Sprintf("%v", this.Aws), "PresignedUrlData", "PresignedUrlData", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PresignedUrlData) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PresignedUrlData{`,
+		`Url:` + fmt.Sprintf("%v", this.Url) + `,`,
+		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ListObjectsRequest) String() string {
 	if this == nil {
 		return "nil"
@@ -2199,6 +3529,8 @@ func (this *ListObjectsRequest) String() string {
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`ObjectType:` + fmt.Sprintf("%v", this.ObjectType) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`QueryType:` + fmt.Sprintf("%v", this.QueryType) + `,`,
+		`LatestVersionOnly:` + fmt.Sprintf("%v", this.LatestVersionOnly) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2215,13 +3547,43 @@ func (this *StoredObjectDescriptor) String() string {
 	}, "")
 	return s
 }
+func (this *VersionDescriptor) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VersionDescriptor{`,
+		`Version:` + fmt.Sprintf("%v", this.Version) + `,`,
+		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`CreationTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.CreationTimestamp), "Timestamp", "types.Timestamp", 1) + `,`,
+		`Url:` + fmt.Sprintf("%v", this.Url) + `,`,
+		`LatestVersion:` + fmt.Sprintf("%v", this.LatestVersion) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListItemDescriptor) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForVersions := "[]*VersionDescriptor{"
+	for _, f := range this.Versions {
+		repeatedStringForVersions += strings.Replace(f.String(), "VersionDescriptor", "VersionDescriptor", 1) + ","
+	}
+	repeatedStringForVersions += "}"
+	s := strings.Join([]string{`&ListItemDescriptor{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Versions:` + repeatedStringForVersions + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ListObjectsResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForItems := "[]*StoredObjectDescriptor{"
+	repeatedStringForItems := "[]*ListItemDescriptor{"
 	for _, f := range this.Items {
-		repeatedStringForItems += strings.Replace(f.String(), "StoredObjectDescriptor", "StoredObjectDescriptor", 1) + ","
+		repeatedStringForItems += strings.Replace(f.String(), "ListItemDescriptor", "ListItemDescriptor", 1) + ","
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&ListObjectsResponse{`,
@@ -2569,9 +3931,9 @@ func (m *CreateObjectResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: CreateObjectResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Spec", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2598,12 +3960,82 @@ func (m *CreateObjectResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Spec == nil {
-				m.Spec = &StoredObjectDescriptor{}
+			if m.Metadata == nil {
+				m.Metadata = &StoredObjectDescriptor{}
 			}
-			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoAdditionalInfo", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AdditionalInfo = &CreateObjectResponse_NoAdditionalInfo{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PresignedUrl", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &PreSignedUrl{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AdditionalInfo = &CreateObjectResponse_PresignedUrl{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2904,6 +4336,301 @@ func (m *GetObjectResponse) Unmarshal(dAtA []byte) error {
 			copy(v, dAtA[iNdEx:postIndex])
 			m.Contents = &GetObjectResponse_BytesValue{v}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContentFormat", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ContentFormat = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PresignedUrl", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &PreSignedUrl{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Contents = &GetObjectResponse_PresignedUrl{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &StoredObjectDescriptor{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCommonTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PreSignedUrl) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCommonTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PreSignedUrl: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PreSignedUrl: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aws", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &PresignedUrlData{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.StorageProviderChoice = &PreSignedUrl_Aws{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCommonTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PresignedUrlData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCommonTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PresignedUrlData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PresignedUrlData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Url", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Url = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
+			}
+			m.Method = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Method |= schema.HttpMethod(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCommonTypes(dAtA[iNdEx:])
@@ -3053,6 +4780,45 @@ func (m *ListObjectsRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryType", wireType)
+			}
+			m.QueryType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.QueryType |= QueryType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LatestVersionOnly", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.LatestVersionOnly = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCommonTypes(dAtA[iNdEx:])
@@ -3230,6 +4996,330 @@ func (m *StoredObjectDescriptor) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *VersionDescriptor) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCommonTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VersionDescriptor: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VersionDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Version = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreationTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CreationTimestamp == nil {
+				m.CreationTimestamp = &types.Timestamp{}
+			}
+			if err := m.CreationTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Url", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Url = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LatestVersion", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.LatestVersion = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCommonTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListItemDescriptor) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCommonTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListItemDescriptor: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListItemDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Versions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Versions = append(m.Versions, &VersionDescriptor{})
+			if err := m.Versions[len(m.Versions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCommonTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *ListObjectsResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3259,7 +5349,7 @@ func (m *ListObjectsResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: ListObjectsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
 			}
@@ -3288,7 +5378,7 @@ func (m *ListObjectsResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Items = append(m.Items, &StoredObjectDescriptor{})
+			m.Items = append(m.Items, &ListItemDescriptor{})
 			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

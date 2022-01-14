@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.service_policy_rule/Object/{object_uid}": {
             "get": {
@@ -2575,7 +2575,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal",
+            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal\nMalformed request\nMultiple decoding",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2599,7 +2599,9 @@ var APISwaggerJSON string = `{
                 "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
                 "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
                 "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
-                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS",
+                "VIOL_MALFORMED_REQUEST",
+                "VIOL_EVASION_MULTIPLE_DECODING"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2845,21 +2847,31 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exclude_signature_contexts": {
                     "type": "array",
-                    "description": " App Firewall signature contexts to be excluded for this request",
+                    "description": " App Firewall signature contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Signature Contexts",
+                    "maxItems": 1024,
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallSignatureContext"
                     },
-                    "x-displayname": "Exclude App Firewall Signature Contexts"
+                    "x-displayname": "Exclude App Firewall Signature Contexts",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1024",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "exclude_violation_contexts": {
                     "type": "array",
-                    "description": " App Firewall violation contexts to be excluded for this request",
+                    "description": " App Firewall violation contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Violation Contexts",
+                    "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallViolationContext"
                     },
-                    "x-displayname": "Exclude App Firewall Violation Contexts"
+                    "x-displayname": "Exclude App Firewall Violation Contexts",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2872,12 +2884,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "signature_id": {
                     "type": "integer",
-                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\nRequired: YES",
+                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
                     "x-ves-example": "10000001",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "10000000",
+                        "ves.io.schema.rules.uint32.lte": "300000000"
+                    }
                 }
             }
         },
@@ -2889,26 +2906,27 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
             "properties": {
                 "exclude_violation": {
-                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\nRequired: YES",
+                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "ViolationType",
                     "$ref": "#/definitions/app_firewallAppFirewallViolationType",
                     "x-displayname": "Violation Type",
                     "x-ves-example": "VIOL_MANDATORY_HEADER",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
         "policyAppTrafficType": {
             "type": "string",
-            "description": "Application traffic type\n\n - WEB: WebTrafficType\n\nWeb application traffic type.\n - MOBILE: MobileTrafficType\n\nMobile application traffic type.",
+            "description": "x-displayName: \"App Traffic type\"\nApplication traffic type\n\n - WEB: WebTrafficType\n\nx-displayName: \"Web Traffic\"\nWeb application traffic type.\n - MOBILE: MobileTrafficType\n\nx-displayName: \"Mobile Traffic\"\nMobile application traffic type.",
             "title": "AppTrafficType",
             "enum": [
                 "WEB",
                 "MOBILE"
             ],
-            "default": "WEB",
-            "x-displayname": "App Traffic type",
-            "x-ves-proto-enum": "ves.io.schema.policy.AppTrafficType"
+            "default": "WEB"
         },
         "policyArgMatcherType": {
             "type": "object",
@@ -2916,16 +2934,16 @@ var APISwaggerJSON string = `{
             "title": "ArgMatcherType",
             "x-displayname": "Argument Matcher",
             "x-ves-displayorder": "1,6,4",
-            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\"]",
             "x-ves-proto-message": "ves.io.schema.policy.ArgMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the argument is not present.",
+                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the argument is not present.",
                     "title": "check_not_present",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the argument is present.",
+                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the argument is present.",
                     "title": "check_present",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2937,23 +2955,23 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
                     "title": "item",
                     "$ref": "#/definitions/policyMatcherType"
                 },
                 "name": {
                     "type": "string",
-                    "description": " x-example: \"phones[_]\"\n x-example: \"cars.make.toyota.models[1]\"\n x-example: \"cars.make.honda.models[_]\"\n x-example: \"cars.make[_].models[_]\"\n A case-sensitive JSON path in the HTTP request body.\n\nExample: - \"name\"-\nRequired: YES",
+                    "description": " x-example: \"phones[_]\"\n x-example: \"cars.make.toyota.models[1]\"\n x-example: \"cars.make.honda.models[_]\"\n x-example: \"cars.make[_].models[_]\"\n A case-sensitive JSON path in the HTTP request body.\n\nExample: - \"name\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.json_path: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "name",
+                    "maxLength": 256,
                     "x-displayname": "Argument Name",
                     "x-ves-example": "name",
-                    "x-ves-required": "true"
-                },
-                "presence": {
-                    "type": "boolean",
-                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the arg is present or absent.",
-                    "title": "presence",
-                    "format": "boolean"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.json_path": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 }
             }
         },
@@ -2966,15 +2984,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "as numbers",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "x-displayname": "AS Numbers",
                     "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2987,19 +3013,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "asn_sets": {
                     "type": "array",
-                    "description": " A list of references to bgp_asn_set objects.\nRequired: YES",
+                    "description": " A list of references to bgp_asn_set objects.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n",
                     "title": "asn_sets",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "BGP ASN Sets",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4"
+                    }
                 }
             }
         },
         "policyChallengeAction": {
             "type": "string",
-            "description": "The challenge options to use when a policy based challenge is configured.\n\n - DEFAULT_CHALLENGE: DEFAULT_CHALLENGE\n\nDefault challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge\n - TEMPORARY_BLOCKING: TEMPORARY_BLOCKING\n\nBlock the user temporarily.",
+            "description": "x-displayName: \"Challenge Action\"\nThe challenge options to use when a policy based challenge is configured.\n\n - DEFAULT_CHALLENGE: DEFAULT_CHALLENGE\n\nx-displayName: \"Default Challenge\"\nDefault challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nx-displayName: \"Enable Javascript Challenge\"\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nx-displayName: \"Enable Captcha Challenge\"\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nx-displayName: \"Disable Challenge\"\nDisable challenge\n - TEMPORARY_BLOCKING: TEMPORARY_BLOCKING\n\nx-displayName: \"Block Temporarily\"\nBlock the user temporarily.",
             "title": "Challenge Action",
             "enum": [
                 "DEFAULT_CHALLENGE",
@@ -3008,35 +3039,27 @@ var APISwaggerJSON string = `{
                 "DISABLE_CHALLENGE",
                 "TEMPORARY_BLOCKING"
             ],
-            "default": "DEFAULT_CHALLENGE",
-            "x-displayname": "Challenge Action",
-            "x-ves-proto-enum": "ves.io.schema.policy.ChallengeAction"
+            "default": "DEFAULT_CHALLENGE"
         },
         "policyContentRewriteAction": {
             "type": "object",
-            "description": "Rewrite HTML response action to insert HTML content such as Javascript \u003cscript\u003e tags into the HTML document",
+            "description": "x-displayName: \"Content Rewrite Action\"\nRewrite HTML response action to insert HTML content such as Javascript \u003cscript\u003e tags into the HTML document",
             "title": "ContentRewriteAction",
-            "x-displayname": "Content Rewrite Action",
-            "x-ves-proto-message": "ves.io.schema.policy.ContentRewriteAction",
             "properties": {
                 "element_selector": {
                     "type": "string",
-                    "description": " Element selector to insert into.\nRequired: YES",
-                    "title": "Element selector",
-                    "x-displayname": "Element selector to rewrite",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Element selector to rewrite\"\nx-required\nElement selector to insert into.",
+                    "title": "Element selector"
                 },
                 "insert_content": {
                     "type": "string",
-                    "description": " HTML content to insert.",
-                    "title": "Insert Content",
-                    "x-displayname": "HTML Content to insert"
+                    "description": "x-displayName: \"HTML Content to insert\"\nHTML content to insert.",
+                    "title": "Insert Content"
                 },
                 "position": {
-                    "description": " Position of HTML content to be inserted within HTML tag.",
+                    "description": "x-displayName: \"HTML position\"\nPosition of HTML content to be inserted within HTML tag.",
                     "title": "Position",
-                    "$ref": "#/definitions/policyHTMLPosition",
-                    "x-displayname": "HTML position"
+                    "$ref": "#/definitions/policyHTMLPosition"
                 }
             }
         },
@@ -3046,16 +3069,16 @@ var APISwaggerJSON string = `{
             "title": "CookieMatcherType",
             "x-displayname": "Cookie Matcher",
             "x-ves-displayorder": "1,6,4",
-            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\"]",
             "x-ves-proto-message": "ves.io.schema.policy.CookieMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the cookie is not present.",
+                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the cookie is not present.",
                     "title": "check_not_present",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the cookie is present.",
+                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the cookie is present.",
                     "title": "check_present",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -3067,29 +3090,28 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
                     "title": "item",
                     "$ref": "#/definitions/policyMatcherType"
                 },
                 "name": {
                     "type": "string",
-                    "description": " A case-sensitive cookie name.\n\nExample: - \"Session\"-\nRequired: YES",
+                    "description": " A case-sensitive cookie name.\n\nExample: - \"Session\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "name",
+                    "maxLength": 256,
                     "x-displayname": "Cookie Name",
                     "x-ves-example": "Session",
-                    "x-ves-required": "true"
-                },
-                "presence": {
-                    "type": "boolean",
-                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the cookie is present or absent.",
-                    "title": "presence",
-                    "format": "boolean"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 }
             }
         },
         "policyHTMLPosition": {
             "type": "string",
-            "description": "Position of the HTML tag to insert in HTML document\n\nBeginning of HTML tag.\nEnd of HTML tag.\nBefore HTML tag.\nAfter HTML tag.",
+            "description": "x-displayName: \"HTML Position\"\nPosition of the HTML tag to insert in HTML document\n\n - BEGINNING: x-displayName: \"Beginning of HTML tag\"\nBeginning of HTML tag.\n - END: x-displayName: \"End of HTML tag\"\nEnd of HTML tag.\n - BEFORE: x-displayName: \"Before HTML tag\"\nBefore HTML tag.\n - AFTER: x-displayName: \"After HTML tag\"\nAfter HTML tag.",
             "title": "HTMLPosition",
             "enum": [
                 "BEGINNING",
@@ -3097,9 +3119,7 @@ var APISwaggerJSON string = `{
                 "BEFORE",
                 "AFTER"
             ],
-            "default": "BEGINNING",
-            "x-displayname": "HTML Position",
-            "x-ves-proto-enum": "ves.io.schema.policy.HTMLPosition"
+            "default": "BEGINNING"
         },
         "policyHttpMethodMatcherType": {
             "type": "object",
@@ -3117,19 +3137,25 @@ var APISwaggerJSON string = `{
                 },
                 "methods": {
                     "type": "array",
-                    "description": " List of methods values to match against.\n\nExample: - \"['GET', 'POST', 'DELETE']\"-",
+                    "description": " List of methods values to match against.\n\nExample: - \"['GET', 'POST', 'DELETE']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "methods",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaHttpMethod"
                     },
                     "x-displayname": "Method List",
-                    "x-ves-example": "['GET', 'POST', 'DELETE']"
+                    "x-ves-example": "['GET', 'POST', 'DELETE']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
         "policyIPThreatCategory": {
             "type": "string",
-            "description": "The IP threat categories to use when a policy based IP threat category is configured.\n\n - SPAM_SOURCES: SPAM_SOURCES\n\nUncategorized\n - WINDOWS_EXPLOITS: WINDOWS_EXPLOITS\n\nWindows Exploits\n - WEB_ATTACKS: WEB_ATTACKS\n\nWeb Attacks\n - BOTNETS: BOTNETS\n\nBotnets\n - SCANNERS: SCANNERS\n\nScanners\n - REPUTATION: REPUTATION\n\nReputation\n - PHISHING: PHISHING\n\nPhishing\n - PROXY: PROXY\n\nProxy\n - MOBILE_THREATS: MOBILE_THREATS\n\nMobile Threats\n - TOR_PROXY: TOR_PROXY\n\nTor Proxy",
+            "description": "The IP threat categories to use when a policy based IP threat category is configured.\n\n - SPAM_SOURCES: SPAM_SOURCES\n\nUncategorized\n - WINDOWS_EXPLOITS: WINDOWS_EXPLOITS\n\nWindows Exploits\n - WEB_ATTACKS: WEB_ATTACKS\n\nWeb Attacks\n - BOTNETS: BOTNETS\n\nBotnets\n - SCANNERS: SCANNERS\n\nScanners\n - REPUTATION: REPUTATION\n\nReputation\n - PHISHING: PHISHING\n\nPhishing\n - PROXY: PROXY\n\nAnonymous Proxies\n - MOBILE_THREATS: MOBILE_THREATS\n\nMobile Threats\n - TOR_PROXY: TOR_PROXY\n\nTor Proxy\n - DENIAL_OF_SERVICE: DENIAL_OF_SERVICE\n\nDenial of service\n - NETWORK: NETWORK\n\nNetwork Attacks",
             "title": "IP Threat Category",
             "enum": [
                 "SPAM_SOURCES",
@@ -3141,7 +3167,9 @@ var APISwaggerJSON string = `{
                 "PHISHING",
                 "PROXY",
                 "MOBILE_THREATS",
-                "TOR_PROXY"
+                "TOR_PROXY",
+                "DENIAL_OF_SERVICE",
+                "NETWORK"
             ],
             "default": "SPAM_SOURCES",
             "x-displayname": "IP Threat Category",
@@ -3163,13 +3191,18 @@ var APISwaggerJSON string = `{
                 },
                 "prefix_sets": {
                     "type": "array",
-                    "description": " A list of references to ip_prefix_set objects.\nRequired: YES",
+                    "description": " A list of references to ip_prefix_set objects.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n",
                     "title": "prefix_sets",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "IP Prefix Sets",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4"
+                    }
                 }
             }
         },
@@ -3199,27 +3232,22 @@ var APISwaggerJSON string = `{
         },
         "policyL4DestMatcherType": {
             "type": "object",
-            "description": "A L4 Destination matcher specifies a list of L4 Destinations as match criteria. The match is considered successful if the destination IP and port match any\nof the L4 Destinations.\nThe result of the match is inverted if invert_matcher is true.",
+            "description": "x-displayName: \"L4 Destination Matcher\"\nA L4 Destination matcher specifies a list of L4 Destinations as match criteria. The match is considered successful if the destination IP and port match any\nof the L4 Destinations.\nThe result of the match is inverted if invert_matcher is true.",
             "title": "l4 dest matcher type",
-            "x-displayname": "L4 Destination Matcher",
-            "x-ves-proto-message": "ves.io.schema.policy.L4DestMatcherType",
             "properties": {
                 "invert_matcher": {
                     "type": "boolean",
-                    "description": " Invert the match result.",
+                    "description": "x-displayName: \"Invert L4 Destination Matcher\"\nInvert the match result.",
                     "title": "invert_matcher",
-                    "format": "boolean",
-                    "x-displayname": "Invert L4 Destination Matcher"
+                    "format": "boolean"
                 },
                 "l4_dests": {
                     "type": "array",
-                    "description": " A list of L4 destinations used as match criteria. The match is considered successful if the destination IP and path match any of the L4 destinations.\nRequired: YES",
+                    "description": "x-displayName: \"L4 Destinations\"\nx-required\nA list of L4 destinations used as match criteria. The match is considered successful if the destination IP and path match any of the L4 destinations.",
                     "title": "prefixes",
                     "items": {
                         "$ref": "#/definitions/schemaL4DestType"
-                    },
-                    "x-displayname": "L4 Destinations",
-                    "x-ves-required": "true"
+                    }
                 }
             }
         },
@@ -3232,59 +3260,73 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "exact values",
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
                     },
                     "x-displayname": "Exact Values",
-                    "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']"
+                    "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "regex_values": {
                     "type": "array",
-                    "description": " A list of regular expressions to match the input against.\n\nExample: - \"['^new .*$', 'san f.*', '.* del .*']\"-",
+                    "description": " A list of regular expressions to match the input against.\n\nExample: - \"['^new .*$', 'san f.*', '.* del .*']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "regex values",
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
                     },
                     "x-displayname": "Regex Values",
-                    "x-ves-example": "['^new .*$', 'san f.*', '.* del .*']"
+                    "x-ves-example": "['^new .*$', 'san f.*', '.* del .*']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.regex": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "transformers": {
                     "type": "array",
-                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "transformers",
+                    "maxItems": 9,
                     "items": {
                         "$ref": "#/definitions/policyTransformer"
                     },
-                    "x-displayname": "Transformers"
+                    "x-displayname": "Transformers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "9",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
         "policyPortMatcherType": {
             "type": "object",
-            "description": "A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
+            "description": "x-displayName: \"Port Matcher\"\nA port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
             "title": "port matcher type",
-            "x-displayname": "Port Matcher",
-            "x-ves-proto-message": "ves.io.schema.policy.PortMatcherType",
             "properties": {
                 "invert_matcher": {
                     "type": "boolean",
-                    "description": " Invert the match result.",
+                    "description": "x-displayName: \"Invert Port Matcher\"\nInvert the match result.",
                     "title": "invert_matcher",
-                    "format": "boolean",
-                    "x-displayname": "Invert Port Matcher"
+                    "format": "boolean"
                 },
                 "ports": {
                     "type": "array",
-                    "description": " A list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\n to be part of the range.\n\nExample: - \"8000-8191\"-\nRequired: YES",
+                    "description": "x-displayName: \"Port Ranges\"\nx-required\nx-example: \"8000-8191\"\nA list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\nto be part of the range.",
                     "title": "port ranges",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "Port Ranges",
-                    "x-ves-example": "8000-8191",
-                    "x-ves-required": "true"
+                    }
                 }
             }
         },
@@ -3304,31 +3346,35 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ip prefixes",
+                    "minItems": 1,
+                    "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IP Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
         "policyRoleMatcherType": {
             "type": "object",
-            "description": "A role matcher specifies a single value for matching an input list of roles. The match is considered successful if the specified value is present in the input\nlist.",
+            "description": "x-displayName: \"Role Matcher\"\nA role matcher specifies a single value for matching an input list of roles. The match is considered successful if the specified value is present in the input\nlist.",
             "title": "RoleMatcherType",
-            "x-displayname": "Role Matcher",
-            "x-ves-proto-message": "ves.io.schema.policy.RoleMatcherType",
             "properties": {
                 "match": {
                     "type": "string",
-                    "description": " x-example: \"ves-io-uam-role\"\n x-example: \"custom-role-security-czar'\"\n Value of the expected role.\n\nExample: - \"ves-io-monitor-role\"-\nRequired: YES",
-                    "title": "match",
-                    "x-displayname": "Role",
-                    "x-ves-example": "ves-io-monitor-role",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Role\"\nx-required\nx-example: \"ves-io-monitor-role\"\nx-example: \"ves-io-uam-role\"\nx-example: \"custom-role-security-czar'\"\nValue of the expected role.",
+                    "title": "match"
                 }
             }
         },
@@ -3350,51 +3396,43 @@ var APISwaggerJSON string = `{
         },
         "policyShapeBotBlockMitigationActionType": {
             "type": "object",
-            "description": "Block request and respond with custom content.",
+            "description": "x-displayName: \"Block bot mitigation\"\nBlock request and respond with custom content.",
             "title": "ShapeBotBlockMitigationActionType",
-            "x-displayname": "Block bot mitigation",
-            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotBlockMitigationActionType",
             "properties": {
                 "body": {
                     "type": "string",
-                    "description": " Custom body message is of type uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Your request was blocked\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Your request was blocked \u003c/p\u003e\". Base64 encoded string for this html is \"LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"\n\nExample: - \"string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"-",
-                    "title": "body",
-                    "x-displayname": "Body",
-                    "x-ves-example": "string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg=="
+                    "description": "x-displayName: \"Body\"\nx-example: \"string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"\nCustom body message is of type uri_ref. Currently supported URL schemes is string:///.\nFor string:/// scheme, message needs to be encoded in Base64 format.\nYou can specify this message as base64 encoded plain text message e.g. \"Your request was blocked\"\nor it can be HTML paragraph or a body string encoded as base64 string\nE.g. \"\u003cp\u003e Your request was blocked \u003c/p\u003e\". Base64 encoded string for this html is \"LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"",
+                    "title": "body"
                 },
                 "status": {
-                    "description": " HTTP Status code to respond with",
+                    "description": "x-displayName: \"Status\"\nHTTP Status code to respond with",
                     "title": "Status",
-                    "$ref": "#/definitions/schemaHttpStatusCode",
-                    "x-displayname": "Status"
+                    "$ref": "#/definitions/schemaHttpStatusCode"
                 }
             }
         },
         "policyShapeBotMitigationAction": {
             "type": "object",
-            "description": "Modify Shape Bot  behavior for a matching request.",
+            "description": "x-displayName: \"Bot Mitigation Action\"\nModify Bot Defense behavior for a matching request.",
             "title": "ShapeBotMitigationAction",
-            "x-displayname": "Shape Bot Mitigation Action",
-            "x-ves-oneof-field-action_type": "[\"block\",\"flag\",\"none\",\"redirect\"]",
-            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotMitigationAction",
             "properties": {
                 "block": {
-                    "description": "Exclusive with [flag none redirect]\nx-displayName: \"Block\"\nBlock bot request and send response with custom content.",
+                    "description": "x-displayName: \"Block\"\nBlock bot request and send response with custom content.",
                     "title": "Block",
                     "$ref": "#/definitions/policyShapeBotBlockMitigationActionType"
                 },
                 "flag": {
-                    "description": "Exclusive with [block none redirect]\nx-displayName: \"Flag\"\nFlag the request while not taking any invasive actions.",
+                    "description": "x-displayName: \"Flag\"\nFlag the request while not taking any invasive actions.",
                     "title": "Flag",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "none": {
-                    "description": "Exclusive with [block flag redirect]\nx-displayName: \"No Action\"\nNo mitigation actions.",
+                    "description": "x-displayName: \"No Action\"\nNo mitigation actions.",
                     "title": "None",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "redirect": {
-                    "description": "Exclusive with [block flag none]\nx-displayName: \"Redirect\"\nRedirect bot request to a custom URI.",
+                    "description": "x-displayName: \"Redirect\"\nRedirect bot request to a custom URI.",
                     "title": "Redirect",
                     "$ref": "#/definitions/policyShapeBotRedirectMitigationActionType"
                 }
@@ -3402,39 +3440,30 @@ var APISwaggerJSON string = `{
         },
         "policyShapeBotRedirectMitigationActionType": {
             "type": "object",
-            "description": "Redirect request to a custom URI.",
+            "description": "x-displayName: \"Redirect bot mitigation\"\nRedirect request to a custom URI.",
             "title": "ShapeBotRedirectMitigationTypeAction",
-            "x-displayname": "Redirect bot mitigation",
-            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotRedirectMitigationActionType",
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": " URI location for redirect may be relative or absolute.\n\nExample: - Enter URI-",
-                    "title": "URI",
-                    "x-displayname": "URI"
+                    "description": "x-displayName: \"URI\"\nx-example: Enter URI\nURI location for redirect may be relative or absolute.",
+                    "title": "URI"
                 }
             }
         },
         "policyShapeProtectedEndpointAction": {
             "type": "object",
-            "description": "Shape Protected Endpoint Action",
+            "description": "x-displayName: \"Protected Endpoint Action\"\nProtected Endpoint Action",
             "title": "ShapeProtectedEndpointAction",
-            "x-displayname": "Shape Protected Endpoint Action",
-            "x-ves-proto-message": "ves.io.schema.policy.ShapeProtectedEndpointAction",
             "properties": {
                 "app_traffic_type": {
-                    "description": " Traffic type\nRequired: YES",
+                    "description": "x-displayName: \"Traffic type\"\nx-required\nTraffic type",
                     "title": "Application traffic type",
-                    "$ref": "#/definitions/policyAppTrafficType",
-                    "x-displayname": "Traffic type",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/policyAppTrafficType"
                 },
                 "mitigation": {
-                    "description": " Mitigation action for shape protected endpoint\nRequired: YES",
+                    "description": "x-displayName: \"Mitigation\"\nx-required\nMitigation action for protected endpoint",
                     "title": "Mitigation",
-                    "$ref": "#/definitions/policyShapeBotMitigationAction",
-                    "x-displayname": "Mitigation",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/policyShapeBotMitigationAction"
                 }
             }
         },
@@ -3454,14 +3483,22 @@ var APISwaggerJSON string = `{
                 },
                 "match": {
                     "type": "array",
-                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\nRequired: YES",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 63\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "match",
+                    "maxItems": 64,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 63
                     },
                     "x-displayname": "Exact Values",
                     "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "63",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3474,32 +3511,49 @@ var APISwaggerJSON string = `{
             "properties": {
                 "classes": {
                     "type": "array",
-                    "description": " A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ADWARE', 'TRICKBOT']-",
+                    "description": " A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ADWARE', 'TRICKBOT']-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "classes",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/policyKnownTlsFingerprintClass"
                     },
-                    "x-displayname": "TLS fingerprint classes"
+                    "x-displayname": "TLS fingerprint classes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']\"-",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 32\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "exact values",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Exact Values",
-                    "x-ves-example": "['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"
+                    "x-ves-example": "['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.len": "32",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "excluded_values": {
                     "type": "array",
-                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']\"-",
+                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 32\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "excluded values",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Excluded Values",
-                    "x-ves-example": "['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"
+                    "x-ves-example": "['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.len": "32",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3525,64 +3579,54 @@ var APISwaggerJSON string = `{
         },
         "policyURLItem": {
             "type": "object",
-            "description": "A URL item specifies exact or regular expression match criteria for the domain and path.",
+            "description": "x-displayName: \"URL Item\"\nA URL item specifies exact or regular expression match criteria for the domain and path.",
             "title": "url item",
-            "x-displayname": "URL Item",
-            "x-ves-displayorder": "1,4",
-            "x-ves-oneof-field-domain_choice": "[\"domain_regex\",\"domain_value\"]",
-            "x-ves-oneof-field-path_choice": "[\"path_prefix\",\"path_regex\",\"path_value\"]",
-            "x-ves-proto-message": "ves.io.schema.policy.URLItem",
             "properties": {
                 "domain_regex": {
                     "type": "string",
-                    "description": "Exclusive with [domain_value]\nx-displayName: \"Domain Regex\"\nx-example: \"*.mybloggingwebsite.org\"\nA regular expression to match the domain against.",
+                    "description": "x-displayName: \"Domain Regex\"\nx-example: \"*.mybloggingwebsite.org\"\nA regular expression to match the domain against.",
                     "title": "domain regex"
                 },
                 "domain_value": {
                     "type": "string",
-                    "description": "Exclusive with [domain_regex]\nx-displayName: \"Domain Value\"\nx-example: \"www.mybloggingwebsite.org\"\nAn exact value to match the domain against.",
+                    "description": "x-displayName: \"Domain Value\"\nx-example: \"www.mybloggingwebsite.org\"\nAn exact value to match the domain against.",
                     "title": "domain value"
                 },
                 "path_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [path_regex path_value]\nx-displayName: \"Path Prefix\"\nx-example: \"/api/web/namespaces/project179/users/\"\nAn prefix value to match the path against.",
+                    "description": "x-displayName: \"Path Prefix\"\nx-example: \"/api/web/namespaces/project179/users/\"\nAn prefix value to match the path against.",
                     "title": "path prefix"
                 },
                 "path_regex": {
                     "type": "string",
-                    "description": "Exclusive with [path_prefix path_value]\nx-displayName: \"Path Regex\"\nx-example: \"^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$\"\nA regular expression to match the path against.",
+                    "description": "x-displayName: \"Path Regex\"\nx-example: \"^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$\"\nA regular expression to match the path against.",
                     "title": "path regex"
                 },
                 "path_value": {
                     "type": "string",
-                    "description": "Exclusive with [path_prefix path_regex]\nx-displayName: \"Path Value\"\nx-example: \"/api/web/namespaces/project179/users/user1\"\nAn exact value to match the path against.",
+                    "description": "x-displayName: \"Path Value\"\nx-example: \"/api/web/namespaces/project179/users/user1\"\nAn exact value to match the path against.",
                     "title": "path value"
                 }
             }
         },
         "policyURLMatcherType": {
             "type": "object",
-            "description": "A URL matcher specifies a list of URL items as match criteria. The match is considered successful if the input domain and path match any of the URL items.\nThe result of the match is inverted if invert_matcher is true.",
+            "description": "x-displayName: \"URL Matcher\"\nA URL matcher specifies a list of URL items as match criteria. The match is considered successful if the input domain and path match any of the URL items.\nThe result of the match is inverted if invert_matcher is true.",
             "title": "url matcher type",
-            "x-displayname": "URL Matcher",
-            "x-ves-proto-message": "ves.io.schema.policy.URLMatcherType",
             "properties": {
                 "invert_matcher": {
                     "type": "boolean",
-                    "description": " Invert the match result.",
+                    "description": "x-displayName: \"Invert URL Matcher\"\nInvert the match result.",
                     "title": "invert_matcher",
-                    "format": "boolean",
-                    "x-displayname": "Invert URL Matcher"
+                    "format": "boolean"
                 },
                 "url_items": {
                     "type": "array",
-                    "description": " A list of URL items used as match criteria. The match is considered successful if the domain and path match any of the URL items.\nRequired: YES",
+                    "description": "x-displayName: \"URL Items\"\nx-required\nA list of URL items used as match criteria. The match is considered successful if the domain and path match any of the URL items.",
                     "title": "url items",
                     "items": {
                         "$ref": "#/definitions/policyURLItem"
-                    },
-                    "x-displayname": "URL Items",
-                    "x-ves-required": "true"
+                    }
                 }
             }
         },
@@ -3591,36 +3635,21 @@ var APISwaggerJSON string = `{
             "description": "Modify App Firewall behavior for a matching request. The modification could either be to entirely skip firewall processing or to customize the firewall rules\nto be applied as defined by App Firewall Rule Control settings.",
             "title": "App Firewall Action",
             "x-displayname": "App Firewall Action",
-            "x-ves-oneof-field-action_type": "[\"app_firewall_detection_control\",\"none\",\"waf_in_monitoring_mode\",\"waf_inline_rule_control\",\"waf_rule_control\",\"waf_skip_processing\"]",
+            "x-ves-oneof-field-action_type": "[\"app_firewall_detection_control\",\"none\",\"waf_skip_processing\"]",
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
                 "app_firewall_detection_control": {
-                    "description": "Exclusive with [none waf_in_monitoring_mode waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Detection Control\"\nApp Firewall detection changes to be applied for this request",
+                    "description": "Exclusive with [none waf_skip_processing]\nx-displayName: \"App Firewall Detection Control\"\nApp Firewall detection changes to be applied for this request",
                     "title": "App Firewall Detection control",
                     "$ref": "#/definitions/policyAppFirewallDetectionControl"
                 },
                 "none": {
-                    "description": "Exclusive with [app_firewall_detection_control waf_in_monitoring_mode waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
+                    "description": "Exclusive with [app_firewall_detection_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
                     "title": "Normal App Firewall Processing",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "waf_in_monitoring_mode": {
-                    "description": "Exclusive with [app_firewall_detection_control none waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
-                    "title": "Set App Firewall in Monitoring Mode",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "waf_inline_rule_control": {
-                    "description": "Exclusive with [app_firewall_detection_control none waf_in_monitoring_mode waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
-                    "title": "App Firewall Rule Control with inline Rule IDs",
-                    "$ref": "#/definitions/policyWafInlineRuleControl"
-                },
-                "waf_rule_control": {
-                    "description": "Exclusive with [app_firewall_detection_control none waf_in_monitoring_mode waf_inline_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
-                    "title": "App Firewall Rule Control",
-                    "$ref": "#/definitions/policyWafRuleControl"
-                },
                 "waf_skip_processing": {
-                    "description": "Exclusive with [app_firewall_detection_control none waf_in_monitoring_mode waf_inline_rule_control waf_rule_control]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
+                    "description": "Exclusive with [app_firewall_detection_control none]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
                     "title": "Skip App Firewall Processing",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -3628,51 +3657,43 @@ var APISwaggerJSON string = `{
         },
         "policyWafInlineRuleControl": {
             "type": "object",
-            "description": "App Firewall rule changes to be applied for this request",
+            "description": "x-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
             "title": "App Firewall Rule Control with inline Rule IDs",
-            "x-displayname": "App Firewall Rule Control with inline Rule IDs",
-            "x-ves-proto-message": "ves.io.schema.policy.WafInlineRuleControl",
             "properties": {
                 "exclude_rule_ids": {
                     "type": "array",
-                    "description": " App Firewall Rule IDs to be excluded for this request",
+                    "description": "x-displayName: \"Exclude App Firewall Rule IDs\"\nApp Firewall Rule IDs to be excluded for this request",
                     "title": "Exclude Rule IDs",
                     "items": {
                         "$ref": "#/definitions/waf_rule_listWafRuleID"
-                    },
-                    "x-displayname": "Exclude App Firewall Rule IDs"
+                    }
                 },
                 "monitoring_mode": {
                     "type": "boolean",
-                    "description": " App Firewall will run in monitoring mode without blocking the request",
+                    "description": "x-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
                     "title": "Set App Firewall in Monitoring Mode",
-                    "format": "boolean",
-                    "x-displayname": "Set App Firewall in Monitoring Mode"
+                    "format": "boolean"
                 }
             }
         },
         "policyWafRuleControl": {
             "type": "object",
-            "description": "App Firewall rule changes to be applied for this request",
+            "description": "x-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
             "title": "App Firewall Rule Control",
-            "x-displayname": "App Firewall Rule Control",
-            "x-ves-proto-message": "ves.io.schema.policy.WafRuleControl",
             "properties": {
                 "exclude_rule_ids": {
                     "type": "array",
-                    "description": " App Firewall Rule List specifying the rule IDs to be excluded for this request",
+                    "description": "x-displayName: \"Exclude App Firewall Rule List\"\nApp Firewall Rule List specifying the rule IDs to be excluded for this request",
                     "title": "Exclude Rule IDs",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Exclude App Firewall Rule List"
+                    }
                 },
                 "monitoring_mode": {
                     "type": "boolean",
-                    "description": " App Firewall will run in monitoring mode without blocking the request",
+                    "description": "x-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
                     "title": "Set App Firewall in Monitoring Mode",
-                    "format": "boolean",
-                    "x-displayname": "Set App Firewall in Monitoring Mode"
+                    "format": "boolean"
                 }
             }
         },
@@ -3751,17 +3772,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3774,7 +3801,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpMethod": {
             "type": "string",
-            "description": "Specifies the HTTP method used to acess a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
             "title": "HttpMethod",
             "enum": [
                 "ANY",
@@ -3794,7 +3821,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpStatusCode": {
             "type": "string",
-            "description": "HTTP response status codes\n\nEmptyStatusCode response codes means it is not specified\nCONTINUE code\nOK code\nCreated status code\nAccepted status code\nNonAuthoritativeInformation status code\nNoContent status code\nResetContent status code\nPartialContent status code\nMultiStatus status code\nAlreadyReported status code\nIMUsed status code\nMultipleChoices status code\nMovedPermanently status code\nFound status code\nSeeOther status code\nNotModified status code\nUseProxy status code\nTemporaryRedirect status code\nPermanentRedirect status code\nBadRequest status code\nUnauthorized status code\nPaymentRequired status code\nForbidden status code\nNotFound status code\nMethodNotAllowed status code\nNotAcceptable status code\nProxyAuthenticationRequired status code\nRequestTimeout status code\nConflict status code\nGone status code\nLengthRequired status code\nPreconditionFailed status code\nPayloadTooLarge status code\nURITooLong status code\nUnsupportedMediaType status code\nRangeNotSatisfiable status code\nExpectationFailed status code\nMisdirectedRequest status code\nUnprocessableEntity status code\nLocked status code\nFailedDependency status code\nUpgradeRequired status code\nPreconditionRequired status code\nTooManyRequests status code\nRequestHeaderFieldsTooLarge status code\nInternalServerError status code\nNotImplemented status code\nBadGateway status code\nServiceUnavailable status code\nGatewayTimeout status code\nHTTPVersionNotSupported status code\nVariantAlsoNegotiates status code\nInsufficientStorage status code\nLoopDetected status code\nNotExtended status code\nNetworkAuthenticationRequired status code",
+            "description": "x-displayName: \"HTTP Status Code\"\nHTTP response status codes\n\n - EmptyStatusCode: x-displayName: \"0 Empty Status Code\"\nEmptyStatusCode response codes means it is not specified\n - Continue: x-displayName: \"100 Continue\"\nContinue status code\n - OK: x-displayName: \"200 Ok\"\nOK status code\n - Created: x-displayName: \"201 Created\"\nCreated status code\n - Accepted: x-displayName: \"202 Accepted\"\nAccepted status code\n - NonAuthoritativeInformation: x-displayName: \"203 Non Authoritative Information\"\nNon Authoritative Information status code\n - NoContent: x-displayName: \"204 No Content\"\nNo Content status code\n - ResetContent: x-displayName: \"205 Reset Content\"\nReset Content status code\n - PartialContent: x-displayName: \"206 Partial Content\"\nPartial Content status code\n - MultiStatus: x-displayName: \"207 Multi Status\"\nMulti Status status code\n - AlreadyReported: x-displayName: \"208 Already Reported\"\nAlready Reported status code\n - IMUsed: x-displayName: \"226 Im Used\"\nIm Used status code\n - MultipleChoices: x-displayName: \"300 Multiple Choices\"\nMultiple Choices status code\n - MovedPermanently: x-displayName: \"301 Moved Permanently\"\nMoved Permanently status code\n - Found: x-displayName: \"302 Found\"\nFound status code\n - SeeOther: x-displayName: \"303 See Other\"\nSee Other status code\n - NotModified: x-displayName: \"304 Not Modified\"\nNot Modified status code\n - UseProxy: x-displayName: \"305 Use Proxy\"\nUse Proxy status code\n - TemporaryRedirect: x-displayName: \"307 Temporary Redirect\"\nTemporary Redirect status code\n - PermanentRedirect: x-displayName: \"308 Permanent Redirect\"\nPermanent Redirect status code\n - BadRequest: x-displayName: \"400 Bad Request\"\nBad Request status code\n - Unauthorized: x-displayName: \"401 Unauthorized\"\nUnauthorized status code\n - PaymentRequired: x-displayName: \"402 Payment Required\"\nPayment Required status code\n - Forbidden: x-displayName: \"403 Forbidden\"\nForbidden status code\n - NotFound: x-displayName: \"404 Not Found\"\nNot Found status code\n - MethodNotAllowed: x-displayName: \"405 Method Not Allowed\"\nMethod Not Allowed status code\n - NotAcceptable: x-displayName: \"406 Not Acceptable\"\nNot Acceptable status code\n - ProxyAuthenticationRequired: x-displayName: \"407 Proxy Authentication Required\"\nProxy Authentication Required status code\n - RequestTimeout: x-displayName: \"408 Request Timeout\"\nRequest Timeout status code\n - Conflict: x-displayName: \"409 Conflict\"\nConflict status code\n - Gone: x-displayName: \"410 Gone\"\nGone status code\n - LengthRequired: x-displayName: \"411 Length Required\"\nLength Required status code\n - PreconditionFailed: x-displayName: \"412 Precondition Failed\"\nPrecondition Failed status code\n - PayloadTooLarge: x-displayName: \"413 Payload Too Large\"\nPayload Too Large status code\n - URITooLong: x-displayName: \"414 Uri Too Long\"\nUri Too Long status code\n - UnsupportedMediaType: x-displayName: \"415 Unsupported Media Type\"\nUnsupported Media Type status code\n - RangeNotSatisfiable: x-displayName: \"416 Range Not Satisfiable\"\nRange Not Satisfiable status code\n - ExpectationFailed: x-displayName: \"417 Expectation Failed\"\nExpectation Failed status code\n - MisdirectedRequest: x-displayName: \"421 Misdirected Request\"\nMisdirected Request status code\n - UnprocessableEntity: x-displayName: \"422 Unprocessable Entity\"\nUnprocessable Entity status code\n - Locked: x-displayName: \"423 Locked\"\nLocked status code\n - FailedDependency: x-displayName: \"424 Failed Dependency\"\nFailed Dependency status code\n - UpgradeRequired: x-displayName: \"426 Upgrade Required\"\nUpgrade Required status code\n - PreconditionRequired: x-displayName: \"428 Precondition Required\"\nPrecondition Required status code\n - TooManyRequests: x-displayName: \"429 Too Many Requests\"\nToo Many Requests status code\n - RequestHeaderFieldsTooLarge: x-displayName: \"431 Request Header Fields Too Large\"\nRequest Header Fields Too Large status code\n - InternalServerError: x-displayName: \"500 Internal Server Error\"\nInternal Server Error status code\n - NotImplemented: x-displayName: \"501 Not Implemented\"\nNot Implemented status code\n - BadGateway: x-displayName: \"502 Bad Gateway\"\nBad Gateway status code\n - ServiceUnavailable: x-displayName: \"503 Service Unavailable\"\nService Unavailable status code\n - GatewayTimeout: x-displayName: \"504 Gateway Timeout\"\nGateway Timeout status code\n - HTTPVersionNotSupported: x-displayName: \"505 Http Version Not Supported\"\nHttp Version Not Supported status code\n - VariantAlsoNegotiates: x-displayName: \"506 Variant Also Negotiates\"\nVariant Also Negotiates status code\n - InsufficientStorage: x-displayName: \"507 Insufficient Storage\"\nInsufficient Storage status code\n - LoopDetected: x-displayName: \"508 Loop Detected\"\nLoop Detected status code\n - NotExtended: x-displayName: \"510 Not Extended\"\nNot Extended status code\n - NetworkAuthenticationRequired: x-displayName: \"511 Network Authentication Required\"\nNetwork Authentication Required status code",
             "title": "HttpStatusCode",
             "enum": [
                 "EmptyStatusCode",
@@ -3855,9 +3882,7 @@ var APISwaggerJSON string = `{
                 "NotExtended",
                 "NetworkAuthenticationRequired"
             ],
-            "default": "EmptyStatusCode",
-            "x-displayname": "HTTP Status Code",
-            "x-ves-proto-enum": "ves.io.schema.HttpStatusCode"
+            "default": "EmptyStatusCode"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -3900,28 +3925,21 @@ var APISwaggerJSON string = `{
         },
         "schemaL4DestType": {
             "type": "object",
-            "description": "L4 Destination consisting of IPv4 Prefixes and TCP Port Range",
+            "description": "x-displayName: \"L4 Destination\"\nL4 Destination consisting of IPv4 Prefixes and TCP Port Range",
             "title": "L4 Dest Type",
-            "x-displayname": "L4 Destination",
-            "x-ves-proto-message": "ves.io.schema.L4DestType",
             "properties": {
                 "port_ranges": {
                     "type": "string",
-                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\nRequired: YES",
-                    "title": "port_ranges",
-                    "x-displayname": "Port Ranges",
-                    "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Port Ranges\"\nx-required\nx-example: \"80,443,8080-8191,9080\"\nA string containing a comma separated list of port ranges.\nEach port range consists of a single port or two ports separated by \"-\".",
+                    "title": "port_ranges"
                 },
                 "prefixes": {
                     "type": "array",
-                    "description": " Destination IPv4 prefixes.\nRequired: YES",
+                    "description": "x-displayName: \"IPv4 Prefixes\"\nx-required\nDestination IPv4 prefixes.",
                     "title": "prefixes",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "IPv4 Prefixes",
-                    "x-ves-required": "true"
+                    }
                 }
             }
         },
@@ -3934,13 +3952,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "keys": {
                     "type": "array",
-                    "description": " The list of label key names that have to match\n\nExample: - \"['environment', 'location', 'deployment']\"-",
+                    "description": " The list of label key names that have to match\n\nExample: - \"['environment', 'location', 'deployment']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "keys",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Keys",
-                    "x-ves-example": "['environment', 'location', 'deployment']"
+                    "x-ves-example": "['environment', 'location', 'deployment']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3953,14 +3976,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "expressions": {
                     "type": "array",
-                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\nRequired: YES",
+                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.k8s_label_selector: true\n  ves.io.schema.rules.repeated.items.string.max_len: 4096\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "expressions",
+                    "maxItems": 1,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096
                     },
                     "x-displayname": "Selector Expression",
                     "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.k8s_label_selector": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "4096",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3969,16 +4002,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3989,10 +4013,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -4018,11 +4048,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -4212,12 +4245,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -4316,19 +4353,16 @@ var APISwaggerJSON string = `{
         },
         "schemapolicyBotAction": {
             "type": "object",
-            "description": "Modify Bot protection behavior for a matching request. The modification could be to entirely skip Bot processing.",
+            "description": "x-displayName: \"Bot Action\"\nModify Bot protection behavior for a matching request. The modification could be to entirely skip Bot processing.",
             "title": "Bot Action",
-            "x-displayname": "Bot Action",
-            "x-ves-oneof-field-action_type": "[\"bot_skip_processing\",\"none\"]",
-            "x-ves-proto-message": "ves.io.schema.policy.BotAction",
             "properties": {
                 "bot_skip_processing": {
-                    "description": "Exclusive with [none]\nx-displayName: \"Skip Bot Processing\"\nSkip all Bot processing for this request",
+                    "description": "x-displayName: \"Skip Bot Processing\"\nSkip all Bot processing for this request",
                     "title": "Skip Bot Processing",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "none": {
-                    "description": "Exclusive with [bot_skip_processing]\nx-displayName: \"Do not modify Bot Processing\"\nPerform normal Bot processing for this request",
+                    "description": "x-displayName: \"Do not modify Bot Processing\"\nPerform normal Bot processing for this request",
                     "title": "Normal Bot Processing",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -4340,16 +4374,16 @@ var APISwaggerJSON string = `{
             "title": "HeaderMatcherType",
             "x-displayname": "Header Matcher",
             "x-ves-displayorder": "1,6,4",
-            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\"]",
             "x-ves-proto-message": "ves.io.schema.policy.HeaderMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the header is not present.",
+                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the header is not present.",
                     "title": "check_not_present",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the header is present.",
+                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the header is present.",
                     "title": "check_present",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -4361,23 +4395,23 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Header Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
                     "title": "item",
                     "$ref": "#/definitions/policyMatcherType"
                 },
                 "name": {
                     "type": "string",
-                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Accept-Encoding\"-\nRequired: YES",
+                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Accept-Encoding\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "name",
+                    "maxLength": 256,
                     "x-displayname": "Header Name",
                     "x-ves-example": "Accept-Encoding",
-                    "x-ves-required": "true"
-                },
-                "presence": {
-                    "type": "boolean",
-                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the header is present or absent.",
-                    "title": "presence",
-                    "format": "boolean"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 }
             }
         },
@@ -4390,52 +4424,88 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-",
+                    "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "exact values",
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
                     },
                     "x-displayname": "Exact Values",
-                    "x-ves-example": "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"
+                    "x-ves-example": "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.http_path": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "prefix_values": {
                     "type": "array",
-                    "description": " A list of path prefix values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']\"-",
+                    "description": " A list of path prefix values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "prefix values",
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
                     },
                     "x-displayname": "Prefix Values",
-                    "x-ves-example": "['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"
+                    "x-ves-example": "['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.http_path": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "regex_values": {
                     "type": "array",
-                    "description": " A list of regular expressions to match the input HTTP path against.\n\nExample: - \"['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']\"-",
+                    "description": " A list of regular expressions to match the input HTTP path against.\n\nExample: - \"['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "regex values",
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
                     },
                     "x-displayname": "Regex Values",
-                    "x-ves-example": "['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"
+                    "x-ves-example": "['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.regex": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "suffix_values": {
                     "type": "array",
-                    "description": " A list of path suffix values to match the input HTTP path against.\n\nExample: - \"['.exe', '.shtml', '.wmz']\"-",
+                    "description": " A list of path suffix values to match the input HTTP path against.\n\nExample: - \"['.exe', '.shtml', '.wmz']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Suffix values",
+                    "maxItems": 64,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 64
                     },
                     "x-displayname": "Suffix Values",
-                    "x-ves-example": "['.exe', '.shtml', '.wmz']"
+                    "x-ves-example": "['.exe', '.shtml', '.wmz']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "64",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "transformers": {
                     "type": "array",
-                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "transformers",
+                    "maxItems": 9,
                     "items": {
                         "$ref": "#/definitions/policyTransformer"
                     },
-                    "x-displayname": "Transformers"
+                    "x-displayname": "Transformers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "9",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4445,16 +4515,16 @@ var APISwaggerJSON string = `{
             "title": "QueryParameterMatcherType",
             "x-displayname": "Query Parameter Matcher",
             "x-ves-displayorder": "1,6,4",
-            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\"]",
             "x-ves-proto-message": "ves.io.schema.policy.QueryParameterMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the query parameter is not present.",
+                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the query parameter is not present.",
                     "title": "check_not_present",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the query parameter is present.",
+                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the query parameter is present.",
                     "title": "check_present",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -4466,23 +4536,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Query Parameter Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the given query parameter. The match is successful if any of the values for the query parameter satisfies the\ncriteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the given query parameter. The match is successful if any of the values for the query parameter satisfies the\ncriteria in the matcher.",
                     "title": "item",
                     "$ref": "#/definitions/policyMatcherType"
                 },
                 "key": {
                     "type": "string",
-                    "description": " A case-sensitive HTTP query parameter name.\n\nExample: - \"sourceid\"-\nRequired: YES",
+                    "description": " A case-sensitive HTTP query parameter name.\n\nExample: - \"sourceid\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "key",
+                    "maxLength": 256,
                     "x-displayname": "Query Parameter Name",
                     "x-ves-example": "sourceid",
-                    "x-ves-required": "true"
-                },
-                "presence": {
-                    "type": "boolean",
-                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the query parameter is present or absent.",
-                    "title": "presence",
-                    "format": "boolean"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 }
             }
         },
@@ -4493,17 +4562,20 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specification",
             "x-ves-oneof-field-asn_choice": "[\"any_asn\",\"asn_list\",\"asn_matcher\"]",
             "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_name\",\"client_name_matcher\",\"client_selector\",\"ip_threat_category_list\"]",
-            "x-ves-oneof-field-dst_asn_choice": "[\"any_dst_asn\",\"dst_asn_list\",\"dst_asn_matcher\"]",
-            "x-ves-oneof-field-dst_ip_choice": "[\"any_dst_ip\",\"dst_ip_matcher\",\"dst_ip_prefix_list\"]",
+            "x-ves-oneof-field-dst_asn_choice": "[]",
+            "x-ves-oneof-field-dst_ip_choice": "[]",
             "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.GlobalSpecType",
             "properties": {
                 "action": {
-                    "description": " Action to be enforced if the input request matches the rule.\nRequired: YES",
+                    "description": " Action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "action",
                     "$ref": "#/definitions/policyRuleAction",
                     "x-displayname": "Action",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "any_asn": {
                     "description": "Exclusive with [asn_list asn_matcher]\nx-displayName: \"Any Source ASN\"\nAny origin ASN.",
@@ -4513,16 +4585,6 @@ var APISwaggerJSON string = `{
                 "any_client": {
                     "description": "Exclusive with [client_name client_name_matcher client_selector ip_threat_category_list]\nx-displayName: \"Any Client\"\nAny Client",
                     "title": "any ip",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "any_dst_asn": {
-                    "description": "Exclusive with [dst_asn_list dst_asn_matcher]\nx-displayName: \"Any Destination ASN\"\nAny origin ASN.",
-                    "title": "any dst asn",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "any_dst_ip": {
-                    "description": "Exclusive with [dst_ip_matcher dst_ip_prefix_list]\nx-displayName: \"Any Destination IP\"\nAny Destination IP",
-                    "title": "any dst ip",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "any_ip": {
@@ -4538,12 +4600,16 @@ var APISwaggerJSON string = `{
                 },
                 "arg_matchers": {
                     "type": "array",
-                    "description": " A list of predicates for all POST args that need to be matched. The criteria for matching each arg are described in individual instances\n of ArgMatcherType. The actual arg values are extracted from the request API as a list of strings for each arg selector name.\n Note that all specified arg matcher predicates must evaluate to true.",
+                    "description": " A list of predicates for all POST args that need to be matched. The criteria for matching each arg are described in individual instances\n of ArgMatcherType. The actual arg values are extracted from the request API as a list of strings for each arg selector name.\n Note that all specified arg matcher predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "arg matchers",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/policyArgMatcherType"
                     },
-                    "x-displayname": "Argument Matchers"
+                    "x-displayname": "Argument Matchers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 },
                 "asn_list": {
                     "description": "Exclusive with [any_asn asn_matcher]\nx-displayName: \"ASN List\"\nList of 4-byte ASN values.\nThe predicate evaluates to true if the origin ASN is present in the ASN list.",
@@ -4561,19 +4627,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
                 },
-                "bot_action": {
-                    "description": " Bot action to be enforced if the input request matches the rule.",
-                    "title": "Bot Action",
-                    "$ref": "#/definitions/schemapolicyBotAction",
-                    "x-displayname": "Bot Action"
-                },
-                "challenge_action": {
-                    "description": " Select challenge action, enable javascript/captcha challenge or disable challenge\nRequired: YES",
-                    "title": "Challenge Action",
-                    "$ref": "#/definitions/policyChallengeAction",
-                    "x-displayname": "Select Challenge Action Type",
-                    "x-ves-required": "true"
-                },
                 "client_name": {
                     "type": "string",
                     "description": "Exclusive with [any_client client_name_matcher client_selector ip_threat_category_list]\nx-displayName: \"Client Name\"\nx-example: \"backend.production.customer.volterra.us\"\nThe expected name of the client invoking the request API.\nThe predicate evaluates to true if any of the actual names is the same as the expected client name.",
@@ -4584,57 +4637,29 @@ var APISwaggerJSON string = `{
                     "title": "client name matcher",
                     "$ref": "#/definitions/policyMatcherType"
                 },
-                "client_role": {
-                    "description": " The expected role(s) of the client invoking the request API. The actual roles for the client are derived from the user and namespace information in the\n API request.\n The predicate evaluates to true if any of the client's roles match the value(s) specified in client role.",
-                    "title": "client role",
-                    "$ref": "#/definitions/policyRoleMatcherType",
-                    "x-displayname": "Client Role"
-                },
                 "client_selector": {
                     "description": "Exclusive with [any_client client_name client_name_matcher ip_threat_category_list]\nx-displayName: \"Group of Clients by Label Selector\"\nA label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\nexpressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\nThis is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\nclient labels rather than being limited to relying on patterns in the client name.\nThe predicate evaluates to true if the expressions in the label selector are true for the client labels.",
                     "title": "client selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },
-                "content_rewrite_action": {
-                    "description": " Rewrite HTML response action to insert HTML content such as Javascript \u003cscript\u003e tags into the HTML document",
-                    "title": "Shape Content Rewrite Action",
-                    "$ref": "#/definitions/policyContentRewriteAction",
-                    "x-displayname": "Shape Content Rewrite Action Type"
-                },
                 "cookie_matchers": {
                     "type": "array",
-                    "description": " A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances\n of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name.\n Note that all specified cookie matcher predicates must evaluate to true.",
+                    "description": " A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances\n of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name.\n Note that all specified cookie matcher predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "cookie matchers",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/policyCookieMatcherType"
                     },
-                    "x-displayname": "Cookie Matchers"
+                    "x-displayname": "Cookie Matchers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 },
                 "domain_matcher": {
                     "description": " A list of exact values and/or regular expressions for the expected name of the domain. The actual value of domain is the host component\n from the URL. The predicate evaluates to true if the domain value matches any of the exact values or regular expressions in the domain\n matcher.",
                     "title": "domain matcher",
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Domain Matcher"
-                },
-                "dst_asn_list": {
-                    "description": "Exclusive with [any_dst_asn dst_asn_matcher]\nx-displayName: \"Destination ASN List\"\nList of 4-byte ASN values.\nThe predicate evaluates to true if the destination ASN is present in the ASN list.",
-                    "title": "dst asn list",
-                    "$ref": "#/definitions/policyAsnMatchList"
-                },
-                "dst_asn_matcher": {
-                    "description": "Exclusive with [any_dst_asn dst_asn_list]\nx-displayName: \"Destination BGP ASN Sets\"\nList of references to BGP ASN Set objects.\nThe predicate evaluates to true if the destination ASN is present in one of the BGP ASN Set objects.",
-                    "title": "dst asn matcher",
-                    "$ref": "#/definitions/policyAsnMatcherType"
-                },
-                "dst_ip_matcher": {
-                    "description": "Exclusive with [any_dst_ip dst_ip_prefix_list]\nx-displayName: \"Destination IP Prefix Sets\"\nList of references to IP Prefix Set objects.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
-                    "title": "ip matcher",
-                    "$ref": "#/definitions/policyIpMatcherType"
-                },
-                "dst_ip_prefix_list": {
-                    "description": "Exclusive with [any_dst_ip dst_ip_matcher]\nx-displayName: \"Destination IPv4 Prefix List\"\nList of IPv4 Prefixes values.\nThe predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list.",
-                    "title": "ip prefix list",
-                    "$ref": "#/definitions/policyPrefixMatchList"
                 },
                 "expiration_timestamp": {
                     "type": "string",
@@ -4644,32 +4669,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Expiration Timestamp",
                     "x-ves-example": "2019-12-31:44:34.171543432Z"
                 },
-                "forwarding_class": {
-                    "type": "array",
-                    "description": " Ordered list of forwarding class to use for traffic that match the enclosing rule\n Action valid only when the policy is used PBR",
-                    "title": "Forwarding Classes",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Forwarding Classes"
-                },
-                "goto_policy": {
-                    "type": "array",
-                    "description": " A reference to a service_policy object.\n Target of the GOTO_POLICY action.\n The target policy must be part of the current policy set and must be after the current policy in the policy set.",
-                    "title": "goto_policy",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Goto Policy"
-                },
                 "headers": {
                     "type": "array",
-                    "description": " A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\n instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\n Note that all specified header predicates must evaluate to true.",
+                    "description": " A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\n instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\n Note that all specified header predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "headers",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemapolicyHeaderMatcherType"
                     },
-                    "x-displayname": "HTTP Headers"
+                    "x-displayname": "HTTP Headers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 },
                 "http_method": {
                     "description": " The list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\n The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
@@ -4692,12 +4703,6 @@ var APISwaggerJSON string = `{
                     "title": "IP Threat Category List",
                     "$ref": "#/definitions/service_policy_ruleIPThreatCategoryListType"
                 },
-                "l4_dest_matcher": {
-                    "description": " A L4 Destination matcher specifies a list of IPv4 prefixes and a TCP port range as match criteria. The match is considered successful if the destination\n IP matches one of the prefixes and the destination port belongs to the port range.",
-                    "title": "l4 dest matcher",
-                    "$ref": "#/definitions/policyL4DestMatcherType",
-                    "x-displayname": "L4 Destination Matcher"
-                },
                 "label_matcher": {
                     "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
                     "title": "label matcher",
@@ -4705,63 +4710,24 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
                 },
-                "malicious_user_mitigation_bypass": {
-                    "description": " When user behavior analyses is enabled, all requests in the application namespace\n are subjected to user behavior analyses and mitigation actions are taken as configured in MaliciousUserMitigationRule.\n If required, the behavior checks can be disabled for certain requests by configuring\n the appropriate match conditions in the enclosing policy rule and setting malicious user mitigation bypass flag.",
-                    "title": "malicious user mitigation bypass",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Malicious User Mitigation Bypass"
-                },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
                     "title": "path",
                     "$ref": "#/definitions/schemapolicyPathMatcherType",
                     "x-displayname": "HTTP Path"
                 },
-                "port_matcher": {
-                    "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
-                    "title": "port matcher",
-                    "$ref": "#/definitions/policyPortMatcherType",
-                    "x-displayname": "Port Matcher"
-                },
                 "query_params": {
                     "type": "array",
-                    "description": " A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\n of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\n Note that all specified query parameter predicates must evaluate to true.",
+                    "description": " A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\n of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\n Note that all specified query parameter predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "query params",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemapolicyQueryParameterMatcherType"
                     },
-                    "x-displayname": "HTTP Query Parameters"
-                },
-                "rate_limiter": {
-                    "type": "array",
-                    "description": " A reference to rate_limiter object.\n Requests matching this the enclosing rule are subjected to the specified rate_limiter.",
-                    "title": "rate_limiter",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Rate Limiter"
-                },
-                "scheme": {
-                    "type": "array",
-                    "description": " The scheme in the request.\n\nExample: - \"HTTPS\"-",
-                    "title": "scheme",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Scheme",
-                    "x-ves-example": "HTTPS"
-                },
-                "server_selector": {
-                    "description": " A label selector that describes the expected set of servers.\n The predicate evaluates to true if the expressions in the label selector are true for the server labels.",
-                    "title": "server selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType",
-                    "x-displayname": "Group of Servers by Label Selector"
-                },
-                "shape_protected_endpoint_action": {
-                    "description": " Shape Protected Endpoint Action that include application traffic type and mitigation",
-                    "title": "Shape Protected Endpoint Action",
-                    "$ref": "#/definitions/policyShapeProtectedEndpointAction",
-                    "x-displayname": "Shape Protected Endpoint Action"
+                    "x-displayname": "HTTP Query Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
@@ -4769,24 +4735,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "TLS Fingerprint Matcher"
                 },
-                "url_matcher": {
-                    "description": " A URL matcher specifies a list of URL items as match criteria. The match is considered successful if the domain and path match any of the URL items.",
-                    "title": "url matcher",
-                    "$ref": "#/definitions/policyURLMatcherType",
-                    "x-displayname": "URL Matcher"
-                },
-                "virtual_host_matcher": {
-                    "description": " A list of exact values and/or regular expressions for the expected name of the virtual_host. The name of the virtual_host is is part of the context in\n which a service_policy_set is evaluated. The predicate evaluates to true if the virtual_host name matches any of the exact values or regular expressions\n in the virtual_host matcher.\n Hidden because this will be used only in system generated rate limiting service_policy_sets.",
-                    "title": "virtual_host matcher",
-                    "$ref": "#/definitions/policyMatcherType",
-                    "x-displayname": "Virtual Host Matcher"
-                },
                 "waf_action": {
-                    "description": " App Firewall action to be enforced if the input request matches the rule.\nRequired: YES",
+                    "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "App Firewall Action",
                     "$ref": "#/definitions/policyWafAction",
                     "x-displayname": "App Firewall Action",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -4799,13 +4756,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip_threat_categories": {
                     "type": "array",
-                    "description": " The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions\nRequired: YES",
+                    "description": " The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP Threat Categories",
+                    "maxItems": 10,
                     "items": {
                         "$ref": "#/definitions/policyIPThreatCategory"
                     },
                     "x-displayname": "List of IP Threat Categories to choose",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "10",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4858,7 +4821,7 @@ var APISwaggerJSON string = `{
         },
         "waf_rule_listWafRuleID": {
             "type": "string",
-            "description": "Supported WAF rule IDs\n\nUsed internally to instruct the modsec code in envoy to skip all rules\nRequest from Known Malicious Client (Based on previous traffic violations).\nClient IP is from a HIGH Risk Country Location.\nHTTP Blacklist match for search engine IP\nHTTP Blacklist match for spammer IP\nHTTP Blacklist match for suspicious IP\nHTTP Blacklist match for harvester IP\nMethod is not allowed by policy\nDenial of Service (DoS) attack identified from %{tx.real_ip} (%{tx.dos_block_counter} hits since last alert)\nFound User-Agent associated with security scanner\nFound User-Agent associated with scripting/generic HTTP client\nFound User-Agent associated with web crawler/bot\nFound request header associated with security scanner\nFound request filename/argument associated with security scanner\nInvalid HTTP Request Line\nAttempted multipart/form-data bypass\nAttempted multipart/form-data bypass\nFailed to parse request body.\nMultipart request body failed strict validation:PE %{REQBODY_PROCESSOR_ERROR},BQ %{MULTIPART_BOUNDARY_QUOTED},BW %{MULTIPART_BOUNDARY_WHITESPACE},DB %{MULTIPART_DATA_BEFORE},DA %{MULTIPART_DATA_AFTER},HF %{MULTIPART_HEADER_FOLDING},LF %{MULTIPART_LF_LINE},SM %{MULTIPART_MISSING_SEMICOLON},IQ %{MULTIPART_INVALID_QUOTING},IH %{MULTIPART_INVALID_HEADER_FOLDING},FLE %{MULTIPART_FILE_LIMIT_EXCEEDED}\nContent-Length HTTP header is not numeric.\nGET or HEAD Request with Body Content.\nGET or HEAD Request with Transfer-Encoding.\nPOST without Content-Length or Transfer-Encoding headers.\nRange: Invalid Last Byte Value.\nRange: Too many fields (6 or more)\nRange: Too many fields for pdf request (63 or more)\nRange: Too many fields for pdf request (6 or more)\nMultiple/Conflicting Connection Header Data Found.\nURL Encoding Abuse Attack Attempt\nMultiple URL Encoding Detected\nURL Encoding Abuse Attack Attempt\nUTF8 Encoding Abuse Attack Attempt\nUnicode Full/Half Width Abuse Attack Attempt\nInvalid character in request (null character)\nInvalid character in request (non printable characters)\nInvalid character in request (outside of printable chars below ascii 127)\nInvalid character in request (outside of very strict set)\nInvalid character in request headers (outside of very strict set)\nRequest Containing Content Requires Content-Type header\nHost header is a numeric IP address\nArgument name too long\nArgument value too long\nToo many arguments in request\nTotal arguments size exceeded\nUploaded file size too large\nTotal uploaded files size too large\nRequest content type is not allowed by policy\nHTTP protocol version is not allowed by policy\nURL file extension is restricted by policy\nHTTP header is restricted by policy (%{MATCHED_VAR})\nAbnormal character escapes in request\nIllegal Content-Type header\nRequest content type charset is not allowed by policy\nHTTP Request Smuggling Attack\nHTTP Response Splitting Attack\nHTTP Response Splitting Attack\nHTTP Header Injection Attack via headers\nHTTP Header Injection Attack via payload (CR/LF detected)\nHTTP Header Injection Attack via payload (CR/LF detected)\nHTTP Header Injection Attack via payload (CR/LF and header-name detected)\nPath Traversal Attack (/../)\nPath Traversal Attack (/../)\nOS File Access Attempt\nRestricted File Access Attempt\nPossible Remote File Inclusion (RFI) Attack: URL Parameter using IP Address\nPossible Remote File Inclusion (RFI) Attack: Common RFI Vulnerable Parameter Name used w/URL Payload\nPossible Remote File Inclusion (RFI) Attack: URL Payload Used w/Trailing Question Mark Character (?)\nPossible Remote File Inclusion (RFI) Attack: Off-Domain Reference/Link\nRemote Command Execution: Unix Command Injection\nRemote Command Execution: Unix Command Injection\nRemote Command Execution: Unix Command Injection\nRemote Command Execution: Windows Command Injection\nRemote Command Execution: Windows Command Injection\nRemote Command Execution: Windows PowerShell Command Found\nRemote Command Execution: Unix Shell Expression Found\nRemote Command Execution: Windows FOR/IF Command Found\nRemote Command Execution: Direct Unix Command Execution\nRemote Command Execution: Unix Shell Code Found\nRemote Command Execution: Shellshock (CVE-2014-6271)\nRemote Command Execution: Shellshock (CVE-2014-6271)\nRestricted File Upload Attempt\nRemote Command Execution: Wildcard bypass technique attempt\nPHP Injection Attack: PHP Open Tag Found\nPHP Injection Attack: PHP Script File Upload Found\nPHP Injection Attack: PHP Script File Upload Found\nPHP Injection Attack: Configuration Directive Found\nPHP Injection Attack: Variables Found\nPHP Injection Attack: Variables Found\nPHP Injection Attack: I/O Stream Found\nPHP Injection Attack: High-Risk PHP Function Name Found\nPHP Injection Attack: Medium-Risk PHP Function Name Found\nPHP Injection Attack: High-Risk PHP Function Call Found\nPHP Injection Attack: Low-Value PHP Function Call Found\nPHP Injection Attack: Serialized Object Injection\nPHP Injection Attack: Variable Function Call Found\nPHP Injection Attack: PHP Closing Tag Found\nXSS Attack Detected via libinjection\nXSS Attack Detected via libinjection\nXSS Filter - Category 1: Script Tag Vector\nXSS Filter - Category 2: Event Handler Vector\nXSS Filter - Category 3: Attribute Vector\nXSS Filter - Category 4: Javascript URI Vector\nXSS Filter - Category 5: Disallowed HTML Attributes\nNoScript XSS InjectionChecker: HTML Injection\nNoScript XSS InjectionChecker: Attribute Injection\nNode-Validator Blacklist Keywords\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nUS-ASCII Malformed Encoding XSS Filter - Attack Detected.\nPossible XSS Attack Detected - HTML Tag Handler\nIE XSS Filters - Attack Detected.\nIE XSS Filters - Attack Detected.\nUTF-7 Encoding IE XSS - Attack Detected.\nSQL Injection Attack Detected via libinjection\nSQL Injection Attack: Common Injection Testing Detected\nSQL Injection Attack: SQL Operator Detected\nSQL Injection Attack: SQL Tautology Detected.\nSQL Injection Attack: Common DB Names Detected\nSQL Injection Attack\nDetects blind sqli tests using sleep() or benchmark().\nDetects SQL benchmark and sleep injection attempts including conditional queries\nDetects basic SQL authentication bypass attempts 1/3\nDetects MSSQL code execution and information gathering attempts\nDetects MySQL comment-/space-obfuscated injections and backtick termination\nDetects chained SQL injection attempts 1/2\nLooking for integer overflow attacks, these are taken from skipfish, except 3.0.00738585072007e-308 is the \\\nDetects conditional SQL injection attempts\nDetects MySQL charset switch and MSSQL DoS attempts\nDetects MATCH AGAINST, MERGE and EXECUTE IMMEDIATE injections\nDetects HAVING injections\nDetects basic SQL authentication bypass attempts 2/3\nLooking for basic sql injection. Common attack string for mysql, oracle and others.\nDetects Postgres pg_sleep injection, waitfor delay attacks and database shutdown attempts\nFinds basic MongoDB SQL injection attempts\nDetects MySQL comments, conditions and ch(a)r injections\nDetects chained SQL injection attempts 2/2\nDetects MySQL and PostgreSQL stored procedure/function injections\nDetects classic SQL injection probings 1/3\nDetects basic SQL authentication bypass attempts 3/3\nDetects MySQL UDF injection and other data/structure manipulation attempts\nDetects concatenated basic SQL injection and SQLLFI attempts\nDetects basic SQL injection based on keyword alter or union\nDetects classic SQL injection probings 2/3\nSQL Injection Attack\nSQL Injection Attack\nSQL Injection Attack\nSQL Injection Attack\nRestricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (8)\nRestricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (3)\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (12)\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)\nSQL Comment Sequence Detected.\nSQL Hex Encoding Identified\nMeta-Character Anomaly Detection Alert - Repetitive Non-Word Characters\nSQL Injection Attack\nSQL Injection Attack\nDetects classic SQL injection probings 3/3\nPossible Session Fixation Attack: Setting Cookie Values in HTML\nPossible Session Fixation Attack: SessionID Parameter Name with Off-Domain Referer\nPossible Session Fixation Attack: SessionID Parameter Name with No Referer\nRemote Command Execution: Suspicious Java class detected\nRemote Command Execution: Java process spawn (CVE-2017-9805)\nRemote Command Execution: Java serialization (CVE-2015-5842)\nSuspicious Java class detected\nMagic bytes Detected, probable java serialization in use\nMagic bytes Detected Base64 Encoded, probable java serialization in use\nRemote Command Execution: Java serialization (CVE-2015-5842)\nRemote Command Execution: Suspicious Java method detected\nBase64 encoded string matched suspicious keyword\nThe Application Returned a 500-Level Status Code\nDirectory Listing\nMicrosoft Access SQL Information Leakage\nOracle SQL Information Leakage\nDB2 SQL Information Leakage\nEMC SQL Information Leakage\nfirebird SQL Information Leakage\nFrontbase SQL Information Leakage\nhsqldb SQL Information Leakage\ninformix SQL Information Leakage\ningres SQL Information Leakage\ninterbase SQL Information Leakage\nmaxDB SQL Information Leakage\nmssql SQL Information Leakage\nmysql SQL Information Leakage\npostgres SQL Information Leakage\nsqlite SQL Information Leakage\nSybase SQL Information Leakage\nJava Source Code Leakage\nJava Errors\nPHP Information Leakage\nPHP source code leakage\nPHP source code leakage\nDisclosure of IIS install location\nApplication Availability Error\nIIS Information Leakage\nIIS Information Leakage\nEnable Drupal specific CRS exclusions\nEnable Wordpress specific CRS exclusions\nEnable Cpanel specific CRS exclusions\nEnable Dokuwiki specific CRS exclusions\nEnable Nextcloud specific CRS exclusions\nEnable Xenforo specific CRS exclusions",
+            "description": "x-displayName: \"WAF Rule ID\"\nSupported WAF rule IDs\n\n - WAF_RULE_ALL: x-displayName: \"Skip All Rules (internal use only)\"\nUsed internally to instruct the modsec code in envoy to skip all rules\n - WAF_RULE_910000: x-displayName: \"910000\"\nRequest from Known Malicious Client (Based on previous traffic violations).\n - WAF_RULE_910100: x-displayName: \"910100\"\nClient IP is from a HIGH Risk Country Location.\n - WAF_RULE_910150: x-displayName: \"910150\"\nHTTP Blacklist match for search engine IP\n - WAF_RULE_910160: x-displayName: \"910160\"\nHTTP Blacklist match for spammer IP\n - WAF_RULE_910170: x-displayName: \"910170\"\nHTTP Blacklist match for suspicious IP\n - WAF_RULE_910180: x-displayName: \"910180\"\nHTTP Blacklist match for harvester IP\n - WAF_RULE_911100: x-displayName: \"911100\"\nMethod is not allowed by policy\n - WAF_RULE_912120: x-displayName: \"912120\"\nDenial of Service (DoS) attack identified from %{tx.real_ip} (%{tx.dos_block_counter} hits since last alert)\n - WAF_RULE_913100: x-displayName: \"913100\"\nFound User-Agent associated with security scanner\n - WAF_RULE_913101: x-displayName: \"913101\"\nFound User-Agent associated with scripting/generic HTTP client\n - WAF_RULE_913102: x-displayName: \"913102\"\nFound User-Agent associated with web crawler/bot\n - WAF_RULE_913110: x-displayName: \"913110\"\nFound request header associated with security scanner\n - WAF_RULE_913120: x-displayName: \"913120\"\nFound request filename/argument associated with security scanner\n - WAF_RULE_920100: x-displayName: \"920100\"\nInvalid HTTP Request Line\n - WAF_RULE_920120: x-displayName: \"920120\"\nAttempted multipart/form-data bypass\n - WAF_RULE_920121: x-displayName: \"920121\"\nAttempted multipart/form-data bypass\n - WAF_RULE_920130: x-displayName: \"920130\"\nFailed to parse request body.\n - WAF_RULE_920140: x-displayName: \"920140\"\nMultipart request body failed strict validation:PE %{REQBODY_PROCESSOR_ERROR},BQ %{MULTIPART_BOUNDARY_QUOTED},BW %{MULTIPART_BOUNDARY_WHITESPACE},DB %{MULTIPART_DATA_BEFORE},DA %{MULTIPART_DATA_AFTER},HF %{MULTIPART_HEADER_FOLDING},LF %{MULTIPART_LF_LINE},SM %{MULTIPART_MISSING_SEMICOLON},IQ %{MULTIPART_INVALID_QUOTING},IH %{MULTIPART_INVALID_HEADER_FOLDING},FLE %{MULTIPART_FILE_LIMIT_EXCEEDED}\n - WAF_RULE_920160: x-displayName: \"920160\"\nContent-Length HTTP header is not numeric.\n - WAF_RULE_920170: x-displayName: \"920170\"\nGET or HEAD Request with Body Content.\n - WAF_RULE_920171: x-displayName: \"920171\"\nGET or HEAD Request with Transfer-Encoding.\n - WAF_RULE_920180: x-displayName: \"920180\"\nPOST without Content-Length or Transfer-Encoding headers.\n - WAF_RULE_920190: x-displayName: \"920190\"\nRange: Invalid Last Byte Value.\n - WAF_RULE_920200: x-displayName: \"920200\"\nRange: Too many fields (6 or more)\n - WAF_RULE_920201: x-displayName: \"920201\"\nRange: Too many fields for pdf request (63 or more)\n - WAF_RULE_920202: x-displayName: \"920202\"\nRange: Too many fields for pdf request (6 or more)\n - WAF_RULE_920210: x-displayName: \"920210\"\nMultiple/Conflicting Connection Header Data Found.\n - WAF_RULE_920220: x-displayName: \"920220\"\nURL Encoding Abuse Attack Attempt\n - WAF_RULE_920230: x-displayName: \"920230\"\nMultiple URL Encoding Detected\n - WAF_RULE_920240: x-displayName: \"920240\"\nURL Encoding Abuse Attack Attempt\n - WAF_RULE_920250: x-displayName: \"920250\"\nUTF8 Encoding Abuse Attack Attempt\n - WAF_RULE_920260: x-displayName: \"920260\"\nUnicode Full/Half Width Abuse Attack Attempt\n - WAF_RULE_920270: x-displayName: \"920270\"\nInvalid character in request (null character)\n - WAF_RULE_920271: x-displayName: \"920271\"\nInvalid character in request (non printable characters)\n - WAF_RULE_920272: x-displayName: \"920272\"\nInvalid character in request (outside of printable chars below ascii 127)\n - WAF_RULE_920273: x-displayName: \"920273\"\nInvalid character in request (outside of very strict set)\n - WAF_RULE_920274: x-displayName: \"920274\"\nInvalid character in request headers (outside of very strict set)\n - WAF_RULE_920341: x-displayName: \"920341\"\nRequest Containing Content Requires Content-Type header\n - WAF_RULE_920350: x-displayName: \"920350\"\nHost header is a numeric IP address\n - WAF_RULE_920360: x-displayName: \"920360\"\nArgument name too long\n - WAF_RULE_920370: x-displayName: \"920370\"\nArgument value too long\n - WAF_RULE_920380: x-displayName: \"920380\"\nToo many arguments in request\n - WAF_RULE_920390: x-displayName: \"920390\"\nTotal arguments size exceeded\n - WAF_RULE_920400: x-displayName: \"920400\"\nUploaded file size too large\n - WAF_RULE_920410: x-displayName: \"920410\"\nTotal uploaded files size too large\n - WAF_RULE_920420: x-displayName: \"920420\"\nRequest content type is not allowed by policy\n - WAF_RULE_920430: x-displayName: \"920430\"\nHTTP protocol version is not allowed by policy\n - WAF_RULE_920440: x-displayName: \"920440\"\nURL file extension is restricted by policy\n - WAF_RULE_920450: x-displayName: \"920450\"\nHTTP header is restricted by policy (%{MATCHED_VAR})\n - WAF_RULE_920460: x-displayName: \"920460\"\nAbnormal character escapes in request\n - WAF_RULE_920470: x-displayName: \"920470\"\nIllegal Content-Type header\n - WAF_RULE_920480: x-displayName: \"920480\"\nRequest content type charset is not allowed by policy\n - WAF_RULE_921110: x-displayName: \"921110\"\nHTTP Request Smuggling Attack\n - WAF_RULE_921120: x-displayName: \"921120\"\nHTTP Response Splitting Attack\n - WAF_RULE_921130: x-displayName: \"921130\"\nHTTP Response Splitting Attack\n - WAF_RULE_921140: x-displayName: \"921140\"\nHTTP Header Injection Attack via headers\n - WAF_RULE_921150: x-displayName: \"921150\"\nHTTP Header Injection Attack via payload (CR/LF detected)\n - WAF_RULE_921151: x-displayName: \"921151\"\nHTTP Header Injection Attack via payload (CR/LF detected)\n - WAF_RULE_921160: x-displayName: \"921160\"\nHTTP Header Injection Attack via payload (CR/LF and header-name detected)\n - WAF_RULE_930100: x-displayName: \"930100\"\nPath Traversal Attack (/../)\n - WAF_RULE_930110: x-displayName: \"930110\"\nPath Traversal Attack (/../)\n - WAF_RULE_930120: x-displayName: \"930120\"\nOS File Access Attempt\n - WAF_RULE_930130: x-displayName: \"930130\"\nRestricted File Access Attempt\n - WAF_RULE_931100: x-displayName: \"931100\"\nPossible Remote File Inclusion (RFI) Attack: URL Parameter using IP Address\n - WAF_RULE_931110: x-displayName: \"931110\"\nPossible Remote File Inclusion (RFI) Attack: Common RFI Vulnerable Parameter Name used w/URL Payload\n - WAF_RULE_931120: x-displayName: \"931120\"\nPossible Remote File Inclusion (RFI) Attack: URL Payload Used w/Trailing Question Mark Character (?)\n - WAF_RULE_931130: x-displayName: \"931130\"\nPossible Remote File Inclusion (RFI) Attack: Off-Domain Reference/Link\n - WAF_RULE_932100: x-displayName: \"932100\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932105: x-displayName: \"932105\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932106: x-displayName: \"932106\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932110: x-displayName: \"932110\"\nRemote Command Execution: Windows Command Injection\n - WAF_RULE_932115: x-displayName: \"932115\"\nRemote Command Execution: Windows Command Injection\n - WAF_RULE_932120: x-displayName: \"932120\"\nRemote Command Execution: Windows PowerShell Command Found\n - WAF_RULE_932130: x-displayName: \"932130\"\nRemote Command Execution: Unix Shell Expression Found\n - WAF_RULE_932140: x-displayName: \"932140\"\nRemote Command Execution: Windows FOR/IF Command Found\n - WAF_RULE_932150: x-displayName: \"932150\"\nRemote Command Execution: Direct Unix Command Execution\n - WAF_RULE_932160: x-displayName: \"932160\"\nRemote Command Execution: Unix Shell Code Found\n - WAF_RULE_932170: x-displayName: \"932170\"\nRemote Command Execution: Shellshock (CVE-2014-6271)\n - WAF_RULE_932171: x-displayName: \"932171\"\nRemote Command Execution: Shellshock (CVE-2014-6271)\n - WAF_RULE_932180: x-displayName: \"932180\"\nRestricted File Upload Attempt\n - WAF_RULE_932190: x-displayName: \"932190\"\nRemote Command Execution: Wildcard bypass technique attempt\n - WAF_RULE_933100: x-displayName: \"933100\"\nPHP Injection Attack: PHP Open Tag Found\n - WAF_RULE_933110: x-displayName: \"933110\"\nPHP Injection Attack: PHP Script File Upload Found\n - WAF_RULE_933111: x-displayName: \"933111\"\nPHP Injection Attack: PHP Script File Upload Found\n - WAF_RULE_933120: x-displayName: \"933120\"\nPHP Injection Attack: Configuration Directive Found\n - WAF_RULE_933130: x-displayName: \"933130\"\nPHP Injection Attack: Variables Found\n - WAF_RULE_933131: x-displayName: \"933131\"\nPHP Injection Attack: Variables Found\n - WAF_RULE_933140: x-displayName: \"933140\"\nPHP Injection Attack: I/O Stream Found\n - WAF_RULE_933150: x-displayName: \"933150\"\nPHP Injection Attack: High-Risk PHP Function Name Found\n - WAF_RULE_933151: x-displayName: \"933151\"\nPHP Injection Attack: Medium-Risk PHP Function Name Found\n - WAF_RULE_933160: x-displayName: \"933160\"\nPHP Injection Attack: High-Risk PHP Function Call Found\n - WAF_RULE_933161: x-displayName: \"933161\"\nPHP Injection Attack: Low-Value PHP Function Call Found\n - WAF_RULE_933170: x-displayName: \"933170\"\nPHP Injection Attack: Serialized Object Injection\n - WAF_RULE_933180: x-displayName: \"933180\"\nPHP Injection Attack: Variable Function Call Found\n - WAF_RULE_933190: x-displayName: \"933190\"\nPHP Injection Attack: PHP Closing Tag Found\n - WAF_RULE_941100: x-displayName: \"941100\"\nXSS Attack Detected via libinjection\n - WAF_RULE_941101: x-displayName: \"941101\"\nXSS Attack Detected via libinjection\n - WAF_RULE_941110: x-displayName: \"941110\"\nXSS Filter - Category 1: Script Tag Vector\n - WAF_RULE_941120: x-displayName: \"941120\"\nXSS Filter - Category 2: Event Handler Vector\n - WAF_RULE_941130: x-displayName: \"941130\"\nXSS Filter - Category 3: Attribute Vector\n - WAF_RULE_941140: x-displayName: \"941140\"\nXSS Filter - Category 4: Javascript URI Vector\n - WAF_RULE_941150: x-displayName: \"941150\"\nXSS Filter - Category 5: Disallowed HTML Attributes\n - WAF_RULE_941160: x-displayName: \"941160\"\nNoScript XSS InjectionChecker: HTML Injection\n - WAF_RULE_941170: x-displayName: \"941170\"\nNoScript XSS InjectionChecker: Attribute Injection\n - WAF_RULE_941180: x-displayName: \"941180\"\nNode-Validator Blacklist Keywords\n - WAF_RULE_941190: x-displayName: \"941190\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941200: x-displayName: \"941200\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941210: x-displayName: \"941210\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941220: x-displayName: \"941220\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941230: x-displayName: \"941230\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941240: x-displayName: \"941240\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941250: x-displayName: \"941250\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941260: x-displayName: \"941260\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941270: x-displayName: \"941270\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941280: x-displayName: \"941280\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941290: x-displayName: \"941290\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941300: x-displayName: \"941300\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941310: x-displayName: \"941310\"\nUS-ASCII Malformed Encoding XSS Filter - Attack Detected.\n - WAF_RULE_941320: x-displayName: \"941320\"\nPossible XSS Attack Detected - HTML Tag Handler\n - WAF_RULE_941330: x-displayName: \"941330\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941340: x-displayName: \"941340\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941350: x-displayName: \"941350\"\nUTF-7 Encoding IE XSS - Attack Detected.\n - WAF_RULE_942100: x-displayName: \"942100\"\nSQL Injection Attack Detected via libinjection\n - WAF_RULE_942110: x-displayName: \"942110\"\nSQL Injection Attack: Common Injection Testing Detected\n - WAF_RULE_942120: x-displayName: \"942120\"\nSQL Injection Attack: SQL Operator Detected\n - WAF_RULE_942130: x-displayName: \"942130\"\nSQL Injection Attack: SQL Tautology Detected.\n - WAF_RULE_942140: x-displayName: \"942140\"\nSQL Injection Attack: Common DB Names Detected\n - WAF_RULE_942150: x-displayName: \"942150\"\nSQL Injection Attack\n - WAF_RULE_942160: x-displayName: \"942160\"\nDetects blind sqli tests using sleep() or benchmark().\n - WAF_RULE_942170: x-displayName: \"942170\"\nDetects SQL benchmark and sleep injection attempts including conditional queries\n - WAF_RULE_942180: x-displayName: \"942180\"\nDetects basic SQL authentication bypass attempts 1/3\n - WAF_RULE_942190: x-displayName: \"942190\"\nDetects MSSQL code execution and information gathering attempts\n - WAF_RULE_942200: x-displayName: \"942200\"\nDetects MySQL comment-/space-obfuscated injections and backtick termination\n - WAF_RULE_942210: x-displayName: \"942210\"\nDetects chained SQL injection attempts 1/2\n - WAF_RULE_942220: x-displayName: \"942220\"\nLooking for integer overflow attacks, these are taken from skipfish, except 3.0.00738585072007e-308 is the \\\n - WAF_RULE_942230: x-displayName: \"942230\"\nDetects conditional SQL injection attempts\n - WAF_RULE_942240: x-displayName: \"942240\"\nDetects MySQL charset switch and MSSQL DoS attempts\n - WAF_RULE_942250: x-displayName: \"942250\"\nDetects MATCH AGAINST, MERGE and EXECUTE IMMEDIATE injections\n - WAF_RULE_942251: x-displayName: \"942251\"\nDetects HAVING injections\n - WAF_RULE_942260: x-displayName: \"942260\"\nDetects basic SQL authentication bypass attempts 2/3\n - WAF_RULE_942270: x-displayName: \"942270\"\nLooking for basic sql injection. Common attack string for mysql, oracle and others.\n - WAF_RULE_942280: x-displayName: \"942280\"\nDetects Postgres pg_sleep injection, waitfor delay attacks and database shutdown attempts\n - WAF_RULE_942290: x-displayName: \"942290\"\nFinds basic MongoDB SQL injection attempts\n - WAF_RULE_942300: x-displayName: \"942300\"\nDetects MySQL comments, conditions and ch(a)r injections\n - WAF_RULE_942310: x-displayName: \"942310\"\nDetects chained SQL injection attempts 2/2\n - WAF_RULE_942320: x-displayName: \"942320\"\nDetects MySQL and PostgreSQL stored procedure/function injections\n - WAF_RULE_942330: x-displayName: \"942330\"\nDetects classic SQL injection probings 1/3\n - WAF_RULE_942340: x-displayName: \"942340\"\nDetects basic SQL authentication bypass attempts 3/3\n - WAF_RULE_942350: x-displayName: \"942350\"\nDetects MySQL UDF injection and other data/structure manipulation attempts\n - WAF_RULE_942360: x-displayName: \"942360\"\nDetects concatenated basic SQL injection and SQLLFI attempts\n - WAF_RULE_942361: x-displayName: \"942361\"\nDetects basic SQL injection based on keyword alter or union\n - WAF_RULE_942370: x-displayName: \"942370\"\nDetects classic SQL injection probings 2/3\n - WAF_RULE_942380: x-displayName: \"942380\"\nSQL Injection Attack\n - WAF_RULE_942390: x-displayName: \"942390\"\nSQL Injection Attack\n - WAF_RULE_942400: x-displayName: \"942400\"\nSQL Injection Attack\n - WAF_RULE_942410: x-displayName: \"942410\"\nSQL Injection Attack\n - WAF_RULE_942420: x-displayName: \"942420\"\nRestricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (8)\n - WAF_RULE_942421: x-displayName: \"942421\"\nRestricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (3)\n - WAF_RULE_942430: x-displayName: \"942430\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (12)\n - WAF_RULE_942431: x-displayName: \"942431\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)\n - WAF_RULE_942432: x-displayName: \"942432\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)\n - WAF_RULE_942440: x-displayName: \"942440\"\nSQL Comment Sequence Detected.\n - WAF_RULE_942450: x-displayName: \"942450\"\nSQL Hex Encoding Identified\n - WAF_RULE_942460: x-displayName: \"942460\"\nMeta-Character Anomaly Detection Alert - Repetitive Non-Word Characters\n - WAF_RULE_942470: x-displayName: \"942470\"\nSQL Injection Attack\n - WAF_RULE_942480: x-displayName: \"942480\"\nSQL Injection Attack\n - WAF_RULE_942490: x-displayName: \"942490\"\nDetects classic SQL injection probings 3/3\n - WAF_RULE_943100: x-displayName: \"943100\"\nPossible Session Fixation Attack: Setting Cookie Values in HTML\n - WAF_RULE_943110: x-displayName: \"943110\"\nPossible Session Fixation Attack: SessionID Parameter Name with Off-Domain Referer\n - WAF_RULE_943120: x-displayName: \"943120\"\nPossible Session Fixation Attack: SessionID Parameter Name with No Referer\n - WAF_RULE_944100: x-displayName: \"944100\"\nRemote Command Execution: Suspicious Java class detected\n - WAF_RULE_944110: x-displayName: \"944110\"\nRemote Command Execution: Java process spawn (CVE-2017-9805)\n - WAF_RULE_944120: x-displayName: \"944120\"\nRemote Command Execution: Java serialization (CVE-2015-5842)\n - WAF_RULE_944130: x-displayName: \"944130\"\nSuspicious Java class detected\n - WAF_RULE_944200: x-displayName: \"944200\"\nMagic bytes Detected, probable java serialization in use\n - WAF_RULE_944210: x-displayName: \"944210\"\nMagic bytes Detected Base64 Encoded, probable java serialization in use\n - WAF_RULE_944240: x-displayName: \"944240\"\nRemote Command Execution: Java serialization (CVE-2015-5842)\n - WAF_RULE_944250: x-displayName: \"944250\"\nRemote Command Execution: Suspicious Java method detected\n - WAF_RULE_944300: x-displayName: \"944300\"\nBase64 encoded string matched suspicious keyword\n - WAF_RULE_950100: x-displayName: \"950100\"\nThe Application Returned a 500-Level Status Code\n - WAF_RULE_950130: x-displayName: \"950130\"\nDirectory Listing\n - WAF_RULE_951110: x-displayName: \"951110\"\nMicrosoft Access SQL Information Leakage\n - WAF_RULE_951120: x-displayName: \"951120\"\nOracle SQL Information Leakage\n - WAF_RULE_951130: x-displayName: \"951130\"\nDB2 SQL Information Leakage\n - WAF_RULE_951140: x-displayName: \"951140\"\nEMC SQL Information Leakage\n - WAF_RULE_951150: x-displayName: \"951150\"\nfirebird SQL Information Leakage\n - WAF_RULE_951160: x-displayName: \"951160\"\nFrontbase SQL Information Leakage\n - WAF_RULE_951170: x-displayName: \"951170\"\nhsqldb SQL Information Leakage\n - WAF_RULE_951180: x-displayName: \"951180\"\ninformix SQL Information Leakage\n - WAF_RULE_951190: x-displayName: \"951190\"\ningres SQL Information Leakage\n - WAF_RULE_951200: x-displayName: \"951200\"\ninterbase SQL Information Leakage\n - WAF_RULE_951210: x-displayName: \"951210\"\nmaxDB SQL Information Leakage\n - WAF_RULE_951220: x-displayName: \"951220\"\nmssql SQL Information Leakage\n - WAF_RULE_951230: x-displayName: \"951230\"\nmysql SQL Information Leakage\n - WAF_RULE_951240: x-displayName: \"951240\"\npostgres SQL Information Leakage\n - WAF_RULE_951250: x-displayName: \"951250\"\nsqlite SQL Information Leakage\n - WAF_RULE_951260: x-displayName: \"951260\"\nSybase SQL Information Leakage\n - WAF_RULE_952100: x-displayName: \"952100\"\nJava Source Code Leakage\n - WAF_RULE_952110: x-displayName: \"952110\"\nJava Errors\n - WAF_RULE_953100: x-displayName: \"953100\"\nPHP Information Leakage\n - WAF_RULE_953110: x-displayName: \"953110\"\nPHP source code leakage\n - WAF_RULE_953120: x-displayName: \"953120\"\nPHP source code leakage\n - WAF_RULE_954100: x-displayName: \"954100\"\nDisclosure of IIS install location\n - WAF_RULE_954110: x-displayName: \"954110\"\nApplication Availability Error\n - WAF_RULE_954120: x-displayName: \"954120\"\nIIS Information Leakage\n - WAF_RULE_954130: x-displayName: \"954130\"\nIIS Information Leakage\n - WAF_RULE_4295001: x-displayName: \"4295001\"\nEnable Drupal specific CRS exclusions\n - WAF_RULE_4295002: x-displayName: \"4295002\"\nEnable Wordpress specific CRS exclusions\n - WAF_RULE_4295003: x-displayName: \"4295003\"\nEnable Cpanel specific CRS exclusions\n - WAF_RULE_4295004: x-displayName: \"4295004\"\nEnable Dokuwiki specific CRS exclusions\n - WAF_RULE_4295005: x-displayName: \"4295005\"\nEnable Nextcloud specific CRS exclusions\n - WAF_RULE_4295006: x-displayName: \"4295006\"\nEnable Xenforo specific CRS exclusions",
             "title": "WAF Rule ID",
             "enum": [
                 "WAF_RULE_ALL",
@@ -5075,9 +5038,7 @@ var APISwaggerJSON string = `{
                 "WAF_RULE_4295005",
                 "WAF_RULE_4295006"
             ],
-            "default": "WAF_RULE_ALL",
-            "x-displayname": "WAF Rule ID",
-            "x-ves-proto-enum": "ves.io.schema.waf_rule_list.WafRuleID"
+            "default": "WAF_RULE_ALL"
         }
     },
     "x-displayname": "",

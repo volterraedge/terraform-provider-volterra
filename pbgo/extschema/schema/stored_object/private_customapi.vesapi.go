@@ -36,6 +36,24 @@ type CustomPrivateAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomPrivateAPIGrpcClient) doRPCCreateObject(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateObjectRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.stored_object.CreateObjectRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.CreateObject(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomPrivateAPIGrpcClient) doRPCDeleteObject(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DeleteObjectRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.stored_object.DeleteObjectRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.DeleteObject(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomPrivateAPIGrpcClient) doRPCGetObject(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetObjectRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -84,6 +102,10 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomPrivateAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["CreateObject"] = ccl.doRPCCreateObject
+
+	rpcFns["DeleteObject"] = ccl.doRPCDeleteObject
+
 	rpcFns["GetObject"] = ccl.doRPCGetObject
 
 	rpcFns["ListObjects"] = ccl.doRPCListObjects
@@ -99,6 +121,179 @@ type CustomPrivateAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomPrivateAPIRestClient) doRPCCreateObject(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &CreateObjectRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.stored_object.CreateObjectRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("content_format", fmt.Sprintf("%v", req.ContentFormat))
+		q.Add("contents", fmt.Sprintf("%v", req.Contents))
+		q.Add("description", fmt.Sprintf("%v", req.Description))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("object_type", fmt.Sprintf("%v", req.ObjectType))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CreateObjectResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.stored_object.CreateObjectResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomPrivateAPIRestClient) doRPCDeleteObject(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DeleteObjectRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.stored_object.DeleteObjectRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("force_delete", fmt.Sprintf("%v", req.ForceDelete))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("object_type", fmt.Sprintf("%v", req.ObjectType))
+		q.Add("version", fmt.Sprintf("%v", req.Version))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &DeleteObjectResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.stored_object.DeleteObjectResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomPrivateAPIRestClient) doRPCGetObject(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -225,9 +420,11 @@ func (c *CustomPrivateAPIRestClient) doRPCListObjects(ctx context.Context, callO
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("latest_version_only", fmt.Sprintf("%v", req.LatestVersionOnly))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("object_type", fmt.Sprintf("%v", req.ObjectType))
+		q.Add("query_type", fmt.Sprintf("%v", req.QueryType))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -294,6 +491,10 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["CreateObject"] = ccl.doRPCCreateObject
+
+	rpcFns["DeleteObject"] = ccl.doRPCDeleteObject
+
 	rpcFns["GetObject"] = ccl.doRPCGetObject
 
 	rpcFns["ListObjects"] = ccl.doRPCListObjects
@@ -310,6 +511,62 @@ type CustomPrivateAPIInprocClient struct {
 	svc svcfw.Service
 }
 
+func (c *CustomPrivateAPIInprocClient) CreateObject(ctx context.Context, in *CreateObjectRequest, opts ...grpc.CallOption) (*CreateObjectResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.stored_object.CustomPrivateAPI")
+	cah, ok := ah.(CustomPrivateAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPISrv", ah)
+	}
+
+	var (
+		rsp *CreateObjectResponse
+		err error
+	)
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomPrivateAPI.CreateObject"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CreateObject(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
+func (c *CustomPrivateAPIInprocClient) DeleteObject(ctx context.Context, in *DeleteObjectRequest, opts ...grpc.CallOption) (*DeleteObjectResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.stored_object.CustomPrivateAPI")
+	cah, ok := ah.(CustomPrivateAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPISrv", ah)
+	}
+
+	var (
+		rsp *DeleteObjectResponse
+		err error
+	)
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.DeleteObject(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
 func (c *CustomPrivateAPIInprocClient) GetObject(ctx context.Context, in *GetObjectRequest, opts ...grpc.CallOption) (*GetObjectResponse, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.stored_object.CustomPrivateAPI")
 	cah, ok := ah.(CustomPrivateAPIServer)
@@ -397,7 +654,7 @@ var CustomPrivateAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/private/namespaces/{namespace}/stored_objects": {
             "get": {
@@ -484,6 +741,28 @@ var CustomPrivateAPISwaggerJSON string = `{
                         "required": false,
                         "type": "string",
                         "x-displayname": "Name"
+                    },
+                    {
+                        "name": "query_type",
+                        "description": "Optional query parameter. The type of search query needs to be performed. Could be EXACT_MATCH or PREFIX_MATCH.\nEXACT_MATCH returns the objects with exact match on the name filed, while PREFIX_MATCH returns the list of object matching the 'name' prefix. Default is EXACT_MATCH.\n\n - EXACT_MATCH: EXACT_MATCH\n\nReturns list of objects with exact match on the name filed.\n - PREFIX_MATCH: PREFIX_MATCH\n\nReturns the list of object matching the 'name' prefix.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "EXACT_MATCH",
+                            "PREFIX_MATCH"
+                        ],
+                        "default": "EXACT_MATCH",
+                        "x-displayname": "PREFIX MATCH"
+                    },
+                    {
+                        "name": "latest_version_only",
+                        "description": "Optional query parameter. If passed, returns only latest version of the objects.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean",
+                        "x-displayname": "Latest Versions Only"
                     }
                 ],
                 "tags": [
@@ -494,6 +773,226 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-ListObjects"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.ListObjects"
+            },
+            "x-displayname": "Stored Object Custom Private API",
+            "x-ves-proto-service": "ves.io.schema.stored_object.CustomPrivateAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/private/namespaces/{namespace}/stored_objects/{object_type}/{name}": {
+            "delete": {
+                "summary": "DeleteObjects",
+                "description": "DeleteObjects is an API to delete object(s) in object store",
+                "operationId": "ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/stored_objectDeleteObjectResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"system\"\nx-required\nNamespace of the stored_object",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "object_type",
+                        "description": "object_type\n\nx-example: \"swagger\"\nx-required\nType of the stored_object",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Object Type"
+                    },
+                    {
+                        "name": "name",
+                        "description": "name\n\nx-example: \"volt-api-specs\"\nx-required\nName of the stored_object",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "version",
+                        "description": "x-example: \"v1-21-01-12\"\nVersion of the stored_object in \"v{n}-{YY}-{MM}-{DD}\" formatted string, where n is version number and YY/MM/DD is year, month and date.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Version"
+                    },
+                    {
+                        "name": "force_delete",
+                        "description": "x-example: \"value\"\nOptional query parameter. If provided will delete all the versions of the specified object.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean",
+                        "x-displayname": "Force Delete"
+                    }
+                ],
+                "tags": [
+                    "CustomPrivateAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-DeleteObject"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject"
+            },
+            "put": {
+                "summary": "CreateObject",
+                "description": "CreateObject is an API to upload an object to generic object store. Objects are immutable, a new version is created when the content is updated.",
+                "operationId": "ves.io.schema.stored_object.CustomPrivateAPI.CreateObject",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/stored_objectCreateObjectResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"system\"\nx-required\nNamespace in which object is to be created",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "object_type",
+                        "description": "object_type\n\nx-example: \"swagger\"\nx-required\nType of the stored_object",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Object Type"
+                    },
+                    {
+                        "name": "name",
+                        "description": "name\n\nx-example: \"volt-api-specs\"\nx-required\nName of the stored_object.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/stored_objectCreateObjectRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomPrivateAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-CreateObject"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.CreateObject"
             },
             "x-displayname": "Stored Object Custom Private API",
             "x-ves-proto-service": "ves.io.schema.stored_object.CustomPrivateAPI",
@@ -603,6 +1102,118 @@ var CustomPrivateAPISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.GetObject"
             },
+            "delete": {
+                "summary": "DeleteObjects",
+                "description": "DeleteObjects is an API to delete object(s) in object store",
+                "operationId": "ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/stored_objectDeleteObjectResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"system\"\nx-required\nNamespace of the stored_object",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "object_type",
+                        "description": "object_type\n\nx-example: \"swagger\"\nx-required\nType of the stored_object",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Object Type"
+                    },
+                    {
+                        "name": "name",
+                        "description": "name\n\nx-example: \"volt-api-specs\"\nx-required\nName of the stored_object",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "version",
+                        "description": "version\n\nx-example: \"v1-21-01-12\"\nVersion of the stored_object in \"v{n}-{YY}-{MM}-{DD}\" formatted string, where n is version number and YY/MM/DD is year, month and date.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Version"
+                    },
+                    {
+                        "name": "force_delete",
+                        "description": "x-example: \"value\"\nOptional query parameter. If provided will delete all the versions of the specified object.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean",
+                        "x-displayname": "Force Delete"
+                    }
+                ],
+                "tags": [
+                    "CustomPrivateAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-DeleteObject"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject"
+            },
             "x-displayname": "Stored Object Custom Private API",
             "x-ves-proto-service": "ves.io.schema.stored_object.CustomPrivateAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
@@ -692,6 +1303,28 @@ var CustomPrivateAPISwaggerJSON string = `{
                         "required": false,
                         "type": "string",
                         "x-displayname": "Name"
+                    },
+                    {
+                        "name": "query_type",
+                        "description": "Optional query parameter. The type of search query needs to be performed. Could be EXACT_MATCH or PREFIX_MATCH.\nEXACT_MATCH returns the objects with exact match on the name filed, while PREFIX_MATCH returns the list of object matching the 'name' prefix. Default is EXACT_MATCH.\n\n - EXACT_MATCH: EXACT_MATCH\n\nReturns list of objects with exact match on the name filed.\n - PREFIX_MATCH: PREFIX_MATCH\n\nReturns the list of object matching the 'name' prefix.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "EXACT_MATCH",
+                            "PREFIX_MATCH"
+                        ],
+                        "default": "EXACT_MATCH",
+                        "x-displayname": "PREFIX MATCH"
+                    },
+                    {
+                        "name": "latest_version_only",
+                        "description": "Optional query parameter. If passed, returns only latest version of the objects.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean",
+                        "x-displayname": "Latest Versions Only"
                     }
                 ],
                 "tags": [
@@ -817,24 +1450,219 @@ var CustomPrivateAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "schemaHttpMethod": {
+            "type": "string",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
+            "title": "HttpMethod",
+            "enum": [
+                "ANY",
+                "GET",
+                "HEAD",
+                "POST",
+                "PUT",
+                "DELETE",
+                "CONNECT",
+                "OPTIONS",
+                "TRACE",
+                "PATCH"
+            ],
+            "default": "ANY",
+            "x-displayname": "HTTP Method",
+            "x-ves-proto-enum": "ves.io.schema.HttpMethod"
+        },
+        "stored_objectCreateObjectRequest": {
+            "type": "object",
+            "description": "Request message for CreateObject API",
+            "title": "CreateObjectRequest",
+            "x-displayname": "Create Object Request",
+            "x-ves-oneof-field-contents": "[\"bytes_value\",\"string_value\"]",
+            "x-ves-proto-message": "ves.io.schema.stored_object.CreateObjectRequest",
+            "properties": {
+                "bytes_value": {
+                    "type": "string",
+                    "description": "Exclusive with [string_value]\nx-displayName: \"Byte Value\"\nBinary object contents. Should be encoded in base64 scheme.",
+                    "title": "bytes_value",
+                    "format": "byte"
+                },
+                "content_format": {
+                    "type": "string",
+                    "description": " The optional content format associated with object\n\nExample: - \"json, yaml\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"\\\", \\\"json\\\", \\\"yaml\\\", \\\"txt\\\", \\\"bin\\\"]\n",
+                    "title": "content_format",
+                    "x-displayname": "Content Format",
+                    "x-ves-example": "json, yaml",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"\\\", \\\"json\\\", \\\"yaml\\\", \\\"txt\\\", \\\"bin\\\"]"
+                    }
+                },
+                "description": {
+                    "type": "string",
+                    "description": " The optional description associated with object\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "description",
+                    "maxLength": 512,
+                    "x-displayname": "Description",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the stored_object.\n\nExample: - \"volt-api-specs\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Name",
+                    "x-ves-example": "volt-api-specs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which object is to be created\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "object_type": {
+                    "type": "string",
+                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"certificate\\\", \\\"javascript\\\", \\\"html\\\", \\\"generic\\\", \\\"big-object\\\"]\n",
+                    "title": "object_type",
+                    "x-displayname": "Object Type",
+                    "x-ves-example": "swagger",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"certificate\\\", \\\"javascript\\\", \\\"html\\\", \\\"generic\\\", \\\"big-object\\\"]"
+                    }
+                },
+                "string_value": {
+                    "type": "string",
+                    "description": "Exclusive with [bytes_value]\nx-displayName: \"String Value\"\nString formatted contents",
+                    "title": "contents"
+                }
+            }
+        },
+        "stored_objectCreateObjectResponse": {
+            "type": "object",
+            "description": "Response message for CreateObject API",
+            "title": "CreateObjectResponse",
+            "x-displayname": "Create Object Response",
+            "x-ves-oneof-field-additional_info": "[\"no_additional_info\",\"presigned_url\"]",
+            "x-ves-proto-message": "ves.io.schema.stored_object.CreateObjectResponse",
+            "properties": {
+                "metadata": {
+                    "description": " Stored object metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/stored_objectStoredObjectDescriptor",
+                    "x-displayname": "Metadata"
+                },
+                "no_additional_info": {
+                    "description": "Exclusive with [presigned_url]\nx-displayName: \"No Additional Info\"\nThere is no additional information for the response",
+                    "title": "no additional info",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "presigned_url": {
+                    "description": "Exclusive with [no_additional_info]\nx-displayName: \"Pre Signed Url Data\"\nThe url to download the resource",
+                    "title": "presigned_url",
+                    "$ref": "#/definitions/stored_objectPreSignedUrl"
+                }
+            }
+        },
+        "stored_objectDeleteObjectResponse": {
+            "type": "object",
+            "description": "Response for DeleteObjects API",
+            "title": "DeleteObjectResponse",
+            "x-displayname": "Delete Objects Response",
+            "x-ves-proto-message": "ves.io.schema.stored_object.DeleteObjectResponse",
+            "properties": {
+                "deleted_objects": {
+                    "type": "array",
+                    "description": " Names of Deleted Object\n\nExample: - \"value\"-",
+                    "title": "deleted_objects",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Deleted Object Names",
+                    "x-ves-example": "value"
+                }
+            }
+        },
         "stored_objectGetObjectResponse": {
             "type": "object",
             "description": "Response message for GetObject API",
             "title": "GetObjectResponse",
             "x-displayname": "Get Object Response",
-            "x-ves-oneof-field-contents": "[\"bytes_value\",\"string_value\"]",
+            "x-ves-oneof-field-contents": "[\"bytes_value\",\"presigned_url\",\"string_value\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.GetObjectResponse",
             "properties": {
                 "bytes_value": {
                     "type": "string",
-                    "description": "Exclusive with [string_value]\nx-displayName: \"Byte Value\"\nx-example: \"\"\nBinary object contents",
+                    "description": "Exclusive with [presigned_url string_value]\nx-displayName: \"Byte Value\"\nx-example: \"\"\nBinary object contents. This will be a base64 encoded string. The client should decode it to see the actual contents of the object.",
                     "title": "bytes_value",
                     "format": "byte"
                 },
+                "content_format": {
+                    "type": "string",
+                    "description": " The optional content format associated with object\n\nExample: - \"json, yaml\"-",
+                    "title": "content_format",
+                    "x-displayname": "Content Format",
+                    "x-ves-example": "json, yaml"
+                },
+                "metadata": {
+                    "description": " Stored object metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/stored_objectStoredObjectDescriptor",
+                    "x-displayname": "Metadata"
+                },
+                "presigned_url": {
+                    "description": "Exclusive with [bytes_value string_value]\nx-displayName: \"Pre Signed Url Data\"\nThe url to download the resource",
+                    "title": "presigned_url",
+                    "$ref": "#/definitions/stored_objectPreSignedUrl"
+                },
                 "string_value": {
                     "type": "string",
-                    "description": "Exclusive with [bytes_value]\nx-displayName: \"Contents\"\nx-example: \"\"\nString formatted contents",
+                    "description": "Exclusive with [bytes_value presigned_url]\nx-displayName: \"Contents\"\nx-example: \"\"\nString formatted contents",
                     "title": "contents"
+                }
+            }
+        },
+        "stored_objectListItemDescriptor": {
+            "type": "object",
+            "description": "A descriptor for list response item.",
+            "title": "ListItemDescriptor",
+            "x-displayname": "List Item Descriptor",
+            "x-ves-proto-message": "ves.io.schema.stored_object.ListItemDescriptor",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the stored object.",
+                    "title": "name",
+                    "x-displayname": "Object Name"
+                },
+                "versions": {
+                    "type": "array",
+                    "description": " Available versions for the stored object.",
+                    "title": "versions",
+                    "items": {
+                        "$ref": "#/definitions/stored_objectVersionDescriptor"
+                    },
+                    "x-displayname": "Versions"
                 }
             }
         },
@@ -847,14 +1675,60 @@ var CustomPrivateAPISwaggerJSON string = `{
             "properties": {
                 "items": {
                     "type": "array",
-                    "description": " Stored Object Names",
+                    "description": " Stored object names and available versions for each object.",
                     "title": "list of store object descriptors",
                     "items": {
-                        "$ref": "#/definitions/stored_objectStoredObjectDescriptor"
+                        "$ref": "#/definitions/stored_objectListItemDescriptor"
                     },
                     "x-displayname": "Stored Object Descriptors"
                 }
             }
+        },
+        "stored_objectPreSignedUrl": {
+            "type": "object",
+            "description": "Pre signed url",
+            "title": "PreSignedUrl",
+            "x-displayname": "Pre Signed Url",
+            "x-ves-oneof-field-storage_provider_choice": "[\"aws\"]",
+            "x-ves-proto-message": "ves.io.schema.stored_object.PreSignedUrl",
+            "properties": {
+                "aws": {
+                    "description": "Exclusive with []\nx-displayName: \"AWS\"\nRelevant only for big_object type. The presigned url relevant data to upload or download the resource",
+                    "title": "aws_big_object_url",
+                    "$ref": "#/definitions/stored_objectPresignedUrlData"
+                }
+            }
+        },
+        "stored_objectPresignedUrlData": {
+            "type": "object",
+            "description": "Pre signed url data",
+            "title": "PresignedUrlData",
+            "x-displayname": "Pre Signed Url Data",
+            "x-ves-proto-message": "ves.io.schema.stored_object.PresignedUrlData",
+            "properties": {
+                "method": {
+                    "description": " The method of the request matched to that url",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "method"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " The url to upload or download the resource",
+                    "title": "url",
+                    "x-displayname": "url"
+                }
+            }
+        },
+        "stored_objectQueryType": {
+            "type": "string",
+            "description": "x-displayName: \"Query Type\"\nThe type of search query needs to be performed. Could be EXACT_MATCH or PREFIX_MATCH.\nEXACT_MATCH returns the objects with exact match on the name filed, while PREFIX_MATCH returns the list of object having the 'name' as prefix. Default is EXACT_MATCH.\n\n - EXACT_MATCH: EXACT_MATCH\n\nx-displayName: \"EXACT MATCH\"\nReturns list of objects with exact match on the name filed.\n - PREFIX_MATCH: PREFIX_MATCH\n\nx-displayName: \"PREFIX MATCH\"\nReturns the list of object matching the 'name' prefix.",
+            "title": "QueryType",
+            "enum": [
+                "EXACT_MATCH",
+                "PREFIX_MATCH"
+            ],
+            "default": "EXACT_MATCH"
         },
         "stored_objectStoredObjectDescriptor": {
             "type": "object",
@@ -865,24 +1739,87 @@ var CustomPrivateAPISwaggerJSON string = `{
             "properties": {
                 "creation_timestamp": {
                     "type": "string",
-                    "description": " Creation date \u0026 time for the object\nRequired: YES",
+                    "description": " Creation date \u0026 time for the object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "creation_timestamp",
                     "format": "date-time",
                     "x-displayname": "Creation Timestamp",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "description": {
                     "type": "string",
-                    "description": " Optional field, the Description for the object",
+                    "description": " Optional field, the Description for the object\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
                     "title": "description",
-                    "x-displayname": "description"
+                    "maxLength": 512,
+                    "x-displayname": "description",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
                 },
                 "url": {
                     "type": "string",
-                    "description": " Url of the stored object\nRequired: YES",
+                    "description": " Url of the stored object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "url",
                     "x-displayname": "Url",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "stored_objectVersionDescriptor": {
+            "type": "object",
+            "description": "Descriptor for store object version.",
+            "title": "VersionDescriptor",
+            "x-displayname": "Version Descriptor",
+            "x-ves-proto-message": "ves.io.schema.stored_object.VersionDescriptor",
+            "properties": {
+                "creation_timestamp": {
+                    "type": "string",
+                    "description": " Creation date \u0026 time for the object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "creation_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "description": {
+                    "type": "string",
+                    "description": " Optional field, the Description for the object\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "description",
+                    "maxLength": 512,
+                    "x-displayname": "description",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "latest_version": {
+                    "type": "boolean",
+                    "description": " A tag representing if this is the latest version for the object.",
+                    "title": "latest_version",
+                    "format": "boolean",
+                    "x-displayname": "Latest Version"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " Url of the stored object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "url",
+                    "x-displayname": "Url",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "version": {
+                    "type": "string",
+                    "description": " Version of the stored object.",
+                    "title": "version",
+                    "x-displayname": "Version"
                 }
             }
         }

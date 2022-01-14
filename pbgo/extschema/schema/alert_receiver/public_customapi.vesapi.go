@@ -568,7 +568,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/alert_receivers/{name}/confirm": {
             "post": {
@@ -888,18 +888,24 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace in which the alert receiver is configured\n\nExample: - \"ns1\"-\nRequired: YES",
+                    "description": " Namespace in which the alert receiver is configured\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "verification_code": {
                     "type": "string",
-                    "description": " Verification Code received by the user\n\nExample: - \"123456\"-",
+                    "description": " Verification Code received by the user\n\nExample: - \"123456\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.len_bytes: 6\n",
                     "title": "Verification Code",
                     "x-displayname": "Verification Code",
-                    "x-ves-example": "123456"
+                    "x-ves-example": "123456",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.len_bytes": "6"
+                    }
                 }
             }
         },
@@ -926,11 +932,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace in which the alert receiver is configured\n\nExample: - \"ns1\"-\nRequired: YES",
+                    "description": " Namespace in which the alert receiver is configured\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -957,11 +966,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace in which the alert receiver is configured\n\nExample: - \"ns1\"-\nRequired: YES",
+                    "description": " Namespace in which the alert receiver is configured\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

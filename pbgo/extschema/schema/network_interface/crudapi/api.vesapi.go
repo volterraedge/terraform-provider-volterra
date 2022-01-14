@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.network_interface/Object/{object_uid}": {
             "get": {
@@ -2813,9 +2813,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Site:Node to IP address.",
+                    "description": " Map of Site:Node to IP address.\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Site:Node to IP mapping",
-                    "x-displayname": "Site:Node to IP Mapping"
+                    "x-displayname": "Site:Node to IP Mapping",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "64",
+                        "ves.io.schema.rules.map.values.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -2827,7 +2833,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "1,12,4,5,9",
             "x-ves-oneof-field-dns_choice": "[\"dns_address\",\"same_as_dgw\"]",
             "x-ves-oneof-field-gateway_choice": "[\"dgw_address\",\"first_address\",\"last_address\"]",
-            "x-ves-oneof-field-network_prefix_choice": "[\"network_prefix\",\"network_prefix_allocator\"]",
+            "x-ves-oneof-field-network_prefix_choice": "[\"network_prefix\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPNetworkType",
             "properties": {
                 "dgw_address": {
@@ -2852,29 +2858,32 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [network_prefix_allocator]\nx-displayName: \"Network Prefix\"\nx-example: \"10.1.1.0/24\"\nNetwork Prefix for a single site.",
+                    "description": "Exclusive with []\nx-displayName: \"Network Prefix\"\nx-example: \"10.1.1.0/24\"\nNetwork Prefix for a single site.",
                     "title": "Network Prefix"
                 },
-                "network_prefix_allocator": {
-                    "description": "Exclusive with [network_prefix]\nx-displayName: \"Prefix Allocator a Fleet\"\nNetwork Prefix for a Fleet is derived from address allocator rules. \nPrefix length from address allocator scheme is used to calculate offsets",
-                    "title": "Network Prefix for a Fleet",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
                 "pool_settings": {
-                    "description": " Controls how DHCP pools are handled\nRequired: YES",
+                    "description": " Controls how DHCP pools are handled\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "DHCP Pool Settings",
                     "$ref": "#/definitions/network_interfaceDHCPPoolSettingType",
                     "x-displayname": "DHCP Pool Settings",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "pools": {
                     "type": "array",
-                    "description": " List of non overlapping ip address ranges.",
+                    "description": " List of non overlapping ip address ranges.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "DHCP pools",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/network_interfaceDHCPPoolType"
                     },
-                    "x-displayname": "DHCP Pools"
+                    "x-displayname": "DHCP Pools",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "same_as_dgw": {
                     "description": "Exclusive with [dns_address]\nx-displayName: \"Default Gateway Address\"\nDNS server address is same as default gateway address",
@@ -2904,24 +2913,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "end_ip": {
                     "type": "string",
-                    "description": " Ending IP of the pool range.\n In case of address allocator, offset is derived based on network prefix.\n 10.1.1.200 with prefix length of 24, end offset is 0.0.0.200\n\nExample: - \"10.1.1.200\"-",
+                    "description": " Ending IP of the pool range.\n In case of address allocator, offset is derived based on network prefix.\n 10.1.1.200 with prefix length of 24, end offset is 0.0.0.200\n\nExample: - \"10.1.1.200\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "End IP",
                     "x-displayname": "Ending IP",
-                    "x-ves-example": "10.1.1.200"
-                },
-                "exclude": {
-                    "type": "boolean",
-                    "description": " If exclude is true, IP addresses are not assigned from this range.",
-                    "title": "Exclude",
-                    "format": "boolean",
-                    "x-displayname": "Exclude"
+                    "x-ves-example": "10.1.1.200",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "start_ip": {
                     "type": "string",
-                    "description": " Starting IP of the pool range. \n In case of address allocator, offset is derived based on network prefix.\n 10.1.1.5 with prefix length of 24, start offset is 0.0.0.5\n\nExample: - \"10.1.1.5\"-",
+                    "description": " Starting IP of the pool range. \n In case of address allocator, offset is derived based on network prefix.\n 10.1.1.5 with prefix length of 24, start offset is 0.0.0.5\n\nExample: - \"10.1.1.5\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Start IP",
                     "x-displayname": "Starting IP",
-                    "x-ves-example": "10.1.1.5"
+                    "x-ves-example": "10.1.1.5",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -2942,26 +2950,33 @@ var APISwaggerJSON string = `{
                 },
                 "dhcp_networks": {
                     "type": "array",
-                    "description": " List of networks from which DHCP server can allocate ip addresses\nRequired: YES",
+                    "description": " List of networks from which DHCP server can allocate ip addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "DHCP Networks",
+                    "minItems": 1,
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/network_interfaceDHCPNetworkType"
                     },
                     "x-displayname": "DHCP Networks",
-                    "x-ves-required": "true"
-                },
-                "dhcp_option82_tag": {
-                    "type": "string",
-                    "description": " Optional tag that can be given to this configuration\n\nExample: - \"network_red\"-",
-                    "title": "Option 82 Tag",
-                    "x-displayname": "Option 82 Tag",
-                    "x-ves-example": "network_red"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "fixed_ip_map": {
                     "type": "object",
-                    "description": " Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address",
+                    "description": " Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Fixed IP Assignments",
-                    "x-displayname": "Fixed MAC address to IP Assignments"
+                    "x-displayname": "Fixed MAC address to IP Assignments",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.mac": "true",
+                        "ves.io.schema.rules.map.max_pairs": "128",
+                        "ves.io.schema.rules.map.unique_values": "true",
+                        "ves.io.schema.rules.map.values.string.ipv4": "true"
+                    }
                 },
                 "interface_ip_map": {
                     "description": "Exclusive with [automatic_from_end automatic_from_start]\nx-displayName: \"Configured\"\nConfigured address for every node",
@@ -2972,232 +2987,196 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceDedicatedInterfaceType": {
             "type": "object",
-            "description": "Dedicated Interface Configuration",
+            "description": "x-displayName: \"Dedicated Interface\"\nDedicated Interface Configuration",
             "title": "Dedicated Interface",
-            "x-displayname": "Dedicated Interface",
-            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
-            "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
-            "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
-            "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "x-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
                     "title": "Cluster",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "device": {
                     "type": "string",
-                    "description": " Name of the device for which interface is configured. Use wwan0 for 4G/LTE.\n\nExample: - \"eth0\"-\nRequired: YES",
-                    "title": "Device",
-                    "x-displayname": "Interface Device",
-                    "x-ves-example": "eth0",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Interface Device\"\nx-example: \"eth0\"\nx-required\nName of the device for which interface is configured. Use wwan0 for 4G/LTE.",
+                    "title": "Device"
                 },
                 "is_primary": {
-                    "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
+                    "description": "x-displayName: \"Interface is Primary\"\nThis interface is primary",
                     "title": "Interface is Primary",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "x-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
                     "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "x-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "mtu": {
                     "type": "integer",
-                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-",
+                    "description": "x-displayName: \"Maximum Packet Size (MTU)\"\nx-example: \"1450\"\nMaximum packet size (Maximum Transfer Unit) of the interface\nWhen configured, mtu must be between 512 and 16384",
                     "title": "Maximum Packet Size (MTU)",
-                    "format": "int64",
-                    "x-displayname": "Maximum Packet Size (MTU)",
-                    "x-ves-example": "1450"
+                    "format": "int64"
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
+                    "description": "x-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
                     "title": "Node"
                 },
                 "not_primary": {
-                    "description": "Exclusive with [is_primary]\nx-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
+                    "description": "x-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
                     "title": "Interface is Not Primary",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "priority": {
                     "type": "integer",
-                    "description": " Priority of the network interface when multiple network interfaces are present in outside network\n Greater the value, higher the priority\n\nExample: - \"42\"-",
+                    "description": "x-displayName: \"Priority\"\nx-example: \"42\"\nPriority of the network interface when multiple network interfaces are present in outside network\nGreater the value, higher the priority",
                     "title": "Priority",
-                    "format": "int64",
-                    "x-displayname": "Priority",
-                    "x-ves-example": "42"
+                    "format": "int64"
                 }
             }
         },
         "network_interfaceDedicatedManagementInterfaceType": {
             "type": "object",
-            "description": "Dedicated Interface Configuration",
+            "description": "x-displayName: \"Dedicated Management Interface\"\nDedicated Interface Configuration",
             "title": "Dedicated Management Interface",
-            "x-displayname": "Dedicated Management Interface",
-            "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
-            "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedManagementInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "x-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
                     "title": "Cluster",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "device": {
                     "type": "string",
-                    "description": " Name of the device for which interface is configured \n\nExample: - \"eth0\"-\nRequired: YES",
-                    "title": "Device",
-                    "x-displayname": "Interface Device",
-                    "x-ves-example": "eth0",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Interface Device\"\nx-example: \"eth0\"\nx-required\nName of the device for which interface is configured",
+                    "title": "Device"
                 },
                 "mtu": {
                     "type": "integer",
-                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-",
+                    "description": "x-displayName: \"Maximum Packet Size (MTU)\"\nx-example: \"1450\"\nMaximum packet size (Maximum Transfer Unit) of the interface\nWhen configured, mtu must be between 512 and 16384",
                     "title": "Maximum Packet Size (MTU)",
-                    "format": "int64",
-                    "x-displayname": "Maximum Packet Size (MTU)",
-                    "x-ves-example": "1450"
+                    "format": "int64"
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
+                    "description": "x-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
                     "title": "Node"
                 }
             }
         },
         "network_interfaceEthernetInterfaceType": {
             "type": "object",
-            "description": "Ethernet Interface Configuration",
+            "description": "x-displayName: \"Ethernet Interface\"\nEthernet Interface Configuration",
             "title": "Ethernet Interface",
-            "x-displayname": "Ethernet Interface",
-            "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
-            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
-            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
-            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\",\"storage_network\"]",
-            "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
-            "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
-            "x-ves-oneof-field-vlan_choice": "[\"untagged\",\"vlan_id\"]",
-            "x-ves-proto-message": "ves.io.schema.network_interface.EthernetInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "x-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site.",
                     "title": "Node Independent",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "device": {
                     "type": "string",
-                    "description": " Interface configuration for the ethernet device \n\nExample: - \"eth0\"-\nRequired: YES",
-                    "title": "Device",
-                    "x-displayname": "Ethernet Device",
-                    "x-ves-example": "eth0",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Ethernet Device\"\nx-example: \"eth0\"\nx-required\nInterface configuration for the ethernet device",
+                    "title": "Device"
                 },
                 "dhcp_client": {
-                    "description": "Exclusive with [dhcp_server static_ip]\nx-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
+                    "description": "x-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
                     "title": "DHCP Client",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "dhcp_server": {
-                    "description": "Exclusive with [dhcp_client static_ip]\nx-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "description": "x-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
                     "title": "DHCP Server",
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
                 },
                 "inside_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
+                    "description": "x-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "is_primary": {
-                    "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
+                    "description": "x-displayName: \"Interface is Primary\"\nThis interface is primary",
                     "title": "Interface is Primary",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "x-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
                     "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "x-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "mtu": {
                     "type": "integer",
-                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-",
+                    "description": "x-displayName: \"Maximum Packet Size (MTU)\"\nx-example: \"1450\"\nMaximum packet size (Maximum Transfer Unit) of the interface\nWhen configured, mtu must be between 512 and 16384",
                     "title": "Maximum Packet Size (MTU)",
-                    "format": "int64",
-                    "x-displayname": "Maximum Packet Size (MTU)",
-                    "x-ves-example": "1450"
+                    "format": "int64"
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [static_ipv6_address]\nx-displayName: \"No IPv6 Address\"\nInterface does not have an IPv6 Address.",
+                    "description": "x-displayName: \"No IPv6 Address\"\nInterface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
+                    "description": "x-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
                     "title": "Node"
                 },
                 "not_primary": {
-                    "description": "Exclusive with [is_primary]\nx-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
+                    "description": "x-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
                     "title": "Interface is Not Primary",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "priority": {
                     "type": "integer",
-                    "description": " Priority of the network interface when multiple network interfaces are present in outside network\n Greater the value, higher the priority\n\nExample: - \"42\"-",
+                    "description": "x-displayName: \"Priority\"\nx-example: \"42\"\nPriority of the network interface when multiple network interfaces are present in outside network\nGreater the value, higher the priority",
                     "title": "Priority",
-                    "format": "int64",
-                    "x-displayname": "Priority",
-                    "x-ves-example": "42"
+                    "format": "int64"
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "x-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
                     "title": "Site Local Network Inside",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network srv6_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "x-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "srv6_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network storage_network]\nx-displayName: \"Per Site Srv6 Network\"\nInterface belongs to per site srv6 network",
+                    "description": "x-displayName: \"Per Site Srv6 Network\"\nInterface belongs to per site srv6 network",
                     "title": "Per Site Srv6 Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "static_ip": {
-                    "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "description": "x-displayName: \"Static IP\"\nInterface IP is configured statically",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [no_ipv6_address]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "description": "x-displayName: \"Static IP\"\nInterface IP is configured statically",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
+                    "description": "x-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
                     "title": "Storage Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "untagged": {
-                    "description": "Exclusive with [vlan_id]\nx-displayName: \"Untagged\"\nConfigure a untagged ethernet interface",
+                    "description": "x-displayName: \"Untagged\"\nConfigure a untagged ethernet interface",
                     "title": "Untagged",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "vlan_id": {
                     "type": "integer",
-                    "description": "Exclusive with [untagged]\nx-displayName: \"VLAN Id\"\nConfigure a VLAN tagged ethernet interface",
+                    "description": "x-displayName: \"VLAN Id\"\nConfigure a VLAN tagged ethernet interface",
                     "title": "VLAN Id",
                     "format": "int64"
                 }
@@ -3208,16 +3187,19 @@ var APISwaggerJSON string = `{
             "description": "Network Interface specification",
             "title": "Global Specification",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy\",\"tunnel_interface\"]",
+            "x-ves-oneof-field-interface_choice": "[]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.GlobalSpecType",
             "properties": {
                 "DHCP_server": {
-                    "description": " Behave as DHCP server for subnet configured in static addresses.\nRequired: YES",
+                    "description": " Behave as DHCP server for subnet configured in static addresses.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "DHCP Server",
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceDHCPServer",
                     "x-displayname": "Enable DHCP Server",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "DNS_server": {
                     "description": " Configures how DNS server is derived for the subnet in static addresses",
@@ -3227,22 +3209,16 @@ var APISwaggerJSON string = `{
                 },
                 "address_allocator": {
                     "type": "array",
-                    "description": " Reference to an address allocator for the network interface. When set, the allocator is used to\n allocate a subnet for the interface and an address from the subnet is set on the interface.",
+                    "description": " Reference to an address allocator for the network interface. When set, the allocator is used to\n allocate a subnet for the interface and an address from the subnet is set on the interface.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Address Allocator",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Address Allocator"
-                },
-                "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
-                    "title": "Internal",
-                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType"
-                },
-                "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
-                    "title": "Internal",
-                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType"
+                    "x-displayname": "Address Allocator",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "default_gateway": {
                     "description": " Configures how default gateway is derived for the subnet static addresses",
@@ -3252,18 +3228,24 @@ var APISwaggerJSON string = `{
                 },
                 "device_name": {
                     "type": "string",
-                    "description": " Name of the physical network interface device  which this network interface represents.\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Name of the physical network interface device  which this network interface represents.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Device Name",
                     "x-displayname": "Device Name",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "dhcp_address": {
-                    "description": " Enable DHCP based address assignment for this interface.\nRequired: YES",
+                    "description": " Enable DHCP based address assignment for this interface.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "DHCP Client",
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceDHCP",
                     "x-displayname": "Enable DHCP Client",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "dhcp_server_params": {
                     "description": " DHCP server parameters",
@@ -3271,22 +3253,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType",
                     "x-displayname": "DHCP server parameters"
                 },
-                "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
-                    "title": "Internal",
-                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType"
-                },
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Site:Node to IP address offset. Key:Node, Value:Map\n Value of 10.1.1.5 with network prefix 24, offset is 0.0.0.5",
+                    "description": " Map of Site:Node to IP address offset. Key:Node, Value:Map\n Value of 10.1.1.5 with network prefix 24, offset is 0.0.0.5\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Site:Node to IP mapping",
-                    "x-displayname": "Site:Node to IP Mapping"
-                },
-                "ipv6_static_addresses": {
-                    "description": " Configure IPv6 subnet to be used.",
-                    "title": "Ipv6 Static IP",
-                    "$ref": "#/definitions/network_interfaceStaticIPParametersType",
-                    "x-displayname": "IPv6 Static IP"
+                    "x-displayname": "Site:Node to IP Mapping",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "64",
+                        "ves.io.schema.rules.map.values.string.ipv4": "true"
+                    }
                 },
                 "is_primary": {
                     "type": "boolean",
@@ -3294,11 +3271,6 @@ var APISwaggerJSON string = `{
                     "title": "Primary Interface",
                     "format": "boolean",
                     "x-displayname": "Primary Interface"
-                },
-                "legacy": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
-                    "title": "Internal",
-                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "monitor": {
                     "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
@@ -3312,11 +3284,14 @@ var APISwaggerJSON string = `{
                 },
                 "mtu": {
                     "type": "integer",
-                    "description": " Maximum Transfer Unit (Max packet length) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"0\"-",
+                    "description": " Maximum Transfer Unit (Max packet length) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,512-16384\n",
                     "title": "Mtu",
                     "format": "int64",
                     "x-displayname": "MTU",
-                    "x-ves-example": "0"
+                    "x-ves-example": "0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.ranges": "0,512-16384"
+                    }
                 },
                 "network_config": {
                     "description": " Configuration to pick network from interface or fleet",
@@ -3324,31 +3299,31 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceInterfaceNetworkType",
                     "x-displayname": "Network Config Method"
                 },
-                "parent_network_interface": {
-                    "type": "array",
-                    "description": " When interface is created as VLAN tagged sub-interface or LACP (interface type),\n then reference to parent network interface is specified here. Valid only for subinterfaces",
-                    "title": "Parent Network Interface",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Parent Interface"
-                },
                 "priority": {
                     "type": "integer",
-                    "description": " Priority of the network interface when multiple network interfaces are present in the fleet object\n Greater the value, higher the priority\n\nExample: - \"42\"-",
+                    "description": " Priority of the network interface when multiple network interfaces are present in the fleet object\n Greater the value, higher the priority\n\nExample: - \"42\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 255\n",
                     "title": "Priority",
                     "format": "int64",
                     "x-displayname": "Priority",
-                    "x-ves-example": "42"
+                    "x-ves-example": "42",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "255"
+                    }
                 },
                 "static_addresses": {
                     "type": "array",
-                    "description": " If DHCP server is enabled, configures the subnet to be used for IP allocation.",
+                    "description": " If DHCP server is enabled, configures the subnet to be used for IP allocation.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Static IP",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaIpv4SubnetType"
                     },
-                    "x-displayname": "Static IP"
+                    "x-displayname": "Static IP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "tunnel": {
                     "description": " When interface is created as TUNNEL type, then reference to tunnel is specified here",
@@ -3356,34 +3331,40 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceTunnel",
                     "x-displayname": "Tunnel"
                 },
-                "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy]\nx-displayName: \"Internal\"\nInternal helps in conversion",
-                    "title": "Internal",
-                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType"
-                },
                 "type": {
-                    "description": " Specifies the type of interface (ethernet, vlan, lacp etc)\nRequired: YES",
+                    "description": " Specifies the type of interface (ethernet, vlan, lacp etc)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Interface Type",
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceType",
                     "x-displayname": "Type",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "virtual_network": {
                     "type": "array",
-                    "description": " Virtual-network for the interface\n This is optional and can contain at most one entry",
+                    "description": " Virtual-network for the interface\n This is optional and can contain at most one entry\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Virtual Network",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Virtual Network"
+                    "x-displayname": "Virtual Network",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "vlan_tag": {
                     "type": "integer",
-                    "description": " Vlan tag of the interface, valid only if VLAN tagging is enabled\n when vlan_tagging is enabled, value must be between 1 - 4094\n\nExample: - \"0\"-",
+                    "description": " Vlan tag of the interface, valid only if VLAN tagging is enabled\n when vlan_tagging is enabled, value must be between 1 - 4094\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 4094\n",
                     "title": "Vlan Tag",
                     "format": "int64",
                     "x-displayname": "VLAN Tag",
-                    "x-ves-example": "0"
+                    "x-ves-example": "0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "4094"
+                    }
                 },
                 "vlan_tagging": {
                     "description": " Enable/Disable VLAN tagging on this interface.\n Must be enabled for VLAN interfaces\n\nExample: - \"NETWORK_INTERFACE_VLAN_TAGGING_DISABLE\"-",
@@ -3430,11 +3411,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Gateway"
                 },
                 "default_gateway_mode": {
-                    "description": " Mode of obtaining default gateway\nRequired: YES",
+                    "description": " Mode of obtaining default gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Default Gateway Mode",
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceGatewayMode",
                     "x-displayname": "Default Gateway Mode",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3471,11 +3455,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.NetworkInterfaceDNS",
             "properties": {
                 "dns_mode": {
-                    "description": " Mode of obtaining DNS server\nRequired: YES",
+                    "description": " Mode of obtaining DNS server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "DNS Server Mode",
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceDNSMode",
                     "x-displayname": "DNS Server Mode",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "dns_server": {
                     "type": "array",
@@ -3538,12 +3525,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "tunnel": {
                     "type": "array",
-                    "description": " Tunnel which is attached to this interface",
+                    "description": " Tunnel which is attached to this interface\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Tunnel",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Tunnel"
+                    "x-displayname": "Tunnel",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3602,24 +3593,21 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceStaticIPParametersType": {
             "type": "object",
-            "description": "Configure Static IP parameters",
+            "description": "x-displayName: \"Static IP Parameters\"\nConfigure Static IP parameters",
             "title": "Static IP Parameters",
-            "x-displayname": "Static IP Parameters",
-            "x-ves-oneof-field-network_prefix_choice": "[\"cluster_static_ip\",\"fleet_static_ip\",\"node_static_ip\"]",
-            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
             "properties": {
                 "cluster_static_ip": {
-                    "description": "Exclusive with [fleet_static_ip node_static_ip]\nx-displayName: \"Cluster, All Nodes of the Site\"\nStatic IP configuration for a specific node",
+                    "description": "x-displayName: \"Cluster, All Nodes of the Site\"\nStatic IP configuration for a specific node",
                     "title": "Node Specific",
                     "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType"
                 },
                 "fleet_static_ip": {
-                    "description": "Exclusive with [cluster_static_ip node_static_ip]\nx-displayName: \"Fleet, All Nodes of All Sites in Fleet\"\nStatic IP configuration for the fleet",
+                    "description": "x-displayName: \"Fleet, All Nodes of All Sites in Fleet\"\nStatic IP configuration for the fleet",
                     "title": "Fleet",
                     "$ref": "#/definitions/network_interfaceStaticIpParametersFleetType"
                 },
                 "node_static_ip": {
-                    "description": "Exclusive with [cluster_static_ip fleet_static_ip]\nx-displayName: \"Specific Node\"\nStatic IP configuration for the Node",
+                    "description": "x-displayName: \"Specific Node\"\nStatic IP configuration for the Node",
                     "title": "Node",
                     "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType"
                 }
@@ -3627,76 +3615,57 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceStaticIpParametersClusterType": {
             "type": "object",
-            "description": "Configure Static IP parameters  for cluster",
+            "description": "x-displayName: \"Cluster: Static IP Parameters\"\nConfigure Static IP parameters  for cluster",
             "title": "Static IP Parameters",
-            "x-displayname": "Cluster: Static IP Parameters",
-            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersClusterType",
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address",
-                    "title": "Site:Node to IP mapping",
-                    "x-displayname": "Node to IP Mapping"
+                    "description": "x-displayName: \"Node to IP Mapping\"\nMap of Node to Static ip configuration value, Key:Node, Value:IP Address",
+                    "title": "Site:Node to IP mapping"
                 }
             }
         },
         "network_interfaceStaticIpParametersFleetType": {
             "type": "object",
-            "description": "Configure Static IP parameters",
+            "description": "x-displayName: \"Fleet: Static IP Parameters\"\nConfigure Static IP parameters",
             "title": "Static IP Parameters",
-            "x-displayname": "Fleet: Static IP Parameters",
-            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersFleetType",
             "properties": {
                 "default_gw": {
                     "type": "string",
-                    "description": " IP address offset of the default gateway, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
-                    "title": "Default Gateway",
-                    "x-displayname": "Default Gateway",
-                    "x-ves-example": "192.168.20.1"
+                    "description": "x-displayName: \"Default Gateway\"\nx-example: \"192.168.20.1\"\nIP address offset of the default gateway, prefix len is used to calculate offset",
+                    "title": "Default Gateway"
                 },
                 "dns_server": {
                     "type": "string",
-                    "description": " IP address offset of the DNS server, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
-                    "title": "DNS Server",
-                    "x-displayname": "DNS Server",
-                    "x-ves-example": "192.168.20.1"
+                    "description": "x-displayName: \"DNS Server\"\nx-example: \"192.168.20.1\"\nIP address offset of the DNS server, prefix len is used to calculate offset",
+                    "title": "DNS Server"
                 },
                 "network_prefix_allocator": {
-                    "description": " Static IP configuration for the fleet",
+                    "description": "x-displayName: \"Fleet address allocator\"\nStatic IP configuration for the fleet",
                     "title": "Fleet",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Fleet address allocator"
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
         "network_interfaceStaticIpParametersNodeType": {
             "type": "object",
-            "description": "Configure Static IP parameters for a node",
+            "description": "x-displayName: \"Node: Static IP Parameters\"\nConfigure Static IP parameters for a node",
             "title": "Static IP Parameters",
-            "x-displayname": "Node: Static IP Parameters",
-            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersNodeType",
             "properties": {
                 "default_gw": {
                     "type": "string",
-                    "description": " IP address of the default gateway.\n\nExample: - \"192.168.20.1\"-",
-                    "title": "Default Gateway",
-                    "x-displayname": "Default Gateway",
-                    "x-ves-example": "192.168.20.1"
+                    "description": "x-displayName: \"Default Gateway\"\nx-example: \"192.168.20.1\"\nIP address of the default gateway.",
+                    "title": "Default Gateway"
                 },
                 "dns_server": {
                     "type": "string",
-                    "description": " IP address of the DNS server\n\nExample: - \"192.168.20.1\"-",
-                    "title": "DNS Server",
-                    "x-displayname": "DNS Server",
-                    "x-ves-example": "192.168.20.1"
+                    "description": "x-displayName: \"DNS Server\"\nx-example: \"192.168.20.1\"\nIP address of the DNS server",
+                    "title": "DNS Server"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": " IP address of the interface and prefix length\n\nExample: - \"192.168.20.1/24\"-\nRequired: YES",
-                    "title": "Default Gateway",
-                    "x-displayname": "IP address/Prefix Length",
-                    "x-ves-example": "192.168.20.1/24",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"IP address/Prefix Length\"\nx-example: \"192.168.20.1/24\"\nx-required\nIP address of the interface and prefix length",
+                    "title": "Default Gateway"
                 }
             }
         },
@@ -3741,67 +3710,55 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceTunnelInterfaceType": {
             "type": "object",
-            "description": "Tunnel Interface Configuration",
+            "description": "x-displayName: \"Tunnel Interface\"\nTunnel Interface Configuration",
             "title": "Tunnel Interface",
-            "x-displayname": "Tunnel Interface",
-            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\"]",
-            "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
-            "x-ves-proto-message": "ves.io.schema.network_interface.TunnelInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site",
+                    "description": "x-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site",
                     "title": "Node Independent",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "inside_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
+                    "description": "x-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "mtu": {
                     "type": "integer",
-                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-",
+                    "description": "x-displayName: \"Maximum Packet Size (MTU)\"\nx-example: \"1450\"\nMaximum packet size (Maximum Transfer Unit) of the interface\nWhen configured, mtu must be between 512 and 16384",
                     "title": "Maximum Packet Size (MTU)",
-                    "format": "int64",
-                    "x-displayname": "Maximum Packet Size (MTU)",
-                    "x-ves-example": "1450"
+                    "format": "int64"
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a given device on the given node.",
+                    "description": "x-displayName: \"Specific Node\"\nConfiguration will apply to a given device on the given node.",
                     "title": "Node"
                 },
                 "priority": {
                     "type": "integer",
-                    "description": " Priority of the network interface when multiple network interfaces are present in outside network\n Greater the value, higher the priority\n\nExample: - \"42\"-",
+                    "description": "x-displayName: \"Priority\"\nx-example: \"42\"\nPriority of the network interface when multiple network interfaces are present in outside network\nGreater the value, higher the priority",
                     "title": "Priority",
-                    "format": "int64",
-                    "x-displayname": "Priority",
-                    "x-ves-example": "42"
+                    "format": "int64"
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [inside_network site_local_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "x-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
                     "title": "Site Local Network Inside",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "x-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "static_ip": {
-                    "description": " Interface IP is configured statically\nRequired: YES",
+                    "description": "x-displayName: \"Static IP\"\nx-required\nInterface IP is configured statically",
                     "title": "Static IP",
-                    "$ref": "#/definitions/network_interfaceStaticIPParametersType",
-                    "x-displayname": "Static IP",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
                 },
                 "tunnel": {
-                    "description": " Tunnel Configuration for this Interface\nRequired: YES",
+                    "description": "x-displayName: \"Tunnel\"\nx-required\nTunnel Configuration for this Interface",
                     "title": "Tunnel",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Tunnel",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -3880,17 +3837,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3949,10 +3912,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-",
+                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IPv4 Address",
                     "x-displayname": "IPv4 Address",
-                    "x-ves-example": "192.168.1.1"
+                    "x-ves-example": "192.168.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -3965,17 +3931,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Prefix Length",
                     "format": "int64",
-                    "x-displayname": "Prefix Length"
+                    "x-displayname": "Prefix Length",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 },
                 "prefix": {
                     "type": "string",
-                    "description": " Prefix part of the IPv4 subnet in string form with dot-decimal notation\n\nExample: - \"192.168.1.0\"-",
+                    "description": " Prefix part of the IPv4 subnet in string form with dot-decimal notation\n\nExample: - \"192.168.1.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Prefix",
                     "x-displayname": "Prefix",
-                    "x-ves-example": "192.168.1.0"
+                    "x-ves-example": "192.168.1.0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -3984,16 +3956,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -4004,10 +3967,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -4033,11 +4002,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -4227,12 +4199,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -4331,32 +4307,23 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
+                    "title": "name"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
+                    "title": "namespace"
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
+                    "title": "tenant"
                 }
             }
         }

@@ -271,7 +271,7 @@ var CustomPrivateAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/private/custom/namespaces/{namespace}/validate/api_credentials": {
             "post": {

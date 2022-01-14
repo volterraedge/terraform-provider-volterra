@@ -936,6 +936,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetVmChoice().(type) {
+	case *CreateSpecType_DisableVm:
+		if fv, exists := v.FldValidators["vm_choice.disable_vm"]; exists {
+			val := m.GetVmChoice().(*CreateSpecType_DisableVm).DisableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("disable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableVm:
+		if fv, exists := v.FldValidators["vm_choice.enable_vm"]; exists {
+			val := m.GetVmChoice().(*CreateSpecType_EnableVm).EnableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("enable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_certified_hw"))
@@ -2041,6 +2067,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("usb_policy_choice"),
 				db.WithValidateField("usb_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetVmChoice().(type) {
+	case *GetSpecType_DisableVm:
+		if fv, exists := v.FldValidators["vm_choice.disable_vm"]; exists {
+			val := m.GetVmChoice().(*GetSpecType_DisableVm).DisableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("disable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableVm:
+		if fv, exists := v.FldValidators["vm_choice.enable_vm"]; exists {
+			val := m.GetVmChoice().(*GetSpecType_EnableVm).EnableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("enable_vm"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3673,6 +3725,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetVmChoice().(type) {
+	case *GlobalSpecType_DisableVm:
+		if fv, exists := v.FldValidators["vm_choice.disable_vm"]; exists {
+			val := m.GetVmChoice().(*GlobalSpecType_DisableVm).DisableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("disable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableVm:
+		if fv, exists := v.FldValidators["vm_choice.enable_vm"]; exists {
+			val := m.GetVmChoice().(*GlobalSpecType_EnableVm).EnableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("enable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_certified_hw"))
@@ -5195,6 +5273,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("usb_policy_choice"),
 				db.WithValidateField("usb_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetVmChoice().(type) {
+	case *ReplaceSpecType_DisableVm:
+		if fv, exists := v.FldValidators["vm_choice.disable_vm"]; exists {
+			val := m.GetVmChoice().(*ReplaceSpecType_DisableVm).DisableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("disable_vm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableVm:
+		if fv, exists := v.FldValidators["vm_choice.enable_vm"]; exists {
+			val := m.GetVmChoice().(*ReplaceSpecType_EnableVm).EnableVm
+			vOpts := append(opts,
+				db.WithValidateField("vm_choice"),
+				db.WithValidateField("enable_vm"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -7905,6 +8009,41 @@ func (r *CreateSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetVmChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VmChoice.(type) {
+	case nil:
+		o.VmChoice = nil
+
+	case *CreateSpecType_DisableVm:
+		o.VmChoice = &GlobalSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *CreateSpecType_EnableVm:
+		o.VmChoice = &GlobalSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VmChoice.(type) {
+	case nil:
+		r.VmChoice = nil
+
+	case *GlobalSpecType_DisableVm:
+		r.VmChoice = &CreateSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *GlobalSpecType_EnableVm:
+		r.VmChoice = &CreateSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -7922,6 +8061,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.Sw = f.GetSw()
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
+	m.GetVmChoiceFromGlobalSpecType(f)
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
 	m.WorkerNodes = f.GetWorkerNodes()
 }
@@ -7945,6 +8085,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	f.Sw = m1.Sw
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
+	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.WorkerNodes = m1.WorkerNodes
 }
@@ -8241,6 +8382,41 @@ func (r *GetSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) er
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetVmChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VmChoice.(type) {
+	case nil:
+		o.VmChoice = nil
+
+	case *GetSpecType_DisableVm:
+		o.VmChoice = &GlobalSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *GetSpecType_EnableVm:
+		o.VmChoice = &GlobalSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VmChoice.(type) {
+	case nil:
+		r.VmChoice = nil
+
+	case *GlobalSpecType_DisableVm:
+		r.VmChoice = &GetSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *GlobalSpecType_EnableVm:
+		r.VmChoice = &GetSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -8258,6 +8434,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
+	m.GetVmChoiceFromGlobalSpecType(f)
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 	m.WorkerNodes = f.GetWorkerNodes()
@@ -8282,6 +8459,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
+	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.WorkerNodes = m1.WorkerNodes
@@ -8579,6 +8757,41 @@ func (r *ReplaceSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetVmChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VmChoice.(type) {
+	case nil:
+		o.VmChoice = nil
+
+	case *ReplaceSpecType_DisableVm:
+		o.VmChoice = &GlobalSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *ReplaceSpecType_EnableVm:
+		o.VmChoice = &GlobalSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VmChoice.(type) {
+	case nil:
+		r.VmChoice = nil
+
+	case *GlobalSpecType_DisableVm:
+		r.VmChoice = &ReplaceSpecType_DisableVm{DisableVm: of.DisableVm}
+
+	case *GlobalSpecType_EnableVm:
+		r.VmChoice = &ReplaceSpecType_EnableVm{EnableVm: of.EnableVm}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -8594,6 +8807,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
+	m.GetVmChoiceFromGlobalSpecType(f)
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
 	m.WorkerNodes = f.GetWorkerNodes()
 }
@@ -8615,6 +8829,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
+	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.WorkerNodes = m1.WorkerNodes
 }

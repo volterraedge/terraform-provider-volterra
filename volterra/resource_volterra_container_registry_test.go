@@ -16,7 +16,7 @@ import (
 // TestContainerRegistry object CRUD
 func TestContainerRegistry(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{
 		ves_io_schema_ns.ObjectType,
 		ves_io_schema_cr.ObjectType,
 	})

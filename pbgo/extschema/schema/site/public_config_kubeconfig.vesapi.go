@@ -430,7 +430,7 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/sites/{name}/local-kubeconfig": {
             "post": {
@@ -672,19 +672,33 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " K8s Cluster name\n\nExample: - \"ce398\"-\nRequired: YES",
+                    "description": " K8s Cluster name\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "ce398",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " K8s Cluster namespace\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " K8s Cluster namespace\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Namespace",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 }
             }
         },
@@ -729,10 +743,16 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of this credential\n\nExample: - \"api-cred-x89sf\"-",
+                    "description": " Name of this credential\n\nExample: - \"api-cred-x89sf\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
-                    "x-ves-example": "api-cred-x89sf"
+                    "x-ves-example": "api-cred-x89sf",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "uid": {
                     "type": "string",

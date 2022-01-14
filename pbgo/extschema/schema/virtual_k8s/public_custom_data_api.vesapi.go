@@ -293,7 +293,7 @@ var CustomDataAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/virtual_k8s/pvc/metrics": {
             "post": {
@@ -502,13 +502,16 @@ var CustomDataAPISwaggerJSON string = `{
                 },
                 "field_selector": {
                     "type": "array",
-                    "description": " Select fields to be returned in the response.\n One or more fields in {PVC_USAGE, PVC_CAPACITY} can be specified.\nRequired: YES",
+                    "description": " Select fields to be returned in the response.\n One or more fields in {PVC_USAGE, PVC_CAPACITY} can be specified.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Field Selector",
                     "items": {
                         "$ref": "#/definitions/virtual_k8sPVCMetricType"
                     },
                     "x-displayname": "Field Selector",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "filter": {
                     "type": "string",

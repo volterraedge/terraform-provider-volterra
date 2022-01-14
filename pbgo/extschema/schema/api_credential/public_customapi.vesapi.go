@@ -1695,7 +1695,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/activate/api_credentials": {
             "post": {
@@ -2801,18 +2801,24 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "password": {
                     "type": "string",
-                    "description": " Password is used for generating an API certificate P12 bundle user can use to protect access to it.\n this password will not be saved/persisted anywhere in the system. Applicable for credential type API_CERTIFICATE\n Users have to use this password when they use the certificate, e.g. in curl or while adding to key chain.\n\nExample: - \"myPassw0rd123\"-\nRequired: YES",
+                    "description": " Password is used for generating an API certificate P12 bundle user can use to protect access to it.\n this password will not be saved/persisted anywhere in the system. Applicable for credential type API_CERTIFICATE\n Users have to use this password when they use the certificate, e.g. in curl or while adding to key chain.\n\nExample: - \"myPassw0rd123\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Password for API certificate",
                     "x-displayname": "Password",
                     "x-ves-example": "myPassw0rd123",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "type": {
-                    "description": " Type of API credential, API credentials, kubeconfig or token.\nRequired: YES",
+                    "description": " Type of API credential, API credentials, kubeconfig or token.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Type",
                     "$ref": "#/definitions/api_credentialAPICredentialType",
                     "x-displayname": "Credential Type",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "virtual_k8s_name": {
                     "type": "string",
@@ -2840,18 +2846,24 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "password": {
                     "type": "string",
-                    "description": " Password is used for generating an API certificate P12 bundle user can use to protect access to it.\n this password will not be saved/persisted anywhere in the system. Applicable for credential type API_CERTIFICATE\n Users have to use this password when they use the certificate, e.g. in curl or while adding to key chain.\n\nExample: - \"myPassw0rd123\"-\nRequired: YES",
+                    "description": " Password is used for generating an API certificate P12 bundle user can use to protect access to it.\n this password will not be saved/persisted anywhere in the system. Applicable for credential type API_CERTIFICATE\n Users have to use this password when they use the certificate, e.g. in curl or while adding to key chain.\n\nExample: - \"myPassw0rd123\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Password for API certificate",
                     "x-displayname": "Password",
                     "x-ves-example": "myPassw0rd123",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "type": {
-                    "description": " Type of API credential, API credentials, kubeconfig or token.\nRequired: YES",
+                    "description": " Type of API credential, API credentials, kubeconfig or token.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Type",
                     "$ref": "#/definitions/api_credentialAPICredentialType",
                     "x-displayname": "Credential Type",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "virtual_k8s_name": {
                     "type": "string",
@@ -2878,19 +2890,25 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of API credential.\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Name of API credential.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Credential name",
                     "x-displayname": "Name",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Value of namespace is always \"system\".\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Value of namespace is always \"system\".\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3009,19 +3027,25 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of API credential object.\n\nExample: - \"api-cred-73c7cbd9-1342-4ce0-97a5-6c515c0b147a\"-\nRequired: YES",
+                    "description": " Name of API credential object.\n\nExample: - \"api-cred-73c7cbd9-1342-4ce0-97a5-6c515c0b147a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Credential name",
                     "x-displayname": "Name",
                     "x-ves-example": "api-cred-73c7cbd9-1342-4ce0-97a5-6c515c0b147a",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Value of namespace is always \"system\" .\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Value of namespace is always \"system\" .\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3090,10 +3114,16 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3119,11 +3149,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3283,12 +3316,16 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3401,9 +3438,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "certificate_serial_num": {
                     "type": "string",
-                    "description": " Serial number of the client certificate part of credential type API Certificate or Kubeconfig",
+                    "description": " Serial number of the client certificate part of credential type API Certificate or Kubeconfig\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n",
                     "title": "Certificate Serial Number",
-                    "x-displayname": "Certificate Serial Number"
+                    "maxLength": 32,
+                    "x-displayname": "Certificate Serial Number",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32"
+                    }
                 },
                 "created_timestamp": {
                     "type": "string",
@@ -3439,12 +3480,16 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "users": {
                     "type": "array",
-                    "description": " Reference to user for whom API credential is created ",
+                    "description": " Reference to user for whom API credential is created \n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "user requesting credential",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "User"
+                    "x-displayname": "User",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "virtual_k8s_name": {
                     "type": "string",
@@ -3510,19 +3555,25 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace the role applies to\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Namespace the role applies to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "role": {
                     "type": "string",
-                    "description": " Users role for this namespace\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Users role for this namespace\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Role",
                     "x-displayname": "Role",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         }

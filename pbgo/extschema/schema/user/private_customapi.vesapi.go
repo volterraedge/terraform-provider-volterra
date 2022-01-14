@@ -397,7 +397,7 @@ var CustomPrivateAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/private/custom/namespaces/system/users/update_last_login": {
             "post": {
@@ -769,11 +769,14 @@ var CustomPrivateAPISwaggerJSON string = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "description": " email of the user requesting for\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " email of the user requesting for\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "email of the user",
                     "x-displayname": "Email",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -784,10 +787,13 @@ var CustomPrivateAPISwaggerJSON string = `{
                 },
                 "tenant_name": {
                     "type": "string",
-                    "description": " User deletion will be executed within this tenant.\nRequired: YES",
+                    "description": " User deletion will be executed within this tenant.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Tenant name",
                     "x-displayname": "Tenant name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         }

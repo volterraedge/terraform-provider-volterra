@@ -4134,6 +4134,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["ce_service_labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ce_service_labels"))
+		for key, value := range m.GetCeServiceLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ce_site_mode"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ce_site_mode"))
@@ -4279,6 +4291,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("no_tenant_in_vk8s_ns"))
 		if err := fv(ctx, m.GetNoTenantInVk8SNs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["obelix"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("obelix"))
+		if err := fv(ctx, m.GetObelix(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5007,129 +5028,6 @@ var DefaultInterfaceStatusValidator = func() *ValidateInterfaceStatus {
 
 func InterfaceStatusValidator() db.Validator {
 	return DefaultInterfaceStatusValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *IpsecConnectionStatus) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *IpsecConnectionStatus) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *IpsecConnectionStatus) DeepCopy() *IpsecConnectionStatus {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &IpsecConnectionStatus{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *IpsecConnectionStatus) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *IpsecConnectionStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return IpsecConnectionStatusValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateIpsecConnectionStatus struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateIpsecConnectionStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*IpsecConnectionStatus)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *IpsecConnectionStatus got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["isLocal"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("isLocal"))
-		if err := fv(ctx, m.GetIsLocal(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["remoteAddress"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("remoteAddress"))
-		if err := fv(ctx, m.GetRemoteAddress(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["role"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("role"))
-		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["state"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("state"))
-		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["url"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("url"))
-		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["verNodeName"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("verNodeName"))
-		if err := fv(ctx, m.GetVerNodeName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultIpsecConnectionStatusValidator = func() *ValidateIpsecConnectionStatus {
-	v := &ValidateIpsecConnectionStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func IpsecConnectionStatusValidator() db.Validator {
-	return DefaultIpsecConnectionStatusValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -8760,18 +8658,6 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("intf_status"))
 		for idx, item := range m.GetIntfStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["ipsec_status"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ipsec_status"))
-		for idx, item := range m.GetIpsecStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err

@@ -290,7 +290,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints/swagger_spec": {
             "get": {

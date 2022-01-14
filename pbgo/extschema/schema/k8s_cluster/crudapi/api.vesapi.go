@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.k8s_cluster/Object/{object_uid}": {
             "get": {
@@ -2811,12 +2811,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Argo CD configuration",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.ApplicationArgoCDType",
             "properties": {
-                "generated_yaml": {
-                    "type": "string",
-                    "description": " Generated YAML",
-                    "title": "Generated YAML",
-                    "x-displayname": "Generated YAML"
-                },
                 "local_domain": {
                     "description": " Local domain to access argocd for example argocd.localdomain",
                     "title": "ArgoCD Local Domain",
@@ -2830,45 +2824,21 @@ var APISwaggerJSON string = `{
             "description": "description\nParameters for K8s dashboard",
             "title": "K8s Dashboard configuration",
             "x-displayname": "K8s Dashboard configuration",
-            "x-ves-proto-message": "ves.io.schema.k8s_cluster.ApplicationDashboardType",
-            "properties": {
-                "generated_yaml": {
-                    "type": "string",
-                    "description": " Generated YAML",
-                    "title": "Generated YAML",
-                    "x-displayname": "Generated YAML"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.k8s_cluster.ApplicationDashboardType"
         },
         "k8s_clusterApplicationMetricsServerType": {
             "type": "object",
             "description": "description\nParameters for Kubernetes Metrics Server application",
             "title": "K8s Metrics Server configuration",
             "x-displayname": "K8s Metrics Server configuration",
-            "x-ves-proto-message": "ves.io.schema.k8s_cluster.ApplicationMetricsServerType",
-            "properties": {
-                "generated_yaml": {
-                    "type": "string",
-                    "description": " Generated YAML",
-                    "title": "Generated YAML",
-                    "x-displayname": "Generated YAML"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.k8s_cluster.ApplicationMetricsServerType"
         },
         "k8s_clusterApplicationPrometheusType": {
             "type": "object",
             "description": "description\nParameters for Prometheus server access",
             "title": "Prometheus configuration",
             "x-displayname": "Prometheus access configuration",
-            "x-ves-proto-message": "ves.io.schema.k8s_cluster.ApplicationPrometheusType",
-            "properties": {
-                "generated_yaml": {
-                    "type": "string",
-                    "description": " Generated YAML",
-                    "title": "Generated YAML",
-                    "x-displayname": "Generated YAML"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.k8s_cluster.ApplicationPrometheusType"
         },
         "k8s_clusterClusterRoleBindingListType": {
             "type": "object",
@@ -2879,13 +2849,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cluster_role_bindings": {
                     "type": "array",
-                    "description": " List of active cluster role binding list for a K8s cluster\nRequired: YES",
+                    "description": " List of active cluster role binding list for a K8s cluster\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Cluster Role Binding List",
+                    "minItems": 1,
+                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "Cluster Role Binding List",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2898,13 +2876,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cluster_roles": {
                     "type": "array",
-                    "description": " List of active cluster role list for a K8s cluster\nRequired: YES",
+                    "description": " List of active cluster role list for a K8s cluster\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Cluster Role List",
+                    "minItems": 1,
+                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "Cluster Role List",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2917,13 +2903,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cluster_wide_apps": {
                     "type": "array",
-                    "description": " List of cluster wide applications\nRequired: YES",
+                    "description": " List of cluster wide applications\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 2\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Cluster Wide Application List",
+                    "minItems": 1,
+                    "maxItems": 2,
                     "items": {
                         "$ref": "#/definitions/k8s_clusterClusterWideAppType"
                     },
                     "x-displayname": "Cluster Wide Application List",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "2",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2965,12 +2958,23 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-apps_choice": "[\"cluster_wide_app_list\",\"no_cluster_wide_apps\"]",
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
+            "x-ves-oneof-field-cluster_scoped_resource_access_choice": "[\"cluster_scoped_access_deny\",\"cluster_scoped_access_permit\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
             "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GlobalSpecType",
             "properties": {
+                "cluster_scoped_access_deny": {
+                    "description": "Exclusive with [cluster_scoped_access_permit]\nx-displayName: \"Deny K8s API Access to ClusterRoles and ClusterRoleBindings\"\nAccess to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
+                    "title": "Deny K8s API Access to ClusterRoles and ClusterRoleBindings",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "cluster_scoped_access_permit": {
+                    "description": "Exclusive with [cluster_scoped_access_deny]\nx-displayName: \"Allow K8s API Access to ClusterRoles and ClusterRoleBindings\"\nAccess to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
+                    "title": "Allow K8s API Access to ClusterRoles and ClusterRoleBindings",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "cluster_wide_app_list": {
                     "description": "Exclusive with [no_cluster_wide_apps]\nx-displayName: \"Add Cluster Wide Applications\"\nSelect cluster wide applications to be deployed",
                     "title": "Add Cluster Wide Applications",
@@ -2978,30 +2982,45 @@ var APISwaggerJSON string = `{
                 },
                 "final_cluster_role_bindings": {
                     "type": "array",
-                    "description": " Internal Cluster Role binding List default + custom",
+                    "description": " Internal Cluster Role binding List default + custom\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 34\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Internal Cluster Role Binding List",
+                    "maxItems": 34,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Internal Cluster Role Binding LIst"
+                    "x-displayname": "Internal Cluster Role Binding LIst",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "34",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "final_cluster_roles": {
                     "type": "array",
-                    "description": " Internal Cluster Role List default + custom",
+                    "description": " Internal Cluster Role List default + custom\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 34\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Internal Cluster Role List",
+                    "maxItems": 34,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Internal Cluster Role LIst"
+                    "x-displayname": "Internal Cluster Role LIst",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "34",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "final_pod_security_policies": {
                     "type": "array",
-                    "description": " Internal Pod Security Policy List is default or custom",
+                    "description": " Internal Pod Security Policy List is default or custom\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 34\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Internal Pod Security Policy List",
+                    "maxItems": 34,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Internal Pod Security Policy  LIst"
+                    "x-displayname": "Internal Pod Security Policy  LIst",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "34",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "global_access_enable": {
                     "description": "Exclusive with [no_global_access]\nx-displayName: \"Enable VoltConsole API Access\"\nAccess via VoltConsole to site K8s API server is enabled",
@@ -3067,12 +3086,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [use_custom_psp_list]\nx-displayName: \"Default Pod Security Policies\"\nSelect default pod security policies for this K8s cluster",
                     "title": "Default Pod Security Policies",
                     "$ref": "#/definitions/schemaEmpty"
-                },
-                "view_internal": {
-                    "description": " Reference to view internal object",
-                    "title": "view_internal",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "View Internal"
                 }
             }
         },
@@ -3085,14 +3098,25 @@ var APISwaggerJSON string = `{
             "properties": {
                 "insecure_registries": {
                     "type": "array",
-                    "description": " List of docker insecure registries in format \"example.com:5000\"\n\nExample: - \"example.com:5000\"-\nRequired: YES",
+                    "description": " List of docker insecure registries in format \"example.com:5000\"\n\nExample: - \"example.com:5000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.hostport: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Docker Insecure Registry List",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
                     },
                     "x-displayname": "Docker Insecure Registry List",
                     "x-ves-example": "example.com:5000",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.hostport": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3111,18 +3135,29 @@ var APISwaggerJSON string = `{
                 },
                 "local_domain": {
                     "type": "string",
-                    "description": " ArgoCD will be accessible at \u003csite name\u003e.\u003clocal domain\u003e.\n\nExample: - \"example.com\"-\nRequired: YES",
+                    "description": " ArgoCD will be accessible at \u003csite name\u003e.\u003clocal domain\u003e.\n\nExample: - \"example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 192\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Local Domain",
+                    "minLength": 1,
+                    "maxLength": 192,
                     "x-displayname": "Local Domain",
                     "x-ves-example": "example.com",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "192",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "password": {
-                    "description": " Select blindfold or clear text password for ArgoCD admin.\nRequired: YES",
+                    "description": " Select blindfold or clear text password for ArgoCD admin.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Admin Password for ArgoCD",
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Admin Password for ArgoCD",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "port": {
                     "type": "integer",
@@ -3147,11 +3182,19 @@ var APISwaggerJSON string = `{
                 },
                 "local_domain": {
                     "type": "string",
-                    "description": " Local K8s API server will be accessible at \u003csite name\u003e.\u003clocal domain\u003e.\n\nExample: - \"example.com\"-\nRequired: YES",
+                    "description": " Local K8s API server will be accessible at \u003csite name\u003e.\u003clocal domain\u003e.\n\nExample: - \"example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 192\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Local Domain",
+                    "minLength": 1,
+                    "maxLength": 192,
                     "x-displayname": "Local Domain",
                     "x-ves-example": "example.com",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "192",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "port": {
                     "type": "integer",
@@ -3170,13 +3213,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "pod_security_policies": {
                     "type": "array",
-                    "description": " List of active Pod security policies for a K8s cluster\nRequired: YES",
+                    "description": " List of active Pod security policies for a K8s cluster\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Pod Security Policy List",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "Pod Security Policy List",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3283,11 +3334,15 @@ var APISwaggerJSON string = `{
                 },
                 "location": {
                     "type": "string",
-                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Location",
                     "x-displayname": "Location",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
@@ -3314,11 +3369,17 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
+                    "maxLength": 131072,
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -3357,17 +3418,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3422,16 +3489,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3442,10 +3500,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3471,11 +3535,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3495,55 +3562,31 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
                 "EncodingBase64"
             ],
-            "default": "EncodingNone",
-            "x-displayname": "Secret Encoding",
-            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+            "default": "EncodingNone"
         },
         "schemaSecretType": {
             "type": "object",
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
-                },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
-                },
-                "vault_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -3719,12 +3762,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3786,48 +3833,34 @@ var APISwaggerJSON string = `{
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
-            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
             "title": "VaultSecretInfoType",
-            "x-displayname": "Vault Secret",
-            "x-ves-displayorder": "1,2,3,4,5",
-            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
-                    "title": "Key",
-                    "x-displayname": "Key",
-                    "x-ves-example": "key_pem"
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
                 },
                 "location": {
                     "type": "string",
-                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
-                    "title": "Location",
-                    "x-displayname": "Location",
-                    "x-ves-example": "v1/data/vhost_key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
                 },
                 "provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
-                    "title": "Provider",
-                    "x-displayname": "Provider",
-                    "x-ves-example": "vault-vh-provider",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
                 },
                 "secret_encoding": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
                     "title": "secret_encoding",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
+                    "$ref": "#/definitions/schemaSecretEncodingType"
                 },
                 "version": {
                     "type": "integer",
-                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
                     "title": "Version",
-                    "format": "int64",
-                    "x-displayname": "Version",
-                    "x-ves-example": "1"
+                    "format": "int64"
                 }
             }
         },
@@ -3870,18 +3903,13 @@ var APISwaggerJSON string = `{
         },
         "schemaWingmanSecretInfoType": {
             "type": "object",
-            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
             "title": "WingmanSecretInfoType",
-            "x-displayname": "Wingman Secret",
-            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "ChargeBack-API-Key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
                 }
             }
         },
@@ -3894,25 +3922,40 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "namespace",
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "tenant",
+                    "maxLength": 64,
                     "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

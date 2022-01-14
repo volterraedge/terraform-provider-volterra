@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.fleet/Object/{object_uid}": {
             "get": {
@@ -2575,19 +2575,16 @@ var APISwaggerJSON string = `{
     "definitions": {
         "bgpFamilyInet": {
             "type": "object",
-            "description": "Parameters for inet family.",
+            "description": "x-displayName: \"BGP Family Inet\"\nParameters for inet family.",
             "title": "FamilyInet",
-            "x-displayname": "BGP Family Inet",
-            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 Unicast\"\nDisable the IPv4 Unicast family.",
+                    "description": "x-displayName: \"Disable IPv4 Unicast\"\nDisable the IPv4 Unicast family.",
                     "title": "disable",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable": {
-                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
+                    "description": "x-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
                     "title": "enable",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -2595,19 +2592,16 @@ var APISwaggerJSON string = `{
         },
         "bgpFamilyInet6vpn": {
             "type": "object",
-            "description": "Parameters for inet6vpn family.",
+            "description": "x-displayName: \"BGP Family Inet6vpn\"\nParameters for inet6vpn family.",
             "title": "FamilyInet6vpn",
-            "x-displayname": "BGP Family Inet6vpn",
-            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet6vpn",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv6 VPN Unicast\"\nDisable the IPv6 Unicast family.",
+                    "description": "x-displayName: \"Disable IPv6 VPN Unicast\"\nDisable the IPv6 Unicast family.",
                     "title": "disable",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable": {
-                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv6 VPN Unicast\"\nEnable the IPv6 Unicast family.",
+                    "description": "x-displayName: \"Enable IPv6 VPN Unicast\"\nEnable the IPv6 Unicast family.",
                     "title": "enable",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -2615,19 +2609,16 @@ var APISwaggerJSON string = `{
         },
         "bgpFamilyInetvpn": {
             "type": "object",
-            "description": "Parameters for inetvpn family.",
+            "description": "x-displayName: \"BGP Family Inetvpn\"\nParameters for inetvpn family.",
             "title": "FamilyInetvpn",
-            "x-displayname": "BGP Family Inetvpn",
-            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInetvpn",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
+                    "description": "x-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
                     "title": "disable",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable": {
-                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
+                    "description": "x-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
                     "title": "enable",
                     "$ref": "#/definitions/bgpFamilyInetvpnParameters"
                 }
@@ -2635,19 +2626,16 @@ var APISwaggerJSON string = `{
         },
         "bgpFamilyInetvpnParameters": {
             "type": "object",
-            "description": "Parameters for inetvpn family.",
+            "description": "x-displayName: \"BGP Family Inetvpn\"\nParameters for inetvpn family.",
             "title": "FamilyInetvpnParameters",
-            "x-displayname": "BGP Family Inetvpn",
-            "x-ves-oneof-field-sr_choice": "[\"disable\",\"enable\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInetvpnParameters",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
+                    "description": "x-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
                     "title": "disable",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable": {
-                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
+                    "description": "x-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
                     "title": "enable",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -2655,19 +2643,16 @@ var APISwaggerJSON string = `{
         },
         "bgpFamilyRtarget": {
             "type": "object",
-            "description": "Parameters for rtarget family.",
+            "description": "x-displayName: \"BGP Family Route Target\"\nParameters for rtarget family.",
             "title": "FamilyRtarget",
-            "x-displayname": "BGP Family Route Target",
-            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.FamilyRtarget",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [enable]\nx-displayName: \"Disable Route Target\"\nDisable the Route Target family.",
+                    "description": "x-displayName: \"Disable Route Target\"\nDisable the Route Target family.",
                     "title": "disable",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable": {
-                    "description": "Exclusive with [disable]\nx-displayName: \"Enable Route Target\"\nEnable the Route Target family.",
+                    "description": "x-displayName: \"Enable Route Target\"\nEnable the Route Target family.",
                     "title": "enable",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -2675,132 +2660,112 @@ var APISwaggerJSON string = `{
         },
         "bgpInterfaceList": {
             "type": "object",
-            "description": "List of network interfaces.",
+            "description": "x-displayName: \"Interface List\"\nList of network interfaces.",
             "title": "InterfaceList",
-            "x-displayname": "Interface List",
-            "x-ves-proto-message": "ves.io.schema.bgp.InterfaceList",
             "properties": {
                 "interfaces": {
                     "type": "array",
-                    "description": " List of network interfaces.\nRequired: YES",
+                    "description": "x-displayName: \"Interface List\"\nx-required\nList of network interfaces.",
                     "title": "interface_list",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Interface List",
-                    "x-ves-required": "true"
+                    }
                 }
             }
         },
         "bgpPeer": {
             "type": "object",
-            "description": "BGP Peer parameters",
+            "description": "x-displayName: \"BGP Peer\"\nBGP Peer parameters",
             "title": "Peer",
-            "x-displayname": "BGP Peer",
-            "x-ves-displayorder": "1,2",
-            "x-ves-oneof-field-type_choice": "[\"external\",\"internal\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
                 "external": {
-                    "description": "Exclusive with [internal]\nx-displayName: \"External\"\nExternal BGP peer.",
+                    "description": "x-displayName: \"External\"\nExternal BGP peer.",
                     "title": "external",
                     "$ref": "#/definitions/bgpPeerExternal"
                 },
                 "internal": {
-                    "description": "Exclusive with [external]\nx-displayName: \"External\"\nExternal BGP peer.",
+                    "description": "x-displayName: \"External\"\nExternal BGP peer.",
                     "title": "external",
                     "$ref": "#/definitions/bgpPeerInternal"
                 },
                 "metadata": {
-                    "description": " Common attributes for the peer including name and description.\nRequired: YES",
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the peer including name and description.",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType",
-                    "x-displayname": "Metadata",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/schemaMessageMetaType"
                 },
                 "target_service": {
                     "type": "string",
-                    "description": " Specify whether this peer should be configured in \"phobos\" or \"frr\".",
-                    "title": "target_service",
-                    "x-displayname": "Target Service"
+                    "description": "x-displayName: \"Target Service\"\nSpecify whether this peer should be configured in \"phobos\" or \"frr\".",
+                    "title": "target_service"
                 }
             }
         },
         "bgpPeerExternal": {
             "type": "object",
-            "description": "External BGP Peer parameters.",
+            "description": "x-displayName: \"External BGP Peer\"\nExternal BGP Peer parameters.",
             "title": "PeerExternal",
-            "x-displayname": "External BGP Peer",
-            "x-ves-displayorder": "1,2,10,11,20",
-            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
-            "x-ves-oneof-field-interface_choice": "[\"inside_interfaces\",\"interface\",\"interface_list\",\"outside_interfaces\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.PeerExternal",
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
+                    "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
                 "asn": {
                     "type": "integer",
-                    "description": " Autonomous System Number for BGP peer\n\nExample: - 64512-\nRequired: YES",
+                    "description": "x-displayName: \"ASN\"\nx-example: 64512\nx-required\nAutonomous System Number for BGP peer",
                     "title": "ASN",
-                    "format": "int64",
-                    "x-displayname": "ASN",
-                    "x-ves-required": "true"
+                    "format": "int64"
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Default Gateway\"\nUse the default gateway address.",
+                    "description": "x-displayName: \"Default Gateway\"\nUse the default gateway address.",
                     "title": "default_gateway",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "family_inet": {
-                    "description": " Parameters for IPv4 Unicast family.",
+                    "description": "x-displayName: \"Family IPv4 Unicast\"\nParameters for IPv4 Unicast family.",
                     "title": "family_inet",
-                    "$ref": "#/definitions/bgpFamilyInet",
-                    "x-displayname": "Family IPv4 Unicast"
+                    "$ref": "#/definitions/bgpFamilyInet"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
+                    "description": "x-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
                     "title": "from_site",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "inside_interfaces": {
-                    "description": "Exclusive with [interface interface_list outside_interfaces]\nx-displayName: \"Site Local Inside Interfaces\"\nAll interfaces in the site local inside network.",
+                    "description": "x-displayName: \"Site Local Inside Interfaces\"\nAll interfaces in the site local inside network.",
                     "title": "inside_interfaces",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "interface": {
-                    "description": "Exclusive with [inside_interfaces interface_list outside_interfaces]\nx-displayName: \"Interface\"\nSpecify interface.",
+                    "description": "x-displayName: \"Interface\"\nSpecify interface.",
                     "title": "interface",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "interface_list": {
-                    "description": "Exclusive with [inside_interfaces interface outside_interfaces]\nx-displayName: \"Interface List\"\nList of network interfaces.",
+                    "description": "x-displayName: \"Interface List\"\nList of network interfaces.",
                     "title": "interface_list",
                     "$ref": "#/definitions/bgpInterfaceList"
                 },
                 "outside_interfaces": {
-                    "description": "Exclusive with [inside_interfaces interface interface_list]\nx-displayName: \"Site Local Interfaces\"\nAll interfaces in the site local outside network.",
+                    "description": "x-displayName: \"Site Local Interfaces\"\nAll interfaces in the site local outside network.",
                     "title": "outside_interfaces",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Peer TCP port number.\n\nExample: - 179-",
+                    "description": "x-displayName: \"Peer Port\"\nx-example: 179\nPeer TCP port number.",
                     "title": "Peer Port",
-                    "format": "int64",
-                    "x-displayname": "Peer Port"
+                    "format": "int64"
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Offset From Beginning Of Subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
+                    "description": "x-displayName: \"Offset From Beginning Of Subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
                     "title": "subnet_begin_offset",
                     "format": "int64"
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
+                    "description": "x-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
                     "title": "subnet_end_offset",
                     "format": "int64"
                 }
@@ -2808,63 +2773,54 @@ var APISwaggerJSON string = `{
         },
         "bgpPeerInternal": {
             "type": "object",
-            "description": "Internal BGP Peer parameters.",
+            "description": "x-displayName: \"Internal BGP Peer\"\nInternal BGP Peer parameters.",
             "title": "PeerInternal",
-            "x-displayname": "Internal BGP Peer",
-            "x-ves-displayorder": "2,10,11,16,12",
-            "x-ves-oneof-field-address_choice": "[\"address\",\"dns_name\",\"from_site\"]",
-            "x-ves-oneof-field-mtls_choice": "[\"disable_mtls\",\"enable_mtls\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.PeerInternal",
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name from_site]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
+                    "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
                 "disable_mtls": {
-                    "description": "Exclusive with [enable_mtls]\nx-displayName: \"Disable MTLS\"\nDisable MTLS",
+                    "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
                     "title": "disable_mtls",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [address from_site]\nx-displayName: \"Use address for DNS name\"\nUse the addresse by resolving the given DNS name.",
+                    "description": "x-displayName: \"Use address for DNS name\"\nUse the addresse by resolving the given DNS name.",
                     "title": "dns_name"
                 },
                 "enable_mtls": {
-                    "description": "Exclusive with [disable_mtls]\nx-displayName: \"Enable MTLS\"\nEnable MTLS",
+                    "description": "x-displayName: \"Enable MTLS\"\nEnable MTLS",
                     "title": "enable_mtls",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "family_inet6vpn": {
-                    "description": " Parameters for IPv6 VPN Unicast family.",
+                    "description": "x-displayName: \"Family IPv6 VPN Unicast\"\nParameters for IPv6 VPN Unicast family.",
                     "title": "family_inet6vpn",
-                    "$ref": "#/definitions/bgpFamilyInet6vpn",
-                    "x-displayname": "Family IPv6 VPN Unicast"
+                    "$ref": "#/definitions/bgpFamilyInet6vpn"
                 },
                 "family_inetvpn": {
-                    "description": " Parameters for IPv4 VPN Unicast family.",
+                    "description": "x-displayName: \"Family IPv4 VPN Unicast\"\nParameters for IPv4 VPN Unicast family.",
                     "title": "family_inetvpn",
-                    "$ref": "#/definitions/bgpFamilyInetvpn",
-                    "x-displayname": "Family IPv4 VPN Unicast"
+                    "$ref": "#/definitions/bgpFamilyInetvpn"
                 },
                 "family_rtarget": {
-                    "description": " Parameters for Route Target family.",
+                    "description": "x-displayName: \"Family Route Target\"\nParameters for Route Target family.",
                     "title": "family_rtarget",
-                    "$ref": "#/definitions/bgpFamilyRtarget",
-                    "x-displayname": "Family Route Target"
+                    "$ref": "#/definitions/bgpFamilyRtarget"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address dns_name]\nx-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
+                    "description": "x-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
                     "title": "from_site",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Peer TCP port number.\n\nExample: - 179-",
+                    "description": "x-displayName: \"Peer Port\"\nx-example: 179\nPeer TCP port number.",
                     "title": "port",
-                    "format": "int64",
-                    "x-displayname": "Peer Port"
+                    "format": "int64"
                 }
             }
         },
@@ -3057,27 +3013,22 @@ var APISwaggerJSON string = `{
         },
         "fleetBGPConfiguration": {
             "type": "object",
-            "description": "BGP configuration parameters",
+            "description": "x-displayName: \"BGP Configuration\"\nBGP configuration parameters",
             "title": "BGP Configuration",
-            "x-displayname": "BGP Configuration",
-            "x-ves-proto-message": "ves.io.schema.fleet.BGPConfiguration",
             "properties": {
                 "asn": {
                     "type": "integer",
-                    "description": " Autonomous System Number\n\nExample: - 64512-\nRequired: YES",
+                    "description": "x-displayName: \"ASN\"\nx-example: 64512\nx-required\nAutonomous System Number",
                     "title": "ASN",
-                    "format": "int64",
-                    "x-displayname": "ASN",
-                    "x-ves-required": "true"
+                    "format": "int64"
                 },
                 "peers": {
                     "type": "array",
-                    "description": " BGP parameters for peer",
+                    "description": "x-displayName: \"Peers\"\nBGP parameters for peer",
                     "title": "BGP Peers",
                     "items": {
                         "$ref": "#/definitions/bgpPeer"
-                    },
-                    "x-displayname": "Peers"
+                    }
                 }
             }
         },
@@ -3089,11 +3040,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rate": {
                     "type": "integer",
-                    "description": " Interval in seconds to transmit LACP packets\n\nExample: - \"30\"-",
+                    "description": " Interval in seconds to transmit LACP packets\n\nExample: - \"30\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 30\n",
                     "title": "Interval",
                     "format": "int64",
                     "x-displayname": "LACP Packet Interval",
-                    "x-ves-example": "30"
+                    "x-ves-example": "30",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "30"
+                    }
                 }
             }
         },
@@ -3117,11 +3072,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/fleetNetworkingDeviceInstanceType"
                 },
                 "owner": {
-                    "description": " Defines ownership of the device. A device can be owned by,\n   * VER : Devices like ethernet are owned by VER\n   * VK8S Workload : The devices is available for VK8S workload use.\n                     This option is not yet supported\n   * HOST : Device is owned by host-os. The devices can be exposed via some other services like TPM.\n            This option is not yet supported\nRequired: YES",
+                    "description": " Defines ownership of the device. A device can be owned by,\n   * VER : Devices like ethernet are owned by VER\n   * VK8S Workload : The devices is available for VK8S workload use.\n                     This option is not yet supported\n   * HOST : Device is owned by host-os. The devices can be exposed via some other services like TPM.\n            This option is not yet supported\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [1]\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Owner",
                     "$ref": "#/definitions/fleetDeviceOwnerType",
                     "x-displayname": "Device Owner",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[1]",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3146,15 +3105,27 @@ var APISwaggerJSON string = `{
                 },
                 "chap_target_username": {
                     "type": "string",
-                    "description": " Target username. Required if useCHAP=true",
+                    "description": " Target username. Required if useCHAP=true\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "CHAP Target Username",
-                    "x-displayname": "CHAP Target Username"
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "CHAP Target Username",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "chap_username": {
                     "type": "string",
-                    "description": " Inbound username. Required if useCHAP=true",
+                    "description": " Inbound username. Required if useCHAP=true\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "CHAP Username",
-                    "x-displayname": "CHAP Username"
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "CHAP Username",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -3174,16 +3145,14 @@ var APISwaggerJSON string = `{
         },
         "fleetEtcdClusterNetworkType": {
             "type": "string",
-            "description": "Decided which network is used for etcd clustering\n\nEtcd clustering happens over Site local network\nEtcd clustering happens over Site local inside network\nEtcd clustering happens over Site management network, requires redundant dedicated management interfaces",
+            "description": "x-displayName: \"Etcd Clustering Network\"\nDecided which network is used for etcd clustering\n\n - ETCD_CLUSTER_SITE_LOCAL_NETWORK: x-displayName: \"Site Local (Outside) Network\"\nEtcd clustering happens over Site local network\n - ETCD_CLUSTER_SITE_LOCAL_INSIDE_NETWORK: x-displayName: \"Site Local Inside Network\"\nEtcd clustering happens over Site local inside network\n - ETCD_CLUSTER_SITE_MANAGEMENT_NETWORK: x-displayName: \"Site Management Network\"\nEtcd clustering happens over Site management network, requires redundant dedicated management interfaces",
             "title": "Etcd Clustering Network",
             "enum": [
                 "ETCD_CLUSTER_SITE_LOCAL_NETWORK",
                 "ETCD_CLUSTER_SITE_LOCAL_INSIDE_NETWORK",
                 "ETCD_CLUSTER_SITE_MANAGEMENT_NETWORK"
             ],
-            "default": "ETCD_CLUSTER_SITE_LOCAL_NETWORK",
-            "x-displayname": "Etcd Clustering Network",
-            "x-ves-proto-enum": "ves.io.schema.fleet.EtcdClusterNetworkType"
+            "default": "ETCD_CLUSTER_SITE_LOCAL_NETWORK"
         },
         "fleetFlashArrayEndpoint": {
             "type": "object",
@@ -3201,10 +3170,17 @@ var APISwaggerJSON string = `{
                 },
                 "labels": {
                     "type": "object",
-                    "description": " The labels are optional, and can be any key-value pair for use with the PSO \"fleet\" provisioner.\n\nExample: - \"{\"rack\"\"22\"}\"-",
+                    "description": " The labels are optional, and can be any key-value pair for use with the PSO \"fleet\" provisioner.\n\nExample: - \"{\"rack\"\"22\"}\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 128\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Labels",
                     "x-displayname": "Labels",
-                    "x-ves-example": "{\"rack\": \"22\"}"
+                    "x-ves-example": "{\"rack\": \"22\"}",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "128",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "mgmt_dns_name": {
                     "type": "string",
@@ -3227,28 +3203,43 @@ var APISwaggerJSON string = `{
             "properties": {
                 "default_fs_opt": {
                     "type": "string",
-                    "description": " Block volume default mkfs options. Not recommended to change!\n\nExample: - \"-q\"-",
+                    "description": " Block volume default mkfs options. Not recommended to change!\n\nExample: - \"-q\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Default Filesystem Options",
+                    "minLength": 1,
+                    "maxLength": 128,
                     "x-displayname": "Default Filesystem Options",
-                    "x-ves-example": "-q"
+                    "x-ves-example": "-q",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "default_fs_type": {
                     "type": "string",
-                    "description": " Block volume default filesystem type. Not recommended to change!\n\nExample: - \"xfs\"-\nRequired: YES",
+                    "description": " Block volume default filesystem type. Not recommended to change!\n\nExample: - \"xfs\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"xfs\\\",\\\"ext4\\\"]\n",
                     "title": "Default Filesystem Type",
                     "x-displayname": "Default Filesystem Type",
                     "x-ves-example": "xfs",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"xfs\\\",\\\"ext4\\\"]"
+                    }
                 },
                 "default_mount_opts": {
                     "type": "array",
-                    "description": " Block volume default filesystem mount options. Not recommended to change!\n\nExample: - \"[- discart]\"-",
+                    "description": " Block volume default filesystem mount options. Not recommended to change!\n\nExample: - \"[- discart]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Default Mount Options",
+                    "maxItems": 4,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Default Mount Options",
-                    "x-ves-example": "[- discart]"
+                    "x-ves-example": "[- discart]",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "disable_preempt_attachments": {
                     "type": "boolean",
@@ -3259,29 +3250,46 @@ var APISwaggerJSON string = `{
                 },
                 "flash_arrays": {
                     "type": "array",
-                    "description": " For FlashArrays you must set the \"mgmt_endpoint\" and \"api_token\"\nRequired: YES",
+                    "description": " For FlashArrays you must set the \"mgmt_endpoint\" and \"api_token\"\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Flash Arrays",
+                    "minItems": 1,
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/fleetFlashArrayEndpoint"
                     },
                     "x-displayname": "Flash Arrays",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "iscsi_login_timeout": {
                     "type": "integer",
-                    "description": " x-exmple: \"20\"\n iSCSI login timeout in seconds. Not recommended to change!\nRequired: YES",
+                    "description": " x-exmple: \"20\"\n iSCSI login timeout in seconds. Not recommended to change!\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "iSCSI Login Timeout",
                     "format": "int32",
                     "x-displayname": "iSCSI Login Timeout",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
                 },
                 "san_type": {
                     "type": "string",
-                    "description": " Block volume access protocol, either ISCSI or FC\n\nExample: - \"ISCSI\"-\nRequired: YES",
+                    "description": " Block volume access protocol, either ISCSI or FC\n\nExample: - \"ISCSI\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ISCSI\\\",\\\"FC\\\"]\n",
                     "title": "SAN Type",
                     "x-displayname": "SAN Type",
                     "x-ves-example": "ISCSI",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"ISCSI\\\",\\\"FC\\\"]"
+                    }
                 }
             }
         },
@@ -3302,10 +3310,17 @@ var APISwaggerJSON string = `{
                 },
                 "lables": {
                     "type": "object",
-                    "description": " The labels are optional, and can be any key-value pair for use with the PSO \"fleet\" provisioner.\n\nExample: - \"{\"rack\"\"22\"}\"-",
+                    "description": " The labels are optional, and can be any key-value pair for use with the PSO \"fleet\" provisioner.\n\nExample: - \"{\"rack\"\"22\"}\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 128\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Labels",
                     "x-displayname": "Labels",
-                    "x-ves-example": "{\"rack\": \"22\"}"
+                    "x-ves-example": "{\"rack\": \"22\"}",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "128",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "mgmt_dns_name": {
                     "type": "string",
@@ -3345,20 +3360,34 @@ var APISwaggerJSON string = `{
                 },
                 "export_rules": {
                     "type": "string",
-                    "description": " NFS Export rules\n\nExample: - \"*(rw,no_root_squash)\"-",
+                    "description": " NFS Export rules\n\nExample: - \"*(rw,no_root_squash)\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 50\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "NFS Export Rules",
+                    "minLength": 1,
+                    "maxLength": 50,
                     "x-displayname": "NFS Export Rules",
-                    "x-ves-example": "*(rw,no_root_squash)"
+                    "x-ves-example": "*(rw,no_root_squash)",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "50",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "flash_blades": {
                     "type": "array",
-                    "description": " For FlashBlades you must set the \"mgmt_endpoint\", \"api_token\" and nfs_endpoint\nRequired: YES",
+                    "description": " For FlashBlades you must set the \"mgmt_endpoint\", \"api_token\" and nfs_endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Flash Blades",
+                    "minItems": 1,
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/fleetFlashBladeEndpoint"
                     },
                     "x-displayname": "Flash Blades",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3377,13 +3406,23 @@ var APISwaggerJSON string = `{
                 },
                 "devices": {
                     "type": "array",
-                    "description": " Ethernet devices that will make up this bond\nRequired: YES",
+                    "description": " Ethernet devices that will make up this bond\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 64\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Member Ethernet Devices",
+                    "minItems": 1,
+                    "maxItems": 8,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 64
                     },
                     "x-displayname": "Member Ethernet Devices",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "64",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "lacp": {
                     "description": "Exclusive with [active_backup]\nx-displayName: \"LACP (802.3ad)\"\nConfigure LACP (802.3ad) based bond device",
@@ -3392,29 +3431,44 @@ var APISwaggerJSON string = `{
                 },
                 "link_polling_interval": {
                     "type": "integer",
-                    "description": " Link polling interval in millisecond\n\nExample: - \"1000\"-\nRequired: YES",
+                    "description": " Link polling interval in millisecond\n\nExample: - \"1000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 500\n  ves.io.schema.rules.uint32.lte: 5000\n",
                     "title": "Link Polling Interval",
                     "format": "int64",
                     "x-displayname": "Link Polling Interval",
                     "x-ves-example": "1000",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "500",
+                        "ves.io.schema.rules.uint32.lte": "5000"
+                    }
                 },
                 "link_up_delay": {
                     "type": "integer",
-                    "description": " Milliseconds wait before link is declared up\n\nExample: - \"200\"-\nRequired: YES",
+                    "description": " Milliseconds wait before link is declared up\n\nExample: - \"200\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 1000\n",
                     "title": "Link Up Delay",
                     "format": "int64",
                     "x-displayname": "Link Up Delay",
                     "x-ves-example": "200",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "1000"
+                    }
                 },
                 "name": {
                     "type": "string",
-                    "description": " Bond device name \n\nExample: - \"bond0\"-\nRequired: YES",
+                    "description": " Bond device name \n\nExample: - \"bond0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Bond Device",
+                    "maxLength": 64,
                     "x-displayname": "Bond Device Name",
                     "x-ves-example": "bond0",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 }
             }
         },
@@ -3427,13 +3481,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "bond_devices": {
                     "type": "array",
-                    "description": " List of bond devices for this fleet\nRequired: YES",
+                    "description": " List of bond devices for this fleet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Bond Devices List",
+                    "minItems": 1,
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/fleetFleetBondDeviceType"
                     },
                     "x-displayname": "Bond Devices List",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3446,13 +3508,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interfaces": {
                     "type": "array",
-                    "description": " Add all interfaces belonging to this fleet\nRequired: YES",
+                    "description": " Add all interfaces belonging to this fleet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Interfaces",
+                    "minItems": 1,
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "List of Interfaces",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3480,12 +3550,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "storage_classes": {
                     "type": "array",
-                    "description": " List of custom storage classes",
+                    "description": " List of custom storage classes\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Storage Classes",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/fleetFleetStorageClassType"
                     },
-                    "x-displayname": "List of Storage Classes"
+                    "x-displayname": "List of Storage Classes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3499,9 +3574,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "advanced_storage_parameters": {
                     "type": "object",
-                    "description": " Map of parameter name and string value",
+                    "description": " Map of parameter name and string value\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.max_len: 128\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Advanced Parameters",
-                    "x-displayname": "Advanced Parameters"
+                    "x-displayname": "Advanced Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "64",
+                        "ves.io.schema.rules.map.values.string.max_len": "128",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "allow_volume_expansion": {
                     "type": "boolean",
@@ -3524,9 +3606,13 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " x-example \"Volume from my fast storage\"\n Description for this storage class",
+                    "description": " x-example \"Volume from my fast storage\"\n Description for this storage class\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Storage Class Description",
-                    "x-displayname": "Storage Class Description"
+                    "maxLength": 256,
+                    "x-displayname": "Storage Class Description",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "netapp_trident": {
                     "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nStorage class Device configuration for NetApp Trident",
@@ -3545,25 +3631,40 @@ var APISwaggerJSON string = `{
                 },
                 "reclaim_policy": {
                     "type": "string",
-                    "description": " Reclaim Policy\n\nExample: - \"Delete\"-",
+                    "description": " Reclaim Policy\n\nExample: - \"Delete\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 16\n",
                     "title": "Reclaim Policy",
+                    "maxLength": 16,
                     "x-displayname": "Reclaim Policy",
-                    "x-ves-example": "Delete"
+                    "x-ves-example": "Delete",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "16"
+                    }
                 },
                 "storage_class_name": {
                     "type": "string",
-                    "description": " Name of the storage class as it will appear in K8s.\n\nExample: - \"premium\"-\nRequired: YES",
+                    "description": " Name of the storage class as it will appear in K8s.\n\nExample: - \"premium\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ves_object_name: true\n",
                     "title": "Storage Class Name",
                     "x-displayname": "Storage Class Name",
                     "x-ves-example": "premium",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
                 },
                 "storage_device": {
                     "type": "string",
-                    "description": " x-example \"DellEMC-isilon_F800-0\"\n Storage device that this class will use. The Device name defined at previous step.\nRequired: YES",
+                    "description": " x-example \"DellEMC-isilon_F800-0\"\n Storage device that this class will use. The Device name defined at previous step.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Storage Device",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Storage Device",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 }
             }
         },
@@ -3576,12 +3677,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "storage_devices": {
                     "type": "array",
-                    "description": " List of custom storage devices",
+                    "description": " List of custom storage devices\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Storage Devices",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/fleetFleetStorageDeviceType"
                     },
-                    "x-displayname": "List of Storage Devices"
+                    "x-displayname": "List of Storage Devices",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3595,9 +3701,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "advanced_advanced_parameters": {
                     "type": "object",
-                    "description": " Map of parameter name and string value",
+                    "description": " Map of parameter name and string value\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.max_len: 128\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Advanced Parameters",
-                    "x-displayname": "Advanced Parameters"
+                    "x-displayname": "Advanced Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "64",
+                        "ves.io.schema.rules.map.values.string.max_len": "128",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "custom_storage": {
                     "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\nx-displayName: \"Custom Storage\"\nDevice configuration for Custom Storage",
@@ -3621,10 +3734,15 @@ var APISwaggerJSON string = `{
                 },
                 "storage_device": {
                     "type": "string",
-                    "description": " x-example \"DellEMC-isilon-F800-0\"\n Storage device and device unit \nRequired: YES",
+                    "description": " x-example \"DellEMC-isilon-F800-0\"\n Storage device and device unit \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Storage Device",
+                    "maxLength": 64,
                     "x-displayname": "Storage Device",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 }
             }
         },
@@ -3637,49 +3755,51 @@ var APISwaggerJSON string = `{
             "properties": {
                 "storage_routes": {
                     "type": "array",
-                    "description": " List of storage static routes\nRequired: YES",
+                    "description": " List of storage static routes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Static Routes",
+                    "minItems": 1,
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/schemaStaticRouteType"
                     },
                     "x-displayname": "List of Static Routes",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
         "fleetFleetType": {
             "type": "string",
-            "description": "Defines fleet type. We have different constraints per each type.\n\nDefault fleet type.\nInternally created site by single fleet such as AWS/Azure/GCP etc.",
+            "description": "x-displayName: \"Fleet Type\"\nDefines fleet type. We have different constraints per each type.\n\n - MULTIPLE_SITE: x-displayName: \"Multiple Site Fleet\"\nDefault fleet type.\n - SINGLE_SITE: x-displayName: \"Single Site Fleet\"\nInternally created site by single fleet such as AWS/Azure/GCP etc.",
             "title": "Fleet Type",
             "enum": [
                 "MULTIPLE_SITE",
                 "SINGLE_SITE"
             ],
-            "default": "MULTIPLE_SITE",
-            "x-displayname": "Fleet Type",
-            "x-ves-proto-enum": "ves.io.schema.fleet.FleetType"
+            "default": "MULTIPLE_SITE"
         },
         "fleetLocalControlPlaneType": {
             "type": "object",
-            "description": "Enable local control plane for L3VPN, SRV6, EVPN etc",
+            "description": "x-displayName: \"Local Control Plane\"\nEnable local control plane for L3VPN, SRV6, EVPN etc",
             "title": "Local Control Plane",
-            "x-displayname": "Local Control Plane",
-            "x-ves-oneof-field-network_choice": "[\"inside_vn\",\"outside_vn\"]",
-            "x-ves-proto-message": "ves.io.schema.fleet.LocalControlPlaneType",
             "properties": {
                 "bgp_config": {
-                    "description": " BGP configuration for local control plane",
+                    "description": "x-displayName: \"BGP Configuration\"\nBGP configuration for local control plane",
                     "title": "BGP configuration",
-                    "$ref": "#/definitions/fleetBGPConfiguration",
-                    "x-displayname": "BGP Configuration"
+                    "$ref": "#/definitions/fleetBGPConfiguration"
                 },
                 "inside_vn": {
-                    "description": "Exclusive with [outside_vn]\nx-displayName: \"Inside Network\"\nLocal control plane will work on inside network",
+                    "description": "x-displayName: \"Inside Network\"\nLocal control plane will work on inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "outside_vn": {
-                    "description": "Exclusive with [inside_vn]\nx-displayName: \"Outside Network\"\nLocal control plane will work on outside network",
+                    "description": "x-displayName: \"Outside Network\"\nLocal control plane will work on outside network",
                     "title": "Outside Network",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -3694,20 +3814,28 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interface": {
                     "type": "array",
-                    "description": " Network Interface attributes for the device.\n User network interface configuration for this network device.\n Attributes like labels, MTU from the 'interface' are applied to corresponding interface in VER node\n If network interface refers to a virtual-network, the virtual-netowrk type must be consistent with use attribute given below\n If use is NETWORK_INTERFACE_USE_REGULAR, the virtual-network must be of type VIRTUAL_NETWORK_SITE_LOCAL or VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n if use is NETWORK_INTERFACE_USE_OUTSIDE, the virtual-network must of type VIRTUAL_NETWORK_SITE_LOCAL\n if use is NETWORK_INTERFACE_USE_INSIDE, the virtual-network must of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\nRequired: YES",
+                    "description": " Network Interface attributes for the device.\n User network interface configuration for this network device.\n Attributes like labels, MTU from the 'interface' are applied to corresponding interface in VER node\n If network interface refers to a virtual-network, the virtual-netowrk type must be consistent with use attribute given below\n If use is NETWORK_INTERFACE_USE_REGULAR, the virtual-network must be of type VIRTUAL_NETWORK_SITE_LOCAL or VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n if use is NETWORK_INTERFACE_USE_OUTSIDE, the virtual-network must of type VIRTUAL_NETWORK_SITE_LOCAL\n if use is NETWORK_INTERFACE_USE_INSIDE, the virtual-network must of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Network Interface",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Network Interface",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "use": {
-                    "description": " Defines how the device is used.\n 'use' specifies how the device is used in node\n Specifies if the network interface is connected to inside network or outside network.\nRequired: YES",
+                    "description": " Defines how the device is used.\n 'use' specifies how the device is used in node\n Specifies if the network interface is connected to inside network or outside network.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Use",
                     "$ref": "#/definitions/fleetNetworkingDeviceInstanceUseType",
                     "x-displayname": "Use",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3733,10 +3861,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "labels": {
                     "type": "object",
-                    "description": " List of labels for Storage Device used in NetApp ONTAP. It is used for storage class label match selection.\n\nExample: - \"{\"department\":\"finance\", \"creditpoints\":\"6000\"}\"-",
+                    "description": " List of labels for Storage Device used in NetApp ONTAP. It is used for storage class label match selection.\n\nExample: - \"{\"department\":\"finance\", \"creditpoints\":\"6000\"}\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 128\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Storage Pool Labels",
                     "x-displayname": "Storage Pool Labels",
-                    "x-ves-example": "{\"department\":\"finance\", \"creditpoints\":\"6000\"}"
+                    "x-ves-example": "{\"department\":\"finance\", \"creditpoints\":\"6000\"}",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "128",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "volume_defaults": {
                     "description": " List of QoS volume default types",
@@ -3821,10 +3956,13 @@ var APISwaggerJSON string = `{
                 },
                 "space_reserve": {
                     "type": "string",
-                    "description": " Space reservation mode; “none” (thin) or “volume” (thick)\n\nExample: - \"thick\"-",
+                    "description": " Space reservation mode; “none” (thin) or “volume” (thick)\n\nExample: - \"thick\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"none\\\",\\\"thick\\\"]\n",
                     "title": "Space Reservation Mode",
                     "x-displayname": "Space Reservation Mode",
-                    "x-ves-example": "thick"
+                    "x-ves-example": "thick",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"none\\\",\\\"thick\\\"]"
+                    }
                 },
                 "split_on_clone": {
                     "type": "boolean",
@@ -3860,30 +3998,49 @@ var APISwaggerJSON string = `{
             "properties": {
                 "node": {
                     "type": "string",
-                    "description": " Enter k8s node name of Mayastor Node (MSN) where this pool is or going to be located.\n\nExample: - \"master-0\"-\nRequired: YES",
+                    "description": " Enter k8s node name of Mayastor Node (MSN) where this pool is or going to be located.\n\nExample: - \"master-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n",
                     "title": "Node Name",
                     "x-displayname": "Node Name",
                     "x-ves-example": "master-0",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
                 },
                 "pool_disk_devices": {
                     "type": "array",
-                    "description": " List of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated\n disk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.\n It supports various types such as \"/dev/sdb\", \"nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432\" or \"iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2\".\n\nExample: - \"/dev/sdb\"-\nRequired: YES",
+                    "description": " List of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated\n disk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.\n It supports various types such as \"/dev/sdb\", \"nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432\" or \"iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2\".\n\nExample: - \"/dev/sdb\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Disk Devices",
+                    "minItems": 1,
+                    "maxItems": 10,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "List of  Disk Devices",
                     "x-ves-example": "/dev/sdb",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "10",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "pool_name": {
                     "type": "string",
-                    "description": " Enter Mayastor Pool Name\n\nExample: - \"maya-pool-01\"-\nRequired: YES",
+                    "description": " Enter Mayastor Pool Name\n\nExample: - \"maya-pool-01\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Mayastor Pool Name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Mayastor Pool Name",
                     "x-ves-example": "maya-pool-01",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 }
             }
         },
@@ -3970,9 +4127,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "yaml": {
                     "type": "string",
-                    "description": " K8s YAML for StorageClass",
+                    "description": " K8s YAML for StorageClass\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Storage Class YAML",
-                    "x-displayname": "Storage Class YAML"
+                    "maxLength": 4096,
+                    "x-displayname": "Storage Class YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -3992,10 +4154,14 @@ var APISwaggerJSON string = `{
                 },
                 "storage_pools": {
                     "type": "string",
-                    "description": " The storagePools parameter is used to further restrict the set of pools that match any specified attributes\n\nExample: - \"backend-name1:.*;backend-name2:storagePoolListName\"-",
+                    "description": " The storagePools parameter is used to further restrict the set of pools that match any specified attributes\n\nExample: - \"backend-name1:.*;backend-name2:storagePoolListName\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
                     "title": "Storage Pools",
+                    "maxLength": 512,
                     "x-displayname": "Storage Pools",
-                    "x-ves-example": "backend-name1:.*;backend-name2:storagePoolListName"
+                    "x-ves-example": "backend-name1:.*;backend-name2:storagePoolListName",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
                 }
             }
         },
@@ -4008,10 +4174,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "protocol": {
                     "type": "string",
-                    "description": " Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF)\n\nExample: - \"nvmf\"-",
+                    "description": " Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF)\n\nExample: - \"nvmf\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"nvmf\\\"]\n",
                     "title": "Protocol",
                     "x-displayname": "Protocol",
-                    "x-ves-example": "nvmf"
+                    "x-ves-example": "nvmf",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"nvmf\\\"]"
+                    }
                 },
                 "replication": {
                     "type": "integer",
@@ -4032,25 +4201,35 @@ var APISwaggerJSON string = `{
             "properties": {
                 "backend": {
                     "type": "string",
-                    "description": " Defines type of Pure storage backend block or file.\n The volume will have the aspects defined in the chosen virtual pool.\n\nExample: - \"block\"-",
+                    "description": " Defines type of Pure storage backend block or file.\n The volume will have the aspects defined in the chosen virtual pool.\n\nExample: - \"block\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"block\\\",\\\"file\\\"]\n",
                     "title": "Backend",
                     "x-displayname": "Backend",
-                    "x-ves-example": "block"
+                    "x-ves-example": "block",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"block\\\",\\\"file\\\"]"
+                    }
                 },
                 "bandwidth_limit": {
                     "type": "string",
-                    "description": " It must be between 1 MB/s and 512 GB/s. Enter the size as a number (bytes must be multiple of 512) or number with a single character unit symbol.\n Valid unit symbols are K, M, G, representing KiB, MiB, and GiB.\n\nExample: - \"1G\"-",
+                    "description": " It must be between 1 MB/s and 512 GB/s. Enter the size as a number (bytes must be multiple of 512) or number with a single character unit symbol.\n Valid unit symbols are K, M, G, representing KiB, MiB, and GiB.\n\nExample: - \"1G\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 12\n",
                     "title": "Bandwidth Limit",
+                    "maxLength": 12,
                     "x-displayname": "Bandwidth Limit",
-                    "x-ves-example": "1G"
+                    "x-ves-example": "1G",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "12"
+                    }
                 },
                 "iops_limit": {
                     "type": "integer",
-                    "description": " Enable IOPS limitation. It must be between 100 and 100 million. If value is 0, IOPS limit is not defined.\n\nExample: - \"3000\"-",
+                    "description": " Enable IOPS limitation. It must be between 100 and 100 million. If value is 0, IOPS limit is not defined.\n\nExample: - \"3000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,100-100000000\n",
                     "title": "IOPS Limit",
                     "format": "int64",
                     "x-displayname": "IOPS Limit",
-                    "x-ves-example": "3000"
+                    "x-ves-example": "3000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.ranges": "0,100-100000000"
+                    }
                 }
             }
         },
@@ -4079,15 +4258,25 @@ var APISwaggerJSON string = `{
                 },
                 "backend_name": {
                     "type": "string",
-                    "description": " Configuration of Backend Name. Driver is name + \"_\" + dataLIF",
+                    "description": " Configuration of Backend Name. Driver is name + \"_\" + dataLIF\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 50\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Storage Backend Name",
-                    "x-displayname": "Storage Backend Name"
+                    "minLength": 1,
+                    "maxLength": 50,
+                    "x-displayname": "Storage Backend Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "50",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "client_certificate": {
                     "type": "string",
-                    "description": " Please Enter Base64-encoded value of client certificate. Used for certificate-based auth.",
+                    "description": " Please Enter Base64-encoded value of client certificate. Used for certificate-based auth.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
                     "title": "Client Certificate",
-                    "x-displayname": "Client Certificate"
+                    "maxLength": 8192,
+                    "x-displayname": "Client Certificate",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8192"
+                    }
                 },
                 "client_private_key": {
                     "description": " Please Enter value of client private key. Used for certificate-based auth.",
@@ -4107,10 +4296,17 @@ var APISwaggerJSON string = `{
                 },
                 "labels": {
                     "type": "object",
-                    "description": " List of labels for Storage Device used in NetApp ONTAP. It is used for storage class selection.\n\nExample: - \"{\"store\":\"nas_store\"}\"-",
+                    "description": " List of labels for Storage Device used in NetApp ONTAP. It is used for storage class selection.\n\nExample: - \"{\"store\":\"nas_store\"}\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 128\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Backend Labels",
                     "x-displayname": "Backend Labels",
-                    "x-ves-example": "{\"store\":\"nas_store\"}"
+                    "x-ves-example": "{\"store\":\"nas_store\"}",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "128",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "limit_aggregate_usage": {
                     "type": "string",
@@ -4158,20 +4354,29 @@ var APISwaggerJSON string = `{
                 },
                 "storage": {
                     "type": "array",
-                    "description": " List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.",
+                    "description": " List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Virtual Storage Pools",
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/fleetOntapVirtualStoragePoolType"
                     },
-                    "x-displayname": "Virtual Storage Pools"
+                    "x-displayname": "Virtual Storage Pools",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "storage_driver_name": {
                     "type": "string",
-                    "description": " Configuration of Backend Name\n\nExample: - \"ontap-nas\"-\nRequired: YES",
+                    "description": " Configuration of Backend Name\n\nExample: - \"ontap-nas\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ontap-nas\\\",\\\"ontap-nas-economy\\\",\\\"ontap-nas-flexgroup\\\"]\n",
                     "title": "Storage Backend Driver",
                     "x-displayname": "Storage Backend Driver",
                     "x-ves-example": "ontap-nas",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"ontap-nas\\\",\\\"ontap-nas-economy\\\",\\\"ontap-nas-flexgroup\\\"]"
+                    }
                 },
                 "storage_prefix": {
                     "type": "string",
@@ -4182,24 +4387,41 @@ var APISwaggerJSON string = `{
                 },
                 "svm": {
                     "type": "string",
-                    "description": " Storage virtual machine to use. Derived if an SVM managementLIF is specified\n\nExample: - \"trident_svm\"-",
+                    "description": " Storage virtual machine to use. Derived if an SVM managementLIF is specified\n\nExample: - \"trident_svm\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Backend SVM",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Backend SVM",
-                    "x-ves-example": "trident_svm"
+                    "x-ves-example": "trident_svm",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "trusted_ca_certificate": {
                     "type": "string",
-                    "description": " Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth..",
+                    "description": " Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth..\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
                     "title": "Trusted CA Certificate",
-                    "x-displayname": "Trusted CA Certificate"
+                    "maxLength": 8192,
+                    "x-displayname": "Trusted CA Certificate",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8192"
+                    }
                 },
                 "username": {
                     "type": "string",
-                    "description": " Username to connect to the cluster/SVM\n\nExample: - \"cluster-admin\"-\nRequired: YES",
+                    "description": " Username to connect to the cluster/SVM\n\nExample: - \"cluster-admin\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Username",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Username",
                     "x-ves-example": "cluster-admin",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "volume_defaults": {
                     "description": " List of QoS volume defaults types",
@@ -4221,9 +4443,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "client_certificate": {
                     "type": "string",
-                    "description": " Please Enter Base64-encoded value of client certificate. Used for certificate-based auth.",
+                    "description": " Please Enter Base64-encoded value of client certificate. Used for certificate-based auth.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
                     "title": "Client Certificate",
-                    "x-displayname": "Client Certificate"
+                    "maxLength": 8192,
+                    "x-displayname": "Client Certificate",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8192"
+                    }
                 },
                 "client_private_key": {
                     "description": " Please Enter value of client private key. Used for certificate-based auth.",
@@ -4243,24 +4469,41 @@ var APISwaggerJSON string = `{
                 },
                 "igroup_name": {
                     "type": "string",
-                    "description": " Name of the igroup for SAN volumes to use",
+                    "description": " Name of the igroup for SAN volumes to use\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "iGroup Name",
-                    "x-displayname": "iGroup Name"
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "iGroup Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "labels": {
                     "type": "object",
-                    "description": " List of labels for Storage Device used in NetApp ONTAP. It is used for storage class selection.\n\nExample: - \"{\"store\":\"nas_store\"}\"-",
+                    "description": " List of labels for Storage Device used in NetApp ONTAP. It is used for storage class selection.\n\nExample: - \"{\"store\":\"nas_store\"}\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 128\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Backend Labels",
                     "x-displayname": "Backend Labels",
-                    "x-ves-example": "{\"store\":\"nas_store\"}"
+                    "x-ves-example": "{\"store\":\"nas_store\"}",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "128",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "limit_aggregate_usage": {
                     "type": "integer",
-                    "description": " Fail provisioning if usage is above this percentage. Not enforced by default.\n\nExample: - \"80\"-",
+                    "description": " Fail provisioning if usage is above this percentage. Not enforced by default.\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "Limit Aggregate Usage",
                     "format": "int64",
                     "x-displayname": "Limit Aggregate Usage",
-                    "x-ves-example": "80"
+                    "x-ves-example": "80",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
                 },
                 "limit_volume_size": {
                     "type": "integer",
@@ -4300,40 +4543,65 @@ var APISwaggerJSON string = `{
                 },
                 "storage": {
                     "type": "array",
-                    "description": " List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.",
+                    "description": " List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Virtual Storage Pools",
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/fleetOntapVirtualStoragePoolType"
                     },
-                    "x-displayname": "Virtual Storage Pools"
+                    "x-displayname": "Virtual Storage Pools",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "storage_driver_name": {
                     "type": "string",
-                    "description": " Configuration of Backend Name\n\nExample: - \"ontap-nas\"-\nRequired: YES",
+                    "description": " Configuration of Backend Name\n\nExample: - \"ontap-nas\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ontap-san\\\",\\\"ontap-san-economy\\\",\\\"ontap-nas-flexgroup\\\"]\n",
                     "title": "Storage Backend Driver",
                     "x-displayname": "Storage Backend Driver",
                     "x-ves-example": "ontap-nas",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"ontap-san\\\",\\\"ontap-san-economy\\\",\\\"ontap-nas-flexgroup\\\"]"
+                    }
                 },
                 "storage_prefix": {
                     "type": "string",
-                    "description": " Prefix used when provisioning new volumes in the SVM. Once set this cannot be updated\n\nExample: - \"trident\"-",
+                    "description": " Prefix used when provisioning new volumes in the SVM. Once set this cannot be updated\n\nExample: - \"trident\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 80\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Storage Prefix",
+                    "minLength": 1,
+                    "maxLength": 80,
                     "x-displayname": "Storage Prefix",
-                    "x-ves-example": "trident"
+                    "x-ves-example": "trident",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "80",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "svm": {
                     "type": "string",
-                    "description": " Storage virtual machine to use. Derived if an SVM managementLIF is specified\n\nExample: - \"trident_svm\"-",
+                    "description": " Storage virtual machine to use. Derived if an SVM managementLIF is specified\n\nExample: - \"trident_svm\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Backend SVM",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Backend SVM",
-                    "x-ves-example": "trident_svm"
+                    "x-ves-example": "trident_svm",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "trusted_ca_certificate": {
                     "type": "string",
-                    "description": " Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth..",
+                    "description": " Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth..\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
                     "title": "Trusted CA Certificate",
-                    "x-displayname": "Trusted CA Certificate"
+                    "maxLength": 8192,
+                    "x-displayname": "Trusted CA Certificate",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8192"
+                    }
                 },
                 "use_chap": {
                     "description": "Exclusive with [no_chap]\nx-displayName: \"Use Device NetApp Backend ONTAP SAN CHAP\"\nDevice NetApp Backend ONTAP SAN CHAP configuration options for enabled CHAP",
@@ -4342,11 +4610,18 @@ var APISwaggerJSON string = `{
                 },
                 "username": {
                     "type": "string",
-                    "description": " Username to connect to the cluster/SVM\n\nExample: - \"cluster-admin\"-\nRequired: YES",
+                    "description": " Username to connect to the cluster/SVM\n\nExample: - \"cluster-admin\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Username",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Username",
                     "x-ves-example": "cluster-admin",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "volume_defaults": {
                     "description": " List of QoS volume defaults types",
@@ -4385,12 +4660,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "mayastor_pools": {
                     "type": "array",
-                    "description": " List of  Mayastor Pools. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\n Each MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\n In the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\n Each MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\n The pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\n mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
+                    "description": " List of  Mayastor Pools. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\n Each MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\n In the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\n Each MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\n The pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\n mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of  Mayastor Pools",
+                    "maxItems": 50,
                     "items": {
                         "$ref": "#/definitions/fleetOpenebsMayastorPoolType"
                     },
-                    "x-displayname": "List of  Mayastor Pools"
+                    "x-displayname": "List of  Mayastor Pools",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4402,19 +4682,30 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.StorageDevicePureStorageServiceOrchestratorType",
             "properties": {
                 "arrays": {
-                    "description": " This section configure PSO storage arrays\nRequired: YES",
+                    "description": " This section configure PSO storage arrays\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Arrays Configuration",
                     "$ref": "#/definitions/fleetPsoArrayConfiguration",
                     "x-displayname": "Arrays Configuration",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "cluster_id": {
                     "type": "string",
-                    "description": " clusterID is added as a prefix for all volumes created by this PSO installation.\n clusterID is also used to identify the volumes used by the datastore, pso-db.\n clusterID MUST BE UNIQUE for multiple K8s clusters running on top of the same storage arrays.\n characters allowed: alphanumeric and underscores\n\nExample: - \"cluster1\"-\nRequired: YES",
+                    "description": " clusterID is added as a prefix for all volumes created by this PSO installation.\n clusterID is also used to identify the volumes used by the datastore, pso-db.\n clusterID MUST BE UNIQUE for multiple K8s clusters running on top of the same storage arrays.\n characters allowed: alphanumeric and underscores\n\nExample: - \"cluster1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 22\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pattern: ^[a-z0-9_]*$\n",
                     "title": "Cluster ID",
+                    "minLength": 1,
+                    "maxLength": 22,
                     "x-displayname": "Cluster ID",
                     "x-ves-example": "cluster1",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "22",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.pattern": "^[a-z0-9_]*$"
+                    }
                 },
                 "enable_storage_topology": {
                     "type": "boolean",
@@ -4440,25 +4731,35 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.VGPUConfiguration",
             "properties": {
                 "feature_type": {
-                    "description": " Set Feature to be enabled\nRequired: YES",
+                    "description": " Set Feature to be enabled\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Feature Type",
                     "$ref": "#/definitions/fleetVGPUFeatureType",
                     "x-displayname": "Feature Type",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "server_address": {
                     "type": "string",
-                    "description": " Set License Server Address\n\nExample: - \"gridlicense1.example.com\"-",
+                    "description": " Set License Server Address\n\nExample: - \"gridlicense1.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname_or_ip: true\n",
                     "title": "License Server Address",
                     "x-displayname": "License Server Address",
-                    "x-ves-example": "gridlicense1.example.com"
+                    "x-ves-example": "gridlicense1.example.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname_or_ip": "true"
+                    }
                 },
                 "server_port": {
                     "type": "integer",
-                    "description": " Set License Server port number",
+                    "description": " Set License Server port number\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "License Server Port Number",
                     "format": "int64",
-                    "x-displayname": "License Server Port Number"
+                    "x-displayname": "License Server Port Number",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 }
             }
         },
@@ -4478,10 +4779,8 @@ var APISwaggerJSON string = `{
         },
         "fleetVMConfiguration": {
             "type": "object",
-            "description": "VMs support configuration",
-            "title": "VM Configuration",
-            "x-displayname": "VM Configuration",
-            "x-ves-proto-message": "ves.io.schema.fleet.VMConfiguration"
+            "description": "x-displayName: \"VM Configuration\"\nVMs support configuration",
+            "title": "VM Configuration"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -4583,11 +4882,15 @@ var APISwaggerJSON string = `{
                 },
                 "location": {
                     "type": "string",
-                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Location",
                     "x-displayname": "Location",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
@@ -4614,11 +4917,17 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
+                    "maxLength": 131072,
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -4657,17 +4966,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -4768,10 +5083,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-",
+                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IPv4 Address",
                     "x-displayname": "IPv4 Address",
-                    "x-ves-example": "192.168.1.1"
+                    "x-ves-example": "192.168.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -4784,17 +5102,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Prefix Length",
                     "format": "int64",
-                    "x-displayname": "Prefix Length"
+                    "x-displayname": "Prefix Length",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 },
                 "prefix": {
                     "type": "string",
-                    "description": " Prefix part of the IPv4 subnet in string form with dot-decimal notation\n\nExample: - \"192.168.1.0\"-",
+                    "description": " Prefix part of the IPv4 subnet in string form with dot-decimal notation\n\nExample: - \"192.168.1.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Prefix",
                     "x-displayname": "Prefix",
-                    "x-ves-example": "192.168.1.0"
+                    "x-ves-example": "192.168.1.0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -4807,10 +5131,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001:db8:0:0:0:0:2:1"
+                    "x-ves-example": "2001:db8:0:0:0:0:2:1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
                 }
             }
         },
@@ -4823,18 +5150,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix length of the IPv6 subnet. Must be \u003c= 128\n\nExample: - \"38\"-",
+                    "description": " Prefix length of the IPv6 subnet. Must be \u003c= 128\n\nExample: - \"38\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 128\n",
                     "title": "Prefix length",
                     "format": "int64",
                     "x-displayname": "Prefix Length",
-                    "x-ves-example": "38"
+                    "x-ves-example": "38",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "128"
+                    }
                 },
                 "prefix": {
                     "type": "string",
-                    "description": " Prefix part of the IPv6 subnet given in form of string.\n IPv6 address must be specified as hexadecimal numbers separated by ':'\n e.g. \"2001:db8:0:0:0:2:0:0\"\n The address can be compacted by suppressing zeros\n e.g. \"2001:db8::2::\"\n\nExample: - \"2001:db8:0:0:0:0:2:0\"-",
+                    "description": " Prefix part of the IPv6 subnet given in form of string.\n IPv6 address must be specified as hexadecimal numbers separated by ':'\n e.g. \"2001:db8:0:0:0:2:0:0\"\n The address can be compacted by suppressing zeros\n e.g. \"2001:db8::2::\"\n\nExample: - \"2001:db8:0:0:0:0:2:0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "Prefix",
                     "x-displayname": "Prefix",
-                    "x-ves-example": "2001:db8:0:0:0:0:2:0"
+                    "x-ves-example": "2001:db8:0:0:0:0:2:0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
                 }
             }
         },
@@ -4843,46 +5176,28 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaMessageMetaType": {
             "type": "object",
-            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "description": "x-displayName: \"Message Metadata\"\nMessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
             "title": "MessageMetaType",
-            "x-displayname": "Message Metadata",
-            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
             "properties": {
                 "description": {
                     "type": "string",
-                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "description": "x-displayName: \"Description\"\nx-example: \"Virtual Host for acmecorp website\"\nHuman readable description.",
+                    "title": "description"
                 },
                 "disable": {
                     "type": "boolean",
-                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
+                    "description": "x-displayName: \"Disable\"\nx-example: \"true\"\nA value of true will administratively disable the object that corresponds to the containing message.",
                     "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
+                    "format": "boolean"
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-example: \"acmecorp-web\"\nx-required\nThis is the name of the message.\nThe value of name has to follow DNS-1035 format.",
+                    "title": "name"
                 }
             }
         },
@@ -4895,12 +5210,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interface": {
                     "type": "array",
-                    "description": " Nexthop is network interface when type is \"Network-Interface\"",
+                    "description": " Nexthop is network interface when type is \"Network-Interface\"\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Network Interface",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Network Interface"
+                    "x-displayname": "Network Interface",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "nexthop_address": {
                     "description": " Nexthop address when type is \"Use-Configured\"",
@@ -4940,10 +5259,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -4969,11 +5294,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -5008,55 +5336,31 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
                 "EncodingBase64"
             ],
-            "default": "EncodingNone",
-            "x-displayname": "Secret Encoding",
-            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+            "default": "EncodingNone"
         },
         "schemaSecretType": {
             "type": "object",
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
-                },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
-                },
-                "vault_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -5070,12 +5374,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "attrs": {
                     "type": "array",
-                    "description": " List of route attributes associated with the static route",
+                    "description": " List of route attributes associated with the static route\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
                     "title": "Attributes",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/schemaRouteAttrType"
                     },
-                    "x-displayname": "Attributes"
+                    "x-displayname": "Attributes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4"
+                    }
                 },
                 "labels": {
                     "type": "object",
@@ -5091,12 +5399,16 @@ var APISwaggerJSON string = `{
                 },
                 "subnets": {
                     "type": "array",
-                    "description": " List of route prefixes",
+                    "description": " List of route prefixes\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
                     "title": "Subnets",
+                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/schemaIpSubnetType"
                     },
-                    "x-displayname": "Subnets"
+                    "x-displayname": "Subnets",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
                 }
             }
         },
@@ -5272,12 +5584,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -5339,48 +5655,34 @@ var APISwaggerJSON string = `{
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
-            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
             "title": "VaultSecretInfoType",
-            "x-displayname": "Vault Secret",
-            "x-ves-displayorder": "1,2,3,4,5",
-            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
-                    "title": "Key",
-                    "x-displayname": "Key",
-                    "x-ves-example": "key_pem"
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
                 },
                 "location": {
                     "type": "string",
-                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
-                    "title": "Location",
-                    "x-displayname": "Location",
-                    "x-ves-example": "v1/data/vhost_key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
                 },
                 "provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
-                    "title": "Provider",
-                    "x-displayname": "Provider",
-                    "x-ves-example": "vault-vh-provider",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
                 },
                 "secret_encoding": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
                     "title": "secret_encoding",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
+                    "$ref": "#/definitions/schemaSecretEncodingType"
                 },
                 "version": {
                     "type": "integer",
-                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
                     "title": "Version",
-                    "format": "int64",
-                    "x-displayname": "Version",
-                    "x-ves-example": "1"
+                    "format": "int64"
                 }
             }
         },
@@ -5423,18 +5725,13 @@ var APISwaggerJSON string = `{
         },
         "schemaWingmanSecretInfoType": {
             "type": "object",
-            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
             "title": "WingmanSecretInfoType",
-            "x-displayname": "Wingman Secret",
-            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "ChargeBack-API-Key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
                 }
             }
         },
@@ -5445,7 +5742,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specifications",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
-            "x-ves-oneof-field-flow_exporter_choice": "[\"disable_flow_export\",\"enable_flow_export\"]",
+            "x-ves-oneof-field-flow_exporter_choice": "[\"disable_flow_export\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_interfaces\",\"interface_list\",\"legacy_devices\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
@@ -5454,7 +5751,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
             "x-ves-oneof-field-storage_static_routes_choice": "[\"no_storage_static_routes\",\"storage_static_routes\"]",
             "x-ves-oneof-field-usb_policy_choice": "[\"allow_all_usb\",\"deny_all_usb\",\"usb_policy\"]",
-            "x-ves-oneof-field-vm_choice": "[\"disable_vm\",\"enable_vm\"]",
+            "x-ves-oneof-field-vm_choice": "[]",
             "x-ves-proto-message": "ves.io.schema.fleet.GlobalSpecType",
             "properties": {
                 "allow_all_usb": {
@@ -5494,15 +5791,19 @@ var APISwaggerJSON string = `{
                 },
                 "devices": {
                     "type": "array",
-                    "description": " Configuration for all devices in the fleet.\n Examples of devices are - network interfaces, cameras, scanners etc.\n Configuration a device is applied on VER node if the VER node is member of this fleet and\n has an corresponding interface/device. The mapping from device configured in fleet with\n interface/device in VER node depends on the type of device and is documented in\n device instance specific sections",
+                    "description": " Configuration for all devices in the fleet.\n Examples of devices are - network interfaces, cameras, scanners etc.\n Configuration a device is applied on VER node if the VER node is member of this fleet and\n has an corresponding interface/device. The mapping from device configured in fleet with\n interface/device in VER node depends on the type of device and is documented in\n device instance specific sections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
                     "title": "Devices",
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/fleetDeviceInstanceType"
                     },
-                    "x-displayname": "Devices"
+                    "x-displayname": "Devices",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
+                    }
                 },
                 "disable_flow_export": {
-                    "description": "Exclusive with [enable_flow_export]\nx-displayName: \"Disable Flow Export\"\nFlows are not exported",
+                    "description": "Exclusive with []\nx-displayName: \"Disable Flow Export\"\nFlows are not exported",
                     "title": "Disable Flow Export",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -5511,22 +5812,12 @@ var APISwaggerJSON string = `{
                     "title": "GPU Disabled",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "disable_vm": {
-                    "description": "Exclusive with [enable_vm]\nx-displayName: \"VMs support Disabled\"\nVMs support is not enabled for this fleet",
-                    "title": "VMs support Disabled",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "enable_default_fleet_config_download": {
                     "type": "boolean",
                     "description": " Enable default fleet config, It must be set for storage config and gpu config",
                     "title": "Enable default fleet config download",
                     "format": "boolean",
                     "x-displayname": "Enable Default Fleet Config Download"
-                },
-                "enable_flow_export": {
-                    "description": "Exclusive with [disable_flow_export]\nx-displayName: \"Enable Flow Export\"\nExport flows to system defined collector",
-                    "title": "Enable Flow Export",
-                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable_gpu": {
                     "description": "Exclusive with [disable_gpu enable_vgpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this fleet",
@@ -5538,70 +5829,40 @@ var APISwaggerJSON string = `{
                     "title": "vGPU Enabled",
                     "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
-                "enable_vm": {
-                    "description": "Exclusive with [disable_vm]\nx-displayName: \"VMs support Enabled\"\nVMs support is enabled for this fleet",
-                    "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/fleetVMConfiguration"
-                },
-                "etcd_cluster_network": {
-                    "description": " Decided which network is used for etcd clustering",
-                    "title": "Etcd Clustering Network",
-                    "$ref": "#/definitions/fleetEtcdClusterNetworkType",
-                    "x-displayname": "Etcd Clustering Network"
-                },
                 "fleet_label": {
                     "type": "string",
-                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant. \n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\nRequired: YES",
+                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant. \n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.k8s_label_value: true\n",
                     "title": "fleet_label",
                     "x-displayname": "Fleet Label Value",
                     "x-ves-example": "sfo",
-                    "x-ves-required": "true"
-                },
-                "fleet_type": {
-                    "description": " Fleet Type can be fleet of single site or multiple sites. Corresponding virtual site is not created\n for single site fleet.",
-                    "title": "Fleet type",
-                    "$ref": "#/definitions/fleetFleetType",
-                    "x-displayname": "Fleet Type"
-                },
-                "generated_yamls": {
-                    "type": "array",
-                    "description": " K8s YAML for CustomStorageClass",
-                    "title": "K8s YAMLs",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "K8s YAMLs"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.k8s_label_value": "true"
+                    }
                 },
                 "inside_virtual_network": {
                     "type": "array",
-                    "description": " Default inside (site local) virtual network for the fleet",
+                    "description": " Default inside (site local) virtual network for the fleet\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Inside Virtual Network",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Site Local Inside Virtual Network"
+                    "x-displayname": "Site Local Inside Virtual Network",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "interface_list": {
                     "description": "Exclusive with [default_interfaces legacy_devices]\nx-displayName: \"List of Interfaces\"\nAdd all interfaces belonging to this fleet",
                     "title": "List of Interfaces",
                     "$ref": "#/definitions/fleetFleetInterfaceListType"
                 },
-                "k8s_cluster": {
-                    "description": " Local K8s cluster access is enabled, using config k8s_cluster object",
-                    "title": "Enable Local K8s Cluster access",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable Local K8s Cluster access"
-                },
                 "legacy_devices": {
                     "description": "Exclusive with [default_interfaces interface_list]\nx-displayName: \"Legacy Device List\"\nAdd device for all interfaces belonging to this fleet",
                     "title": "Legacy Device Config",
                     "$ref": "#/definitions/schemaEmpty"
-                },
-                "local_control_plane": {
-                    "description": " Enable local control plane for L3VPN, SRV6, EVPN etc",
-                    "title": "Local Control Plane",
-                    "$ref": "#/definitions/fleetLocalControlPlaneType",
-                    "x-displayname": "Local Control Plane"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
@@ -5615,21 +5876,29 @@ var APISwaggerJSON string = `{
                 },
                 "network_connectors": {
                     "type": "array",
-                    "description": " Network Connector defines connection between two virtual networks in a given site.\n Fleet defines one or more such network connectors.\n The network connectors configuration is applied on all sites that are member of the fleet.",
+                    "description": " Network Connector defines connection between two virtual networks in a given site.\n Fleet defines one or more such network connectors.\n The network connectors configuration is applied on all sites that are member of the fleet.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
                     "title": "Network Connectors",
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Network Connectors"
+                    "x-displayname": "Network Connectors",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
+                    }
                 },
                 "network_firewall": {
                     "type": "array",
-                    "description": " Network Firewall defines firewall to be applied for the virtual networks in the fleet.\n The network firewall configuration is applied on all sites that are member of the fleet.\n\n Constraints\n The Network Firewall is applied on Virtual Networks of type site local network and site local inside network",
+                    "description": " Network Firewall defines firewall to be applied for the virtual networks in the fleet.\n The network firewall configuration is applied on all sites that are member of the fleet.\n\n Constraints\n The Network Firewall is applied on Virtual Networks of type site local network and site local inside network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Network Firewall",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Network Firewall"
+                    "x-displayname": "Network Firewall",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "no_bond_devices": {
                     "description": "Exclusive with [bond_device_list]\nx-displayName: \"No Bond Devices\"\nNo Bond Devices configured for this Fleet",
@@ -5658,28 +5927,27 @@ var APISwaggerJSON string = `{
                 },
                 "operating_system_version": {
                     "type": "string",
-                    "description": " Desired Operating System version that is applied to all sites that are member of the fleet.\n Current Operating System version can be overridden via site config.\n\nExample: - \"value\"-",
+                    "description": " Desired Operating System version that is applied to all sites that are member of the fleet.\n Current Operating System version can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Operating System Version",
+                    "maxLength": 256,
                     "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "outside_virtual_network": {
                     "type": "array",
-                    "description": " Default outside (site local) virtual network for the fleet",
+                    "description": " Default outside (site local) virtual network for the fleet\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Outside Virtual Network",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Outside (Site Local) Virtual Network"
-                },
-                "single_site": {
-                    "type": "array",
-                    "description": " Vega should use this ref when when fleet type is single site fleet",
-                    "title": "Single Site Fleet Site",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Single Site Fleet Site"
+                    "x-displayname": "Outside (Site Local) Virtual Network",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "storage_class_list": {
                     "description": "Exclusive with [default_storage_class]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes for this fleet",
@@ -5706,18 +5974,16 @@ var APISwaggerJSON string = `{
                     "title": "USB Device Policy",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
-                "view_internal": {
-                    "description": " Reference to view internal object",
-                    "title": "view_internal",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "View Internal"
-                },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": " Volterra software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-",
+                    "description": " Volterra software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Software Version",
+                    "maxLength": 256,
                     "x-displayname": "Software Version",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
@@ -5730,25 +5996,40 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "namespace",
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "tenant",
+                    "maxLength": 64,
                     "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },
@@ -5761,14 +6042,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv4 prefix list",
+                    "minItems": 1,
+                    "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         }

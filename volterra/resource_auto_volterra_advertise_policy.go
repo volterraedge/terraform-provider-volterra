@@ -378,6 +378,34 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 							},
 						},
 
+						"crl": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"kind": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"require_client_certificate": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -942,6 +970,38 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 						}
 
+					}
+
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["crl"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				crlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				tlsParameters.Crl = crlInt
+				for i, ps := range sl {
+
+					cMapToStrVal := ps.(map[string]interface{})
+					crlInt[i] = &ves_io_schema.ObjectRefType{}
+
+					crlInt[i].Kind = "crl"
+
+					if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+						crlInt[i].Name = v.(string)
+					}
+
+					if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						crlInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						crlInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						crlInt[i].Uid = v.(string)
 					}
 
 				}
@@ -1582,6 +1642,38 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 
 						}
 
+					}
+
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["crl"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				crlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				tlsParameters.Crl = crlInt
+				for i, ps := range sl {
+
+					cMapToStrVal := ps.(map[string]interface{})
+					crlInt[i] = &ves_io_schema.ObjectRefType{}
+
+					crlInt[i].Kind = "crl"
+
+					if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+						crlInt[i].Name = v.(string)
+					}
+
+					if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						crlInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						crlInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						crlInt[i].Uid = v.(string)
 					}
 
 				}

@@ -1404,6 +1404,14 @@ func (v *ValidateCreateSpecType) ClusterRoleChoiceValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) ClusterScopedResourceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_scoped_resource_access_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1550,6 +1558,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("cluster_role_choice"),
 				db.WithValidateField("use_custom_cluster_role_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice"]; exists {
+		val := m.GetClusterScopedResourceAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_scoped_resource_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterScopedResourceAccessChoice().(type) {
+	case *CreateSpecType_ClusterScopedAccessDeny:
+		if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice.cluster_scoped_access_deny"]; exists {
+			val := m.GetClusterScopedResourceAccessChoice().(*CreateSpecType_ClusterScopedAccessDeny).ClusterScopedAccessDeny
+			vOpts := append(opts,
+				db.WithValidateField("cluster_scoped_resource_access_choice"),
+				db.WithValidateField("cluster_scoped_access_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ClusterScopedAccessPermit:
+		if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice.cluster_scoped_access_permit"]; exists {
+			val := m.GetClusterScopedResourceAccessChoice().(*CreateSpecType_ClusterScopedAccessPermit).ClusterScopedAccessPermit
+			vOpts := append(opts,
+				db.WithValidateField("cluster_scoped_resource_access_choice"),
+				db.WithValidateField("cluster_scoped_access_permit"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1749,6 +1793,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_choice"] = vFn
+
+	vrhClusterScopedResourceAccessChoice := v.ClusterScopedResourceAccessChoiceValidationRuleHandler
+	rulesClusterScopedResourceAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClusterScopedResourceAccessChoice(rulesClusterScopedResourceAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.cluster_scoped_resource_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_scoped_resource_access_choice"] = vFn
 
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
@@ -2001,6 +2056,14 @@ func (v *ValidateGetSpecType) ClusterRoleChoiceValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) ClusterScopedResourceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_scoped_resource_access_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2147,6 +2210,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("cluster_role_choice"),
 				db.WithValidateField("use_custom_cluster_role_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice"]; exists {
+		val := m.GetClusterScopedResourceAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_scoped_resource_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterScopedResourceAccessChoice().(type) {
+	case *GetSpecType_ClusterScopedAccessDeny:
+		if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice.cluster_scoped_access_deny"]; exists {
+			val := m.GetClusterScopedResourceAccessChoice().(*GetSpecType_ClusterScopedAccessDeny).ClusterScopedAccessDeny
+			vOpts := append(opts,
+				db.WithValidateField("cluster_scoped_resource_access_choice"),
+				db.WithValidateField("cluster_scoped_access_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ClusterScopedAccessPermit:
+		if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice.cluster_scoped_access_permit"]; exists {
+			val := m.GetClusterScopedResourceAccessChoice().(*GetSpecType_ClusterScopedAccessPermit).ClusterScopedAccessPermit
+			vOpts := append(opts,
+				db.WithValidateField("cluster_scoped_resource_access_choice"),
+				db.WithValidateField("cluster_scoped_access_permit"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2346,6 +2445,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_choice"] = vFn
+
+	vrhClusterScopedResourceAccessChoice := v.ClusterScopedResourceAccessChoiceValidationRuleHandler
+	rulesClusterScopedResourceAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClusterScopedResourceAccessChoice(rulesClusterScopedResourceAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.cluster_scoped_resource_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_scoped_resource_access_choice"] = vFn
 
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
@@ -2836,6 +2946,14 @@ func (v *ValidateGlobalSpecType) ClusterRoleChoiceValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) ClusterScopedResourceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_scoped_resource_access_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3110,6 +3228,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice"]; exists {
+		val := m.GetClusterScopedResourceAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_scoped_resource_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterScopedResourceAccessChoice().(type) {
+	case *GlobalSpecType_ClusterScopedAccessDeny:
+		if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice.cluster_scoped_access_deny"]; exists {
+			val := m.GetClusterScopedResourceAccessChoice().(*GlobalSpecType_ClusterScopedAccessDeny).ClusterScopedAccessDeny
+			vOpts := append(opts,
+				db.WithValidateField("cluster_scoped_resource_access_choice"),
+				db.WithValidateField("cluster_scoped_access_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ClusterScopedAccessPermit:
+		if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice.cluster_scoped_access_permit"]; exists {
+			val := m.GetClusterScopedResourceAccessChoice().(*GlobalSpecType_ClusterScopedAccessPermit).ClusterScopedAccessPermit
+			vOpts := append(opts,
+				db.WithValidateField("cluster_scoped_resource_access_choice"),
+				db.WithValidateField("cluster_scoped_access_permit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["final_cluster_role_bindings"]; exists {
 		vOpts := append(opts, db.WithValidateField("final_cluster_role_bindings"))
 		if err := fv(ctx, m.GetFinalClusterRoleBindings(), vOpts...); err != nil {
@@ -3334,6 +3488,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_choice"] = vFn
+
+	vrhClusterScopedResourceAccessChoice := v.ClusterScopedResourceAccessChoiceValidationRuleHandler
+	rulesClusterScopedResourceAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClusterScopedResourceAccessChoice(rulesClusterScopedResourceAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.cluster_scoped_resource_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_scoped_resource_access_choice"] = vFn
 
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
@@ -4395,6 +4560,14 @@ func (v *ValidateReplaceSpecType) ClusterRoleChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) ClusterScopedResourceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_scoped_resource_access_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4541,6 +4714,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("cluster_role_choice"),
 				db.WithValidateField("use_custom_cluster_role_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice"]; exists {
+		val := m.GetClusterScopedResourceAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_scoped_resource_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterScopedResourceAccessChoice().(type) {
+	case *ReplaceSpecType_ClusterScopedAccessDeny:
+		if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice.cluster_scoped_access_deny"]; exists {
+			val := m.GetClusterScopedResourceAccessChoice().(*ReplaceSpecType_ClusterScopedAccessDeny).ClusterScopedAccessDeny
+			vOpts := append(opts,
+				db.WithValidateField("cluster_scoped_resource_access_choice"),
+				db.WithValidateField("cluster_scoped_access_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ClusterScopedAccessPermit:
+		if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice.cluster_scoped_access_permit"]; exists {
+			val := m.GetClusterScopedResourceAccessChoice().(*ReplaceSpecType_ClusterScopedAccessPermit).ClusterScopedAccessPermit
+			vOpts := append(opts,
+				db.WithValidateField("cluster_scoped_resource_access_choice"),
+				db.WithValidateField("cluster_scoped_access_permit"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4741,6 +4950,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["cluster_role_choice"] = vFn
 
+	vrhClusterScopedResourceAccessChoice := v.ClusterScopedResourceAccessChoiceValidationRuleHandler
+	rulesClusterScopedResourceAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClusterScopedResourceAccessChoice(rulesClusterScopedResourceAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.cluster_scoped_resource_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_scoped_resource_access_choice"] = vFn
+
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4910,6 +5130,41 @@ func (r *CreateSpecType) GetClusterRoleChoiceFromGlobalSpecType(o *GlobalSpecTyp
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetClusterScopedResourceAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterScopedResourceAccessChoice.(type) {
+	case nil:
+		o.ClusterScopedResourceAccessChoice = nil
+
+	case *CreateSpecType_ClusterScopedAccessDeny:
+		o.ClusterScopedResourceAccessChoice = &GlobalSpecType_ClusterScopedAccessDeny{ClusterScopedAccessDeny: of.ClusterScopedAccessDeny}
+
+	case *CreateSpecType_ClusterScopedAccessPermit:
+		o.ClusterScopedResourceAccessChoice = &GlobalSpecType_ClusterScopedAccessPermit{ClusterScopedAccessPermit: of.ClusterScopedAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetClusterScopedResourceAccessChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterScopedResourceAccessChoice.(type) {
+	case nil:
+		r.ClusterScopedResourceAccessChoice = nil
+
+	case *GlobalSpecType_ClusterScopedAccessDeny:
+		r.ClusterScopedResourceAccessChoice = &CreateSpecType_ClusterScopedAccessDeny{ClusterScopedAccessDeny: of.ClusterScopedAccessDeny}
+
+	case *GlobalSpecType_ClusterScopedAccessPermit:
+		r.ClusterScopedResourceAccessChoice = &CreateSpecType_ClusterScopedAccessPermit{ClusterScopedAccessPermit: of.ClusterScopedAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetGlobalAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.GlobalAccessChoice.(type) {
 	case nil:
@@ -5056,6 +5311,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetAppsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
+	m.GetClusterScopedResourceAccessChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
@@ -5071,6 +5327,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetAppsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
+	m1.SetClusterScopedResourceAccessChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
@@ -5175,6 +5432,41 @@ func (r *GetSpecType) GetClusterRoleChoiceFromGlobalSpecType(o *GlobalSpecType) 
 
 	case *GlobalSpecType_UseDefaultClusterRoles:
 		r.ClusterRoleChoice = &GetSpecType_UseDefaultClusterRoles{UseDefaultClusterRoles: of.UseDefaultClusterRoles}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetClusterScopedResourceAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterScopedResourceAccessChoice.(type) {
+	case nil:
+		o.ClusterScopedResourceAccessChoice = nil
+
+	case *GetSpecType_ClusterScopedAccessDeny:
+		o.ClusterScopedResourceAccessChoice = &GlobalSpecType_ClusterScopedAccessDeny{ClusterScopedAccessDeny: of.ClusterScopedAccessDeny}
+
+	case *GetSpecType_ClusterScopedAccessPermit:
+		o.ClusterScopedResourceAccessChoice = &GlobalSpecType_ClusterScopedAccessPermit{ClusterScopedAccessPermit: of.ClusterScopedAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetClusterScopedResourceAccessChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterScopedResourceAccessChoice.(type) {
+	case nil:
+		r.ClusterScopedResourceAccessChoice = nil
+
+	case *GlobalSpecType_ClusterScopedAccessDeny:
+		r.ClusterScopedResourceAccessChoice = &GetSpecType_ClusterScopedAccessDeny{ClusterScopedAccessDeny: of.ClusterScopedAccessDeny}
+
+	case *GlobalSpecType_ClusterScopedAccessPermit:
+		r.ClusterScopedResourceAccessChoice = &GetSpecType_ClusterScopedAccessPermit{ClusterScopedAccessPermit: of.ClusterScopedAccessPermit}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -5329,6 +5621,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetAppsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
+	m.GetClusterScopedResourceAccessChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
@@ -5344,6 +5637,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetAppsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
+	m1.SetClusterScopedResourceAccessChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
@@ -5448,6 +5742,41 @@ func (r *ReplaceSpecType) GetClusterRoleChoiceFromGlobalSpecType(o *GlobalSpecTy
 
 	case *GlobalSpecType_UseDefaultClusterRoles:
 		r.ClusterRoleChoice = &ReplaceSpecType_UseDefaultClusterRoles{UseDefaultClusterRoles: of.UseDefaultClusterRoles}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetClusterScopedResourceAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterScopedResourceAccessChoice.(type) {
+	case nil:
+		o.ClusterScopedResourceAccessChoice = nil
+
+	case *ReplaceSpecType_ClusterScopedAccessDeny:
+		o.ClusterScopedResourceAccessChoice = &GlobalSpecType_ClusterScopedAccessDeny{ClusterScopedAccessDeny: of.ClusterScopedAccessDeny}
+
+	case *ReplaceSpecType_ClusterScopedAccessPermit:
+		o.ClusterScopedResourceAccessChoice = &GlobalSpecType_ClusterScopedAccessPermit{ClusterScopedAccessPermit: of.ClusterScopedAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetClusterScopedResourceAccessChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterScopedResourceAccessChoice.(type) {
+	case nil:
+		r.ClusterScopedResourceAccessChoice = nil
+
+	case *GlobalSpecType_ClusterScopedAccessDeny:
+		r.ClusterScopedResourceAccessChoice = &ReplaceSpecType_ClusterScopedAccessDeny{ClusterScopedAccessDeny: of.ClusterScopedAccessDeny}
+
+	case *GlobalSpecType_ClusterScopedAccessPermit:
+		r.ClusterScopedResourceAccessChoice = &ReplaceSpecType_ClusterScopedAccessPermit{ClusterScopedAccessPermit: of.ClusterScopedAccessPermit}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -5602,6 +5931,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetAppsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
+	m.GetClusterScopedResourceAccessChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
@@ -5617,6 +5947,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetAppsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
+	m1.SetClusterScopedResourceAccessChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)

@@ -24,7 +24,7 @@ func TestAccDataSourceVHDNSInfoBasic(t *testing.T) {
 			ves_io_schema_vn.ObjectType, ves_io_schema_ap.ObjectType,
 		}
 	}
-	testURL, stopFunc := createTestCustomAPIServer(t, getTestObj())
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, getTestObj())
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)

@@ -195,7 +195,7 @@ var DefaultAppFirewallDetectionControlValidator = func() *ValidateAppFirewallDet
 
 	vrhExcludeSignatureContexts := v.ExcludeSignatureContextsValidationRuleHandler
 	rulesExcludeSignatureContexts := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "1024",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhExcludeSignatureContexts(rulesExcludeSignatureContexts)
@@ -3624,7 +3624,7 @@ var DefaultPrefixMatchListValidator = func() *ValidatePrefixMatchList {
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "16",
+		"ves.io.schema.rules.repeated.max_items":                "128",
 		"ves.io.schema.rules.repeated.min_items":                "1",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -4074,7 +4074,7 @@ var DefaultShapeBotBlockMitigationActionTypeValidator = func() *ValidateShapeBot
 
 	vrhBody := v.BodyValidationRuleHandler
 	rulesBody := map[string]string{
-		"ves.io.schema.rules.string.max_len": "65536",
+		"ves.io.schema.rules.string.max_len": "4096",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhBody(rulesBody)
@@ -4517,12 +4517,19 @@ func (v *ValidateSimpleWafExclusionRule) DomainChoiceValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
-func (v *ValidateSimpleWafExclusionRule) DomainChoiceDomainRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_DomainRegex, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateSimpleWafExclusionRule) DomainChoiceExactValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ExactValue, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_regex")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exact_value")
 	}
-	return oValidatorFn_DomainRegex, nil
+	return oValidatorFn_ExactValue, nil
+}
+func (v *ValidateSimpleWafExclusionRule) DomainChoiceSuffixValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SuffixValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for suffix_value")
+	}
+	return oValidatorFn_SuffixValue, nil
 }
 
 func (v *ValidateSimpleWafExclusionRule) PathRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -4704,12 +4711,23 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-	case *SimpleWafExclusionRule_DomainRegex:
-		if fv, exists := v.FldValidators["domain_choice.domain_regex"]; exists {
-			val := m.GetDomainChoice().(*SimpleWafExclusionRule_DomainRegex).DomainRegex
+	case *SimpleWafExclusionRule_ExactValue:
+		if fv, exists := v.FldValidators["domain_choice.exact_value"]; exists {
+			val := m.GetDomainChoice().(*SimpleWafExclusionRule_ExactValue).ExactValue
 			vOpts := append(opts,
 				db.WithValidateField("domain_choice"),
-				db.WithValidateField("domain_regex"),
+				db.WithValidateField("exact_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SimpleWafExclusionRule_SuffixValue:
+		if fv, exists := v.FldValidators["domain_choice.suffix_value"]; exists {
+			val := m.GetDomainChoice().(*SimpleWafExclusionRule_SuffixValue).SuffixValue
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("suffix_value"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4787,18 +4805,31 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 	}
 	v.FldValidators["domain_choice"] = vFn
 
-	vrhDomainChoiceDomainRegex := v.DomainChoiceDomainRegexValidationRuleHandler
-	rulesDomainChoiceDomainRegex := map[string]string{
-		"ves.io.schema.rules.string.max_len":   "256",
-		"ves.io.schema.rules.string.vh_domain": "true",
+	vrhDomainChoiceExactValue := v.DomainChoiceExactValueValidationRuleHandler
+	rulesDomainChoiceExactValue := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
 	}
-	vFnMap["domain_choice.domain_regex"], err = vrhDomainChoiceDomainRegex(rulesDomainChoiceDomainRegex)
+	vFnMap["domain_choice.exact_value"], err = vrhDomainChoiceExactValue(rulesDomainChoiceExactValue)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleWafExclusionRule.domain_choice_domain_regex: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleWafExclusionRule.domain_choice_exact_value: %s", err)
+		panic(errMsg)
+	}
+	vrhDomainChoiceSuffixValue := v.DomainChoiceSuffixValueValidationRuleHandler
+	rulesDomainChoiceSuffixValue := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
+	}
+	vFnMap["domain_choice.suffix_value"], err = vrhDomainChoiceSuffixValue(rulesDomainChoiceSuffixValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleWafExclusionRule.domain_choice_suffix_value: %s", err)
 		panic(errMsg)
 	}
 
-	v.FldValidators["domain_choice.domain_regex"] = vFnMap["domain_choice.domain_regex"]
+	v.FldValidators["domain_choice.exact_value"] = vFnMap["domain_choice.exact_value"]
+	v.FldValidators["domain_choice.suffix_value"] = vFnMap["domain_choice.suffix_value"]
 
 	vrhPathRegex := v.PathRegexValidationRuleHandler
 	rulesPathRegex := map[string]string{

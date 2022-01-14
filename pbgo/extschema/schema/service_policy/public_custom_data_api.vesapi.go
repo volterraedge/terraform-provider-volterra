@@ -435,7 +435,7 @@ var CustomDataAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/service_policy/hits": {
             "post": {

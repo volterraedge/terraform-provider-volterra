@@ -25,15 +25,15 @@ var (
 
 // augmented methods on protoc/std generated struct
 
-func (m *AddonServiceAccess) ToJSON() (string, error) {
+func (m *AddonServiceStatus) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *AddonServiceAccess) ToYAML() (string, error) {
+func (m *AddonServiceStatus) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *AddonServiceAccess) DeepCopy() *AddonServiceAccess {
+func (m *AddonServiceStatus) DeepCopy() *AddonServiceStatus {
 	if m == nil {
 		return nil
 	}
@@ -41,7 +41,7 @@ func (m *AddonServiceAccess) DeepCopy() *AddonServiceAccess {
 	if err != nil {
 		return nil
 	}
-	c := &AddonServiceAccess{}
+	c := &AddonServiceStatus{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -49,29 +49,29 @@ func (m *AddonServiceAccess) DeepCopy() *AddonServiceAccess {
 	return c
 }
 
-func (m *AddonServiceAccess) DeepCopyProto() proto.Message {
+func (m *AddonServiceStatus) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *AddonServiceAccess) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return AddonServiceAccessValidator().Validate(ctx, m, opts...)
+func (m *AddonServiceStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AddonServiceStatusValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateAddonServiceAccess struct {
+type ValidateAddonServiceStatus struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAddonServiceAccess) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*AddonServiceAccess)
+func (v *ValidateAddonServiceStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AddonServiceStatus)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *AddonServiceAccess got type %s", t)
+			return fmt.Errorf("Expected type *AddonServiceStatus got type %s", t)
 		}
 	}
 	if m == nil {
@@ -100,14 +100,14 @@ func (v *ValidateAddonServiceAccess) Validate(ctx context.Context, pm interface{
 }
 
 // Well-known symbol for default validator implementation
-var DefaultAddonServiceAccessValidator = func() *ValidateAddonServiceAccess {
-	v := &ValidateAddonServiceAccess{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultAddonServiceStatusValidator = func() *ValidateAddonServiceStatus {
+	v := &ValidateAddonServiceStatus{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func AddonServiceAccessValidator() db.Validator {
-	return DefaultAddonServiceAccessValidator
+func AddonServiceStatusValidator() db.Validator {
+	return DefaultAddonServiceStatusValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -512,7 +512,20 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetContactsDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetContactsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetContactsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetGroupsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetGroupsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -549,6 +562,51 @@ func (m *GlobalSpecType) GetContactsDBEntries(ctx context.Context, d db.Interfac
 		return nil, errors.Wrap(err, "Cannot find type for kind: contact")
 	}
 	for _, ref := range m.GetContacts() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetGroupsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetGroups()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.groups[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "user_group.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "groups",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetGroupsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetGroupsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "user_group.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: user_group")
+	}
+	for _, ref := range m.GetGroups() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -614,6 +672,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["groups"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("groups"))
+		for idx, item := range m.GetGroups() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}

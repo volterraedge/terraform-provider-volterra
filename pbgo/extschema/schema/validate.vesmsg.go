@@ -3276,6 +3276,28 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *StringRules_CertificateUrl:
+		if fv, exists := v.FldValidators["well_known.certificate_url"]; exists {
+			val := m.GetWellKnown().(*StringRules_CertificateUrl).CertificateUrl
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("certificate_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_TruststoreUrl:
+		if fv, exists := v.FldValidators["well_known.truststore_url"]; exists {
+			val := m.GetWellKnown().(*StringRules_TruststoreUrl).TruststoreUrl
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("truststore_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

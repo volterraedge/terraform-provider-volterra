@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.fast_acl/Object/{object_uid}": {
             "get": {
@@ -2769,28 +2769,39 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "array",
-                    "description": " List of IP addresses to match with destination",
+                    "description": " List of IP addresses to match with destination\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "IP Address",
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaIpAddressType"
                     },
-                    "x-displayname": "IP Address"
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128"
+                    }
                 },
                 "ports": {
                     "type": "array",
-                    "description": " List of ports to match with destination ports\n Special value \"0\" means all valid ports on the VIPs\n\nExample: - 100-",
+                    "description": " List of ports to match with destination ports\n Special value \"0\" means all valid ports on the VIPs\n\nExample: - 100-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "Ports",
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaPortValueType"
                     },
-                    "x-displayname": "Ports"
+                    "x-displayname": "Ports",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128"
+                    }
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Protocol to match in the traffic\n\nExample: - \"TCP\"-",
+                    "description": " Protocol to match in the traffic\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"\\\",\\\"ALL\\\",\\\"TCP\\\",\\\"UDP\\\",\\\"ICMP\\\"]\n",
                     "title": "protocol",
                     "x-displayname": "Protocol",
-                    "x-ves-example": "TCP"
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"\\\",\\\"ALL\\\",\\\"TCP\\\",\\\"UDP\\\",\\\"ICMP\\\"]"
+                    }
                 }
             }
         },
@@ -2836,48 +2847,39 @@ var APISwaggerJSON string = `{
         },
         "fast_aclFastACLRuleType": {
             "type": "object",
-            "description": "Shape of -fast_acl_rule-",
+            "description": "x-displayName: \"Fast ACL Rule\"\nShape of -fast_acl_rule-",
             "title": "Fast ACL Rule",
-            "x-displayname": "Fast ACL Rule",
-            "x-ves-oneof-field-source": "[\"ip_prefix_set\",\"prefix\"]",
-            "x-ves-proto-message": "ves.io.schema.fast_acl.FastACLRuleType",
             "properties": {
                 "action": {
-                    "description": " Action to be applied if traffic matched rule (pass, deny or rate limit)\nRequired: YES",
+                    "description": "x-displayName: \"Action\"\nx-required\nAction to be applied if traffic matched rule (pass, deny or rate limit)",
                     "title": "action",
-                    "$ref": "#/definitions/fast_acl_ruleFastAclRuleAction",
-                    "x-displayname": "Action",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/fast_acl_ruleFastAclRuleAction"
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [prefix]\nx-displayName: \"IP prefix Set\"\nReference to IP prefix set object",
+                    "description": "x-displayName: \"IP prefix Set\"\nReference to IP prefix set object",
                     "title": "ip_prefix_set",
                     "$ref": "#/definitions/schemaIpPrefixSetRefType"
                 },
                 "metadata": {
-                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType",
-                    "x-displayname": "Metadata",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/schemaMessageMetaType"
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name for this rule, will be used to generate metrics",
-                    "title": "Rule Name",
-                    "x-displayname": "Rule Name"
+                    "description": "x-displayName: \"Rule Name\"\nName for this rule, will be used to generate metrics",
+                    "title": "Rule Name"
                 },
                 "port": {
                     "type": "array",
-                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-",
+                    "description": "x-displayName: \"Source Ports\"\nx-example: ALL / DNS / 1234\nL4 port numbers to match",
                     "title": "ports",
                     "items": {
                         "$ref": "#/definitions/schemaPortValueType"
-                    },
-                    "x-displayname": "Source Ports"
+                    }
                 },
                 "prefix": {
-                    "description": "Exclusive with [ip_prefix_set]\nx-displayName: \"Prefix\"\nList of IP prefixes",
+                    "description": "x-displayName: \"Prefix\"\nList of IP prefixes",
                     "title": "prefix",
                     "$ref": "#/definitions/schemaPrefixListType"
                 }
@@ -2885,33 +2887,29 @@ var APISwaggerJSON string = `{
         },
         "fast_aclReACLType": {
             "type": "object",
-            "description": "Fast ACL definition for RE",
+            "description": "x-displayName: \"Fast ACL for RE\"\nFast ACL definition for RE",
             "title": "Fast ACL for RE",
-            "x-displayname": "Fast ACL for RE",
-            "x-ves-oneof-field-vip_choice": "[\"all_public_vips\",\"default_tenant_vip\",\"selected_tenant_vip\"]",
-            "x-ves-proto-message": "ves.io.schema.fast_acl.ReACLType",
             "properties": {
                 "all_public_vips": {
-                    "description": "Exclusive with [default_tenant_vip selected_tenant_vip]\nx-displayName: \"ALL Public VIP(s)\"\nApply this Fast ACL to all public vips",
+                    "description": "x-displayName: \"ALL Public VIP(s)\"\nApply this Fast ACL to all public vips",
                     "title": "All Public VIP(s)",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "default_tenant_vip": {
-                    "description": "Exclusive with [all_public_vips selected_tenant_vip]\nx-displayName: \"Default Tenant VIP\"\nApply this Fast ACL to Default(dedicated) Tenant VIP",
+                    "description": "x-displayName: \"Default Tenant VIP\"\nApply this Fast ACL to Default(dedicated) Tenant VIP",
                     "title": "Default Tenant VIP(s)",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "fast_acl_rules": {
                     "type": "array",
-                    "description": " Fast ACL rules to match ",
+                    "description": "x-displayName: \"Rules\"\nFast ACL rules to match",
                     "title": "Rules",
                     "items": {
                         "$ref": "#/definitions/fast_aclFastACLRuleType"
-                    },
-                    "x-displayname": "Rules"
+                    }
                 },
                 "selected_tenant_vip": {
-                    "description": "Exclusive with [all_public_vips default_tenant_vip]\nx-displayName: \"List of Specific VIP(s)\"\nDo not apply to dedicated Tenant VIP\nApply this Fast ACL to List of some selected public VIP(s)",
+                    "description": "x-displayName: \"List of Specific VIP(s)\"\nDo not apply to dedicated Tenant VIP\nApply this Fast ACL to List of some selected public VIP(s)",
                     "title": "Chose Specific VIP(s)",
                     "$ref": "#/definitions/fast_aclSelectedTenantVIPsType"
                 }
@@ -2921,24 +2919,20 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "x-displayName: \"Specific Tenant VIP \nSelect various tenant public VIP(s)",
             "title": "Specific Tenant VIP",
-            "x-ves-proto-message": "ves.io.schema.fast_acl.SelectedTenantVIPsType",
             "properties": {
                 "default_tenant_vip": {
                     "type": "boolean",
-                    "description": " Include tenant vip in list of specific VIP(s)",
+                    "description": "x-displayName: \"Include Tenant VIP\"\nInclude tenant vip in list of specific VIP(s)",
                     "title": "Include Default Tenant VIP",
-                    "format": "boolean",
-                    "x-displayname": "Include Tenant VIP"
+                    "format": "boolean"
                 },
                 "public_ip_refs": {
                     "type": "array",
-                    "description": " Select additional public VIP(s) \nRequired: YES",
+                    "description": "x-displayName: \"Select Public VIP(s)\"\nx-required\nSelect additional public VIP(s)",
                     "title": "Apply to Dedicated Public VIP",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Select Public VIP(s)",
-                    "x-ves-required": "true"
+                    }
                 }
             }
         },
@@ -2951,55 +2945,54 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "array",
-                    "description": " List of IP addresses to match with destination",
+                    "description": " List of IP addresses to match with destination\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "IP Address",
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaIpAddressType"
                     },
-                    "x-displayname": "IP Address"
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128"
+                    }
                 }
             }
         },
         "fast_aclSiteACLType": {
             "type": "object",
-            "description": "Fast ACL definition for Site",
+            "description": "x-displayName: \"Fast ACL for Site\"\nFast ACL definition for Site",
             "title": "Fast ACL for Site",
-            "x-displayname": "Fast ACL for Site",
-            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
-            "x-ves-oneof-field-vip_choice": "[\"all_services\",\"interface_services\",\"vip_services\"]",
-            "x-ves-proto-message": "ves.io.schema.fast_acl.SiteACLType",
             "properties": {
                 "all_services": {
-                    "description": "Exclusive with [interface_services vip_services]\nx-displayName: \"All VIP(s)\"\nDestination will be all VIP(s), interface IP(s) and configured VIP(s)\nPort and protocol is picked up from advertise policies",
+                    "description": "x-displayName: \"All VIP(s)\"\nDestination will be all VIP(s), interface IP(s) and configured VIP(s)\nPort and protocol is picked up from advertise policies",
                     "title": "All VIP(S)",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "fast_acl_rules": {
                     "type": "array",
-                    "description": " Fast ACL rules to match ",
+                    "description": "x-displayName: \"Rules\"\nFast ACL rules to match",
                     "title": "Rules",
                     "items": {
                         "$ref": "#/definitions/fast_aclFastACLRuleType"
-                    },
-                    "x-displayname": "Rules"
+                    }
                 },
                 "inside_network": {
-                    "description": "Exclusive with [outside_network]\nx-displayName: \"Inside Network\"\nSite Local Inside network",
+                    "description": "x-displayName: \"Inside Network\"\nSite Local Inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "interface_services": {
-                    "description": "Exclusive with [all_services vip_services]\nx-displayName: \"All Interface IP(s) as VIP\"\nDestination matching any IP address assigned to the interfaces (e.g from DHCP) and is used as (VIP)\nPort and protocol is picked up from advertise policies",
+                    "description": "x-displayName: \"All Interface IP(s) as VIP\"\nDestination matching any IP address assigned to the interfaces (e.g from DHCP) and is used as (VIP)\nPort and protocol is picked up from advertise policies",
                     "title": "Interface Services",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network]\nx-displayName: \"Outside Network\"\nSite Local Outside network",
+                    "description": "x-displayName: \"Outside Network\"\nSite Local Outside network",
                     "title": "Outside Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "vip_services": {
-                    "description": "Exclusive with [all_services interface_services]\nx-displayName: \"Configured VIP(s)\"\nDestination matching configured VIP(s)\nPort and protocol is picked up from advertise policies",
+                    "description": "x-displayName: \"Configured VIP(s)\"\nDestination matching configured VIP(s)\nPort and protocol is picked up from advertise policies",
                     "title": "VIP Services",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -3056,23 +3049,21 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_ruleFastAclRuleAction": {
             "type": "object",
-            "description": " FastAclRuleAction specifies possible action to be applied on traffic,\n possible action include dropping, forwarding or ratelimiting the traffic",
+            "description": "x-displayName: \"Action\"\n FastAclRuleAction specifies possible action to be applied on traffic,\n possible action include dropping, forwarding or ratelimiting the traffic",
             "title": "FastAclRuleAction",
-            "x-ves-oneof-field-action": "[\"policer_action\",\"protocol_policer_action\",\"simple_action\"]",
-            "x-ves-proto-message": "ves.io.schema.fast_acl_rule.FastAclRuleAction",
             "properties": {
                 "policer_action": {
-                    "description": "Exclusive with [protocol_policer_action simple_action]\nx-displayName: \"Policer Action\"\nReference to policer object to which traffic would be subjected",
+                    "description": "x-displayName: \"Policer Action\"\nReference to policer object to which traffic would be subjected",
                     "title": "policer_action",
                     "$ref": "#/definitions/schemaPolicerRefType"
                 },
                 "protocol_policer_action": {
-                    "description": "Exclusive with [policer_action simple_action]\nx-displayName: \"Protocol Policer Action\"\nReference to protocol based policer object",
+                    "description": "x-displayName: \"Protocol Policer Action\"\nReference to protocol based policer object",
                     "title": "protocol_policer_action",
                     "$ref": "#/definitions/schemaProtocolPolicerRefType"
                 },
                 "simple_action": {
-                    "description": "Exclusive with [policer_action protocol_policer_action]\nx-displayName: \"Simple Action\"\nSimple action like dropping or forwarding the traffic",
+                    "description": "x-displayName: \"Simple Action\"\nSimple action like dropping or forwarding the traffic",
                     "title": "simple_action",
                     "$ref": "#/definitions/fast_acl_ruleFastAclRuleSimpleAction"
                 }
@@ -3080,15 +3071,13 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_ruleFastAclRuleSimpleAction": {
             "type": "string",
-            "description": "FastAclRuleSimpleAction specifies simple action like PASS or DENY\n\nDrop the traffic\nForward the traffic",
+            "description": "x-displayName: \"Simple Action\"\nFastAclRuleSimpleAction specifies simple action like PASS or DENY\n\n - DENY: x-displayName: \"Deny\"\nDrop the traffic\n - ALLOW: x-displayName: \"Allow\"\nForward the traffic",
             "title": "FastAclRuleSimpleAction",
             "enum": [
                 "DENY",
                 "ALLOW"
             ],
-            "default": "DENY",
-            "x-displayname": "Simple Action",
-            "x-ves-proto-enum": "ves.io.schema.fast_acl_rule.FastAclRuleSimpleAction"
+            "default": "DENY"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -3209,17 +3198,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3292,19 +3287,16 @@ var APISwaggerJSON string = `{
         },
         "schemaIpPrefixSetRefType": {
             "type": "object",
-            "description": "A list of references to ip_prefix_set objects.",
+            "description": "x-displayName: \"IP Prefix Set Reference\"\nA list of references to ip_prefix_set objects.",
             "title": "IpPrefixSetRefType",
-            "x-displayname": "IP Prefix Set Reference",
-            "x-ves-proto-message": "ves.io.schema.IpPrefixSetRefType",
             "properties": {
                 "ref": {
                     "type": "array",
-                    "description": " A list of references to ip_prefix_set objects.",
+                    "description": "x-displayName: \"Reference\"\nA list of references to ip_prefix_set objects.",
                     "title": "ref",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Reference"
+                    }
                 }
             }
         },
@@ -3317,10 +3309,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-",
+                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IPv4 Address",
                     "x-displayname": "IPv4 Address",
-                    "x-ves-example": "192.168.1.1"
+                    "x-ves-example": "192.168.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -3333,10 +3328,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001:db8:0:0:0:0:2:1"
+                    "x-ves-example": "2001:db8:0:0:0:0:2:1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
                 }
             }
         },
@@ -3345,46 +3343,28 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaMessageMetaType": {
             "type": "object",
-            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "description": "x-displayName: \"Message Metadata\"\nMessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
             "title": "MessageMetaType",
-            "x-displayname": "Message Metadata",
-            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
             "properties": {
                 "description": {
                     "type": "string",
-                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "description": "x-displayName: \"Description\"\nx-example: \"Virtual Host for acmecorp website\"\nHuman readable description.",
+                    "title": "description"
                 },
                 "disable": {
                     "type": "boolean",
-                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
+                    "description": "x-displayName: \"Disable\"\nx-example: \"true\"\nA value of true will administratively disable the object that corresponds to the containing message.",
                     "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
+                    "format": "boolean"
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-example: \"acmecorp-web\"\nx-required\nThis is the name of the message.\nThe value of name has to follow DNS-1035 format.",
+                    "title": "name"
                 }
             }
         },
@@ -3397,10 +3377,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3426,11 +3412,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3450,19 +3439,16 @@ var APISwaggerJSON string = `{
         },
         "schemaPolicerRefType": {
             "type": "object",
-            "description": "Reference to policer object",
+            "description": "x-displayName: \"Policer Reference\"\nReference to policer object",
             "title": "PolicerRefType",
-            "x-displayname": "Policer Reference",
-            "x-ves-proto-message": "ves.io.schema.PolicerRefType",
             "properties": {
                 "ref": {
                     "type": "array",
-                    "description": " A policer direct reference",
+                    "description": "x-displayName: \"Reference\"\nA policer direct reference",
                     "title": "ref",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Reference"
+                    }
                 }
             }
         },
@@ -3494,38 +3480,31 @@ var APISwaggerJSON string = `{
         },
         "schemaPrefixListType": {
             "type": "object",
-            "description": "List of IP Address prefixes. Prefix must contain both prefix and prefix-length\nThe list can contain mix of both IPv4 and IPv6 prefixes",
+            "description": "x-displayName: \"IP Prefix List\"\nList of IP Address prefixes. Prefix must contain both prefix and prefix-length\nThe list can contain mix of both IPv4 and IPv6 prefixes",
             "title": "IP Prefix List",
-            "x-displayname": "IP Prefix List",
-            "x-ves-proto-message": "ves.io.schema.PrefixListType",
             "properties": {
                 "prefix": {
                     "type": "array",
-                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]\"-",
+                    "description": "x-displayName: \"Prefix\"\nx-example: \"[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]\"\nIP Address prefix in string format. String must contain both prefix and prefix-length",
                     "title": "Prefix",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "Prefix",
-                    "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"
+                    }
                 }
             }
         },
         "schemaProtocolPolicerRefType": {
             "type": "object",
-            "description": "Reference to policer object",
+            "description": "x-displayName: \"Protocol Policer Reference\"\nReference to policer object",
             "title": "ProtocolPolicerRefType",
-            "x-displayname": "Protocol Policer Reference",
-            "x-ves-proto-message": "ves.io.schema.ProtocolPolicerRefType",
             "properties": {
                 "ref": {
                     "type": "array",
-                    "description": " Reference to protocol policer object",
+                    "description": "x-displayName: \"Protocol policer Reference\"\nReference to protocol policer object",
                     "title": "ref",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Protocol policer Reference"
+                    }
                 }
             }
         },
@@ -3701,12 +3680,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3833,36 +3816,41 @@ var APISwaggerJSON string = `{
             "description": "Shape of -fast_acl- object",
             "title": "GlobalSpecType",
             "x-displayname": "Global Spec",
-            "x-ves-oneof-field-config_choice": "[\"legacy_acl\",\"re_acl\",\"site_acl\"]",
+            "x-ves-oneof-field-config_choice": "[]",
             "x-ves-proto-message": "ves.io.schema.fast_acl.GlobalSpecType",
             "properties": {
                 "default_protocol_policer": {
                     "type": "array",
-                    "description": " Protocol rate limits to be applied if none of the source rules match.\n Traffic from source is classified into hash buckets based on first\n 24 bits of source IP address and rate limiting is applied on each hash\n bucket. This helps in grouping source IP address and ratelimiting traffic\n on that group, giving a semantics of hash limit for source IP",
+                    "description": " Protocol rate limits to be applied if none of the source rules match.\n Traffic from source is classified into hash buckets based on first\n 24 bits of source IP address and rate limiting is applied on each hash\n bucket. This helps in grouping source IP address and ratelimiting traffic\n on that group, giving a semantics of hash limit for source IP\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Default protocol policer",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Default Protocol Policer"
+                    "x-displayname": "Default Protocol Policer",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "destination_type": {
-                    "description": " IP type specifies how to pick destination IP, possible options\n  1. Pick IP from physical interface\n  2. Pick VIP from interface or site\n  3. All VIP in site\n  4. Explicit IP and port\nRequired: YES",
+                    "description": " IP type specifies how to pick destination IP, possible options\n  1. Pick IP from physical interface\n  2. Pick VIP from interface or site\n  3. All VIP in site\n  4. Explicit IP and port\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Destination IP type",
                     "$ref": "#/definitions/fast_aclDestinationType",
                     "x-displayname": "IP Type",
-                    "x-ves-required": "true"
-                },
-                "legacy_acl": {
-                    "description": "Exclusive with [re_acl site_acl]\nx-displayName: \"Internal\"\nUsed by view handling to store user input",
-                    "title": "Internal",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "network_type": {
-                    "description": " Specifies Virtual Network types on which Fast ACL must be applied\n RE applies Fast ACLs with network_type selector as \"public\" only\n CE applies Fast ACLs with network type selector as \"site_local\" and \"site_local_inside\" only\nRequired: YES",
+                    "description": " Specifies Virtual Network types on which Fast ACL must be applied\n RE applies Fast ACLs with network_type selector as \"public\" only\n CE applies Fast ACLs with network type selector as \"site_local\" and \"site_local_inside\" only\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Virtual Network Type",
                     "$ref": "#/definitions/schemaVirtualNetworkSelectorType",
                     "x-displayname": "Virtual Network Type",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "protocol_policer": {
                     "description": " Protocol rate limits to be applied if none of the source rules match.\n Traffic from source is classified into hash buckets based on first\n 24 bits of source IP address and rate limiting is applied on each hash\n bucket. This helps in grouping source IP address and ratelimiting traffic\n on that group, giving a semantics of hash limit for source IP",
@@ -3870,30 +3858,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Default Protocol Policer"
                 },
-                "re_acl": {
-                    "description": "Exclusive with [legacy_acl site_acl]\nx-displayName: \"Internal\"\nUsed by view handling to store user input",
-                    "title": "Internal",
-                    "$ref": "#/definitions/fast_aclReACLType"
-                },
-                "site_acl": {
-                    "description": "Exclusive with [legacy_acl re_acl]\nx-displayName: \"Internal\"\nUsed by view handling to store user input",
-                    "title": "Internal",
-                    "$ref": "#/definitions/fast_aclSiteACLType"
-                },
                 "source_rules": {
                     "type": "array",
-                    "description": " List of Fast ACL rules to be applied to received packets on this site",
+                    "description": " List of Fast ACL rules to be applied to received packets on this site\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "Source Rules",
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Source Rules"
-                },
-                "view_internal": {
-                    "description": " Reference to view internal object",
-                    "title": "view_internal",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "View Internal"
+                    "x-displayname": "Source Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128"
+                    }
                 }
             }
         },
@@ -3906,25 +3882,40 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "namespace",
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "tenant",
+                    "maxLength": 64,
                     "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

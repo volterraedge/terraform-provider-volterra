@@ -287,7 +287,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/virtual_hosts/{name}/get-dns-info": {
             "get": {
@@ -485,9 +485,12 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "ip_address": {
                     "type": "string",
-                    "description": " IP address associated with virtual host",
+                    "description": " IP address associated with virtual host\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "IP address",
-                    "x-displayname": "IP Address"
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 }
             }
         }

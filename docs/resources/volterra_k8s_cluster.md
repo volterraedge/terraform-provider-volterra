@@ -21,53 +21,31 @@ resource "volterra_k8s_cluster" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_cluster_wide_apps cluster_wide_app_list" must be set
+  no_cluster_wide_apps = true
 
-  cluster_wide_app_list {
-    cluster_wide_apps {
-      // One of the arguments from this list "argo_cd dashboard metrics_server prometheus" must be set
-
-      argo_cd {
-        generated_yaml = "generated_yaml"
-
-        local_domain {
-          local_domain = "example.com"
-
-          password {
-            blindfold_secret_info_internal {
-              decryption_provider = "decryption_provider"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "store_provider"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
-
-            wingman_secret_info {
-              name = "ChargeBack-API-Key"
-            }
-          }
-
-          // One of the arguments from this list "port default_port" must be set
-          default_port = true
-        }
-      }
-    }
-  }
-  // One of the arguments from this list "use_custom_cluster_role_bindings use_default_cluster_role_bindings" must be set
+  // One of the arguments from this list "use_default_cluster_role_bindings use_custom_cluster_role_bindings" must be set
   use_default_cluster_role_bindings = true
-  // One of the arguments from this list "use_custom_cluster_role_list use_default_cluster_roles" must be set
+
+  // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
   use_default_cluster_roles = true
+
+  // One of the arguments from this list "cluster_scoped_access_permit cluster_scoped_access_deny" must be set
+  cluster_scoped_access_deny = true
+
   // One of the arguments from this list "no_global_access global_access_enable" must be set
   no_global_access = true
 
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
+  no_insecure_registries = true
 
-  insecure_registry_list {
-    insecure_registries = ["example.com:5000"]
-  }
   // One of the arguments from this list "no_local_access local_access_config" must be set
-  no_local_access = true
+
+  local_access_config {
+    local_domain = "example.com"
+
+    // One of the arguments from this list "default_port port" must be set
+    default_port = true
+  }
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
   use_default_psp = true
 }
@@ -104,6 +82,10 @@ Argument Reference
 `use_custom_cluster_role_list` - (Optional) Select custom K8s cluster roles for this K8s cluster. See [Use Custom Cluster Role List ](#use-custom-cluster-role-list) below for details.
 
 `use_default_cluster_roles` - (Optional) Select default K8s cluster roles for this K8s cluster (bool).
+
+`cluster_scoped_access_deny` - (Optional) Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will not be allowed through K8s cluster API. It can be managed only through VoltConsole. (bool).
+
+`cluster_scoped_access_permit` - (Optional) Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings. (bool).
 
 `global_access_enable` - (Optional) Access via VoltConsole to site K8s API server is enabled (bool).
 

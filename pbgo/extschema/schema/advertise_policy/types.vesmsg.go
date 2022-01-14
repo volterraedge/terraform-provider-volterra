@@ -88,6 +88,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
@@ -141,6 +147,24 @@ func (m *CreateSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Interfac
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -397,6 +421,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
@@ -450,6 +480,24 @@ func (m *GetSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Interface) 
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -706,6 +754,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
@@ -759,6 +813,24 @@ func (m *GlobalSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Interfac
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -1015,6 +1087,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
@@ -1068,6 +1146,24 @@ func (m *ReplaceSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Interfa
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type

@@ -420,9 +420,11 @@ func (c *CustomAPIRestClient) doRPCListObjects(ctx context.Context, callOpts *se
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("latest_version_only", fmt.Sprintf("%v", req.LatestVersionOnly))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("object_type", fmt.Sprintf("%v", req.ObjectType))
+		q.Add("query_type", fmt.Sprintf("%v", req.QueryType))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -716,9 +718,9 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
-        "/public/namespaces/{namespace}/stored_objects": {
+        "/public/namespaces/{namespace}/stored_objects/{object_type}": {
             "get": {
                 "summary": "ListObjects",
                 "description": "ListObjects is an API to list objects in object store",
@@ -790,9 +792,9 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "object_type",
-                        "description": "x-example: \"swagger\"\nOptional query parameter. Type of the stored_object",
-                        "in": "query",
-                        "required": false,
+                        "description": "object_type\n\nx-example: \"swagger\"\nOptional query parameter. Type of the stored_object",
+                        "in": "path",
+                        "required": true,
                         "type": "string",
                         "x-displayname": "Object Type"
                     },
@@ -803,6 +805,28 @@ var CustomAPISwaggerJSON string = `{
                         "required": false,
                         "type": "string",
                         "x-displayname": "Name"
+                    },
+                    {
+                        "name": "query_type",
+                        "description": "Optional query parameter. The type of search query needs to be performed. Could be EXACT_MATCH or PREFIX_MATCH.\nEXACT_MATCH returns the objects with exact match on the name filed, while PREFIX_MATCH returns the list of object matching the 'name' prefix. Default is EXACT_MATCH.\n\n - EXACT_MATCH: EXACT_MATCH\n\nReturns list of objects with exact match on the name filed.\n - PREFIX_MATCH: PREFIX_MATCH\n\nReturns the list of object matching the 'name' prefix.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "EXACT_MATCH",
+                            "PREFIX_MATCH"
+                        ],
+                        "default": "EXACT_MATCH",
+                        "x-displayname": "PREFIX MATCH"
+                    },
+                    {
+                        "name": "latest_version_only",
+                        "description": "Optional query parameter. If passed, returns only latest version of the objects.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean",
+                        "x-displayname": "Latest Versions Only"
                     }
                 ],
                 "tags": [
@@ -1260,6 +1284,33 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "schemaHttpMethod": {
+            "type": "string",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
+            "title": "HttpMethod",
+            "enum": [
+                "ANY",
+                "GET",
+                "HEAD",
+                "POST",
+                "PUT",
+                "DELETE",
+                "CONNECT",
+                "OPTIONS",
+                "TRACE",
+                "PATCH"
+            ],
+            "default": "ANY",
+            "x-displayname": "HTTP Method",
+            "x-ves-proto-enum": "ves.io.schema.HttpMethod"
+        },
         "stored_objectCreateObjectRequest": {
             "type": "object",
             "description": "Request message for CreateObject API",
@@ -1270,47 +1321,69 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "bytes_value": {
                     "type": "string",
-                    "description": "Exclusive with [string_value]\nx-displayName: \"Byte Value\"\nBinary object contents",
+                    "description": "Exclusive with [string_value]\nx-displayName: \"Byte Value\"\nBinary object contents. Should be encoded in base64 scheme.",
                     "title": "bytes_value",
                     "format": "byte"
                 },
                 "content_format": {
                     "type": "string",
-                    "description": " The optional content format associated with object\n\nExample: - \"json, yaml\"-",
+                    "description": " The optional content format associated with object\n\nExample: - \"json, yaml\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"\\\", \\\"json\\\", \\\"yaml\\\", \\\"txt\\\", \\\"bin\\\"]\n",
                     "title": "content_format",
                     "x-displayname": "Content Format",
-                    "x-ves-example": "json, yaml"
+                    "x-ves-example": "json, yaml",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"\\\", \\\"json\\\", \\\"yaml\\\", \\\"txt\\\", \\\"bin\\\"]"
+                    }
                 },
                 "description": {
                     "type": "string",
-                    "description": " The optional description associated with object\n\nExample: - \"value\"-",
+                    "description": " The optional description associated with object\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
                     "title": "description",
+                    "maxLength": 512,
                     "x-displayname": "Description",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the stored_object.\n\nExample: - \"volt-api-specs\"-\nRequired: YES",
+                    "description": " Name of the stored_object.\n\nExample: - \"volt-api-specs\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 512,
                     "x-displayname": "Name",
                     "x-ves-example": "volt-api-specs",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace in which object is to be created\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Namespace in which object is to be created\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "object_type": {
                     "type": "string",
-                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\nRequired: YES",
+                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"certificate\\\", \\\"javascript\\\", \\\"html\\\", \\\"generic\\\", \\\"big-object\\\"]\n",
                     "title": "object_type",
                     "x-displayname": "Object Type",
                     "x-ves-example": "swagger",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"certificate\\\", \\\"javascript\\\", \\\"html\\\", \\\"generic\\\", \\\"big-object\\\"]"
+                    }
                 },
                 "string_value": {
                     "type": "string",
@@ -1324,13 +1397,24 @@ var CustomAPISwaggerJSON string = `{
             "description": "Response message for CreateObject API",
             "title": "CreateObjectResponse",
             "x-displayname": "Create Object Response",
+            "x-ves-oneof-field-additional_info": "[\"no_additional_info\",\"presigned_url\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.CreateObjectResponse",
             "properties": {
-                "spec": {
-                    "description": " Stored object specs",
-                    "title": "spec",
+                "metadata": {
+                    "description": " Stored object metadata",
+                    "title": "metadata",
                     "$ref": "#/definitions/stored_objectStoredObjectDescriptor",
-                    "x-displayname": "Stored Object"
+                    "x-displayname": "Metadata"
+                },
+                "no_additional_info": {
+                    "description": "Exclusive with [presigned_url]\nx-displayName: \"No Additional Info\"\nThere is no additional information for the response",
+                    "title": "no additional info",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "presigned_url": {
+                    "description": "Exclusive with [no_additional_info]\nx-displayName: \"Pre Signed Url Data\"\nThe url to download the resource",
+                    "title": "presigned_url",
+                    "$ref": "#/definitions/stored_objectPreSignedUrl"
                 }
             }
         },
@@ -1358,19 +1442,61 @@ var CustomAPISwaggerJSON string = `{
             "description": "Response message for GetObject API",
             "title": "GetObjectResponse",
             "x-displayname": "Get Object Response",
-            "x-ves-oneof-field-contents": "[\"bytes_value\",\"string_value\"]",
+            "x-ves-oneof-field-contents": "[\"bytes_value\",\"presigned_url\",\"string_value\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.GetObjectResponse",
             "properties": {
                 "bytes_value": {
                     "type": "string",
-                    "description": "Exclusive with [string_value]\nx-displayName: \"Byte Value\"\nx-example: \"\"\nBinary object contents",
+                    "description": "Exclusive with [presigned_url string_value]\nx-displayName: \"Byte Value\"\nx-example: \"\"\nBinary object contents. This will be a base64 encoded string. The client should decode it to see the actual contents of the object.",
                     "title": "bytes_value",
                     "format": "byte"
                 },
+                "content_format": {
+                    "type": "string",
+                    "description": " The optional content format associated with object\n\nExample: - \"json, yaml\"-",
+                    "title": "content_format",
+                    "x-displayname": "Content Format",
+                    "x-ves-example": "json, yaml"
+                },
+                "metadata": {
+                    "description": " Stored object metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/stored_objectStoredObjectDescriptor",
+                    "x-displayname": "Metadata"
+                },
+                "presigned_url": {
+                    "description": "Exclusive with [bytes_value string_value]\nx-displayName: \"Pre Signed Url Data\"\nThe url to download the resource",
+                    "title": "presigned_url",
+                    "$ref": "#/definitions/stored_objectPreSignedUrl"
+                },
                 "string_value": {
                     "type": "string",
-                    "description": "Exclusive with [bytes_value]\nx-displayName: \"Contents\"\nx-example: \"\"\nString formatted contents",
+                    "description": "Exclusive with [bytes_value presigned_url]\nx-displayName: \"Contents\"\nx-example: \"\"\nString formatted contents",
                     "title": "contents"
+                }
+            }
+        },
+        "stored_objectListItemDescriptor": {
+            "type": "object",
+            "description": "A descriptor for list response item.",
+            "title": "ListItemDescriptor",
+            "x-displayname": "List Item Descriptor",
+            "x-ves-proto-message": "ves.io.schema.stored_object.ListItemDescriptor",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the stored object.",
+                    "title": "name",
+                    "x-displayname": "Object Name"
+                },
+                "versions": {
+                    "type": "array",
+                    "description": " Available versions for the stored object.",
+                    "title": "versions",
+                    "items": {
+                        "$ref": "#/definitions/stored_objectVersionDescriptor"
+                    },
+                    "x-displayname": "Versions"
                 }
             }
         },
@@ -1383,14 +1509,60 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "items": {
                     "type": "array",
-                    "description": " Stored Object Names",
+                    "description": " Stored object names and available versions for each object.",
                     "title": "list of store object descriptors",
                     "items": {
-                        "$ref": "#/definitions/stored_objectStoredObjectDescriptor"
+                        "$ref": "#/definitions/stored_objectListItemDescriptor"
                     },
                     "x-displayname": "Stored Object Descriptors"
                 }
             }
+        },
+        "stored_objectPreSignedUrl": {
+            "type": "object",
+            "description": "Pre signed url",
+            "title": "PreSignedUrl",
+            "x-displayname": "Pre Signed Url",
+            "x-ves-oneof-field-storage_provider_choice": "[\"aws\"]",
+            "x-ves-proto-message": "ves.io.schema.stored_object.PreSignedUrl",
+            "properties": {
+                "aws": {
+                    "description": "Exclusive with []\nx-displayName: \"AWS\"\nRelevant only for big_object type. The presigned url relevant data to upload or download the resource",
+                    "title": "aws_big_object_url",
+                    "$ref": "#/definitions/stored_objectPresignedUrlData"
+                }
+            }
+        },
+        "stored_objectPresignedUrlData": {
+            "type": "object",
+            "description": "Pre signed url data",
+            "title": "PresignedUrlData",
+            "x-displayname": "Pre Signed Url Data",
+            "x-ves-proto-message": "ves.io.schema.stored_object.PresignedUrlData",
+            "properties": {
+                "method": {
+                    "description": " The method of the request matched to that url",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "method"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " The url to upload or download the resource",
+                    "title": "url",
+                    "x-displayname": "url"
+                }
+            }
+        },
+        "stored_objectQueryType": {
+            "type": "string",
+            "description": "x-displayName: \"Query Type\"\nThe type of search query needs to be performed. Could be EXACT_MATCH or PREFIX_MATCH.\nEXACT_MATCH returns the objects with exact match on the name filed, while PREFIX_MATCH returns the list of object having the 'name' as prefix. Default is EXACT_MATCH.\n\n - EXACT_MATCH: EXACT_MATCH\n\nx-displayName: \"EXACT MATCH\"\nReturns list of objects with exact match on the name filed.\n - PREFIX_MATCH: PREFIX_MATCH\n\nx-displayName: \"PREFIX MATCH\"\nReturns the list of object matching the 'name' prefix.",
+            "title": "QueryType",
+            "enum": [
+                "EXACT_MATCH",
+                "PREFIX_MATCH"
+            ],
+            "default": "EXACT_MATCH"
         },
         "stored_objectStoredObjectDescriptor": {
             "type": "object",
@@ -1401,24 +1573,87 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "creation_timestamp": {
                     "type": "string",
-                    "description": " Creation date \u0026 time for the object\nRequired: YES",
+                    "description": " Creation date \u0026 time for the object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "creation_timestamp",
                     "format": "date-time",
                     "x-displayname": "Creation Timestamp",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "description": {
                     "type": "string",
-                    "description": " Optional field, the Description for the object",
+                    "description": " Optional field, the Description for the object\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
                     "title": "description",
-                    "x-displayname": "description"
+                    "maxLength": 512,
+                    "x-displayname": "description",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
                 },
                 "url": {
                     "type": "string",
-                    "description": " Url of the stored object\nRequired: YES",
+                    "description": " Url of the stored object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "url",
                     "x-displayname": "Url",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "stored_objectVersionDescriptor": {
+            "type": "object",
+            "description": "Descriptor for store object version.",
+            "title": "VersionDescriptor",
+            "x-displayname": "Version Descriptor",
+            "x-ves-proto-message": "ves.io.schema.stored_object.VersionDescriptor",
+            "properties": {
+                "creation_timestamp": {
+                    "type": "string",
+                    "description": " Creation date \u0026 time for the object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "creation_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "description": {
+                    "type": "string",
+                    "description": " Optional field, the Description for the object\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "description",
+                    "maxLength": 512,
+                    "x-displayname": "description",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "latest_version": {
+                    "type": "boolean",
+                    "description": " A tag representing if this is the latest version for the object.",
+                    "title": "latest_version",
+                    "format": "boolean",
+                    "x-displayname": "Latest Version"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " Url of the stored object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "url",
+                    "x-displayname": "Url",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "version": {
+                    "type": "string",
+                    "description": " Version of the stored object.",
+                    "title": "version",
+                    "x-displayname": "Version"
                 }
             }
         }

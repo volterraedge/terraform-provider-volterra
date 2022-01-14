@@ -231,6 +231,18 @@ func (v *ValidateBigIPAWSType) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["tags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vip_address"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vip_address"))
@@ -411,16 +423,6 @@ func (v *ValidateBigIPDeviceType) InstanceTypeValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateBigIPDeviceType) PublicSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for public_subnet_id")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateBigIPDeviceType) PrivateSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -436,6 +438,26 @@ func (v *ValidateBigIPDeviceType) WorkloadSubnetIdValidationRuleHandler(rules ma
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for workload_subnet_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIPDeviceType) MgmtSubnetCidrValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mgmt_subnet_cidr")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIPDeviceType) MgmtSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mgmt_subnet_id")
 	}
 
 	return validatorFn, nil
@@ -464,6 +486,24 @@ func (v *ValidateBigIPDeviceType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["mgmt_subnet_cidr"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mgmt_subnet_cidr"))
+		if err := fv(ctx, m.GetMgmtSubnetCidr(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mgmt_subnet_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mgmt_subnet_id"))
+		if err := fv(ctx, m.GetMgmtSubnetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -477,15 +517,6 @@ func (v *ValidateBigIPDeviceType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("private_subnet_id"))
 		if err := fv(ctx, m.GetPrivateSubnetId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["public_subnet_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("public_subnet_id"))
-		if err := fv(ctx, m.GetPublicSubnetId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -537,17 +568,6 @@ var DefaultBigIPDeviceTypeValidator = func() *ValidateBigIPDeviceType {
 	}
 	v.FldValidators["instance_type"] = vFn
 
-	vrhPublicSubnetId := v.PublicSubnetIdValidationRuleHandler
-	rulesPublicSubnetId := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPublicSubnetId(rulesPublicSubnetId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIPDeviceType.public_subnet_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["public_subnet_id"] = vFn
-
 	vrhPrivateSubnetId := v.PrivateSubnetIdValidationRuleHandler
 	rulesPrivateSubnetId := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -569,6 +589,28 @@ var DefaultBigIPDeviceTypeValidator = func() *ValidateBigIPDeviceType {
 		panic(errMsg)
 	}
 	v.FldValidators["workload_subnet_id"] = vFn
+
+	vrhMgmtSubnetCidr := v.MgmtSubnetCidrValidationRuleHandler
+	rulesMgmtSubnetCidr := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMgmtSubnetCidr(rulesMgmtSubnetCidr)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIPDeviceType.mgmt_subnet_cidr: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mgmt_subnet_cidr"] = vFn
+
+	vrhMgmtSubnetId := v.MgmtSubnetIdValidationRuleHandler
+	rulesMgmtSubnetId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMgmtSubnetId(rulesMgmtSubnetId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIPDeviceType.mgmt_subnet_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mgmt_subnet_id"] = vFn
 
 	return v
 }()

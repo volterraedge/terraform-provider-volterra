@@ -12,7 +12,7 @@ SERVICE := $(shell basename ${TOP})
 PACKAGE = $(shell echo "${PWD}" | sed "s,$$GOPATH/src/,,g")
 
 # Timeout for golang tests
-TEST_TIMEOUT ?= 300s
+TEST_TIMEOUT ?= 600s
 
 # GO environemnt settings
 GO_CMD=$(shell which richgo 2> /dev/null || which go)

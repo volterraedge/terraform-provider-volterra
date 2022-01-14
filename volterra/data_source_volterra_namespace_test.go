@@ -16,7 +16,7 @@ import (
 func TestAccDataSourceNamespaceBasic(t *testing.T) {
 	name := generateResourceName()
 	resourceName := "volterra_namespace." + name
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{ves_io_schema_ns.ObjectType})
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{ves_io_schema_ns.ObjectType})
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)

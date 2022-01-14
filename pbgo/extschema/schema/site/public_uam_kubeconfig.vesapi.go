@@ -568,7 +568,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/system/revoke/global-kubeconfigs": {
             "post": {
@@ -873,19 +873,30 @@ var UamKubeConfigAPISwaggerJSON string = `{
             "properties": {
                 "expiration_timestamp": {
                     "type": "string",
-                    "description": " Timestamp of kubeconfig's certificate expiry.\n\nExample: - \"value\"-",
+                    "description": " Timestamp of kubeconfig's certificate expiry.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.timestamp.gt_now: true\n  ves.io.schema.rules.timestamp.within.seconds: 31536000\n",
                     "title": "Expiry timestamp",
                     "format": "date-time",
                     "x-displayname": "Expiry timestamp",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.timestamp.gt_now": "true",
+                        "ves.io.schema.rules.timestamp.within.seconds": "31536000"
+                    }
                 },
                 "site": {
                     "type": "string",
-                    "description": " Name of the site for which kubeconfig is being requested.\n\nExample: - \"ce398\"-\nRequired: YES",
+                    "description": " Name of the site for which kubeconfig is being requested.\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Site",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Site",
                     "x-ves-example": "ce398",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 }
             }
         },
@@ -947,10 +958,16 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of this credential\n\nExample: - \"api-cred-x89sf\"-",
+                    "description": " Name of this credential\n\nExample: - \"api-cred-x89sf\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
-                    "x-ves-example": "api-cred-x89sf"
+                    "x-ves-example": "api-cred-x89sf",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "uid": {
                     "type": "string",
@@ -977,11 +994,18 @@ var UamKubeConfigAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of kubeconfig resource.\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Name of kubeconfig resource.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Credential name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 }
             }
         }

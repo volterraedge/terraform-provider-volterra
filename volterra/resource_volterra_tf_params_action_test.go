@@ -12,7 +12,7 @@ import (
 )
 
 func TestResourceTFParamsAction(t *testing.T) {
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{})
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{})
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)

@@ -854,7 +854,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/listregistrationsbystate": {
             "post": {
@@ -1393,19 +1393,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Registration name (= \"r-\" + uid) to approve. Registration name is taken from listing pending registrations.\n\nExample: - \"r-e9030963-639e-41cd-aba6-261504f4a6be\"-\nRequired: YES",
+                    "description": " Registration name (= \"r-\" + uid) to approve. Registration name is taken from listing pending registrations.\n\nExample: - \"r-e9030963-639e-41cd-aba6-261504f4a6be\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "r-e9030963-639e-41cd-aba6-261504f4a6be",
-                    "x-ves-required": "true"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " Registration namespace, only \"system\" namespaces is accepted\n\nExample: - \"system\"-\nRequired: YES",
-                    "title": "Namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "passport": {
                     "description": " Passport to be changed in registration, must be valid and always provided",
@@ -1414,11 +1409,14 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Passport"
                 },
                 "state": {
-                    "description": " State to approve (APPROVED or RETIRED)\nRequired: YES",
+                    "description": " State to approve (APPROVED or RETIRED)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Target registration state",
                     "$ref": "#/definitions/registrationObjectState",
                     "x-displayname": "Target state",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "tunnel_type": {
                     "description": " Tunnel type specifies the type of tunnel to be used for traffic between the sites.",
@@ -1437,27 +1435,36 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Registration name\n\nExample: - \"r-e9030963-639e-41cd-aba6-261504f4a6be\"-\nRequired: YES",
+                    "description": " Registration name\n\nExample: - \"r-e9030963-639e-41cd-aba6-261504f4a6be\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "r-e9030963-639e-41cd-aba6-261504f4a6be",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Registration namespace\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Registration namespace\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "token": {
                     "type": "string",
-                    "description": " Token - verify node identity\n\nExample: - \"835af393-3056-46af-a9e4-57613fbe0339\"-\nRequired: YES",
+                    "description": " Token - verify node identity\n\nExample: - \"835af393-3056-46af-a9e4-57613fbe0339\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Token",
                     "x-displayname": "Token",
                     "x-ves-example": "835af393-3056-46af-a9e4-57613fbe0339",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -1509,10 +1516,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "hostname": {
                     "type": "string",
-                    "description": " Must be unique in entire cluster and same as OS settings.\n '.' (dots) are not allowed in hostname\nRequired: YES",
+                    "description": " Must be unique in entire cluster and same as OS settings.\n '.' (dots) are not allowed in hostname\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Instance hostname",
                     "x-displayname": "Hostname",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "hw_info": {
                     "description": " HW information about node in the site",
@@ -1528,10 +1538,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "interfaces": {
                     "type": "object",
-                    "description": " Machine interfaces present during registration time\nRequired: YES",
+                    "description": " Machine interfaces present during registration time\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Interfaces",
                     "x-displayname": "Interfaces",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "internet_proxy": {
                     "description": " It will be used as the proxy URL for HTTP requests and HTTPS requests to Volterra public domains.",
@@ -1754,18 +1767,24 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Registration namespace, only \"system\" namespaces is accepted\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Registration namespace, only \"system\" namespaces is accepted\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "state": {
-                    "description": " State to get list of registrations (NEW, APPROVED, ADMITTED or RETIRED)\nRequired: YES",
+                    "description": " State to get list of registrations (NEW, APPROVED, ADMITTED or RETIRED)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "ObjectState",
                     "$ref": "#/definitions/registrationObjectState",
                     "x-displayname": "Object State",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -1850,27 +1869,36 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "cluster_name": {
                     "type": "string",
-                    "description": "\nExample: - \"acme-ce01\"-\nRequired: YES",
+                    "description": "\nExample: - \"acme-ce01\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "cluster_name",
                     "x-displayname": "Cluster Name",
                     "x-ves-example": "acme-ce01",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "cluster_size": {
                     "type": "integer",
-                    "description": " Defines how many master nodes is in the cluster, only 1 or 3 is allowed\n 1 - cluster have single master, without HA\n 3 - cluster have 3 masters, with HA, all nodes should be allowed at same time, cluster won't start until ALL nodes are ADMITTED\n 0 - same as 1\n This value can't be changed after installation.\n It does not interact with auto-scaling as only pool nodes are scaled.\n\nExample: - \"3\"-",
+                    "description": " Defines how many master nodes is in the cluster, only 1 or 3 is allowed\n 1 - cluster have single master, without HA\n 3 - cluster have 3 masters, with HA, all nodes should be allowed at same time, cluster won't start until ALL nodes are ADMITTED\n 0 - same as 1\n This value can't be changed after installation.\n It does not interact with auto-scaling as only pool nodes are scaled.\n\nExample: - \"3\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.in: [0,1,3]\n",
                     "title": "Cluster size",
                     "format": "int32",
                     "x-displayname": "Cluster Size",
-                    "x-ves-example": "3"
+                    "x-ves-example": "3",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.in": "[0,1,3]"
+                    }
                 },
                 "cluster_type": {
                     "type": "string",
-                    "description": "\nExample: - \"ce\"-\nRequired: YES",
+                    "description": "\nExample: - \"ce\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "cluster_type",
                     "x-displayname": "Cluster Type",
                     "x-ves-example": "ce",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "default_os_version": {
                     "description": "Exclusive with [operating_system_version]\nx-displayName: \"Default OS Version\"\nWill assign latest available OS version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
@@ -1884,19 +1912,27 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "latitude": {
                     "type": "number",
-                    "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-",
+                    "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
                     "title": "Latitude",
                     "format": "float",
                     "x-displayname": "Latitude",
-                    "x-ves-example": "49.3156733"
+                    "x-ves-example": "49.3156733",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "-90.0",
+                        "ves.io.schema.rules.float.lte": "90.0"
+                    }
                 },
                 "longitude": {
                     "type": "number",
-                    "description": " Geographic location of this site\n\nExample: - \"14.2484333\"-",
+                    "description": " Geographic location of this site\n\nExample: - \"14.2484333\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
                     "title": "Longitude",
                     "format": "float",
                     "x-displayname": "Longitude",
-                    "x-ves-example": "14.2484333"
+                    "x-ves-example": "14.2484333",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "-180.0",
+                        "ves.io.schema.rules.float.lte": "180.0"
+                    }
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -1905,22 +1941,19 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "private_network_name": {
                     "type": "string",
-                    "description": " Private Network name for private access connectivity to Volterra ADN.\n It is used for PrivateLink, CloudLink and L3VPN.\n\nExample: - \"private-ntw\"-",
+                    "description": " Private Network name for private access connectivity to Volterra ADN.\n It is used for PrivateLink, CloudLink and L3VPN.\n\nExample: - \"private-ntw\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "Private Network Name",
+                    "maxLength": 64,
                     "x-displayname": "Private Network Name",
-                    "x-ves-example": "private-ntw"
+                    "x-ves-example": "private-ntw",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "volterra_software_version": {
                     "type": "string",
                     "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
                     "title": "Volterra Software Version"
-                },
-                "vpm_version": {
-                    "type": "string",
-                    "description": " vpm version used for registration\n it'll be used to refuse registration from old vpms\n Local control plane to manage volterra software appliance\n\nExample: - \"value\"-",
-                    "title": "VPM version",
-                    "x-displayname": "VPM Version",
-                    "x-ves-example": "value"
                 }
             }
         },
@@ -2098,9 +2131,15 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotation"
+                    "x-displayname": "Annotation",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2124,11 +2163,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2148,10 +2190,16 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotation",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2177,11 +2225,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2201,10 +2252,16 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2230,11 +2287,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2464,12 +2524,16 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -2575,23 +2639,32 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.registration.CreateSpecType",
             "properties": {
                 "infra": {
-                    "description": " Infrastructure metadata section\nRequired: YES",
+                    "description": " Infrastructure metadata section\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/registrationInfra",
                     "x-displayname": "Infrastructure",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "passport": {
-                    "description": " Passport is storing identification for instance as site name, latitude, longitude, etc.\nRequired: YES",
+                    "description": " Passport is storing identification for instance as site name, latitude, longitude, etc.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/registrationPassport",
                     "x-displayname": "Passport",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "token": {
                     "type": "string",
-                    "description": " Token is used for machine and tenant identification\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Token is used for machine and tenant identification\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "x-displayname": "Token",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2604,23 +2677,32 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.registration.GetSpecType",
             "properties": {
                 "infra": {
-                    "description": " Infrastructure metadata section\nRequired: YES",
+                    "description": " Infrastructure metadata section\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/registrationInfra",
                     "x-displayname": "Infrastructure",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "passport": {
-                    "description": " Passport is storing identification for instance as site name, latitude, longitude, etc.\nRequired: YES",
+                    "description": " Passport is storing identification for instance as site name, latitude, longitude, etc.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/registrationPassport",
                     "x-displayname": "Passport",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "token": {
                     "type": "string",
-                    "description": " Token is used for machine and tenant identification\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Token is used for machine and tenant identification\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "x-displayname": "Token",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2631,18 +2713,24 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.registration.GlobalSpecType",
             "properties": {
                 "infra": {
-                    "description": " Infrastructure metadata section\nRequired: YES",
+                    "description": " Infrastructure metadata section\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Infra",
                     "$ref": "#/definitions/registrationInfra",
                     "x-displayname": "Infrastructure",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "passport": {
-                    "description": " Passport is storing identification for instance as site name, latitude, longitude, etc.\nRequired: YES",
+                    "description": " Passport is storing identification for instance as site name, latitude, longitude, etc.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Passport",
                     "$ref": "#/definitions/registrationPassport",
                     "x-displayname": "Passport",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "role": {
                     "type": "array",
@@ -2665,17 +2753,23 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "token": {
                     "type": "string",
-                    "description": " Token is used for machine and tenant identification\n\nExample: - \"value\"-\nRequired: YES",
+                    "description": " Token is used for machine and tenant identification\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Token",
                     "x-displayname": "Token",
                     "x-ves-example": "value",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "tunnel_type": {
-                    "description": " Tunnel type specifies the type of tunnel to be used for traffic between the sites.",
+                    "description": " Tunnel type specifies the type of tunnel to be used for traffic between the sites.\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2]\n",
                     "title": "Site to site tunnel type",
                     "$ref": "#/definitions/schemaSiteToSiteTunnelType",
-                    "x-displayname": "Site to Site Tunnel Type"
+                    "x-displayname": "Site to Site Tunnel Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1,2]"
+                    }
                 }
             }
         },

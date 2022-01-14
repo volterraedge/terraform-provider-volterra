@@ -585,6 +585,94 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_VoltconsoleShapeBotRead:
+		if fv, exists := v.FldValidators["choice.voltconsole_shape_bot_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleShapeBotRead).VoltconsoleShapeBotRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_shape_bot_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleShapeBotWrite:
+		if fv, exists := v.FldValidators["choice.voltconsole_shape_bot_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleShapeBotWrite).VoltconsoleShapeBotWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_shape_bot_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleShapeBotAdmin:
+		if fv, exists := v.FldValidators["choice.voltconsole_shape_bot_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleShapeBotAdmin).VoltconsoleShapeBotAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_shape_bot_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleShapeBotSubscriptionMgmt:
+		if fv, exists := v.FldValidators["choice.voltconsole_shape_bot_subscription_mgmt"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleShapeBotSubscriptionMgmt).VoltconsoleShapeBotSubscriptionMgmt
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_shape_bot_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleShapeRecognizeRead:
+		if fv, exists := v.FldValidators["choice.voltconsole_shape_recognize_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleShapeRecognizeRead).VoltconsoleShapeRecognizeRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_shape_recognize_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleShapeRecognizeWrite:
+		if fv, exists := v.FldValidators["choice.voltconsole_shape_recognize_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleShapeRecognizeWrite).VoltconsoleShapeRecognizeWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_shape_recognize_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleShapeRecognizeAdmin:
+		if fv, exists := v.FldValidators["choice.voltconsole_shape_recognize_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleShapeRecognizeAdmin).VoltconsoleShapeRecognizeAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_shape_recognize_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleShapeRecognizeSubscriptionMgmt:
+		if fv, exists := v.FldValidators["choice.voltconsole_shape_recognize_subscription_mgmt"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleShapeRecognizeSubscriptionMgmt).VoltconsoleShapeRecognizeSubscriptionMgmt
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_shape_recognize_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
