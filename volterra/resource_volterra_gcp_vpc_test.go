@@ -97,6 +97,9 @@ func testGCPVPCSiteConfig(resourceName, name string) string {
 		  }
 		  logs_streaming_disabled = true
 		  ssh_key = "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAD5sRjpKVBvf5afxhysXd4GyvEFaiDOnPhKQcK8SHNUxkGkjhRV6xMFpBBApNctQ73yaHweV//OhBHurwzUodKOWAEyH+ay0V2BAOpx2aiQHxiMh7b0CGYVxv4lRZ4IPZ1Da9Siz1Sz19RYBjVM7v6Dvo2UlYftUyauKPIDPnd19iN10g=="
+		  lifecycle {
+			ignore_changes = [labels]
+		  }
 
 		}
 		resource "volterra_tf_params_action" "%[1]s" {
@@ -104,6 +107,15 @@ func testGCPVPCSiteConfig(resourceName, name string) string {
 			site_kind = "gcp_vpc_site"
 			action = "plan"
 			wait_for_action = false
+		}
+		resource "volterra_cloud_site_labels" "%[1]s" {
+			name = volterra_gcp_vpc_site.%[1]s.name
+			site_type = "gcp_vpc_site"
+			labels = {
+				key1 = "value1"
+				key2 = "value2"
+			}
+			ignore_on_delete = true
 		}
 		`, resourceName, name)
 }

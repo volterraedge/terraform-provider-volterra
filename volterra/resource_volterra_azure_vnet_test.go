@@ -127,12 +127,24 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 			latitude = 37.404989
 			longitude = -121.942300
 		  }
+		  lifecycle {
+			ignore_changes = [labels]
+		  }
 		}
 		resource "volterra_tf_params_action" "%[1]s" {
 			site_name = "%[2]s"
 			site_kind = "azure_vnet_site"
 			action = "plan"
 			wait_for_action = false
+		}
+		resource "volterra_cloud_site_labels" "%[1]s" {
+			name = volterra_azure_vnet_site.%[1]s.name
+			site_type = "azure_vnet_site"
+			labels = {
+				key1 = "value1"
+				key2 = "value2"
+			}
+			ignore_on_delete = true
 		}
 		`, resourceName, name)
 }
