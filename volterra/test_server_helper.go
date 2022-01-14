@@ -19,10 +19,12 @@ import (
 	"gopkg.volterra.us/stdlib/svcfw/test/generic"
 	"gopkg.volterra.us/stdlib/testutil/fixtures/vesenv"
 
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	ves_io_schema_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
@@ -390,10 +392,10 @@ func makeTestServer(t *testing.T, objectType string) (*generic.Fixture, func()) 
 	return f, stop
 }
 
-func createTestCustomAPIServer(t *testing.T, objectTypes []string) (string, func()) {
+func createTestCustomAPIServer(t *testing.T, objectTypes []string) (string, func(), *generic.Fixture) {
 
 	f, stop := makeCustomTestServer(t, objectTypes)
-	return fmt.Sprintf("https://localhost:%d", f.Svc.RestServerTLSPort()), stop
+	return fmt.Sprintf("https://localhost:%d", f.Svc.RestServerTLSPort()), stop, f
 }
 
 func makeCustomTestServer(t *testing.T, objectTypes []string) (*generic.Fixture, func()) {
@@ -485,4 +487,30 @@ func getTestClientOpts(url, tenant string) ([]vesapi.ConfigOpt, error) {
 
 func generateResourceName() string {
 	return acctest.RandStringFromCharSet(10, acctest.CharSetAlpha)
+}
+
+// mkDBObjTenant creates an instance of *ves_io_schema_tenant.DBObject
+func mkDBObjTenant(name, uid string) *ves_io_schema_tenant.DBObject {
+	pbObj := &ves_io_schema_tenant.Object{
+		Metadata: &ves_io_schema.ObjectMetaType{
+			Name:      name,
+			Uid:       uid,
+			Namespace: "system",
+		},
+		SystemMetadata: &ves_io_schema.SystemObjectMetaType{
+			Tenant: "ves-io",
+			Uid:    uid,
+			Namespace: []*ves_io_schema.ObjectRefType{
+				{
+					Tenant: name,
+					Kind:   "namespace",
+					Name:   "system",
+				},
+			},
+		},
+		Spec: &ves_io_schema_tenant.SpecType{
+			GcSpec: &ves_io_schema_tenant.GlobalSpecType{},
+		},
+	}
+	return ves_io_schema_tenant.NewDBObject(pbObj)
 }

@@ -18,7 +18,7 @@ import (
 
 func TestPK8sSite(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{
 		ves_io_schema_voltstack_site.ObjectType,
 		ves_io_schema_k8s_cluster.ObjectType,
 		ves_io_schema_k8s_cluster_role.ObjectType,
@@ -123,6 +123,8 @@ func testPk8sSiteConfig(name string) string {
 			}
 			use_default_psp = false
 			use_default_cluster_roles = true
+			cluster_scoped_access_deny = false
+			cluster_scoped_access_permit = true
 			no_cluster_wide_apps = true
 		}
 		resource "volterra_voltstack_site" "this" {

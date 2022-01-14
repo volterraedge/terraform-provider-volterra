@@ -16,7 +16,7 @@ import (
 func TestNetworkInterface(t *testing.T) {
 	name := generateResourceName()
 	resourceName := "volterra_network_interface." + name
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{ves_io_schema_netw_intf.ObjectType})
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{ves_io_schema_netw_intf.ObjectType})
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)

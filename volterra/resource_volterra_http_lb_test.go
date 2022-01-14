@@ -8,11 +8,13 @@ import (
 	"os"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_uid "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
 	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
@@ -21,7 +23,7 @@ import (
 // TestAccHTTPLB token creation test
 func TestHTTPLB(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{
+	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{
 		ves_io_schema_views_http_loadbalancer.ObjectType,
 		ves_io_schema_uid.ObjectType,
 		ves_io_schema_ns.ObjectType,
@@ -29,13 +31,17 @@ func TestHTTPLB(t *testing.T) {
 		ves_io_schema_app_firewall.ObjectType,
 		ves_io_schema_app_type.ObjectType,
 		ves_io_schema_app_setting.ObjectType,
+		ves_io_schema_tenant.ObjectType,
 	})
+	tenantName := "tenant1"
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String())
+	f.MustCreateEntry(tenantObj)
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")
 	os.Setenv("VOLT_VESENV", "true")
-	os.Setenv("VOLT_TENANT", "ves-io")
+	os.Setenv("VOLT_TENANT", "tenant1")
 	resource.Test(t, resource.TestCase{
 		Providers: testAccProviders,
 		PreCheck:  func() { testAccPreCheck() },

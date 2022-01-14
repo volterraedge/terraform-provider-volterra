@@ -22,7 +22,7 @@ import (
 // TestNamespaceCustomAPI namespace custom api test
 func TestNamespaceCustomAPI(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{
 		ves_io_schema_sp.ObjectType,
 		ves_io_schema_np.ObjectType,
 		ves_io_schema_pp.ObjectType,

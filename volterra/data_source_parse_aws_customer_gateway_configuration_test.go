@@ -18,7 +18,7 @@ var (
 
 func TestAccParseCGWData(t *testing.T) {
 	dataSourceName := "data.volterra_parse_aws_cgw_configuration.test"
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{ves_io_schema_ns.ObjectType})
+	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{ves_io_schema_ns.ObjectType})
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	//os.Setenv("TF_LOG", "TRACE")
