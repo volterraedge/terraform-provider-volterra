@@ -23,6 +23,7 @@ func TestAWSVPCSiteState(t *testing.T) {
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")
+	os.Setenv("TF_LOG", "")
 	os.Setenv("VOLT_VESENV", "true")
 	os.Setenv("VOLT_TENANT", "ves-io")
 	resource.Test(t, resource.TestCase{
@@ -145,7 +146,19 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 		  logs_streaming_disabled = true
 		  ssh_key = "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAD5sRjpKVBvf5afxhysXd4GyvEFaiDOnPhKQcK8SHNUxkGkjhRV6xMFpBBApNctQ73yaHweV//OhBHurwzUodKOWAEyH+ay0V2BAOpx2aiQHxiMh7b0CGYVxv4lRZ4IPZ1Da9Siz1Sz19RYBjVM7v6Dvo2UlYftUyauKPIDPnd19iN10g=="
 		  total_nodes = 2
+		  lifecycle {
+			ignore_changes = [labels]
+		  }
 
+		}
+		resource "volterra_cloud_site_labels" "%[1]s" {
+			name = volterra_aws_vpc_site.%[1]s.name
+			site_type = "aws_vpc_site"
+			labels = {
+				key1 = "value1"
+				key2 = "value2"
+			}
+			ignore_on_delete = true
 		}`, resourceName, name, cloudCred)
 }
 
