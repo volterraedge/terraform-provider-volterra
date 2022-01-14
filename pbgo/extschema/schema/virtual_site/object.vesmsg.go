@@ -61,39 +61,32 @@ func (m *SpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 }
 
 func (m *SpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetGcSpecSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetGcSpecSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetGcSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *SpecType) GetGcSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	var (
-		srInfos []db.SelrFldInfo
-		err     error
-	)
-	if m.GcSpec == nil {
-		return []db.SelrFldInfo{}, nil
+	if m.GetGcSpec() == nil {
+		return nil, nil
 	}
 
-	srInfos, err = m.GcSpec.GetSRefInfo()
+	srInfos, err := m.GetGcSpec().GetSRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "HasSref message field")
+		return nil, errors.Wrap(err, "GetGcSpec().GetSRefInfo() FAILED")
 	}
 
-	retSRInfos := []db.SelrFldInfo{}
-	for _, sri := range srInfos {
+	for i := range srInfos {
+		sri := &srInfos[i]
 		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
 		sl := strings.Split(sri.Name, ".")
 		sri.Name = "gc_spec." + strings.Join(sl[1:], ".")
-		retSRInfos = append(retSRInfos, sri)
 	}
-	return retSRInfos, nil
+	return srInfos, nil
+
 }
 
 type ValidateSpecType struct {

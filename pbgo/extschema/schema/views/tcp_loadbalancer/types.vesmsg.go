@@ -65,88 +65,89 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAdvertiseChoice().(type) {
 	case *CreateSpecType_AdvertiseOnPublic:
-		odrInfos, err = m.GetAdvertiseOnPublic().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_on_public." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_AdvertiseCustom:
-		odrInfos, err = m.GetAdvertiseCustom().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_custom." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_DoNotAdvertise:
 
+		return nil, nil
+
 	case *CreateSpecType_AdvertiseOnPublicDefaultVip:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOriginPoolsWeights() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("origin_pools_weights[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -214,6 +215,16 @@ func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]s
 			return errors.Wrap(err, "items domains")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ListenPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for listen_port")
 	}
 
 	return validatorFn, nil
@@ -548,6 +559,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhListenPort := v.ListenPortValidationRuleHandler
+	rulesListenPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhListenPort(rulesListenPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.listen_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["listen_port"] = vFn
+
 	vrhOriginPoolsWeights := v.OriginPoolsWeightsValidationRuleHandler
 	rulesOriginPoolsWeights := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
@@ -619,74 +641,82 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginPoolsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAdvertiseChoice().(type) {
 	case *GetSpecType_AdvertiseOnPublic:
-		odrInfos, err = m.GetAdvertiseOnPublic().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_on_public." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_AdvertiseCustom:
-		odrInfos, err = m.GetAdvertiseCustom().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_custom." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_DoNotAdvertise:
 
+		return nil, nil
+
 	case *GetSpecType_AdvertiseOnPublicDefaultVip:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GetSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetOriginPools() {
+	vrefs := m.GetOriginPools()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GetSpecType.origin_pools[%d] has a nil value", i)
 		}
@@ -702,8 +732,8 @@ func (m *GetSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetOriginPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -737,27 +767,24 @@ func (m *GetSpecType) GetOriginPoolsDBEntries(ctx context.Context, d db.Interfac
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOriginPoolsWeights() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("origin_pools_weights[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -825,6 +852,16 @@ func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]stri
 			return errors.Wrap(err, "items domains")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ListenPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for listen_port")
 	}
 
 	return validatorFn, nil
@@ -1228,6 +1265,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhListenPort := v.ListenPortValidationRuleHandler
+	rulesListenPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhListenPort(rulesListenPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.listen_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["listen_port"] = vFn
+
 	vrhOriginPools := v.OriginPoolsValidationRuleHandler
 	rulesOriginPools := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
@@ -1313,80 +1361,88 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginPoolsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAdvertiseChoice().(type) {
 	case *GlobalSpecType_AdvertiseOnPublic:
-		odrInfos, err = m.GetAdvertiseOnPublic().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_on_public." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_AdvertiseCustom:
-		odrInfos, err = m.GetAdvertiseCustom().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_custom." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_DoNotAdvertise:
 
+		return nil, nil
+
 	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetOriginPools() {
+	vrefs := m.GetOriginPools()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.origin_pools[%d] has a nil value", i)
 		}
@@ -1402,8 +1458,8 @@ func (m *GlobalSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetOriginPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1437,31 +1493,27 @@ func (m *GlobalSpecType) GetOriginPoolsDBEntries(ctx context.Context, d db.Inter
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOriginPoolsWeights() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("origin_pools_weights[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -1469,16 +1521,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1575,6 +1627,16 @@ func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]s
 			return errors.Wrap(err, "items domains")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ListenPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for listen_port")
 	}
 
 	return validatorFn, nil
@@ -1987,6 +2049,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhListenPort := v.ListenPortValidationRuleHandler
+	rulesListenPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhListenPort(rulesListenPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.listen_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["listen_port"] = vFn
+
 	vrhOriginPools := v.OriginPoolsValidationRuleHandler
 	rulesOriginPools := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
@@ -2074,74 +2147,82 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginPoolsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAdvertiseChoice().(type) {
 	case *ReplaceSpecType_AdvertiseOnPublic:
-		odrInfos, err = m.GetAdvertiseOnPublic().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_on_public." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_AdvertiseCustom:
-		odrInfos, err = m.GetAdvertiseCustom().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_custom." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_DoNotAdvertise:
 
+		return nil, nil
+
 	case *ReplaceSpecType_AdvertiseOnPublicDefaultVip:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *ReplaceSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetOriginPools() {
+	vrefs := m.GetOriginPools()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.origin_pools[%d] has a nil value", i)
 		}
@@ -2157,8 +2238,8 @@ func (m *ReplaceSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetOriginPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2192,27 +2273,24 @@ func (m *ReplaceSpecType) GetOriginPoolsDBEntries(ctx context.Context, d db.Inte
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOriginPoolsWeights() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("origin_pools_weights[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -2280,6 +2358,16 @@ func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]
 			return errors.Wrap(err, "items domains")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ListenPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for listen_port")
 	}
 
 	return validatorFn, nil
@@ -2661,6 +2749,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["domains"] = vFn
+
+	vrhListenPort := v.ListenPortValidationRuleHandler
+	rulesListenPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhListenPort(rulesListenPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.listen_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["listen_port"] = vFn
 
 	vrhOriginPools := v.OriginPoolsValidationRuleHandler
 	rulesOriginPools := map[string]string{

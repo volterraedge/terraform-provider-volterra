@@ -64,73 +64,59 @@ func (m *ObjectCreateReq) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ObjectCreateReq) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSystemMetadataDRefInfo()
+
 }
 
 func (m *ObjectCreateReq) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSpecSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSpecSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectCreateReq) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ObjectCreateReq) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	var (
-		srInfos []db.SelrFldInfo
-		err     error
-	)
-	if m.Spec == nil {
-		return []db.SelrFldInfo{}, nil
+	if m.GetSpec() == nil {
+		return nil, nil
 	}
 
-	srInfos, err = m.Spec.GetSRefInfo()
+	srInfos, err := m.GetSpec().GetSRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "HasSref message field")
+		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
 	}
 
-	retSRInfos := []db.SelrFldInfo{}
-	for _, sri := range srInfos {
+	for i := range srInfos {
+		sri := &srInfos[i]
 		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
 		sl := strings.Split(sri.Name, ".")
 		sri.Name = "spec." + strings.Join(sl[1:], ".")
-		retSRInfos = append(retSRInfos, sri)
 	}
-	return retSRInfos, nil
+	return srInfos, nil
+
 }
 
 type ValidateObjectCreateReq struct {
@@ -236,73 +222,59 @@ func (m *ObjectCreateRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ObjectCreateRsp) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSystemMetadataDRefInfo()
+
 }
 
 func (m *ObjectCreateRsp) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSpecSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSpecSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectCreateRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ObjectCreateRsp) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	var (
-		srInfos []db.SelrFldInfo
-		err     error
-	)
-	if m.Spec == nil {
-		return []db.SelrFldInfo{}, nil
+	if m.GetSpec() == nil {
+		return nil, nil
 	}
 
-	srInfos, err = m.Spec.GetSRefInfo()
+	srInfos, err := m.GetSpec().GetSRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "HasSref message field")
+		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
 	}
 
-	retSRInfos := []db.SelrFldInfo{}
-	for _, sri := range srInfos {
+	for i := range srInfos {
+		sri := &srInfos[i]
 		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
 		sl := strings.Split(sri.Name, ".")
 		sri.Name = "spec." + strings.Join(sl[1:], ".")
-		retSRInfos = append(retSRInfos, sri)
 	}
-	return retSRInfos, nil
+	return srInfos, nil
+
 }
 
 type ValidateObjectCreateRsp struct {
@@ -690,74 +662,67 @@ func (m *ObjectGetRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) err
 }
 
 func (m *ObjectGetRsp) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ObjectGetRsp) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSpecSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSpecSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectGetRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ObjectGetRsp) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	var (
-		srInfos []db.SelrFldInfo
-		err     error
-	)
-	if m.Spec == nil {
-		return []db.SelrFldInfo{}, nil
+	if m.GetSpec() == nil {
+		return nil, nil
 	}
 
-	srInfos, err = m.Spec.GetSRefInfo()
+	srInfos, err := m.GetSpec().GetSRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "HasSref message field")
+		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
 	}
 
-	retSRInfos := []db.SelrFldInfo{}
-	for _, sri := range srInfos {
+	for i := range srInfos {
+		sri := &srInfos[i]
 		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
 		sl := strings.Split(sri.Name, ".")
 		sri.Name = "spec." + strings.Join(sl[1:], ".")
-		retSRInfos = append(retSRInfos, sri)
 	}
-	return retSRInfos, nil
+	return srInfos, nil
+
 }
 
 type ValidateObjectGetRsp struct {
@@ -1039,79 +1004,67 @@ func (m *ObjectListRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 }
 
 func (m *ObjectListRsp) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetItemsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetItemsDRefInfo()
+
 }
 
 func (m *ObjectListRsp) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetItemsSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetItemsSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectListRsp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetItems() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetItemsSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ObjectListRsp) GetItemsSRefInfo() ([]db.SelrFldInfo, error) {
-	var (
-		srInfos []db.SelrFldInfo
-		err     error
-	)
-	if m.Items == nil {
-		return []db.SelrFldInfo{}, nil
+	if m.GetItems() == nil {
+		return nil, nil
 	}
 
-	var sri []db.SelrFldInfo
-	for _, e := range m.Items {
-		sri, err = e.GetSRefInfo()
+	var srInfos []db.SelrFldInfo
+	for _, e := range m.GetItems() {
+		sris, err := e.GetSRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "HasSref message array field")
+			return nil, errors.Wrap(err, "GetItems() GetSRefInfo() FAILED")
 		}
-		srInfos = append(srInfos, sri...)
+		srInfos = append(srInfos, sris...)
 	}
 
-	retSRInfos := []db.SelrFldInfo{}
-	for _, sri := range srInfos {
+	for i := range srInfos {
+		sri := &srInfos[i]
 		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
 		sl := strings.Split(sri.Name, ".")
 		sri.Name = "items." + strings.Join(sl[1:], ".")
-		retSRInfos = append(retSRInfos, sri)
 	}
-	return retSRInfos, nil
+	return srInfos, nil
+
 }
 
 type ValidateObjectListRsp struct {
@@ -1228,74 +1181,67 @@ func (m *ObjectListRspItem) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *ObjectListRspItem) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ObjectListRspItem) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSpecSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSpecSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectListRspItem) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ObjectListRspItem) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	var (
-		srInfos []db.SelrFldInfo
-		err     error
-	)
-	if m.Spec == nil {
-		return []db.SelrFldInfo{}, nil
+	if m.GetSpec() == nil {
+		return nil, nil
 	}
 
-	srInfos, err = m.Spec.GetSRefInfo()
+	srInfos, err := m.GetSpec().GetSRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "HasSref message field")
+		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
 	}
 
-	retSRInfos := []db.SelrFldInfo{}
-	for _, sri := range srInfos {
+	for i := range srInfos {
+		sri := &srInfos[i]
 		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
 		sl := strings.Split(sri.Name, ".")
 		sri.Name = "spec." + strings.Join(sl[1:], ".")
-		retSRInfos = append(retSRInfos, sri)
 	}
-	return retSRInfos, nil
+	return srInfos, nil
+
 }
 
 type ValidateObjectListRspItem struct {
@@ -1463,39 +1409,32 @@ func (m *ObjectReplaceReq) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *ObjectReplaceReq) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSpecSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSpecSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ObjectReplaceReq) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	var (
-		srInfos []db.SelrFldInfo
-		err     error
-	)
-	if m.Spec == nil {
-		return []db.SelrFldInfo{}, nil
+	if m.GetSpec() == nil {
+		return nil, nil
 	}
 
-	srInfos, err = m.Spec.GetSRefInfo()
+	srInfos, err := m.GetSpec().GetSRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "HasSref message field")
+		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
 	}
 
-	retSRInfos := []db.SelrFldInfo{}
-	for _, sri := range srInfos {
+	for i := range srInfos {
+		sri := &srInfos[i]
 		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
 		sl := strings.Split(sri.Name, ".")
 		sri.Name = "spec." + strings.Join(sl[1:], ".")
-		retSRInfos = append(retSRInfos, sri)
 	}
-	return retSRInfos, nil
+	return srInfos, nil
+
 }
 
 type ValidateObjectReplaceReq struct {
@@ -1608,73 +1547,59 @@ func (m *ObjectReplaceRsp) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *ObjectReplaceRsp) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSystemMetadataDRefInfo()
+
 }
 
 func (m *ObjectReplaceRsp) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSpecSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSpecSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetDRefInfo for the field's type
 func (m *ObjectReplaceRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSystemMetadata() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSystemMetadata().GetDRefInfo()
+	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ObjectReplaceRsp) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	var (
-		srInfos []db.SelrFldInfo
-		err     error
-	)
-	if m.Spec == nil {
-		return []db.SelrFldInfo{}, nil
+	if m.GetSpec() == nil {
+		return nil, nil
 	}
 
-	srInfos, err = m.Spec.GetSRefInfo()
+	srInfos, err := m.GetSpec().GetSRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "HasSref message field")
+		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
 	}
 
-	retSRInfos := []db.SelrFldInfo{}
-	for _, sri := range srInfos {
+	for i := range srInfos {
+		sri := &srInfos[i]
 		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
 		sl := strings.Split(sri.Name, ".")
 		sri.Name = "spec." + strings.Join(sl[1:], ".")
-		retSRInfos = append(retSRInfos, sri)
 	}
-	return retSRInfos, nil
+	return srInfos, nil
+
 }
 
 type ValidateObjectReplaceRsp struct {

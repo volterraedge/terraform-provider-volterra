@@ -29,14 +29,14 @@ resource "volterra_route" "example" {
         invert_match = true
         name         = "Content-Type"
 
-        // One of the arguments from this list "presence exact regex" must be set
+        // One of the arguments from this list "exact regex presence" must be set
         exact = "application/json"
       }
 
       http_method = "http_method"
 
       path {
-        // One of the arguments from this list "regex prefix path" must be set
+        // One of the arguments from this list "prefix path regex" must be set
         prefix = "/register/"
       }
 
@@ -44,14 +44,16 @@ resource "volterra_route" "example" {
         key = "assignee_username"
 
         // One of the arguments from this list "exact regex" must be set
-        regex = "regex"
+        exact = "exact"
       }
     }
 
     request_headers_to_add {
       append = true
       name   = "name"
-      value  = "value"
+
+      // One of the arguments from this list "value secret_value" must be set
+      value = "value"
     }
 
     request_headers_to_remove = ["host"]
@@ -59,30 +61,27 @@ resource "volterra_route" "example" {
     response_headers_to_add {
       append = true
       name   = "name"
-      value  = "value"
+
+      // One of the arguments from this list "value secret_value" must be set
+      value = "value"
     }
 
     response_headers_to_remove = ["host"]
 
     // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
-    route_redirect {
-      host_redirect  = "one.ves.io"
-      path_redirect  = "/api/register"
-      proto_redirect = "https"
-
-      // One of the arguments from this list "retain_all_params remove_all_params strip_query_params all_params" must be set
-      retain_all_params = true
-      response_code     = "response_code"
+    route_direct_response {
+      response_body = "OK"
+      response_code = "response_code"
     }
     service_policy {
       disable = true
     }
     waf_type {
-      // One of the arguments from this list "app_firewall waf waf_rules" must be set
+      // One of the arguments from this list "waf_rules app_firewall waf" must be set
 
-      waf {
-        waf {
+      app_firewall {
+        app_firewall {
           name      = "test1"
           namespace = "staging"
           tenant    = "acmecorp"
@@ -129,6 +128,26 @@ A direct reference to an Application Firewall configuration object.
 
 `max_interval` - (Optional) to the base_interval if set. The default is 10 times the base_interval. (`Int`).
 
+### Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
 ### Buffer Policy
 
 Route level buffer configuration overrides any configuration at VirtualHost level..
@@ -138,6 +157,14 @@ Route level buffer configuration overrides any configuration at VirtualHost leve
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
 
 `max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).
+
+### Clear Secret Info
+
+Clear Secret is used for the secrets that are not encrypted.
+
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
 ### Cookie
 
@@ -178,6 +205,8 @@ sent to the cluster specified in the destination.
 `cluster` - (Required) does not exist ServiceUnavailable response will be sent. See [ref](#ref) below for details.
 
 `endpoint_subsets` - (Optional) upstream cluster which match this metadata will be selected for load balancing (`String`).
+
+`priority` - (Optional) made active as per the increasing priority. (`Int`).
 
 `weight` - (Optional) sent to the cluster specified in the destination (`Int`).
 
@@ -281,7 +310,9 @@ enclosing VirtualHost object level.
 
 `name` - (Required) Name of the HTTP header. (`String`).
 
-`value` - (Required) Value of the HTTP header. (`String`).
+`secret_value` - (Optional) Secret Value of the HTTP header.. See [Secret Value ](#secret-value) below for details.
+
+`value` - (Optional) Value of the HTTP header. (`String`).
 
 ### Response Headers To Add
 
@@ -291,7 +322,9 @@ enclosing VirtualHost object level.
 
 `name` - (Required) Name of the HTTP header. (`String`).
 
-`value` - (Required) Value of the HTTP header. (`String`).
+`secret_value` - (Optional) Secret Value of the HTTP header.. See [Secret Value ](#secret-value) below for details.
+
+`value` - (Optional) Value of the HTTP header. (`String`).
 
 ### Retain All Params
 
@@ -409,6 +442,22 @@ List of routes to match for incoming request.
 
 `waf_type` - (Optional) waf_type specified at route level overrides waf configuration at VirtualHost level. See [Waf Type ](#waf-type) below for details.
 
+### Secret Value
+
+Secret Value of the HTTP header..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
 ### Service Policy
 
 service policy configuration at route level which overrides configuration at virtual-host level.
@@ -426,6 +475,20 @@ SPDY configuration for each route.
 Specifies the list of query params to be removed. Not supported.
 
 `query_params` - (Optional) Query params keys to strip while manipulating the HTTP request (`String`).
+
+### Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
 
 ### Waf
 
@@ -458,6 +521,12 @@ Websocket configuration for each route.
 `max_connect_attempts` - (Optional) giving up. Default is 1 (`Int`).
 
 `use_websocket` - (Optional) a WebSocket connection (`Bool`).
+
+### Wingman Secret Info
+
+Secret is given as bootstrap secret in Volterra Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
 
 Attribute Reference
 -------------------

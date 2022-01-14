@@ -1157,6 +1157,18 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["addon_service_access"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("addon_service_access"))
+		for key, value := range m.GetAddonServiceAccess() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["billing_flags"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("billing_flags"))
@@ -1354,6 +1366,18 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 		vOpts := append(opts, db.WithValidateField("tenant_type"))
 		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tile_access"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tile_access"))
+		for key, value := range m.GetTileAccess() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}

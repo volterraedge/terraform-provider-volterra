@@ -34,14 +34,12 @@ resource "volterra_cloud_credentials" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+      // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
-      vault_secret_info {
-        key             = "key_pem"
-        location        = "v1/data/vhost_key"
-        provider        = "vault-vh-provider"
-        secret_encoding = "secret_encoding"
-        version         = "1"
+      blindfold_secret_info {
+        decryption_provider = "decryption_provider"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "store_provider"
       }
     }
   }
@@ -132,7 +130,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -148,7 +146,7 @@ Client Secret (alias password) for your Azure service principal.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -164,7 +162,7 @@ Content of Credential File for your GCP account.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -186,7 +184,7 @@ Password for your '.p12' or '.pfx' file whose certificate is linked to service p
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -202,7 +200,7 @@ Secret Access Key for your AWS account.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 

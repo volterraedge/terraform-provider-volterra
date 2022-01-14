@@ -6,8 +6,6 @@ require (
 	cloud.google.com/go/bigquery v1.4.0 // indirect
 	github.com/Flaque/filet v0.0.0-20201012163910-45f684403088 // indirect
 	github.com/benbjohnson/clock v1.0.3 // indirect
-	github.com/fatih/color v1.9.0 // indirect
-	github.com/fluent/fluent-logger-golang v1.5.0 // indirect
 	github.com/gogo/googleapis v1.4.0
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/mock v1.4.4 // indirect
@@ -21,7 +19,6 @@ require (
 	github.com/hashicorp/hcl/v2 v2.3.0 // indirect
 	github.com/hashicorp/terraform-json v0.5.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk v1.8.0
-	github.com/mattn/go-colorable v0.1.7 // indirect
 	github.com/mitchellh/cli v1.1.1 // indirect
 	github.com/mitchellh/go-testing-interface v1.0.4 // indirect
 	github.com/moul/http2curl v1.0.0
@@ -32,25 +29,22 @@ require (
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/prometheus/common v0.15.0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
-	github.com/smartystreets/cproxy v1.0.3 // indirect
 	github.com/spf13/cobra v1.0.0 // indirect
 	github.com/spf13/viper v1.7.1 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/throttled/throttled v2.2.5+incompatible // indirect
-	github.com/tinylib/msgp v1.1.4 // indirect
 	github.com/ulikunitz/xz v0.5.7 // indirect
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	go.opencensus.io v0.22.4 // indirect
 	go.uber.org/goleak v1.1.10 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
 	google.golang.org/api v0.15.1 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/genproto v0.0.0-20200423170343-7949de9c1215
 	google.golang.org/grpc v1.29.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gopkg.volterra.us/stdlib v0.0.0-20210709201810-3cd2898afef6
+	gopkg.volterra.us/stdlib v0.0.0-20211205172807-95e6b7b3be28
 	honnef.co/go/tools v0.0.1-2020.1.5 // indirect
 	k8s.io/api v0.19.0-alpha.3
 	software.sslmate.com/src/go-pkcs12 v0.0.0-20201103104416-57fc603b7f52 // indirect

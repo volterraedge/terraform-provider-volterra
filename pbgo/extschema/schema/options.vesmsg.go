@@ -546,6 +546,15 @@ func (v *ValidateVia) Validate(ctx context.Context, pm interface{}, opts ...db.V
 
 	}
 
+	if fv, exists := v.FldValidators["gen_field_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gen_field_path"))
+		if err := fv(ctx, m.GetGenFieldPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ref_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ref_type"))

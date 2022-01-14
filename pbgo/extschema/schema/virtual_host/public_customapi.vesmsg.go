@@ -150,37 +150,30 @@ func (m *GetDnsInfoResponse) Validate(ctx context.Context, opts ...db.ValidateOp
 }
 
 func (m *GetDnsInfoResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDnsInfoDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDnsInfoDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDnsInfo() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDnsInfo().GetDRefInfo()
+	drInfos, err := m.GetDnsInfo().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDnsInfo().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "dns_info." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGetDnsInfoResponse struct {

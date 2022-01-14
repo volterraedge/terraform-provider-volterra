@@ -479,6 +479,11 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 							},
 						},
 
+						"priority": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"weight": {
 							Type:     schema.TypeInt,
 							Optional: true,
@@ -1112,6 +1117,10 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 				}
 
+			}
+
+			if w, ok := originPoolsWeightsMapStrToI["priority"]; ok && !isIntfNil(w) {
+				originPoolsWeights[i].Priority = uint32(w.(int))
 			}
 
 			if w, ok := originPoolsWeightsMapStrToI["weight"]; ok && !isIntfNil(w) {
@@ -1807,6 +1816,10 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 				}
 
+			}
+
+			if w, ok := originPoolsWeightsMapStrToI["priority"]; ok && !isIntfNil(w) {
+				originPoolsWeights[i].Priority = uint32(w.(int))
 			}
 
 			if w, ok := originPoolsWeightsMapStrToI["weight"]; ok && !isIntfNil(w) {

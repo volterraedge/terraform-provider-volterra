@@ -65,27 +65,32 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetProxyChoice().(type) {
 	case *CreateSpecType_AnyProxy:
+
+		return nil, nil
 
 	case *CreateSpecType_NetworkConnector:
 
@@ -95,7 +100,7 @@ func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_connector.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "network_connector.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -103,15 +108,19 @@ func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "network_connector",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *CreateSpecType_ProxyLabelSelector:
 
+		return nil, nil
+
 	case *CreateSpecType_DrpHttpConnect:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetProxyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -156,37 +165,37 @@ func (m *CreateSpecType) GetProxyChoiceDBEntries(ctx context.Context, d db.Inter
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRuleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *CreateSpecType_AllowAll:
 
+		return nil, nil
+
 	case *CreateSpecType_AllowList:
+
+		return nil, nil
 
 	case *CreateSpecType_DenyList:
 
-	case *CreateSpecType_RuleList:
-		odrInfos, err = m.GetRuleList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *CreateSpecType_RuleList:
+		drInfos, err := m.GetRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -565,31 +574,40 @@ func (m *ForwardProxyAdvancedRuleType) Validate(ctx context.Context, opts ...db.
 }
 
 func (m *ForwardProxyAdvancedRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDestinationChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDestinationChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSourceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSourceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDestinationChoice().(type) {
 	case *ForwardProxyAdvancedRuleType_AllDestinations:
 
+		return nil, nil
+
 	case *ForwardProxyAdvancedRuleType_TlsList:
 
+		return nil, nil
+
 	case *ForwardProxyAdvancedRuleType_HttpList:
+
+		return nil, nil
 
 	case *ForwardProxyAdvancedRuleType_DstIpPrefixSet:
 
@@ -599,7 +617,7 @@ func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDRefInfo() ([]db.DRef
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("ip_prefix_set.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "ip_prefix_set.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -607,11 +625,15 @@ func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDRefInfo() ([]db.DRef
 			DRField:    "dst_ip_prefix_set",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *ForwardProxyAdvancedRuleType_DstPrefixList:
 
+		return nil, nil
+
 	case *ForwardProxyAdvancedRuleType_DstLabelSelector:
+
+		return nil, nil
 
 	case *ForwardProxyAdvancedRuleType_DstAsnSet:
 
@@ -621,7 +643,7 @@ func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDRefInfo() ([]db.DRef
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("bgp_asn_set.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "bgp_asn_set.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -629,13 +651,19 @@ func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDRefInfo() ([]db.DRef
 			DRField:    "dst_asn_set",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *ForwardProxyAdvancedRuleType_DstAsnList:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	case *ForwardProxyAdvancedRuleType_UrlCategoryList:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
 }
 
 // GetDestinationChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -703,20 +731,26 @@ func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDBEntries(ctx context
 
 	case *ForwardProxyAdvancedRuleType_DstAsnList:
 
+	case *ForwardProxyAdvancedRuleType_UrlCategoryList:
+
 	}
 
 	return entries, nil
 }
 
 func (m *ForwardProxyAdvancedRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSourceChoice().(type) {
 	case *ForwardProxyAdvancedRuleType_AllSources:
 
+		return nil, nil
+
 	case *ForwardProxyAdvancedRuleType_PrefixList:
 
+		return nil, nil
+
 	case *ForwardProxyAdvancedRuleType_InsideSources:
+
+		return nil, nil
 
 	case *ForwardProxyAdvancedRuleType_Interface:
 
@@ -726,7 +760,7 @@ func (m *ForwardProxyAdvancedRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo,
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_interface.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "network_interface.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -734,9 +768,11 @@ func (m *ForwardProxyAdvancedRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo,
 			DRField:    "interface",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *ForwardProxyAdvancedRuleType_LabelSelector:
+
+		return nil, nil
 
 	case *ForwardProxyAdvancedRuleType_IpPrefixSet:
 
@@ -746,7 +782,7 @@ func (m *ForwardProxyAdvancedRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo,
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("ip_prefix_set.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "ip_prefix_set.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -754,11 +790,11 @@ func (m *ForwardProxyAdvancedRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo,
 			DRField:    "ip_prefix_set",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetSourceChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1006,6 +1042,17 @@ func (v *ValidateForwardProxyAdvancedRuleType) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
+	case *ForwardProxyAdvancedRuleType_UrlCategoryList:
+		if fv, exists := v.FldValidators["destination_choice.url_category_list"]; exists {
+			val := m.GetDestinationChoice().(*ForwardProxyAdvancedRuleType_UrlCategoryList).UrlCategoryList
+			vOpts := append(opts,
+				db.WithValidateField("destination_choice"),
+				db.WithValidateField("url_category_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1220,6 +1267,7 @@ var DefaultForwardProxyAdvancedRuleTypeValidator = func() *ValidateForwardProxyA
 	v.FldValidators["destination_choice.dst_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["destination_choice.dst_asn_set"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["destination_choice.dst_asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+	v.FldValidators["destination_choice.url_category_list"] = URLCategoryListTypeValidator().Validate
 
 	v.FldValidators["http_connect_choice.port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
 
@@ -1273,39 +1321,34 @@ func (m *ForwardProxyRuleListType) Validate(ctx context.Context, opts ...db.Vali
 }
 
 func (m *ForwardProxyRuleListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRulesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ForwardProxyRuleListType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateForwardProxyRuleListType struct {
@@ -1771,27 +1814,32 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetProxyChoice().(type) {
 	case *GetSpecType_AnyProxy:
+
+		return nil, nil
 
 	case *GetSpecType_NetworkConnector:
 
@@ -1801,7 +1849,7 @@ func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_connector.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "network_connector.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -1809,15 +1857,19 @@ func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "network_connector",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *GetSpecType_ProxyLabelSelector:
 
+		return nil, nil
+
 	case *GetSpecType_DrpHttpConnect:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetProxyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1862,37 +1914,37 @@ func (m *GetSpecType) GetProxyChoiceDBEntries(ctx context.Context, d db.Interfac
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRuleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *GetSpecType_AllowAll:
 
+		return nil, nil
+
 	case *GetSpecType_AllowList:
+
+		return nil, nil
 
 	case *GetSpecType_DenyList:
 
-	case *GetSpecType_RuleList:
-		odrInfos, err = m.GetRuleList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GetSpecType_RuleList:
+		drInfos, err := m.GetRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -2134,33 +2186,38 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetProxyChoice().(type) {
 	case *GlobalSpecType_AnyProxy:
+
+		return nil, nil
 
 	case *GlobalSpecType_NetworkConnector:
 
@@ -2170,7 +2227,7 @@ func (m *GlobalSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_connector.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "network_connector.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -2178,15 +2235,19 @@ func (m *GlobalSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "network_connector",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *GlobalSpecType_ProxyLabelSelector:
 
+		return nil, nil
+
 	case *GlobalSpecType_DrpHttpConnect:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetProxyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2231,41 +2292,40 @@ func (m *GlobalSpecType) GetProxyChoiceDBEntries(ctx context.Context, d db.Inter
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRuleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *GlobalSpecType_AllowAll:
 
+		return nil, nil
+
 	case *GlobalSpecType_AllowList:
+
+		return nil, nil
 
 	case *GlobalSpecType_DenyList:
 
-	case *GlobalSpecType_RuleList:
-		odrInfos, err = m.GetRuleList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_RuleList:
+		drInfos, err := m.GetRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -2273,16 +2333,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2564,27 +2624,32 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetProxyChoice().(type) {
 	case *ReplaceSpecType_AnyProxy:
+
+		return nil, nil
 
 	case *ReplaceSpecType_NetworkConnector:
 
@@ -2594,7 +2659,7 @@ func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_connector.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "network_connector.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -2602,15 +2667,19 @@ func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "network_connector",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *ReplaceSpecType_ProxyLabelSelector:
 
+		return nil, nil
+
 	case *ReplaceSpecType_DrpHttpConnect:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetProxyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2655,37 +2724,37 @@ func (m *ReplaceSpecType) GetProxyChoiceDBEntries(ctx context.Context, d db.Inte
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRuleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *ReplaceSpecType_AllowAll:
 
+		return nil, nil
+
 	case *ReplaceSpecType_AllowList:
+
+		return nil, nil
 
 	case *ReplaceSpecType_DenyList:
 
-	case *ReplaceSpecType_RuleList:
-		odrInfos, err = m.GetRuleList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReplaceSpecType_RuleList:
+		drInfos, err := m.GetRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -2887,6 +2956,152 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *URLCategoryListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *URLCategoryListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *URLCategoryListType) DeepCopy() *URLCategoryListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &URLCategoryListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *URLCategoryListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *URLCategoryListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return URLCategoryListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateURLCategoryListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateURLCategoryListType) UrlCategoriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.URLCategory)
+		return int32(i)
+	}
+	// ves_io_schema_policy.URLCategory_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_policy.URLCategory_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for url_categories")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_policy.URLCategory, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for url_categories")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema_policy.URLCategory)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema_policy.URLCategory, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated url_categories")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items url_categories")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateURLCategoryListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*URLCategoryListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *URLCategoryListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["url_categories"]; exists {
+		vOpts := append(opts, db.WithValidateField("url_categories"))
+		if err := fv(ctx, m.GetUrlCategories(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultURLCategoryListTypeValidator = func() *ValidateURLCategoryListType {
+	v := &ValidateURLCategoryListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUrlCategories := v.UrlCategoriesValidationRuleHandler
+	rulesUrlCategories := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhUrlCategories(rulesUrlCategories)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for URLCategoryListType.url_categories: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["url_categories"] = vFn
+
+	return v
+}()
+
+func URLCategoryListTypeValidator() db.Validator {
+	return DefaultURLCategoryListTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

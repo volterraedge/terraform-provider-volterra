@@ -162,6 +162,22 @@ func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetRoutes() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting CreateSpecType.routes idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
 	if m == nil {
 		return nil
@@ -190,39 +206,34 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRoutesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -335,6 +346,22 @@ func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetRoutes() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GetSpecType.routes idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *GetSpecType) DeepCopy() *GetSpecType {
 	if m == nil {
 		return nil
@@ -363,39 +390,34 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRoutesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -508,6 +530,22 @@ func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetRoutes() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalSpecType.routes idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
 	if m == nil {
 		return nil
@@ -536,39 +574,34 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRoutesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGlobalSpecType struct {
@@ -884,19 +917,21 @@ func (m *MirrorPolicyType) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *MirrorPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetClusterDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetClusterDRefInfo()
+
 }
 
 func (m *MirrorPolicyType) GetClusterDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetCluster() {
+	refs := m.GetCluster()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("MirrorPolicyType.cluster[%d] has a nil value", i)
 		}
@@ -911,8 +946,8 @@ func (m *MirrorPolicyType) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetClusterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1056,6 +1091,22 @@ func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetRoutes() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ReplaceSpecType.routes idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {
 	if m == nil {
 		return nil
@@ -1084,39 +1135,34 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRoutesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -1257,19 +1303,21 @@ func (m *RouteDestination) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *RouteDestination) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetClusterDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetClusterDRefInfo()
+
 }
 
 func (m *RouteDestination) GetClusterDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetCluster() {
+	refs := m.GetCluster()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("RouteDestination.cluster[%d] has a nil value", i)
 		}
@@ -1284,8 +1332,8 @@ func (m *RouteDestination) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetClusterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1397,6 +1445,16 @@ func (v *ValidateRouteDestination) EndpointSubsetsValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteDestination) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteDestination) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RouteDestination)
 	if !ok {
@@ -1422,6 +1480,15 @@ func (v *ValidateRouteDestination) Validate(ctx context.Context, pm interface{},
 	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
 		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["priority"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("priority"))
+		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1474,6 +1541,17 @@ var DefaultRouteDestinationValidator = func() *ValidateRouteDestination {
 	}
 	v.FldValidators["endpoint_subsets"] = vFn
 
+	vrhPriority := v.PriorityValidationRuleHandler
+	rulesPriority := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "32",
+	}
+	vFn, err = vrhPriority(rulesPriority)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDestination.priority: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["priority"] = vFn
+
 	return v
 }()
 
@@ -1519,68 +1597,65 @@ func (m *RouteDestinationList) Validate(ctx context.Context, opts ...db.Validate
 }
 
 func (m *RouteDestinationList) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDestinationsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDestinationsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetMirrorPolicyDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetMirrorPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *RouteDestinationList) GetDestinationsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDestinations() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetDestinations() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDestinations() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("destinations[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *RouteDestinationList) GetMirrorPolicyDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetMirrorPolicy() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetMirrorPolicy().GetDRefInfo()
+	drInfos, err := m.GetMirrorPolicy().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetMirrorPolicy().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "mirror_policy." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateRouteDestinationList struct {
@@ -1690,6 +1765,46 @@ func (v *ValidateRouteDestinationList) EndpointSubsetsValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteDestinationList) HashPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*HashPolicyType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := HashPolicyTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for hash_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*HashPolicyType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*HashPolicyType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated hash_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items hash_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RouteDestinationList)
 	if !ok {
@@ -1765,13 +1880,9 @@ func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interfac
 	}
 
 	if fv, exists := v.FldValidators["hash_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hash_policy"))
-		for idx, item := range m.GetHashPolicy() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetHashPolicy(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1936,6 +2047,17 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 	}
 	v.FldValidators["endpoint_subsets"] = vFn
 
+	vrhHashPolicy := v.HashPolicyValidationRuleHandler
+	rulesHashPolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+	}
+	vFn, err = vrhHashPolicy(rulesHashPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDestinationList.hash_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy"] = vFn
+
 	v.FldValidators["retry_policy"] = ves_io_schema.RetryPolicyTypeValidator().Validate
 
 	v.FldValidators["mirror_policy"] = MirrorPolicyTypeValidator().Validate
@@ -1943,8 +2065,6 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 	v.FldValidators["buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
-
-	v.FldValidators["hash_policy"] = HashPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -2467,6 +2587,28 @@ func (m *RouteType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *RouteType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetRequestHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting RouteType.request_headers_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting RouteType.response_headers_to_add idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *RouteType) DeepCopy() *RouteType {
 	if m == nil {
 		return nil
@@ -2495,76 +2637,74 @@ func (m *RouteType) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 }
 
 func (m *RouteType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetRouteActionDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRouteActionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWafTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *RouteType) GetRouteActionDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRouteAction() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRouteAction().(type) {
 	case *RouteType_RouteDestination:
-		odrInfos, err = m.GetRouteDestination().GetDRefInfo()
+		drInfos, err := m.GetRouteDestination().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRouteDestination().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "route_destination." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route_destination." + dri.DRField
 		}
+		return drInfos, err
 
 	case *RouteType_RouteRedirect:
 
+		return nil, nil
+
 	case *RouteType_RouteDirectResponse:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *RouteType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWafType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWafType().GetDRefInfo()
+	drInfos, err := m.GetWafType().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafType().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateRouteType struct {
@@ -2576,6 +2716,46 @@ func (v *ValidateRouteType) RouteActionValidationRuleHandler(rules map[string]st
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for route_action")
 	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteType) MatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.RouteMatch, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.RouteMatchValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for match")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.RouteMatch)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.RouteMatch, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated match")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items match")
+		}
+		return nil
+	}
+
 	return validatorFn, nil
 }
 
@@ -2776,13 +2956,9 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 	}
 
 	if fv, exists := v.FldValidators["match"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match"))
-		for idx, item := range m.GetMatch() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetMatch(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2910,6 +3086,17 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 	}
 	v.FldValidators["route_action"] = vFn
 
+	vrhMatch := v.MatchValidationRuleHandler
+	rulesMatch := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhMatch(rulesMatch)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.match: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["match"] = vFn
+
 	vrhRequestHeadersToAdd := v.RequestHeadersToAddValidationRuleHandler
 	rulesRequestHeadersToAdd := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "32",
@@ -2961,8 +3148,6 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 	v.FldValidators["route_action.route_destination"] = RouteDestinationListValidator().Validate
 	v.FldValidators["route_action.route_redirect"] = RouteRedirectValidator().Validate
 	v.FldValidators["route_action.route_direct_response"] = RouteDirectResponseValidator().Validate
-
-	v.FldValidators["match"] = ves_io_schema.RouteMatchValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
 

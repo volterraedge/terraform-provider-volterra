@@ -20,7 +20,7 @@ resource "volterra_log_receiver" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "data_dog splunk syslog" must be set
+  // One of the arguments from this list "syslog data_dog splunk" must be set
 
   syslog {
     // One of the arguments from this list "syslog_rfc3164 syslog_rfc5424" must be set
@@ -28,20 +28,12 @@ resource "volterra_log_receiver" "example" {
 
     // One of the arguments from this list "udp_server tcp_server tls_server" must be set
 
-    tls_server {
-      // One of the arguments from this list "volterra_ca trusted_ca_url" must be set
-      trusted_ca_url = "trusted_ca_url"
-
-      // One of the arguments from this list "mtls_disabled mtls_enable" must be set
-      mtls_disabled = true
-
-      // One of the arguments from this list "default_syslog_tls_port default_https_port port" must be set
-      port = "3000"
-
-      server_name = "server.acme.com"
+    udp_server {
+      port        = "514"
+      server_name = "server.example.com"
     }
   }
-  // One of the arguments from this list "site_local log_receiver_sites" must be set
+  // One of the arguments from this list "log_receiver_sites site_local" must be set
   site_local = true
 }
 
@@ -98,7 +90,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -144,7 +136,7 @@ Secret API key to access datadog servers.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -176,7 +168,7 @@ The data may be optionally secured using BlindFold..
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -234,7 +226,7 @@ Secret splunk HEC token.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 

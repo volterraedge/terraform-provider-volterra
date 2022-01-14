@@ -80,195 +80,182 @@ func (m *AWSVPCIngressEgressGwReplaceType) Validate(ctx context.Context, opts ..
 }
 
 func (m *AWSVPCIngressEgressGwReplaceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInsideStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwReplaceType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetForwardProxyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetForwardProxyChoice().(type) {
 	case *AWSVPCIngressEgressGwReplaceType_NoForwardProxy:
 
+		return nil, nil
+
 	case *AWSVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AWSVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetGlobalNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetGlobalNetworkChoice().(type) {
 	case *AWSVPCIngressEgressGwReplaceType_NoGlobalNetwork:
 
-	case *AWSVPCIngressEgressGwReplaceType_GlobalNetworkList:
-		odrInfos, err = m.GetGlobalNetworkList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "global_network_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCIngressEgressGwReplaceType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwReplaceType) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInsideStaticRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInsideStaticRouteChoice().(type) {
 	case *AWSVPCIngressEgressGwReplaceType_NoInsideStaticRoutes:
 
-	case *AWSVPCIngressEgressGwReplaceType_InsideStaticRoutes:
-		odrInfos, err = m.GetInsideStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "inside_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCIngressEgressGwReplaceType_InsideStaticRoutes:
+		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "inside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *AWSVPCIngressEgressGwReplaceType_NoNetworkPolicy:
 
-	case *AWSVPCIngressEgressGwReplaceType_ActiveNetworkPolicies:
-		odrInfos, err = m.GetActiveNetworkPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_network_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCIngressEgressGwReplaceType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOutsideStaticRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetOutsideStaticRouteChoice().(type) {
 	case *AWSVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes:
 
-	case *AWSVPCIngressEgressGwReplaceType_OutsideStaticRoutes:
-		odrInfos, err = m.GetOutsideStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "outside_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCIngressEgressGwReplaceType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAWSVPCIngressEgressGwReplaceType struct {
@@ -681,195 +668,182 @@ func (m *AWSVPCIngressEgressGwType) Validate(ctx context.Context, opts ...db.Val
 }
 
 func (m *AWSVPCIngressEgressGwType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInsideStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetForwardProxyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetForwardProxyChoice().(type) {
 	case *AWSVPCIngressEgressGwType_NoForwardProxy:
 
+		return nil, nil
+
 	case *AWSVPCIngressEgressGwType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AWSVPCIngressEgressGwType_ForwardProxyAllowAll:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetGlobalNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetGlobalNetworkChoice().(type) {
 	case *AWSVPCIngressEgressGwType_NoGlobalNetwork:
 
-	case *AWSVPCIngressEgressGwType_GlobalNetworkList:
-		odrInfos, err = m.GetGlobalNetworkList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "global_network_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCIngressEgressGwType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwType) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInsideStaticRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInsideStaticRouteChoice().(type) {
 	case *AWSVPCIngressEgressGwType_NoInsideStaticRoutes:
 
-	case *AWSVPCIngressEgressGwType_InsideStaticRoutes:
-		odrInfos, err = m.GetInsideStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "inside_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCIngressEgressGwType_InsideStaticRoutes:
+		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "inside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *AWSVPCIngressEgressGwType_NoNetworkPolicy:
 
-	case *AWSVPCIngressEgressGwType_ActiveNetworkPolicies:
-		odrInfos, err = m.GetActiveNetworkPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_network_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCIngressEgressGwType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCIngressEgressGwType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOutsideStaticRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetOutsideStaticRouteChoice().(type) {
 	case *AWSVPCIngressEgressGwType_NoOutsideStaticRoutes:
 
-	case *AWSVPCIngressEgressGwType_OutsideStaticRoutes:
-		odrInfos, err = m.GetOutsideStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "outside_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCIngressEgressGwType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAWSVPCIngressEgressGwType struct {
@@ -1633,158 +1607,149 @@ func (m *AWSVPCVoltstackClusterReplaceType) Validate(ctx context.Context, opts .
 }
 
 func (m *AWSVPCVoltstackClusterReplaceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCVoltstackClusterReplaceType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetForwardProxyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetForwardProxyChoice().(type) {
 	case *AWSVPCVoltstackClusterReplaceType_NoForwardProxy:
 
+		return nil, nil
+
 	case *AWSVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AWSVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCVoltstackClusterReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetGlobalNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetGlobalNetworkChoice().(type) {
 	case *AWSVPCVoltstackClusterReplaceType_NoGlobalNetwork:
 
-	case *AWSVPCVoltstackClusterReplaceType_GlobalNetworkList:
-		odrInfos, err = m.GetGlobalNetworkList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "global_network_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCVoltstackClusterReplaceType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCVoltstackClusterReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *AWSVPCVoltstackClusterReplaceType_NoNetworkPolicy:
 
-	case *AWSVPCVoltstackClusterReplaceType_ActiveNetworkPolicies:
-		odrInfos, err = m.GetActiveNetworkPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_network_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCVoltstackClusterReplaceType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOutsideStaticRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetOutsideStaticRouteChoice().(type) {
 	case *AWSVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes:
 
-	case *AWSVPCVoltstackClusterReplaceType_OutsideStaticRoutes:
-		odrInfos, err = m.GetOutsideStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "outside_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCVoltstackClusterReplaceType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAWSVPCVoltstackClusterReplaceType struct {
@@ -2129,109 +2094,108 @@ func (m *AWSVPCVoltstackClusterType) Validate(ctx context.Context, opts ...db.Va
 }
 
 func (m *AWSVPCVoltstackClusterType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetK8SClusterChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetK8SClusterChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCVoltstackClusterType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetForwardProxyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetForwardProxyChoice().(type) {
 	case *AWSVPCVoltstackClusterType_NoForwardProxy:
 
+		return nil, nil
+
 	case *AWSVPCVoltstackClusterType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AWSVPCVoltstackClusterType_ForwardProxyAllowAll:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCVoltstackClusterType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetGlobalNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetGlobalNetworkChoice().(type) {
 	case *AWSVPCVoltstackClusterType_NoGlobalNetwork:
 
-	case *AWSVPCVoltstackClusterType_GlobalNetworkList:
-		odrInfos, err = m.GetGlobalNetworkList().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "global_network_list." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCVoltstackClusterType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *AWSVPCVoltstackClusterType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetK8SClusterChoice().(type) {
 	case *AWSVPCVoltstackClusterType_NoK8SCluster:
+
+		return nil, nil
 
 	case *AWSVPCVoltstackClusterType_K8SCluster:
 
@@ -2241,7 +2205,7 @@ func (m *AWSVPCVoltstackClusterType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInf
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("k8s_cluster.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "k8s_cluster.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -2249,11 +2213,11 @@ func (m *AWSVPCVoltstackClusterType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInf
 			DRField:    "k8s_cluster",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetK8SClusterChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2294,64 +2258,56 @@ func (m *AWSVPCVoltstackClusterType) GetK8SClusterChoiceDBEntries(ctx context.Co
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCVoltstackClusterType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkPolicyChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *AWSVPCVoltstackClusterType_NoNetworkPolicy:
 
-	case *AWSVPCVoltstackClusterType_ActiveNetworkPolicies:
-		odrInfos, err = m.GetActiveNetworkPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_network_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCVoltstackClusterType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AWSVPCVoltstackClusterType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOutsideStaticRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetOutsideStaticRouteChoice().(type) {
 	case *AWSVPCVoltstackClusterType_NoOutsideStaticRoutes:
 
-	case *AWSVPCVoltstackClusterType_OutsideStaticRoutes:
-		odrInfos, err = m.GetOutsideStaticRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "outside_static_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *AWSVPCVoltstackClusterType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAWSVPCVoltstackClusterType struct {
@@ -2905,31 +2861,34 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDeploymentDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeploymentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDeployment().(type) {
 	case *CreateSpecType_AwsCred:
 
@@ -2939,7 +2898,7 @@ func (m *CreateSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("cloud_credentials.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "cloud_credentials.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -2947,13 +2906,15 @@ func (m *CreateSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "aws_cred",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *CreateSpecType_Assisted:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetDeploymentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2993,10 +2954,10 @@ func (m *CreateSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interf
 }
 
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *CreateSpecType_LogReceiver:
 
@@ -3006,7 +2967,7 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -3014,11 +2975,11 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3059,43 +3020,40 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSiteType().(type) {
 	case *CreateSpecType_IngressGw:
 
+		return nil, nil
+
 	case *CreateSpecType_IngressEgressGw:
-		odrInfos, err = m.GetIngressEgressGw().GetDRefInfo()
+		drInfos, err := m.GetIngressEgressGw().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ingress_egress_gw." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_VoltstackCluster:
-		odrInfos, err = m.GetVoltstackCluster().GetDRefInfo()
+		drInfos, err := m.GetVoltstackCluster().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "voltstack_cluster." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -3194,6 +3152,16 @@ func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]s
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
 	}
 
 	return validatorFn, nil
@@ -3334,6 +3302,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
+		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3600,6 +3577,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
+	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
+	rulesSiteToSiteTunnelIp := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.site_to_site_tunnel_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_tunnel_ip"] = vFn
+
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -3679,31 +3667,34 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDeploymentDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeploymentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDeployment().(type) {
 	case *GetSpecType_AwsCred:
 
@@ -3713,7 +3704,7 @@ func (m *GetSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("cloud_credentials.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "cloud_credentials.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -3721,13 +3712,15 @@ func (m *GetSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "aws_cred",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *GetSpecType_Assisted:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetDeploymentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3767,10 +3760,10 @@ func (m *GetSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interface
 }
 
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *GetSpecType_LogReceiver:
 
@@ -3780,7 +3773,7 @@ func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -3788,11 +3781,11 @@ func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3833,43 +3826,40 @@ func (m *GetSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.I
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSiteType().(type) {
 	case *GetSpecType_IngressGw:
 
+		return nil, nil
+
 	case *GetSpecType_IngressEgressGw:
-		odrInfos, err = m.GetIngressEgressGw().GetDRefInfo()
+		drInfos, err := m.GetIngressEgressGw().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ingress_egress_gw." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_VoltstackCluster:
-		odrInfos, err = m.GetVoltstackCluster().GetDRefInfo()
+		drInfos, err := m.GetVoltstackCluster().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "voltstack_cluster." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -4033,6 +4023,16 @@ func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -4177,6 +4177,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
 		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
+		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4494,6 +4503,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["vip_params_per_az"] = vFn
 
+	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
+	rulesSiteToSiteTunnelIp := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.site_to_site_tunnel_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_tunnel_ip"] = vFn
+
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -4569,43 +4589,46 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDeploymentDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeploymentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTfParamsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTfParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDeployment().(type) {
 	case *GlobalSpecType_AwsCred:
 
@@ -4615,7 +4638,7 @@ func (m *GlobalSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("cloud_credentials.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "cloud_credentials.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -4623,13 +4646,15 @@ func (m *GlobalSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "aws_cred",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *GlobalSpecType_Assisted:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetDeploymentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4669,10 +4694,10 @@ func (m *GlobalSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interf
 }
 
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GlobalSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *GlobalSpecType_LogReceiver:
 
@@ -4682,7 +4707,7 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -4690,11 +4715,11 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4735,47 +4760,43 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSiteType().(type) {
 	case *GlobalSpecType_IngressGw:
 
+		return nil, nil
+
 	case *GlobalSpecType_IngressEgressGw:
-		odrInfos, err = m.GetIngressEgressGw().GetDRefInfo()
+		drInfos, err := m.GetIngressEgressGw().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ingress_egress_gw." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_VoltstackCluster:
-		odrInfos, err = m.GetVoltstackCluster().GetDRefInfo()
+		drInfos, err := m.GetVoltstackCluster().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "voltstack_cluster." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetTfParams()
 	if vref == nil {
@@ -4783,16 +4804,16 @@ func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("terraform_parameters.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "terraform_parameters.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "tf_params",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetTfParamsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4825,7 +4846,6 @@ func (m *GlobalSpecType) GetTfParamsDBEntries(ctx context.Context, d db.Interfac
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -4833,16 +4853,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5035,6 +5055,16 @@ func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -5179,6 +5209,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
+		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5523,6 +5562,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["vip_params_per_az"] = vFn
 
+	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
+	rulesSiteToSiteTunnelIp := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.site_to_site_tunnel_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_tunnel_ip"] = vFn
+
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -5606,27 +5656,32 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
+
+		return nil, nil
 
 	case *ReplaceSpecType_LogReceiver:
 
@@ -5636,7 +5691,7 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error)
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("log_receiver.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "log_receiver.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -5644,11 +5699,11 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error)
 			DRField:    "log_receiver",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5689,43 +5744,40 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d 
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSiteType().(type) {
 	case *ReplaceSpecType_IngressGw:
 
+		return nil, nil
+
 	case *ReplaceSpecType_IngressEgressGw:
-		odrInfos, err = m.GetIngressEgressGw().GetDRefInfo()
+		drInfos, err := m.GetIngressEgressGw().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ingress_egress_gw." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_VoltstackCluster:
-		odrInfos, err = m.GetVoltstackCluster().GetDRefInfo()
+		drInfos, err := m.GetVoltstackCluster().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "voltstack_cluster." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -5776,6 +5828,16 @@ func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
 	}
 
 	return validatorFn, nil
@@ -5845,6 +5907,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
+		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -6025,6 +6096,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
+	rulesSiteToSiteTunnelIp := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.site_to_site_tunnel_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_tunnel_ip"] = vFn
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -6600,6 +6682,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.InstanceType = f.GetInstanceType()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.Os = f.GetOs()
+	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.Sw = f.GetSw()
@@ -6621,6 +6704,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.InstanceType = m1.InstanceType
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.Os = m1.Os
+	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.Sw = m1.Sw
@@ -6793,6 +6877,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 
+	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
@@ -6817,6 +6902,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 
+	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.UserModificationTimestamp = m1.UserModificationTimestamp
@@ -6977,6 +7063,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
@@ -6990,6 +7077,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 	m1.SetWorkerNodesToGlobalSpecType(f)
 }

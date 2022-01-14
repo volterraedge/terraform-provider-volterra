@@ -64,24 +64,28 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDefaultFlavorRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
@@ -89,16 +93,16 @@ func (m *CreateSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("workload_flavor.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "workload_flavor.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "default_flavor_ref",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -131,8 +135,12 @@ func (m *CreateSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.
 }
 
 func (m *CreateSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVsiteRefs() {
+	refs := m.GetVsiteRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.vsite_refs[%d] has a nil value", i)
 		}
@@ -147,8 +155,8 @@ func (m *CreateSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVsiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -345,24 +353,28 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDefaultFlavorRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
@@ -370,16 +382,16 @@ func (m *GetSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("workload_flavor.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "workload_flavor.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "default_flavor_ref",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -412,8 +424,12 @@ func (m *GetSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.Int
 }
 
 func (m *GetSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVsiteRefs() {
+	refs := m.GetVsiteRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.vsite_refs[%d] has a nil value", i)
 		}
@@ -428,8 +444,8 @@ func (m *GetSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVsiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -626,24 +642,28 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDefaultFlavorRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
@@ -651,16 +671,16 @@ func (m *GlobalSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("workload_flavor.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "workload_flavor.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "default_flavor_ref",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -693,8 +713,12 @@ func (m *GlobalSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.
 }
 
 func (m *GlobalSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVsiteRefs() {
+	refs := m.GetVsiteRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.vsite_refs[%d] has a nil value", i)
 		}
@@ -709,8 +733,8 @@ func (m *GlobalSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVsiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -907,24 +931,28 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDefaultFlavorRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
@@ -932,16 +960,16 @@ func (m *ReplaceSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("workload_flavor.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "workload_flavor.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "default_flavor_ref",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -974,8 +1002,12 @@ func (m *ReplaceSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db
 }
 
 func (m *ReplaceSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVsiteRefs() {
+	refs := m.GetVsiteRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.vsite_refs[%d] has a nil value", i)
 		}
@@ -990,8 +1022,8 @@ func (m *ReplaceSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVsiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

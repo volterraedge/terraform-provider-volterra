@@ -63,39 +63,34 @@ func (m *AdvertiseCustom) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *AdvertiseCustom) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAdvertiseWhereDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAdvertiseWhereDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseCustom) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseWhere() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAdvertiseWhere() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseWhere() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("advertise_where[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateAdvertiseCustom struct {
@@ -238,18 +233,15 @@ func (m *AdvertisePublic) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *AdvertisePublic) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetPublicIpDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetPublicIpDRefInfo()
+
 }
 
 func (m *AdvertisePublic) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetPublicIp()
 	if vref == nil {
@@ -257,16 +249,16 @@ func (m *AdvertisePublic) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("public_ip.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "public_ip.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "public_ip",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetPublicIpDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -417,39 +409,34 @@ func (m *AdvertiseSiteVsite) Validate(ctx context.Context, opts ...db.ValidateOp
 }
 
 func (m *AdvertiseSiteVsite) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAdvertiseWhereDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAdvertiseWhereDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseSiteVsite) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseWhere() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAdvertiseWhere() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseWhere() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("advertise_where[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateAdvertiseSiteVsite struct {
@@ -750,18 +737,15 @@ func (m *GlobalConnectorType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *GlobalConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetGlobalVnDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetGlobalVnDRefInfo()
+
 }
 
 func (m *GlobalConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetGlobalVn()
 	if vref == nil {
@@ -769,16 +753,16 @@ func (m *GlobalConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("virtual_network.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "virtual_network.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "global_vn",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetGlobalVnDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1265,19 +1249,15 @@ func (m *OriginPoolWithWeight) Validate(ctx context.Context, opts ...db.Validate
 }
 
 func (m *OriginPoolWithWeight) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetPoolChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetPoolChoiceDRefInfo()
+
 }
 
 func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetPoolChoice().(type) {
 	case *OriginPoolWithWeight_Pool:
 
@@ -1287,7 +1267,7 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("origin_pool.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "origin_pool.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -1295,7 +1275,7 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "pool",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *OriginPoolWithWeight_Cluster:
 
@@ -1305,7 +1285,7 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("cluster.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "cluster.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -1313,11 +1293,11 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "cluster",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetPoolChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1442,6 +1422,16 @@ func (v *ValidateOriginPoolWithWeight) EndpointSubsetsValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateOriginPoolWithWeight) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateOriginPoolWithWeight) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*OriginPoolWithWeight)
 	if !ok {
@@ -1496,6 +1486,15 @@ func (v *ValidateOriginPoolWithWeight) Validate(ctx context.Context, pm interfac
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["priority"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("priority"))
+		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1567,6 +1566,17 @@ var DefaultOriginPoolWithWeightValidator = func() *ValidateOriginPoolWithWeight 
 		panic(errMsg)
 	}
 	v.FldValidators["endpoint_subsets"] = vFn
+
+	vrhPriority := v.PriorityValidationRuleHandler
+	rulesPriority := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "32",
+	}
+	vFn, err = vrhPriority(rulesPriority)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolWithWeight.priority: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["priority"] = vFn
 
 	return v
 }()
@@ -1755,19 +1765,15 @@ func (m *SiteLocator) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *SiteLocator) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetChoiceDRefInfo()
+
 }
 
 func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetChoice().(type) {
 	case *SiteLocator_Site:
 
@@ -1777,7 +1783,7 @@ func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("site.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -1785,7 +1791,7 @@ func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "site",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *SiteLocator_VirtualSite:
 
@@ -1795,7 +1801,7 @@ func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_site.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "virtual_site.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -1803,11 +1809,11 @@ func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "virtual_site",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2312,18 +2318,15 @@ func (m *WhereSite) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 }
 
 func (m *WhereSite) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSiteDRefInfo()
+
 }
 
 func (m *WhereSite) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetSite()
 	if vref == nil {
@@ -2331,16 +2334,16 @@ func (m *WhereSite) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("site.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "site.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "site",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2557,73 +2560,68 @@ func (m *WhereType) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 }
 
 func (m *WhereType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetChoice().(type) {
 	case *WhereType_Site:
-		odrInfos, err = m.GetSite().GetDRefInfo()
+		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
 		}
+		return drInfos, err
 
 	case *WhereType_VirtualSite:
-		odrInfos, err = m.GetVirtualSite().GetDRefInfo()
+		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "virtual_site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
 		}
+		return drInfos, err
 
 	case *WhereType_Vk8SService:
-		odrInfos, err = m.GetVk8SService().GetDRefInfo()
+		drInfos, err := m.GetVk8SService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVk8SService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "vk8s_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "vk8s_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *WhereType_VirtualNetwork:
-		odrInfos, err = m.GetVirtualNetwork().GetDRefInfo()
+		drInfos, err := m.GetVirtualNetwork().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVirtualNetwork().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "virtual_network." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_network." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateWhereType struct {
@@ -2862,53 +2860,46 @@ func (m *WhereTypeSiteVsite) Validate(ctx context.Context, opts ...db.ValidateOp
 }
 
 func (m *WhereTypeSiteVsite) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetChoice().(type) {
 	case *WhereTypeSiteVsite_Site:
-		odrInfos, err = m.GetSite().GetDRefInfo()
+		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
 		}
+		return drInfos, err
 
 	case *WhereTypeSiteVsite_VirtualSite:
-		odrInfos, err = m.GetVirtualSite().GetDRefInfo()
+		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "virtual_site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateWhereTypeSiteVsite struct {
@@ -3094,19 +3085,15 @@ func (m *WhereVK8SService) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *WhereVK8SService) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetChoiceDRefInfo()
+
 }
 
 func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetChoice().(type) {
 	case *WhereVK8SService_Site:
 
@@ -3116,7 +3103,7 @@ func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("site.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -3124,7 +3111,7 @@ func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "site",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *WhereVK8SService_VirtualSite:
 
@@ -3134,7 +3121,7 @@ func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_site.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "virtual_site.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -3142,11 +3129,11 @@ func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "virtual_site",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3343,18 +3330,15 @@ func (m *WhereVirtualNetwork) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *WhereVirtualNetwork) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetVirtualNetworkDRefInfo()
+
 }
 
 func (m *WhereVirtualNetwork) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetVirtualNetwork()
 	if vref == nil {
@@ -3362,16 +3346,16 @@ func (m *WhereVirtualNetwork) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error)
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("virtual_network.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "virtual_network.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "virtual_network",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3597,18 +3581,15 @@ func (m *WhereVirtualSite) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *WhereVirtualSite) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetVirtualSiteDRefInfo()
+
 }
 
 func (m *WhereVirtualSite) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetVirtualSite()
 	if vref == nil {
@@ -3616,16 +3597,16 @@ func (m *WhereVirtualSite) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("virtual_site.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "virtual_site.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "virtual_site",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

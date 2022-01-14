@@ -108,7 +108,7 @@ allows to apply back pressure on downstream quickly..
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -129,6 +129,16 @@ Common TLS parameters used in both upstream and downstream connections.
 `trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
 
 `validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
+
+### Custom Hash Algorithms
+
+Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
 
 ### Disable Sni
 
@@ -170,7 +180,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -194,6 +204,12 @@ Set of TLS certificates.
 
 `description` - (Optional) Description for the certificate (`String`).
 
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Tls Parameters
@@ -211,6 +227,10 @@ TLS parameters to access upstream endpoints for this cluster.
 ### Use Host Header As Sni
 
 Use the host header as SNI.
+
+### Use System Defaults
+
+Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Validation Params
 

@@ -62,19 +62,21 @@ func (m *AppFirewallRefType) Validate(ctx context.Context, opts ...db.ValidateOp
 }
 
 func (m *AppFirewallRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAppFirewallDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAppFirewallDRefInfo()
+
 }
 
 func (m *AppFirewallRefType) GetAppFirewallDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAppFirewall() {
+	refs := m.GetAppFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("AppFirewallRefType.app_firewall[%d] has a nil value", i)
 		}
@@ -89,8 +91,8 @@ func (m *AppFirewallRefType) GetAppFirewallDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAppFirewallDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1582,6 +1584,148 @@ func CorsPolicyValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DomainNameList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DomainNameList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DomainNameList) DeepCopy() *DomainNameList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DomainNameList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DomainNameList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DomainNameList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomainNameListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDomainNameList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDomainNameList) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for domains")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for domains")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated domains")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDomainNameList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomainNameList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DomainNameList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domains"]; exists {
+		vOpts := append(opts, db.WithValidateField("domains"))
+		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDomainNameListValidator = func() *ValidateDomainNameList {
+	v := &ValidateDomainNameList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomains := v.DomainsValidationRuleHandler
+	rulesDomains := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
+		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
+		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhDomains(rulesDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainNameList.domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domains"] = vFn
+
+	return v
+}()
+
+func DomainNameListValidator() db.Validator {
+	return DefaultDomainNameListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DomainType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2404,12 +2548,173 @@ func FractionalPercentValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *HashAlgorithms) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HashAlgorithms) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HashAlgorithms) DeepCopy() *HashAlgorithms {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HashAlgorithms{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HashAlgorithms) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HashAlgorithms) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HashAlgorithmsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHashAlgorithms struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHashAlgorithms) HashAlgorithmsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(HashAlgorithm)
+		return int32(i)
+	}
+	// HashAlgorithm_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, HashAlgorithm_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_algorithms")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []HashAlgorithm, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for hash_algorithms")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]HashAlgorithm)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []HashAlgorithm, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated hash_algorithms")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items hash_algorithms")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHashAlgorithms) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HashAlgorithms)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HashAlgorithms got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["hash_algorithms"]; exists {
+		vOpts := append(opts, db.WithValidateField("hash_algorithms"))
+		if err := fv(ctx, m.GetHashAlgorithms(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHashAlgorithmsValidator = func() *ValidateHashAlgorithms {
+	v := &ValidateHashAlgorithms{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHashAlgorithms := v.HashAlgorithmsValidationRuleHandler
+	rulesHashAlgorithms := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhHashAlgorithms(rulesHashAlgorithms)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HashAlgorithms.hash_algorithms: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_algorithms"] = vFn
+
+	return v
+}()
+
+func HashAlgorithmsValidator() db.Validator {
+	return DefaultHashAlgorithmsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *HeaderManipulationOptionType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
 func (m *HeaderManipulationOptionType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *HeaderManipulationOptionType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSecretValue().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HeaderManipulationOptionType.secret_value")
+	}
+
+	return nil
 }
 
 func (m *HeaderManipulationOptionType) DeepCopy() *HeaderManipulationOptionType {
@@ -2443,21 +2748,27 @@ type ValidateHeaderManipulationOptionType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateHeaderManipulationOptionType) ValueChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateHeaderManipulationOptionType) ValueChoiceValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Value, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+	return oValidatorFn_Value, nil
+}
+
 func (v *ValidateHeaderManipulationOptionType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateHeaderManipulationOptionType) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
 	}
 
 	return validatorFn, nil
@@ -2495,11 +2806,38 @@ func (v *ValidateHeaderManipulationOptionType) Validate(ctx context.Context, pm 
 
 	}
 
-	if fv, exists := v.FldValidators["value"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("value"))
-		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["value_choice"]; exists {
+		val := m.GetValueChoice()
+		vOpts := append(opts,
+			db.WithValidateField("value_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetValueChoice().(type) {
+	case *HeaderManipulationOptionType_Value:
+		if fv, exists := v.FldValidators["value_choice.value"]; exists {
+			val := m.GetValueChoice().(*HeaderManipulationOptionType_Value).Value
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HeaderManipulationOptionType_SecretValue:
+		if fv, exists := v.FldValidators["value_choice.secret_value"]; exists {
+			val := m.GetValueChoice().(*HeaderManipulationOptionType_SecretValue).SecretValue
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("secret_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2519,6 +2857,29 @@ var DefaultHeaderManipulationOptionTypeValidator = func() *ValidateHeaderManipul
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhValueChoice := v.ValueChoiceValidationRuleHandler
+	rulesValueChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhValueChoice(rulesValueChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HeaderManipulationOptionType.value_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value_choice"] = vFn
+
+	vrhValueChoiceValue := v.ValueChoiceValueValidationRuleHandler
+	rulesValueChoiceValue := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["value_choice.value"], err = vrhValueChoiceValue(rulesValueChoiceValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field HeaderManipulationOptionType.value_choice_value: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["value_choice.value"] = vFnMap["value_choice.value"]
+
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2531,17 +2892,7 @@ var DefaultHeaderManipulationOptionTypeValidator = func() *ValidateHeaderManipul
 	}
 	v.FldValidators["name"] = vFn
 
-	vrhValue := v.ValueValidationRuleHandler
-	rulesValue := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "8096",
-	}
-	vFn, err = vrhValue(rulesValue)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for HeaderManipulationOptionType.value: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["value"] = vFn
+	v.FldValidators["value_choice.secret_value"] = SecretTypeValidator().Validate
 
 	return v
 }()
@@ -3560,19 +3911,21 @@ func (m *IpPrefixSetRefType) Validate(ctx context.Context, opts ...db.ValidateOp
 }
 
 func (m *IpPrefixSetRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefDRefInfo()
+
 }
 
 func (m *IpPrefixSetRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRef() {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("IpPrefixSetRefType.ref[%d] has a nil value", i)
 		}
@@ -3587,8 +3940,8 @@ func (m *IpPrefixSetRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3962,6 +4315,9 @@ var DefaultL4DestTypeValidator = func() *ValidateL4DestType {
 
 	vrhPortRanges := v.PortRangesValidationRuleHandler
 	rulesPortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
 		"ves.io.schema.rules.string.port_range_list": "true",
 	}
 	vFn, err = vrhPortRanges(rulesPortRanges)
@@ -4239,11 +4595,11 @@ var DefaultLabelSelectorTypeValidator = func() *ValidateLabelSelectorType {
 
 	vrhExpressions := v.ExpressionsValidationRuleHandler
 	rulesExpressions := map[string]string{
-		"ves.io.schema.rules.message.required":          "true",
-		"ves.io.schema.rules.repeated.max_items":        "1",
-		"ves.io.schema.rules.string.k8s_label_selector": "true",
-		"ves.io.schema.rules.string.max_len":            "4096",
-		"ves.io.schema.rules.string.min_len":            "1",
+		"ves.io.schema.rules.message.required":                         "true",
+		"ves.io.schema.rules.repeated.items.string.k8s_label_selector": "true",
+		"ves.io.schema.rules.repeated.items.string.max_len":            "4096",
+		"ves.io.schema.rules.repeated.items.string.min_len":            "1",
+		"ves.io.schema.rules.repeated.max_items":                       "1",
 	}
 	vFn, err = vrhExpressions(rulesExpressions)
 	if err != nil {
@@ -4610,19 +4966,21 @@ func (m *NetworkRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *NetworkRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefDRefInfo()
+
 }
 
 func (m *NetworkRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRef() {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("NetworkRefType.ref[%d] has a nil value", i)
 		}
@@ -4637,8 +4995,8 @@ func (m *NetworkRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4798,63 +5156,57 @@ func (m *NetworkSiteRefSelector) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *NetworkSiteRefSelector) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefOrSelectorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefOrSelectorDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *NetworkSiteRefSelector) GetRefOrSelectorDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRefOrSelector() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRefOrSelector().(type) {
 	case *NetworkSiteRefSelector_VirtualNetwork:
-		odrInfos, err = m.GetVirtualNetwork().GetDRefInfo()
+		drInfos, err := m.GetVirtualNetwork().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVirtualNetwork().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "virtual_network." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_network." + dri.DRField
 		}
+		return drInfos, err
 
 	case *NetworkSiteRefSelector_Site:
-		odrInfos, err = m.GetSite().GetDRefInfo()
+		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
 		}
+		return drInfos, err
 
 	case *NetworkSiteRefSelector_VirtualSite:
-		odrInfos, err = m.GetVirtualSite().GetDRefInfo()
+		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "virtual_site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateNetworkSiteRefSelector struct {
@@ -4968,19 +5320,21 @@ func (m *NextHopType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *NextHopType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfaceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfaceDRefInfo()
+
 }
 
 func (m *NextHopType) GetInterfaceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetInterface() {
+	refs := m.GetInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("NextHopType.interface[%d] has a nil value", i)
 		}
@@ -4995,8 +5349,8 @@ func (m *NextHopType) GetInterfaceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6366,19 +6720,21 @@ func (m *PolicerRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *PolicerRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefDRefInfo()
+
 }
 
 func (m *PolicerRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRef() {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("PolicerRefType.ref[%d] has a nil value", i)
 		}
@@ -6393,8 +6749,8 @@ func (m *PolicerRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6514,6 +6870,146 @@ var DefaultPolicerRefTypeValidator = func() *ValidatePolicerRefType {
 
 func PolicerRefTypeValidator() db.Validator {
 	return DefaultPolicerRefTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PortRangesType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PortRangesType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PortRangesType) DeepCopy() *PortRangesType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PortRangesType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PortRangesType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PortRangesType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PortRangesTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePortRangesType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePortRangesType) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ports")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ports")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ports")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ports")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePortRangesType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PortRangesType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PortRangesType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ports"]; exists {
+		vOpts := append(opts, db.WithValidateField("ports"))
+		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPortRangesTypeValidator = func() *ValidatePortRangesType {
+	v := &ValidatePortRangesType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPorts := v.PortsValidationRuleHandler
+	rulesPorts := map[string]string{
+		"ves.io.schema.rules.message.required":                 "true",
+		"ves.io.schema.rules.repeated.items.string.port_range": "true",
+		"ves.io.schema.rules.repeated.max_items":               "128",
+	}
+	vFn, err = vrhPorts(rulesPorts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PortRangesType.ports: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ports"] = vFn
+
+	return v
+}()
+
+func PortRangesTypeValidator() db.Validator {
+	return DefaultPortRangesTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -6688,19 +7184,21 @@ func (m *ProtocolPolicerRefType) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *ProtocolPolicerRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefDRefInfo()
+
 }
 
 func (m *ProtocolPolicerRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRef() {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ProtocolPolicerRefType.ref[%d] has a nil value", i)
 		}
@@ -6715,8 +7213,8 @@ func (m *ProtocolPolicerRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7458,7 +7956,7 @@ var DefaultRetryPolicyTypeValidator = func() *ValidateRetryPolicyType {
 
 	vrhRetryOn := v.RetryOnValidationRuleHandler
 	rulesRetryOn := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"5xx\",\"gateway-error\",\"connect-failure\",\"refused-stream\",\"retriable-4xx\",\"retriable-status-codes\"]",
+		"ves.io.schema.rules.string.in": "[\"\",\"5xx\",\"gateway-error\",\"connect-failure\",\"refused-stream\",\"retriable-4xx\",\"retriable-status-codes\"]",
 	}
 	vFn, err = vrhRetryOn(rulesRetryOn)
 	if err != nil {
@@ -7503,9 +8001,9 @@ var DefaultRetryPolicyTypeValidator = func() *ValidateRetryPolicyType {
 
 	vrhRetryCondition := v.RetryConditionValidationRuleHandler
 	rulesRetryCondition := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "6",
-		"ves.io.schema.rules.repeated.unique":    "true",
-		"ves.io.schema.rules.string.in":          "[\"5xx\",\"gateway-error\",\"connect-failure\",\"refused-stream\",\"retriable-4xx\",\"retriable-status-codes\"]",
+		"ves.io.schema.rules.repeated.items.string.in": "[\"5xx\",\"gateway-error\",\"connect-failure\",\"refused-stream\",\"retriable-4xx\",\"retriable-status-codes\"]",
+		"ves.io.schema.rules.repeated.max_items":       "6",
+		"ves.io.schema.rules.repeated.unique":          "true",
 	}
 	vFn, err = vrhRetryCondition(rulesRetryCondition)
 	if err != nil {
@@ -7564,6 +8062,86 @@ type ValidateRouteMatch struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateRouteMatch) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*HeaderMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*HeaderMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*HeaderMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteMatch) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*QueryParameterMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := QueryParameterMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for query_params")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*QueryParameterMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*QueryParameterMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated query_params")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items query_params")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteMatch) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RouteMatch)
 	if !ok {
@@ -7579,13 +8157,9 @@ func (v *ValidateRouteMatch) Validate(ctx context.Context, pm interface{}, opts 
 	}
 
 	if fv, exists := v.FldValidators["headers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("headers"))
-		for idx, item := range m.GetHeaders() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -7609,13 +8183,9 @@ func (v *ValidateRouteMatch) Validate(ctx context.Context, pm interface{}, opts 
 	}
 
 	if fv, exists := v.FldValidators["query_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_params"))
-		for idx, item := range m.GetQueryParams() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -7627,11 +8197,39 @@ func (v *ValidateRouteMatch) Validate(ctx context.Context, pm interface{}, opts 
 var DefaultRouteMatchValidator = func() *ValidateRouteMatch {
 	v := &ValidateRouteMatch{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHeaders := v.HeadersValidationRuleHandler
+	rulesHeaders := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhHeaders(rulesHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteMatch.headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["headers"] = vFn
+
+	vrhQueryParams := v.QueryParamsValidationRuleHandler
+	rulesQueryParams := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhQueryParams(rulesQueryParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteMatch.query_params: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["query_params"] = vFn
+
 	v.FldValidators["path"] = PathMatcherTypeValidator().Validate
-
-	v.FldValidators["headers"] = HeaderMatcherTypeValidator().Validate
-
-	v.FldValidators["query_params"] = QueryParameterMatcherTypeValidator().Validate
 
 	return v
 }()
@@ -8448,19 +9046,21 @@ func (m *SiteRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *SiteRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefDRefInfo()
+
 }
 
 func (m *SiteRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRef() {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("SiteRefType.ref[%d] has a nil value", i)
 		}
@@ -8475,8 +9075,8 @@ func (m *SiteRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -8645,53 +9245,46 @@ func (m *SiteVirtualSiteRefSelector) Validate(ctx context.Context, opts ...db.Va
 }
 
 func (m *SiteVirtualSiteRefSelector) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefOrSelectorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefOrSelectorDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *SiteVirtualSiteRefSelector) GetRefOrSelectorDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRefOrSelector() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRefOrSelector().(type) {
 	case *SiteVirtualSiteRefSelector_Site:
-		odrInfos, err = m.GetSite().GetDRefInfo()
+		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
 		}
+		return drInfos, err
 
 	case *SiteVirtualSiteRefSelector_VirtualSite:
-		odrInfos, err = m.GetVirtualSite().GetDRefInfo()
+		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "virtual_site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateSiteVirtualSiteRefSelector struct {
@@ -8793,37 +9386,30 @@ func (m *StaticRouteType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *StaticRouteType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNexthopDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetNexthopDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *StaticRouteType) GetNexthopDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNexthop() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetNexthop().GetDRefInfo()
+	drInfos, err := m.GetNexthop().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNexthop().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "nexthop." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateStaticRouteType struct {
@@ -9082,6 +9668,11 @@ func (m *StatusMetaType) SetVtrpId(in string) {
 	m.VtrpId = in
 }
 
+// SetVtrpStale sets the field
+func (m *StatusMetaType) SetVtrpStale(in bool) {
+	m.VtrpStale = in
+}
+
 type ValidateStatusMetaType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -9158,6 +9749,15 @@ func (v *ValidateStatusMetaType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("vtrp_id"))
 		if err := fv(ctx, m.GetVtrpId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vtrp_stale"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vtrp_stale"))
+		if err := fv(ctx, m.GetVtrpStale(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9482,14 +10082,12 @@ func (m *SystemObjectMetaType) Validate(ctx context.Context, opts ...db.Validate
 }
 
 func (m *SystemObjectMetaType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNamespaceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetNamespaceDRefInfo()
+
 }
 
 // SetCreationTimestamp sets the field
@@ -9547,9 +10145,18 @@ func (m *SystemObjectMetaType) SetVtrpId(in string) {
 	m.VtrpId = in
 }
 
+// SetVtrpStale sets the field
+func (m *SystemObjectMetaType) SetVtrpStale(in bool) {
+	m.VtrpStale = in
+}
+
 func (m *SystemObjectMetaType) GetNamespaceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNamespace() {
+	refs := m.GetNamespace()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("SystemObjectMetaType.namespace[%d] has a nil value", i)
 		}
@@ -9564,8 +10171,8 @@ func (m *SystemObjectMetaType) GetNamespaceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNamespaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -9792,6 +10399,15 @@ func (v *ValidateSystemObjectMetaType) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["vtrp_stale"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vtrp_stale"))
+		if err := fv(ctx, m.GetVtrpStale(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -9943,6 +10559,43 @@ func (v *ValidateTlsCertificateType) Validate(ctx context.Context, pm interface{
 
 	}
 
+	switch m.GetOcspStaplingChoice().(type) {
+	case *TlsCertificateType_UseSystemDefaults:
+		if fv, exists := v.FldValidators["ocsp_stapling_choice.use_system_defaults"]; exists {
+			val := m.GetOcspStaplingChoice().(*TlsCertificateType_UseSystemDefaults).UseSystemDefaults
+			vOpts := append(opts,
+				db.WithValidateField("ocsp_stapling_choice"),
+				db.WithValidateField("use_system_defaults"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TlsCertificateType_DisableOcspStapling:
+		if fv, exists := v.FldValidators["ocsp_stapling_choice.disable_ocsp_stapling"]; exists {
+			val := m.GetOcspStaplingChoice().(*TlsCertificateType_DisableOcspStapling).DisableOcspStapling
+			vOpts := append(opts,
+				db.WithValidateField("ocsp_stapling_choice"),
+				db.WithValidateField("disable_ocsp_stapling"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TlsCertificateType_CustomHashAlgorithms:
+		if fv, exists := v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"]; exists {
+			val := m.GetOcspStaplingChoice().(*TlsCertificateType_CustomHashAlgorithms).CustomHashAlgorithms
+			vOpts := append(opts,
+				db.WithValidateField("ocsp_stapling_choice"),
+				db.WithValidateField("custom_hash_algorithms"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["private_key"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("private_key"))
@@ -9991,6 +10644,8 @@ var DefaultTlsCertificateTypeValidator = func() *ValidateTlsCertificateType {
 		panic(errMsg)
 	}
 	v.FldValidators["private_key"] = vFn
+
+	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = HashAlgorithmsValidator().Validate
 
 	return v
 }()
@@ -11164,19 +11819,21 @@ func (m *VSiteRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) err
 }
 
 func (m *VSiteRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefDRefInfo()
+
 }
 
 func (m *VSiteRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRef() {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("VSiteRefType.ref[%d] has a nil value", i)
 		}
@@ -11191,8 +11848,8 @@ func (m *VSiteRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -12018,19 +12675,21 @@ func (m *VirtualNetworkReferenceType) Validate(ctx context.Context, opts ...db.V
 }
 
 func (m *VirtualNetworkReferenceType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefsDRefInfo()
+
 }
 
 func (m *VirtualNetworkReferenceType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRefs() {
+	refs := m.GetRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("VirtualNetworkReferenceType.refs[%d] has a nil value", i)
 		}
@@ -12045,8 +12704,8 @@ func (m *VirtualNetworkReferenceType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -12424,19 +13083,21 @@ func (m *WafRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error
 }
 
 func (m *WafRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetWafDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetWafDRefInfo()
+
 }
 
 func (m *WafRefType) GetWafDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetWaf() {
+	refs := m.GetWaf()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("WafRefType.waf[%d] has a nil value", i)
 		}
@@ -12451,8 +13112,8 @@ func (m *WafRefType) GetWafDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetWafDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -12612,19 +13273,21 @@ func (m *WafRulesRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *WafRulesRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetWafRulesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetWafRulesDRefInfo()
+
 }
 
 func (m *WafRulesRefType) GetWafRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetWafRules() {
+	refs := m.GetWafRules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("WafRulesRefType.waf_rules[%d] has a nil value", i)
 		}
@@ -12639,8 +13302,8 @@ func (m *WafRulesRefType) GetWafRulesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetWafRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -12800,63 +13463,57 @@ func (m *WafType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 }
 
 func (m *WafType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRefTypeDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRefTypeDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *WafType) GetRefTypeDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRefType() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRefType().(type) {
 	case *WafType_Waf:
-		odrInfos, err = m.GetWaf().GetDRefInfo()
+		drInfos, err := m.GetWaf().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetWaf().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "waf." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "waf." + dri.DRField
 		}
+		return drInfos, err
 
 	case *WafType_WafRules:
-		odrInfos, err = m.GetWafRules().GetDRefInfo()
+		drInfos, err := m.GetWafRules().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetWafRules().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "waf_rules." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "waf_rules." + dri.DRField
 		}
+		return drInfos, err
 
 	case *WafType_AppFirewall:
-		odrInfos, err = m.GetAppFirewall().GetDRefInfo()
+		drInfos, err := m.GetAppFirewall().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAppFirewall().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "app_firewall." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "app_firewall." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateWafType struct {

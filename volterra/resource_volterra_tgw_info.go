@@ -14,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"gopkg.volterra.us/stdlib/codec"
 
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 )
 
@@ -44,6 +45,30 @@ func resourceVolterraSetTGWInfo() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"subnet_ids": {
+				Type:     schema.TypeList,
+				Required: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"az": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"outside_subnet_id": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"inside_subnet_id": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"workload_subnet_id": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -63,12 +88,14 @@ func resourceVolterraSetTGWInfoCreate(d *schema.ResourceData, meta interface{}) 
 		vpcID = v.(string)
 	}
 
+	subnetIDs := getSubnetIDs(d)
 	req := &ves_io_schema_tgw_site.SetTGWInfoRequest{
 		Name:      name,
 		Namespace: systemNS,
 		TgwInfo: &ves_io_schema_tgw_site.AWSTGWInfoConfigType{
-			TgwId: tgwID,
-			VpcId: vpcID,
+			TgwId:     tgwID,
+			VpcId:     vpcID,
+			SubnetIds: subnetIDs,
 		},
 	}
 	log.Printf("[INFO] Foo Setting Id %s, %s\n", tgwID, vpcID)
@@ -106,13 +133,15 @@ func resourceVolterraSetTGWInfoUpdate(d *schema.ResourceData, meta interface{}) 
 	if v, ok := d.GetOk("vpc_id"); ok {
 		vpcID = v.(string)
 	}
+	subnetIDs := getSubnetIDs(d)
 
 	req := &ves_io_schema_tgw_site.SetTGWInfoRequest{
 		Name:      name,
 		Namespace: systemNS,
 		TgwInfo: &ves_io_schema_tgw_site.AWSTGWInfoConfigType{
-			TgwId: tgwID,
-			VpcId: vpcID,
+			TgwId:     tgwID,
+			VpcId:     vpcID,
+			SubnetIds: subnetIDs,
 		},
 	}
 
@@ -130,7 +159,31 @@ func resourceVolterraSetTGWInfoUpdate(d *schema.ResourceData, meta interface{}) 
 }
 
 func resourceVolterraSetTGWInfoDelete(d *schema.ResourceData, meta interface{}) error {
-	// Remove the VPC IP prefixes
 	d.SetId("")
 	return nil
+}
+
+func getSubnetIDs(d *schema.ResourceData) []*ves_io_schema_views.AWSSubnetIdsType {
+	subnetIDs := []*ves_io_schema_views.AWSSubnetIdsType{}
+	if v, ok := d.GetOk("subnet_ids"); ok && !isIntfNil(v) {
+		sl := v.([]interface{})
+		for _, set := range sl {
+			subnetID := &ves_io_schema_views.AWSSubnetIdsType{}
+			subnetIDMapStrToI := set.(map[string]interface{})
+			if az, ok := subnetIDMapStrToI["az"]; ok && !isIntfNil(az) {
+				subnetID.AzName = az.(string)
+			}
+			if subnet_id, ok := subnetIDMapStrToI["outside_subnet_id"]; ok && !isIntfNil(subnet_id) {
+				subnetID.OutsideSubnetId = subnet_id.(string)
+			}
+			if subnet_id, ok := subnetIDMapStrToI["inside_subnet_id"]; ok && !isIntfNil(subnet_id) {
+				subnetID.InsideSubnetId = subnet_id.(string)
+			}
+			if subnet_id, ok := subnetIDMapStrToI["workload_subnet_id"]; ok && !isIntfNil(subnet_id) {
+				subnetID.WorkloadSubnetId = subnet_id.(string)
+			}
+			subnetIDs = append(subnetIDs, subnetID)
+		}
+	}
+	return subnetIDs
 }

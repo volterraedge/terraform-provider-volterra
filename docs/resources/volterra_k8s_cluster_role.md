@@ -21,7 +21,18 @@ resource "volterra_k8s_cluster_role" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "policy_rule_list k8s_cluster_role_selector yaml" must be set
-  yaml = "yaml"
+
+  policy_rule_list {
+    policy_rule {
+      // One of the arguments from this list "resource_list non_resource_url_list" must be set
+
+      non_resource_url_list {
+        urls = ["urls"]
+
+        verbs = ["get"]
+      }
+    }
+  }
 }
 
 ```

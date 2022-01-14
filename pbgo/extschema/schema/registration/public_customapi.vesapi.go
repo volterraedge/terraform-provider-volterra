@@ -149,14 +149,20 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsBySite(ctx context.Context, 
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -226,14 +232,20 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsByState(ctx context.Context,
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -303,14 +315,20 @@ func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, call
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -386,14 +404,20 @@ func (c *CustomAPIRestClient) doRPCRegistrationConfig(ctx context.Context, callO
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -464,14 +488,20 @@ func (c *CustomAPIRestClient) doRPCRegistrationCreate(ctx context.Context, callO
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -1813,7 +1843,7 @@ var CustomAPISwaggerJSON string = `{
             "description": "Passport stores information about identification and node configuration provided by CE during registration. It can be manually updated by user during approval.",
             "title": "Passport",
             "x-displayname": "Passport",
-            "x-ves-displayorder": "1,2,9,7,8,4,5,6,10,3,11",
+            "x-ves-displayorder": "1,2,9,7,8,4,5,6,10,3,11,12,15",
             "x-ves-oneof-field-operating_system_version_choice": "[\"default_os_version\",\"operating_system_version\"]",
             "x-ves-oneof-field-volterra_sw_version_choice": "[\"default_sw_version\",\"volterra_software_version\"]",
             "x-ves-proto-message": "ves.io.schema.registration.Passport",
@@ -2102,7 +2132,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
@@ -2155,7 +2185,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
@@ -2208,14 +2238,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -2224,7 +2254,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -2309,7 +2339,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -2325,7 +2355,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -2404,7 +2434,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -2420,7 +2450,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -2489,6 +2519,13 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -2797,6 +2834,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "cpus",
                     "format": "int64",
                     "x-displayname": "CPUs"
+                },
+                "flags": {
+                    "type": "string",
+                    "description": " CPU flags",
+                    "title": "flags",
+                    "x-displayname": "Cpu Flags"
                 },
                 "model": {
                     "type": "string",

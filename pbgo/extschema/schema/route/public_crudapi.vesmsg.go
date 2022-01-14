@@ -35,6 +35,20 @@ func (m *CreateRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateRequest) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateRequest.spec")
+	}
+
+	return nil
+}
+
 func (m *CreateRequest) DeepCopy() *CreateRequest {
 	if m == nil {
 		return nil
@@ -63,37 +77,30 @@ func (m *CreateRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 }
 
 func (m *CreateRequest) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSpecDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateRequest) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSpec() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSpec().GetDRefInfo()
+	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "spec." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateCreateRequest struct {
@@ -160,6 +167,20 @@ func (m *CreateResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateResponse) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateResponse.spec")
+	}
+
+	return nil
+}
+
 func (m *CreateResponse) DeepCopy() *CreateResponse {
 	if m == nil {
 		return nil
@@ -188,37 +209,30 @@ func (m *CreateResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSpecDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSpec() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSpec().GetDRefInfo()
+	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "spec." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateCreateResponse struct {
@@ -486,6 +500,32 @@ func (m *GetResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetResponse) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetObject().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.object")
+	}
+
+	if err := m.GetCreateForm().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.create_form")
+	}
+
+	if err := m.GetReplaceForm().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.replace_form")
+	}
+
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.spec")
+	}
+
+	return nil
+}
+
 func (m *GetResponse) DeepCopy() *GetResponse {
 	if m == nil {
 		return nil
@@ -514,95 +554,85 @@ func (m *GetResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetCreateFormDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetCreateFormDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetReplaceFormDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetReplaceFormDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetResponse) GetCreateFormDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetCreateForm() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetCreateForm().GetDRefInfo()
+	drInfos, err := m.GetCreateForm().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetCreateForm().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "create_form." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetResponse) GetReplaceFormDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetReplaceForm() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetReplaceForm().GetDRefInfo()
+	drInfos, err := m.GetReplaceForm().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetReplaceForm().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "replace_form." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSpec() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSpec().GetDRefInfo()
+	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "spec." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGetResponse struct {
@@ -857,6 +887,22 @@ func (m *ListResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ListResponse) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetItems() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ListResponse.items idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *ListResponse) DeepCopy() *ListResponse {
 	if m == nil {
 		return nil
@@ -885,39 +931,34 @@ func (m *ListResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) err
 }
 
 func (m *ListResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetItemsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetItemsDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetItems() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateListResponse struct {
@@ -988,6 +1029,24 @@ func (m *ListResponseItem) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ListResponseItem) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetObject().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ListResponseItem.object")
+	}
+
+	if err := m.GetGetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ListResponseItem.get_spec")
+	}
+
+	return nil
+}
+
 func (m *ListResponseItem) DeepCopy() *ListResponseItem {
 	if m == nil {
 		return nil
@@ -1016,37 +1075,37 @@ func (m *ListResponseItem) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *ListResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetGetSpecDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGetSpecDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ListResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetGetSpec() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetGetSpec().GetDRefInfo()
+	drInfos, err := m.GetGetSpec().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "get_spec." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateListResponseItem struct {
@@ -1234,6 +1293,20 @@ func (m *ReplaceRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceRequest) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceRequest.spec")
+	}
+
+	return nil
+}
+
 func (m *ReplaceRequest) DeepCopy() *ReplaceRequest {
 	if m == nil {
 		return nil
@@ -1262,37 +1335,30 @@ func (m *ReplaceRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *ReplaceRequest) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSpecDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceRequest) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSpec() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSpec().GetDRefInfo()
+	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "spec." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateReplaceRequest struct {

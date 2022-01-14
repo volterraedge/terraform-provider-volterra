@@ -138,14 +138,20 @@ func (c *CustomAPIRestClient) doRPCSetTGWInfo(ctx context.Context, callOpts *ser
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -216,14 +222,20 @@ func (c *CustomAPIRestClient) doRPCSetVIPInfo(ctx context.Context, callOpts *ser
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -294,14 +306,20 @@ func (c *CustomAPIRestClient) doRPCSetVPCIpPrefixes(ctx context.Context, callOpt
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -372,14 +390,20 @@ func (c *CustomAPIRestClient) doRPCSetVPNTunnels(ctx context.Context, callOpts *
 	var hReq *http.Request
 	hm := strings.ToLower(callOpts.HTTPMethod)
 	switch hm {
-	case "post":
+	case "post", "put":
 		jsn, err := req.ToJSON()
 		if err != nil {
 			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
 		}
-		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
 		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
 		}
 		hReq = newReq
 	case "get":
@@ -1098,6 +1122,16 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "AWS TGW Information Config",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType",
             "properties": {
+                "subnet_ids": {
+                    "type": "array",
+                    "description": " AWS Subnet Ids used by volterra site\nRequired: YES",
+                    "title": "AWS Subnet Ids Info",
+                    "items": {
+                        "$ref": "#/definitions/viewsAWSSubnetIdsType"
+                    },
+                    "x-displayname": "AWS Subnet Ids",
+                    "x-ves-required": "true"
+                },
                 "tgw_id": {
                     "type": "string",
                     "description": " TGW ID populated by AWS\n\nExample: - \"tgw-12345678\"-\nRequired: YES",
@@ -1148,6 +1182,13 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Remote IP(s)",
                     "x-ves-example": "3.4.5.6",
+                    "x-ves-required": "true"
+                },
+                "type": {
+                    "description": " VPN Tunnel Type\nRequired: YES",
+                    "title": "VPN Tunnel Type",
+                    "$ref": "#/definitions/aws_tgw_siteVPNTunnelType",
+                    "x-displayname": "VPN Tunnel Type",
                     "x-ves-required": "true"
                 }
             }
@@ -1317,9 +1358,21 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "aws_tgw_siteVPNTunnelType": {
+            "type": "string",
+            "description": "This defines VPN Tunnel type for which the config exists\n\nVPN Tunnel Type - HUB\nVPN Tunnel Type - Services",
+            "title": "VPN Tunnel Type",
+            "enum": [
+                "HUB",
+                "SERVICES"
+            ],
+            "default": "HUB",
+            "x-displayname": "VPN Tunnel Type",
+            "x-ves-proto-enum": "ves.io.schema.views.aws_tgw_site.VPNTunnelType"
+        },
         "sitePublishVIPParamsPerAz": {
             "type": "object",
-            "description": "Per AZ parameters needed to publish VIP for publci cloud sites",
+            "description": "Per AZ parameters needed to publish VIP for public cloud sites",
             "title": "Publish VIP Params Per AZ",
             "x-displayname": "Publish VIP Params Per AZ",
             "x-ves-proto-message": "ves.io.schema.site.PublishVIPParamsPerAz",
@@ -1365,6 +1418,44 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Outside VIP CNAME",
                     "x-displayname": "Outside VIP CNAME",
                     "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                }
+            }
+        },
+        "viewsAWSSubnetIdsType": {
+            "type": "object",
+            "description": "AWS Subnet Ids used by volterra site",
+            "title": "AWS Subnets Ids",
+            "x-displayname": "AWS Subnets Ids",
+            "x-ves-proto-message": "ves.io.schema.views.AWSSubnetIdsType",
+            "properties": {
+                "az_name": {
+                    "type": "string",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
+                    "title": "AZ Name",
+                    "x-displayname": "AZ Name",
+                    "x-ves-example": "us-west-2a",
+                    "x-ves-required": "true"
+                },
+                "inside_subnet_id": {
+                    "type": "string",
+                    "description": " Inside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Inside Subnet ID",
+                    "x-displayname": "Inside Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                },
+                "outside_subnet_id": {
+                    "type": "string",
+                    "description": " Outside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Outside Subnet ID",
+                    "x-displayname": "Outside Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                },
+                "workload_subnet_id": {
+                    "type": "string",
+                    "description": " Workload subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Workload Subnet ID",
+                    "x-displayname": "Workload Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
                 }
             }
         }

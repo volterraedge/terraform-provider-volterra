@@ -98,6 +98,9 @@ func testAWSTGWSiteConfig(resourceName, name string) string {
 				latitude = 37.404989
 				longitude = -121.942300
 			}
+			lifecycle {
+				ignore_changes = [labels]
+			}
 		  }
 		  resource "volterra_tf_params_action" "%[1]s" {
 			  site_name = "%[2]s"
@@ -105,5 +108,15 @@ func testAWSTGWSiteConfig(resourceName, name string) string {
 			  action = "plan"
 			  wait_for_action = false
 		  }
+		  resource "volterra_cloud_site_labels" "%[1]s" {
+			name = volterra_aws_tgw_site.%[1]s.name
+			site_type = "aws_tgw_site"
+			labels = {
+				key1 = "value1"
+				key2 = "value2"
+			}
+			ignore_on_delete = true
+		}
+
 		`, resourceName, name)
 }

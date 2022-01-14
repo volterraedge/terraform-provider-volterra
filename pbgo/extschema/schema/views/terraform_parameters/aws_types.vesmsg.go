@@ -529,6 +529,12 @@ func (m *AWSTGWType) Redact(ctx context.Context) error {
 		}
 	}
 
+	for idx, e := range m.GetSvcsTunnelInformation() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting AWSTGWType.svcs_tunnel_information idx %v", idx)
+		}
+	}
+
 	return nil
 }
 
@@ -697,6 +703,18 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["svcs_tunnel_information"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("svcs_tunnel_information"))
+		for idx, item := range m.GetSvcsTunnelInformation() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw"))
@@ -788,6 +806,8 @@ var DefaultAWSTGWTypeValidator = func() *ValidateAWSTGWType {
 	v.FldValidators["master_nodes"] = AWSInstanceTypeValidator().Validate
 
 	v.FldValidators["tunnel_information"] = AWSTGWTunnelInfoTypeValidator().Validate
+
+	v.FldValidators["svcs_tunnel_information"] = AWSTGWTunnelInfoTypeValidator().Validate
 
 	return v
 }()

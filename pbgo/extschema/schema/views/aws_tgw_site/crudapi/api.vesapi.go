@@ -2580,6 +2580,16 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS TGW Information Config",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType",
             "properties": {
+                "subnet_ids": {
+                    "type": "array",
+                    "description": " AWS Subnet Ids used by volterra site\nRequired: YES",
+                    "title": "AWS Subnet Ids Info",
+                    "items": {
+                        "$ref": "#/definitions/viewsAWSSubnetIdsType"
+                    },
+                    "x-displayname": "AWS Subnet Ids",
+                    "x-ves-required": "true"
+                },
                 "tgw_id": {
                     "type": "string",
                     "description": " TGW ID populated by AWS\n\nExample: - \"tgw-12345678\"-\nRequired: YES",
@@ -2630,6 +2640,13 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Remote IP(s)",
                     "x-ves-example": "3.4.5.6",
+                    "x-ves-required": "true"
+                },
+                "type": {
+                    "description": " VPN Tunnel Type\nRequired: YES",
+                    "title": "VPN Tunnel Type",
+                    "$ref": "#/definitions/aws_tgw_siteVPNTunnelType",
+                    "x-displayname": "VPN Tunnel Type",
                     "x-ves-required": "true"
                 }
             }
@@ -2986,6 +3003,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "aws_tgw_siteVPNTunnelType": {
+            "type": "string",
+            "description": "This defines VPN Tunnel type for which the config exists\n\nVPN Tunnel Type - HUB\nVPN Tunnel Type - Services",
+            "title": "VPN Tunnel Type",
+            "enum": [
+                "HUB",
+                "SERVICES"
+            ],
+            "default": "HUB",
+            "x-displayname": "VPN Tunnel Type",
+            "x-ves-proto-enum": "ves.io.schema.views.aws_tgw_site.VPNTunnelType"
+        },
         "aws_tgw_siteVnConfiguration": {
             "type": "object",
             "description": "Virtual Network Configuration",
@@ -3223,7 +3252,7 @@ var APISwaggerJSON string = `{
         },
         "ioschemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -3390,7 +3419,7 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.  \n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
                     "title": "URL",
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
@@ -3433,7 +3462,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3531,6 +3560,38 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "IP Prefixes to Skip Protocol Parsing",
                     "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"
+                }
+            }
+        },
+        "schemaHashAlgorithm": {
+            "type": "string",
+            "description": "Specifies the Hash Algorithm to be used\n\nInvalid hash algorithm\nsha256 hash algorithm\nsha1 hash algorithm",
+            "title": "HashAlgoritm",
+            "enum": [
+                "INVALID_HASH_ALGORITHM",
+                "SHA256",
+                "SHA1"
+            ],
+            "default": "INVALID_HASH_ALGORITHM",
+            "x-displayname": "Hash Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.HashAlgorithm"
+        },
+        "schemaHashAlgorithms": {
+            "type": "object",
+            "description": "Specifies the hash algorithms to be used",
+            "title": "HashAlgorithms",
+            "x-displayname": "Hash Algorithms",
+            "x-ves-proto-message": "ves.io.schema.HashAlgorithms",
+            "properties": {
+                "hash_algorithms": {
+                    "type": "array",
+                    "description": " Ordered list of hash algorithms to be used.\nRequired: YES",
+                    "title": "Hash Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaHashAlgorithm"
+                    },
+                    "x-displayname": "Hash Algorithms",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3801,14 +3862,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3960,7 +4021,7 @@ var APISwaggerJSON string = `{
                 },
                 "status_id": {
                     "type": "string",
-                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
                     "title": "status_id",
                     "x-displayname": "Status ID"
                 },
@@ -3973,22 +4034,29 @@ var APISwaggerJSON string = `{
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "description": " Origin of this status exchanged by VTRP.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
             "default": "STATUS_DO_NOT_PUBLISH",
-            "x-displayname": "Publish",
+            "x-displayname": "Status Publish Type",
             "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
@@ -4059,7 +4127,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -4075,7 +4143,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -4144,6 +4212,13 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -4152,7 +4227,7 @@ var APISwaggerJSON string = `{
             "description": "Handle to fetch certificate and key",
             "title": "TlsCertificateType",
             "x-displayname": "TLS Certificate",
-            "x-ves-displayorder": "1,4,5",
+            "x-ves-oneof-field-ocsp_stapling_choice": "[\"custom_hash_algorithms\",\"disable_ocsp_stapling\",\"use_system_defaults\"]",
             "x-ves-proto-message": "ves.io.schema.TlsCertificateType",
             "properties": {
                 "certificate_url": {
@@ -4162,11 +4237,21 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Certificate URL",
                     "x-ves-required": "true"
                 },
+                "custom_hash_algorithms": {
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "title": "Use Custom Order for Hash Algorithms",
+                    "$ref": "#/definitions/schemaHashAlgorithms"
+                },
                 "description": {
                     "type": "string",
                     "description": " Description for the certificate",
                     "title": "description",
                     "x-displayname": "Description"
+                },
+                "disable_ocsp_stapling": {
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "title": "Disable OCSP Stapling",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\nRequired: YES",
@@ -4174,6 +4259,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Private Key",
                     "x-ves-required": "true"
+                },
+                "use_system_defaults": {
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with Volterra default settings",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -4422,7 +4512,7 @@ var APISwaggerJSON string = `{
         },
         "sitePublishVIPParamsPerAz": {
             "type": "object",
-            "description": "Per AZ parameters needed to publish VIP for publci cloud sites",
+            "description": "Per AZ parameters needed to publish VIP for public cloud sites",
             "title": "Publish VIP Params Per AZ",
             "x-displayname": "Publish VIP Params Per AZ",
             "x-ves-proto-message": "ves.io.schema.site.PublishVIPParamsPerAz",
@@ -4468,6 +4558,44 @@ var APISwaggerJSON string = `{
                     "title": "Outside VIP CNAME",
                     "x-displayname": "Outside VIP CNAME",
                     "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                }
+            }
+        },
+        "viewsAWSSubnetIdsType": {
+            "type": "object",
+            "description": "AWS Subnet Ids used by volterra site",
+            "title": "AWS Subnets Ids",
+            "x-displayname": "AWS Subnets Ids",
+            "x-ves-proto-message": "ves.io.schema.views.AWSSubnetIdsType",
+            "properties": {
+                "az_name": {
+                    "type": "string",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
+                    "title": "AZ Name",
+                    "x-displayname": "AZ Name",
+                    "x-ves-example": "us-west-2a",
+                    "x-ves-required": "true"
+                },
+                "inside_subnet_id": {
+                    "type": "string",
+                    "description": " Inside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Inside Subnet ID",
+                    "x-displayname": "Inside Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                },
+                "outside_subnet_id": {
+                    "type": "string",
+                    "description": " Outside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Outside Subnet ID",
+                    "x-displayname": "Outside Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                },
+                "workload_subnet_id": {
+                    "type": "string",
+                    "description": " Workload subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Workload Subnet ID",
+                    "x-displayname": "Workload Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
                 }
             }
         },

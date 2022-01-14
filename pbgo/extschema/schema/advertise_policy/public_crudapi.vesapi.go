@@ -1698,7 +1698,7 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
-                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created.\nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1790,7 +1790,7 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
-                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created.\nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -2759,6 +2759,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2821,7 +2828,7 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.  \n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
                     "title": "URL",
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
@@ -2864,7 +2871,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -2943,6 +2950,38 @@ var APISwaggerJSON string = `{
                     "title": "message",
                     "x-displayname": "Message",
                     "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaHashAlgorithm": {
+            "type": "string",
+            "description": "Specifies the Hash Algorithm to be used\n\nInvalid hash algorithm\nsha256 hash algorithm\nsha1 hash algorithm",
+            "title": "HashAlgoritm",
+            "enum": [
+                "INVALID_HASH_ALGORITHM",
+                "SHA256",
+                "SHA1"
+            ],
+            "default": "INVALID_HASH_ALGORITHM",
+            "x-displayname": "Hash Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.HashAlgorithm"
+        },
+        "schemaHashAlgorithms": {
+            "type": "object",
+            "description": "Specifies the hash algorithms to be used",
+            "title": "HashAlgorithms",
+            "x-displayname": "Hash Algorithms",
+            "x-ves-proto-message": "ves.io.schema.HashAlgorithms",
+            "properties": {
+                "hash_algorithms": {
+                    "type": "array",
+                    "description": " Ordered list of hash algorithms to be used.\nRequired: YES",
+                    "title": "Hash Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaHashAlgorithm"
+                    },
+                    "x-displayname": "Hash Algorithms",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3071,7 +3110,7 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
@@ -3124,7 +3163,7 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
@@ -3177,14 +3216,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3193,7 +3232,7 @@ var APISwaggerJSON string = `{
         },
         "schemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -3277,7 +3316,7 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
@@ -3398,7 +3437,7 @@ var APISwaggerJSON string = `{
                 },
                 "status_id": {
                     "type": "string",
-                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
                     "title": "status_id",
                     "x-displayname": "Status ID"
                 },
@@ -3411,22 +3450,29 @@ var APISwaggerJSON string = `{
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "description": " Origin of this status exchanged by VTRP.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
             "default": "STATUS_DO_NOT_PUBLISH",
-            "x-displayname": "Publish",
+            "x-displayname": "Status Publish Type",
             "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
@@ -3490,7 +3536,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -3506,7 +3552,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -3585,7 +3631,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -3601,7 +3647,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -3670,6 +3716,13 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -3678,7 +3731,7 @@ var APISwaggerJSON string = `{
             "description": "Handle to fetch certificate and key",
             "title": "TlsCertificateType",
             "x-displayname": "TLS Certificate",
-            "x-ves-displayorder": "1,4,5",
+            "x-ves-oneof-field-ocsp_stapling_choice": "[\"custom_hash_algorithms\",\"disable_ocsp_stapling\",\"use_system_defaults\"]",
             "x-ves-proto-message": "ves.io.schema.TlsCertificateType",
             "properties": {
                 "certificate_url": {
@@ -3688,11 +3741,21 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Certificate URL",
                     "x-ves-required": "true"
                 },
+                "custom_hash_algorithms": {
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "title": "Use Custom Order for Hash Algorithms",
+                    "$ref": "#/definitions/schemaHashAlgorithms"
+                },
                 "description": {
                     "type": "string",
                     "description": " Description for the certificate",
                     "title": "description",
                     "x-displayname": "Description"
+                },
+                "disable_ocsp_stapling": {
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "title": "Disable OCSP Stapling",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\nRequired: YES",
@@ -3700,6 +3763,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Private Key",
                     "x-ves-required": "true"
+                },
+                "use_system_defaults": {
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with Volterra default settings",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -3708,7 +3776,7 @@ var APISwaggerJSON string = `{
             "description": "Information of different aspects for TLS authentication related to ciphers,\ncertificates and trust store",
             "title": "TlsParamsType",
             "x-displayname": "TLS Parameters",
-            "x-ves-displayorder": "4,5,1,2,3",
+            "x-ves-displayorder": "4,7,1,2,3",
             "x-ves-proto-message": "ves.io.schema.TlsParamsType",
             "properties": {
                 "cipher_suites": {

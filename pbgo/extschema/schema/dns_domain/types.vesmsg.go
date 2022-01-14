@@ -64,18 +64,15 @@ func (m *AWSRoute53Type) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *AWSRoute53Type) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetCredsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetCredsDRefInfo()
+
 }
 
 func (m *AWSRoute53Type) GetCredsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetCreds()
 	if vref == nil {
@@ -83,16 +80,16 @@ func (m *AWSRoute53Type) GetCredsDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("cloud_credentials.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "cloud_credentials.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "creds",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetCredsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -205,47 +202,43 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDomainChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDomainChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDomainChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDomainChoice().(type) {
 	case *CreateSpecType_VolterraManaged:
 
+		return nil, nil
+
 	case *CreateSpecType_Route53:
-		odrInfos, err = m.GetRoute53().GetDRefInfo()
+		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "route53." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route53." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_VerificationOnly:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -403,47 +396,43 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDomainChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDomainChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDomainChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDomainChoice().(type) {
 	case *GetSpecType_VolterraManaged:
 
+		return nil, nil
+
 	case *GetSpecType_Route53:
-		odrInfos, err = m.GetRoute53().GetDRefInfo()
+		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "route53." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route53." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_VerificationOnly:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -619,47 +608,43 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDomainChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDomainChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDomainChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDomainChoice().(type) {
 	case *GlobalSpecType_VolterraManaged:
 
+		return nil, nil
+
 	case *GlobalSpecType_Route53:
-		odrInfos, err = m.GetRoute53().GetDRefInfo()
+		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "route53." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route53." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_VerificationOnly:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGlobalSpecType struct {
@@ -826,47 +811,43 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDomainChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDomainChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDomainChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDomainChoice().(type) {
 	case *ReplaceSpecType_VolterraManaged:
 
+		return nil, nil
+
 	case *ReplaceSpecType_Route53:
-		odrInfos, err = m.GetRoute53().GetDRefInfo()
+		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "route53." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route53." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_VerificationOnly:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {

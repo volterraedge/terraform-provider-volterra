@@ -2885,10 +2885,9 @@ var APISwaggerJSON string = `{
         },
         "routeRouteDestination": {
             "type": "object",
-            "description": "Each destination is a reference to cluster, it priority, weight and subset criteria.",
+            "description": "Each destination is a reference to cluster, it's priority, weight and subset criteria.",
             "title": "RouteDestination",
             "x-displayname": "Destination",
-            "x-ves-displayorder": "1,3,4",
             "x-ves-proto-message": "ves.io.schema.route.RouteDestination",
             "properties": {
                 "cluster": {
@@ -2906,6 +2905,13 @@ var APISwaggerJSON string = `{
                     "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoints which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing",
                     "title": "endpoint_subsets",
                     "x-displayname": "Endpoint Subsets"
+                },
+                "priority": {
+                    "type": "integer",
+                    "description": " Priority of this cluster, valid only with multiple destinations are configured.\n Value of 0 will make the cluster as lowest priority upstream cluster\n Priority of 1 means highest priority and is considered active.\n When active cluster is not available, lower priority clusters are\n made active as per the increasing priority.",
+                    "title": "Priority",
+                    "format": "int64",
+                    "x-displayname": "Priority"
                 },
                 "weight": {
                     "type": "integer",
@@ -3383,6 +3389,36 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaBlindfoldSecretInfoType": {
+            "type": "object",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
+            "properties": {
+                "decryption_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true"
+                },
+                "store_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider"
+                }
+            }
+        },
         "schemaBufferConfigType": {
             "type": "object",
             "description": "Some upstream applications are not capable of handling streamed data. This config\nenables buffering the entire request before sending to upstream application. We can\nspecify the maximum buffer size and buffer interval with this config.\n\nBuffering can be enabled and disabled at VirtualHost and Route levels\nRoute level buffer configuration takes precedence.",
@@ -3413,6 +3449,31 @@ var APISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Max Request Time",
                     "x-ves-example": "30"
+                }
+            }
+        },
+        "schemaClearSecretInfoType": {
+            "type": "object",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "title": "URL",
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3451,7 +3512,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3589,6 +3650,7 @@ var APISwaggerJSON string = `{
             "description": "HTTP header is a key-value pair.\nThe name acts as key of HTTP header\nThe value acts as the data/value of HTTP header\nExample HTTP header\n    Host: user.volterra.com\nIn the above example, Host is the name or key of HTTP header\nIn the above example, user.volterra.com is the value of HTTP header",
             "title": "HeaderManipulationOptionType",
             "x-displayname": "Header Manipulation Option",
+            "x-ves-oneof-field-value_choice": "[\"secret_value\",\"value\"]",
             "x-ves-proto-message": "ves.io.schema.HeaderManipulationOptionType",
             "properties": {
                 "append": {
@@ -3605,12 +3667,15 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Name",
                     "x-ves-required": "true"
                 },
+                "secret_value": {
+                    "description": "Exclusive with [value]\nx-displayName: \"Secret Value\"\nSecret Value of the HTTP header.",
+                    "title": "Secret Value",
+                    "$ref": "#/definitions/schemaSecretType"
+                },
                 "value": {
                     "type": "string",
-                    "description": " Value of the HTTP header.\nRequired: YES",
-                    "title": "value",
-                    "x-displayname": "Value",
-                    "x-ves-required": "true"
+                    "description": "Exclusive with [secret_value]\nx-displayName: \"Value\"\nValue of the HTTP header.",
+                    "title": "value"
                 }
             }
         },
@@ -3775,14 +3840,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3791,7 +3856,7 @@ var APISwaggerJSON string = `{
         },
         "schemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -3960,7 +4025,7 @@ var APISwaggerJSON string = `{
                 },
                 "retry_on": {
                     "type": "string",
-                    "description": " Specifies the conditions under which retry takes place. \n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
                     "title": "retry_on",
                     "x-displayname": "Retry On",
                     "x-ves-example": "5xx"
@@ -4019,6 +4084,60 @@ var APISwaggerJSON string = `{
             "x-displayname": "Routing Priority",
             "x-ves-proto-enum": "ves.io.schema.RoutingPriority"
         },
+        "schemaSecretEncodingType": {
+            "type": "string",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "title": "SecretEncodingType",
+            "enum": [
+                "EncodingNone",
+                "EncodingBase64"
+            ],
+            "default": "EncodingNone",
+            "x-displayname": "Secret Encoding",
+            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+        },
+        "schemaSecretType": {
+            "type": "object",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
+            "properties": {
+                "blindfold_secret_info": {
+                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "title": "Blindfold Secret",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret Internal"
+                },
+                "clear_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "title": "Clear Secret",
+                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                },
+                "secret_encoding_type": {
+                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
+                    "title": "secret_encoding_type",
+                    "$ref": "#/definitions/schemaSecretEncodingType",
+                    "x-displayname": "Secret Encoding"
+                },
+                "vault_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
+                    "title": "Vault Secret",
+                    "$ref": "#/definitions/schemaVaultSecretInfoType"
+                },
+                "wingman_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
+                    "title": "Wingman Secret",
+                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
+                }
+            }
+        },
         "schemaStatusMetaType": {
             "type": "object",
             "description": "StatusMetaType is metadata that all status must have.",
@@ -4055,7 +4174,7 @@ var APISwaggerJSON string = `{
                 },
                 "status_id": {
                     "type": "string",
-                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
                     "title": "status_id",
                     "x-displayname": "Status ID"
                 },
@@ -4068,22 +4187,29 @@ var APISwaggerJSON string = `{
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "description": " Origin of this status exchanged by VTRP.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
             "default": "STATUS_DO_NOT_PUBLISH",
-            "x-displayname": "Publish",
+            "x-displayname": "Status Publish Type",
             "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
@@ -4154,7 +4280,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -4170,7 +4296,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -4239,6 +4365,60 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
+                }
+            }
+        },
+        "schemaVaultSecretInfoType": {
+            "type": "object",
+            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "title": "VaultSecretInfoType",
+            "x-displayname": "Vault Secret",
+            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
+                    "title": "Key",
+                    "x-displayname": "Key",
+                    "x-ves-example": "key_pem"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "v1/data/vhost_key",
+                    "x-ves-required": "true"
+                },
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "vault-vh-provider",
+                    "x-ves-required": "true"
+                },
+                "secret_encoding": {
+                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "title": "secret_encoding",
+                    "$ref": "#/definitions/schemaSecretEncodingType",
+                    "x-displayname": "Secret Encoding"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "title": "Version",
+                    "format": "int64",
+                    "x-displayname": "Version",
+                    "x-ves-example": "1"
                 }
             }
         },
@@ -4337,6 +4517,23 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [app_firewall waf]\nx-displayName: \"WAF Rules\"\nA set of direct references of WAF Rules objects",
                     "title": "waf_rules",
                     "$ref": "#/definitions/schemaWafRulesRefType"
+                }
+            }
+        },
+        "schemaWingmanSecretInfoType": {
+            "type": "object",
+            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "title": "WingmanSecretInfoType",
+            "x-displayname": "Wingman Secret",
+            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "ChargeBack-API-Key",
+                    "x-ves-required": "true"
                 }
             }
         }
