@@ -1632,7 +1632,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{metadata.namespace}/network_firewalls": {
             "post": {
@@ -2206,13 +2206,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "fast_acls": {
                     "type": "array",
-                    "description": " Ordered List of Fast ACL(s) active for this network firewall\nRequired: YES",
+                    "description": " Ordered List of Fast ACL(s) active for this network firewall\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Fast ACL",
+                    "minItems": 1,
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "Fast ACL(s)",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2225,13 +2232,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "forward_proxy_policies": {
                     "type": "array",
-                    "description": " List of Forward Proxy Policies\nRequired: YES",
+                    "description": " List of Forward Proxy Policies\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Forward Proxy Policies",
+                    "minItems": 1,
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "Forward Proxy Policies",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2244,13 +2258,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "network_policies": {
                     "type": "array",
-                    "description": " Ordered List of Network Policies active for this network firewall\nRequired: YES",
+                    "description": " Ordered List of Network Policies active for this network firewall\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Network Policy",
+                    "minItems": 1,
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "Network Policy",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2304,55 +2325,40 @@ var APISwaggerJSON string = `{
             "description": "network firewall is created by users in system namespace",
             "title": "Create network firewall",
             "x-displayname": "Create Network Firewall",
-            "x-ves-oneof-field-fast_acl_choice": "[\"active_fast_acls\",\"disable_fast_acl\",\"fast_acl_set\"]",
-            "x-ves-oneof-field-forward_proxy_policy_choice": "[\"active_forward_proxy_policies\",\"disable_forward_proxy_policy\",\"forward_proxy_policy_set\"]",
-            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"disable_network_policy\",\"network_policy_set\"]",
+            "x-ves-oneof-field-fast_acl_choice": "[\"active_fast_acls\",\"disable_fast_acl\"]",
+            "x-ves-oneof-field-forward_proxy_policy_choice": "[\"active_forward_proxy_policies\",\"disable_forward_proxy_policy\"]",
+            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"disable_network_policy\"]",
             "x-ves-proto-message": "ves.io.schema.network_firewall.CreateSpecType",
             "properties": {
                 "active_fast_acls": {
-                    "description": "Exclusive with [disable_fast_acl fast_acl_set]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
+                    "description": "Exclusive with [disable_fast_acl]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
                     "title": "Active Fast ACL(s)",
                     "$ref": "#/definitions/network_firewallActiveFastACLsType"
                 },
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [disable_forward_proxy_policy forward_proxy_policy_set]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
+                    "description": "Exclusive with [disable_forward_proxy_policy]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
                     "title": "Active Forward Proxy Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [disable_network_policy network_policy_set]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
+                    "description": "Exclusive with [disable_network_policy]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
                     "title": "Active Network Policies",
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
                 "disable_fast_acl": {
-                    "description": "Exclusive with [active_fast_acls fast_acl_set]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
+                    "description": "Exclusive with [active_fast_acls]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
                     "title": "Disable Fast ACL",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_forward_proxy_policy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_policy_set]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_forward_proxy_policies]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
                     "title": "Disable Forward Proxy Policy",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_network_policy": {
-                    "description": "Exclusive with [active_network_policies network_policy_set]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
                     "title": "Disable Network Policy",
                     "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "fast_acl_set": {
-                    "description": "Exclusive with [active_fast_acls disable_fast_acl]\nx-displayName: \"Fast ACL Legacy mode\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Fast ACL Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "forward_proxy_policy_set": {
-                    "description": "Exclusive with [active_forward_proxy_policies disable_forward_proxy_policy]\nx-displayName: \"Disable Forward Proxy Policy\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Forward Proxy Policy Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "network_policy_set": {
-                    "description": "Exclusive with [active_network_policies disable_network_policy]\nx-displayName: \"Network Policy Legacy mode\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Network Policy Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -2425,13 +2431,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_firewallReplaceRequest",
                     "x-displayname": "ReplaceRequest Format"
                 },
-                "resource_version": {
-                    "type": "string",
-                    "description": "Version of the object\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
-                },
                 "spec": {
                     "description": " Specification of the desired behavior of the network firewall",
                     "title": "spec",
@@ -2474,55 +2473,40 @@ var APISwaggerJSON string = `{
             "description": "Get network firewall in system namespace",
             "title": "Get network firewall",
             "x-displayname": "Get Network Firewall",
-            "x-ves-oneof-field-fast_acl_choice": "[\"active_fast_acls\",\"disable_fast_acl\",\"fast_acl_set\"]",
-            "x-ves-oneof-field-forward_proxy_policy_choice": "[\"active_forward_proxy_policies\",\"disable_forward_proxy_policy\",\"forward_proxy_policy_set\"]",
-            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"disable_network_policy\",\"network_policy_set\"]",
+            "x-ves-oneof-field-fast_acl_choice": "[\"active_fast_acls\",\"disable_fast_acl\"]",
+            "x-ves-oneof-field-forward_proxy_policy_choice": "[\"active_forward_proxy_policies\",\"disable_forward_proxy_policy\"]",
+            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"disable_network_policy\"]",
             "x-ves-proto-message": "ves.io.schema.network_firewall.GetSpecType",
             "properties": {
                 "active_fast_acls": {
-                    "description": "Exclusive with [disable_fast_acl fast_acl_set]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
+                    "description": "Exclusive with [disable_fast_acl]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
                     "title": "Active Fast ACL(s)",
                     "$ref": "#/definitions/network_firewallActiveFastACLsType"
                 },
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [disable_forward_proxy_policy forward_proxy_policy_set]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
+                    "description": "Exclusive with [disable_forward_proxy_policy]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
                     "title": "Active Forward Proxy Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [disable_network_policy network_policy_set]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
+                    "description": "Exclusive with [disable_network_policy]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
                     "title": "Active Network Policies",
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
                 "disable_fast_acl": {
-                    "description": "Exclusive with [active_fast_acls fast_acl_set]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
+                    "description": "Exclusive with [active_fast_acls]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
                     "title": "Disable Fast ACL",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_forward_proxy_policy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_policy_set]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_forward_proxy_policies]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
                     "title": "Disable Forward Proxy Policy",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_network_policy": {
-                    "description": "Exclusive with [active_network_policies network_policy_set]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
                     "title": "Disable Network Policy",
                     "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "fast_acl_set": {
-                    "description": "Exclusive with [active_fast_acls disable_fast_acl]\nx-displayName: \"Fast ACL Legacy mode\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Fast ACL Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "forward_proxy_policy_set": {
-                    "description": "Exclusive with [active_forward_proxy_policies disable_forward_proxy_policy]\nx-displayName: \"Disable Forward Proxy Policy\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Forward Proxy Policy Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "network_policy_set": {
-                    "description": "Exclusive with [active_network_policies disable_network_policy]\nx-displayName: \"Network Policy Legacy mode\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Network Policy Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -2531,90 +2515,10 @@ var APISwaggerJSON string = `{
             "description": "Global spec, desired state of the network firewall",
             "title": "Network Firewall Specification",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-fast_acl_config_mode": "[\"active_fast_acls\",\"disable_fast_acl\",\"fast_acl_legacy_mode\"]",
-            "x-ves-oneof-field-forward_proxy_policy_config_mode": "[\"active_forward_proxy_policies\",\"disable_forward_proxy_policy\",\"forward_proxy_policy_legacy_mode\"]",
-            "x-ves-oneof-field-network_policy_config_mode": "[\"active_network_policies\",\"disable_network_policy\",\"network_policy_legacy_mode\"]",
-            "x-ves-proto-message": "ves.io.schema.network_firewall.GlobalSpecType",
-            "properties": {
-                "active_fast_acls": {
-                    "description": "Exclusive with [disable_fast_acl fast_acl_legacy_mode]\nx-displayName: \"Fast ACL Set\"\nFast ACL set defined for the fleet. Fast ACL set is applied for all sites that are member of the fleet.\nThe list of Virtual Networks / Interfaces is selected by the Fast ACL set object",
-                    "title": "Fast ACL Set",
-                    "$ref": "#/definitions/network_firewallActiveFastACLsType"
-                },
-                "active_forward_proxy_policies": {
-                    "description": "Exclusive with [disable_forward_proxy_policy forward_proxy_policy_legacy_mode]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy. Assign service_policy_set to be used for forward proxies in this firewall.",
-                    "title": "Forward proxy policy set",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
-                },
-                "active_network_policies": {
-                    "description": "Exclusive with [disable_network_policy network_policy_legacy_mode]\nx-displayName: \"Active Network Policies\"\nL3/L4 firewall\nActive network policies for this network firewall \nNetwork Policy set to be used as firewall for the fleet where this firewall is attached\nCurrently, Network Policy is applied for following Virtual Networks in a site,\n   - Site Local Inside\n   - Site Local",
-                    "title": "Active Network Policies",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
-                },
-                "disable_fast_acl": {
-                    "description": "Exclusive with [active_fast_acls fast_acl_legacy_mode]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
-                    "title": "Disable Fast ACL",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "disable_forward_proxy_policy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_policy_legacy_mode]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
-                    "title": "Disable Forward Proxy Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "disable_network_policy": {
-                    "description": "Exclusive with [active_network_policies network_policy_legacy_mode]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
-                    "title": "Disable Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "fast_acl_legacy_mode": {
-                    "description": "Exclusive with [active_fast_acls disable_fast_acl]\nx-displayName: \"Fast ACL Legacy mode\"\nInternal",
-                    "title": "Fast ACL Legacy mode",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "fast_acl_set": {
-                    "type": "array",
-                    "description": " Fast ACL set defined for the fleet. Fast ACL set is applied for all sites that are member of the fleet.\n The list of Virtual Networks / Interfaces is selected by the Fast ACL set object",
-                    "title": "Fast ACL Set",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Fast ACL Set (Legacy)"
-                },
-                "forward_proxy_policy_legacy_mode": {
-                    "description": "Exclusive with [active_forward_proxy_policies disable_forward_proxy_policy]\nx-displayName: \"Disable Forward Proxy Policy\"\nInternal",
-                    "title": "Forward Proxy Policy Legacy mode",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "forward_proxy_policy_set": {
-                    "type": "array",
-                    "description": " L7 firewall for forward proxy. Assign service_policy_set to be used for forward proxies in this firewall.",
-                    "title": "Forward proxy policy set",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Forward Proxy (Service) Policy Set (Legacy)"
-                },
-                "network_policy_legacy_mode": {
-                    "description": "Exclusive with [active_network_policies disable_network_policy]\nx-displayName: \"Disable Network Policy\"\nInternal",
-                    "title": "Network Policy Legacy mode",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "network_policy_set": {
-                    "type": "array",
-                    "description": " L3/L4 firewall (Legacy Mode)\n Network Policy set to be used as firewall for the fleet where this firewall is attached\n Currently, Network Policy is applied for following Virtual Networks in a site,\n    - Site Local Inside\n    - Site Local",
-                    "title": "Network Policy Set",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Network Policy Set (Legacy)"
-                },
-                "view_internal": {
-                    "description": " Reference to view internal object",
-                    "title": "view_internal",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "View Internal"
-                }
-            }
+            "x-ves-oneof-field-fast_acl_config_mode": "[]",
+            "x-ves-oneof-field-forward_proxy_policy_config_mode": "[]",
+            "x-ves-oneof-field-network_policy_config_mode": "[]",
+            "x-ves-proto-message": "ves.io.schema.network_firewall.GlobalSpecType"
         },
         "network_firewallListResponse": {
             "type": "object",
@@ -2800,13 +2704,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectReplaceMetaType",
                     "x-displayname": "Metadata"
                 },
-                "resource_version": {
-                    "type": "string",
-                    "description": "If provided, do the replace operation if the configuration object is still at 'resource_version'\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
-                },
                 "spec": {
                     "description": " Specification of the desired behavior of the network firewall",
                     "title": "spec",
@@ -2824,55 +2721,40 @@ var APISwaggerJSON string = `{
             "description": "Replace network firewall  will replace the contains of given object",
             "title": "Replace network firewall",
             "x-displayname": "Replace Network Firewall",
-            "x-ves-oneof-field-fast_acl_choice": "[\"active_fast_acls\",\"disable_fast_acl\",\"fast_acl_set\"]",
-            "x-ves-oneof-field-forward_proxy_policy_choice": "[\"active_forward_proxy_policies\",\"disable_forward_proxy_policy\",\"forward_proxy_policy_set\"]",
-            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"disable_network_policy\",\"network_policy_set\"]",
+            "x-ves-oneof-field-fast_acl_choice": "[\"active_fast_acls\",\"disable_fast_acl\"]",
+            "x-ves-oneof-field-forward_proxy_policy_choice": "[\"active_forward_proxy_policies\",\"disable_forward_proxy_policy\"]",
+            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"disable_network_policy\"]",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ReplaceSpecType",
             "properties": {
                 "active_fast_acls": {
-                    "description": "Exclusive with [disable_fast_acl fast_acl_set]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
+                    "description": "Exclusive with [disable_fast_acl]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
                     "title": "Active Fast ACL(s)",
                     "$ref": "#/definitions/network_firewallActiveFastACLsType"
                 },
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [disable_forward_proxy_policy forward_proxy_policy_set]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
+                    "description": "Exclusive with [disable_forward_proxy_policy]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
                     "title": "Active Forward Proxy Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [disable_network_policy network_policy_set]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
+                    "description": "Exclusive with [disable_network_policy]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
                     "title": "Active Network Policies",
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
                 "disable_fast_acl": {
-                    "description": "Exclusive with [active_fast_acls fast_acl_set]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
+                    "description": "Exclusive with [active_fast_acls]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
                     "title": "Disable Fast ACL",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_forward_proxy_policy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_policy_set]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_forward_proxy_policies]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
                     "title": "Disable Forward Proxy Policy",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_network_policy": {
-                    "description": "Exclusive with [active_network_policies network_policy_set]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
                     "title": "Disable Network Policy",
                     "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "fast_acl_set": {
-                    "description": "Exclusive with [active_fast_acls disable_fast_acl]\nx-displayName: \"Fast ACL Legacy mode\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Fast ACL Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "forward_proxy_policy_set": {
-                    "description": "Exclusive with [active_forward_proxy_policies disable_forward_proxy_policy]\nx-displayName: \"Disable Forward Proxy Policy\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Forward Proxy Policy Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "network_policy_set": {
-                    "description": "Exclusive with [active_network_policies disable_network_policy]\nx-displayName: \"Network Policy Legacy mode\"\nUse this to for existing network firewalls. Not recommended for new network firewall",
-                    "title": "Network Policy Legacy mode",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -2979,17 +2861,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3087,9 +2975,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotation"
+                    "x-displayname": "Annotation",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3113,11 +3007,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3137,10 +3034,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotation",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3166,11 +3069,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3190,10 +3096,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3219,11 +3131,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3250,9 +3165,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotations"
+                    "x-displayname": "Annotations",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3276,10 +3197,13 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web"
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3550,12 +3474,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3661,25 +3589,40 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "namespace",
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "tenant",
+                    "maxLength": 64,
                     "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

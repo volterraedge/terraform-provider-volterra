@@ -93,14 +93,6 @@ type ValidateCreateObjectRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCreateObjectRequest) ContentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for contents")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateObjectRequest) ContentsStringValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_StringValue, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -189,16 +181,6 @@ func (v *ValidateCreateObjectRequest) Validate(ctx context.Context, pm interface
 
 	}
 
-	if fv, exists := v.FldValidators["contents"]; exists {
-		val := m.GetContents()
-		vOpts := append(opts,
-			db.WithValidateField("contents"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetContents().(type) {
 	case *CreateObjectRequest_StringValue:
 		if fv, exists := v.FldValidators["contents.string_value"]; exists {
@@ -276,17 +258,6 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhContents := v.ContentsValidationRuleHandler
-	rulesContents := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhContents(rulesContents)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateObjectRequest.contents: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["contents"] = vFn
-
 	vrhContentsStringValue := v.ContentsStringValueValidationRuleHandler
 	rulesContentsStringValue := map[string]string{
 		"ves.io.schema.rules.string.max_len": "1048576",
@@ -323,7 +294,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\", \"big-object\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -334,9 +305,10 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "512",
-		"ves.io.schema.rules.string.pattern":   "([a-z]([-a-z0-9]*[a-z0-9])?)",
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
@@ -429,10 +401,36 @@ func (v *ValidateCreateObjectResponse) Validate(ctx context.Context, pm interfac
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["spec"]; exists {
+	switch m.GetAdditionalInfo().(type) {
+	case *CreateObjectResponse_NoAdditionalInfo:
+		if fv, exists := v.FldValidators["additional_info.no_additional_info"]; exists {
+			val := m.GetAdditionalInfo().(*CreateObjectResponse_NoAdditionalInfo).NoAdditionalInfo
+			vOpts := append(opts,
+				db.WithValidateField("additional_info"),
+				db.WithValidateField("no_additional_info"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateObjectResponse_PresignedUrl:
+		if fv, exists := v.FldValidators["additional_info.presigned_url"]; exists {
+			val := m.GetAdditionalInfo().(*CreateObjectResponse_PresignedUrl).PresignedUrl
+			vOpts := append(opts,
+				db.WithValidateField("additional_info"),
+				db.WithValidateField("presigned_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
-		vOpts := append(opts, db.WithValidateField("spec"))
-		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
 
@@ -445,7 +443,7 @@ func (v *ValidateCreateObjectResponse) Validate(ctx context.Context, pm interfac
 var DefaultCreateObjectResponseValidator = func() *ValidateCreateObjectResponse {
 	v := &ValidateCreateObjectResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["spec"] = StoredObjectDescriptorValidator().Validate
+	v.FldValidators["metadata"] = StoredObjectDescriptorValidator().Validate
 
 	return v
 }()
@@ -623,7 +621,7 @@ var DefaultDeleteObjectRequestValidator = func() *ValidateDeleteObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\", \"big-object\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -634,9 +632,10 @@ var DefaultDeleteObjectRequestValidator = func() *ValidateDeleteObjectRequest {
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "512",
-		"ves.io.schema.rules.string.pattern":   "([a-z]([-a-z0-9]*[a-z0-9])?)",
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
@@ -904,7 +903,7 @@ var DefaultGetObjectRequestValidator = func() *ValidateGetObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\", \"big-object\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -915,9 +914,10 @@ var DefaultGetObjectRequestValidator = func() *ValidateGetObjectRequest {
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "512",
-		"ves.io.schema.rules.string.pattern":   "([a-z]([-a-z0-9]*[a-z0-9])?)",
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
@@ -1014,6 +1014,15 @@ func (v *ValidateGetObjectResponse) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["content_format"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_format"))
+		if err := fv(ctx, m.GetContentFormat(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetContents().(type) {
 	case *GetObjectResponse_StringValue:
 		if fv, exists := v.FldValidators["contents.string_value"]; exists {
@@ -1036,6 +1045,26 @@ func (v *ValidateGetObjectResponse) Validate(ctx context.Context, pm interface{}
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+	case *GetObjectResponse_PresignedUrl:
+		if fv, exists := v.FldValidators["contents.presigned_url"]; exists {
+			val := m.GetContents().(*GetObjectResponse_PresignedUrl).PresignedUrl
+			vOpts := append(opts,
+				db.WithValidateField("contents"),
+				db.WithValidateField("presigned_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1077,11 +1106,105 @@ var DefaultGetObjectResponseValidator = func() *ValidateGetObjectResponse {
 	v.FldValidators["contents.string_value"] = vFnMap["contents.string_value"]
 	v.FldValidators["contents.bytes_value"] = vFnMap["contents.bytes_value"]
 
+	v.FldValidators["metadata"] = StoredObjectDescriptorValidator().Validate
+
 	return v
 }()
 
 func GetObjectResponseValidator() db.Validator {
 	return DefaultGetObjectResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListItemDescriptor) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListItemDescriptor) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListItemDescriptor) DeepCopy() *ListItemDescriptor {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListItemDescriptor{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListItemDescriptor) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListItemDescriptor) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListItemDescriptorValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListItemDescriptor struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListItemDescriptor)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListItemDescriptor got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["versions"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("versions"))
+		for idx, item := range m.GetVersions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListItemDescriptorValidator = func() *ValidateListItemDescriptor {
+	v := &ValidateListItemDescriptor{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["versions"] = VersionDescriptorValidator().Validate
+
+	return v
+}()
+
+func ListItemDescriptorValidator() db.Validator {
+	return DefaultListItemDescriptorValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1169,6 +1292,15 @@ func (v *ValidateListObjectsRequest) Validate(ctx context.Context, pm interface{
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["latest_version_only"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latest_version_only"))
+		if err := fv(ctx, m.GetLatestVersionOnly(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -1191,6 +1323,15 @@ func (v *ValidateListObjectsRequest) Validate(ctx context.Context, pm interface{
 
 		vOpts := append(opts, db.WithValidateField("object_type"))
 		if err := fv(ctx, m.GetObjectType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query_type"))
+		if err := fv(ctx, m.GetQueryType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1224,7 +1365,7 @@ var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\", \"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\"]",
+		"ves.io.schema.rules.string.in": "[\"\", \"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\", \"big-object\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1235,8 +1376,8 @@ var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "512",
-		"ves.io.schema.rules.string.pattern": "([a-z]([-a-z0-9]*[a-z0-9])?)|^$",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
@@ -1326,13 +1467,184 @@ func (v *ValidateListObjectsResponse) Validate(ctx context.Context, pm interface
 var DefaultListObjectsResponseValidator = func() *ValidateListObjectsResponse {
 	v := &ValidateListObjectsResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["items"] = StoredObjectDescriptorValidator().Validate
+	v.FldValidators["items"] = ListItemDescriptorValidator().Validate
 
 	return v
 }()
 
 func ListObjectsResponseValidator() db.Validator {
 	return DefaultListObjectsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PreSignedUrl) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PreSignedUrl) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PreSignedUrl) DeepCopy() *PreSignedUrl {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PreSignedUrl{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PreSignedUrl) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PreSignedUrl) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PreSignedUrlValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePreSignedUrl struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePreSignedUrl) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PreSignedUrl)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PreSignedUrl got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetStorageProviderChoice().(type) {
+	case *PreSignedUrl_Aws:
+		if fv, exists := v.FldValidators["storage_provider_choice.aws"]; exists {
+			val := m.GetStorageProviderChoice().(*PreSignedUrl_Aws).Aws
+			vOpts := append(opts,
+				db.WithValidateField("storage_provider_choice"),
+				db.WithValidateField("aws"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPreSignedUrlValidator = func() *ValidatePreSignedUrl {
+	v := &ValidatePreSignedUrl{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PreSignedUrlValidator() db.Validator {
+	return DefaultPreSignedUrlValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PresignedUrlData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PresignedUrlData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PresignedUrlData) DeepCopy() *PresignedUrlData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PresignedUrlData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PresignedUrlData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PresignedUrlData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PresignedUrlDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePresignedUrlData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePresignedUrlData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PresignedUrlData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PresignedUrlData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("method"))
+		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("url"))
+		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPresignedUrlDataValidator = func() *ValidatePresignedUrlData {
+	v := &ValidatePresignedUrlData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PresignedUrlDataValidator() db.Validator {
+	return DefaultPresignedUrlDataValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1515,4 +1827,204 @@ var DefaultStoredObjectDescriptorValidator = func() *ValidateStoredObjectDescrip
 
 func StoredObjectDescriptorValidator() db.Validator {
 	return DefaultStoredObjectDescriptorValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VersionDescriptor) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VersionDescriptor) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VersionDescriptor) DeepCopy() *VersionDescriptor {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VersionDescriptor{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VersionDescriptor) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VersionDescriptor) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VersionDescriptorValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVersionDescriptor struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVersionDescriptor) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVersionDescriptor) CreationTimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var (
+		reqdValidatorFn db.ValidatorFunc
+		err             error
+	)
+
+	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for creation_timestamp")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if reqdValidatorFn != nil {
+			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
+				return err
+			}
+		}
+		// TODO: lookup configured third-party type validators
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVersionDescriptor) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVersionDescriptor) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VersionDescriptor)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VersionDescriptor got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("creation_timestamp"))
+		if err := fv(ctx, m.GetCreationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["latest_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latest_version"))
+		if err := fv(ctx, m.GetLatestVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("url"))
+		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("version"))
+		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVersionDescriptorValidator = func() *ValidateVersionDescriptor {
+	v := &ValidateVersionDescriptor{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VersionDescriptor.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
+	vrhCreationTimestamp := v.CreationTimestampValidationRuleHandler
+	rulesCreationTimestamp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCreationTimestamp(rulesCreationTimestamp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VersionDescriptor.creation_timestamp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["creation_timestamp"] = vFn
+
+	vrhUrl := v.UrlValidationRuleHandler
+	rulesUrl := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhUrl(rulesUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VersionDescriptor.url: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["url"] = vFn
+
+	return v
+}()
+
+func VersionDescriptorValidator() db.Validator {
+	return DefaultVersionDescriptorValidator
 }

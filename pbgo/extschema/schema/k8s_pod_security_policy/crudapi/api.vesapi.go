@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.k8s_pod_security_policy/Object/{object_uid}": {
             "get": {
@@ -2769,13 +2769,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "capabilities": {
                     "type": "array",
-                    "description": " List of capabilities that docker container has.\nRequired: YES",
+                    "description": " List of capabilities that docker container has.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Capability List",
+                    "minItems": 1,
+                    "maxItems": 64,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Capability List",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2787,12 +2795,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-config_method_choice": "[\"psp_spec\",\"yaml\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.GlobalSpecType",
             "properties": {
-                "generated_yaml": {
-                    "type": "string",
-                    "description": " K8s YAML for ClusterRoleBinding",
-                    "title": "K8s YAML",
-                    "x-displayname": "K8s YAML"
-                },
                 "psp_spec": {
                     "description": "Exclusive with [yaml]\nx-displayName: \"Pod Security Policy Specification\"\nForm based pod security specification",
                     "title": "Pod Security Policy Specification",
@@ -2814,10 +2816,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "path_prefix": {
                     "type": "string",
-                    "description": " Host path prefix is the path prefix that the host volume must match. It does not support *.\nRequired: YES",
+                    "description": " Host path prefix is the path prefix that the host volume must match. It does not support *.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Host Path Prefix",
+                    "minLength": 1,
+                    "maxLength": 128,
                     "x-displayname": "Host Path Prefix",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "read_only": {
                     "type": "boolean",
@@ -2834,21 +2843,31 @@ var APISwaggerJSON string = `{
             "properties": {
                 "max_id": {
                     "type": "integer",
-                    "description": " Ending(maximum) ID for for ID range\n\nExample: - \"3000\"-\nRequired: YES",
+                    "description": " Ending(maximum) ID for for ID range\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Ending ID",
                     "format": "int64",
                     "x-displayname": "Ending ID",
                     "x-ves-example": "3000",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "min_id": {
                     "type": "integer",
-                    "description": " Starting(minimum) ID for for ID range\n\nExample: - \"2000\"-\nRequired: YES",
+                    "description": " Starting(minimum) ID for for ID range\n\nExample: - \"2000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Starting ID",
                     "format": "int64",
                     "x-displayname": "Starting ID",
                     "x-ves-example": "2000",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 }
             }
         },
@@ -2861,19 +2880,29 @@ var APISwaggerJSON string = `{
             "properties": {
                 "id_ranges": {
                     "type": "array",
-                    "description": " List of range of  ID(s)",
+                    "description": " List of range of  ID(s)\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "ID Ranges",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/k8s_pod_security_policyIDRangeType"
                     },
-                    "x-displayname": "ID Ranges"
+                    "x-displayname": "ID Ranges",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 },
                 "rule": {
                     "type": "string",
-                    "description": " Rule indicated how the FS group ID range is used\n\nExample: - \"MustRunAs\"-",
+                    "description": " Rule indicated how the FS group ID range is used\n\nExample: - \"MustRunAs\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Rule",
+                    "minLength": 1,
+                    "maxLength": 128,
                     "x-displayname": "Rule",
-                    "x-ves-example": "MustRunAs"
+                    "x-ves-example": "MustRunAs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 }
             }
         },
@@ -2887,8 +2916,8 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-drop_capabilities_choice": "[\"drop_capabilities\",\"no_drop_capabilities\"]",
             "x-ves-oneof-field-fs_group_choice": "[\"fs_group_strategy_options\",\"no_fs_groups\"]",
             "x-ves-oneof-field-group_choice": "[\"no_run_as_group\",\"run_as_group\"]",
-            "x-ves-oneof-field-runtime_class_choice": "[\"no_runtime_class\",\"runtime_class\"]",
-            "x-ves-oneof-field-se_linux_choice": "[\"no_se_linux_options\",\"se_linux_options\"]",
+            "x-ves-oneof-field-runtime_class_choice": "[\"no_runtime_class\"]",
+            "x-ves-oneof-field-se_linux_choice": "[\"no_se_linux_options\"]",
             "x-ves-oneof-field-supplemental_group_choice": "[\"no_supplemental_groups\",\"supplemental_groups\"]",
             "x-ves-oneof-field-user_choice": "[\"no_run_as_user\",\"run_as_user\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.PodSecurityPolicySpecType",
@@ -2907,48 +2936,81 @@ var APISwaggerJSON string = `{
                 },
                 "allowed_csi_drivers": {
                     "type": "array",
-                    "description": " Restrict the available CSI drivers for POD, default all drivers are available.",
+                    "description": " Restrict the available CSI drivers for POD, default all drivers are available.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed CSI drivers",
+                    "maxItems": 8,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
                     },
-                    "x-displayname": "Allowed CSI drivers"
+                    "x-displayname": "Allowed CSI drivers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "64",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "allowed_flex_volumes": {
                     "type": "array",
-                    "description": " Restrict list of Flex volumes, default all volumes are allowed",
+                    "description": " Restrict list of Flex volumes, default all volumes are allowed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed Flex Volumes",
+                    "maxItems": 8,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
                     },
-                    "x-displayname": "Allowed Flex Volumes"
+                    "x-displayname": "Allowed Flex Volumes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "64",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "allowed_host_paths": {
                     "type": "array",
-                    "description": " Restrict list of host paths, default all host paths are allowed",
+                    "description": " Restrict list of host paths, default all host paths are allowed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed Host Paths",
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/k8s_pod_security_policyHostPathType"
                     },
-                    "x-displayname": "Allowed Host Paths"
+                    "x-displayname": "Allowed Host Paths",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "allowed_proc_mounts": {
                     "type": "array",
-                    "description": " allowed list of proc mounts, empty list allows default proc mounts.",
+                    "description": " allowed list of proc mounts, empty list allows default proc mounts.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed Proc Mounts",
+                    "maxItems": 8,
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Allowed Proc Mounts"
+                    "x-displayname": "Allowed Proc Mounts",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "allowed_unsafe_sysctls": {
                     "type": "array",
-                    "description": " allowed list of unsafe sysctls, empty list allows none. supports prefix reg-ex",
+                    "description": " allowed list of unsafe sysctls, empty list allows none. supports prefix reg-ex\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed Unsafe Sysctls",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Allowed Unsafe Sysctls"
+                    "x-displayname": "Allowed Unsafe Sysctls",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "default_allow_privilege_escalation": {
                     "type": "boolean",
@@ -2969,12 +3031,17 @@ var APISwaggerJSON string = `{
                 },
                 "forbidden_sysctls": {
                     "type": "array",
-                    "description": " Forbidden list of sysctls, empty list forbids none. supports prefix reg-ex",
+                    "description": " Forbidden list of sysctls, empty list forbids none. supports prefix reg-ex\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Forbidden Sysctls",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Forbidden Sysctls"
+                    "x-displayname": "Forbidden Sysctls",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "fs_group_strategy_options": {
                     "description": "Exclusive with [no_fs_groups]\nx-displayName: \"FS Groups Allowed\"\nFS Groups that are used by security context",
@@ -3004,10 +3071,13 @@ var APISwaggerJSON string = `{
                 },
                 "host_port_ranges": {
                     "type": "string",
-                    "description": " Host port ranges determines which ports ranges are allowed to be exposed\n\nExample: - \"80,443,8080-8191,9080\"-",
+                    "description": " Host port ranges determines which ports ranges are allowed to be exposed\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.port_range_list: true\n",
                     "title": "Host Port Ranges",
                     "x-displayname": "Host Ports Ranges",
-                    "x-ves-example": "80,443,8080-8191,9080"
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.port_range_list": "true"
+                    }
                 },
                 "no_allowed_capabilities": {
                     "description": "Exclusive with [allowed_capabilities]\nx-displayName: \"Add Capabilities is Disabled\"\nAdd capabilities is not allowed in POD.",
@@ -3040,12 +3110,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "no_runtime_class": {
-                    "description": "Exclusive with [runtime_class]\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed runtime  class options can be used",
+                    "description": "Exclusive with []\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed runtime  class options can be used",
                     "title": "Default K8s Restrictions",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "no_se_linux_options": {
-                    "description": "Exclusive with [se_linux_options]\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed SE Linux options can be used",
+                    "description": "Exclusive with []\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed SE Linux options can be used",
                     "title": "Default K8s Restrictions",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -3078,16 +3148,6 @@ var APISwaggerJSON string = `{
                     "title": "Run As User",
                     "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType"
                 },
-                "runtime_class": {
-                    "description": "Exclusive with [no_runtime_class]\nx-displayName: \"Runtime Class\"\nControls Allowable Runtime Class values, if not present all values are allowed",
-                    "title": "Runtime Class",
-                    "$ref": "#/definitions/k8s_pod_security_policyRuntimeClassStrategyOptions"
-                },
-                "se_linux_options": {
-                    "description": "Exclusive with [no_se_linux_options]\nx-displayName: \"SE Linux Options\"\nControls Allowable SE Linux labels, if not present all values are allowed",
-                    "title": "SE Linux Options",
-                    "$ref": "#/definitions/k8s_pod_security_policySELinuxStrategyOptions"
-                },
                 "supplemental_groups": {
                     "description": "Exclusive with [no_supplemental_groups]\nx-displayName: \"Supplemental Groups Allowed\"\nSupplemental Groups that are used by security context",
                     "title": "Supplemental Groups",
@@ -3095,80 +3155,73 @@ var APISwaggerJSON string = `{
                 },
                 "volumes": {
                     "type": "array",
-                    "description": " Allow List of volume plugins. Empty no volumes are allowed",
+                    "description": " Allow List of volume plugins. Empty no volumes are allowed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Volumes",
+                    "maxItems": 8,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64
                     },
-                    "x-displayname": "Volume"
+                    "x-displayname": "Volume",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "64",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
         "k8s_pod_security_policyRuntimeClassStrategyOptions": {
             "type": "object",
-            "description": "Allowed runtime classes",
+            "description": "x-displayName: \"Runtime Class Strategy\"\nAllowed runtime classes",
             "title": "Runtime Class Strategy",
-            "x-displayname": "Runtime Class Strategy",
-            "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.RuntimeClassStrategyOptions",
             "properties": {
                 "allowed_runtime_class_names": {
                     "type": "array",
-                    "description": " List of allowed runtime class names\nRequired: YES",
+                    "description": "x-displayName: \"Allowed Runtime Classes\"\nx-required\nList of allowed runtime class names",
                     "title": "Allowed Runtime Classes",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "Allowed Runtime Classes",
-                    "x-ves-required": "true"
+                    }
                 },
                 "default_runtime_class_name": {
                     "type": "string",
-                    "description": " description",
-                    "title": "Default Runtime Class",
-                    "x-displayname": "Default Runtime Class"
+                    "description": "x-displayName: \"Default Runtime Class\"\ndescription",
+                    "title": "Default Runtime Class"
                 }
             }
         },
         "k8s_pod_security_policySELinuxStrategyOptions": {
             "type": "object",
+            "description": "x-displayName: \"SE Linux Strategy\"",
             "title": "SE Linux Strategy",
-            "x-displayname": "SE Linux Strategy",
-            "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.SELinuxStrategyOptions",
             "properties": {
                 "Level": {
                     "type": "string",
-                    "description": " Run as SE linux level label\n\nExample: - \"secret\"-",
-                    "title": "SE Linux Level",
-                    "x-displayname": "SE Linux Level",
-                    "x-ves-example": "secret"
+                    "description": "x-displayName: \"SE Linux Level\"\nx-example: \"secret\"\nRun as SE linux level label",
+                    "title": "SE Linux Level"
                 },
                 "role": {
                     "type": "string",
-                    "description": " Run as SE linux label\n\nExample: - \"admin_r\"-",
-                    "title": "SE Linux Role",
-                    "x-displayname": "SE Linux Role",
-                    "x-ves-example": "admin_r"
+                    "description": "x-displayName: \"SE Linux Role\"\nx-example: \"admin_r\"\nRun as SE linux label",
+                    "title": "SE Linux Role"
                 },
                 "rule": {
                     "type": "string",
-                    "description": " Rule indicated how the FS group ID range is used\n\nExample: - \"MustRunAs\"-",
-                    "title": "Rule",
-                    "x-displayname": "Rule",
-                    "x-ves-example": "MustRunAs"
+                    "description": "x-displayName: \"Rule\"\nx-example: \"MustRunAs\"\nRule indicated how the FS group ID range is used",
+                    "title": "Rule"
                 },
                 "type": {
                     "type": "string",
-                    "description": " Run as SE linux type label\n\nExample: - \"admin_t\"-",
-                    "title": "SE Linux Type",
-                    "x-displayname": "SE Linux Type",
-                    "x-ves-example": "admin_t"
+                    "description": "x-displayName: \"SE Linux Type\"\nx-example: \"admin_t\"\nRun as SE linux type label",
+                    "title": "SE Linux Type"
                 },
                 "user": {
                     "type": "string",
-                    "description": " Run as SE linux user label\n\nExample: - \"system_u\"-",
-                    "title": "SE Linux User",
-                    "x-displayname": "SE Linux User",
-                    "x-ves-example": "system_u"
+                    "description": "x-displayName: \"SE Linux User\"\nx-example: \"system_u\"\nRun as SE linux user label",
+                    "title": "SE Linux User"
                 }
             }
         },
@@ -3294,17 +3347,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3359,16 +3418,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3379,10 +3429,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3408,11 +3464,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3646,12 +3705,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",

@@ -715,6 +715,18 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["tags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw"))
@@ -1065,6 +1077,18 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 		for idx, item := range m.GetSubnets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx))
 			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
 				return err
 			}
 		}

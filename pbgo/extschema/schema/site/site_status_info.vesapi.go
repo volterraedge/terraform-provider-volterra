@@ -291,7 +291,7 @@ var CustomSiteStatusAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/site/{site}/status/metrics": {
             "post": {
@@ -512,29 +512,38 @@ var CustomSiteStatusAPISwaggerJSON string = `{
                 },
                 "field_selector": {
                     "type": "array",
-                    "description": " List of fields to be returned in the response\nRequired: YES",
+                    "description": " List of fields to be returned in the response\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Field Selector",
                     "items": {
                         "$ref": "#/definitions/siteSiteStatusMetricsField"
                     },
                     "x-displayname": "Field Selector",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Only system namespace is valid for this request\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Only system namespace is valid for this request\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "site": {
                     "type": "string",
-                    "description": " Name of the site\n\nExample: - \"ce01\"-\nRequired: YES",
+                    "description": " Name of the site\n\nExample: - \"ce01\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Site",
                     "x-displayname": "Site",
                     "x-ves-example": "ce01",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "start_time": {
                     "type": "string",

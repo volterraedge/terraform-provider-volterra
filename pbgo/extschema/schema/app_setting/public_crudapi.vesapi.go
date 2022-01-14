@@ -1632,7 +1632,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{metadata.namespace}/app_settings": {
             "post": {
@@ -2148,7 +2148,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_settingAnomalyType": {
             "type": "string",
-            "description": "Different types of anomaly detection supported\nThis is deprecated.\n\nDisable anomaly detection\nAnomaly detection is enabled only per site\nAnomaly detection is enabled only per service\nAnamoly detection is enabled only per service per site",
+            "description": "x-displayName: \"Anomaly Type\"\nDifferent types of anomaly detection supported\nThis is deprecated.\n\n - ANOMALY_NONE: x-displayName: \"Disable Anomaly\"\nDisable anomaly detection\n - ANOMALY_SITE: x-displayName: \"Anomaly Per Site\"\nAnomaly detection is enabled only per site\n - ANOMALY_SERVICE: x-displayName: \"Anomaly Per Service\"\nAnomaly detection is enabled only per service\n - ANOMALY_SERVICE_PER_SITE: x-displayName: \"Anomaly Per Service, Site\"\nAnamoly detection is enabled only per service per site",
             "title": "Anomaly type",
             "enum": [
                 "ANOMALY_NONE",
@@ -2156,9 +2156,7 @@ var APISwaggerJSON string = `{
                 "ANOMALY_SERVICE",
                 "ANOMALY_SERVICE_PER_SITE"
             ],
-            "default": "ANOMALY_NONE",
-            "x-displayname": "Anomaly Type",
-            "x-ves-proto-enum": "ves.io.schema.app_setting.AnomalyType"
+            "default": "ANOMALY_NONE"
         },
         "app_settingAppTypeSettings": {
             "type": "object",
@@ -2169,13 +2167,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "app_type_ref": {
                     "type": "array",
-                    "description": "\n The AppType of App instance in current Namespace.\n Associating an AppType reference, will enable analysis on this instance's generated data\nRequired: YES",
+                    "description": "\n The AppType of App instance in current Namespace.\n Associating an AppType reference, will enable analysis on this instance's generated data\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "app_type_ref",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "AppType",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "business_logic_markup_setting": {
                     "description": " Setting specifying how Business Logic Markup will be performed.",
@@ -2269,30 +2272,21 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create App Setting",
             "x-ves-proto-message": "ves.io.schema.app_setting.CreateSpecType",
             "properties": {
-                "anomaly_types": {
-                    "type": "array",
-                    "description": " List of Anomaly algorithms that need to be enabled",
-                    "items": {
-                        "$ref": "#/definitions/app_settingAnomalyType"
-                    },
-                    "x-displayname": "Anomaly Types"
-                },
-                "app_type_refs": {
-                    "type": "array",
-                    "description": " List of references to app_type for which monitoring needs to enabled",
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "App Types"
-                },
                 "app_type_settings": {
                     "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\nRequired: YES",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/app_settingAppTypeSettings"
                     },
                     "x-displayname": "AppType Settings",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2335,11 +2329,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "login_failures_threshold": {
                     "type": "integer",
-                    "description": " The number of failed logins beyond which the system will flag this user as malicious\nRequired: YES",
+                    "description": " The number of failed logins beyond which the system will flag this user as malicious\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "Login failures threshold",
                     "format": "int64",
                     "x-displayname": "Login Failures Threshold",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gt": "0"
+                    }
                 }
             }
         },
@@ -2352,11 +2350,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "forbidden_requests_threshold": {
                     "type": "integer",
-                    "description": " The number of forbidden requests beyond which the system will flag this user as malicious\nRequired: YES",
+                    "description": " The number of forbidden requests beyond which the system will flag this user as malicious\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "forbidden requests threshold",
                     "format": "int64",
                     "x-displayname": "Forbidden Requests Threshold",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gt": "0"
+                    }
                 }
             }
         },
@@ -2398,13 +2400,6 @@ var APISwaggerJSON string = `{
                     "title": "replace_form",
                     "$ref": "#/definitions/app_settingReplaceRequest",
                     "x-displayname": "ReplaceRequest Format"
-                },
-                "resource_version": {
-                    "type": "string",
-                    "description": "Version of the object\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
                 },
                 "spec": {
                     "description": " Specification of the desired behavior of the appsettings",
@@ -2450,30 +2445,21 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get App Setting",
             "x-ves-proto-message": "ves.io.schema.app_setting.GetSpecType",
             "properties": {
-                "anomaly_types": {
-                    "type": "array",
-                    "description": " List of Anomaly algorithms that need to be enabled",
-                    "items": {
-                        "$ref": "#/definitions/app_settingAnomalyType"
-                    },
-                    "x-displayname": "Anomaly Types"
-                },
-                "app_type_refs": {
-                    "type": "array",
-                    "description": " List of references to app_type for which monitoring needs to enabled",
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "App Types"
-                },
                 "app_type_settings": {
                     "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\nRequired: YES",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/app_settingAppTypeSettings"
                     },
                     "x-displayname": "AppType Settings",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2484,33 +2470,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "App Setting Spec",
             "x-ves-proto-message": "ves.io.schema.app_setting.GlobalSpecType",
             "properties": {
-                "anomaly_types": {
-                    "type": "array",
-                    "description": " List of Anomaly algorithms that need to be enabled",
-                    "title": "List of Anomaly type to be enabled",
-                    "items": {
-                        "$ref": "#/definitions/app_settingAnomalyType"
-                    },
-                    "x-displayname": "Anomaly Types"
-                },
-                "app_type_refs": {
-                    "type": "array",
-                    "description": " List of references to app_type for which monitoring needs to enabled",
-                    "title": "List of App types",
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "App Types"
-                },
                 "app_type_settings": {
                     "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\nRequired: YES",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "List of App Type Settings",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/app_settingAppTypeSettings"
                     },
                     "x-displayname": "AppType Settings",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2715,12 +2690,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "metric": {
                     "type": "array",
-                    "description": " Metrics enabled to be analyzed",
+                    "description": " Metrics enabled to be analyzed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Metrics",
                     "items": {
                         "$ref": "#/definitions/app_settingMetric"
                     },
-                    "x-displayname": "Metrics"
+                    "x-displayname": "Metrics",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "metrics_source": {
                     "description": " Source from where this metric is gathered for analyses",
@@ -2784,13 +2762,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectReplaceMetaType",
                     "x-displayname": "Metadata"
                 },
-                "resource_version": {
-                    "type": "string",
-                    "description": "If provided, do the replace operation if the configuration object is still at 'resource_version'\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
-                },
                 "spec": {
                     "description": " Specification of the desired behavior of the appsettings",
                     "title": "spec",
@@ -2810,30 +2781,21 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace App Setting",
             "x-ves-proto-message": "ves.io.schema.app_setting.ReplaceSpecType",
             "properties": {
-                "anomaly_types": {
-                    "type": "array",
-                    "description": " List of Anomaly algorithms that need to be enabled",
-                    "items": {
-                        "$ref": "#/definitions/app_settingAnomalyType"
-                    },
-                    "x-displayname": "Anomaly Types"
-                },
-                "app_type_refs": {
-                    "type": "array",
-                    "description": " List of references to app_type for which monitoring needs to enabled",
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "App Types"
-                },
                 "app_type_settings": {
                     "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\nRequired: YES",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/app_settingAppTypeSettings"
                     },
                     "x-displayname": "AppType Settings",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2893,12 +2855,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "metric_selectors": {
                     "type": "array",
-                    "description": " List of metric selectors where each selector specifies which metrics are selected to be analyzed",
+                    "description": " List of metric selectors where each selector specifies which metrics are selected to be analyzed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Metric Selector",
                     "items": {
                         "$ref": "#/definitions/app_settingMetricSelector"
                     },
-                    "x-displayname": "Metric Selectors"
+                    "x-displayname": "Metric Selectors",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2990,17 +2955,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3098,9 +3069,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotation"
+                    "x-displayname": "Annotation",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3124,11 +3101,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3148,10 +3128,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotation",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3177,11 +3163,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3201,10 +3190,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3230,11 +3225,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3305,9 +3303,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotations"
+                    "x-displayname": "Annotations",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3331,10 +3335,13 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web"
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3605,12 +3612,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",

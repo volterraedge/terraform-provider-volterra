@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.app_firewall/Object/{object_uid}": {
             "get": {
@@ -2576,20 +2576,30 @@ var APISwaggerJSON string = `{
         "app_firewallAllowedResponseCodes": {
             "type": "object",
             "description": "List of HTTP response status codes that are allowed",
-            "title": "Allowed Response Code",
-            "x-displayname": "Allowed Response Code",
+            "title": "Allowed Response Codes",
+            "x-displayname": "Allowed Response Codes",
             "x-ves-proto-message": "ves.io.schema.app_firewall.AllowedResponseCodes",
             "properties": {
                 "response_code": {
                     "type": "array",
-                    "description": " response code to send\n\nExample: - [200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]-\nRequired: YES",
+                    "description": " List of HTTP response status codes that are allowed\n\nExample: - [200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.uint32.gte: 100\n  ves.io.schema.rules.repeated.items.uint32.lte: 599\n  ves.io.schema.rules.repeated.max_items: 48\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "response_code",
+                    "minItems": 1,
+                    "maxItems": 48,
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
-                    "x-displayname": "Response Code",
-                    "x-ves-required": "true"
+                    "x-displayname": "Response Codes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.uint32.gte": "100",
+                        "ves.io.schema.rules.repeated.items.uint32.lte": "599",
+                        "ves.io.schema.rules.repeated.max_items": "48",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2627,13 +2637,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "anonymization_config": {
                     "type": "array",
-                    "description": " List of HTTP headers, cookies and query parameters which values will be masked.\nRequired: YES",
+                    "description": " List of HTTP headers, cookies and query parameters which values will be masked.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "AnonymizationConfiguration",
+                    "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/app_firewallAnonymizationConfiguration"
                     },
                     "x-displayname": "Configuration",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2646,10 +2662,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_name": {
                     "type": "string",
-                    "description": " Specify name of the sensitive HTTP Cookie\nRequired: YES",
+                    "description": " Specify name of the sensitive HTTP Cookie\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "cookie_name",
+                    "maxLength": 256,
                     "x-displayname": "Cookie Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
@@ -2662,10 +2683,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "header_name": {
                     "type": "string",
-                    "description": " Specify name of the sensitive HTTP Header\nRequired: YES",
+                    "description": " Specify name of the sensitive HTTP Header\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "header_name",
                     "x-displayname": "Header Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.http_header_field": "true"
+                    }
                 }
             }
         },
@@ -2678,16 +2703,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "query_param_name": {
                     "type": "string",
-                    "description": " Specify name of the sensitive HTTP Query Parameter\nRequired: YES",
+                    "description": " Specify name of the sensitive HTTP Query Parameter\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "query_param_name",
+                    "maxLength": 256,
                     "x-displayname": "Query Parameter Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal",
+            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal\nMalformed request\nMultiple decoding",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2711,7 +2741,9 @@ var APISwaggerJSON string = `{
                 "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
                 "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
                 "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
-                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS",
+                "VIOL_MALFORMED_REQUEST",
+                "VIOL_EVASION_MULTIPLE_DECODING"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2719,7 +2751,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAttackType": {
             "type": "string",
-            "description": "List of all Attack Types\n\nNo attack\nNon-Browser Client\nOther Application Attack\nTrojan Backdoor Spyware\nDetection Evasion\nVulnerability Scan\nAbuse of Functionality\nAuthentication Authorization Attack\nBuffer Overflow\nPredictable Resource Location\nInformation Leakage\nDirectory Indexing\nPath Traversal\nXPath Injection\nLDAP Injection\nServer-Side Code Injection\nCommand Execution\nSQL Injection\nCross-Site Scripting\nDenial of Service\nHTTP Parser Attack\nSession Hijacking\nHTTP Response Splitting",
+            "description": "List of all Attack Types\n\nNo attack\nNon-Browser Client\nOther Application Attack\nTrojan Backdoor Spyware\nDetection Evasion\nVulnerability Scan\nAbuse of Functionality\nAuthentication Authorization Attack\nBuffer Overflow\nPredictable Resource Location\nInformation Leakage\nDirectory Indexing\nPath Traversal\nXPath Injection\nLDAP Injection\nServer-Side Code Injection\nCommand Execution\nSQL Injection\nCross-Site Scripting\nDenial of Service\nHTTP Parser Attack\nSession Hijacking\nHTTP Response Splitting\nForceful Browsing",
             "title": "AttackType",
             "enum": [
                 "ATTACK_TYPE_NONE",
@@ -2744,7 +2776,8 @@ var APISwaggerJSON string = `{
                 "ATTACK_TYPE_DENIAL_OF_SERVICE",
                 "ATTACK_TYPE_HTTP_PARSER_ATTACK",
                 "ATTACK_TYPE_SESSION_HIJACKING",
-                "ATTACK_TYPE_HTTP_RESPONSE_SPLITTING"
+                "ATTACK_TYPE_HTTP_RESPONSE_SPLITTING",
+                "ATTACK_TYPE_FORCEFUL_BROWSING"
             ],
             "default": "ATTACK_TYPE_NONE",
             "x-displayname": "Attack Type",
@@ -2759,13 +2792,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "disabled_attack_types": {
                     "type": "array",
-                    "description": " List of attack types that will be ignored and not trigger a detection\nRequired: YES",
+                    "description": " List of attack types that will be ignored and not trigger a detection\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 22\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Disabled Attack Types",
+                    "maxItems": 22,
                     "items": {
                         "$ref": "#/definitions/app_firewallAttackType"
                     },
                     "x-displayname": "Disabled Attack Types",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "22",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2811,16 +2850,21 @@ var APISwaggerJSON string = `{
         },
         "app_firewallCustomBlockingPage": {
             "type": "object",
-            "description": "Custom blocking page response body",
+            "description": "Custom blocking response page body",
             "title": "Custom Blocking Page",
-            "x-displayname": "Custom Blocking Page",
+            "x-displayname": "Custom Blocking Response Page",
             "x-ves-proto-message": "ves.io.schema.app_firewall.CustomBlockingPage",
             "properties": {
                 "blocking_page": {
                     "type": "string",
-                    "description": " Custom blocking page response body",
+                    "description": " Custom blocking response page body\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 65536\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "blocking_page",
-                    "x-displayname": "Custom Blocking Page"
+                    "maxLength": 65536,
+                    "x-displayname": "Custom Blocking Response Page Body",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "65536",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2881,7 +2925,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocking_page_choice": "[\"blocking_page\",\"use_default_blocking_page\"]",
             "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
             "x-ves-oneof-field-detection_setting_choice": "[\"default_detection_settings\",\"detection_settings\"]",
-            "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\",\"use_loadbalancer_setting\"]",
+            "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.GlobalSpecType",
             "properties": {
                 "allow_all_response_codes": {
@@ -2890,17 +2934,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "allowed_response_codes": {
-                    "description": "Exclusive with [allow_all_response_codes]\nx-displayName: \"Custom\"\nList of HTTP response status codes that are allowed",
+                    "description": "Exclusive with [allow_all_response_codes]\nx-displayName: \"Custom\"\nDefine list of HTTP response status codes that are allowed",
                     "title": "Custom",
                     "$ref": "#/definitions/app_firewallAllowedResponseCodes"
                 },
                 "blocking": {
-                    "description": "Exclusive with [monitoring use_loadbalancer_setting]\nx-displayName: \"Blocking\"\nOverride the load balancer setting and set mode to blocking",
+                    "description": "Exclusive with [monitoring]\nx-displayName: \"Blocking\"\nOverride the load balancer setting and set mode to blocking",
                     "title": "Blocking",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "blocking_page": {
-                    "description": "Exclusive with [use_default_blocking_page]\nx-displayName: \"Custom Blocking Page\"\nUse custom blocking response page",
+                    "description": "Exclusive with [use_default_blocking_page]\nx-displayName: \"Custom\"\nDefine custom blocking response page that should be returned to the client",
                     "title": "Custom Blocking Page",
                     "$ref": "#/definitions/app_firewallCustomBlockingPage"
                 },
@@ -2940,18 +2984,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "monitoring": {
-                    "description": "Exclusive with [blocking use_loadbalancer_setting]\nx-displayName: \"Monitoring\"\nOverride the load balancer setting and set mode to monitoring",
+                    "description": "Exclusive with [blocking]\nx-displayName: \"Monitoring\"\nOverride the load balancer setting and set mode to monitoring",
                     "title": "Monitoring",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "use_default_blocking_page": {
-                    "description": "Exclusive with [blocking_page]\nx-displayName: \"Default Response\"\nUse default blocking response page",
+                    "description": "Exclusive with [blocking_page]\nx-displayName: \"Default\"\nDefault blocking response page will be returned to the client",
                     "title": "Default Blocking Page",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "use_loadbalancer_setting": {
-                    "description": "Exclusive with [blocking monitoring]\nx-displayName: \"Use LoadBalancer Setting\"\nUse the mode as specified in the load balancer",
-                    "title": "Blocking",
                     "$ref": "#/definitions/schemaEmpty"
                 }
             }
@@ -3049,13 +3088,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "disabled_violation_types": {
                     "type": "array",
-                    "description": " List of violations to be excluded\nRequired: YES",
+                    "description": " List of violations to be excluded\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 40\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Disabled Violations",
+                    "maxItems": 40,
                     "items": {
                         "$ref": "#/definitions/app_firewallAppFirewallViolationType"
                     },
                     "x-displayname": "Disabled Violations",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "40",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3321,17 +3366,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3386,16 +3437,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3406,10 +3448,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3435,11 +3483,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3673,12 +3724,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",

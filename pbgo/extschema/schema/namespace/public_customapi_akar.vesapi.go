@@ -1275,7 +1275,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/active_alert_policies": {
             "get": {
@@ -2045,12 +2045,16 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "properties": {
                 "alert_policies": {
                     "type": "array",
-                    "description": " A list of references to alert_policy objects.",
+                    "description": " A list of references to alert_policy objects.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "alert_policies",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Alert Policies"
+                    "x-displayname": "Alert Policies",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2084,12 +2088,16 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "network_policies": {
                     "type": "array",
-                    "description": " A list of references to network_policy objects.",
+                    "description": " A list of references to network_policy objects.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "network_policies",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Network Policies"
+                    "x-displayname": "Network Policies",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
                 }
             }
         },
@@ -2116,12 +2124,16 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "service_policies": {
                     "type": "array",
-                    "description": " A list of references to service_policy objects.",
+                    "description": " A list of references to service_policy objects.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "service_policies",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Service Policies"
+                    "x-displayname": "Service Policies",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
                 }
             }
         },
@@ -2141,13 +2153,17 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "properties": {
                 "fast_acls": {
                     "type": "array",
-                    "description": " The list of refs of FastACLs\n\nExample: - \"list of refs\"-",
+                    "description": " The list of refs of FastACLs\n\nExample: - \"list of refs\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "fast_acls",
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "FastACLs",
-                    "x-ves-example": "list of refs"
+                    "x-ves-example": "list of refs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2174,25 +2190,40 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "namespace",
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "tenant",
+                    "maxLength": 64,
                     "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

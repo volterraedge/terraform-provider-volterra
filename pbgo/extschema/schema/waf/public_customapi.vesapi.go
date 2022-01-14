@@ -287,7 +287,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/waf/virtual_host/status/{name}": {
             "get": {
@@ -599,11 +599,15 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "paranoia_level": {
                     "type": "integer",
-                    "description": " Paranoia level is used to tune the sensitivity at which WAF is supposed to alert/block.\n High paranoia level means that WAF will alert/block requests that look even slightly suspicious.\n Low paranoia level means that WAF will alert/block only those requests that highly suspicious.\n\nExample: - \"2\"-",
+                    "description": " Paranoia level is used to tune the sensitivity at which WAF is supposed to alert/block.\n High paranoia level means that WAF will alert/block requests that look even slightly suspicious.\n Low paranoia level means that WAF will alert/block only those requests that highly suspicious.\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 4\n",
                     "title": "paranoia_level",
                     "format": "int64",
                     "x-displayname": "Paranoia Level",
-                    "x-ves-example": "2"
+                    "x-ves-example": "2",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "4"
+                    }
                 },
                 "rules": {
                     "type": "array",

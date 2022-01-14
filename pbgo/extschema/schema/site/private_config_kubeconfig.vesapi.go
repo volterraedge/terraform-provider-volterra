@@ -271,7 +271,7 @@ var PrivateConfigKubeConfigAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/private/namespaces/{namespace}/sites/{name}/global_access_check": {
             "get": {

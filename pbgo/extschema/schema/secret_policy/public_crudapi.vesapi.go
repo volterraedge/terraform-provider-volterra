@@ -1632,7 +1632,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{metadata.namespace}/secret_policys": {
             "post": {
@@ -2148,16 +2148,14 @@ var APISwaggerJSON string = `{
     "definitions": {
         "policyRuleCombiningAlgorithm": {
             "type": "string",
-            "description": "The rule combining algorithm for a policy determines how the list of rules in the policy is evaluated.\nIf any of the rules is configured with a App Firewall action, the rule combining algorithm must be configured to be FIRST_MATCH.\n\n- FIRST_MATCH Rules are evaluated sequentially till a matching rule is identified\n- ALLOW_OVERRIDES Rules with an ALLOW action are evaluated prior to rules with a DENY action\n- DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action\n\n - FIRST_MATCH: First Match\n\nRules are evaluated sequentially till a matching rule is identified\n - DENY_OVERRIDES: Deny Overrides\n\nRules with a DENY action are evaluated prior to rules with an ALLOW action\n - ALLOW_OVERRIDES: Allow Overrides\n\nRules with an ALLOW action are evaluated prior to rules with a DENY action",
+            "description": "x-displayName: \"Rule Combining Algorithm\"\nThe rule combining algorithm for a policy determines how the list of rules in the policy is evaluated.\nIf any of the rules is configured with a App Firewall action, the rule combining algorithm must be configured to be FIRST_MATCH.\n\n- FIRST_MATCH Rules are evaluated sequentially till a matching rule is identified\n- ALLOW_OVERRIDES Rules with an ALLOW action are evaluated prior to rules with a DENY action\n- DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action\n\n - FIRST_MATCH: First Match\n\nx-displayName: \"First Rule Match\"\nRules are evaluated sequentially till a matching rule is identified\n - DENY_OVERRIDES: Deny Overrides\n\nx-displayName: \"Deny Rule Overrides\"\nRules with a DENY action are evaluated prior to rules with an ALLOW action\n - ALLOW_OVERRIDES: Allow Overrides\n\nx-displayName: \"Allow Rule Overrides\"\nRules with an ALLOW action are evaluated prior to rules with a DENY action",
             "title": "RuleCombiningAlgorithm",
             "enum": [
                 "FIRST_MATCH",
                 "DENY_OVERRIDES",
                 "ALLOW_OVERRIDES"
             ],
-            "default": "FIRST_MATCH",
-            "x-displayname": "Rule Combining Algorithm",
-            "x-ves-proto-enum": "ves.io.schema.policy.RuleCombiningAlgorithm"
+            "default": "FIRST_MATCH"
         },
         "protobufAny": {
             "type": "object",
@@ -2209,17 +2207,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -2317,9 +2321,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotation"
+                    "x-displayname": "Annotation",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2343,11 +2353,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2367,10 +2380,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotation",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2396,11 +2415,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2420,10 +2442,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2449,11 +2477,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2524,9 +2555,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotations"
+                    "x-displayname": "Annotations",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2550,10 +2587,13 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web"
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2824,12 +2864,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -2933,11 +2977,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Secret Policy",
             "x-ves-proto-message": "ves.io.schema.secret_policy.CreateSpecType",
             "properties": {
-                "algo": {
-                    "description": " This will define the rule combining algorithm. It can take one of the following values -\n\n - FIRST_MATCH Rules are evaluated sequentially till a matching rule is identified\n - ALLOW_OVERRIDES Rules with an ALLOW action are evaluated prior to rules with a DENY action\n - DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action",
-                    "$ref": "#/definitions/policyRuleCombiningAlgorithm",
-                    "x-displayname": "Rule Combining Algorithm"
-                },
                 "allow_volterra": {
                     "type": "boolean",
                     "description": " if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
@@ -2953,11 +2992,15 @@ var APISwaggerJSON string = `{
                 },
                 "rules": {
                     "type": "array",
-                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.",
+                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Secret Policy Rules"
+                    "x-displayname": "Secret Policy Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
                 }
             }
         },
@@ -2968,11 +3011,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Secret Policy",
             "x-ves-proto-message": "ves.io.schema.secret_policy.GetSpecType",
             "properties": {
-                "algo": {
-                    "description": " This will define the rule combining algorithm. It can take one of the following values -\n\n - FIRST_MATCH Rules are evaluated sequentially till a matching rule is identified\n - ALLOW_OVERRIDES Rules with an ALLOW action are evaluated prior to rules with a DENY action\n - DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action",
-                    "$ref": "#/definitions/policyRuleCombiningAlgorithm",
-                    "x-displayname": "Rule Combining Algorithm"
-                },
                 "allow_volterra": {
                     "type": "boolean",
                     "description": " if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
@@ -2996,11 +3034,15 @@ var APISwaggerJSON string = `{
                 },
                 "rules": {
                     "type": "array",
-                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.",
+                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Secret Policy Rules"
+                    "x-displayname": "Secret Policy Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
                 }
             }
         },
@@ -3011,12 +3053,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specification",
             "x-ves-proto-message": "ves.io.schema.secret_policy.GlobalSpecType",
             "properties": {
-                "algo": {
-                    "description": " This will define the rule combining algorithm. It can take one of the following values -\n\n - FIRST_MATCH Rules are evaluated sequentially till a matching rule is identified\n - ALLOW_OVERRIDES Rules with an ALLOW action are evaluated prior to rules with a DENY action\n - DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action",
-                    "title": "algo",
-                    "$ref": "#/definitions/policyRuleCombiningAlgorithm",
-                    "x-displayname": "Rule Combining Algorithm"
-                },
                 "allow_volterra": {
                     "type": "boolean",
                     "description": " if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
@@ -3032,27 +3068,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Decrypt Cache Timeout",
                     "x-ves-example": "6h"
                 },
-                "delete_delay": {
-                    "type": "string",
-                    "description": " deleted_delay is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
-                    "title": "Delete Delay",
-                    "x-displayname": "Delete Delay"
-                },
-                "deleted_at": {
-                    "type": "string",
-                    "description": " deleted_at is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
-                    "title": "Deleted At",
-                    "format": "date-time",
-                    "x-displayname": "Deleted At"
-                },
                 "rules": {
                     "type": "array",
-                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.",
+                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
                     "title": "Rules",
+                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Secret Policy Rules"
+                    "x-displayname": "Secret Policy Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
                 }
             }
         },
@@ -3063,11 +3090,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace Secret Policy",
             "x-ves-proto-message": "ves.io.schema.secret_policy.ReplaceSpecType",
             "properties": {
-                "algo": {
-                    "description": " This will define the rule combining algorithm. It can take one of the following values -\n\n - FIRST_MATCH Rules are evaluated sequentially till a matching rule is identified\n - ALLOW_OVERRIDES Rules with an ALLOW action are evaluated prior to rules with a DENY action\n - DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action",
-                    "$ref": "#/definitions/policyRuleCombiningAlgorithm",
-                    "x-displayname": "Rule Combining Algorithm"
-                },
                 "allow_volterra": {
                     "type": "boolean",
                     "description": " if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
@@ -3083,11 +3105,15 @@ var APISwaggerJSON string = `{
                 },
                 "rules": {
                     "type": "array",
-                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.",
+                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Secret Policy Rules"
+                    "x-displayname": "Secret Policy Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
                 }
             }
         },
@@ -3204,13 +3230,6 @@ var APISwaggerJSON string = `{
                     "title": "replace_form",
                     "$ref": "#/definitions/secret_policyReplaceRequest",
                     "x-displayname": "ReplaceRequest Format"
-                },
-                "resource_version": {
-                    "type": "string",
-                    "description": "Version of the object\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
                 },
                 "spec": {
                     "description": " Specification of Object",
@@ -3416,13 +3435,6 @@ var APISwaggerJSON string = `{
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectReplaceMetaType",
                     "x-displayname": "Metadata"
-                },
-                "resource_version": {
-                    "type": "string",
-                    "description": "If provided, do the replace operation if the configuration object is still at 'resource_version'\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
                 },
                 "spec": {
                     "description": " Specification of Object",

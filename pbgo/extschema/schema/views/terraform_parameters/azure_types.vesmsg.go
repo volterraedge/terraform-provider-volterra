@@ -1236,6 +1236,18 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["tags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vnet"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vnet"))

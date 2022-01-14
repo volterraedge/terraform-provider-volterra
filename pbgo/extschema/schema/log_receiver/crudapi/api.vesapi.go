@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.log_receiver/Object/{object_uid}": {
             "get": {
@@ -2806,59 +2806,52 @@ var APISwaggerJSON string = `{
         },
         "log_receiverDataDogReceiver": {
             "type": "object",
-            "description": "Configuration for Datadog server",
+            "description": "x-displayName: \"Datadog Server Configuration\"\nConfiguration for Datadog server",
             "title": "Datadog Server Configuration",
-            "x-displayname": "Datadog Server Configuration",
-            "x-ves-oneof-field-ca_choice": "[\"trusted_ca_url\",\"volterra_ca\"]",
-            "x-ves-oneof-field-compression_choice": "[\"compression_disabled\",\"compression_enabled\"]",
-            "x-ves-oneof-field-port_choice": "[\"default_port\",\"port\"]",
-            "x-ves-oneof-field-server_name_choice": "[\"datadog_default_server\",\"server_name\"]",
-            "x-ves-proto-message": "ves.io.schema.log_receiver.DataDogReceiver",
             "properties": {
                 "compression_disabled": {
-                    "description": "Exclusive with [compression_enabled]\nx-displayName: \"Disable Compression\"\nDisable compression of log messages",
+                    "description": "x-displayName: \"Disable Compression\"\nDisable compression of log messages",
                     "title": "Disable Compression",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "compression_enabled": {
-                    "description": "Exclusive with [compression_disabled]\nx-displayName: \"Enable Compression\"\nEnable compression of log messages",
+                    "description": "x-displayName: \"Enable Compression\"\nEnable compression of log messages",
                     "title": "Enable Compression",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "datadog_api_key": {
-                    "description": " Secret API key to access datadog servers",
+                    "description": "x-displayName: \"Datadog API Key\"\nSecret API key to access datadog servers",
                     "title": "Datadog API Key",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Datadog API Key"
+                    "$ref": "#/definitions/schemaSecretType"
                 },
                 "datadog_default_server": {
-                    "description": "Exclusive with [server_name]\nx-displayName: \"http-intake.log.datadoghq.com\"\nDefault Datadog server name",
+                    "description": "x-displayName: \"http-intake.log.datadoghq.com\"\nDefault Datadog server name",
                     "title": "http-intake.log.datadoghq.com",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "default_port": {
-                    "description": "Exclusive with [port]\nx-displayName: \"Default HTTPS Port\"\nDefault port number https is 443.",
+                    "description": "x-displayName: \"Default HTTPS Port\"\nDefault port number https is 443.",
                     "title": "Default Port Number",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [default_port]\nx-displayName: \"Custom Port Number\"\nx-required\nx-example: \"3000\"\nCustom port number used for communication",
+                    "description": "x-displayName: \"Custom Port Number\"\nx-required\nx-example: \"3000\"\nCustom port number used for communication",
                     "title": "Custom Port Number",
                     "format": "int64"
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [datadog_default_server]\nx-displayName: \"Custom Server Name\"\nx-example: \"myserver.datadoghq.com\"\nCustom fully qualified server name",
+                    "description": "x-displayName: \"Custom Server Name\"\nx-example: \"myserver.datadoghq.com\"\nCustom fully qualified server name",
                     "title": "Custom Server Name"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [volterra_ca]\nx-displayName: \"Server CA Certificates\"\nThe URL or value for trusted Server CA certificate or certificate chain\nCertificates in PEM format including the PEM headers.",
+                    "description": "x-displayName: \"Server CA Certificates\"\nThe URL or value for trusted Server CA certificate or certificate chain\nCertificates in PEM format including the PEM headers.",
                     "title": "Server CA certificates"
                 },
                 "volterra_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\nx-displayName: \"Default Volterra CA\"\nUse Volterra default CA",
+                    "description": "x-displayName: \"Default Volterra CA\"\nUse Volterra default CA",
                     "title": "Default Volterra CA",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -2869,92 +2862,55 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Log Receiver object",
             "title": "Specification for Log Receiver",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-log_receiver_choice": "[\"data_dog\",\"splunk\",\"syslog\"]",
-            "x-ves-oneof-field-where_choice": "[\"log_receiver_sites\",\"site_local\"]",
+            "x-ves-oneof-field-log_receiver_choice": "[\"syslog\"]",
+            "x-ves-oneof-field-where_choice": "[\"site_local\"]",
             "x-ves-proto-message": "ves.io.schema.log_receiver.GlobalSpecType",
             "properties": {
-                "data_dog": {
-                    "description": "Exclusive with [splunk syslog]\nx-displayName: \"Datadog Receiver\"\nStream log to Datadog receiver",
-                    "title": "Datadog Receiver",
-                    "$ref": "#/definitions/log_receiverDataDogReceiver"
-                },
-                "log_receiver_sites": {
-                    "description": "Exclusive with [site_local]\nx-displayName: \"Specific Site\"\nLog receiver is accessible on a specific site.",
-                    "title": "Specific Site",
-                    "$ref": "#/definitions/log_receiverWhereSites"
-                },
                 "site_local": {
-                    "description": "Exclusive with [log_receiver_sites]\nx-displayName: \"Local Site\"\nLog receiver is accessible local to the site where it is used.",
+                    "description": "Exclusive with []\nx-displayName: \"Local Site\"\nLog receiver is accessible local to the site where it is used.",
                     "title": "Local Site",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "splunk": {
-                    "description": "Exclusive with [data_dog syslog]\nx-displayName: \"Splunk Receiver\"\nStream log to Splunk HEC Receiver",
-                    "title": "Splunk Receiver",
-                    "$ref": "#/definitions/log_receiverSplunkReceiver"
-                },
                 "syslog": {
-                    "description": "Exclusive with [data_dog splunk]\nx-displayName: \"Syslog Server\"\nStream log to syslog server",
+                    "description": "Exclusive with []\nx-displayName: \"Syslog Server\"\nStream log to syslog server",
                     "title": "Syslog Server",
                     "$ref": "#/definitions/log_receiverSyslogReceiver"
-                },
-                "view_internal": {
-                    "description": " Reference to view internal object",
-                    "title": "view_internal",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "View Internal"
                 }
             }
         },
         "log_receiverHTTPServerConfigType": {
             "type": "object",
-            "description": "Name and port number for a HTTP server",
+            "description": "x-displayName: \"HTTP Server Name and Port Number\"\nName and port number for a HTTP server",
             "title": "HTTP Server Name and Port Number",
-            "x-displayname": "HTTP Server Name and Port Number",
-            "x-ves-proto-message": "ves.io.schema.log_receiver.HTTPServerConfigType",
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": " Port number used for communication\n\nExample: - \"3000\"-\nRequired: YES",
+                    "description": "x-displayName: \"Port Number\"\nx-required\nx-example: \"3000\"\nPort number used for communication",
                     "title": "Port Number",
-                    "format": "int64",
-                    "x-displayname": "Port Number",
-                    "x-ves-example": "3000",
-                    "x-ves-required": "true"
+                    "format": "int64"
                 },
                 "server_name": {
                     "type": "string",
-                    "description": " Server name is fully qualified domain name of the server\n\nExample: - \"server.example.com\"-\nRequired: YES",
-                    "title": "Server Name",
-                    "x-displayname": "Server name",
-                    "x-ves-example": "server.example.com",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Server name\"\nx-required\nx-example: \"server.example.com\"\nServer name is fully qualified domain name of the server",
+                    "title": "Server Name"
                 }
             }
         },
         "log_receiverIPServerConfigType": {
             "type": "object",
-            "description": "Ip address and port number for a server",
+            "description": "x-displayName: \"IP Address and Port Number\"\nIp address and port number for a server",
             "title": "IP Address and Port Number",
-            "x-displayname": "IP Address and Port Number",
-            "x-ves-proto-message": "ves.io.schema.log_receiver.IPServerConfigType",
             "properties": {
                 "ip_address": {
                     "type": "string",
-                    "description": " Ip address of the log receiver server\n\nExample: - \"10.1.1.1\"-\nRequired: YES",
-                    "title": "Server IP address",
-                    "x-displayname": "Server IP address",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Server IP address\"\nx-required\nx-example: \"10.1.1.1\"\nIp address of the log receiver server",
+                    "title": "Server IP address"
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Port number used for communication\n\nExample: - \"3000\"-\nRequired: YES",
+                    "description": "x-displayName: \"Port Number\"\nx-required\nx-example: \"3000\"\nPort number used for communication",
                     "title": "Port Number",
-                    "format": "int64",
-                    "x-displayname": "Port Number",
-                    "x-ves-example": "3000",
-                    "x-ves-required": "true"
+                    "format": "int64"
                 }
             }
         },
@@ -2974,30 +2930,26 @@ var APISwaggerJSON string = `{
         },
         "log_receiverSplunkReceiver": {
             "type": "object",
-            "description": "Configuration for Splunk server",
+            "description": "x-displayName: \"Splunk HEC Configuration\"\nConfiguration for Splunk server",
             "title": "Splunk HEC Configuration",
-            "x-displayname": "Splunk HEC Configuration",
-            "x-ves-oneof-field-server_name_choice": "[\"splunk_server_ip\",\"splunk_server_name\",\"splunk_server_tls\"]",
-            "x-ves-proto-message": "ves.io.schema.log_receiver.SplunkReceiver",
             "properties": {
                 "splunk_hec_token": {
-                    "description": " Secret splunk HEC token",
+                    "description": "x-displayName: \"Splunk HEC token\"\nSecret splunk HEC token",
                     "title": "Splunk HEC token",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Splunk HEC token"
+                    "$ref": "#/definitions/schemaSecretType"
                 },
                 "splunk_server_ip": {
-                    "description": "Exclusive with [splunk_server_name splunk_server_tls]\nx-displayName: \"Server IP\"\nSplunk HEC server ip address and port number",
+                    "description": "x-displayName: \"Server IP\"\nSplunk HEC server ip address and port number",
                     "title": "Server IP",
                     "$ref": "#/definitions/log_receiverIPServerConfigType"
                 },
                 "splunk_server_name": {
-                    "description": "Exclusive with [splunk_server_ip splunk_server_tls]\nx-displayName: \"HTTP Server Name\"\nFully qualified splunk HEC server name and port number",
+                    "description": "x-displayName: \"HTTP Server Name\"\nFully qualified splunk HEC server name and port number",
                     "title": "Server Name",
                     "$ref": "#/definitions/log_receiverHTTPServerConfigType"
                 },
                 "splunk_server_tls": {
-                    "description": "Exclusive with [splunk_server_ip splunk_server_name]\nx-displayName: \"TLS Server\"\nSplunk TLS Server Parameters",
+                    "description": "x-displayName: \"TLS Server\"\nSplunk TLS Server Parameters",
                     "title": "TLS Server",
                     "$ref": "#/definitions/log_receiverTLSConfigType"
                 }
@@ -3041,19 +2993,13 @@ var APISwaggerJSON string = `{
             "description": "Configuration for syslog server",
             "title": "Syslog Server Configuration",
             "x-displayname": "Syslog Server Configuration",
-            "x-ves-oneof-field-format_choice": "[\"syslog_rfc3164\",\"syslog_rfc5424\"]",
+            "x-ves-oneof-field-format_choice": "[\"syslog_rfc5424\"]",
             "x-ves-oneof-field-mode_choice": "[\"tcp_server\",\"tls_server\",\"udp_server\"]",
             "x-ves-proto-message": "ves.io.schema.log_receiver.SyslogReceiver",
             "properties": {
-                "syslog_rfc3164": {
-                    "type": "integer",
-                    "description": "Exclusive with [syslog_rfc5424]\nx-displayName: \"Syslog RFC3164 Format\"\nx-example: \"500\"\nSelect RFC3164 syslog format and maximum message length.",
-                    "title": "Syslog RFC3164 Format",
-                    "format": "int64"
-                },
                 "syslog_rfc5424": {
                     "type": "integer",
-                    "description": "Exclusive with [syslog_rfc3164]\nx-displayName: \"Syslog RFC5424 Format\"\nx-example: \"500\"\nSelect RFC5424 syslog format and maximum message length.",
+                    "description": "Exclusive with []\nx-displayName: \"Syslog RFC5424 Format\"\nx-example: \"500\"\nSelect RFC5424 syslog format and maximum message length.",
                     "title": "Syslog RFC5424 Format",
                     "format": "int64"
                 },
@@ -3083,20 +3029,31 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": " Port number used for communication\n\nExample: - \"601\"-\nRequired: YES",
+                    "description": " Port number used for communication\n\nExample: - \"601\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port Number",
                     "format": "int64",
                     "x-displayname": "Port Number",
                     "x-ves-example": "601",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "server_name": {
                     "type": "string",
-                    "description": " Server name is fully qualified domain name or IP address of the server\n\nExample: - \"server.example.com\"-\nRequired: YES",
+                    "description": " Server name is fully qualified domain name or IP address of the server\n\nExample: - \"server.example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname_or_ip: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Server Name",
+                    "maxLength": 256,
                     "x-displayname": "Server name",
                     "x-ves-example": "server.example.com",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname_or_ip": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
@@ -3109,8 +3066,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate": {
                     "type": "string",
-                    "description": " Client  certificate is PEM-encoded certificate or certificate-chain.",
-                    "x-displayname": "Client Certificate"
+                    "description": " Client  certificate is PEM-encoded certificate or certificate-chain.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 131072,
+                    "x-displayname": "Client Certificate",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "key_url": {
                     "description": " Client private key file containing data in PEM format including the PEM headers.\n The data in this key file has to match accompanying certificate.\n The data may be optionally secured using BlindFold.",
@@ -3158,11 +3120,17 @@ var APISwaggerJSON string = `{
                 },
                 "server_name": {
                     "type": "string",
-                    "description": " ServerName is passed to the server for SNI and is used in the client to check server\n certificates against.\n\nExample: - \"server.acme.com\"-\nRequired: YES",
+                    "description": " ServerName is passed to the server for SNI and is used in the client to check server\n certificates against.\n\nExample: - \"server.acme.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Server Name",
+                    "maxLength": 256,
                     "x-displayname": "SNI name",
                     "x-ves-example": "server.acme.com",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "trusted_ca_url": {
                     "type": "string",
@@ -3185,46 +3153,51 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": " Port number used for communication\n\nExample: - \"514\"-\nRequired: YES",
+                    "description": " Port number used for communication\n\nExample: - \"514\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port Number",
                     "format": "int64",
                     "x-displayname": "Port Number",
                     "x-ves-example": "514",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "server_name": {
                     "type": "string",
-                    "description": " Server name is fully qualified domain name or IP address of the server\n\nExample: - \"server.example.com\"-\nRequired: YES",
+                    "description": " Server name is fully qualified domain name or IP address of the server\n\nExample: - \"server.example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname_or_ip: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Server Name",
+                    "maxLength": 256,
                     "x-displayname": "Server name",
                     "x-ves-example": "server.example.com",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname_or_ip": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
         "log_receiverWhereSites": {
             "type": "object",
-            "description": "This defines a reference to CE sites along with network type",
+            "description": "x-displayName: \"Site\"\nThis defines a reference to CE sites along with network type",
             "title": "WhereSite",
-            "x-displayname": "Site",
-            "x-ves-proto-message": "ves.io.schema.log_receiver.WhereSites",
             "properties": {
                 "network": {
-                    "description": " Select Network through which log receiver is accessible\nRequired: YES",
+                    "description": "x-displayName: \"Site Network\"\nx-required\nSelect Network through which log receiver is accessible",
                     "title": "SiteNetwork",
-                    "$ref": "#/definitions/viewsSiteNetwork",
-                    "x-displayname": "Site Network",
-                    "x-ves-required": "true"
+                    "$ref": "#/definitions/viewsSiteNetwork"
                 },
                 "site": {
                     "type": "array",
-                    "description": " Reference to CE sites\nRequired: YES",
+                    "description": "x-displayName: \"Site Reference\"\nx-required\nReference to CE sites",
                     "title": "Site",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Site Reference",
-                    "x-ves-required": "true"
+                    }
                 }
             }
         },
@@ -3284,11 +3257,15 @@ var APISwaggerJSON string = `{
                 },
                 "location": {
                     "type": "string",
-                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Location",
                     "x-displayname": "Location",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
@@ -3315,11 +3292,17 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
+                    "maxLength": 131072,
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -3358,17 +3341,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3423,16 +3412,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3443,10 +3423,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3472,11 +3458,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3496,55 +3485,31 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
                 "EncodingBase64"
             ],
-            "default": "EncodingNone",
-            "x-displayname": "Secret Encoding",
-            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+            "default": "EncodingNone"
         },
         "schemaSecretType": {
             "type": "object",
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
-                },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
-                },
-                "vault_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -3720,12 +3685,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3787,48 +3756,34 @@ var APISwaggerJSON string = `{
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
-            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
             "title": "VaultSecretInfoType",
-            "x-displayname": "Vault Secret",
-            "x-ves-displayorder": "1,2,3,4,5",
-            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
-                    "title": "Key",
-                    "x-displayname": "Key",
-                    "x-ves-example": "key_pem"
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
                 },
                 "location": {
                     "type": "string",
-                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
-                    "title": "Location",
-                    "x-displayname": "Location",
-                    "x-ves-example": "v1/data/vhost_key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
                 },
                 "provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
-                    "title": "Provider",
-                    "x-displayname": "Provider",
-                    "x-ves-example": "vault-vh-provider",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
                 },
                 "secret_encoding": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
                     "title": "secret_encoding",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
+                    "$ref": "#/definitions/schemaSecretEncodingType"
                 },
                 "version": {
                     "type": "integer",
-                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
                     "title": "Version",
-                    "format": "int64",
-                    "x-displayname": "Version",
-                    "x-ves-example": "1"
+                    "format": "int64"
                 }
             }
         },
@@ -3871,55 +3826,41 @@ var APISwaggerJSON string = `{
         },
         "schemaWingmanSecretInfoType": {
             "type": "object",
-            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
             "title": "WingmanSecretInfoType",
-            "x-displayname": "Wingman Secret",
-            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "ChargeBack-API-Key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
                 }
             }
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
+                    "title": "name"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
+                    "title": "namespace"
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
+                    "title": "tenant"
                 }
             }
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside networks.\nAll outside networks.\nvK8s service network.",
+            "description": "x-displayName: \"Site Network\"\nThis defines network types to be used on site\n\n - SITE_NETWORK_INSIDE_AND_OUTSIDE: x-displayName: \"Inside and Outside Network\"\nAll inside and outside networks.\n - SITE_NETWORK_INSIDE: x-displayName: \"Inside Network\"\nAll inside networks.\n - SITE_NETWORK_OUTSIDE: x-displayName: \"Outside Network\"\nAll outside networks.\n - SITE_NETWORK_SERVICE: x-displayName: \"vK8s Service Network\"\nvK8s service network.",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
@@ -3927,9 +3868,7 @@ var APISwaggerJSON string = `{
                 "SITE_NETWORK_OUTSIDE",
                 "SITE_NETWORK_SERVICE"
             ],
-            "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE",
-            "x-displayname": "Site Network",
-            "x-ves-proto-enum": "ves.io.schema.views.SiteNetwork"
+            "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE"
         }
     },
     "x-displayname": "",

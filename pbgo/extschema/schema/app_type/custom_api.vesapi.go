@@ -1421,7 +1421,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoint/learnt_schema": {
             "post": {
@@ -2918,12 +2918,15 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "api_endpoint_info_request": {
                     "type": "array",
-                    "description": " List of additional things that needs to be sent as part of the request",
+                    "description": " List of additional things that needs to be sent as part of the request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Api Endpoint Info Request",
                     "items": {
                         "$ref": "#/definitions/app_typeApiEndpointInfoRequest"
                     },
-                    "x-displayname": "Api Endpoint Info Request"
+                    "x-displayname": "Api Endpoint Info Request",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "app_type_name": {
                     "type": "string",

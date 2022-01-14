@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.flow_exporter/Object/{object_uid}": {
             "get": {
@@ -2804,7 +2804,7 @@ var APISwaggerJSON string = `{
             "title": "Flow Collector Reachability Information",
             "x-displayname": "Flow Collector Endpoint Information",
             "x-ves-oneof-field-collector_ip_information": "[\"collector_ip\",\"collector_service_name\"]",
-            "x-ves-oneof-field-collector_network_choice": "[\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-oneof-field-collector_network_choice": "[\"site_local_network\"]",
             "x-ves-proto-message": "ves.io.schema.flow_exporter.FlowCollectorEndPoint",
             "properties": {
                 "collector_ip": {
@@ -2814,33 +2814,35 @@ var APISwaggerJSON string = `{
                 },
                 "collector_port": {
                     "type": "integer",
-                    "description": " Port number in which the collector is listening\n\nExample: - \"4739\"-\nRequired: YES",
+                    "description": " Port number in which the collector is listening\n\nExample: - \"4739\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Collector Port",
                     "format": "int64",
                     "x-displayname": "Port",
                     "x-ves-example": "4739",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "collector_proto": {
                     "type": "string",
-                    "description": " Protocol supported by the collector\n\nExample: - \"UDP\"-\nRequired: YES",
+                    "description": " Protocol supported by the collector\n\nExample: - \"UDP\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"UDP\\\"]\n",
                     "title": "Collector Protocol",
                     "x-displayname": "Protocol",
                     "x-ves-example": "UDP",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"UDP\\\"]"
+                    }
                 },
                 "collector_service_name": {
                     "type": "string",
                     "description": "Exclusive with [collector_ip]\nx-displayName: \"Collector Service Name\"\nService Name Of Collector",
                     "title": "Collector Service Name"
                 },
-                "site_local_inside_network": {
-                    "description": "Exclusive with [site_local_network]\nx-displayName: \"Site Local Network Inside\"\nCollector is present on site local inside network",
-                    "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "site_local_network": {
-                    "description": "Exclusive with [site_local_inside_network]\nx-displayName: \"Site Local Network (Outside)\"\nCollector is present on site local network (outside)",
+                    "description": "Exclusive with []\nx-displayName: \"Site Local Network (Outside)\"\nCollector is present on site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -2855,19 +2857,25 @@ var APISwaggerJSON string = `{
             "properties": {
                 "timeout_packets": {
                     "type": "integer",
-                    "description": " If so many packets have hit the entity, consider as a timeout\n\nExample: - \"2000\"-",
+                    "description": " If so many packets have hit the entity, consider as a timeout\n\nExample: - \"2000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 500\n",
                     "title": "Timeout in Packets",
                     "format": "int64",
                     "x-displayname": "Packets",
-                    "x-ves-example": "2000"
+                    "x-ves-example": "2000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "500"
+                    }
                 },
                 "timeout_seconds": {
                     "type": "integer",
-                    "description": " If so many seconds have elapsed, consider as a timeout\n\nExample: - \"60\"-",
+                    "description": " If so many seconds have elapsed, consider as a timeout\n\nExample: - \"60\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "Timeout in Seconds",
                     "format": "int64",
                     "x-displayname": "Seconds",
-                    "x-ves-example": "60"
+                    "x-ves-example": "60",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0"
+                    }
                 }
             }
         },
@@ -2880,11 +2888,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "sampler_rate": {
                     "type": "integer",
-                    "description": " 1 packet out of rate packets\n\nExample: - \"1 packet out of 2000 packets\"-",
+                    "description": " 1 packet out of rate packets\n\nExample: - \"1 packet out of 2000 packets\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 500\n  ves.io.schema.rules.uint32.lte: 8000\n",
                     "title": "Sampler Rate",
                     "format": "int64",
                     "x-displayname": "Sampling Rate",
-                    "x-ves-example": "1 packet out of 2000 packets"
+                    "x-ves-example": "1 packet out of 2000 packets",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "500",
+                        "ves.io.schema.rules.uint32.lte": "8000"
+                    }
                 }
             }
         },
@@ -2905,12 +2917,16 @@ var APISwaggerJSON string = `{
                 },
                 "flow_collector": {
                     "type": "array",
-                    "description": " Set of all collectors to which the flow information should be\n exported",
+                    "description": " Set of all collectors to which the flow information should be\n exported\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 2\n",
                     "title": "Set of collectors",
+                    "maxItems": 2,
                     "items": {
                         "$ref": "#/definitions/flow_exporterFlowCollector"
                     },
-                    "x-displayname": "Flow Collectors"
+                    "x-displayname": "Flow Collectors",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "2"
+                    }
                 },
                 "flow_sampler": {
                     "description": " A flow sampler samples packets and the selected samples are then\n used to derive flow information that are exported",
@@ -3059,17 +3075,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3149,10 +3171,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-",
+                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IPv4 Address",
                     "x-displayname": "IPv4 Address",
-                    "x-ves-example": "192.168.1.1"
+                    "x-ves-example": "192.168.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -3165,10 +3190,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001:db8:0:0:0:0:2:1"
+                    "x-ves-example": "2001:db8:0:0:0:0:2:1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
                 }
             }
         },
@@ -3177,16 +3205,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3197,10 +3216,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3226,11 +3251,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3464,12 +3492,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",

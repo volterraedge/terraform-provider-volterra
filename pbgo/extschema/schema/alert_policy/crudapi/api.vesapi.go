@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.alert_policy/Object/{object_uid}": {
             "get": {
@@ -2616,9 +2616,20 @@ var APISwaggerJSON string = `{
             "description": "A set of matchers an alert has to fulfill to match the route",
             "title": "Custom Matcher",
             "x-displayname": "Custom Matcher",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.alert_policy.CustomMatcher",
             "properties": {
+                "alertlabel": {
+                    "type": "object",
+                    "description": " AlertLabel to configure the alert policy rule\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 3\n",
+                    "title": "AlertLabel",
+                    "x-displayname": "AlertLabel",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "3"
+                    }
+                },
                 "alertname": {
                     "description": " Alertname Matcher",
                     "title": "Alertname",
@@ -2654,23 +2665,33 @@ var APISwaggerJSON string = `{
                 },
                 "receivers": {
                     "type": "array",
-                    "description": " list of Alert Receivers where the alerts will be sent\nRequired: YES",
+                    "description": " list of Alert Receivers where the alerts will be sent\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n",
                     "title": "Receivers",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Alert Receivers",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4"
+                    }
                 },
                 "routes": {
                     "type": "array",
-                    "description": " Set of routes to match the incoming alert.\n The routes are evaluated in the specified order and terminates on the first match.\nRequired: YES",
+                    "description": " Set of routes to match the incoming alert.\n The routes are evaluated in the specified order and terminates on the first match.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "Routes",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/alert_policyRoute"
                     },
                     "x-displayname": "Policy Rules",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 }
             }
         },
@@ -2751,17 +2772,27 @@ var APISwaggerJSON string = `{
                 },
                 "group_interval": {
                     "type": "string",
-                    "description": " Group Interval is used to specify how long to wait before sending a notification about new alerts\n that are added to the group for which an initial notification has already been sent.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n If not specified, group_interval defaults to \"1m\"\n\nExample: - \"1m\"-",
+                    "description": " Group Interval is used to specify how long to wait before sending a notification about new alerts\n that are added to the group for which an initial notification has already been sent.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n If not specified, group_interval defaults to \"1m\"\n\nExample: - \"1m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_time_interval: 10m\n  ves.io.schema.rules.string.min_time_interval: 30s\n  ves.io.schema.rules.string.time_interval: true\n",
                     "title": "Group Interval",
                     "x-displayname": "Notify Interval for a Group",
-                    "x-ves-example": "1m"
+                    "x-ves-example": "1m",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_time_interval": "10m",
+                        "ves.io.schema.rules.string.min_time_interval": "30s",
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 },
                 "group_wait": {
                     "type": "string",
-                    "description": " Time value used to specify how long to initially wait for an inhibiting alert to arrive or\n collect more alerts for the same group.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n If not specified, group_wait defaults to \"30s\"\n\nExample: - \"30s\"-",
+                    "description": " Time value used to specify how long to initially wait for an inhibiting alert to arrive or\n collect more alerts for the same group.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n If not specified, group_wait defaults to \"30s\"\n\nExample: - \"30s\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_time_interval: 5m\n  ves.io.schema.rules.string.min_time_interval: 0s\n  ves.io.schema.rules.string.time_interval: true\n",
                     "title": "Group Wait",
                     "x-displayname": "Wait to Notify",
-                    "x-ves-example": "30s"
+                    "x-ves-example": "30s",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_time_interval": "5m",
+                        "ves.io.schema.rules.string.min_time_interval": "0s",
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 },
                 "individual": {
                     "description": "Exclusive with [custom default ves_io_group]\nx-displayName: \"Individual\"\nThis option disables grouping of alerts",
@@ -2770,10 +2801,15 @@ var APISwaggerJSON string = `{
                 },
                 "repeat_interval": {
                     "type": "string",
-                    "description": " Repeat Interval is used to specify how long to wait before sending a notification again if it\n has already been sent successfully.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n If not specified, group_interval defaults to \"4h\"\n\nExample: - \"4h\"-",
+                    "description": " Repeat Interval is used to specify how long to wait before sending a notification again if it\n has already been sent successfully.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n If not specified, group_interval defaults to \"4h\"\n\nExample: - \"4h\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_time_interval: 10d\n  ves.io.schema.rules.string.min_time_interval: 30m\n  ves.io.schema.rules.string.time_interval: true\n",
                     "title": "Repeat Interval",
                     "x-displayname": "Notify Interval For a Alert",
-                    "x-ves-example": "4h"
+                    "x-ves-example": "4h",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_time_interval": "10d",
+                        "ves.io.schema.rules.string.min_time_interval": "30m",
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 },
                 "ves_io_group": {
                     "description": "Exclusive with [custom default individual]\nx-displayName: \"Volterra Defined Group\"\nGroup the alerts by severity, group name and alert name",
@@ -3181,17 +3217,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3246,16 +3288,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3266,10 +3299,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3295,11 +3334,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3533,12 +3575,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",

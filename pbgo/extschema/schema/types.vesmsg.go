@@ -1978,8 +1978,102 @@ func (m *DownstreamTlsParamsType) Validate(ctx context.Context, opts ...db.Valid
 	return DownstreamTlsParamsTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *DownstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCrlDRefInfo()
+
+}
+
+func (m *DownstreamTlsParamsType) GetCrlDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetCrl()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("DownstreamTlsParamsType.crl[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "crl.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "crl",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetCrlDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DownstreamTlsParamsType) GetCrlDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "crl.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: crl")
+	}
+	for _, ref := range m.GetCrl() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateDownstreamTlsParamsType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDownstreamTlsParamsType) CrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for crl")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated crl")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items crl")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateDownstreamTlsParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -2005,6 +2099,14 @@ func (v *ValidateDownstreamTlsParamsType) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["crl"]; exists {
+		vOpts := append(opts, db.WithValidateField("crl"))
+		if err := fv(ctx, m.GetCrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["require_client_certificate"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("require_client_certificate"))
@@ -2020,6 +2122,25 @@ func (v *ValidateDownstreamTlsParamsType) Validate(ctx context.Context, pm inter
 // Well-known symbol for default validator implementation
 var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParamsType {
 	v := &ValidateDownstreamTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCrl := v.CrlValidationRuleHandler
+	rulesCrl := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhCrl(rulesCrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsParamsType.crl: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["crl"] = vFn
 
 	v.FldValidators["common_params"] = TlsParamsTypeValidator().Validate
 
@@ -10622,10 +10743,10 @@ var DefaultTlsCertificateTypeValidator = func() *ValidateTlsCertificateType {
 
 	vrhCertificateUrl := v.CertificateUrlValidationRuleHandler
 	rulesCertificateUrl := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "131072",
-		"ves.io.schema.rules.string.min_bytes": "1",
-		"ves.io.schema.rules.string.uri_ref":   "true",
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.certificate_url": "true",
+		"ves.io.schema.rules.string.max_bytes":       "131072",
+		"ves.io.schema.rules.string.min_bytes":       "1",
 	}
 	vFn, err = vrhCertificateUrl(rulesCertificateUrl)
 	if err != nil {
@@ -11575,8 +11696,8 @@ var DefaultTlsValidationParamsTypeValidator = func() *ValidateTlsValidationParam
 
 	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
 	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.string.max_bytes": "131072",
-		"ves.io.schema.rules.string.uri_ref":   "true",
+		"ves.io.schema.rules.string.max_bytes":      "131072",
+		"ves.io.schema.rules.string.truststore_url": "true",
 	}
 	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
 	if err != nil {

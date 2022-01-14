@@ -1063,6 +1063,15 @@ func (v *ValidateRouteTargetInfo) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["ip_based"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_based"))
+		if err := fv(ctx, m.GetIpBased(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["value"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("value"))
@@ -1425,6 +1434,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("object_store"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Recognize:
+		if fv, exists := v.FldValidators["choice.recognize"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Recognize).Recognize
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("recognize"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

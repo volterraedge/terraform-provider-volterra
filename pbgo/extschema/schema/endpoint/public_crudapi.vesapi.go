@@ -1632,7 +1632,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{metadata.namespace}/endpoints": {
             "post": {
@@ -2165,9 +2165,12 @@ var APISwaggerJSON string = `{
                 },
                 "labels": {
                     "type": "object",
-                    "description": " Tags on the service instance",
+                    "description": " Tags on the service instance\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 32\n",
                     "title": "labels",
-                    "x-displayname": "labels"
+                    "x-displayname": "labels",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.max_pairs": "32"
+                    }
                 }
             }
         },
@@ -2179,16 +2182,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.endpoint.CreateRequest",
             "properties": {
                 "metadata": {
-                    "description": " Standard object's metadata\nRequired: YES",
+                    "description": " Standard object's metadata\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectCreateMetaType",
-                    "x-displayname": "Metadata"
+                    "x-displayname": "Metadata",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the endpoint\nRequired: YES",
+                    "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
                     "$ref": "#/definitions/endpointCreateSpecType",
-                    "x-displayname": "Spec"
+                    "x-displayname": "Spec",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2197,16 +2206,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.endpoint.CreateResponse",
             "properties": {
                 "metadata": {
-                    "description": " Standard object's metadata\nRequired: YES",
+                    "description": " Standard object's metadata\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectGetMetaType",
-                    "x-displayname": "Metadata"
+                    "x-displayname": "Metadata",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the endpoint\nRequired: YES",
+                    "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
                     "$ref": "#/definitions/endpointGetSpecType",
-                    "x-displayname": "Spec"
+                    "x-displayname": "Spec",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "system_metadata": {
                     "description": " System generated object's metadata",
@@ -2234,10 +2249,13 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-",
+                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port used for health check",
-                    "x-ves-example": "9080"
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "ip": {
                     "type": "string",
@@ -2245,16 +2263,22 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-",
+                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port",
-                    "x-ves-example": "9080"
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
                     "x-displayname": "Protocol",
-                    "x-ves-example": "TCP"
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
+                    }
                 },
                 "service_info": {
                     "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
@@ -2346,26 +2370,26 @@ var APISwaggerJSON string = `{
             "description": "Specifies name and TTL used for DNS resolution.",
             "title": "DnsNameAdvancedType",
             "x-displayname": "DNS Name Advanced Type",
-            "x-ves-oneof-field-ttl_choice": "[\"refresh_interval\",\"strict_ttl\"]",
+            "x-ves-oneof-field-ttl_choice": "[\"refresh_interval\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.DnsNameAdvancedType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"volterra.io\"-",
+                    "description": " Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"volterra.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "name",
+                    "maxLength": 256,
                     "x-displayname": "Endpoint DNS Name",
-                    "x-ves-example": "volterra.io"
+                    "x-ves-example": "volterra.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "refresh_interval": {
                     "type": "integer",
-                    "description": "Exclusive with [strict_ttl]\nx-displayName: \"DNS Refresh interval\"\nx-example: \"20\"\nInterval for DNS refresh in seconds.",
+                    "description": "Exclusive with []\nx-displayName: \"DNS Refresh interval\"\nx-example: \"20\"\nInterval for DNS refresh in seconds.",
                     "title": "refresh_interval",
                     "format": "int64"
-                },
-                "strict_ttl": {
-                    "description": "Exclusive with [refresh_interval]\nx-displayName: \"TTL as refresh interval\"\nUse TTL value returned by DNS Server during DNS resolution as DNS refresh interval",
-                    "title": "strict_ttl",
-                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -2383,10 +2407,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "CreateRequest Format"
                 },
                 "metadata": {
-                    "description": " Standard object's metadata\nRequired: YES",
+                    "description": " Standard object's metadata\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectGetMetaType",
-                    "x-displayname": "Metadata"
+                    "x-displayname": "Metadata",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "object": {
                     "title": "object",
@@ -2408,18 +2435,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/endpointReplaceRequest",
                     "x-displayname": "ReplaceRequest Format"
                 },
-                "resource_version": {
-                    "type": "string",
-                    "description": "Version of the object\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
-                },
                 "spec": {
-                    "description": " Specification of the desired behavior of the endpoint\nRequired: YES",
+                    "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
                     "$ref": "#/definitions/endpointGetSpecType",
-                    "x-displayname": "Spec"
+                    "x-displayname": "Spec",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "status": {
                     "type": "array",
@@ -2470,10 +2493,13 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-",
+                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port used for health check",
-                    "x-ves-example": "9080"
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "ip": {
                     "type": "string",
@@ -2481,16 +2507,22 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-",
+                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port",
-                    "x-ves-example": "9080"
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
                     "x-displayname": "Protocol",
-                    "x-ves-example": "TCP"
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
+                    }
                 },
                 "service_info": {
                     "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
@@ -2508,59 +2540,58 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Endpoint",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"k8s_cluster_api_server\",\"serverless_service_name\",\"service_info\"]",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.GlobalSpecType",
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advanced ip k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint Name\"\nx-example: \"ves.io\"\nEndpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\nx-displayName: \"Endpoint Name\"\nx-example: \"ves.io\"\nEndpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
                     "title": "dns_name"
                 },
                 "dns_name_advanced": {
-                    "description": "Exclusive with [dns_name ip k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint Name (Advanced)\"\nSpecifies name and TTL used for DNS resolution.",
+                    "description": "Exclusive with [dns_name ip service_info]\nx-displayName: \"Endpoint Name (Advanced)\"\nSpecifies name and TTL used for DNS resolution.",
                     "title": "dns_name_advanced",
                     "$ref": "#/definitions/endpointDnsNameAdvancedType"
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-",
+                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Health check Port",
                     "format": "int64",
                     "x-displayname": "Port used for health check",
-                    "x-ves-example": "9080"
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\nx-displayName: \"Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
                     "title": "Endpoint IP Address"
-                },
-                "k8s_cluster_api_server": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip serverless_service_name service_info]\nx-displayName: \"Local K8s Cluster API Server\"\nUsed internally to refer local in cluster  k8s api server",
-                    "title": "Local K8s Cluster API Server",
-                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-",
+                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port",
                     "format": "int64",
                     "x-displayname": "Port",
-                    "x-ves-example": "9080"
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
                     "title": "Protocol",
                     "x-displayname": "Protocol",
-                    "x-ves-example": "TCP"
-                },
-                "serverless_service_name": {
-                    "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced ip k8s_cluster_api_server service_info]\nx-displayName: \"Serverless Service Name\"\nx-example: \"simpleservice\"\nNot supported",
-                    "title": "serverless_service_name"
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
+                    }
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip k8s_cluster_api_server serverless_service_name]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in K8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch K8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual K8s cluster, system already has access to it.\n    In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in K8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch K8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual K8s cluster, system already has access to it.\n    In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
                     "title": "Service Selector Info",
                     "$ref": "#/definitions/endpointServiceInfoType"
                 },
@@ -2598,9 +2629,12 @@ var APISwaggerJSON string = `{
                 },
                 "labels": {
                     "type": "object",
-                    "description": " labels of service",
+                    "description": " labels of service\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 32\n",
                     "title": "labels",
-                    "x-displayname": "labels"
+                    "x-displayname": "labels",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.max_pairs": "32"
+                    }
                 },
                 "pod_name": {
                     "type": "array",
@@ -2750,18 +2784,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.endpoint.Object",
             "properties": {
                 "metadata": {
-                    "description": " Standard object's metadata\nRequired: YES",
+                    "description": " Standard object's metadata\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectMetaType",
                     "x-displayname": "Metadata",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the endpoint\nRequired: YES",
+                    "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
                     "$ref": "#/definitions/endpointSpecType",
                     "x-displayname": "Spec",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "system_metadata": {
                     "description": " System generated object's metadata",
@@ -2779,23 +2819,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.endpoint.ReplaceRequest",
             "properties": {
                 "metadata": {
-                    "description": " Standard object's metadata\nRequired: YES",
+                    "description": " Standard object's metadata\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectReplaceMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "resource_version": {
-                    "type": "string",
-                    "description": "If provided, do the replace operation if the configuration object is still at 'resource_version'\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
+                    "x-displayname": "Metadata",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the endpoint\nRequired: YES",
+                    "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
                     "$ref": "#/definitions/endpointReplaceSpecType",
-                    "x-displayname": "Spec"
+                    "x-displayname": "Spec",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2821,10 +2860,13 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-",
+                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port used for health check",
-                    "x-ves-example": "9080"
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "ip": {
                     "type": "string",
@@ -2832,16 +2874,22 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-",
+                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port",
-                    "x-ves-example": "9080"
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
                     "x-displayname": "Protocol",
-                    "x-ves-example": "TCP"
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
+                    }
                 },
                 "service_info": {
                     "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
@@ -2864,11 +2912,15 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.endpoint.ServiceInfoType",
             "properties": {
                 "discovery_type": {
-                    "description": " Specifies whether the discovery is from Kubernetes or Consul cluster\nRequired: YES",
+                    "description": " Specifies whether the discovery is from Kubernetes or Consul cluster\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
                     "title": "discovery_type",
                     "$ref": "#/definitions/schemaDiscoveryType",
                     "x-displayname": "Discovery",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "service_name": {
                     "type": "string",
@@ -2890,11 +2942,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.endpoint.SpecType",
             "properties": {
                 "gc_spec": {
-                    "description": "\nRequired: YES",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "gc_spec",
                     "$ref": "#/definitions/endpointGlobalSpecType",
                     "x-displayname": "GC Spec",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2922,13 +2977,16 @@ var APISwaggerJSON string = `{
                 },
                 "object_refs": {
                     "type": "array",
-                    "description": " Object reference\nRequired: YES",
+                    "description": " Object reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "object_refs",
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "ver_status": {
                     "type": "array",
@@ -2997,10 +3055,8 @@ var APISwaggerJSON string = `{
         },
         "ioschemaEmpty": {
             "type": "object",
-            "description": "This can be used for messages where no values are needed",
-            "title": "Empty",
-            "x-displayname": "Empty",
-            "x-ves-proto-message": "ves.io.schema.Empty"
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "protobufAny": {
             "type": "object",
@@ -3052,17 +3108,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3194,10 +3256,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-",
+                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IPv4 Address",
                     "x-displayname": "IPv4 Address",
-                    "x-ves-example": "192.168.1.1"
+                    "x-ves-example": "192.168.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
@@ -3210,10 +3275,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001:db8:0:0:0:0:2:1"
+                    "x-ves-example": "2001:db8:0:0:0:0:2:1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
                 }
             }
         },
@@ -3226,14 +3294,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "expressions": {
                     "type": "array",
-                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\nRequired: YES",
+                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.k8s_label_selector: true\n  ves.io.schema.rules.repeated.items.string.max_len: 4096\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "expressions",
+                    "maxItems": 1,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096
                     },
                     "x-displayname": "Selector Expression",
                     "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.k8s_label_selector": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "4096",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3246,12 +3324,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ref": {
                     "type": "array",
-                    "description": " A virtual network direct reference",
+                    "description": " A virtual network direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Reference"
+                    "x-displayname": "Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3289,9 +3371,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotation"
+                    "x-displayname": "Annotation",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3315,11 +3403,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3339,10 +3430,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotation",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3368,11 +3465,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3392,10 +3492,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3421,11 +3527,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3496,9 +3605,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotations"
+                    "x-displayname": "Annotations",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3522,10 +3637,13 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web"
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3551,12 +3669,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A site direct reference",
+                    "description": " A site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Reference"
+                    "x-displayname": "Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3820,12 +3942,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3900,12 +4026,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A virtual_site direct reference",
+                    "description": " A virtual_site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Reference"
+                    "x-displayname": "Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },

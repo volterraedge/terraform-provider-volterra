@@ -377,6 +377,51 @@ func (v *ValidateCreateSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) GcpLabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for gcp_labels")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for gcp_labels")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for gcp_labels")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map gcp_labels")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items gcp_labels")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -449,6 +494,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gcp_labels"]; exists {
+		vOpts := append(opts, db.WithValidateField("gcp_labels"))
+		if err := fv(ctx, m.GetGcpLabels(), vOpts...); err != nil {
 			return err
 		}
 
@@ -727,6 +780,19 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_to_site_tunnel_ip"] = vFn
+
+	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
+	rulesGcpLabels := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len":   "127",
+		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.values.string.max_len": "255",
+	}
+	vFn, err = vrhGcpLabels(rulesGcpLabels)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.gcp_labels: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["gcp_labels"] = vFn
 
 	v.FldValidators["deployment.cloud_credentials"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3999,6 +4065,51 @@ func (v *ValidateGetSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) GcpLabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for gcp_labels")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for gcp_labels")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for gcp_labels")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map gcp_labels")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items gcp_labels")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -4071,6 +4182,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gcp_labels"]; exists {
+		vOpts := append(opts, db.WithValidateField("gcp_labels"))
+		if err := fv(ctx, m.GetGcpLabels(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4380,6 +4499,19 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_to_site_tunnel_ip"] = vFn
+
+	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
+	rulesGcpLabels := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len":   "127",
+		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.values.string.max_len": "255",
+	}
+	vFn, err = vrhGcpLabels(rulesGcpLabels)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.gcp_labels: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["gcp_labels"] = vFn
 
 	v.FldValidators["deployment.cloud_credentials"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4877,6 +5009,51 @@ func (v *ValidateGlobalSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) GcpLabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for gcp_labels")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for gcp_labels")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for gcp_labels")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map gcp_labels")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items gcp_labels")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4949,6 +5126,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gcp_labels"]; exists {
+		vOpts := append(opts, db.WithValidateField("gcp_labels"))
+		if err := fv(ctx, m.GetGcpLabels(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5285,6 +5470,19 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_to_site_tunnel_ip"] = vFn
+
+	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
+	rulesGcpLabels := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len":   "127",
+		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.values.string.max_len": "255",
+	}
+	vFn, err = vrhGcpLabels(rulesGcpLabels)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.gcp_labels: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["gcp_labels"] = vFn
 
 	v.FldValidators["deployment.cloud_credentials"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5847,6 +6045,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
+	m.GcpLabels = f.GetGcpLabels()
 	m.GcpRegion = f.GetGcpRegion()
 	m.InstanceType = f.GetInstanceType()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
@@ -5868,6 +6067,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
+	f.GcpLabels = m1.GcpLabels
 	f.GcpRegion = m1.GcpRegion
 	f.InstanceType = m1.InstanceType
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
@@ -6385,6 +6585,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
+	m.GcpLabels = f.GetGcpLabels()
 	m.GcpRegion = f.GetGcpRegion()
 	m.InstanceType = f.GetInstanceType()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
@@ -6407,6 +6608,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
+	f.GcpLabels = m1.GcpLabels
 	f.GcpRegion = m1.GcpRegion
 	f.InstanceType = m1.InstanceType
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)

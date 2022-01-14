@@ -208,7 +208,7 @@ const (
 	// x-displayName: "4 KBytes"
 	// Page size of 4KB
 	HARDWARE_MEM_PAGE_SIZE_4KB MemPageSize = 1
-	// x-displayName: "4 MBytes"
+	// x-displayName: "2 MBytes"
 	// Page size of 2MB
 	HARDWARE_MEM_PAGE_SIZE_2MB MemPageSize = 2
 	// x-displayName: "1 GBytes"

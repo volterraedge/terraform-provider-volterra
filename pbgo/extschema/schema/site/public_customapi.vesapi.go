@@ -288,7 +288,7 @@ var CustomStateAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/site/{name}/state": {
             "post": {
@@ -401,26 +401,35 @@ var CustomStateAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Site name\n\nExample: - \"ce398\"-\nRequired: YES",
+                    "description": " Site name\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "ce398",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Site namespace\n\nExample: - \"system\"-\nRequired: YES",
+                    "description": " Site namespace\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "state": {
-                    "description": " Desired (target) state for site (3 = STANDBY)\n\nExample: - 3 -\nRequired: YES",
+                    "description": " Desired (target) state for site (3 = STANDBY)\n\nExample: - 3 -\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "State",
                     "$ref": "#/definitions/siteSiteState",
                     "x-displayname": "State",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

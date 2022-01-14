@@ -287,7 +287,7 @@ var CustomAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/dns_domain/{name}/verify": {
             "post": {

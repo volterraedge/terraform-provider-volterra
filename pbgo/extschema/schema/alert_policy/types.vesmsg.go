@@ -409,6 +409,46 @@ type ValidateCustomMatcher struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCustomMatcher) AlertlabelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for alertlabel")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]*LabelMatcher, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := LabelMatcherValidator().Validate(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for alertlabel")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]*LabelMatcher)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]*LabelMatcher, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map alertlabel")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items alertlabel")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCustomMatcher) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CustomMatcher)
 	if !ok {
@@ -421,6 +461,14 @@ func (v *ValidateCustomMatcher) Validate(ctx context.Context, pm interface{}, op
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["alertlabel"]; exists {
+		vOpts := append(opts, db.WithValidateField("alertlabel"))
+		if err := fv(ctx, m.GetAlertlabel(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["alertname"]; exists {
@@ -456,6 +504,27 @@ func (v *ValidateCustomMatcher) Validate(ctx context.Context, pm interface{}, op
 // Well-known symbol for default validator implementation
 var DefaultCustomMatcherValidator = func() *ValidateCustomMatcher {
 	v := &ValidateCustomMatcher{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAlertlabel := v.AlertlabelValidationRuleHandler
+	rulesAlertlabel := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len": "64",
+		"ves.io.schema.rules.map.keys.string.min_len": "1",
+		"ves.io.schema.rules.map.max_pairs":           "3",
+	}
+	vFn, err = vrhAlertlabel(rulesAlertlabel)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomMatcher.alertlabel: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["alertlabel"] = vFn
 
 	v.FldValidators["severity"] = LabelMatcherValidator().Validate
 

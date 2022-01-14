@@ -635,6 +635,147 @@ func CaptchaChallengeTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CdnServiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CdnServiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CdnServiceType) DeepCopy() *CdnServiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CdnServiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CdnServiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CdnServiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CdnServiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCdnServiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCdnServiceType) ContentChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for content_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCdnServiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CdnServiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CdnServiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_ttl"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cache_ttl"))
+		if err := fv(ctx, m.GetCacheTtl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["content_choice"]; exists {
+		val := m.GetContentChoice()
+		vOpts := append(opts,
+			db.WithValidateField("content_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetContentChoice().(type) {
+	case *CdnServiceType_DownloadDelivery:
+		if fv, exists := v.FldValidators["content_choice.download_delivery"]; exists {
+			val := m.GetContentChoice().(*CdnServiceType_DownloadDelivery).DownloadDelivery
+			vOpts := append(opts,
+				db.WithValidateField("content_choice"),
+				db.WithValidateField("download_delivery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CdnServiceType_LiveStreaming:
+		if fv, exists := v.FldValidators["content_choice.live_streaming"]; exists {
+			val := m.GetContentChoice().(*CdnServiceType_LiveStreaming).LiveStreaming
+			vOpts := append(opts,
+				db.WithValidateField("content_choice"),
+				db.WithValidateField("live_streaming"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCdnServiceTypeValidator = func() *ValidateCdnServiceType {
+	v := &ValidateCdnServiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhContentChoice := v.ContentChoiceValidationRuleHandler
+	rulesContentChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhContentChoice(rulesContentChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CdnServiceType.content_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["content_choice"] = vFn
+
+	return v
+}()
+
+func CdnServiceTypeValidator() db.Validator {
+	return DefaultCdnServiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CompressionType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -931,6 +1072,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUserIdentificationDRefInfo() FAILED")
 	} else {
@@ -1170,6 +1317,24 @@ func (m *CreateSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface)
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 func (m *CreateSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
@@ -2693,6 +2858,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUserIdentificationDRefInfo() FAILED")
 	} else {
@@ -2932,6 +3103,24 @@ func (m *GetSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface) ([
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 func (m *GetSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
@@ -3533,6 +3722,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["cdn_service"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_service"))
+		if err := fv(ctx, m.GetCdnService(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["challenge_type"]; exists {
 		val := m.GetChallengeType()
 		vOpts := append(opts,
@@ -4109,6 +4307,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["temporary_user_blocking"] = TemporaryUserBlockingTypeValidator().Validate
 
+	v.FldValidators["cdn_service"] = CdnServiceTypeValidator().Validate
+
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
 	return v
@@ -4267,6 +4467,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetServicePolicySetsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServicePolicySetsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -4752,6 +4958,24 @@ func (m *GlobalSpecType) GetServicePolicySetsDBEntries(ctx context.Context, d db
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 func (m *GlobalSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
@@ -5550,6 +5774,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["cdn_service"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_service"))
+		if err := fv(ctx, m.GetCdnService(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["challenge_type"]; exists {
 		val := m.GetChallengeType()
 		vOpts := append(opts,
@@ -5604,6 +5837,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["check_ip_reputation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("check_ip_reputation"))
+		if err := fv(ctx, m.GetCheckIpReputation(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -6276,6 +6518,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["temporary_user_blocking"] = TemporaryUserBlockingTypeValidator().Validate
 
 	v.FldValidators["tls_intercept"] = ves_io_schema.TlsInterceptionTypeValidator().Validate
+
+	v.FldValidators["cdn_service"] = CdnServiceTypeValidator().Validate
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
@@ -6950,6 +7194,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUserIdentificationDRefInfo() FAILED")
 	} else {
@@ -7189,6 +7439,24 @@ func (m *ReplaceSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 func (m *ReplaceSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
@@ -8435,6 +8703,16 @@ func (v *ValidateShapeBotDefenseConfigType) ApplicationIdValidationRuleHandler(r
 	return validatorFn, nil
 }
 
+func (v *ValidateShapeBotDefenseConfigType) TimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ShapeBotDefenseConfigType)
 	if !ok {
@@ -8479,6 +8757,15 @@ func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("timeout"))
+		if err := fv(ctx, m.GetTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -8505,6 +8792,18 @@ var DefaultShapeBotDefenseConfigTypeValidator = func() *ValidateShapeBotDefenseC
 		panic(errMsg)
 	}
 	v.FldValidators["application_id"] = vFn
+
+	vrhTimeout := v.TimeoutValidationRuleHandler
+	rulesTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "60000",
+	}
+	vFn, err = vrhTimeout(rulesTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotDefenseConfigType.timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["timeout"] = vFn
 
 	v.FldValidators["api_auth_key"] = ves_io_schema.SecretTypeValidator().Validate
 
@@ -9093,6 +9392,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.AutoCertInfo = f.GetAutoCertInfo()
 	m.AutoCertState = f.GetAutoCertState()
 	m.BufferPolicy = f.GetBufferPolicy()
+	m.CdnService = f.GetCdnService()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
 	m.CorsPolicy = f.GetCorsPolicy()
@@ -9137,6 +9437,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.AutoCertInfo = m1.AutoCertInfo
 	f.AutoCertState = m1.AutoCertState
 	f.BufferPolicy = m1.BufferPolicy
+	f.CdnService = m1.CdnService
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
 	f.CorsPolicy = m1.CorsPolicy

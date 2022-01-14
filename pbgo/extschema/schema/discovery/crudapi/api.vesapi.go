@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.discovery/Object/{object_uid}": {
             "get": {
@@ -2778,12 +2778,6 @@ var APISwaggerJSON string = `{
                     "title": "Http authentication parameters",
                     "$ref": "#/definitions/discoveryConsulHttpBasicAuthInfoType",
                     "x-displayname": "HTTP Authentication Parameters"
-                },
-                "scheme": {
-                    "description": " scheme",
-                    "title": "Scheme",
-                    "$ref": "#/definitions/discoverySchemeType",
-                    "x-displayname": "Scheme"
                 }
             }
         },
@@ -2795,18 +2789,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.ConsulDiscoveryType",
             "properties": {
                 "access_info": {
-                    "description": " Credentials to access Hashicorp Consul service discovery\nRequired: YES",
+                    "description": " Credentials to access Hashicorp Consul service discovery\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Hashicorp Consul Credentials",
                     "$ref": "#/definitions/discoveryConsulAccessInfo",
                     "x-displayname": "Access Credentials",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "publish_info": {
-                    "description": " Configuration to publish VIPs\nRequired: YES",
+                    "description": " Configuration to publish VIPs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "publish info",
                     "$ref": "#/definitions/discoveryConsulVipDiscoveryInfoType",
                     "x-displayname": "VIP Publishing Configuration",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2825,10 +2825,14 @@ var APISwaggerJSON string = `{
                 },
                 "user_name": {
                     "type": "string",
-                    "description": " username in consul\n\nExample: - \"Joe\"-",
+                    "description": " username in consul\n\nExample: - \"Joe\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "username",
+                    "maxLength": 64,
                     "x-displayname": "User Name",
-                    "x-ves-example": "Joe"
+                    "x-ves-example": "Joe",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 }
             }
         },
@@ -2861,23 +2865,34 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cluster_ip": {
                     "type": "string",
-                    "description": " IP Address of the service\n\nExample: - \"192.1.2.3\"-",
+                    "description": " IP Address of the service\n\nExample: - \"192.1.2.3\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "Service IP",
                     "x-displayname": "IP",
-                    "x-ves-example": "192.1.2.3"
+                    "x-ves-example": "192.1.2.3",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "labels": {
                     "type": "object",
-                    "description": " Key value pairs defined as labels for the service",
+                    "description": " Key value pairs defined as labels for the service\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.k8s_label_value: true\n",
                     "title": "Service labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.max_pairs": "16",
+                        "ves.io.schema.rules.map.values.string.k8s_label_value": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace of the discovered service\n\nExample: - \"mynamespace\"-",
+                    "description": " Namespace of the discovered service\n\nExample: - \"mynamespace\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Namespace",
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
-                    "x-ves-example": "mynamespace"
+                    "x-ves-example": "mynamespace",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 },
                 "pods": {
                     "type": "array",
@@ -2887,12 +2902,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/discoveryPodInfoType"
                     },
                     "x-displayname": "PODs"
-                },
-                "port_map": {
-                    "type": "object",
-                    "description": " port number to target port mapping for ClusterIP service\n port number to node-port mapping for NodePort service",
-                    "title": "Port mapping",
-                    "x-displayname": "Port Mapping"
                 },
                 "ports": {
                     "type": "array",
@@ -2905,17 +2914,25 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": " Name of the discovered service\n\nExample: - \"myservice\"-",
+                    "description": " Name of the discovered service\n\nExample: - \"myservice\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Service name",
+                    "maxLength": 64,
                     "x-displayname": "Service",
-                    "x-ves-example": "myservice"
+                    "x-ves-example": "myservice",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 },
                 "service_type": {
                     "type": "string",
-                    "description": " Type of discovered service. Examples include \"ClusterIP\", \"NodePort\" etc\n\nExample: - \"NodePort\"-",
+                    "description": " Type of discovered service. Examples include \"ClusterIP\", \"NodePort\" etc\n\nExample: - \"NodePort\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Service Type",
+                    "maxLength": 64,
                     "x-displayname": "Type",
-                    "x-ves-example": "NodePort"
+                    "x-ves-example": "NodePort",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 }
             }
         },
@@ -2924,15 +2941,10 @@ var APISwaggerJSON string = `{
             "description": "Desired state of discovery",
             "title": "Specification for discovery",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-access_info": "[\"consul\",\"k8s\"]",
+            "x-ves-oneof-field-access_info": "[]",
             "x-ves-oneof-field-discovery_choice": "[\"discovery_consul\",\"discovery_k8s\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.GlobalSpecType",
             "properties": {
-                "consul": {
-                    "description": "Exclusive with [k8s]\nx-displayName: \"Hashicorp Consul Service Discovery\"\nHashicorp Consul discovery method, credentials to access Hashicorp Consul service discovery",
-                    "title": "Hashicorp Consul Credentials",
-                    "$ref": "#/definitions/discoveryConsulAccessInfo"
-                },
                 "discovery_consul": {
                     "description": "Exclusive with [discovery_k8s]\nx-displayName: \"Consul Discovery Configuration\"\nDiscovery configuration for Hashicorp Consul",
                     "title": "discovery consul",
@@ -2943,30 +2955,15 @@ var APISwaggerJSON string = `{
                     "title": "discovery K8s",
                     "$ref": "#/definitions/discoveryK8SDiscoveryType"
                 },
-                "k8s": {
-                    "description": "Exclusive with [consul]\nx-displayName: \"Kubernetes Service Discovery\"\nKubernetes discovery method, credentials can be kubeconfig file or mutual TLS using PKI certificates",
-                    "title": "Kubernetes Credentials",
-                    "$ref": "#/definitions/discoveryK8SAccessInfo"
-                },
-                "publish_vip": {
-                    "description": " Configuration to publish VIP(s) in to a discovery service.",
-                    "title": "VIP publish",
-                    "$ref": "#/definitions/discoveryVipDiscoveryInfoType",
-                    "x-displayname": "VIP Publishing configuration"
-                },
-                "type": {
-                    "description": " Type of discovery K8s or consul\nRequired: YES",
-                    "title": "Discovery type",
-                    "$ref": "#/definitions/schemaDiscoveryType",
-                    "x-displayname": "Type of Discovery",
-                    "x-ves-required": "true"
-                },
                 "where": {
-                    "description": " All the sites where this discovery config is valid.\nRequired: YES",
+                    "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Where",
                     "$ref": "#/definitions/schemaNetworkSiteRefSelector",
                     "x-displayname": "Select Site, Virtual Site or Network",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2976,20 +2973,14 @@ var APISwaggerJSON string = `{
             "title": "K8S access info",
             "x-displayname": "K8s API Server",
             "x-ves-displayorder": "10,11",
-            "x-ves-oneof-field-config_type": "[\"connection_info\",\"in_cluster\",\"kubeconfig_url\"]",
+            "x-ves-oneof-field-config_type": "[\"connection_info\",\"kubeconfig_url\"]",
             "x-ves-oneof-field-k8s_pod_network_choice": "[\"isolated\",\"reachable\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.K8SAccessInfo",
             "properties": {
                 "connection_info": {
-                    "description": "Exclusive with [in_cluster kubeconfig_url]\nx-displayName: \"TLS parameters for HTTP REST\"\nProvide API server access details (endpoint and TLS parameters)",
+                    "description": "Exclusive with [kubeconfig_url]\nx-displayName: \"TLS parameters for HTTP REST\"\nProvide API server access details (endpoint and TLS parameters)",
                     "title": "REST connection info",
                     "$ref": "#/definitions/discoveryRestConfigType"
-                },
-                "in_cluster": {
-                    "type": "boolean",
-                    "description": "Exclusive with [connection_info kubeconfig_url]\nx-displayName: \"In Cluster\"\nVER is POD running in the same K8s cluster.",
-                    "title": "In Cluster",
-                    "format": "boolean"
                 },
                 "isolated": {
                     "description": "Exclusive with [reachable]\nx-displayName: \"Kubernetes POD is isolated\"\nSpecifies Kubernetes POD network is isolated from VER. In this mode\nNodeIP is discovered when Kubernetes cluster is external and ClusterIP is\nis discovered when Kubernetes cluster is in InCluster mode.",
@@ -2997,7 +2988,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "kubeconfig_url": {
-                    "description": "Exclusive with [connection_info in_cluster]\nx-displayName: \"Kubeconfig\"\nProvide kubeconfig file to connect to K8s cluster",
+                    "description": "Exclusive with [connection_info]\nx-displayName: \"Kubeconfig\"\nProvide kubeconfig file to connect to K8s cluster",
                     "title": "Kubeconfig",
                     "$ref": "#/definitions/schemaSecretType"
                 },
@@ -3025,18 +3016,26 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.K8SDelegationType",
             "properties": {
                 "dns_mode": {
-                    "description": " Indicates whether external K8S is running core DNS or kube DNS\nRequired: YES",
+                    "description": " Indicates whether external K8S is running core DNS or kube DNS\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "DNS mode",
                     "$ref": "#/definitions/discoveryK8SDNSMode",
                     "x-displayname": "DNS Mode",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "subdomain": {
                     "type": "string",
-                    "description": " The DNS subdomain for which Volterra will respond to DNS queries.\nRequired: YES",
+                    "description": " The DNS subdomain for which Volterra will respond to DNS queries.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "subdomain",
+                    "maxLength": 256,
                     "x-displayname": "Subdomain",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
@@ -3048,18 +3047,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.K8SDiscoveryType",
             "properties": {
                 "access_info": {
-                    "description": " Credentials can be kubeconfig file or mutual TLS using PKI certificates\nRequired: YES",
+                    "description": " Credentials can be kubeconfig file or mutual TLS using PKI certificates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Kubernetes Credentials",
                     "$ref": "#/definitions/discoveryK8SAccessInfo",
                     "x-displayname": "Access Credentials",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "publish_info": {
-                    "description": " Configuration to publish VIPs\nRequired: YES",
+                    "description": " Configuration to publish VIPs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "publish info",
                     "$ref": "#/definitions/discoveryK8SVipDiscoveryInfoType",
                     "x-displayname": "VIP Publishing Configuration",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3069,10 +3074,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace where the service/endpoints need to be created if it's not included in the domain.\n The external K8S administrator needs to ensure that the namespace exists.\nRequired: YES",
+                    "description": " The namespace where the service/endpoints need to be created if it's not included in the domain.\n The external K8S administrator needs to ensure that the namespace exists.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "namespace",
+                    "maxLength": 64,
                     "x-displayname": "Default Namespace",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 }
             }
         },
@@ -3137,29 +3147,42 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": " Port number on which the service is exposed\n\nExample: - \"8080\"-\nRequired: YES",
+                    "description": " Port number on which the service is exposed\n\nExample: - \"8080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port",
                     "format": "int64",
                     "x-displayname": "Port number",
                     "x-ves-example": "8080",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Protocol on which the service is exposed\n\nExample: - \"TCP\"-\nRequired: YES",
+                    "description": " Protocol on which the service is exposed\n\nExample: - \"TCP\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Protocol",
                     "x-displayname": "Protocol",
                     "x-ves-example": "TCP",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "target_port": {
                     "type": "integer",
-                    "description": " Port on which the pods targeted by the service can be reached.\n TargetPort of Kubenetes service when its type is ClusterIP.\n NodePort of Kubernetes service when its type is NodePort.\n\nExample: - \"8081\"-\nRequired: YES",
+                    "description": " Port on which the pods targeted by the service can be reached.\n TargetPort of Kubenetes service when its type is ClusterIP.\n NodePort of Kubernetes service when its type is NodePort.\n\nExample: - \"8081\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Target Port",
                     "format": "int64",
                     "x-displayname": "Target Port number",
                     "x-ves-example": "8081",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 }
             }
         },
@@ -3172,11 +3195,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "api_server": {
                     "type": "string",
-                    "description": " API server must be a fully qualified domain string and port specified as host:port pair\n\nExample: - \"api.acme.com:4430\"-\nRequired: YES",
+                    "description": " API server must be a fully qualified domain string and port specified as host:port pair\n\nExample: - \"api.acme.com:4430\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostport: true\n  ves.io.schema.rules.string.max_len: 262\n",
                     "title": "Discovery Service API server",
+                    "maxLength": 262,
                     "x-displayname": "API Server and Port",
                     "x-ves-example": "api.acme.com:4430",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostport": "true",
+                        "ves.io.schema.rules.string.max_len": "262"
+                    }
                 },
                 "tls_info": {
                     "description": " TLS settings to enable transport layer security",
@@ -3188,15 +3217,13 @@ var APISwaggerJSON string = `{
         },
         "discoverySchemeType": {
             "type": "string",
-            "description": "Scheme to use when doing REST API to discovery server\n\nhttp:// Scheme\nhttps:// Scheme",
+            "description": "x-displayName: \"Scheme\"\nScheme to use when doing REST API to discovery server\n\n - HTTP: x-displayName: \"HTTP\"\nhttp:// Scheme\n - HTTPS: x-displayName: \"HTTPS\"\nhttps:// Scheme",
             "title": "REST scheme",
             "enum": [
                 "HTTP",
                 "HTTPS"
             ],
-            "default": "HTTP",
-            "x-displayname": "Scheme",
-            "x-ves-proto-enum": "ves.io.schema.discovery.SchemeType"
+            "default": "HTTP"
         },
         "discoverySpecType": {
             "type": "object",
@@ -3259,22 +3286,15 @@ var APISwaggerJSON string = `{
             "x-displayname": "Client TLS Config",
             "x-ves-proto-message": "ves.io.schema.discovery.TLSClientConfigType",
             "properties": {
-                "ca_certificate_url": {
-                    "description": " Volterra Secret. URL to fetch the server CA certificate file",
-                    "title": "Server CA certificates",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Server CA Certificates"
-                },
                 "certificate": {
                     "type": "string",
-                    "description": " Client  certificate is PEM-encoded certificate or certificate-chain.",
-                    "x-displayname": "Client Certificate"
-                },
-                "certificate_url": {
-                    "description": " Volterra Secret. URL to fetch the client certificate file",
-                    "title": "Client credentials",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Client Credentials"
+                    "description": " Client  certificate is PEM-encoded certificate or certificate-chain.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 131072,
+                    "x-displayname": "Client Certificate",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "key_url": {
                     "description": " Client private key file containing data in PEM format including the PEM headers.\n The data in this key file has to match accompanying certificate.\n The data may be optionally secured using BlindFold.",
@@ -3284,16 +3304,26 @@ var APISwaggerJSON string = `{
                 },
                 "server_name": {
                     "type": "string",
-                    "description": " ServerName is passed to the server for SNI and is used in the client to check server\n ceritificates against. If ServerName is empty, the hostname used to contact the\n server is used\n\nExample: - \"k8s.acme.com\"-",
+                    "description": " ServerName is passed to the server for SNI and is used in the client to check server\n ceritificates against. If ServerName is empty, the hostname used to contact the\n server is used\n\nExample: - \"k8s.acme.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Server Name",
+                    "maxLength": 256,
                     "x-displayname": "SNI name",
-                    "x-ves-example": "k8s.acme.com"
+                    "x-ves-example": "k8s.acme.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL or value for trusted Server CA certificate or certificate chain\n Certificates in PEM format including the PEM headers.",
+                    "description": " The URL or value for trusted Server CA certificate or certificate chain\n Certificates in PEM format including the PEM headers.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Server CA certificates",
-                    "x-displayname": "Server CA Certificates"
+                    "maxLength": 131072,
+                    "x-displayname": "Server CA Certificates",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -3336,55 +3366,46 @@ var APISwaggerJSON string = `{
         },
         "discoveryVipDiscoveryInfoType": {
             "type": "object",
-            "description": "K8S Configuration to publish VIPs",
+            "description": "x-displayName: \"VIP Publish Configuration\"\nK8S Configuration to publish VIPs",
             "title": "VIP Discovery Info Type",
-            "x-displayname": "VIP Publish Configuration",
-            "x-ves-proto-message": "ves.io.schema.discovery.VipDiscoveryInfoType",
             "properties": {
                 "dns_mode": {
-                    "description": " When virtual IP is published with DNS delegation, this field indicates whether\n external K8s is running core DNS or kube DNS",
+                    "description": "x-displayName: \"DNS Mode\"\nWhen virtual IP is published with DNS delegation, this field indicates whether\nexternal K8s is running core DNS or kube DNS",
                     "title": "DNS mode",
-                    "$ref": "#/definitions/discoveryK8SDNSMode",
-                    "x-displayname": "DNS Mode"
+                    "$ref": "#/definitions/discoveryK8SDNSMode"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When virtual IP is published with \"PUBLISH_SERVICE\" mode, this field indicates the namespace\n where the service/endpoints needs to be created if the domain name doesn't specify it\n explicitly. K8S administrator of the external K8s should ensure this namespace is created",
-                    "title": "default namespace",
-                    "x-displayname": "Default Namespace"
+                    "description": "x-displayName: \"Default Namespace\"\nWhen virtual IP is published with \"PUBLISH_SERVICE\" mode, this field indicates the namespace\nwhere the service/endpoints needs to be created if the domain name doesn't specify it\nexplicitly. K8S administrator of the external K8s should ensure this namespace is created",
+                    "title": "default namespace"
                 },
                 "publish_virtual_ip": {
                     "type": "boolean",
-                    "description": " Are we publishing Virtual Host domains to Virtual IP mapping to external cluster",
+                    "description": "x-displayName: \"VIP Publish Enable\"\nAre we publishing Virtual Host domains to Virtual IP mapping to external cluster",
                     "title": "enable/disable publish VIP",
-                    "format": "boolean",
-                    "x-displayname": "VIP Publish Enable"
+                    "format": "boolean"
                 },
                 "subdomain": {
                     "type": "string",
-                    "description": " Subdomain for which DNS delegation is done\n Volterra Edge Router will only respond for DNS queries on this sub-domain\n While programming the DNS DELEGATE on external cluster, VER will take ownership of this\n sub-domain",
-                    "title": "DNS delegation sub-domain",
-                    "x-displayname": "Subdomain"
+                    "description": "x-displayName: \"Subdomain\"\nSubdomain for which DNS delegation is done\nVolterra Edge Router will only respond for DNS queries on this sub-domain\nWhile programming the DNS DELEGATE on external cluster, VER will take ownership of this\nsub-domain",
+                    "title": "DNS delegation sub-domain"
                 },
                 "type": {
-                    "description": " How is Virtual IP discovery performed\n Two modes are possible\n   DNS_DELEGATION: Program DNS delegation for a sub-domain in external cluster\n   PUBLISH_SERVICE: Create/Register a service in external K8s/consul cluster",
+                    "description": "x-displayName: \"VIP Publish Method\"\nHow is Virtual IP discovery performed\nTwo modes are possible\n  DNS_DELEGATION: Program DNS delegation for a sub-domain in external cluster\n  PUBLISH_SERVICE: Create/Register a service in external K8s/consul cluster",
                     "title": "VIP publish method",
-                    "$ref": "#/definitions/discoveryVirtualIPDiscoveryType",
-                    "x-displayname": "VIP Publish Method"
+                    "$ref": "#/definitions/discoveryVirtualIPDiscoveryType"
                 }
             }
         },
         "discoveryVirtualIPDiscoveryType": {
             "type": "string",
-            "description": "How is the Virtual IP discovery done\nTwo modes are possible\n  DNS_DELEGATION: Program DNS delegation for a sub-domain in external K8s cluster\n  PUBLISH_SERVICE: Create/Register a service in external K8s/consul cluster\n\nDNS sub domain is delegated to volterra site.\nName to VIP mapping is published in external discovery service",
+            "description": "x-displayName: \"Virtual IP Discovery\"\nHow is the Virtual IP discovery done\nTwo modes are possible\n  DNS_DELEGATION: Program DNS delegation for a sub-domain in external K8s cluster\n  PUBLISH_SERVICE: Create/Register a service in external K8s/consul cluster\n\n - DNS_DELEGATION: x-displayName: \"DNS Delegation\"\nDNS sub domain is delegated to volterra site.\n - PUBLISH_SERVICE: x-displayName: \"Publish\"\nName to VIP mapping is published in external discovery service",
             "title": "VirtualIPDiscoveryType",
             "enum": [
                 "DNS_DELEGATION",
                 "PUBLISH_SERVICE"
             ],
-            "default": "DNS_DELEGATION",
-            "x-displayname": "Virtual IP Discovery",
-            "x-ves-proto-enum": "ves.io.schema.discovery.VirtualIPDiscoveryType"
+            "default": "DNS_DELEGATION"
         },
         "protobufAny": {
             "type": "object",
@@ -3442,11 +3463,15 @@ var APISwaggerJSON string = `{
                 },
                 "location": {
                     "type": "string",
-                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Location",
                     "x-displayname": "Location",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
@@ -3473,11 +3498,17 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
+                    "maxLength": 131072,
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -3516,17 +3547,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3594,16 +3631,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaNetworkRefType": {
             "type": "object",
@@ -3614,12 +3642,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ref": {
                     "type": "array",
-                    "description": " A virtual network direct reference",
+                    "description": " A virtual network direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Reference"
+                    "x-displayname": "Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3657,10 +3689,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3686,11 +3724,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3754,55 +3795,31 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
                 "EncodingBase64"
             ],
-            "default": "EncodingNone",
-            "x-displayname": "Secret Encoding",
-            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+            "default": "EncodingNone"
         },
         "schemaSecretType": {
             "type": "object",
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
-                },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
-                },
-                "vault_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -3821,12 +3838,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A site direct reference",
+                    "description": " A site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Reference"
+                    "x-displayname": "Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -4002,12 +4023,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -4082,59 +4107,49 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A virtual_site direct reference",
+                    "description": " A virtual_site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Reference"
+                    "x-displayname": "Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
-            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
             "title": "VaultSecretInfoType",
-            "x-displayname": "Vault Secret",
-            "x-ves-displayorder": "1,2,3,4,5",
-            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
-                    "title": "Key",
-                    "x-displayname": "Key",
-                    "x-ves-example": "key_pem"
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
                 },
                 "location": {
                     "type": "string",
-                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
-                    "title": "Location",
-                    "x-displayname": "Location",
-                    "x-ves-example": "v1/data/vhost_key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
                 },
                 "provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
-                    "title": "Provider",
-                    "x-displayname": "Provider",
-                    "x-ves-example": "vault-vh-provider",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
                 },
                 "secret_encoding": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
                     "title": "secret_encoding",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
+                    "$ref": "#/definitions/schemaSecretEncodingType"
                 },
                 "version": {
                     "type": "integer",
-                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
                     "title": "Version",
-                    "format": "int64",
-                    "x-displayname": "Version",
-                    "x-ves-example": "1"
+                    "format": "int64"
                 }
             }
         },
@@ -4199,18 +4214,13 @@ var APISwaggerJSON string = `{
         },
         "schemaWingmanSecretInfoType": {
             "type": "object",
-            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
             "title": "WingmanSecretInfoType",
-            "x-displayname": "Wingman Secret",
-            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "ChargeBack-API-Key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
                 }
             }
         }

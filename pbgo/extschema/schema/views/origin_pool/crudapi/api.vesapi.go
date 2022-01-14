@@ -1466,7 +1466,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.views.origin_pool/Object/{object_uid}": {
             "get": {
@@ -2574,27 +2574,36 @@ var APISwaggerJSON string = `{
             "properties": {
                 "connection_limit": {
                     "type": "integer",
-                    "description": " The maximum number of connections that loadbalancer will establish to all hosts in an upstream cluster.\n In practice this is only applicable to TCP and HTTP/1.1 clusters since HTTP/2 uses a single connection to each host.\n Remove endpoint out of load balancing decision, if number of connections reach connection limit.\n\nExample: - \"100\"-",
+                    "description": " The maximum number of connections that loadbalancer will establish to all hosts in an upstream cluster.\n In practice this is only applicable to TCP and HTTP/1.1 clusters since HTTP/2 uses a single connection to each host.\n Remove endpoint out of load balancing decision, if number of connections reach connection limit.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32768\n",
                     "title": "connection_limit",
                     "format": "int64",
                     "x-displayname": "Connection Limit",
-                    "x-ves-example": "100"
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "32768"
+                    }
                 },
                 "max_requests": {
                     "type": "integer",
-                    "description": " The maximum number of requests that can be outstanding to all hosts in a cluster at any given time.\n In practice this is applicable to HTTP/2 clusters since HTTP/1.1 clusters are governed by the\n maximum connections (connection_limit).\n Remove endpoint out of load balancing decision, if requests exceed this count.\n\nExample: - \"10\"-",
+                    "description": " The maximum number of requests that can be outstanding to all hosts in a cluster at any given time.\n In practice this is applicable to HTTP/2 clusters since HTTP/1.1 clusters are governed by the\n maximum connections (connection_limit).\n Remove endpoint out of load balancing decision, if requests exceed this count.\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32768\n",
                     "title": "max_requests",
                     "format": "int64",
                     "x-displayname": "Maximum Request Count",
-                    "x-ves-example": "10"
+                    "x-ves-example": "10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "32768"
+                    }
                 },
                 "pending_requests": {
                     "type": "integer",
-                    "description": " The maximum number of requests that will be queued while waiting for a ready connection pool connection.\n Since HTTP/2 requests are sent over a single connection, this circuit breaker only comes into play as the\n initial connection is created, as requests will be multiplexed immediately afterwards. For HTTP/1.1, requests\n are added to the list of pending requests whenever there aren’t enough upstream connections available to\n immediately dispatch the request, so this circuit breaker will remain in play for the lifetime of the process.\n Remove endpoint out of load balancing decision, if pending request reach  pending_request.\n\nExample: - \"20\"-",
+                    "description": " The maximum number of requests that will be queued while waiting for a ready connection pool connection.\n Since HTTP/2 requests are sent over a single connection, this circuit breaker only comes into play as the\n initial connection is created, as requests will be multiplexed immediately afterwards. For HTTP/1.1, requests\n are added to the list of pending requests whenever there aren’t enough upstream connections available to\n immediately dispatch the request, so this circuit breaker will remain in play for the lifetime of the process.\n Remove endpoint out of load balancing decision, if pending request reach  pending_request.\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32768\n",
                     "title": "pending_requests",
                     "format": "int64",
                     "x-displayname": "Pending Requests",
-                    "x-ves-example": "20"
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "32768"
+                    }
                 },
                 "priority": {
                     "description": " Priority for the CircuitBreaker which can be either DEFAULT or HIGH. This implies that\n we can have maximum of two CircuitBreakers per cluster. The priority of the route is\n matched with priority of CircuitBreaker to select the CircuitBreaker",
@@ -2604,11 +2613,14 @@ var APISwaggerJSON string = `{
                 },
                 "retries": {
                     "type": "integer",
-                    "description": " The maximum number of retries that can be outstanding to all hosts in a cluster at any given time.\n Remove endpoint out of load balancing decision, if retries for request exceed this count.\n\nExample: - \"10\"-",
+                    "description": " The maximum number of retries that can be outstanding to all hosts in a cluster at any given time.\n Remove endpoint out of load balancing decision, if retries for request exceed this count.\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32768\n",
                     "title": "retries",
                     "format": "int64",
                     "x-displayname": "Retry Count",
-                    "x-ves-example": "10"
+                    "x-ves-example": "10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "32768"
+                    }
                 }
             }
         },
@@ -2634,13 +2646,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "keys": {
                     "type": "array",
-                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-",
+                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "keys",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Keys",
-                    "x-ves-example": "production"
+                    "x-ves-example": "production",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 }
             }
         },
@@ -2685,43 +2701,58 @@ var APISwaggerJSON string = `{
             "properties": {
                 "base_ejection_time": {
                     "type": "integer",
-                    "description": " The base time that a host is ejected for. The real time is equal to the\n base time multiplied by the number of times the host has been ejected.\n This causes hosts to get ejected for longer periods if they continue to fail.\n Defaults to 30000ms or 30s. Specified in milliseconds.\n\nExample: - \"20000\"-",
+                    "description": " The base time that a host is ejected for. The real time is equal to the\n base time multiplied by the number of times the host has been ejected.\n This causes hosts to get ejected for longer periods if they continue to fail.\n Defaults to 30000ms or 30s. Specified in milliseconds.\n\nExample: - \"20000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1800000\n",
                     "title": "base_ejection_time",
                     "format": "int64",
                     "x-displayname": "Base Ejection Time",
-                    "x-ves-example": "20000"
+                    "x-ves-example": "20000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "1800000"
+                    }
                 },
                 "consecutive_5xx": {
                     "type": "integer",
-                    "description": " If an upstream endpoint returns some number of consecutive 5xx, it will be ejected.\n Note that in this case a 5xx means an actual 5xx respond code, or an event that would\n cause the HTTP router to return one on the upstream’s behalf(reset, connection failure, etc.)\n consecutive_5xx indicates the number of consecutive 5xx responses required before\n a consecutive 5xx ejection occurs. Defaults to 5.\n\nExample: - \"3\"-",
+                    "description": " If an upstream endpoint returns some number of consecutive 5xx, it will be ejected.\n Note that in this case a 5xx means an actual 5xx respond code, or an event that would\n cause the HTTP router to return one on the upstream’s behalf(reset, connection failure, etc.)\n consecutive_5xx indicates the number of consecutive 5xx responses required before\n a consecutive 5xx ejection occurs. Defaults to 5.\n\nExample: - \"3\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1024\n",
                     "title": "consecutive_5xx",
                     "format": "int64",
                     "x-displayname": "Consecutive 5xx Count",
-                    "x-ves-example": "3"
+                    "x-ves-example": "3",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "1024"
+                    }
                 },
                 "consecutive_gateway_failure": {
                     "type": "integer",
-                    "description": " If an upstream endpoint returns some number of consecutive “gateway errors”\n (502, 503 or 504 status code), it will be ejected. Note that this includes events\n that would cause the HTTP router to return one of these status codes on the\n upstream’s behalf (reset, connection failure, etc.).\n consecutive_gateway_failure indicates the number of consecutive gateway failures\n before a consecutive gateway failure ejection occurs. Defaults to 5.\n\nExample: - \"5\"-",
+                    "description": " If an upstream endpoint returns some number of consecutive “gateway errors”\n (502, 503 or 504 status code), it will be ejected. Note that this includes events\n that would cause the HTTP router to return one of these status codes on the\n upstream’s behalf (reset, connection failure, etc.).\n consecutive_gateway_failure indicates the number of consecutive gateway failures\n before a consecutive gateway failure ejection occurs. Defaults to 5.\n\nExample: - \"5\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1024\n",
                     "title": "consecutive_gateway_failure",
                     "format": "int64",
                     "x-displayname": "Consecutive Gateway Failure",
-                    "x-ves-example": "5"
+                    "x-ves-example": "5",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "1024"
+                    }
                 },
                 "interval": {
                     "type": "integer",
-                    "description": " The time interval between ejection analysis sweeps. This can result in\n both new ejections as well as endpoints being returned to service. Defaults\n to 10000ms or 10s. Specified in milliseconds.\n\nExample: - \"5000\"-",
+                    "description": " The time interval between ejection analysis sweeps. This can result in\n both new ejections as well as endpoints being returned to service. Defaults\n to 10000ms or 10s. Specified in milliseconds.\n\nExample: - \"5000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
                     "title": "interval",
                     "format": "int64",
                     "x-displayname": "Interval",
-                    "x-ves-example": "5000"
+                    "x-ves-example": "5000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "600000"
+                    }
                 },
                 "max_ejection_percent": {
                     "type": "integer",
-                    "description": " The maximum % of an upstream cluster that can be ejected due to outlier\n detection. Defaults to 10% but will eject at least one host regardless of the value.\n\nExample: - \"20\"-",
+                    "description": " The maximum % of an upstream cluster that can be ejected due to outlier\n detection. Defaults to 10% but will eject at least one host regardless of the value.\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "max_ejection_percent",
                     "format": "int64",
                     "x-displayname": "Max Ejection Percentage",
-                    "x-ves-example": "20"
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
                 }
             }
         },
@@ -2962,11 +2993,14 @@ var APISwaggerJSON string = `{
                 },
                 "connection_timeout": {
                     "type": "integer",
-                    "description": " The timeout for new network connections to endpoints in the cluster.\n This is specified in milliseconds. The default value is 2 seconds\n\nExample: - \"4000\"-",
+                    "description": " The timeout for new network connections to endpoints in the cluster.\n This is specified in milliseconds. The default value is 2 seconds\n\nExample: - \"4000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1800000\n",
                     "title": "connection_timeout",
                     "format": "int64",
                     "x-displayname": "Connection Timeout",
-                    "x-ves-example": "4000"
+                    "x-ves-example": "4000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "1800000"
+                    }
                 },
                 "disable_circuit_breaker": {
                     "description": "Exclusive with [circuit_breaker]\nx-displayName: \"Disable Circuit Breaker\"\nCircuit Breaker is disabled",
@@ -2996,11 +3030,14 @@ var APISwaggerJSON string = `{
                 },
                 "http_idle_timeout": {
                     "type": "integer",
-                    "description": " The idle timeout for upstream connection pool connections. The idle timeout is defined as the\n period in which there are no active requests. When the idle timeout is reached the connection\n will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.\n This is specified in milliseconds. The default value is 5 minutes.\n\nExample: - \"60000\"-",
+                    "description": " The idle timeout for upstream connection pool connections. The idle timeout is defined as the\n period in which there are no active requests. When the idle timeout is reached the connection\n will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.\n This is specified in milliseconds. The default value is 5 minutes.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
                     "title": "http_idle_timeout",
                     "format": "int64",
                     "x-displayname": "HTTP Idle Timeout",
-                    "x-ves-example": "60000"
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "600000"
+                    }
                 },
                 "no_panic_threshold": {
                     "description": "Exclusive with [panic_threshold]\nx-displayName: \"No Panic threshold\"\n\nDisable panic threshold. Only healthy endpoints are considered for load balancing.",
@@ -3029,10 +3066,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "default_subset": {
                     "type": "object",
-                    "description": " List of key-value pairs that define default subset.\n which gets used when route specifies no metadata or no subset matching the metadata exists.\n\nExample: - \"key:value\"-",
+                    "description": " List of key-value pairs that define default subset.\n which gets used when route specifies no metadata or no subset matching the metadata exists.\n\nExample: - \"key:value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 32\n",
                     "title": "default_subset",
                     "x-displayname": "Default Subset for Origin Pool",
-                    "x-ves-example": "key:value"
+                    "x-ves-example": "key:value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.max_pairs": "32"
+                    }
                 }
             }
         },
@@ -3056,12 +3096,16 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint_subsets": {
                     "type": "array",
-                    "description": " List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.",
+                    "description": " List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "Origin Server Subsets Classes",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/clusterEndpointSubsetSelectorType"
                     },
-                    "x-displayname": "Origin Server Subsets Classes"
+                    "x-displayname": "Origin Server Subsets Classes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
                 },
                 "fail_request": {
                     "description": "Exclusive with [any_endpoint default_subset]\nx-displayName: \"Fail the Request\"\nRequest will be failed and error returned, as if cluster has no origin servers.",
@@ -3091,17 +3135,23 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": " Consul service name of this origin server\nRequired: YES",
+                    "description": " Consul service name of this origin server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "site_locator": {
-                    "description": " Site or Virtual site where this origin server is located\nRequired: YES",
+                    "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Site Locator",
                     "$ref": "#/definitions/viewsSiteLocator",
                     "x-displayname": "Site or Virtual Site",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3114,11 +3164,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerCustomEndpoint",
             "properties": {
                 "endpoint": {
-                    "description": " Reference to an endpoint object\nRequired: YES",
+                    "description": " Reference to an endpoint object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Endpoint",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Endpoint",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3143,17 +3196,23 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": " K8s service name of the origin server, including the namespace (servicename.namespace). For example, if the servicename is \"frontend\" and namespace is \"speedtest\", then you will enter \"frontend.speedtest\".\nRequired: YES",
+                    "description": " K8s service name of the origin server, including the namespace (servicename.namespace). For example, if the servicename is \"frontend\" and namespace is \"speedtest\", then you will enter \"frontend.speedtest\".\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "site_locator": {
-                    "description": " Site or Virtual site where this origin server is located\nRequired: YES",
+                    "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Site Locator",
                     "$ref": "#/definitions/viewsSiteLocator",
                     "x-displayname": "Site or Virtual Site",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "vk8s_networks": {
                     "description": "Exclusive with [inside_network outside_network]\nx-displayName: \"vK8s Networks on Site\"\norigin server are on vK8s network on the site",
@@ -3178,10 +3237,14 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": " IP address\nRequired: YES",
+                    "description": " IP address\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "outside_network": {
                     "description": "Exclusive with [inside_network]\nx-displayName: \"Outside Network\"\nOutside network on the site",
@@ -3189,11 +3252,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "site_locator": {
-                    "description": " Site or Virtual site where this origin server is located\nRequired: YES",
+                    "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Site Locator",
                     "$ref": "#/definitions/viewsSiteLocator",
                     "x-displayname": "Site or Virtual Site",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3208,10 +3274,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": " DNS Name\nRequired: YES",
+                    "description": " DNS Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "DNS name",
                     "x-displayname": "DNS Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "inside_network": {
                     "description": "Exclusive with [outside_network]\nx-displayName: \"Inside Network\"\nInside network on the site",
@@ -3224,11 +3293,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "site_locator": {
-                    "description": " Site or Virtual site where this origin server is located\nRequired: YES",
+                    "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Site Locator",
                     "$ref": "#/definitions/viewsSiteLocator",
                     "x-displayname": "Site or Virtual Site",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3242,10 +3314,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " Public IP address\nRequired: YES",
+                    "description": " Public IP address\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "IP",
                     "x-displayname": "Public IP",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 }
             }
         },
@@ -3259,10 +3335,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": " DNS Name\nRequired: YES",
+                    "description": " DNS Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "DNS name",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "DNS Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -3337,17 +3421,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " IP address\nRequired: YES",
+                    "description": " IP address\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "virtual_network": {
-                    "description": " Virtual Network where this IP will be present\nRequired: YES",
+                    "description": " Virtual Network where this IP will be present\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Virtual Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Virtual Network",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3361,17 +3452,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": " DNS Name\nRequired: YES",
+                    "description": " DNS Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "DNS name",
                     "x-displayname": "DNS Name",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "private_network": {
-                    "description": " Virtual Network where this Name will be present\nRequired: YES",
+                    "description": " Virtual Network where this Name will be present\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Virtual Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Virtual Network",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3396,13 +3493,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "tls_certificates": {
                     "type": "array",
-                    "description": " TLS Certificates\nRequired: YES",
+                    "description": " TLS Certificates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "TLS certificates",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaTlsCertificateType"
                     },
                     "x-displayname": "TLS Certificates",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -3438,11 +3542,14 @@ var APISwaggerJSON string = `{
                     "title": "sni"
                 },
                 "tls_config": {
-                    "description": " TLS parameters such as min/max TLS version and ciphers\nRequired: YES",
+                    "description": " TLS parameters such as min/max TLS version and ciphers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "TLS Config",
                     "$ref": "#/definitions/viewsTlsConfig",
                     "x-displayname": "TLS Configuration for Origin Servers",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "use_host_header_as_sni": {
                     "description": "Exclusive with [disable_sni sni]\nx-displayName: \"Host Header\"\nUse the host header as SNI. The host header value is extracted after any configured rewrites have been applied.",
@@ -3476,10 +3583,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " Trusted CA certificates for verification of Server's certificate\nRequired: YES",
+                    "description": " Trusted CA certificates for verification of Server's certificate\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "Trusted CAs",
+                    "minLength": 1,
+                    "maxLength": 131072,
                     "x-displayname": "Trusted CAs",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.truststore_url": "true"
+                    }
                 }
             }
         },
@@ -3539,11 +3654,15 @@ var APISwaggerJSON string = `{
                 },
                 "location": {
                     "type": "string",
-                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Location",
                     "x-displayname": "Location",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
@@ -3570,11 +3689,17 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
+                    "maxLength": 131072,
                     "x-displayname": "URL",
                     "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -3607,13 +3732,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "hash_algorithms": {
                     "type": "array",
-                    "description": " Ordered list of hash algorithms to be used.\nRequired: YES",
+                    "description": " Ordered list of hash algorithms to be used.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Hash Algorithms",
+                    "minItems": 1,
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/schemaHashAlgorithm"
                     },
                     "x-displayname": "Hash Algorithms",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3661,16 +3794,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3681,10 +3805,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3710,11 +3840,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3746,55 +3879,31 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
                 "EncodingBase64"
             ],
-            "default": "EncodingNone",
-            "x-displayname": "Secret Encoding",
-            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+            "default": "EncodingNone"
         },
         "schemaSecretType": {
             "type": "object",
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
-                },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
-                },
-                "vault_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -3896,12 +4005,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
@@ -3971,10 +4084,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate_url": {
                     "type": "string",
-                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\nRequired: YES",
+                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "certificate_url",
+                    "minLength": 1,
+                    "maxLength": 131072,
                     "x-displayname": "Certificate URL",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.certificate_url": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "custom_hash_algorithms": {
                     "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
@@ -3993,11 +4114,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "private_key": {
-                    "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\nRequired: YES",
+                    "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "private_key",
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Private Key",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "use_system_defaults": {
                     "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
@@ -4023,48 +4147,34 @@ var APISwaggerJSON string = `{
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
-            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
             "title": "VaultSecretInfoType",
-            "x-displayname": "Vault Secret",
-            "x-ves-displayorder": "1,2,3,4,5",
-            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
-                    "title": "Key",
-                    "x-displayname": "Key",
-                    "x-ves-example": "key_pem"
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
                 },
                 "location": {
                     "type": "string",
-                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
-                    "title": "Location",
-                    "x-displayname": "Location",
-                    "x-ves-example": "v1/data/vhost_key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
                 },
                 "provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
-                    "title": "Provider",
-                    "x-displayname": "Provider",
-                    "x-ves-example": "vault-vh-provider",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
                 },
                 "secret_encoding": {
-                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
                     "title": "secret_encoding",
-                    "$ref": "#/definitions/schemaSecretEncodingType",
-                    "x-displayname": "Secret Encoding"
+                    "$ref": "#/definitions/schemaSecretEncodingType"
                 },
                 "version": {
                     "type": "integer",
-                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
                     "title": "Version",
-                    "format": "int64",
-                    "x-displayname": "Version",
-                    "x-ves-example": "1"
+                    "format": "int64"
                 }
             }
         },
@@ -4107,18 +4217,13 @@ var APISwaggerJSON string = `{
         },
         "schemaWingmanSecretInfoType": {
             "type": "object",
-            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
             "title": "WingmanSecretInfoType",
-            "x-displayname": "Wingman Secret",
-            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "ChargeBack-API-Key",
-                    "x-ves-required": "true"
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
                 }
             }
         },
@@ -4131,25 +4236,40 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "namespace",
+                    "maxLength": 64,
                     "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "tenant",
+                    "maxLength": 64,
                     "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },
@@ -4163,13 +4283,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cipher_suites": {
                     "type": "array",
-                    "description": " The TLS listener will only support the specified cipher list.\nRequired: YES",
+                    "description": " The TLS listener will only support the specified cipher list.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "cipher_suites",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Cipher Suites",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "max_version": {
                     "description": " Maximum TLS protocol version.",
@@ -4252,11 +4377,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Advanced Options"
                 },
                 "endpoint_selection": {
-                    "description": " Policy for selection of endpoints from local site or remote site or both\nRequired: YES",
+                    "description": " Policy for selection of endpoints from local site or remote site or both\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "endpoint_selection",
                     "$ref": "#/definitions/clusterEndpointSelectionPolicy",
                     "x-displayname": "Endpoint Selection",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -4266,19 +4394,26 @@ var APISwaggerJSON string = `{
                 },
                 "healthcheck": {
                     "type": "array",
-                    "description": " Reference to healthcheck configuration objects",
+                    "description": " Reference to healthcheck configuration objects\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
                     "title": "Health Check",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Health Check object"
+                    "x-displayname": "Health Check object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4"
+                    }
                 },
                 "loadbalancer_algorithm": {
-                    "description": " When a connection to a endpoint in an upstream cluster is required, the loadbalancer uses\n loadbalancer_algorithm to determine which host is selected.\nRequired: YES",
+                    "description": " When a connection to a endpoint in an upstream cluster is required, the loadbalancer uses\n loadbalancer_algorithm to determine which host is selected.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "loadbalancer_algorithm",
                     "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
                     "x-displayname": "LoadBalancer Algorithm",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "no_tls": {
                     "description": "Exclusive with [use_tls]\nx-displayName: \"No TLS\"\nOrigin servers do not use TLS",
@@ -4287,22 +4422,35 @@ var APISwaggerJSON string = `{
                 },
                 "origin_servers": {
                     "type": "array",
-                    "description": " List of origin servers in this pool\nRequired: YES",
+                    "description": " List of origin servers in this pool\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Origin Servers",
+                    "minItems": 1,
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/origin_poolOriginServerType"
                     },
                     "x-displayname": "Origin Servers",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\nRequired: YES",
+                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port",
                     "format": "int64",
                     "x-displayname": "Port",
                     "x-ves-example": "9080",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "same_as_endpoint_port": {
                     "description": "Exclusive with [health_check_port]\nx-displayName: \"Endpoint port\"\nHealth check is performed on endpoint port itself",

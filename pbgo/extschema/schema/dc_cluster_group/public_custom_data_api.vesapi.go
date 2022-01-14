@@ -293,7 +293,7 @@ var CustomDataAPISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{namespace}/dc_cluster_groups/metrics": {
             "post": {
@@ -466,13 +466,16 @@ var CustomDataAPISwaggerJSON string = `{
                 },
                 "field_selector": {
                     "type": "array",
-                    "description": " Select fields to be returned in the response.\n One or more fields in {TX_THROUGHPUT_BYTES, TX_THROUGHPUT_PACKETS} can be specified.\nRequired: YES",
+                    "description": " Select fields to be returned in the response.\n One or more fields in {TX_THROUGHPUT_BYTES, TX_THROUGHPUT_PACKETS} can be specified.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Field Selector",
                     "items": {
                         "$ref": "#/definitions/schemadc_cluster_groupMetricType"
                     },
                     "x-displayname": "Field Selector",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "filter": {
                     "type": "string",

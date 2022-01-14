@@ -889,6 +889,16 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_NoInsecureRegistries
 	//	*GlobalSpecType_InsecureRegistryList
 	InsecureRegistriesChoice isGlobalSpecType_InsecureRegistriesChoice `protobuf_oneof:"insecure_registries_choice"`
+	// Cluster Scoped Roles and RoleBindings Access
+	//
+	// x-displayName: "Cluster Scoped Roles and RoleBindings Access"
+	// x-required
+	// Select method of Access to ClusterRoles and ClusterRoleBindings
+	//
+	// Types that are valid to be assigned to ClusterScopedResourceAccessChoice:
+	//	*GlobalSpecType_ClusterScopedAccessDeny
+	//	*GlobalSpecType_ClusterScopedAccessPermit
+	ClusterScopedResourceAccessChoice isGlobalSpecType_ClusterScopedResourceAccessChoice `protobuf_oneof:"cluster_scoped_resource_access_choice"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -981,6 +991,12 @@ type isGlobalSpecType_InsecureRegistriesChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_ClusterScopedResourceAccessChoice interface {
+	isGlobalSpecType_ClusterScopedResourceAccessChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_NoLocalAccess struct {
 	NoLocalAccess *schema.Empty `protobuf:"bytes,2,opt,name=no_local_access,json=noLocalAccess,proto3,oneof" json:"no_local_access,omitempty"`
@@ -1024,21 +1040,30 @@ type GlobalSpecType_NoInsecureRegistries struct {
 type GlobalSpecType_InsecureRegistryList struct {
 	InsecureRegistryList *InsecureRegistryListType `protobuf:"bytes,21,opt,name=insecure_registry_list,json=insecureRegistryList,proto3,oneof" json:"insecure_registry_list,omitempty"`
 }
+type GlobalSpecType_ClusterScopedAccessDeny struct {
+	ClusterScopedAccessDeny *schema.Empty `protobuf:"bytes,23,opt,name=cluster_scoped_access_deny,json=clusterScopedAccessDeny,proto3,oneof" json:"cluster_scoped_access_deny,omitempty"`
+}
+type GlobalSpecType_ClusterScopedAccessPermit struct {
+	ClusterScopedAccessPermit *schema.Empty `protobuf:"bytes,24,opt,name=cluster_scoped_access_permit,json=clusterScopedAccessPermit,proto3,oneof" json:"cluster_scoped_access_permit,omitempty"`
+}
 
-func (*GlobalSpecType_NoLocalAccess) isGlobalSpecType_LocalAccessChoice()                         {}
-func (*GlobalSpecType_LocalAccessConfig) isGlobalSpecType_LocalAccessChoice()                     {}
-func (*GlobalSpecType_NoGlobalAccess) isGlobalSpecType_GlobalAccessChoice()                       {}
-func (*GlobalSpecType_GlobalAccessEnable) isGlobalSpecType_GlobalAccessChoice()                   {}
-func (*GlobalSpecType_UseDefaultPsp) isGlobalSpecType_PodSecurityPolicyChoice()                   {}
-func (*GlobalSpecType_UseCustomPspList) isGlobalSpecType_PodSecurityPolicyChoice()                {}
-func (*GlobalSpecType_UseDefaultClusterRoles) isGlobalSpecType_ClusterRoleChoice()                {}
-func (*GlobalSpecType_UseCustomClusterRoleList) isGlobalSpecType_ClusterRoleChoice()              {}
-func (*GlobalSpecType_UseDefaultClusterRoleBindings) isGlobalSpecType_ClusterRoleBindingsChoice() {}
-func (*GlobalSpecType_UseCustomClusterRoleBindings) isGlobalSpecType_ClusterRoleBindingsChoice()  {}
-func (*GlobalSpecType_NoClusterWideApps) isGlobalSpecType_AppsChoice()                            {}
-func (*GlobalSpecType_ClusterWideAppList) isGlobalSpecType_AppsChoice()                           {}
-func (*GlobalSpecType_NoInsecureRegistries) isGlobalSpecType_InsecureRegistriesChoice()           {}
-func (*GlobalSpecType_InsecureRegistryList) isGlobalSpecType_InsecureRegistriesChoice()           {}
+func (*GlobalSpecType_NoLocalAccess) isGlobalSpecType_LocalAccessChoice()                           {}
+func (*GlobalSpecType_LocalAccessConfig) isGlobalSpecType_LocalAccessChoice()                       {}
+func (*GlobalSpecType_NoGlobalAccess) isGlobalSpecType_GlobalAccessChoice()                         {}
+func (*GlobalSpecType_GlobalAccessEnable) isGlobalSpecType_GlobalAccessChoice()                     {}
+func (*GlobalSpecType_UseDefaultPsp) isGlobalSpecType_PodSecurityPolicyChoice()                     {}
+func (*GlobalSpecType_UseCustomPspList) isGlobalSpecType_PodSecurityPolicyChoice()                  {}
+func (*GlobalSpecType_UseDefaultClusterRoles) isGlobalSpecType_ClusterRoleChoice()                  {}
+func (*GlobalSpecType_UseCustomClusterRoleList) isGlobalSpecType_ClusterRoleChoice()                {}
+func (*GlobalSpecType_UseDefaultClusterRoleBindings) isGlobalSpecType_ClusterRoleBindingsChoice()   {}
+func (*GlobalSpecType_UseCustomClusterRoleBindings) isGlobalSpecType_ClusterRoleBindingsChoice()    {}
+func (*GlobalSpecType_NoClusterWideApps) isGlobalSpecType_AppsChoice()                              {}
+func (*GlobalSpecType_ClusterWideAppList) isGlobalSpecType_AppsChoice()                             {}
+func (*GlobalSpecType_NoInsecureRegistries) isGlobalSpecType_InsecureRegistriesChoice()             {}
+func (*GlobalSpecType_InsecureRegistryList) isGlobalSpecType_InsecureRegistriesChoice()             {}
+func (*GlobalSpecType_ClusterScopedAccessDeny) isGlobalSpecType_ClusterScopedResourceAccessChoice() {}
+func (*GlobalSpecType_ClusterScopedAccessPermit) isGlobalSpecType_ClusterScopedResourceAccessChoice() {
+}
 
 func (m *GlobalSpecType) GetLocalAccessChoice() isGlobalSpecType_LocalAccessChoice {
 	if m != nil {
@@ -1079,6 +1104,12 @@ func (m *GlobalSpecType) GetAppsChoice() isGlobalSpecType_AppsChoice {
 func (m *GlobalSpecType) GetInsecureRegistriesChoice() isGlobalSpecType_InsecureRegistriesChoice {
 	if m != nil {
 		return m.InsecureRegistriesChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetClusterScopedResourceAccessChoice() isGlobalSpecType_ClusterScopedResourceAccessChoice {
+	if m != nil {
+		return m.ClusterScopedResourceAccessChoice
 	}
 	return nil
 }
@@ -1181,6 +1212,20 @@ func (m *GlobalSpecType) GetInsecureRegistryList() *InsecureRegistryListType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetClusterScopedAccessDeny() *schema.Empty {
+	if x, ok := m.GetClusterScopedResourceAccessChoice().(*GlobalSpecType_ClusterScopedAccessDeny); ok {
+		return x.ClusterScopedAccessDeny
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetClusterScopedAccessPermit() *schema.Empty {
+	if x, ok := m.GetClusterScopedResourceAccessChoice().(*GlobalSpecType_ClusterScopedAccessPermit); ok {
+		return x.ClusterScopedAccessPermit
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -1226,6 +1271,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_ClusterWideAppList)(nil),
 		(*GlobalSpecType_NoInsecureRegistries)(nil),
 		(*GlobalSpecType_InsecureRegistryList)(nil),
+		(*GlobalSpecType_ClusterScopedAccessDeny)(nil),
+		(*GlobalSpecType_ClusterScopedAccessPermit)(nil),
 	}
 }
 
@@ -1262,6 +1309,10 @@ type CreateSpecType struct {
 	//	*CreateSpecType_NoInsecureRegistries
 	//	*CreateSpecType_InsecureRegistryList
 	InsecureRegistriesChoice isCreateSpecType_InsecureRegistriesChoice `protobuf_oneof:"insecure_registries_choice"`
+	// Types that are valid to be assigned to ClusterScopedResourceAccessChoice:
+	//	*CreateSpecType_ClusterScopedAccessDeny
+	//	*CreateSpecType_ClusterScopedAccessPermit
+	ClusterScopedResourceAccessChoice isCreateSpecType_ClusterScopedResourceAccessChoice `protobuf_oneof:"cluster_scoped_resource_access_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -1334,6 +1385,12 @@ type isCreateSpecType_InsecureRegistriesChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_ClusterScopedResourceAccessChoice interface {
+	isCreateSpecType_ClusterScopedResourceAccessChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_NoLocalAccess struct {
 	NoLocalAccess *schema.Empty `protobuf:"bytes,2,opt,name=no_local_access,json=noLocalAccess,proto3,oneof" json:"no_local_access,omitempty"`
@@ -1377,21 +1434,30 @@ type CreateSpecType_NoInsecureRegistries struct {
 type CreateSpecType_InsecureRegistryList struct {
 	InsecureRegistryList *InsecureRegistryListType `protobuf:"bytes,21,opt,name=insecure_registry_list,json=insecureRegistryList,proto3,oneof" json:"insecure_registry_list,omitempty"`
 }
+type CreateSpecType_ClusterScopedAccessDeny struct {
+	ClusterScopedAccessDeny *schema.Empty `protobuf:"bytes,23,opt,name=cluster_scoped_access_deny,json=clusterScopedAccessDeny,proto3,oneof" json:"cluster_scoped_access_deny,omitempty"`
+}
+type CreateSpecType_ClusterScopedAccessPermit struct {
+	ClusterScopedAccessPermit *schema.Empty `protobuf:"bytes,24,opt,name=cluster_scoped_access_permit,json=clusterScopedAccessPermit,proto3,oneof" json:"cluster_scoped_access_permit,omitempty"`
+}
 
-func (*CreateSpecType_NoLocalAccess) isCreateSpecType_LocalAccessChoice()                         {}
-func (*CreateSpecType_LocalAccessConfig) isCreateSpecType_LocalAccessChoice()                     {}
-func (*CreateSpecType_NoGlobalAccess) isCreateSpecType_GlobalAccessChoice()                       {}
-func (*CreateSpecType_GlobalAccessEnable) isCreateSpecType_GlobalAccessChoice()                   {}
-func (*CreateSpecType_UseDefaultPsp) isCreateSpecType_PodSecurityPolicyChoice()                   {}
-func (*CreateSpecType_UseCustomPspList) isCreateSpecType_PodSecurityPolicyChoice()                {}
-func (*CreateSpecType_UseDefaultClusterRoles) isCreateSpecType_ClusterRoleChoice()                {}
-func (*CreateSpecType_UseCustomClusterRoleList) isCreateSpecType_ClusterRoleChoice()              {}
-func (*CreateSpecType_UseDefaultClusterRoleBindings) isCreateSpecType_ClusterRoleBindingsChoice() {}
-func (*CreateSpecType_UseCustomClusterRoleBindings) isCreateSpecType_ClusterRoleBindingsChoice()  {}
-func (*CreateSpecType_NoClusterWideApps) isCreateSpecType_AppsChoice()                            {}
-func (*CreateSpecType_ClusterWideAppList) isCreateSpecType_AppsChoice()                           {}
-func (*CreateSpecType_NoInsecureRegistries) isCreateSpecType_InsecureRegistriesChoice()           {}
-func (*CreateSpecType_InsecureRegistryList) isCreateSpecType_InsecureRegistriesChoice()           {}
+func (*CreateSpecType_NoLocalAccess) isCreateSpecType_LocalAccessChoice()                           {}
+func (*CreateSpecType_LocalAccessConfig) isCreateSpecType_LocalAccessChoice()                       {}
+func (*CreateSpecType_NoGlobalAccess) isCreateSpecType_GlobalAccessChoice()                         {}
+func (*CreateSpecType_GlobalAccessEnable) isCreateSpecType_GlobalAccessChoice()                     {}
+func (*CreateSpecType_UseDefaultPsp) isCreateSpecType_PodSecurityPolicyChoice()                     {}
+func (*CreateSpecType_UseCustomPspList) isCreateSpecType_PodSecurityPolicyChoice()                  {}
+func (*CreateSpecType_UseDefaultClusterRoles) isCreateSpecType_ClusterRoleChoice()                  {}
+func (*CreateSpecType_UseCustomClusterRoleList) isCreateSpecType_ClusterRoleChoice()                {}
+func (*CreateSpecType_UseDefaultClusterRoleBindings) isCreateSpecType_ClusterRoleBindingsChoice()   {}
+func (*CreateSpecType_UseCustomClusterRoleBindings) isCreateSpecType_ClusterRoleBindingsChoice()    {}
+func (*CreateSpecType_NoClusterWideApps) isCreateSpecType_AppsChoice()                              {}
+func (*CreateSpecType_ClusterWideAppList) isCreateSpecType_AppsChoice()                             {}
+func (*CreateSpecType_NoInsecureRegistries) isCreateSpecType_InsecureRegistriesChoice()             {}
+func (*CreateSpecType_InsecureRegistryList) isCreateSpecType_InsecureRegistriesChoice()             {}
+func (*CreateSpecType_ClusterScopedAccessDeny) isCreateSpecType_ClusterScopedResourceAccessChoice() {}
+func (*CreateSpecType_ClusterScopedAccessPermit) isCreateSpecType_ClusterScopedResourceAccessChoice() {
+}
 
 func (m *CreateSpecType) GetLocalAccessChoice() isCreateSpecType_LocalAccessChoice {
 	if m != nil {
@@ -1432,6 +1498,12 @@ func (m *CreateSpecType) GetAppsChoice() isCreateSpecType_AppsChoice {
 func (m *CreateSpecType) GetInsecureRegistriesChoice() isCreateSpecType_InsecureRegistriesChoice {
 	if m != nil {
 		return m.InsecureRegistriesChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetClusterScopedResourceAccessChoice() isCreateSpecType_ClusterScopedResourceAccessChoice {
+	if m != nil {
+		return m.ClusterScopedResourceAccessChoice
 	}
 	return nil
 }
@@ -1534,6 +1606,20 @@ func (m *CreateSpecType) GetInsecureRegistryList() *InsecureRegistryListType {
 	return nil
 }
 
+func (m *CreateSpecType) GetClusterScopedAccessDeny() *schema.Empty {
+	if x, ok := m.GetClusterScopedResourceAccessChoice().(*CreateSpecType_ClusterScopedAccessDeny); ok {
+		return x.ClusterScopedAccessDeny
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetClusterScopedAccessPermit() *schema.Empty {
+	if x, ok := m.GetClusterScopedResourceAccessChoice().(*CreateSpecType_ClusterScopedAccessPermit); ok {
+		return x.ClusterScopedAccessPermit
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1551,6 +1637,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_ClusterWideAppList)(nil),
 		(*CreateSpecType_NoInsecureRegistries)(nil),
 		(*CreateSpecType_InsecureRegistryList)(nil),
+		(*CreateSpecType_ClusterScopedAccessDeny)(nil),
+		(*CreateSpecType_ClusterScopedAccessPermit)(nil),
 	}
 }
 
@@ -1588,6 +1676,10 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_NoInsecureRegistries
 	//	*ReplaceSpecType_InsecureRegistryList
 	InsecureRegistriesChoice isReplaceSpecType_InsecureRegistriesChoice `protobuf_oneof:"insecure_registries_choice"`
+	// Types that are valid to be assigned to ClusterScopedResourceAccessChoice:
+	//	*ReplaceSpecType_ClusterScopedAccessDeny
+	//	*ReplaceSpecType_ClusterScopedAccessPermit
+	ClusterScopedResourceAccessChoice isReplaceSpecType_ClusterScopedResourceAccessChoice `protobuf_oneof:"cluster_scoped_resource_access_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -1660,6 +1752,12 @@ type isReplaceSpecType_InsecureRegistriesChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_ClusterScopedResourceAccessChoice interface {
+	isReplaceSpecType_ClusterScopedResourceAccessChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_NoLocalAccess struct {
 	NoLocalAccess *schema.Empty `protobuf:"bytes,2,opt,name=no_local_access,json=noLocalAccess,proto3,oneof" json:"no_local_access,omitempty"`
@@ -1703,6 +1801,12 @@ type ReplaceSpecType_NoInsecureRegistries struct {
 type ReplaceSpecType_InsecureRegistryList struct {
 	InsecureRegistryList *InsecureRegistryListType `protobuf:"bytes,21,opt,name=insecure_registry_list,json=insecureRegistryList,proto3,oneof" json:"insecure_registry_list,omitempty"`
 }
+type ReplaceSpecType_ClusterScopedAccessDeny struct {
+	ClusterScopedAccessDeny *schema.Empty `protobuf:"bytes,23,opt,name=cluster_scoped_access_deny,json=clusterScopedAccessDeny,proto3,oneof" json:"cluster_scoped_access_deny,omitempty"`
+}
+type ReplaceSpecType_ClusterScopedAccessPermit struct {
+	ClusterScopedAccessPermit *schema.Empty `protobuf:"bytes,24,opt,name=cluster_scoped_access_permit,json=clusterScopedAccessPermit,proto3,oneof" json:"cluster_scoped_access_permit,omitempty"`
+}
 
 func (*ReplaceSpecType_NoLocalAccess) isReplaceSpecType_LocalAccessChoice()                         {}
 func (*ReplaceSpecType_LocalAccessConfig) isReplaceSpecType_LocalAccessChoice()                     {}
@@ -1718,6 +1822,10 @@ func (*ReplaceSpecType_NoClusterWideApps) isReplaceSpecType_AppsChoice()        
 func (*ReplaceSpecType_ClusterWideAppList) isReplaceSpecType_AppsChoice()                           {}
 func (*ReplaceSpecType_NoInsecureRegistries) isReplaceSpecType_InsecureRegistriesChoice()           {}
 func (*ReplaceSpecType_InsecureRegistryList) isReplaceSpecType_InsecureRegistriesChoice()           {}
+func (*ReplaceSpecType_ClusterScopedAccessDeny) isReplaceSpecType_ClusterScopedResourceAccessChoice() {
+}
+func (*ReplaceSpecType_ClusterScopedAccessPermit) isReplaceSpecType_ClusterScopedResourceAccessChoice() {
+}
 
 func (m *ReplaceSpecType) GetLocalAccessChoice() isReplaceSpecType_LocalAccessChoice {
 	if m != nil {
@@ -1758,6 +1866,12 @@ func (m *ReplaceSpecType) GetAppsChoice() isReplaceSpecType_AppsChoice {
 func (m *ReplaceSpecType) GetInsecureRegistriesChoice() isReplaceSpecType_InsecureRegistriesChoice {
 	if m != nil {
 		return m.InsecureRegistriesChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetClusterScopedResourceAccessChoice() isReplaceSpecType_ClusterScopedResourceAccessChoice {
+	if m != nil {
+		return m.ClusterScopedResourceAccessChoice
 	}
 	return nil
 }
@@ -1860,6 +1974,20 @@ func (m *ReplaceSpecType) GetInsecureRegistryList() *InsecureRegistryListType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetClusterScopedAccessDeny() *schema.Empty {
+	if x, ok := m.GetClusterScopedResourceAccessChoice().(*ReplaceSpecType_ClusterScopedAccessDeny); ok {
+		return x.ClusterScopedAccessDeny
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetClusterScopedAccessPermit() *schema.Empty {
+	if x, ok := m.GetClusterScopedResourceAccessChoice().(*ReplaceSpecType_ClusterScopedAccessPermit); ok {
+		return x.ClusterScopedAccessPermit
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1877,6 +2005,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_ClusterWideAppList)(nil),
 		(*ReplaceSpecType_NoInsecureRegistries)(nil),
 		(*ReplaceSpecType_InsecureRegistryList)(nil),
+		(*ReplaceSpecType_ClusterScopedAccessDeny)(nil),
+		(*ReplaceSpecType_ClusterScopedAccessPermit)(nil),
 	}
 }
 
@@ -1913,6 +2043,10 @@ type GetSpecType struct {
 	//	*GetSpecType_NoInsecureRegistries
 	//	*GetSpecType_InsecureRegistryList
 	InsecureRegistriesChoice isGetSpecType_InsecureRegistriesChoice `protobuf_oneof:"insecure_registries_choice"`
+	// Types that are valid to be assigned to ClusterScopedResourceAccessChoice:
+	//	*GetSpecType_ClusterScopedAccessDeny
+	//	*GetSpecType_ClusterScopedAccessPermit
+	ClusterScopedResourceAccessChoice isGetSpecType_ClusterScopedResourceAccessChoice `protobuf_oneof:"cluster_scoped_resource_access_choice"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -1985,6 +2119,12 @@ type isGetSpecType_InsecureRegistriesChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_ClusterScopedResourceAccessChoice interface {
+	isGetSpecType_ClusterScopedResourceAccessChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_NoLocalAccess struct {
 	NoLocalAccess *schema.Empty `protobuf:"bytes,2,opt,name=no_local_access,json=noLocalAccess,proto3,oneof" json:"no_local_access,omitempty"`
@@ -2028,21 +2168,29 @@ type GetSpecType_NoInsecureRegistries struct {
 type GetSpecType_InsecureRegistryList struct {
 	InsecureRegistryList *InsecureRegistryListType `protobuf:"bytes,21,opt,name=insecure_registry_list,json=insecureRegistryList,proto3,oneof" json:"insecure_registry_list,omitempty"`
 }
+type GetSpecType_ClusterScopedAccessDeny struct {
+	ClusterScopedAccessDeny *schema.Empty `protobuf:"bytes,23,opt,name=cluster_scoped_access_deny,json=clusterScopedAccessDeny,proto3,oneof" json:"cluster_scoped_access_deny,omitempty"`
+}
+type GetSpecType_ClusterScopedAccessPermit struct {
+	ClusterScopedAccessPermit *schema.Empty `protobuf:"bytes,24,opt,name=cluster_scoped_access_permit,json=clusterScopedAccessPermit,proto3,oneof" json:"cluster_scoped_access_permit,omitempty"`
+}
 
-func (*GetSpecType_NoLocalAccess) isGetSpecType_LocalAccessChoice()                         {}
-func (*GetSpecType_LocalAccessConfig) isGetSpecType_LocalAccessChoice()                     {}
-func (*GetSpecType_NoGlobalAccess) isGetSpecType_GlobalAccessChoice()                       {}
-func (*GetSpecType_GlobalAccessEnable) isGetSpecType_GlobalAccessChoice()                   {}
-func (*GetSpecType_UseDefaultPsp) isGetSpecType_PodSecurityPolicyChoice()                   {}
-func (*GetSpecType_UseCustomPspList) isGetSpecType_PodSecurityPolicyChoice()                {}
-func (*GetSpecType_UseDefaultClusterRoles) isGetSpecType_ClusterRoleChoice()                {}
-func (*GetSpecType_UseCustomClusterRoleList) isGetSpecType_ClusterRoleChoice()              {}
-func (*GetSpecType_UseDefaultClusterRoleBindings) isGetSpecType_ClusterRoleBindingsChoice() {}
-func (*GetSpecType_UseCustomClusterRoleBindings) isGetSpecType_ClusterRoleBindingsChoice()  {}
-func (*GetSpecType_NoClusterWideApps) isGetSpecType_AppsChoice()                            {}
-func (*GetSpecType_ClusterWideAppList) isGetSpecType_AppsChoice()                           {}
-func (*GetSpecType_NoInsecureRegistries) isGetSpecType_InsecureRegistriesChoice()           {}
-func (*GetSpecType_InsecureRegistryList) isGetSpecType_InsecureRegistriesChoice()           {}
+func (*GetSpecType_NoLocalAccess) isGetSpecType_LocalAccessChoice()                             {}
+func (*GetSpecType_LocalAccessConfig) isGetSpecType_LocalAccessChoice()                         {}
+func (*GetSpecType_NoGlobalAccess) isGetSpecType_GlobalAccessChoice()                           {}
+func (*GetSpecType_GlobalAccessEnable) isGetSpecType_GlobalAccessChoice()                       {}
+func (*GetSpecType_UseDefaultPsp) isGetSpecType_PodSecurityPolicyChoice()                       {}
+func (*GetSpecType_UseCustomPspList) isGetSpecType_PodSecurityPolicyChoice()                    {}
+func (*GetSpecType_UseDefaultClusterRoles) isGetSpecType_ClusterRoleChoice()                    {}
+func (*GetSpecType_UseCustomClusterRoleList) isGetSpecType_ClusterRoleChoice()                  {}
+func (*GetSpecType_UseDefaultClusterRoleBindings) isGetSpecType_ClusterRoleBindingsChoice()     {}
+func (*GetSpecType_UseCustomClusterRoleBindings) isGetSpecType_ClusterRoleBindingsChoice()      {}
+func (*GetSpecType_NoClusterWideApps) isGetSpecType_AppsChoice()                                {}
+func (*GetSpecType_ClusterWideAppList) isGetSpecType_AppsChoice()                               {}
+func (*GetSpecType_NoInsecureRegistries) isGetSpecType_InsecureRegistriesChoice()               {}
+func (*GetSpecType_InsecureRegistryList) isGetSpecType_InsecureRegistriesChoice()               {}
+func (*GetSpecType_ClusterScopedAccessDeny) isGetSpecType_ClusterScopedResourceAccessChoice()   {}
+func (*GetSpecType_ClusterScopedAccessPermit) isGetSpecType_ClusterScopedResourceAccessChoice() {}
 
 func (m *GetSpecType) GetLocalAccessChoice() isGetSpecType_LocalAccessChoice {
 	if m != nil {
@@ -2083,6 +2231,12 @@ func (m *GetSpecType) GetAppsChoice() isGetSpecType_AppsChoice {
 func (m *GetSpecType) GetInsecureRegistriesChoice() isGetSpecType_InsecureRegistriesChoice {
 	if m != nil {
 		return m.InsecureRegistriesChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetClusterScopedResourceAccessChoice() isGetSpecType_ClusterScopedResourceAccessChoice {
+	if m != nil {
+		return m.ClusterScopedResourceAccessChoice
 	}
 	return nil
 }
@@ -2185,6 +2339,20 @@ func (m *GetSpecType) GetInsecureRegistryList() *InsecureRegistryListType {
 	return nil
 }
 
+func (m *GetSpecType) GetClusterScopedAccessDeny() *schema.Empty {
+	if x, ok := m.GetClusterScopedResourceAccessChoice().(*GetSpecType_ClusterScopedAccessDeny); ok {
+		return x.ClusterScopedAccessDeny
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetClusterScopedAccessPermit() *schema.Empty {
+	if x, ok := m.GetClusterScopedResourceAccessChoice().(*GetSpecType_ClusterScopedAccessPermit); ok {
+		return x.ClusterScopedAccessPermit
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2202,6 +2370,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_ClusterWideAppList)(nil),
 		(*GetSpecType_NoInsecureRegistries)(nil),
 		(*GetSpecType_InsecureRegistryList)(nil),
+		(*GetSpecType_ClusterScopedAccessDeny)(nil),
+		(*GetSpecType_ClusterScopedAccessPermit)(nil),
 	}
 }
 
@@ -2248,141 +2418,149 @@ func init() {
 }
 
 var fileDescriptor_c55b4fdc7e1bea1d = []byte{
-	// 2144 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4f, 0x6c, 0xdb, 0xd6,
-	0x19, 0xd7, 0xd3, 0x9f, 0x58, 0xf9, 0x6c, 0xd9, 0x32, 0x65, 0xa7, 0xb4, 0xea, 0x29, 0x8a, 0xd0,
-	0xae, 0x41, 0x41, 0xcb, 0xa4, 0xfe, 0x38, 0x92, 0x57, 0x74, 0x0d, 0xed, 0x22, 0x8a, 0x97, 0xa1,
-	0x2e, 0x3d, 0x6c, 0xd8, 0x0e, 0x63, 0x68, 0xea, 0x59, 0xe6, 0x42, 0xe9, 0x71, 0x24, 0x95, 0xcc,
-	0xc5, 0x82, 0x05, 0xb9, 0x6f, 0x48, 0xb2, 0x9d, 0x76, 0xd8, 0x0e, 0xbb, 0x0c, 0x19, 0xd0, 0xae,
-	0xd7, 0xe9, 0x62, 0x04, 0xd8, 0x50, 0xf4, 0xe4, 0x63, 0x8e, 0x8d, 0x72, 0x49, 0x36, 0x0c, 0xe8,
-	0xd9, 0xa7, 0x81, 0x4f, 0x94, 0x44, 0xfd, 0xb5, 0x32, 0x64, 0x40, 0x31, 0xe8, 0xe2, 0x3c, 0xf2,
-	0xfb, 0xf3, 0x7e, 0xdf, 0xf7, 0xde, 0xf7, 0xfd, 0x3e, 0x06, 0x82, 0xb7, 0x6f, 0x63, 0x2b, 0xad,
-	0x91, 0x75, 0x4b, 0x3d, 0xc4, 0x55, 0x65, 0xfd, 0x56, 0xc1, 0x92, 0x55, 0xbd, 0x6e, 0xd9, 0xd8,
-	0x5c, 0xb7, 0x8f, 0x0c, 0x6c, 0xa5, 0x0d, 0x93, 0xd8, 0x84, 0x59, 0x69, 0xa9, 0xa5, 0x5b, 0x6a,
-	0x69, 0x8f, 0x5a, 0x7c, 0xad, 0xa2, 0xd9, 0x87, 0xf5, 0xfd, 0xb4, 0x4a, 0xaa, 0xeb, 0x15, 0x52,
-	0x21, 0xeb, 0xd4, 0x62, 0xbf, 0x7e, 0x40, 0x9f, 0xe8, 0x03, 0x5d, 0xb5, 0x3c, 0xc5, 0xdf, 0xec,
-	0xdd, 0x90, 0x18, 0xb6, 0x46, 0x6a, 0xee, 0x36, 0xf1, 0x95, 0x5e, 0xa1, 0x07, 0x41, 0x7c, 0xb5,
-	0x57, 0x74, 0x5b, 0xd1, 0xb5, 0xb2, 0x62, 0x63, 0x57, 0x9a, 0xec, 0x93, 0x6a, 0xf8, 0x8e, 0xdc,
-	0xeb, 0xfa, 0xe2, 0xa0, 0x86, 0xe5, 0xdd, 0x20, 0xf5, 0x39, 0x82, 0xe5, 0xab, 0x86, 0xa1, 0x6b,
-	0xaa, 0xe2, 0xd8, 0x5d, 0x35, 0x2b, 0x64, 0x6b, 0xfb, 0x07, 0x47, 0x06, 0x66, 0xb6, 0x60, 0xbe,
-	0x82, 0x6b, 0xd8, 0x54, 0x6c, 0x5c, 0x96, 0x8f, 0x94, 0xaa, 0xce, 0xbe, 0x9c, 0x49, 0xa2, 0xcb,
-	0xe7, 0xc5, 0x37, 0x9f, 0xde, 0x45, 0x2f, 0x1a, 0x08, 0xfd, 0xed, 0xe5, 0x71, 0x20, 0x64, 0x06,
-	0xd8, 0x7b, 0x49, 0x77, 0xf5, 0x00, 0x21, 0x29, 0xd2, 0xb1, 0xf9, 0xb1, 0x52, 0xd5, 0x99, 0x3d,
-	0x98, 0xd3, 0x89, 0xaa, 0xe8, 0x72, 0x99, 0x54, 0x15, 0xad, 0xc6, 0xa2, 0x24, 0xba, 0x3c, 0x9b,
-	0xe1, 0xd3, 0x23, 0x13, 0x9b, 0xbe, 0xe1, 0xa8, 0x5f, 0x55, 0x55, 0x6c, 0x59, 0x5d, 0x30, 0xd2,
-	0x2c, 0xf5, 0xb2, 0x4d, 0x9d, 0xa4, 0x64, 0x60, 0x3d, 0x90, 0xb7, 0x15, 0xeb, 0x70, 0x9f, 0x28,
-	0x66, 0xf9, 0xb5, 0xa1, 0x4e, 0xa9, 0xb0, 0xea, 0xd9, 0xe0, 0xfb, 0xd8, 0x36, 0x35, 0xd5, 0xda,
-	0xc3, 0xe6, 0x6d, 0x6c, 0xbe, 0xbe, 0x4d, 0x6e, 0xc2, 0x8a, 0x67, 0x93, 0x5d, 0x93, 0x54, 0xb1,
-	0x7d, 0x88, 0xeb, 0xd6, 0xeb, 0xdb, 0xe1, 0xef, 0x21, 0x60, 0xb6, 0x5a, 0x69, 0xfd, 0x91, 0x56,
-	0xc6, 0x57, 0x0d, 0x83, 0xfa, 0xfe, 0x18, 0x66, 0x14, 0xb3, 0x42, 0x64, 0xb5, 0xcc, 0xfa, 0xcf,
-	0x3c, 0x8e, 0xa1, 0x77, 0x43, 0x0c, 0x9e, 0x34, 0x10, 0x2a, 0xf9, 0xa4, 0x73, 0x8e, 0xa3, 0xad,
-	0x32, 0xb3, 0x07, 0xe7, 0xcb, 0xed, 0x63, 0x60, 0x03, 0xd4, 0x69, 0x76, 0x32, 0xa7, 0x3d, 0xa7,
-	0x57, 0xf2, 0x49, 0x5d, 0x3f, 0xcc, 0x4d, 0x98, 0xaf, 0xb6, 0x52, 0x2f, 0x5b, 0x34, 0xf7, 0x6c,
-	0x90, 0x7a, 0xbe, 0x32, 0x99, 0xe7, 0x81, 0x63, 0x2b, 0xf9, 0xa4, 0x48, 0xd5, 0xfb, 0x92, 0xf9,
-	0x21, 0x80, 0xd1, 0xc9, 0x3b, 0x1b, 0xa2, 0xde, 0x73, 0x93, 0x79, 0xef, 0x3d, 0xaf, 0x92, 0x4f,
-	0xf2, 0x78, 0xda, 0xfc, 0x93, 0xff, 0xcb, 0x06, 0xfa, 0x83, 0x1f, 0x3e, 0x81, 0xa0, 0x23, 0x7d,
-	0xd7, 0x04, 0x03, 0x98, 0x4e, 0xd6, 0x33, 0x33, 0x4e, 0x26, 0x93, 0x5b, 0xdb, 0x10, 0xf7, 0xa4,
-	0x2d, 0x13, 0xf9, 0x5e, 0xc1, 0x4a, 0x76, 0xd2, 0x01, 0x6f, 0xf5, 0x47, 0x9f, 0x61, 0x1c, 0x05,
-	0x37, 0xaa, 0x64, 0x2b, 0x02, 0x60, 0xbd, 0x11, 0x64, 0xa0, 0x8b, 0x0a, 0xfe, 0x88, 0x00, 0x76,
-	0x15, 0x53, 0xa9, 0x62, 0x1b, 0x9b, 0x96, 0xf4, 0x00, 0x81, 0xc0, 0x5c, 0x72, 0x11, 0xa4, 0xbd,
-	0x35, 0xd9, 0xf3, 0x10, 0x9f, 0xa3, 0xf5, 0x97, 0x6c, 0x55, 0x1a, 0x14, 0x46, 0x98, 0x94, 0xf1,
-	0x81, 0x52, 0xd7, 0x6d, 0xd9, 0x20, 0xa6, 0x1d, 0x9f, 0xdb, 0x6e, 0x3d, 0x25, 0x77, 0x89, 0x69,
-	0x6f, 0x86, 0x36, 0xf2, 0xb9, 0x5c, 0x16, 0x2e, 0x31, 0x2b, 0x43, 0x2d, 0xa9, 0x45, 0xd0, 0xd1,
-	0x14, 0x2f, 0x01, 0x28, 0x86, 0x21, 0xab, 0x87, 0x44, 0x53, 0x31, 0x13, 0x3b, 0x6e, 0x20, 0xbf,
-	0x73, 0xad, 0x9a, 0x0d, 0x34, 0x93, 0xe1, 0xb2, 0x5c, 0x8e, 0xcb, 0xef, 0x04, 0xc3, 0x28, 0xea,
-	0x4f, 0x7d, 0x86, 0xe0, 0x42, 0xef, 0x3d, 0xbe, 0xa1, 0x59, 0x36, 0xbd, 0xcb, 0x04, 0x16, 0xdd,
-	0xc3, 0x91, 0xef, 0x68, 0x65, 0x2c, 0x2b, 0x86, 0x61, 0xb1, 0x28, 0x19, 0xb8, 0x3c, 0x9b, 0x59,
-	0x1b, 0x73, 0x90, 0x83, 0x55, 0x21, 0x2e, 0xd1, 0x3a, 0x7a, 0x84, 0xfc, 0x51, 0x7f, 0x7b, 0x15,
-	0x46, 0xd2, 0x82, 0xda, 0xa3, 0x69, 0x6d, 0xbe, 0xf5, 0xa4, 0x81, 0x92, 0x90, 0x80, 0x15, 0xd7,
-	0x45, 0xd2, 0x91, 0x24, 0x3d, 0x17, 0xc3, 0x62, 0x90, 0x90, 0xfa, 0xb7, 0x1f, 0x96, 0x3d, 0x8d,
-	0x6c, 0x8b, 0xd4, 0x0e, 0xb4, 0x0a, 0x05, 0xfc, 0xdd, 0x21, 0x0d, 0xf1, 0xbc, 0xb8, 0xea, 0x6c,
-	0x19, 0x34, 0xfd, 0x87, 0x9d, 0xba, 0x3e, 0x46, 0xee, 0xab, 0x28, 0xea, 0x69, 0x7e, 0x4c, 0x11,
-	0xe6, 0xbc, 0xd9, 0x77, 0xab, 0x6d, 0xa9, 0x2f, 0xd8, 0x0f, 0xab, 0x86, 0x7d, 0x54, 0xf2, 0x49,
-	0xb3, 0xae, 0xae, 0x93, 0x70, 0xe6, 0x73, 0x04, 0x41, 0x6a, 0xe3, 0xd4, 0x51, 0x44, 0xfc, 0x3d,
-	0xdd, 0xe2, 0x77, 0xe8, 0xdd, 0x87, 0x68, 0xe7, 0x37, 0x88, 0xe7, 0x36, 0x72, 0xb9, 0x2c, 0x57,
-	0xe0, 0xf9, 0xfc, 0x5a, 0x81, 0xe7, 0xaf, 0x70, 0x85, 0x5c, 0x2e, 0xbb, 0x56, 0xc8, 0xe5, 0x72,
-	0x5c, 0x21, 0xef, 0xbc, 0xcb, 0xf3, 0x57, 0xb8, 0xa2, 0x23, 0x2d, 0xf2, 0x74, 0x55, 0xe4, 0xb9,
-	0xa2, 0x23, 0x28, 0x52, 0x81, 0xc0, 0xf3, 0x5c, 0x51, 0x10, 0xf2, 0x5c, 0xb1, 0x58, 0x2c, 0x72,
-	0x19, 0xbe, 0x28, 0xe4, 0xb8, 0x4c, 0xb6, 0xc0, 0x67, 0xb8, 0x2c, 0x5f, 0xe0, 0xf3, 0xce, 0xdf,
-	0xbc, 0xf3, 0xb7, 0x48, 0xd7, 0x45, 0x67, 0x9d, 0xc9, 0x64, 0x32, 0x9c, 0x50, 0xe0, 0x8b, 0xc2,
-	0x9a, 0xf3, 0x37, 0xcf, 0x6d, 0xe4, 0x79, 0x9e, 0x5f, 0xdb, 0xc8, 0x67, 0xb3, 0xb9, 0x92, 0x4f,
-	0xa2, 0x50, 0xc5, 0x04, 0xcc, 0x3a, 0xff, 0xb6, 0x6f, 0xc9, 0xc2, 0x71, 0x03, 0x05, 0x4e, 0x1a,
-	0xc8, 0xdf, 0x6c, 0xa0, 0x40, 0x96, 0xcb, 0xed, 0x04, 0xc3, 0xfe, 0x68, 0x20, 0xf5, 0x38, 0xd0,
-	0x93, 0x6f, 0x0f, 0x8b, 0x4d, 0xf3, 0xfd, 0x4a, 0xf9, 0x66, 0xbe, 0x03, 0x61, 0x43, 0xb1, 0xac,
-	0x3b, 0xc4, 0x2c, 0xbb, 0x0d, 0x71, 0xa5, 0x2f, 0xd4, 0x3d, 0xac, 0x9a, 0xd8, 0xee, 0xd2, 0x80,
-	0xd4, 0x31, 0x98, 0xf0, 0xb0, 0x3e, 0x45, 0xb0, 0xb2, 0x4b, 0xca, 0x7b, 0x58, 0xad, 0x9b, 0x9a,
-	0x7d, 0xb4, 0x4b, 0x74, 0x4d, 0x3d, 0xea, 0x54, 0xf4, 0x03, 0x04, 0xcb, 0x06, 0x29, 0xcb, 0x96,
-	0x2b, 0x96, 0x0d, 0x47, 0xae, 0xe1, 0x76, 0x59, 0xa7, 0xfa, 0xe0, 0xd0, 0x91, 0x26, 0xfd, 0xd1,
-	0xfe, 0xcf, 0xb0, 0x6a, 0x4b, 0xf8, 0x80, 0xe2, 0x2a, 0x3c, 0xbe, 0xfb, 0x86, 0x53, 0xee, 0x83,
-	0x7e, 0x8e, 0x3a, 0x55, 0x1e, 0xed, 0x56, 0x79, 0x7b, 0xc5, 0x22, 0x29, 0x66, 0xf4, 0x01, 0xd3,
-	0xb0, 0x95, 0x7a, 0x88, 0x20, 0xe6, 0x96, 0xbb, 0x44, 0x74, 0xdc, 0x81, 0xfa, 0x09, 0x44, 0xda,
-	0xcd, 0xc7, 0x24, 0xfa, 0x2b, 0x21, 0x14, 0x1e, 0xdf, 0x8d, 0x7a, 0x1a, 0x12, 0xb5, 0xef, 0x40,
-	0x2b, 0x0f, 0x85, 0x36, 0xa7, 0x76, 0x21, 0x58, 0xa9, 0xbf, 0x22, 0x88, 0x7b, 0x30, 0x89, 0x5a,
-	0xad, 0xac, 0xd5, 0x2a, 0x1d, 0x68, 0x0f, 0x11, 0x2c, 0x7b, 0x7d, 0xcb, 0xfb, 0x2d, 0x85, 0x57,
-	0xc1, 0x58, 0x7c, 0x7c, 0x97, 0xed, 0xc7, 0xd8, 0xf6, 0x73, 0x06, 0xd6, 0x98, 0x3a, 0x00, 0x8d,
-	0x42, 0x66, 0xaf, 0xd7, 0xe8, 0x79, 0x60, 0x09, 0x57, 0x34, 0xcb, 0x36, 0xbb, 0xc7, 0x5e, 0x85,
-	0x98, 0xe6, 0xca, 0x64, 0xb3, 0x25, 0x6c, 0x9f, 0xf9, 0x79, 0xf1, 0x3d, 0xc7, 0x35, 0x3c, 0x42,
-	0x33, 0xa9, 0x90, 0x19, 0xf8, 0xaa, 0x35, 0xfc, 0xb4, 0x1f, 0x2f, 0xdf, 0xf3, 0x9f, 0x71, 0xa6,
-	0x8c, 0xd6, 0xbb, 0xa9, 0x86, 0xad, 0xcd, 0xb7, 0x9f, 0x34, 0xd0, 0x25, 0xb8, 0x08, 0xf1, 0x6d,
-	0xa2, 0xde, 0xc2, 0x66, 0xb2, 0x8d, 0x2b, 0xd9, 0xd5, 0x71, 0xfa, 0xf8, 0x3f, 0x16, 0x61, 0xfe,
-	0x9a, 0x4e, 0xf6, 0x15, 0x7d, 0xcf, 0xc0, 0x2a, 0x05, 0xfa, 0x3e, 0x2c, 0xd4, 0x88, 0xdc, 0xea,
-	0x29, 0x0a, 0xed, 0x36, 0xee, 0x14, 0x35, 0xaa, 0x25, 0x44, 0x6a, 0xc4, 0xd3, 0x9a, 0x98, 0x7d,
-	0x88, 0x79, 0x8d, 0x65, 0x95, 0x72, 0x83, 0xdb, 0x56, 0x26, 0x1c, 0x8c, 0xbb, 0x7c, 0x52, 0xf2,
-	0x49, 0x8b, 0x7a, 0xbf, 0x80, 0xf9, 0x00, 0xa2, 0x35, 0x22, 0x57, 0x28, 0xf0, 0x36, 0xc8, 0xd0,
-	0x18, 0x90, 0x48, 0x9a, 0xaf, 0x91, 0x56, 0x9c, 0x2e, 0xca, 0x12, 0x2c, 0xf5, 0x98, 0xcb, 0xb8,
-	0xa6, 0xec, 0xeb, 0x98, 0x3d, 0x37, 0xd6, 0x0b, 0x53, 0xf1, 0xf8, 0xf8, 0x90, 0x5a, 0x38, 0xf9,
-	0xaa, 0x5b, 0x58, 0xee, 0xf4, 0x50, 0xcb, 0x60, 0xc3, 0x63, 0x9c, 0xf8, 0xa5, 0x48, 0xdd, 0xc2,
-	0xee, 0x44, 0xb1, 0x6b, 0x19, 0x0c, 0x86, 0x98, 0x63, 0xaf, 0xd6, 0x2d, 0x9b, 0x54, 0x1d, 0x73,
-	0x59, 0xd7, 0x2c, 0x9b, 0x3d, 0x7f, 0xe6, 0xb0, 0x36, 0xb2, 0xc5, 0x94, 0xfc, 0x52, 0xb4, 0x6e,
-	0xe1, 0x2d, 0xea, 0x71, 0xd7, 0xa2, 0xc3, 0x04, 0xf3, 0x31, 0xac, 0x78, 0x61, 0xf6, 0xd6, 0xf5,
-	0xec, 0x18, 0xc0, 0x01, 0xe9, 0x42, 0x17, 0xb0, 0xa7, 0x22, 0x2d, 0xc6, 0x80, 0x55, 0x0f, 0xf2,
-	0x9e, 0x2a, 0xa2, 0x21, 0xcc, 0x51, 0xaf, 0xe9, 0xb3, 0xc7, 0x14, 0x6f, 0xd3, 0x29, 0x05, 0x24,
-	0xb6, 0x03, 0xbe, 0x4f, 0xce, 0xdc, 0x84, 0x4b, 0xa3, 0x82, 0xe8, 0x36, 0x80, 0xf9, 0x31, 0xc1,
-	0x04, 0xa5, 0x6f, 0x0d, 0x0d, 0xa6, 0x5d, 0xc3, 0xcc, 0xaf, 0x20, 0x39, 0x2a, 0xa6, 0xce, 0x06,
-	0x0b, 0x74, 0x83, 0xfc, 0x64, 0x71, 0xf5, 0x35, 0xae, 0x52, 0x50, 0x5a, 0x1d, 0x16, 0x5e, 0x07,
-	0xc0, 0x35, 0x58, 0xaa, 0x11, 0x79, 0x70, 0xe6, 0x5b, 0x1c, 0x13, 0x55, 0x48, 0x5a, 0xac, 0x91,
-	0xde, 0x91, 0xcf, 0x39, 0x9d, 0xe5, 0x7e, 0x2f, 0xad, 0x63, 0x61, 0xa8, 0x27, 0x61, 0xe2, 0xe9,
-	0xb1, 0x0d, 0x5d, 0x0c, 0x1f, 0x37, 0x10, 0xa2, 0x1f, 0x46, 0x21, 0x89, 0x51, 0x07, 0x74, 0x18,
-	0x09, 0x2e, 0xd4, 0x88, 0x3c, 0xac, 0xcb, 0x2d, 0x8d, 0x06, 0x2f, 0x06, 0x1d, 0xaf, 0xa5, 0x73,
-	0xd2, 0x52, 0x8d, 0x5c, 0x1f, 0xe8, 0x63, 0xcc, 0xcf, 0xe1, 0x42, 0xbf, 0xc3, 0xa3, 0x56, 0x18,
-	0xcb, 0x67, 0x7e, 0x85, 0x8d, 0xea, 0xc5, 0xdd, 0x2d, 0xb5, 0x21, 0x1a, 0xcc, 0x4f, 0x21, 0x42,
-	0xff, 0xa3, 0x41, 0xab, 0xd9, 0xd8, 0xac, 0x29, 0x3a, 0xfb, 0x62, 0x86, 0x6e, 0x35, 0x09, 0xa5,
-	0x2c, 0x3d, 0xbe, 0xdb, 0x6b, 0xec, 0x7c, 0xca, 0x4a, 0x73, 0xce, 0xab, 0xeb, 0xee, 0x1b, 0xe6,
-	0xb7, 0x08, 0xde, 0x3c, 0xd0, 0x6a, 0x8a, 0x3e, 0xe2, 0x7a, 0xbd, 0x9c, 0x99, 0x98, 0xc1, 0xd6,
-	0x27, 0x61, 0xb0, 0x94, 0x87, 0x2a, 0x58, 0xba, 0xf1, 0xb0, 0x7b, 0xf7, 0x4b, 0x88, 0x0d, 0x82,
-	0xb2, 0xd8, 0x7f, 0x4e, 0x0e, 0xe6, 0x9d, 0x71, 0x94, 0xef, 0x05, 0xb1, 0xd8, 0x0f, 0xc2, 0x62,
-	0x1e, 0x75, 0x72, 0x32, 0x7c, 0x34, 0xfa, 0xd7, 0xe4, 0x30, 0xd2, 0x13, 0xcc, 0x46, 0x83, 0x29,
-	0xd9, 0x1d, 0x1c, 0x8b, 0x36, 0x6f, 0x3c, 0x69, 0xa0, 0x12, 0x44, 0xe0, 0x9c, 0xcb, 0x19, 0x01,
-	0x81, 0xcb, 0xc1, 0x05, 0x08, 0xb7, 0x15, 0x19, 0xb8, 0xc2, 0x09, 0x3c, 0x27, 0x64, 0x39, 0xa1,
-	0x08, 0x17, 0xc7, 0x7d, 0x31, 0xf9, 0x85, 0x0d, 0xf1, 0xdb, 0xfd, 0xbc, 0xd8, 0x9d, 0x21, 0xdb,
-	0x9f, 0x85, 0x81, 0x0c, 0x97, 0x15, 0xdf, 0xe9, 0x67, 0x26, 0x8f, 0x62, 0xe8, 0xa4, 0x81, 0x82,
-	0x8e, 0x62, 0x9e, 0xdb, 0x10, 0xd7, 0x20, 0x3e, 0x24, 0x46, 0xaf, 0x7a, 0xf8, 0xa4, 0x81, 0x66,
-	0x1c, 0xf5, 0x02, 0x57, 0x14, 0x2f, 0x43, 0xac, 0xe7, 0x9a, 0xb8, 0x7a, 0x8b, 0xc7, 0x0d, 0x34,
-	0x7b, 0xd2, 0x40, 0xd0, 0x6c, 0xa0, 0x90, 0x20, 0x70, 0x42, 0x46, 0x14, 0x60, 0x75, 0xe8, 0xcd,
-	0xf4, 0x9a, 0xcc, 0x9f, 0x34, 0x50, 0x84, 0x9a, 0xe4, 0x38, 0x21, 0x2f, 0x26, 0x61, 0xd6, 0xe9,
-	0x52, 0x5e, 0x8d, 0xc5, 0x93, 0x06, 0x8a, 0x52, 0x8d, 0x2b, 0x9c, 0x50, 0x10, 0xb3, 0x10, 0x1f,
-	0xd2, 0x19, 0xda, 0x06, 0xcb, 0xc7, 0x0d, 0xb4, 0xf4, 0x45, 0xab, 0xbd, 0xc4, 0x1c, 0xa3, 0x0c,
-	0xcf, 0x65, 0x84, 0xd6, 0xe7, 0xf1, 0x4e, 0x30, 0x1c, 0x8c, 0x86, 0x76, 0x82, 0xe1, 0x99, 0x68,
-	0x78, 0x27, 0x18, 0x86, 0xe8, 0xec, 0x4e, 0x30, 0x1c, 0x89, 0xce, 0xef, 0x04, 0xc3, 0xd1, 0xe8,
-	0xe2, 0x4e, 0x30, 0x1c, 0x8b, 0x2e, 0xa5, 0x3e, 0x8d, 0xc0, 0xfc, 0x96, 0x89, 0x15, 0x1b, 0x4f,
-	0x07, 0x99, 0xe9, 0x20, 0x33, 0x1d, 0x64, 0xfe, 0x8f, 0x06, 0x19, 0xfd, 0xb5, 0x0f, 0x32, 0x2d,
-	0xfe, 0x1f, 0x3e, 0xc4, 0xdc, 0xf8, 0x6f, 0x86, 0x98, 0x91, 0xe3, 0xcb, 0xad, 0xff, 0xc1, 0xf8,
-	0x32, 0x6a, 0x70, 0xd9, 0x5c, 0xfc, 0xf2, 0xfd, 0xbe, 0x8f, 0x39, 0x31, 0x3d, 0x9c, 0x74, 0xde,
-	0xb8, 0x7f, 0x8a, 0x86, 0x09, 0x44, 0x7e, 0x04, 0xf9, 0xb0, 0xf7, 0x4f, 0xd1, 0x50, 0x89, 0xf8,
-	0xde, 0x58, 0x16, 0x4a, 0xdc, 0x3f, 0x45, 0x63, 0xe4, 0x0e, 0xbe, 0x61, 0xa4, 0x44, 0xf1, 0x0d,
-	0x11, 0x88, 0x1f, 0x9c, 0x41, 0x4d, 0xc9, 0xfb, 0xa7, 0x68, 0xac, 0x86, 0x98, 0xe8, 0x65, 0xaa,
-	0x85, 0xfb, 0xa7, 0xc8, 0xfb, 0xc2, 0x89, 0x67, 0x0c, 0x4f, 0xd1, 0x78, 0x46, 0xcb, 0x5f, 0x81,
-	0xb0, 0x3e, 0x8b, 0xc0, 0x82, 0x84, 0x0d, 0x5d, 0x51, 0xa7, 0x8c, 0x35, 0x65, 0xac, 0x29, 0x63,
-	0x4d, 0x19, 0x6b, 0xca, 0x58, 0x53, 0xc6, 0xfa, 0x26, 0x33, 0xd6, 0x5f, 0x22, 0x30, 0x7b, 0x0d,
-	0xdb, 0x53, 0xb6, 0x9a, 0xb2, 0xd5, 0x94, 0xad, 0xa6, 0x6c, 0x35, 0x65, 0xab, 0x29, 0x5b, 0x7d,
-	0x73, 0xd9, 0x4a, 0xfc, 0x35, 0x3a, 0x79, 0x96, 0xf0, 0x3d, 0x7d, 0x96, 0xf0, 0x7d, 0xfd, 0x2c,
-	0x81, 0xee, 0x35, 0x13, 0xe8, 0xcf, 0xcd, 0x04, 0xfa, 0xa2, 0x99, 0x40, 0x27, 0xcd, 0x04, 0x7a,
-	0xda, 0x4c, 0xa0, 0xaf, 0x9a, 0x09, 0xf4, 0xa2, 0x99, 0xf0, 0x7d, 0xdd, 0x4c, 0xa0, 0x07, 0xcf,
-	0x13, 0xbe, 0xe3, 0xe7, 0x09, 0x74, 0xf2, 0x3c, 0xe1, 0x7b, 0xfa, 0x3c, 0xe1, 0xfb, 0xc9, 0x47,
-	0x15, 0x62, 0xdc, 0xaa, 0xa4, 0x6f, 0x13, 0xdd, 0xc6, 0xa6, 0xa9, 0xa4, 0xeb, 0xd6, 0x3a, 0x5d,
-	0x1c, 0x10, 0xb3, 0xba, 0x66, 0x98, 0xe4, 0xb6, 0x56, 0xc6, 0xe6, 0x5a, 0x5b, 0xbc, 0x6e, 0xec,
-	0x57, 0xc8, 0x3a, 0xfe, 0x85, 0xed, 0xfe, 0x0c, 0x71, 0xf0, 0x67, 0x97, 0xfb, 0xe7, 0xe8, 0xcf,
-	0x11, 0xb3, 0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0x82, 0x1d, 0x13, 0x88, 0x9a, 0x29, 0x00, 0x00,
+	// 2266 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4d, 0x6c, 0xdb, 0xc8,
+	0x15, 0xd6, 0xe8, 0x27, 0x56, 0xc6, 0x96, 0x2d, 0x53, 0xfe, 0xa1, 0xb5, 0xae, 0xa2, 0x08, 0x9b,
+	0x6e, 0xba, 0xa0, 0x65, 0x92, 0x92, 0x1c, 0xc9, 0x5d, 0xa4, 0x1b, 0xda, 0x8b, 0x28, 0xde, 0x14,
+	0xf1, 0xd2, 0x45, 0x17, 0x5b, 0xa0, 0x65, 0x68, 0x6a, 0x2c, 0xb3, 0xa1, 0x38, 0x2c, 0x49, 0x25,
+	0xf5, 0xa2, 0x41, 0x03, 0xdf, 0x5b, 0x24, 0x69, 0x4f, 0x3d, 0xb4, 0x87, 0x5e, 0x0a, 0x1f, 0xda,
+	0x2e, 0x0a, 0xb4, 0x40, 0x75, 0x31, 0x02, 0x14, 0xd8, 0xee, 0xc9, 0xc7, 0x1c, 0x37, 0xca, 0x25,
+	0x69, 0x51, 0x60, 0xcf, 0x3e, 0x15, 0x1c, 0x51, 0x12, 0xf5, 0x6b, 0x25, 0x48, 0x81, 0x45, 0xa1,
+	0x8b, 0x3c, 0xe2, 0xfb, 0x99, 0xef, 0xbd, 0x99, 0xf7, 0xbe, 0x47, 0x43, 0xf0, 0xd2, 0x5d, 0x64,
+	0xa5, 0x55, 0xbc, 0x6a, 0x29, 0xfb, 0xa8, 0x22, 0xaf, 0xde, 0xc9, 0x5b, 0x92, 0xa2, 0x55, 0x2d,
+	0x1b, 0x99, 0xab, 0xf6, 0x81, 0x81, 0xac, 0xb4, 0x61, 0x62, 0x1b, 0x53, 0x4b, 0x0d, 0xb5, 0x74,
+	0x43, 0x2d, 0xed, 0x51, 0x8b, 0xaf, 0x94, 0x55, 0x7b, 0xbf, 0xba, 0x9b, 0x56, 0x70, 0x65, 0xb5,
+	0x8c, 0xcb, 0x78, 0x95, 0x58, 0xec, 0x56, 0xf7, 0xc8, 0x37, 0xf2, 0x85, 0xac, 0x1a, 0x9e, 0xe2,
+	0x6f, 0x75, 0x6e, 0x88, 0x0d, 0x5b, 0xc5, 0xba, 0xbb, 0x4d, 0x7c, 0xa9, 0x53, 0xe8, 0x41, 0x10,
+	0x5f, 0xee, 0x14, 0xdd, 0x95, 0x35, 0xb5, 0x24, 0xdb, 0xc8, 0x95, 0x26, 0xbb, 0xa4, 0x2a, 0xba,
+	0x27, 0x75, 0xba, 0xbe, 0xd0, 0xab, 0x61, 0x79, 0x37, 0x48, 0x7d, 0x06, 0xe0, 0xfc, 0x35, 0xc3,
+	0xd0, 0x54, 0x45, 0x76, 0xec, 0xae, 0x99, 0x65, 0xbc, 0xb1, 0xf9, 0xbd, 0x03, 0x03, 0x51, 0x1b,
+	0x70, 0xba, 0x8c, 0x74, 0x64, 0xca, 0x36, 0x2a, 0x49, 0x07, 0x72, 0x45, 0xa3, 0x5f, 0x4e, 0x24,
+	0xc1, 0xe5, 0xf3, 0xc2, 0x5b, 0x4f, 0xef, 0x83, 0x17, 0x35, 0x00, 0xfe, 0xfe, 0xf2, 0x38, 0x10,
+	0x32, 0x03, 0xf4, 0x83, 0xa4, 0xbb, 0x7a, 0x08, 0x80, 0x18, 0x69, 0xd9, 0x7c, 0x22, 0x57, 0x34,
+	0x6a, 0x07, 0x4e, 0x69, 0x58, 0x91, 0x35, 0xa9, 0x84, 0x2b, 0xb2, 0xaa, 0xd3, 0x20, 0x09, 0x2e,
+	0x4f, 0xf2, 0x6c, 0x7a, 0x60, 0x62, 0xd3, 0x37, 0x1d, 0xf5, 0x6b, 0x8a, 0x82, 0x2c, 0xab, 0x0d,
+	0x46, 0x9c, 0x24, 0x5e, 0x36, 0x89, 0x93, 0x94, 0x04, 0x69, 0x0f, 0xe4, 0x4d, 0xd9, 0xda, 0xdf,
+	0xc5, 0xb2, 0x59, 0x7a, 0x63, 0xa8, 0x53, 0x0a, 0x5c, 0xf6, 0x6c, 0xf0, 0x5d, 0x64, 0x9b, 0xaa,
+	0x62, 0xed, 0x20, 0xf3, 0x2e, 0x32, 0xdf, 0xdc, 0x26, 0xb7, 0xe1, 0x92, 0x67, 0x93, 0x6d, 0x13,
+	0x57, 0x90, 0xbd, 0x8f, 0xaa, 0xd6, 0x9b, 0xdb, 0xe1, 0x1f, 0x21, 0x48, 0x6d, 0x34, 0xd2, 0xfa,
+	0xb1, 0x5a, 0x42, 0xd7, 0x0c, 0x83, 0xf8, 0xfe, 0x08, 0x4e, 0xc8, 0x66, 0x19, 0x4b, 0x4a, 0x89,
+	0xf6, 0x9f, 0x79, 0x1c, 0x7d, 0xef, 0x86, 0x10, 0x3c, 0xa9, 0x01, 0x50, 0xf4, 0x89, 0xe7, 0x1c,
+	0x47, 0x1b, 0x25, 0x6a, 0x07, 0x9e, 0x2f, 0x35, 0x8f, 0x81, 0x0e, 0x10, 0xa7, 0x99, 0xd1, 0x9c,
+	0x76, 0x9c, 0x5e, 0xd1, 0x27, 0xb6, 0xfd, 0x50, 0xb7, 0xe1, 0x74, 0xa5, 0x91, 0x7a, 0xc9, 0x22,
+	0xb9, 0xa7, 0x83, 0xc4, 0xf3, 0x95, 0xd1, 0x3c, 0xf7, 0x1c, 0x5b, 0xd1, 0x27, 0x46, 0x2a, 0xde,
+	0x87, 0xd4, 0xf7, 0x21, 0x34, 0x5a, 0x79, 0xa7, 0x43, 0xc4, 0x7b, 0x76, 0x34, 0xef, 0x9d, 0xe7,
+	0x55, 0xf4, 0x89, 0x1e, 0x4f, 0xeb, 0xbf, 0xf7, 0x7f, 0x51, 0x03, 0xbf, 0xf5, 0xc3, 0x4f, 0x61,
+	0xd0, 0x91, 0xbe, 0x6b, 0x42, 0x03, 0x52, 0xad, 0xac, 0xf3, 0x13, 0x4e, 0x26, 0x93, 0x1b, 0x9b,
+	0x30, 0xee, 0x49, 0x1b, 0x1f, 0xf9, 0x30, 0x6f, 0x25, 0x5b, 0xe9, 0x80, 0x6f, 0x77, 0x47, 0xcf,
+	0x53, 0x8e, 0x82, 0x1b, 0x55, 0xb2, 0x11, 0x01, 0xa4, 0xbd, 0x11, 0xf0, 0xb0, 0x8d, 0x0a, 0xfe,
+	0x0e, 0x40, 0xb8, 0x2d, 0x9b, 0x72, 0x05, 0xd9, 0xc8, 0xb4, 0xc4, 0x87, 0x00, 0x72, 0xd4, 0x45,
+	0x17, 0x41, 0xda, 0x5b, 0x93, 0x1d, 0x5f, 0xe2, 0x53, 0xa4, 0xfe, 0x92, 0x8d, 0x4a, 0x83, 0xf9,
+	0x01, 0x26, 0x25, 0xb4, 0x27, 0x57, 0x35, 0x5b, 0x32, 0xb0, 0x69, 0xc7, 0xa7, 0x36, 0x1b, 0xdf,
+	0x92, 0xdb, 0xd8, 0xb4, 0xd7, 0x43, 0x6b, 0xb9, 0x6c, 0x36, 0x03, 0x2f, 0x52, 0x4b, 0x7d, 0x2d,
+	0x89, 0x45, 0xd0, 0xd1, 0x14, 0x2e, 0x42, 0x28, 0x1b, 0x86, 0xa4, 0xec, 0x63, 0x55, 0x41, 0x54,
+	0xec, 0xb8, 0x06, 0xfc, 0xce, 0xb5, 0xaa, 0xd7, 0xc0, 0x04, 0xcf, 0x64, 0x98, 0x2c, 0x93, 0xdb,
+	0x0a, 0x86, 0x41, 0xd4, 0x9f, 0xfa, 0x13, 0x80, 0x0b, 0x9d, 0xf7, 0xf8, 0xa6, 0x6a, 0xd9, 0xe4,
+	0x2e, 0x63, 0x38, 0xeb, 0x1e, 0x8e, 0x74, 0x4f, 0x2d, 0x21, 0x49, 0x36, 0x0c, 0x8b, 0x06, 0xc9,
+	0xc0, 0xe5, 0x49, 0x7e, 0x65, 0xc8, 0x41, 0xf6, 0x56, 0x85, 0x30, 0x47, 0xea, 0xe8, 0x31, 0xf0,
+	0x47, 0xfd, 0xcd, 0x55, 0x18, 0x88, 0x33, 0x4a, 0x87, 0xa6, 0xb5, 0xfe, 0xf6, 0x93, 0x1a, 0x48,
+	0xc2, 0x04, 0x5c, 0x72, 0x5d, 0x24, 0x1d, 0x49, 0xd2, 0x73, 0x31, 0x2c, 0x0a, 0x70, 0xa9, 0xff,
+	0xf8, 0xe1, 0xbc, 0xa7, 0x91, 0x6d, 0x60, 0x7d, 0x4f, 0x2d, 0x13, 0xc0, 0xdf, 0xe9, 0xd3, 0x10,
+	0xcf, 0x0b, 0xcb, 0xce, 0x96, 0x41, 0xd3, 0xbf, 0xdf, 0xaa, 0xeb, 0x63, 0xe0, 0x3e, 0x8a, 0x82,
+	0x8e, 0xe6, 0x47, 0x15, 0xe0, 0x94, 0x37, 0xfb, 0x6e, 0xb5, 0xcd, 0x75, 0x05, 0xfb, 0x41, 0xc5,
+	0xb0, 0x0f, 0x8a, 0x3e, 0x71, 0xd2, 0xd5, 0x75, 0x12, 0x4e, 0x7d, 0x06, 0x60, 0x90, 0xd8, 0x38,
+	0x75, 0x14, 0x11, 0x7e, 0x43, 0xb6, 0xf8, 0x35, 0x78, 0xf7, 0x11, 0xd8, 0xfa, 0x25, 0x60, 0x99,
+	0xb5, 0x6c, 0x36, 0xc3, 0xe4, 0x59, 0x36, 0xb7, 0x92, 0x67, 0xd9, 0x2b, 0x4c, 0x3e, 0x9b, 0xcd,
+	0xac, 0xe4, 0xb3, 0xd9, 0x2c, 0x93, 0xcf, 0x39, 0xcf, 0x72, 0xec, 0x15, 0xa6, 0xe0, 0x48, 0x0b,
+	0x2c, 0x59, 0x15, 0x58, 0xa6, 0xe0, 0x08, 0x0a, 0x44, 0xc0, 0xb1, 0x2c, 0x53, 0xe0, 0xb8, 0x1c,
+	0x53, 0x28, 0x14, 0x0a, 0x0c, 0xcf, 0x16, 0xb8, 0x2c, 0xc3, 0x67, 0xf2, 0x2c, 0xcf, 0x64, 0xd8,
+	0x3c, 0x9b, 0x73, 0x3e, 0x73, 0xce, 0x67, 0x81, 0xac, 0x0b, 0xce, 0x9a, 0xe7, 0x79, 0x9e, 0xe1,
+	0xf2, 0x6c, 0x81, 0x5b, 0x71, 0x3e, 0x73, 0xcc, 0x5a, 0x8e, 0x65, 0xd9, 0x95, 0xb5, 0x5c, 0x26,
+	0x93, 0x2d, 0xfa, 0x44, 0x02, 0x55, 0x48, 0xc0, 0x49, 0xe7, 0x6f, 0xf3, 0x96, 0xcc, 0x1c, 0xd7,
+	0x40, 0xe0, 0xa4, 0x06, 0xfc, 0xf5, 0x1a, 0x08, 0x64, 0x98, 0xec, 0x56, 0x30, 0xec, 0x8f, 0x06,
+	0x52, 0x47, 0x81, 0x8e, 0x7c, 0x7b, 0x58, 0x6c, 0x9c, 0xef, 0x57, 0xca, 0x37, 0xf5, 0x6d, 0x18,
+	0x36, 0x64, 0xcb, 0xba, 0x87, 0xcd, 0x92, 0xdb, 0x10, 0x97, 0xba, 0x42, 0xdd, 0x41, 0x8a, 0x89,
+	0xec, 0x36, 0x0d, 0x88, 0x2d, 0x83, 0x11, 0x0f, 0xeb, 0x8f, 0x00, 0x2e, 0x6d, 0xe3, 0xd2, 0x0e,
+	0x52, 0xaa, 0xa6, 0x6a, 0x1f, 0x6c, 0x63, 0x4d, 0x55, 0x0e, 0x5a, 0x15, 0xfd, 0x10, 0xc0, 0x79,
+	0x03, 0x97, 0x24, 0xcb, 0x15, 0x4b, 0x86, 0x23, 0x57, 0x51, 0xb3, 0xac, 0x53, 0x5d, 0x70, 0xc8,
+	0x48, 0x93, 0xbe, 0xb5, 0xfb, 0x63, 0xa4, 0xd8, 0x22, 0xda, 0x23, 0xb8, 0xf2, 0x47, 0xf7, 0x17,
+	0x9d, 0x72, 0xef, 0xf5, 0x73, 0xd0, 0xaa, 0xf2, 0x68, 0xbb, 0xca, 0x9b, 0x2b, 0x1a, 0x88, 0x31,
+	0xa3, 0x0b, 0x98, 0x8a, 0xac, 0xd4, 0x23, 0x00, 0x63, 0x6e, 0xb9, 0x8b, 0x58, 0x43, 0x2d, 0xa8,
+	0x9f, 0xc2, 0x48, 0xb3, 0xf9, 0x98, 0x58, 0x7b, 0x25, 0x84, 0xdc, 0xd1, 0xfd, 0xa8, 0xa7, 0x21,
+	0x11, 0xfb, 0x16, 0xb4, 0x52, 0x5f, 0x68, 0x53, 0x4a, 0x1b, 0x82, 0x95, 0xfa, 0x33, 0x80, 0x71,
+	0x0f, 0x26, 0x41, 0xd5, 0x4b, 0xaa, 0x5e, 0x6e, 0x41, 0x7b, 0x04, 0xe0, 0xbc, 0xd7, 0xb7, 0xb4,
+	0xdb, 0x50, 0x78, 0x15, 0x8c, 0x85, 0xa3, 0xfb, 0x74, 0x37, 0xc6, 0xa6, 0x9f, 0x33, 0xb0, 0xc6,
+	0x94, 0x1e, 0x68, 0x04, 0x32, 0x7d, 0x43, 0x27, 0xe7, 0x81, 0x44, 0x54, 0x56, 0x2d, 0xdb, 0x6c,
+	0x1f, 0x7b, 0x05, 0xc6, 0x54, 0x57, 0x26, 0x99, 0x0d, 0x61, 0xf3, 0xcc, 0xcf, 0x0b, 0xef, 0x39,
+	0xae, 0xe1, 0x63, 0x30, 0x91, 0x0a, 0x99, 0x81, 0x2f, 0x1b, 0xc3, 0x4f, 0xf3, 0xeb, 0xe5, 0x07,
+	0xfe, 0x33, 0xce, 0x94, 0x52, 0x3b, 0x37, 0x55, 0x91, 0xb5, 0x7e, 0xe9, 0x49, 0x0d, 0x5c, 0x84,
+	0x17, 0x60, 0x7c, 0x13, 0x2b, 0x77, 0x90, 0x99, 0x6c, 0xe2, 0x4a, 0xb6, 0x75, 0x9c, 0x3e, 0xfe,
+	0xcf, 0x18, 0x9c, 0xbe, 0xae, 0xe1, 0x5d, 0x59, 0xdb, 0x31, 0x90, 0x42, 0x80, 0x5e, 0x85, 0x33,
+	0x3a, 0x96, 0x1a, 0x3d, 0x45, 0x26, 0xdd, 0xc6, 0x9d, 0xa2, 0x06, 0xb5, 0x84, 0x88, 0x8e, 0x3d,
+	0xad, 0x89, 0xda, 0x85, 0x31, 0xaf, 0xb1, 0xa4, 0x10, 0x6e, 0x70, 0xdb, 0xca, 0x88, 0x83, 0x71,
+	0x9b, 0x4f, 0x8a, 0x3e, 0x71, 0x56, 0xeb, 0x16, 0x50, 0xef, 0xc3, 0xa8, 0x8e, 0xa5, 0x32, 0x01,
+	0xde, 0x04, 0x19, 0x1a, 0x02, 0x12, 0x88, 0xd3, 0x3a, 0x6e, 0xc4, 0xe9, 0xa2, 0x2c, 0xc2, 0xb9,
+	0x0e, 0x73, 0x09, 0xe9, 0xf2, 0xae, 0x86, 0xe8, 0x73, 0x43, 0xbd, 0x50, 0x65, 0x8f, 0x8f, 0x0f,
+	0x88, 0x85, 0x93, 0xaf, 0xaa, 0x85, 0xa4, 0x56, 0x0f, 0xb5, 0x0c, 0x3a, 0x3c, 0xc4, 0x89, 0x5f,
+	0x8c, 0x54, 0x2d, 0xe4, 0x4e, 0x14, 0xdb, 0x96, 0x41, 0x21, 0x18, 0x73, 0xec, 0x95, 0xaa, 0x65,
+	0xe3, 0x8a, 0x63, 0x2e, 0x69, 0xaa, 0x65, 0xd3, 0xe7, 0xcf, 0x1c, 0xd6, 0x06, 0xb6, 0x98, 0xa2,
+	0x5f, 0x8c, 0x56, 0x2d, 0xb4, 0x41, 0x3c, 0x6e, 0x5b, 0x64, 0x98, 0xa0, 0x3e, 0x82, 0x4b, 0x5e,
+	0x98, 0x9d, 0x75, 0x3d, 0x39, 0x04, 0x70, 0x40, 0x5c, 0x68, 0x03, 0xf6, 0x54, 0xa4, 0x45, 0x19,
+	0x70, 0xd9, 0x83, 0xbc, 0xa3, 0x8a, 0x48, 0x08, 0x53, 0xc4, 0x6b, 0xfa, 0xec, 0x31, 0xc5, 0xdb,
+	0x74, 0x8a, 0x01, 0x91, 0x6e, 0x81, 0xef, 0x92, 0x53, 0xb7, 0xe1, 0xc5, 0x41, 0x41, 0xb4, 0x1b,
+	0xc0, 0xf4, 0x90, 0x60, 0x82, 0xe2, 0x37, 0xfa, 0x06, 0xd3, 0xac, 0x61, 0xea, 0xe7, 0x30, 0x39,
+	0x28, 0xa6, 0xd6, 0x06, 0x33, 0x64, 0x83, 0xdc, 0x68, 0x71, 0x75, 0x35, 0xae, 0x62, 0x50, 0x5c,
+	0xee, 0x17, 0x5e, 0x0b, 0xc0, 0x75, 0x38, 0xa7, 0x63, 0xa9, 0x77, 0xe6, 0x9b, 0x1d, 0x12, 0x55,
+	0x48, 0x9c, 0xd5, 0x71, 0xe7, 0xc8, 0xe7, 0x9c, 0xce, 0x7c, 0xb7, 0x97, 0xc6, 0xb1, 0x50, 0xc4,
+	0x13, 0x37, 0xf2, 0xf4, 0xd8, 0x84, 0x2e, 0x84, 0x8f, 0x6b, 0x00, 0x90, 0x17, 0xa3, 0x90, 0x48,
+	0x29, 0x3d, 0x3a, 0x94, 0x08, 0x17, 0x74, 0x2c, 0xf5, 0xeb, 0x72, 0x73, 0x83, 0xc1, 0x0b, 0x41,
+	0xc7, 0x6b, 0xf1, 0x9c, 0x38, 0xa7, 0xe3, 0x1b, 0x3d, 0x7d, 0x8c, 0xfa, 0x09, 0x5c, 0xe8, 0x76,
+	0x78, 0xd0, 0x08, 0x63, 0xfe, 0xcc, 0xb7, 0xb0, 0x41, 0xbd, 0xb8, 0xbd, 0xa5, 0xda, 0x47, 0x83,
+	0xfa, 0x04, 0xc6, 0x9b, 0x89, 0xb3, 0x14, 0x6c, 0xa0, 0x52, 0xb3, 0x45, 0x94, 0x90, 0x7e, 0x40,
+	0x2f, 0x9e, 0x19, 0xca, 0x84, 0xb8, 0xe8, 0xda, 0xef, 0x10, 0xf3, 0x46, 0xb7, 0xd8, 0x44, 0xfa,
+	0x01, 0xf5, 0x43, 0xb8, 0xdc, 0xdf, 0xb5, 0x81, 0xcc, 0x8a, 0x6a, 0xd3, 0xf4, 0x08, 0xce, 0x97,
+	0xfa, 0x38, 0xdf, 0x26, 0xe6, 0xd4, 0x8f, 0x60, 0x84, 0xfc, 0x8b, 0x44, 0xd5, 0x6d, 0x64, 0xea,
+	0xb2, 0x46, 0xbf, 0x98, 0x20, 0x0e, 0x47, 0x21, 0xc3, 0xb9, 0xa3, 0xfb, 0x9d, 0xc6, 0xce, 0x4b,
+	0xb8, 0x38, 0xe5, 0x3c, 0xba, 0xe1, 0x3e, 0xa1, 0x7e, 0x05, 0xe0, 0x5b, 0x7b, 0xaa, 0x2e, 0x6b,
+	0x03, 0x0a, 0xe3, 0xe5, 0xc4, 0xc8, 0xdc, 0xbb, 0x3a, 0x0a, 0xf7, 0xa6, 0x3c, 0x24, 0x47, 0x93,
+	0x8d, 0xfb, 0x55, 0xcc, 0xcf, 0x60, 0xac, 0x17, 0x94, 0x45, 0xff, 0x6b, 0x74, 0x30, 0xef, 0x0c,
+	0x1b, 0x56, 0xbc, 0x20, 0x66, 0xbb, 0x41, 0x58, 0xd4, 0xe3, 0x56, 0x4e, 0xfa, 0x0f, 0x75, 0xff,
+	0x1e, 0x1d, 0x46, 0x7a, 0x84, 0xa9, 0xae, 0x37, 0x25, 0xdb, 0xbd, 0x03, 0xdd, 0xfa, 0xad, 0x27,
+	0x35, 0xf0, 0x21, 0x8c, 0xc0, 0x73, 0x2e, 0xdb, 0x05, 0x38, 0x26, 0x0b, 0x97, 0x60, 0xb8, 0xa9,
+	0x48, 0x45, 0xae, 0x30, 0x1c, 0xcb, 0x70, 0x19, 0x86, 0x2b, 0x30, 0x3c, 0x0f, 0x2f, 0x0c, 0x7b,
+	0xdd, 0xf3, 0x73, 0x6b, 0xc2, 0x37, 0xbb, 0x49, 0xbd, 0x3d, 0x00, 0x37, 0xdf, 0x69, 0x03, 0x3c,
+	0x93, 0x11, 0xde, 0xe9, 0xa6, 0x55, 0x8f, 0x62, 0xe8, 0xa4, 0x06, 0x82, 0x8e, 0x62, 0x8e, 0x59,
+	0x13, 0x56, 0x60, 0xbc, 0x4f, 0x98, 0x5e, 0xf5, 0xf0, 0x49, 0x0d, 0x4c, 0x38, 0xea, 0x79, 0xa6,
+	0x20, 0x5c, 0x86, 0xb1, 0x8e, 0x9b, 0xe2, 0xea, 0xcd, 0x1e, 0xd7, 0xc0, 0xe4, 0x49, 0x0d, 0xc0,
+	0x7a, 0x0d, 0x84, 0x38, 0x8e, 0xe1, 0x78, 0x81, 0x6b, 0x97, 0x58, 0xc7, 0xe5, 0xf4, 0x9a, 0x4c,
+	0x9f, 0xd4, 0x40, 0x84, 0x98, 0x64, 0x19, 0x2e, 0x27, 0x24, 0xe1, 0xa4, 0xd3, 0x62, 0xbd, 0x1a,
+	0xb3, 0x27, 0x35, 0x10, 0x25, 0x1a, 0x57, 0x18, 0x2e, 0x2f, 0x64, 0x60, 0xbc, 0x4f, 0x5b, 0x6b,
+	0x1a, 0xcc, 0x1f, 0xd7, 0xc0, 0xdc, 0xe7, 0x8d, 0xde, 0x18, 0x73, 0x8c, 0x78, 0x96, 0xe1, 0x39,
+	0xe1, 0x2a, 0xbc, 0xd4, 0x55, 0xec, 0x26, 0xb2, 0x70, 0xd5, 0x54, 0x50, 0x57, 0x72, 0x1c, 0xfb,
+	0x45, 0xd7, 0x7e, 0x81, 0xd8, 0x67, 0x18, 0x3e, 0xdb, 0xf8, 0xdf, 0xc0, 0x56, 0x30, 0x1c, 0x8c,
+	0x86, 0xb6, 0x82, 0xe1, 0x89, 0x68, 0x78, 0x2b, 0x18, 0x86, 0xd1, 0xc9, 0xad, 0x60, 0x38, 0x12,
+	0x9d, 0xde, 0x0a, 0x86, 0xa3, 0xd1, 0xd9, 0xad, 0x60, 0x38, 0x16, 0x9d, 0xdb, 0x0a, 0x86, 0x17,
+	0xa2, 0x8b, 0xa9, 0xbf, 0xce, 0xc0, 0xe9, 0x0d, 0x13, 0xc9, 0x36, 0x1a, 0xcf, 0x72, 0xe3, 0x59,
+	0x6e, 0x3c, 0xcb, 0xfd, 0x1f, 0xcd, 0x72, 0xda, 0x1b, 0x9f, 0xe5, 0x1a, 0xd3, 0x44, 0xff, 0x39,
+	0xee, 0xe6, 0xeb, 0xcc, 0x71, 0x03, 0x27, 0xb8, 0x3b, 0xff, 0x83, 0x09, 0x6e, 0xe0, 0xec, 0xb6,
+	0xf3, 0xba, 0xb3, 0xdb, 0xb0, 0xa9, 0xed, 0xe3, 0xd7, 0x9f, 0xda, 0x86, 0xce, 0x6b, 0xeb, 0xb3,
+	0x5f, 0x5c, 0xed, 0x7a, 0xfb, 0x16, 0xd2, 0xfd, 0x89, 0x76, 0xf1, 0xf0, 0x14, 0xf4, 0x13, 0x08,
+	0xec, 0x00, 0xc2, 0xa5, 0x0f, 0x4f, 0x41, 0x5f, 0x89, 0xf0, 0xde, 0x50, 0xe6, 0x4d, 0x1c, 0x9e,
+	0x82, 0x21, 0x72, 0x07, 0x5f, 0x3f, 0x22, 0x26, 0xf8, 0xfa, 0x08, 0x84, 0xf7, 0xcf, 0xa0, 0xe3,
+	0xe4, 0xe1, 0x29, 0x18, 0xaa, 0x21, 0x24, 0x3a, 0xd9, 0x79, 0xe6, 0xf0, 0x14, 0x78, 0x1f, 0x38,
+	0xf1, 0x0c, 0xe1, 0x66, 0x12, 0xcf, 0x60, 0xb9, 0x20, 0x8e, 0x4a, 0xd2, 0xdf, 0x3a, 0x3c, 0x05,
+	0xa3, 0xa9, 0xbe, 0x32, 0x71, 0xff, 0x6d, 0x06, 0xce, 0x88, 0xc8, 0xd0, 0x64, 0x65, 0xcc, 0xdc,
+	0x63, 0xe6, 0x1e, 0x33, 0xf7, 0x98, 0xb9, 0xc7, 0xcc, 0x3d, 0x66, 0xee, 0x31, 0x73, 0x7f, 0xfd,
+	0x99, 0xfb, 0x2f, 0x33, 0x70, 0xf2, 0x3a, 0xb2, 0xc7, 0xac, 0x3d, 0x66, 0xed, 0x31, 0x6b, 0x8f,
+	0x59, 0x7b, 0xcc, 0xda, 0x63, 0xd6, 0x1e, 0xb3, 0xf6, 0xd7, 0x9d, 0xb5, 0x85, 0x5f, 0x80, 0x93,
+	0x67, 0x09, 0xdf, 0xd3, 0x67, 0x09, 0xdf, 0x57, 0xcf, 0x12, 0xe0, 0x41, 0x3d, 0x01, 0xfe, 0x50,
+	0x4f, 0x80, 0xcf, 0xeb, 0x09, 0x70, 0x52, 0x4f, 0x80, 0xa7, 0xf5, 0x04, 0xf8, 0xb2, 0x9e, 0x00,
+	0x2f, 0xea, 0x09, 0xdf, 0x57, 0xf5, 0x04, 0x78, 0xf8, 0x3c, 0xe1, 0x3b, 0x7e, 0x9e, 0x00, 0x27,
+	0xcf, 0x13, 0xbe, 0xa7, 0xcf, 0x13, 0xbe, 0x1f, 0xdc, 0x2a, 0x63, 0xe3, 0x4e, 0x39, 0x7d, 0x17,
+	0x6b, 0x36, 0x32, 0x4d, 0x39, 0x5d, 0xb5, 0x56, 0xc9, 0x62, 0x0f, 0x9b, 0x95, 0x15, 0xc3, 0xc4,
+	0x77, 0xd5, 0x12, 0x32, 0x57, 0x9a, 0xe2, 0x55, 0x63, 0xb7, 0x8c, 0x57, 0xd1, 0x4f, 0x6d, 0xf7,
+	0x17, 0xca, 0xbd, 0xbf, 0xc8, 0xde, 0x3d, 0x47, 0x7e, 0xa9, 0x9c, 0xf9, 0x6f, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0xcc, 0x57, 0x19, 0x97, 0xb5, 0x2d, 0x00, 0x00,
 }
 
 func (this *ApplicationArgoCDType) Equal(that interface{}) bool {
@@ -3002,6 +3180,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.InsecureRegistriesChoice.Equal(that1.InsecureRegistriesChoice) {
 		return false
 	}
+	if that1.ClusterScopedResourceAccessChoice == nil {
+		if this.ClusterScopedResourceAccessChoice != nil {
+			return false
+		}
+	} else if this.ClusterScopedResourceAccessChoice == nil {
+		return false
+	} else if !this.ClusterScopedResourceAccessChoice.Equal(that1.ClusterScopedResourceAccessChoice) {
+		return false
+	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
 		return false
 	}
@@ -3367,6 +3554,54 @@ func (this *GlobalSpecType_InsecureRegistryList) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_ClusterScopedAccessDeny) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ClusterScopedAccessDeny)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ClusterScopedAccessDeny)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClusterScopedAccessDeny.Equal(that1.ClusterScopedAccessDeny) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ClusterScopedAccessPermit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ClusterScopedAccessPermit)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ClusterScopedAccessPermit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClusterScopedAccessPermit.Equal(that1.ClusterScopedAccessPermit) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3447,6 +3682,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.InsecureRegistriesChoice == nil {
 		return false
 	} else if !this.InsecureRegistriesChoice.Equal(that1.InsecureRegistriesChoice) {
+		return false
+	}
+	if that1.ClusterScopedResourceAccessChoice == nil {
+		if this.ClusterScopedResourceAccessChoice != nil {
+			return false
+		}
+	} else if this.ClusterScopedResourceAccessChoice == nil {
+		return false
+	} else if !this.ClusterScopedResourceAccessChoice.Equal(that1.ClusterScopedResourceAccessChoice) {
 		return false
 	}
 	return true
@@ -3787,6 +4031,54 @@ func (this *CreateSpecType_InsecureRegistryList) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_ClusterScopedAccessDeny) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ClusterScopedAccessDeny)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ClusterScopedAccessDeny)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClusterScopedAccessDeny.Equal(that1.ClusterScopedAccessDeny) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ClusterScopedAccessPermit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ClusterScopedAccessPermit)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ClusterScopedAccessPermit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClusterScopedAccessPermit.Equal(that1.ClusterScopedAccessPermit) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3867,6 +4159,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.InsecureRegistriesChoice == nil {
 		return false
 	} else if !this.InsecureRegistriesChoice.Equal(that1.InsecureRegistriesChoice) {
+		return false
+	}
+	if that1.ClusterScopedResourceAccessChoice == nil {
+		if this.ClusterScopedResourceAccessChoice != nil {
+			return false
+		}
+	} else if this.ClusterScopedResourceAccessChoice == nil {
+		return false
+	} else if !this.ClusterScopedResourceAccessChoice.Equal(that1.ClusterScopedResourceAccessChoice) {
 		return false
 	}
 	return true
@@ -4207,6 +4508,54 @@ func (this *ReplaceSpecType_InsecureRegistryList) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_ClusterScopedAccessDeny) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ClusterScopedAccessDeny)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ClusterScopedAccessDeny)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClusterScopedAccessDeny.Equal(that1.ClusterScopedAccessDeny) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ClusterScopedAccessPermit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ClusterScopedAccessPermit)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ClusterScopedAccessPermit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClusterScopedAccessPermit.Equal(that1.ClusterScopedAccessPermit) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4287,6 +4636,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.InsecureRegistriesChoice == nil {
 		return false
 	} else if !this.InsecureRegistriesChoice.Equal(that1.InsecureRegistriesChoice) {
+		return false
+	}
+	if that1.ClusterScopedResourceAccessChoice == nil {
+		if this.ClusterScopedResourceAccessChoice != nil {
+			return false
+		}
+	} else if this.ClusterScopedResourceAccessChoice == nil {
+		return false
+	} else if !this.ClusterScopedResourceAccessChoice.Equal(that1.ClusterScopedResourceAccessChoice) {
 		return false
 	}
 	return true
@@ -4627,6 +4985,54 @@ func (this *GetSpecType_InsecureRegistryList) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_ClusterScopedAccessDeny) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ClusterScopedAccessDeny)
+	if !ok {
+		that2, ok := that.(GetSpecType_ClusterScopedAccessDeny)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClusterScopedAccessDeny.Equal(that1.ClusterScopedAccessDeny) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ClusterScopedAccessPermit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ClusterScopedAccessPermit)
+	if !ok {
+		that2, ok := that.(GetSpecType_ClusterScopedAccessPermit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClusterScopedAccessPermit.Equal(that1.ClusterScopedAccessPermit) {
+		return false
+	}
+	return true
+}
 func (this *ApplicationArgoCDType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -4837,7 +5243,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 22)
+	s := make([]string, 0, 24)
 	s = append(s, "&k8s_cluster.GlobalSpecType{")
 	if this.LocalAccessChoice != nil {
 		s = append(s, "LocalAccessChoice: "+fmt.Sprintf("%#v", this.LocalAccessChoice)+",\n")
@@ -4859,6 +5265,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.InsecureRegistriesChoice != nil {
 		s = append(s, "InsecureRegistriesChoice: "+fmt.Sprintf("%#v", this.InsecureRegistriesChoice)+",\n")
+	}
+	if this.ClusterScopedResourceAccessChoice != nil {
+		s = append(s, "ClusterScopedResourceAccessChoice: "+fmt.Sprintf("%#v", this.ClusterScopedResourceAccessChoice)+",\n")
 	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
@@ -4987,11 +5396,27 @@ func (this *GlobalSpecType_InsecureRegistryList) GoString() string {
 		`InsecureRegistryList:` + fmt.Sprintf("%#v", this.InsecureRegistryList) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_ClusterScopedAccessDeny) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&k8s_cluster.GlobalSpecType_ClusterScopedAccessDeny{` +
+		`ClusterScopedAccessDeny:` + fmt.Sprintf("%#v", this.ClusterScopedAccessDeny) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ClusterScopedAccessPermit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&k8s_cluster.GlobalSpecType_ClusterScopedAccessPermit{` +
+		`ClusterScopedAccessPermit:` + fmt.Sprintf("%#v", this.ClusterScopedAccessPermit) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 18)
+	s := make([]string, 0, 20)
 	s = append(s, "&k8s_cluster.CreateSpecType{")
 	if this.LocalAccessChoice != nil {
 		s = append(s, "LocalAccessChoice: "+fmt.Sprintf("%#v", this.LocalAccessChoice)+",\n")
@@ -5013,6 +5438,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.InsecureRegistriesChoice != nil {
 		s = append(s, "InsecureRegistriesChoice: "+fmt.Sprintf("%#v", this.InsecureRegistriesChoice)+",\n")
+	}
+	if this.ClusterScopedResourceAccessChoice != nil {
+		s = append(s, "ClusterScopedResourceAccessChoice: "+fmt.Sprintf("%#v", this.ClusterScopedResourceAccessChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -5129,11 +5557,27 @@ func (this *CreateSpecType_InsecureRegistryList) GoString() string {
 		`InsecureRegistryList:` + fmt.Sprintf("%#v", this.InsecureRegistryList) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_ClusterScopedAccessDeny) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&k8s_cluster.CreateSpecType_ClusterScopedAccessDeny{` +
+		`ClusterScopedAccessDeny:` + fmt.Sprintf("%#v", this.ClusterScopedAccessDeny) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ClusterScopedAccessPermit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&k8s_cluster.CreateSpecType_ClusterScopedAccessPermit{` +
+		`ClusterScopedAccessPermit:` + fmt.Sprintf("%#v", this.ClusterScopedAccessPermit) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 18)
+	s := make([]string, 0, 20)
 	s = append(s, "&k8s_cluster.ReplaceSpecType{")
 	if this.LocalAccessChoice != nil {
 		s = append(s, "LocalAccessChoice: "+fmt.Sprintf("%#v", this.LocalAccessChoice)+",\n")
@@ -5155,6 +5599,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.InsecureRegistriesChoice != nil {
 		s = append(s, "InsecureRegistriesChoice: "+fmt.Sprintf("%#v", this.InsecureRegistriesChoice)+",\n")
+	}
+	if this.ClusterScopedResourceAccessChoice != nil {
+		s = append(s, "ClusterScopedResourceAccessChoice: "+fmt.Sprintf("%#v", this.ClusterScopedResourceAccessChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -5271,11 +5718,27 @@ func (this *ReplaceSpecType_InsecureRegistryList) GoString() string {
 		`InsecureRegistryList:` + fmt.Sprintf("%#v", this.InsecureRegistryList) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_ClusterScopedAccessDeny) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&k8s_cluster.ReplaceSpecType_ClusterScopedAccessDeny{` +
+		`ClusterScopedAccessDeny:` + fmt.Sprintf("%#v", this.ClusterScopedAccessDeny) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ClusterScopedAccessPermit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&k8s_cluster.ReplaceSpecType_ClusterScopedAccessPermit{` +
+		`ClusterScopedAccessPermit:` + fmt.Sprintf("%#v", this.ClusterScopedAccessPermit) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 18)
+	s := make([]string, 0, 20)
 	s = append(s, "&k8s_cluster.GetSpecType{")
 	if this.LocalAccessChoice != nil {
 		s = append(s, "LocalAccessChoice: "+fmt.Sprintf("%#v", this.LocalAccessChoice)+",\n")
@@ -5297,6 +5760,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.InsecureRegistriesChoice != nil {
 		s = append(s, "InsecureRegistriesChoice: "+fmt.Sprintf("%#v", this.InsecureRegistriesChoice)+",\n")
+	}
+	if this.ClusterScopedResourceAccessChoice != nil {
+		s = append(s, "ClusterScopedResourceAccessChoice: "+fmt.Sprintf("%#v", this.ClusterScopedResourceAccessChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -5411,6 +5877,22 @@ func (this *GetSpecType_InsecureRegistryList) GoString() string {
 	}
 	s := strings.Join([]string{`&k8s_cluster.GetSpecType_InsecureRegistryList{` +
 		`InsecureRegistryList:` + fmt.Sprintf("%#v", this.InsecureRegistryList) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ClusterScopedAccessDeny) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&k8s_cluster.GetSpecType_ClusterScopedAccessDeny{` +
+		`ClusterScopedAccessDeny:` + fmt.Sprintf("%#v", this.ClusterScopedAccessDeny) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ClusterScopedAccessPermit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&k8s_cluster.GetSpecType_ClusterScopedAccessPermit{` +
+		`ClusterScopedAccessPermit:` + fmt.Sprintf("%#v", this.ClusterScopedAccessPermit) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -6095,6 +6577,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc2
 	}
+	if m.ClusterScopedResourceAccessChoice != nil {
+		{
+			size := m.ClusterScopedResourceAccessChoice.Size()
+			i -= size
+			if _, err := m.ClusterScopedResourceAccessChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.InsecureRegistriesChoice != nil {
 		{
 			size := m.InsecureRegistriesChoice.Size()
@@ -6463,6 +6954,52 @@ func (m *GlobalSpecType_InsecureRegistryList) MarshalToSizedBuffer(dAtA []byte) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_ClusterScopedAccessDeny) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ClusterScopedAccessDeny) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClusterScopedAccessDeny != nil {
+		{
+			size, err := m.ClusterScopedAccessDeny.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ClusterScopedAccessPermit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ClusterScopedAccessPermit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClusterScopedAccessPermit != nil {
+		{
+			size, err := m.ClusterScopedAccessPermit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -6483,6 +7020,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClusterScopedResourceAccessChoice != nil {
+		{
+			size := m.ClusterScopedResourceAccessChoice.Size()
+			i -= size
+			if _, err := m.ClusterScopedResourceAccessChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.InsecureRegistriesChoice != nil {
 		{
 			size := m.InsecureRegistriesChoice.Size()
@@ -6851,6 +7397,52 @@ func (m *CreateSpecType_InsecureRegistryList) MarshalToSizedBuffer(dAtA []byte) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_ClusterScopedAccessDeny) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ClusterScopedAccessDeny) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClusterScopedAccessDeny != nil {
+		{
+			size, err := m.ClusterScopedAccessDeny.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ClusterScopedAccessPermit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ClusterScopedAccessPermit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClusterScopedAccessPermit != nil {
+		{
+			size, err := m.ClusterScopedAccessPermit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -6871,6 +7463,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClusterScopedResourceAccessChoice != nil {
+		{
+			size := m.ClusterScopedResourceAccessChoice.Size()
+			i -= size
+			if _, err := m.ClusterScopedResourceAccessChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.InsecureRegistriesChoice != nil {
 		{
 			size := m.InsecureRegistriesChoice.Size()
@@ -7239,6 +7840,52 @@ func (m *ReplaceSpecType_InsecureRegistryList) MarshalToSizedBuffer(dAtA []byte)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_ClusterScopedAccessDeny) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ClusterScopedAccessDeny) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClusterScopedAccessDeny != nil {
+		{
+			size, err := m.ClusterScopedAccessDeny.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ClusterScopedAccessPermit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ClusterScopedAccessPermit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClusterScopedAccessPermit != nil {
+		{
+			size, err := m.ClusterScopedAccessPermit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7259,6 +7906,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClusterScopedResourceAccessChoice != nil {
+		{
+			size := m.ClusterScopedResourceAccessChoice.Size()
+			i -= size
+			if _, err := m.ClusterScopedResourceAccessChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.InsecureRegistriesChoice != nil {
 		{
 			size := m.InsecureRegistriesChoice.Size()
@@ -7627,6 +8283,52 @@ func (m *GetSpecType_InsecureRegistryList) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_ClusterScopedAccessDeny) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ClusterScopedAccessDeny) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClusterScopedAccessDeny != nil {
+		{
+			size, err := m.ClusterScopedAccessDeny.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ClusterScopedAccessPermit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ClusterScopedAccessPermit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClusterScopedAccessPermit != nil {
+		{
+			size, err := m.ClusterScopedAccessPermit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -7934,6 +8636,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.InsecureRegistriesChoice != nil {
 		n += m.InsecureRegistriesChoice.Size()
 	}
+	if m.ClusterScopedResourceAccessChoice != nil {
+		n += m.ClusterScopedResourceAccessChoice.Size()
+	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -8127,6 +8832,30 @@ func (m *GlobalSpecType_InsecureRegistryList) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_ClusterScopedAccessDeny) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClusterScopedAccessDeny != nil {
+		l = m.ClusterScopedAccessDeny.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ClusterScopedAccessPermit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClusterScopedAccessPermit != nil {
+		l = m.ClusterScopedAccessPermit.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -8153,6 +8882,9 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.InsecureRegistriesChoice != nil {
 		n += m.InsecureRegistriesChoice.Size()
+	}
+	if m.ClusterScopedResourceAccessChoice != nil {
+		n += m.ClusterScopedResourceAccessChoice.Size()
 	}
 	return n
 }
@@ -8325,6 +9057,30 @@ func (m *CreateSpecType_InsecureRegistryList) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_ClusterScopedAccessDeny) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClusterScopedAccessDeny != nil {
+		l = m.ClusterScopedAccessDeny.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ClusterScopedAccessPermit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClusterScopedAccessPermit != nil {
+		l = m.ClusterScopedAccessPermit.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -8351,6 +9107,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.InsecureRegistriesChoice != nil {
 		n += m.InsecureRegistriesChoice.Size()
+	}
+	if m.ClusterScopedResourceAccessChoice != nil {
+		n += m.ClusterScopedResourceAccessChoice.Size()
 	}
 	return n
 }
@@ -8523,6 +9282,30 @@ func (m *ReplaceSpecType_InsecureRegistryList) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_ClusterScopedAccessDeny) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClusterScopedAccessDeny != nil {
+		l = m.ClusterScopedAccessDeny.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ClusterScopedAccessPermit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClusterScopedAccessPermit != nil {
+		l = m.ClusterScopedAccessPermit.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -8549,6 +9332,9 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.InsecureRegistriesChoice != nil {
 		n += m.InsecureRegistriesChoice.Size()
+	}
+	if m.ClusterScopedResourceAccessChoice != nil {
+		n += m.ClusterScopedResourceAccessChoice.Size()
 	}
 	return n
 }
@@ -8717,6 +9503,30 @@ func (m *GetSpecType_InsecureRegistryList) Size() (n int) {
 	_ = l
 	if m.InsecureRegistryList != nil {
 		l = m.InsecureRegistryList.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ClusterScopedAccessDeny) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClusterScopedAccessDeny != nil {
+		l = m.ClusterScopedAccessDeny.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ClusterScopedAccessPermit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClusterScopedAccessPermit != nil {
+		l = m.ClusterScopedAccessPermit.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -8979,6 +9789,7 @@ func (this *GlobalSpecType) String() string {
 		`ClusterRoleBindingsChoice:` + fmt.Sprintf("%v", this.ClusterRoleBindingsChoice) + `,`,
 		`AppsChoice:` + fmt.Sprintf("%v", this.AppsChoice) + `,`,
 		`InsecureRegistriesChoice:` + fmt.Sprintf("%v", this.InsecureRegistriesChoice) + `,`,
+		`ClusterScopedResourceAccessChoice:` + fmt.Sprintf("%v", this.ClusterScopedResourceAccessChoice) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`FinalClusterRoleBindings:` + repeatedStringForFinalClusterRoleBindings + `,`,
 		`FinalClusterRoles:` + repeatedStringForFinalClusterRoles + `,`,
@@ -9127,6 +9938,26 @@ func (this *GlobalSpecType_InsecureRegistryList) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_ClusterScopedAccessDeny) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ClusterScopedAccessDeny{`,
+		`ClusterScopedAccessDeny:` + strings.Replace(fmt.Sprintf("%v", this.ClusterScopedAccessDeny), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ClusterScopedAccessPermit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ClusterScopedAccessPermit{`,
+		`ClusterScopedAccessPermit:` + strings.Replace(fmt.Sprintf("%v", this.ClusterScopedAccessPermit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -9139,6 +9970,7 @@ func (this *CreateSpecType) String() string {
 		`ClusterRoleBindingsChoice:` + fmt.Sprintf("%v", this.ClusterRoleBindingsChoice) + `,`,
 		`AppsChoice:` + fmt.Sprintf("%v", this.AppsChoice) + `,`,
 		`InsecureRegistriesChoice:` + fmt.Sprintf("%v", this.InsecureRegistriesChoice) + `,`,
+		`ClusterScopedResourceAccessChoice:` + fmt.Sprintf("%v", this.ClusterScopedResourceAccessChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9283,6 +10115,26 @@ func (this *CreateSpecType_InsecureRegistryList) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_ClusterScopedAccessDeny) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ClusterScopedAccessDeny{`,
+		`ClusterScopedAccessDeny:` + strings.Replace(fmt.Sprintf("%v", this.ClusterScopedAccessDeny), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ClusterScopedAccessPermit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ClusterScopedAccessPermit{`,
+		`ClusterScopedAccessPermit:` + strings.Replace(fmt.Sprintf("%v", this.ClusterScopedAccessPermit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -9295,6 +10147,7 @@ func (this *ReplaceSpecType) String() string {
 		`ClusterRoleBindingsChoice:` + fmt.Sprintf("%v", this.ClusterRoleBindingsChoice) + `,`,
 		`AppsChoice:` + fmt.Sprintf("%v", this.AppsChoice) + `,`,
 		`InsecureRegistriesChoice:` + fmt.Sprintf("%v", this.InsecureRegistriesChoice) + `,`,
+		`ClusterScopedResourceAccessChoice:` + fmt.Sprintf("%v", this.ClusterScopedResourceAccessChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9439,6 +10292,26 @@ func (this *ReplaceSpecType_InsecureRegistryList) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_ClusterScopedAccessDeny) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ClusterScopedAccessDeny{`,
+		`ClusterScopedAccessDeny:` + strings.Replace(fmt.Sprintf("%v", this.ClusterScopedAccessDeny), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ClusterScopedAccessPermit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ClusterScopedAccessPermit{`,
+		`ClusterScopedAccessPermit:` + strings.Replace(fmt.Sprintf("%v", this.ClusterScopedAccessPermit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -9451,6 +10324,7 @@ func (this *GetSpecType) String() string {
 		`ClusterRoleBindingsChoice:` + fmt.Sprintf("%v", this.ClusterRoleBindingsChoice) + `,`,
 		`AppsChoice:` + fmt.Sprintf("%v", this.AppsChoice) + `,`,
 		`InsecureRegistriesChoice:` + fmt.Sprintf("%v", this.InsecureRegistriesChoice) + `,`,
+		`ClusterScopedResourceAccessChoice:` + fmt.Sprintf("%v", this.ClusterScopedResourceAccessChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9591,6 +10465,26 @@ func (this *GetSpecType_InsecureRegistryList) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_InsecureRegistryList{`,
 		`InsecureRegistryList:` + strings.Replace(fmt.Sprintf("%v", this.InsecureRegistryList), "InsecureRegistryListType", "InsecureRegistryListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ClusterScopedAccessDeny) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ClusterScopedAccessDeny{`,
+		`ClusterScopedAccessDeny:` + strings.Replace(fmt.Sprintf("%v", this.ClusterScopedAccessDeny), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ClusterScopedAccessPermit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ClusterScopedAccessPermit{`,
+		`ClusterScopedAccessPermit:` + strings.Replace(fmt.Sprintf("%v", this.ClusterScopedAccessPermit), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11440,6 +12334,76 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.InsecureRegistriesChoice = &GlobalSpecType_InsecureRegistryList{v}
 			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClusterScopedAccessDeny", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterScopedResourceAccessChoice = &GlobalSpecType_ClusterScopedAccessDeny{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClusterScopedAccessPermit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterScopedResourceAccessChoice = &GlobalSpecType_ClusterScopedAccessPermit{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -12121,6 +13085,76 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.InsecureRegistriesChoice = &CreateSpecType_InsecureRegistryList{v}
 			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClusterScopedAccessDeny", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterScopedResourceAccessChoice = &CreateSpecType_ClusterScopedAccessDeny{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClusterScopedAccessPermit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterScopedResourceAccessChoice = &CreateSpecType_ClusterScopedAccessPermit{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -12664,6 +13698,76 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.InsecureRegistriesChoice = &ReplaceSpecType_InsecureRegistryList{v}
 			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClusterScopedAccessDeny", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterScopedResourceAccessChoice = &ReplaceSpecType_ClusterScopedAccessDeny{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClusterScopedAccessPermit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterScopedResourceAccessChoice = &ReplaceSpecType_ClusterScopedAccessPermit{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -13206,6 +14310,76 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.InsecureRegistriesChoice = &GetSpecType_InsecureRegistryList{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClusterScopedAccessDeny", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterScopedResourceAccessChoice = &GetSpecType_ClusterScopedAccessDeny{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClusterScopedAccessPermit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterScopedResourceAccessChoice = &GetSpecType_ClusterScopedAccessPermit{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

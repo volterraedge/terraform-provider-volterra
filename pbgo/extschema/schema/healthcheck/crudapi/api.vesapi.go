@@ -1475,7 +1475,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/ves.io.schema.healthcheck/Object/{object_uid}": {
             "get": {
@@ -2770,12 +2770,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "healthy_threshold": {
                     "type": "integer",
-                    "description": " Number of successful responses before declaring healthy. In other words, this is\n the number of healthy health checks required before a host is marked\n healthy. Note that during startup, only a single successful health check is\n required to mark a host healthy.\n\nExample: - \"2\"-\nRequired: YES",
+                    "description": " Number of successful responses before declaring healthy. In other words, this is\n the number of healthy health checks required before a host is marked\n healthy. Note that during startup, only a single successful health check is\n required to mark a host healthy.\n\nExample: - \"2\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 16\n",
                     "title": "healthy threshold",
                     "format": "int64",
                     "x-displayname": "Healthy Threshold",
                     "x-ves-example": "2",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "16"
+                    }
                 },
                 "http_health_check": {
                     "description": "Exclusive with [tcp_health_check]\nx-displayName: \"HTTP HealthCheck\"\nSpecifies the following details for HTTP health check requests\n1. Host header\n2. Path\n3. Request headers to add\n4. Request headers to remove",
@@ -2784,28 +2789,28 @@ var APISwaggerJSON string = `{
                 },
                 "interval": {
                     "type": "integer",
-                    "description": " Time interval in seconds between two healthcheck requests.\n\nExample: - \"10\"-\nRequired: YES",
+                    "description": " Time interval in seconds between two healthcheck requests.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
                     "title": "interval",
                     "format": "int64",
                     "x-displayname": "Interval",
                     "x-ves-example": "10",
-                    "x-ves-required": "true"
-                },
-                "jitter": {
-                    "type": "integer",
-                    "description": " Random variation of time in seconds interval between two health checks\n This is the amount of time in seconds added to the interval above to\n increase the wait time between two healthcheck requests.\n\nExample: - \"1\"-",
-                    "title": "jitter",
-                    "format": "int64",
-                    "x-displayname": "Jitter",
-                    "x-ves-example": "1"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "600"
+                    }
                 },
                 "jitter_percent": {
                     "type": "integer",
-                    "description": " Add a random amount of time as a percent value to the interval between successive healthcheck requests.\n\nExample: - \"25\"-",
+                    "description": " Add a random amount of time as a percent value to the interval between successive healthcheck requests.\n\nExample: - \"25\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,10-50\n",
                     "title": "jitter percent",
                     "format": "int64",
                     "x-displayname": "Jitter Percent",
-                    "x-ves-example": "25"
+                    "x-ves-example": "25",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.ranges": "0,10-50"
+                    }
                 },
                 "tcp_health_check": {
                     "description": "Exclusive with [http_health_check]\nx-displayName: \"TCP HealthCheck\"\nSpecifies send payload and expected response payload",
@@ -2814,21 +2819,31 @@ var APISwaggerJSON string = `{
                 },
                 "timeout": {
                     "type": "integer",
-                    "description": " Timeout in seconds to wait for successful response. In other words, it is\n the time to wait for a health check response. If the timeout is reached the\n health check attempt will be considered a failure.\n\nExample: - \"1\"-\nRequired: YES",
+                    "description": " Timeout in seconds to wait for successful response. In other words, it is\n the time to wait for a health check response. If the timeout is reached the\n health check attempt will be considered a failure.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
                     "title": "timeout",
                     "format": "int64",
                     "x-displayname": "Timeout",
                     "x-ves-example": "1",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "600"
+                    }
                 },
                 "unhealthy_threshold": {
                     "type": "integer",
-                    "description": " Number of failed responses before declaring unhealthy. In other words, this is\n the number of unhealthy health checks required before a host is marked\n unhealthy. Note that for http health checking if a host responds with 503\n this threshold is ignored and the host is considered unhealthy immediately.\n\nExample: - \"5\"-\nRequired: YES",
+                    "description": " Number of failed responses before declaring unhealthy. In other words, this is\n the number of unhealthy health checks required before a host is marked\n unhealthy. Note that for http health checking if a host responds with 503\n this threshold is ignored and the host is considered unhealthy immediately.\n\nExample: - \"5\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 16\n",
                     "title": "unhealthy threshold",
                     "format": "int64",
                     "x-displayname": "Unhealthy Threshold",
                     "x-ves-example": "5",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "16"
+                    }
                 }
             }
         },
@@ -2843,9 +2858,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "headers": {
                     "type": "object",
-                    "description": " Specifies a list of HTTP headers that should be added to each request that is sent to the\n health checked cluster. This is a list of key-value pairs.",
+                    "description": " Specifies a list of HTTP headers that should be added to each request that is sent to the\n health checked cluster. This is a list of key-value pairs.\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 2048\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Headers to add in health check request",
-                    "x-displayname": "Request Headers to Add"
+                    "x-displayname": "Request Headers to Add",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "256",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "16",
+                        "ves.io.schema.rules.map.values.string.max_len": "2048",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "host_header": {
                     "type": "string",
@@ -2854,21 +2876,33 @@ var APISwaggerJSON string = `{
                 },
                 "path": {
                     "type": "string",
-                    "description": " Specifies the HTTP path that will be requested during health checking.\n\nExample: - \"/healthcheck\"-\nRequired: YES",
+                    "description": " Specifies the HTTP path that will be requested during health checking.\n\nExample: - \"/healthcheck\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 2048\n",
                     "title": "path",
+                    "maxLength": 2048,
                     "x-displayname": "Path",
                     "x-ves-example": "/healthcheck",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
                 },
                 "request_headers_to_remove": {
                     "type": "array",
-                    "description": " Specifies a list of HTTP headers that should be removed from each request that is sent to the\n health checked cluster. This is a list of keys of headers.\n\nExample: - \"user-agent\"-",
+                    "description": " Specifies a list of HTTP headers that should be removed from each request that is sent to the\n health checked cluster. This is a list of keys of headers.\n\nExample: - \"user-agent\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "Headers to be removed from health check request",
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
                     },
                     "x-displayname": "Request Headers to Remove",
-                    "x-ves-example": "user-agent"
+                    "x-ves-example": "user-agent",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
                 },
                 "use_http2": {
                     "type": "boolean",
@@ -2940,17 +2974,27 @@ var APISwaggerJSON string = `{
             "properties": {
                 "expected_response": {
                     "type": "string",
-                    "description": " raw bytes expected in the request. Describes the encoding of the payload bytes in the payload.\n Hex encoded payload.\n\nExample: - \"00000034\"-",
+                    "description": " raw bytes expected in the request. Describes the encoding of the payload bytes in the payload.\n Hex encoded payload.\n\nExample: - \"00000034\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hex: true\n  ves.io.schema.rules.string.max_len: 2048\n",
                     "title": "expected response",
+                    "maxLength": 2048,
                     "x-displayname": "Expected Response",
-                    "x-ves-example": "00000034"
+                    "x-ves-example": "00000034",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hex": "true",
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
                 },
                 "send_payload": {
                     "type": "string",
-                    "description": " raw bytes sent in the request. Empty payloads imply a connect-only health check.\n Describes the encoding of the payload bytes in the payload.\n Hex encoded payload.\n\nExample: - \"000000FF\"-",
+                    "description": " raw bytes sent in the request. Empty payloads imply a connect-only health check.\n Describes the encoding of the payload bytes in the payload.\n Hex encoded payload.\n\nExample: - \"000000FF\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hex: true\n  ves.io.schema.rules.string.max_len: 2048\n",
                     "title": "send payload",
+                    "maxLength": 2048,
                     "x-displayname": "Send Payload",
-                    "x-ves-example": "000000FF"
+                    "x-ves-example": "000000FF",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hex": "true",
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
                 }
             }
         },
@@ -3029,17 +3073,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3094,16 +3144,7 @@ var APISwaggerJSON string = `{
             "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
-            "x-ves-proto-message": "ves.io.schema.ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "181255"
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3114,10 +3155,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -3143,11 +3190,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3381,12 +3431,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",

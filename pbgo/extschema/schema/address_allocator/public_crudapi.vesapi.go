@@ -1393,7 +1393,7 @@ var APISwaggerJSON string = `{
     "produces": [
         "application/json"
     ],
-    "tags": null,
+    "tags": [],
     "paths": {
         "/public/namespaces/{metadata.namespace}/address_allocators": {
             "post": {
@@ -1799,18 +1799,27 @@ var APISwaggerJSON string = `{
             "properties": {
                 "allocation_unit": {
                     "type": "integer",
-                    "description": " Prefix length indicating the size of each allocated subnet. For example, if this is\n specified as 30, subnets of /30 will be allocated from the given address pool.\n\nExample: - 30-\nRequired: YES",
+                    "description": " Prefix length indicating the size of each allocated subnet. For example, if this is\n specified as 30, subnets of /30 will be allocated from the given address pool.\n\nExample: - 30-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Allocation Unit",
                     "format": "int64",
                     "x-displayname": "Allocation Unit",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 },
                 "local_interface_address_offset": {
                     "type": "integer",
-                    "description": "\n This is used to derive address for the local interface from the allocated subnet.\n\n If Local Interface Address Type is set to \"Offset from beginning of Subnet\", this offset value is added\n to the allocated subnet and used as the local interface address. For example, if the allocated subnet is\n 169.254.0.0/30 and offset is set to 2 with Local Interface Address Type set to \"Offset from beginning\n of Subnet\", local interface address of 169.254.0.2 is used.\n\n If Local Interface Address Type is set to \"Offset from end of Subnet\", this offset value is subtracted\n from the end of the allocated subnet and used as the local interface address. For example, if the allocated\n subnet is 169.254.0.0/30 and offset is set to 1 with Local Interface Address Type set to \"Offset from\n end of Subnet\", local interface address of 169.254.0.2 is used.",
+                    "description": "\n This is used to derive address for the local interface from the allocated subnet.\n\n If Local Interface Address Type is set to \"Offset from beginning of Subnet\", this offset value is added\n to the allocated subnet and used as the local interface address. For example, if the allocated subnet is\n 169.254.0.0/30 and offset is set to 2 with Local Interface Address Type set to \"Offset from beginning\n of Subnet\", local interface address of 169.254.0.2 is used.\n\n If Local Interface Address Type is set to \"Offset from end of Subnet\", this offset value is subtracted\n from the end of the allocated subnet and used as the local interface address. For example, if the allocated\n subnet is 169.254.0.0/30 and offset is set to 1 with Local Interface Address Type set to \"Offset from\n end of Subnet\", local interface address of 169.254.0.2 is used.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Local Interface Address Offset",
                     "format": "int64",
-                    "x-displayname": "Local Interface Address Offset"
+                    "x-displayname": "Local Interface Address Offset",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 },
                 "local_interface_address_type": {
                     "description": "\n Decides how address for local interface is derived from the allocated subnet.",
@@ -1885,26 +1894,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.address_allocator.CreateSpecType",
             "properties": {
                 "address_allocation_scheme": {
-                    "description": " Configures the scheme to be used to allocate addresses from the configured address pool.\nRequired: YES",
+                    "description": " Configures the scheme to be used to allocate addresses from the configured address pool.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/address_allocatorAllocationScheme",
                     "x-displayname": "Address Allocation Scheme",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "address_pool": {
                     "type": "array",
-                    "description": " Address pool from which the allocator carves out subnets or addresses to its clients.\n\nExample: - \"10.1.1.0/24\"-\nRequired: YES",
+                    "description": " Address pool from which the allocator carves out subnets or addresses to its clients.\n\nExample: - \"10.1.1.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "minItems": 1,
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Address Pool",
                     "x-ves-example": "10.1.1.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 },
                 "mode": {
-                    "description": " Configures the mode the address allocator.\n Currently, only local mode is supported - the address allocator is limited\n to VERs within local cluster.\nRequired: YES",
+                    "description": " Configures the mode the address allocator.\n Currently, only local mode is supported - the address allocator is limited\n to VERs within local cluster.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/address_allocatorAllocatorMode",
                     "x-displayname": "Address Allocator Mode",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -1971,13 +1994,6 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Referring Objects"
                 },
-                "resource_version": {
-                    "type": "string",
-                    "description": "Version of the object\n\nExample: -\"42\"-",
-                    "title": "resource_version",
-                    "x-displayname": "Resource Version",
-                    "x-ves-example": "42"
-                },
                 "spec": {
                     "description": " Specification of address allocator",
                     "title": "spec",
@@ -2022,26 +2038,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.address_allocator.GetSpecType",
             "properties": {
                 "address_allocation_scheme": {
-                    "description": " Configures the scheme to be used to allocate addresses from the configured address pool.\nRequired: YES",
+                    "description": " Configures the scheme to be used to allocate addresses from the configured address pool.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/address_allocatorAllocationScheme",
                     "x-displayname": "Address Allocation Scheme",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "address_pool": {
                     "type": "array",
-                    "description": " Address pool from which the allocator carves out subnets or addresses to its clients.\n\nExample: - \"10.1.1.0/24\"-\nRequired: YES",
+                    "description": " Address pool from which the allocator carves out subnets or addresses to its clients.\n\nExample: - \"10.1.1.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "minItems": 1,
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Address Pool",
                     "x-ves-example": "10.1.1.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 },
                 "mode": {
-                    "description": " Configures the mode the address allocator.\n Currently, only local mode is supported - the address allocator is limited\n to VERs within local cluster.\nRequired: YES",
+                    "description": " Configures the mode the address allocator.\n Currently, only local mode is supported - the address allocator is limited\n to VERs within local cluster.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/address_allocatorAllocatorMode",
                     "x-displayname": "Address Allocator Mode",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2053,35 +2083,43 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.address_allocator.GlobalSpecType",
             "properties": {
                 "address_allocation_scheme": {
-                    "description": " Configures the scheme to be used to allocate addresses from the configured address pool.\nRequired: YES",
+                    "description": " Configures the scheme to be used to allocate addresses from the configured address pool.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Address Allocation Scheme",
                     "$ref": "#/definitions/address_allocatorAllocationScheme",
                     "x-displayname": "Address Allocation Scheme",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "address_pool": {
                     "type": "array",
-                    "description": " Address pool from which the allocator carves out subnets or addresses to its clients.\n\nExample: - \"10.1.1.0/24\"-\nRequired: YES",
+                    "description": " Address pool from which the allocator carves out subnets or addresses to its clients.\n\nExample: - \"10.1.1.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Address Pool",
+                    "minItems": 1,
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Address Pool",
                     "x-ves-example": "10.1.1.0/24",
-                    "x-ves-required": "true"
-                },
-                "allocation_map": {
-                    "description": " Per Site:Node Allocation in global per site node mode.",
-                    "title": "Internal allocation",
-                    "$ref": "#/definitions/address_allocatorNodePrefixMapType",
-                    "x-displayname": "Internal allocation"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 },
                 "mode": {
-                    "description": " Configures the mode the address allocator.\n Currently, only local mode is supported - the address allocator is limited\n to VERs within local cluster.\nRequired: YES",
+                    "description": " Configures the mode the address allocator.\n Currently, only local mode is supported - the address allocator is limited\n to VERs within local cluster.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Address Allocator Mode",
                     "$ref": "#/definitions/address_allocatorAllocatorMode",
                     "x-displayname": "Address Allocator Mode",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2227,16 +2265,13 @@ var APISwaggerJSON string = `{
         },
         "address_allocatorNodePrefixMapType": {
             "type": "object",
-            "description": "Allocated ip subnet per Node.",
+            "description": "x-displayName: \"Node Allocation Map\"\nAllocated ip subnet per Node.",
             "title": "Node Allocation Map",
-            "x-displayname": "Node Allocation Map",
-            "x-ves-proto-message": "ves.io.schema.address_allocator.NodePrefixMapType",
             "properties": {
                 "endpoints": {
                     "type": "object",
-                    "description": " Map of site:node to node prefix ",
-                    "title": "Node Prefix Map",
-                    "x-displayname": "Node Prefix Map"
+                    "description": "x-displayName: \"Node Prefix Map\"\nMap of site:node to node prefix",
+                    "title": "Node Prefix Map"
                 }
             }
         },
@@ -2376,17 +2411,23 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
-                    "x-ves-example": "Failed"
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
                     "title": "type",
                     "x-displayname": "Type",
-                    "x-ves-example": "Operational"
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -2484,9 +2525,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
-                    "x-displayname": "Annotation"
+                    "x-displayname": "Annotation",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2510,11 +2557,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2534,10 +2584,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotation",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2563,11 +2619,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2587,10 +2646,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -2616,11 +2681,14 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -2942,12 +3010,16 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Namespace Reference"
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "object_index": {
                     "type": "integer",
