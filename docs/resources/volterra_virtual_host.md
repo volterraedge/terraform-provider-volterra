@@ -20,12 +20,11 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
+  // One of the arguments from this list "captcha_challenge no_challenge js_challenge" must be set
 
-  js_challenge {
-    cookie_expiry   = "cookie_expiry"
-    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    js_script_delay = "js_script_delay"
+  captcha_challenge {
+    cookie_expiry = "cookie_expiry"
+    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
   }
 }
 
@@ -465,6 +464,8 @@ Set of TLS certificates.
 in advertise policy.
 
 `common_params` - (Optional) Common TLS parameters used in both upstream and downstream connections. See [Common Params ](#common-params) below for details.
+
+`crl` - (Optional) Used to ensure that the client presented certificate is not revoked as per the CRL. See [ref](#ref) below for details.
 
 `require_client_certificate` - (Optional) certificate. (`Bool`).
 

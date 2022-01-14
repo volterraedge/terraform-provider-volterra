@@ -41,7 +41,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
 
       workload_subnet {
-        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -59,16 +59,8 @@ resource "volterra_aws_tgw_site" "example" {
     }
     disk_size     = "80"
     instance_type = "a1.xlarge"
-
     // One of the arguments from this list "new_vpc vpc_id" must be set
-
-    new_vpc {
-      allocate_ipv6 = true
-
-      // One of the arguments from this list "name_tag autogenerate" must be set
-      autogenerate = true
-      primary_ipv4 = "10.1.0.0/16"
-    }
+    vpc_id = "vpc-12345678901234567"
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
@@ -77,12 +69,17 @@ resource "volterra_aws_tgw_site" "example" {
       // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
-    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
     nodes_per_az = "2"
   }
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -118,7 +115,11 @@ Argument Reference
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
+`site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
+
 `sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
+
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
 
 `tgw_security` - (Optional) Security Configuration for transit gateway. See [Tgw Security ](#tgw-security) below for details.
 

@@ -365,6 +365,39 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
+			"api_definitions": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"api_definitions": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"blocked_clients": {
 
 				Type:     schema.TypeList,
@@ -1059,6 +1092,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"regional_endpoint": {
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"timeout": {
+							Type:     schema.TypeInt,
 							Optional: true,
 						},
 					},
@@ -2558,6 +2596,35 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"crl": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"no_crl": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"trusted_ca_url": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -2852,6 +2919,35 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"crl": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"no_crl": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
 
 									"trusted_ca_url": {
 										Type:     schema.TypeString,
@@ -5145,7 +5241,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
-						"domain_regex": {
+						"exact_value": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"suffix_value": {
 
 							Type:     schema.TypeString,
 							Optional: true,
@@ -5634,6 +5736,45 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			advertiseChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DoNotAdvertise{}
 			advertiseChoiceInt.DoNotAdvertise = &ves_io_schema.Empty{}
 			createSpec.AdvertiseChoice = advertiseChoiceInt
+		}
+
+	}
+
+	//api_definitions
+	if v, ok := d.GetOk("api_definitions"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		apiDefinitions := &ves_io_schema_views_http_loadbalancer.ApiDefinitionList{}
+		createSpec.ApiDefinitions = apiDefinitions
+		for _, set := range sl {
+			apiDefinitionsMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiDefinitionsMapStrToI["api_definitions"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				apiDefinitionsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				apiDefinitions.ApiDefinitions = apiDefinitionsInt
+				for i, ps := range sl {
+
+					adMapToStrVal := ps.(map[string]interface{})
+					apiDefinitionsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := adMapToStrVal["name"]; ok && !isIntfNil(v) {
+						apiDefinitionsInt[i].Name = v.(string)
+					}
+
+					if v, ok := adMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						apiDefinitionsInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := adMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						apiDefinitionsInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -6679,6 +6820,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["regional_endpoint"]; ok && !isIntfNil(v) {
 
 				botDefenseChoiceInt.BotDefense.RegionalEndpoint = ves_io_schema_views_http_loadbalancer.ShapeBotDefenseRegion(ves_io_schema_views_http_loadbalancer.ShapeBotDefenseRegion_value[v.(string)])
+
+			}
+
+			if v, ok := cs["timeout"]; ok && !isIntfNil(v) {
+
+				botDefenseChoiceInt.BotDefense.Timeout = uint32(v.(int))
 
 			}
 
@@ -8650,6 +8797,53 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							crlChoiceTypeFound := false
+
+							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+								crlChoiceTypeFound = true
+								crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_Crl{}
+								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										crlChoiceInt.Crl.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										crlChoiceInt.Crl.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										crlChoiceInt.Crl.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+								crlChoiceTypeFound = true
+
+								if v.(bool) {
+									crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_NoCrl{}
+									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+								}
+
+							}
+
 							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
@@ -9032,6 +9226,53 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					crlChoiceTypeFound := false
+
+					if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+						crlChoiceTypeFound = true
+						crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_Crl{}
+						crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+						mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								crlChoiceInt.Crl.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								crlChoiceInt.Crl.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								crlChoiceInt.Crl.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+						crlChoiceTypeFound = true
+
+						if v.(bool) {
+							crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_NoCrl{}
+							crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+							mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+						}
+
+					}
 
 					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
@@ -12185,14 +12426,25 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if v, ok := wafExclusionRulesMapStrToI["domain_regex"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+			if v, ok := wafExclusionRulesMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 				domainChoiceTypeFound = true
-				domainChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_DomainRegex{}
+				domainChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_ExactValue{}
 
 				wafExclusionRules[i].DomainChoice = domainChoiceInt
 
-				domainChoiceInt.DomainRegex = v.(string)
+				domainChoiceInt.ExactValue = v.(string)
+
+			}
+
+			if v, ok := wafExclusionRulesMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_SuffixValue{}
+
+				wafExclusionRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.SuffixValue = v.(string)
 
 			}
 
@@ -12720,6 +12972,44 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			advertiseChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DoNotAdvertise{}
 			advertiseChoiceInt.DoNotAdvertise = &ves_io_schema.Empty{}
 			updateSpec.AdvertiseChoice = advertiseChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("api_definitions"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		apiDefinitions := &ves_io_schema_views_http_loadbalancer.ApiDefinitionList{}
+		updateSpec.ApiDefinitions = apiDefinitions
+		for _, set := range sl {
+			apiDefinitionsMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiDefinitionsMapStrToI["api_definitions"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				apiDefinitionsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				apiDefinitions.ApiDefinitions = apiDefinitionsInt
+				for i, ps := range sl {
+
+					adMapToStrVal := ps.(map[string]interface{})
+					apiDefinitionsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := adMapToStrVal["name"]; ok && !isIntfNil(v) {
+						apiDefinitionsInt[i].Name = v.(string)
+					}
+
+					if v, ok := adMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						apiDefinitionsInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := adMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						apiDefinitionsInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -13762,6 +14052,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["regional_endpoint"]; ok && !isIntfNil(v) {
 
 				botDefenseChoiceInt.BotDefense.RegionalEndpoint = ves_io_schema_views_http_loadbalancer.ShapeBotDefenseRegion(ves_io_schema_views_http_loadbalancer.ShapeBotDefenseRegion_value[v.(string)])
+
+			}
+
+			if v, ok := cs["timeout"]; ok && !isIntfNil(v) {
+
+				botDefenseChoiceInt.BotDefense.Timeout = uint32(v.(int))
 
 			}
 
@@ -15723,6 +16019,53 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							crlChoiceTypeFound := false
+
+							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+								crlChoiceTypeFound = true
+								crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_Crl{}
+								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										crlChoiceInt.Crl.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										crlChoiceInt.Crl.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										crlChoiceInt.Crl.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+								crlChoiceTypeFound = true
+
+								if v.(bool) {
+									crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_NoCrl{}
+									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+								}
+
+							}
+
 							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
@@ -16105,6 +16448,53 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					crlChoiceTypeFound := false
+
+					if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+						crlChoiceTypeFound = true
+						crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_Crl{}
+						crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+						mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								crlChoiceInt.Crl.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								crlChoiceInt.Crl.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								crlChoiceInt.Crl.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+						crlChoiceTypeFound = true
+
+						if v.(bool) {
+							crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_NoCrl{}
+							crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+							mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+						}
+
+					}
 
 					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
@@ -19243,14 +19633,25 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if v, ok := wafExclusionRulesMapStrToI["domain_regex"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+			if v, ok := wafExclusionRulesMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 				domainChoiceTypeFound = true
-				domainChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_DomainRegex{}
+				domainChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_ExactValue{}
 
 				wafExclusionRules[i].DomainChoice = domainChoiceInt
 
-				domainChoiceInt.DomainRegex = v.(string)
+				domainChoiceInt.ExactValue = v.(string)
+
+			}
+
+			if v, ok := wafExclusionRulesMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_SuffixValue{}
+
+				wafExclusionRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.SuffixValue = v.(string)
 
 			}
 

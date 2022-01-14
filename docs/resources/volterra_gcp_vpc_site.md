@@ -29,8 +29,14 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
@@ -40,7 +46,7 @@ resource "volterra_gcp_vpc_site" "example" {
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
     local_network {
-      // One of the arguments from this list "existing_network new_network_autogenerate new_network" must be set
+      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
       new_network_autogenerate {
         autogenerate = true
@@ -90,6 +96,8 @@ Argument Reference
 `cloud_credentials` - (Optional) Reference to GCP credentials for automatic deployment. See [ref](#ref) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
+
+`gcp_labels` - (Optional) It helps to manage, identify, organize, search for, and filter resources in Azure console. (`String`).
 
 `gcp_region` - (Required) Name for GCP Region. (`String`).
 

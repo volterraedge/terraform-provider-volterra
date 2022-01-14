@@ -33,13 +33,12 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
-  ingress_gw_ar {
-    azure_certified_hw = "azure-byol-voltmesh"
-
-    node {
-      fault_domain = "1"
+  ingress_gw {
+    az_nodes {
+      azure_az  = "1"
+      disk_size = "disk_size"
 
       local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
@@ -49,23 +48,20 @@ resource "volterra_azure_vnet_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
-      node_number   = "node_number"
-      update_domain = "1"
     }
+
+    azure_certified_hw = "azure-byol-voltmesh"
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
 
-    new_vnet {
-      // One of the arguments from this list "name autogenerate" must be set
-      name = "name"
-
-      primary_ipv4 = "10.1.0.0/16"
+    existing_vnet {
+      resource_group = "resource_group"
+      vnet_name      = "vnet_name"
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  no_worker_nodes = true
+  nodes_per_az = "2"
 }
 
 ```
@@ -130,6 +126,8 @@ Argument Reference
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
+
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in Azure console. (`String`).
 
 `vnet` - (Required) Choice of using existing Vnet or create new Vnet. See [Vnet ](#vnet) below for details.
 

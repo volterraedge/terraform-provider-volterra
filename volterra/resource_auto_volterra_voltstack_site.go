@@ -4850,6 +4850,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 				},
 			},
 
+			"disable_vm": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_vm": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{},
+				},
+			},
+
 			"volterra_certified_hw": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -11502,6 +11517,28 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
+	//vm_choice
+
+	vmChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_vm"); ok && !vmChoiceTypeFound {
+
+		vmChoiceTypeFound = true
+
+		if v.(bool) {
+			vmChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_DisableVm{}
+			vmChoiceInt.DisableVm = &ves_io_schema.Empty{}
+			createSpec.VmChoice = vmChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_vm"); ok && !vmChoiceTypeFound {
+
+		vmChoiceTypeFound = true
+		_ = v
+	}
+
 	//volterra_certified_hw
 	if v, ok := d.GetOk("volterra_certified_hw"); ok && !isIntfNil(v) {
 
@@ -18103,6 +18140,26 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 		}
 
+	}
+
+	vmChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_vm"); ok && !vmChoiceTypeFound {
+
+		vmChoiceTypeFound = true
+
+		if v.(bool) {
+			vmChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_DisableVm{}
+			vmChoiceInt.DisableVm = &ves_io_schema.Empty{}
+			updateSpec.VmChoice = vmChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_vm"); ok && !vmChoiceTypeFound {
+
+		vmChoiceTypeFound = true
+		_ = v
 	}
 
 	if v, ok := d.GetOk("volterra_certified_hw"); ok && !isIntfNil(v) {

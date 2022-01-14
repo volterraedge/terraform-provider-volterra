@@ -387,6 +387,18 @@ func resourceVolterraK8SCluster() *schema.Resource {
 				Optional: true,
 			},
 
+			"cluster_scoped_access_deny": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"cluster_scoped_access_permit": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"global_access_enable": {
 
 				Type:     schema.TypeBool,
@@ -1004,6 +1016,34 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 			clusterRoleChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_UseDefaultClusterRoles{}
 			clusterRoleChoiceInt.UseDefaultClusterRoles = &ves_io_schema.Empty{}
 			createSpec.ClusterRoleChoice = clusterRoleChoiceInt
+		}
+
+	}
+
+	//cluster_scoped_resource_access_choice
+
+	clusterScopedResourceAccessChoiceTypeFound := false
+
+	if v, ok := d.GetOk("cluster_scoped_access_deny"); ok && !clusterScopedResourceAccessChoiceTypeFound {
+
+		clusterScopedResourceAccessChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterScopedResourceAccessChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_ClusterScopedAccessDeny{}
+			clusterScopedResourceAccessChoiceInt.ClusterScopedAccessDeny = &ves_io_schema.Empty{}
+			createSpec.ClusterScopedResourceAccessChoice = clusterScopedResourceAccessChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("cluster_scoped_access_permit"); ok && !clusterScopedResourceAccessChoiceTypeFound {
+
+		clusterScopedResourceAccessChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterScopedResourceAccessChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_ClusterScopedAccessPermit{}
+			clusterScopedResourceAccessChoiceInt.ClusterScopedAccessPermit = &ves_io_schema.Empty{}
+			createSpec.ClusterScopedResourceAccessChoice = clusterScopedResourceAccessChoiceInt
 		}
 
 	}
@@ -1739,6 +1779,32 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 			clusterRoleChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_UseDefaultClusterRoles{}
 			clusterRoleChoiceInt.UseDefaultClusterRoles = &ves_io_schema.Empty{}
 			updateSpec.ClusterRoleChoice = clusterRoleChoiceInt
+		}
+
+	}
+
+	clusterScopedResourceAccessChoiceTypeFound := false
+
+	if v, ok := d.GetOk("cluster_scoped_access_deny"); ok && !clusterScopedResourceAccessChoiceTypeFound {
+
+		clusterScopedResourceAccessChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterScopedResourceAccessChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_ClusterScopedAccessDeny{}
+			clusterScopedResourceAccessChoiceInt.ClusterScopedAccessDeny = &ves_io_schema.Empty{}
+			updateSpec.ClusterScopedResourceAccessChoice = clusterScopedResourceAccessChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("cluster_scoped_access_permit"); ok && !clusterScopedResourceAccessChoiceTypeFound {
+
+		clusterScopedResourceAccessChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterScopedResourceAccessChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_ClusterScopedAccessPermit{}
+			clusterScopedResourceAccessChoiceInt.ClusterScopedAccessPermit = &ves_io_schema.Empty{}
+			updateSpec.ClusterScopedResourceAccessChoice = clusterScopedResourceAccessChoiceInt
 		}
 
 	}

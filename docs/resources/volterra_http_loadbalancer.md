@@ -20,11 +20,11 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_custom do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
 
   advertise_custom {
     advertise_where {
-      // One of the arguments from this list "site virtual_site vk8s_service virtual_network" must be set
+      // One of the arguments from this list "virtual_network site virtual_site vk8s_service" must be set
 
       site {
         ip      = "ip"
@@ -41,11 +41,17 @@ resource "volterra_http_loadbalancer" "example" {
       use_default_port = true
     }
   }
+
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-  no_challenge = true
+
+  js_challenge {
+    cookie_expiry   = "cookie_expiry"
+    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    js_script_delay = "js_script_delay"
+  }
   domains = ["www.foo.com"]
   // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
-  round_robin = true
+  source_ip_stickiness = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -59,7 +65,7 @@ resource "volterra_http_loadbalancer" "example" {
     // One of the arguments from this list "enable_discovery disable_discovery" must be set
 
     enable_discovery {
-      // One of the arguments from this list "enable_learn_from_redirect_traffic disable_learn_from_redirect_traffic" must be set
+      // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
       disable_learn_from_redirect_traffic = true
     }
 
@@ -69,14 +75,26 @@ resource "volterra_http_loadbalancer" "example" {
     // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
     enable_malicious_user_detection = true
   }
-  // One of the arguments from this list "disable_rate_limit rate_limit" must be set
+  // One of the arguments from this list "rate_limit disable_rate_limit" must be set
   disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  no_service_policies = true
-  // One of the arguments from this list "user_identification user_id_client_ip" must be set
-  user_id_client_ip = true
-  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
-  disable_waf = true
+  service_policies_from_namespace = true
+
+  // One of the arguments from this list "user_id_client_ip user_identification" must be set
+
+  user_identification {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+
+  // One of the arguments from this list "waf_rule app_firewall disable_waf waf" must be set
+
+  waf {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -110,11 +128,13 @@ Argument Reference
 
 `do_not_advertise` - (Optional) Do not advertise this loadbalancer (bool).
 
+`api_definitions` - (Optional) Use API definitions from OpenAPI specification files to specify API operations of an application. See [Api Definitions ](#api-definitions) below for details.
+
 `blocked_clients` - (Optional) Rules that specify the clients to be blocked. See [Blocked Clients ](#blocked-clients) below for details.
 
-`bot_defense` - (Optional) Shape Bot Defense intent configuration object. See [Bot Defense ](#bot-defense) below for details.
+`bot_defense` - (Optional) Bot Defense configuration object. See [Bot Defense ](#bot-defense) below for details.
 
-`disable_bot_defense` - (Optional) No Shape Bot Defense configuration for this load balancer (bool).
+`disable_bot_defense` - (Optional) No Bot Defense configuration for this load balancer (bool).
 
 `captcha_challenge` - (Optional) Configure Captcha challenge on this load balancer. See [Captcha Challenge ](#captcha-challenge) below for details.
 
@@ -300,6 +320,12 @@ Challenge rules can be used to selectively disable Javascript challenge or enabl
 
 Any Domain..
 
+### Api Definitions
+
+Use API definitions from OpenAPI specification files to specify API operations of an application.
+
+`api_definitions` - (Required) API Definitions using OpenAPI specification files. See [ref](#ref) below for details.
+
 ### App Firewall Detection Control
 
 App Firewall detection changes to be applied for this request.
@@ -374,11 +400,13 @@ Rules that specify the clients to be blocked.
 
 ### Bot Defense
 
-Shape Bot Defense intent configuration object.
+Bot Defense configuration object.
 
-`policy` - (Required) Shape Bot Defense Policy.. See [Policy ](#policy) below for details.
+`policy` - (Required) Bot Defense Policy.. See [Policy ](#policy) below for details.
 
 `regional_endpoint` - (Required) x-required (`String`).
+
+`timeout` - (Optional) The timeout for the inference check, in milliseconds. (`Int`).
 
 ### Bot Skip Processing
 
@@ -856,17 +884,17 @@ Configure Javascript challenge parameters.
 
 ### Js Insert All Pages
 
-Insert Shape Bot Defense JavaScript in all pages..
+Insert Bot Defense JavaScript in all pages..
 
-`javascript_location` - (Optional) Defines where to insert Shape JavaScript in HTML page. (`String`).
+`javascript_location` - (Optional) Defines where to insert Bot Defense JavaScript in HTML page. (`String`).
 
 ### Js Insert All Pages Except
 
-Insert Shape Bot Defense JavaScript in all pages with the exceptions..
+Insert Bot Defense JavaScript in all pages with the exceptions..
 
 `exclude_list` - (Optional) Optional JavaScript insertions exclude list of domain and path matchers.. See [Exclude List ](#exclude-list) below for details.
 
-`javascript_location` - (Optional) Defines where to insert Shape JavaScript in HTML page. (`String`).
+`javascript_location` - (Optional) Defines where to insert Bot Defense JavaScript in HTML page. (`String`).
 
 ### Js Insertion Rules
 
@@ -874,7 +902,7 @@ Specify custom JavaScript insertion rules..
 
 `exclude_list` - (Optional) Optional JavaScript insertions exclude list of domain and path matchers.. See [Exclude List ](#exclude-list) below for details.
 
-`rules` - (Required) Required list of pages to insert Shape Client JavaScript.. See [Rules ](#rules) below for details.
+`rules` - (Required) Required list of pages to insert Bot Defense client JavaScript.. See [Rules ](#rules) below for details.
 
 ### Low Security
 
@@ -958,6 +986,10 @@ More options like header manipulation, compression etc..
 
 Challenge rules can be used to selectively enable Javascript or Captcha challenge for some requests..
 
+### No Crl
+
+Client certificate revocation status is not verified.
+
 ### No Ip Allowed List
 
 There is no ip allowed list for rate limiting, all clients go through rate limiting..
@@ -1018,17 +1050,17 @@ to the action configured in the rule. If there's no match, the rate limiting con
 
 ### Policy
 
-Shape Bot Defense Policy..
+Bot Defense Policy..
 
 `disable_js_insert` - (Optional) Disable JavaScript insertion. (bool).
 
-`js_insert_all_pages` - (Optional) Insert Shape Bot Defense JavaScript in all pages.. See [Js Insert All Pages ](#js-insert-all-pages) below for details.
+`js_insert_all_pages` - (Optional) Insert Bot Defense JavaScript in all pages.. See [Js Insert All Pages ](#js-insert-all-pages) below for details.
 
-`js_insert_all_pages_except` - (Optional) Insert Shape Bot Defense JavaScript in all pages with the exceptions.. See [Js Insert All Pages Except ](#js-insert-all-pages-except) below for details.
+`js_insert_all_pages_except` - (Optional) Insert Bot Defense JavaScript in all pages with the exceptions.. See [Js Insert All Pages Except ](#js-insert-all-pages-except) below for details.
 
 `js_insertion_rules` - (Optional) Specify custom JavaScript insertion rules.. See [Js Insertion Rules ](#js-insertion-rules) below for details.
 
-`js_download_path` - (Optional) Customize path to Shape Client JavaScript. If not specified, default `/common.js` (`String`).
+`js_download_path` - (Optional) Customize Bot Defense Client JavaScript path. If not specified, default `/common.js` (`String`).
 
 `protected_app_endpoints` - (Required) List of protected application endpoints (max 128 items).. See [Protected App Endpoints ](#protected-app-endpoints) below for details.
 
@@ -1258,13 +1290,13 @@ list challenge rules to be used in policy based challenge.
 
 ### Rules
 
-Required list of pages to insert Shape Client JavaScript..
+Required list of pages to insert Bot Defense client JavaScript..
 
 `any_domain` - (Optional) Any Domain. (bool).
 
 `domain` - (Optional) Domain matcher.. See [Domain ](#domain) below for details.
 
-`javascript_location` - (Optional) Defines where to insert Shape JavaScript in HTML page. (`String`).
+`javascript_location` - (Optional) Defines where to insert Bot Defense JavaScript in HTML page. (`String`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
@@ -1428,6 +1460,10 @@ For HTTP, default is 80. For HTTPS/SNI, default is 443..
 
 mTLS with clients is enabled.
 
+`crl` - (Optional) CRL server information to download the certificate revocation list. See [ref](#ref) below for details.
+
+`no_crl` - (Optional) Client certificate revocation status is not verified (bool).
+
 `trusted_ca_url` - (Required) The URL for a trust store (`String`).
 
 ### Use System Defaults
@@ -1482,7 +1518,9 @@ Rules that specify the match conditions and the corresponding WAF_RULE_IDs which
 
 `any_domain` - (Optional) Apply this WAF exclusion rule for any domain (bool).
 
-`domain_regex` - (Optional) Domain to be matched (`String`).
+`exact_value` - (Optional) Exact domain name (`String`).
+
+`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
 `exclude_rule_ids` - (Required) WAF Rules to be excluded when match conditions are met (`List of Strings`).
 

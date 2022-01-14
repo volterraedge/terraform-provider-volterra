@@ -2383,6 +2383,11 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				},
 			},
 
+			"tags": {
+				Type:     schema.TypeMap,
+				Optional: true,
+			},
+
 			"vpc": {
 
 				Type:     schema.TypeSet,
@@ -5803,6 +5808,16 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 		}
 
+	}
+
+	//tags
+	if v, ok := d.GetOk("tags"); ok && !isIntfNil(v) {
+
+		ms := map[string]string{}
+		for k, v := range v.(map[string]interface{}) {
+			ms[k] = v.(string)
+		}
+		createSpec.Tags = ms
 	}
 
 	//vpc

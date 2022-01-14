@@ -454,6 +454,11 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
+			"site_to_site_tunnel_ip": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
 			"sw": {
 
 				Type:     schema.TypeSet,
@@ -474,6 +479,11 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"tags": {
+				Type:     schema.TypeMap,
+				Optional: true,
 			},
 
 			"tgw_security": {
@@ -2157,6 +2167,14 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//site_to_site_tunnel_ip
+	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
+
+		createSpec.SiteToSiteTunnelIp =
+			v.(string)
+
+	}
+
 	//sw
 	if v, ok := d.GetOk("sw"); ok && !isIntfNil(v) {
 
@@ -2193,6 +2211,16 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 		}
 
+	}
+
+	//tags
+	if v, ok := d.GetOk("tags"); ok && !isIntfNil(v) {
+
+		ms := map[string]string{}
+		for k, v := range v.(map[string]interface{}) {
+			ms[k] = v.(string)
+		}
+		createSpec.Tags = ms
 	}
 
 	//tgw_security
@@ -3866,6 +3894,13 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
+
+	}
+
+	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
+
+		updateSpec.SiteToSiteTunnelIp =
+			v.(string)
 
 	}
 
