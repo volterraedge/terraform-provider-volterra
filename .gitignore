@@ -5,4 +5,5 @@ _binaries
 .terraform
 *.tfstate*
 .vscode
+*.rej
 dist
