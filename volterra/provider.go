@@ -108,6 +108,7 @@ func Provider() terraform.ResourceProvider {
 			"volterra_address_allocator":           dataSourceVolterraAddressAllocator(),
 			"volterra_tunnel":                      dataSourceVolterraTunnel(),
 			"volterra_parse_aws_cgw_configuration": dataSourceVolterraParseAWSCGWConfiguration(),
+			"volterra_http_loadbalancer_state":     dataSourceVolterraHttpLoadbalancerState(),
 		},
 	}
 
