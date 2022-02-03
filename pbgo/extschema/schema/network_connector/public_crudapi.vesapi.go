@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_connector.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_connector.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_connector.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_connector.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_connector.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_connector.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_connector-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_connector.API.Delete"
             },
@@ -2252,29 +2260,34 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_connector.CreateSpecType",
             "properties": {
                 "disable_forward_proxy": {
-                    "description": "Exclusive with [enable_forward_proxy]\nx-displayName: \"Disable Forward Proxy\"\nForward Proxy is disabled for this connector",
+                    "description": "Exclusive with [enable_forward_proxy]\nForward Proxy is disabled for this connector",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "enable_forward_proxy": {
-                    "description": "Exclusive with [disable_forward_proxy]\nx-displayName: \"Enable Forward Proxy\"\nForward Proxy is enabled for this connector",
+                    "description": "Exclusive with [disable_forward_proxy]\nForward Proxy is enabled for this connector",
                     "title": "Enable Forward Proxy",
-                    "$ref": "#/definitions/schemaForwardProxyConfigType"
+                    "$ref": "#/definitions/schemaForwardProxyConfigType",
+                    "x-displayname": "Enable Forward Proxy"
                 },
                 "sli_to_global_dr": {
-                    "description": "Exclusive with [sli_to_slo_snat slo_to_global_dr]\nx-displayName: \"Direct, Site Local Inside to a Global Network\"\nSite local inside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_slo_snat slo_to_global_dr]\nSite local inside is connected directly to a given global network",
                     "title": "Site Local Inside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Inside to a Global Network"
                 },
                 "sli_to_slo_snat": {
-                    "description": "Exclusive with [sli_to_global_dr slo_to_global_dr]\nx-displayName: \"SNAT, Site Local Inside to Site Local Outside\"\nSite local inside is connected to site local outside, using SNAT",
+                    "description": "Exclusive with [sli_to_global_dr slo_to_global_dr]\nSite local inside is connected to site local outside, using SNAT",
                     "title": "Site Local Inside to Site Local Outside SNAT\"",
-                    "$ref": "#/definitions/network_connectorSnatConnectorType"
+                    "$ref": "#/definitions/network_connectorSnatConnectorType",
+                    "x-displayname": "SNAT, Site Local Inside to Site Local Outside"
                 },
                 "slo_to_global_dr": {
-                    "description": "Exclusive with [sli_to_global_dr sli_to_slo_snat]\nx-displayName: \"Direct, Site Local Outside to a Global Network\"\nSite local outside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_global_dr sli_to_slo_snat]\nSite local outside is connected directly to a given global network",
                     "title": "Site Local Outside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Outside to a Global Network"
                 }
             }
         },
@@ -2394,29 +2407,34 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_connector.GetSpecType",
             "properties": {
                 "disable_forward_proxy": {
-                    "description": "Exclusive with [enable_forward_proxy]\nx-displayName: \"Disable Forward Proxy\"\nForward Proxy is disabled for this connector",
+                    "description": "Exclusive with [enable_forward_proxy]\nForward Proxy is disabled for this connector",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "enable_forward_proxy": {
-                    "description": "Exclusive with [disable_forward_proxy]\nx-displayName: \"Enable Forward Proxy\"\nForward Proxy is enabled for this connector",
+                    "description": "Exclusive with [disable_forward_proxy]\nForward Proxy is enabled for this connector",
                     "title": "Enable Forward Proxy",
-                    "$ref": "#/definitions/schemaForwardProxyConfigType"
+                    "$ref": "#/definitions/schemaForwardProxyConfigType",
+                    "x-displayname": "Enable Forward Proxy"
                 },
                 "sli_to_global_dr": {
-                    "description": "Exclusive with [sli_to_slo_snat slo_to_global_dr]\nx-displayName: \"Direct, Site Local Inside to a Global Network\"\nSite local inside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_slo_snat slo_to_global_dr]\nSite local inside is connected directly to a given global network",
                     "title": "Site Local Inside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Inside to a Global Network"
                 },
                 "sli_to_slo_snat": {
-                    "description": "Exclusive with [sli_to_global_dr slo_to_global_dr]\nx-displayName: \"SNAT, Site Local Inside to Site Local Outside\"\nSite local inside is connected to site local outside, using SNAT",
+                    "description": "Exclusive with [sli_to_global_dr slo_to_global_dr]\nSite local inside is connected to site local outside, using SNAT",
                     "title": "Site Local Inside to Site Local Outside SNAT\"",
-                    "$ref": "#/definitions/network_connectorSnatConnectorType"
+                    "$ref": "#/definitions/network_connectorSnatConnectorType",
+                    "x-displayname": "SNAT, Site Local Inside to Site Local Outside"
                 },
                 "slo_to_global_dr": {
-                    "description": "Exclusive with [sli_to_global_dr sli_to_slo_snat]\nx-displayName: \"Direct, Site Local Outside to a Global Network\"\nSite local outside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_global_dr sli_to_slo_snat]\nSite local outside is connected directly to a given global network",
                     "title": "Site Local Outside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Outside to a Global Network"
                 }
             }
         },
@@ -2782,29 +2800,34 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_connector.ReplaceSpecType",
             "properties": {
                 "disable_forward_proxy": {
-                    "description": "Exclusive with [enable_forward_proxy]\nx-displayName: \"Disable Forward Proxy\"\nForward Proxy is disabled for this connector",
+                    "description": "Exclusive with [enable_forward_proxy]\nForward Proxy is disabled for this connector",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "enable_forward_proxy": {
-                    "description": "Exclusive with [disable_forward_proxy]\nx-displayName: \"Enable Forward Proxy\"\nForward Proxy is enabled for this connector",
+                    "description": "Exclusive with [disable_forward_proxy]\nForward Proxy is enabled for this connector",
                     "title": "Enable Forward Proxy",
-                    "$ref": "#/definitions/schemaForwardProxyConfigType"
+                    "$ref": "#/definitions/schemaForwardProxyConfigType",
+                    "x-displayname": "Enable Forward Proxy"
                 },
                 "sli_to_global_dr": {
-                    "description": "Exclusive with [sli_to_slo_snat slo_to_global_dr]\nx-displayName: \"Direct, Site Local Inside to a Global Network\"\nSite local inside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_slo_snat slo_to_global_dr]\nSite local inside is connected directly to a given global network",
                     "title": "Site Local Inside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Inside to a Global Network"
                 },
                 "sli_to_slo_snat": {
-                    "description": "Exclusive with [sli_to_global_dr slo_to_global_dr]\nx-displayName: \"SNAT, Site Local Inside to Site Local Outside\"\nSite local inside is connected to site local outside, using SNAT",
+                    "description": "Exclusive with [sli_to_global_dr slo_to_global_dr]\nSite local inside is connected to site local outside, using SNAT",
                     "title": "Site Local Inside to Site Local Outside SNAT\"",
-                    "$ref": "#/definitions/network_connectorSnatConnectorType"
+                    "$ref": "#/definitions/network_connectorSnatConnectorType",
+                    "x-displayname": "SNAT, Site Local Inside to Site Local Outside"
                 },
                 "slo_to_global_dr": {
-                    "description": "Exclusive with [sli_to_global_dr sli_to_slo_snat]\nx-displayName: \"Direct, Site Local Outside to a Global Network\"\nSite local outside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_global_dr sli_to_slo_snat]\nSite local outside is connected directly to a given global network",
                     "title": "Site Local Outside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Outside to a Global Network"
                 }
             }
         },
@@ -2818,14 +2841,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_connector.SnatConnectorType",
             "properties": {
                 "default_gw_snat": {
-                    "description": "Exclusive with []\nx-displayName: \"Default Gateway\"\nDefault route in inside network to SNATed network",
+                    "description": "Exclusive with []\n Default route in inside network to SNATed network",
                     "title": "Default Gateway",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Gateway"
                 },
                 "interface_ip": {
-                    "description": "Exclusive with []\nx-displayName: \"Interface IP\"\nInterface IP of the outgoing interface will be used for SNAT",
+                    "description": "Exclusive with []\n Interface IP of the outgoing interface will be used for SNAT",
                     "title": "Interface IP",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Interface IP"
                 }
             }
         },
@@ -3027,18 +3052,45 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact_value": {
                     "type": "string",
-                    "description": "Exclusive with [regex_value suffix_value]\nx-displayName: \"Exact Value\"\nx-example: \"abc.zyz.com\"\nExact domain name.",
-                    "title": "exact value"
+                    "description": "Exclusive with [regex_value suffix_value]\n Exact domain name.\n\nExample: - \"abc.zyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "exact value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Exact Value",
+                    "x-ves-example": "abc.zyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "regex_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value suffix_value]\nx-displayName: \"Regex Values of Domains\"\nx-example: \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"\nRegular Expression value for the domain name",
-                    "title": "regex values of Domains"
+                    "description": "Exclusive with [exact_value suffix_value]\n Regular Expression value for the domain name\n\nExample: - \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex values of Domains",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex Values of Domains",
+                    "x-ves-example": "([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 },
                 "suffix_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value regex_value]\nx-displayName: \"Suffix Value\"\nx-example: \"xyz.com\"\nSuffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"",
-                    "title": "suffix value"
+                    "description": "Exclusive with [exact_value regex_value]\n Suffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "suffix value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Suffix Value",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -3118,14 +3170,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_interception": {
-                    "description": "Exclusive with [tls_intercept]\nx-displayName: \"No TLS Interception\"\nNo TLS interception is enabled for this network connector",
+                    "description": "Exclusive with [tls_intercept]\n No TLS interception is enabled for this network connector",
                     "title": "No TLS interception",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No TLS Interception"
                 },
                 "tls_intercept": {
-                    "description": "Exclusive with [no_interception]\nx-displayName: \"TLS Interception\"\nSpecify TLS interception configuration for the network connector",
+                    "description": "Exclusive with [no_interception]\n Specify TLS interception configuration for the network connector",
                     "title": "TLS Interception",
-                    "$ref": "#/definitions/schemaTlsInterceptionType"
+                    "$ref": "#/definitions/schemaTlsInterceptionType",
+                    "x-displayname": "TLS Interception"
                 },
                 "white_listed_ports": {
                     "type": "array",
@@ -3524,14 +3578,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -3888,9 +3944,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_hash_algorithms": {
-                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
-                    "$ref": "#/definitions/schemaHashAlgorithms"
+                    "$ref": "#/definitions/schemaHashAlgorithms",
+                    "x-displayname": "Use hash algorithms in custom order"
                 },
                 "description": {
                     "type": "string",
@@ -3899,9 +3956,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Description"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable OCSP Stapling"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3914,9 +3972,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_system_defaults": {
-                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
                     "title": "Fetch with Volterra default settings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Fetch with Volterra default settings"
                 }
             }
         },
@@ -3956,9 +4015,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.TlsInterceptionRule",
             "properties": {
                 "disable_interception": {
-                    "description": "Exclusive with [enable_interception]\nx-displayName: \"Disable Interception\"\nDisable Interception",
+                    "description": "Exclusive with [enable_interception]\n Disable Interception",
                     "title": "Disable Interception",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Interception"
                 },
                 "domain_match": {
                     "description": " Domain value or regular expression to match\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3971,9 +4031,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "enable_interception": {
-                    "description": "Exclusive with [disable_interception]\nx-displayName: \"Enable Interception\"\nEnable Interception",
+                    "description": "Exclusive with [disable_interception]\n Enable Interception",
                     "title": "Enable Interception",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Interception"
                 }
             }
         },
@@ -3988,34 +4049,45 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.TlsInterceptionType",
             "properties": {
                 "custom_certificate": {
-                    "description": "Exclusive with [volterra_certificate]\nx-displayName: \"Custom Signing Certificate\"\nCertificates for generating intermediate certificate for TLS interception.",
+                    "description": "Exclusive with [volterra_certificate]\n Certificates for generating intermediate certificate for TLS interception.",
                     "title": "Custom Signing Certificate",
-                    "$ref": "#/definitions/schemaTlsCertificateType"
+                    "$ref": "#/definitions/schemaTlsCertificateType",
+                    "x-displayname": "Custom Signing Certificate"
                 },
                 "enable_for_all_domains": {
-                    "description": "Exclusive with [policy]\nx-displayName: \"Enable For All Domains\"\nEnable interception for all domains",
+                    "description": "Exclusive with [policy]\n Enable interception for all domains",
                     "title": "Enable For All Domains",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable For All Domains"
                 },
                 "policy": {
-                    "description": "Exclusive with [enable_for_all_domains]\nx-displayName: \"Enable/Disable for Specific Domains\"\nPolicy to enable/disable specific domains, with implicit enable all domains",
+                    "description": "Exclusive with [enable_for_all_domains]\n Policy to enable/disable specific domains, with implicit enable all domains",
                     "title": "Policy for specific domains",
-                    "$ref": "#/definitions/schemaTlsInterceptionPolicy"
+                    "$ref": "#/definitions/schemaTlsInterceptionPolicy",
+                    "x-displayname": "Enable/Disable for Specific Domains"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [volterra_trusted_ca]\nx-displayName: \"Custom Trusted CA List\"\nCustom trusted CA certificates for validating upstream server certificate",
-                    "title": "Custom List"
+                    "description": "Exclusive with [volterra_trusted_ca]\n Custom trusted CA certificates for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Custom List",
+                    "maxLength": 131072,
+                    "x-displayname": "Custom Trusted CA List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "volterra_certificate": {
-                    "description": "Exclusive with [custom_certificate]\nx-displayName: \"Volterra Signing Certificate\"\nVolterra certificates for generating intermediate certificate for TLS interception.",
+                    "description": "Exclusive with [custom_certificate]\n Volterra certificates for generating intermediate certificate for TLS interception.",
                     "title": "Volterra Signing Certificate",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Volterra Signing Certificate"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\nx-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Default volterra trusted CA list for validating upstream server certificate",
                     "title": "Volterra List",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Trusted CA List"
                 }
             }
         },

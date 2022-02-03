@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.flow_exporter.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.flow_exporter.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-flow_exporter-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.flow_exporter.crudapi.API.Create"
             },
@@ -2792,9 +2798,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Collector Type"
                 },
                 "ipfix_collector_parameters": {
-                    "description": "Exclusive with []\nx-displayName: \"IPFIX Collector Parameters\"\nIPFIX parameters for the collector",
+                    "description": "Exclusive with []\n IPFIX parameters for the collector",
                     "title": "IPFIX parameters",
-                    "$ref": "#/definitions/flow_exporterIpfixParameters"
+                    "$ref": "#/definitions/flow_exporterIpfixParameters",
+                    "x-displayname": "IPFIX Collector Parameters"
                 }
             }
         },
@@ -2808,9 +2815,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.flow_exporter.FlowCollectorEndPoint",
             "properties": {
                 "collector_ip": {
-                    "description": "Exclusive with [collector_service_name]\nx-displayName: \"IP Address\"\nAddress in which the collector resides",
+                    "description": "Exclusive with [collector_service_name]\n Address in which the collector resides",
                     "title": "Collector IP",
-                    "$ref": "#/definitions/schemaIpAddressType"
+                    "$ref": "#/definitions/schemaIpAddressType",
+                    "x-displayname": "IP Address"
                 },
                 "collector_port": {
                     "type": "integer",
@@ -2838,13 +2846,15 @@ var APISwaggerJSON string = `{
                 },
                 "collector_service_name": {
                     "type": "string",
-                    "description": "Exclusive with [collector_ip]\nx-displayName: \"Collector Service Name\"\nService Name Of Collector",
-                    "title": "Collector Service Name"
+                    "description": "Exclusive with [collector_ip]\n Service Name Of Collector",
+                    "title": "Collector Service Name",
+                    "x-displayname": "Collector Service Name"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with []\nx-displayName: \"Site Local Network (Outside)\"\nCollector is present on site local network (outside)",
+                    "description": "Exclusive with []\n Collector is present on site local network (outside)",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Network (Outside)"
                 }
             }
         },
@@ -3151,14 +3161,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },

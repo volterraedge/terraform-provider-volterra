@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fast_acl.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fast_acl.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.crudapi.API.Create"
             },
@@ -2814,34 +2820,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.DestinationType",
             "properties": {
                 "all_services": {
-                    "description": "Exclusive with [destination_ip_address interface_services selected_vip_address shared_vip_services vip_services]\nx-displayName: \"All Services\"\nDestination will be a union of all VIPs covered via interface_services and vip_services option\nPort and protocol is picked up from listener config of each VIP\nCustomer Edge: Applies the configuration to all the VIPs configured including interface_services VIP\nRegional Edge: Applies the configuration to all the VIPs assigned to tenant",
+                    "description": "Exclusive with [destination_ip_address interface_services selected_vip_address shared_vip_services vip_services]\n Destination will be a union of all VIPs covered via interface_services and vip_services option\n Port and protocol is picked up from listener config of each VIP\n Customer Edge: Applies the configuration to all the VIPs configured including interface_services VIP\n Regional Edge: Applies the configuration to all the VIPs assigned to tenant",
                     "title": "All Services",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All Services"
                 },
                 "destination_ip_address": {
-                    "description": "Exclusive with [all_services interface_services selected_vip_address shared_vip_services vip_services]\nx-displayName: \"Destination IP Address\"\nDestination is taken from configured ip address list\nPort and protocol are also picked from DestinationIPAddressType\nCustomer Edge : Tenant can configure it\nRegional Edge : Tenant can not configure it",
+                    "description": "Exclusive with [all_services interface_services selected_vip_address shared_vip_services vip_services]\n Destination is taken from configured ip address list\n Port and protocol are also picked from DestinationIPAddressType\n Customer Edge : Tenant can configure it\n Regional Edge : Tenant can not configure it",
                     "title": "Destination IP Address",
-                    "$ref": "#/definitions/fast_aclDestinationIPAddressType"
+                    "$ref": "#/definitions/fast_aclDestinationIPAddressType",
+                    "x-displayname": "Destination IP Address"
                 },
                 "interface_services": {
-                    "description": "Exclusive with [all_services destination_ip_address selected_vip_address shared_vip_services vip_services]\nx-displayName: \"Interface Services\"\nDestination matching any IP address assigned to the interfaces (e.g from DHCP) and participating as listener(VIP)\nPort and protocol is picked up from listener config of each VIP\nCustomer Edge : Applies the configuration to IP of interface if configured for services\nRegional Edge : tenants CANNOT use this option on RE",
+                    "description": "Exclusive with [all_services destination_ip_address selected_vip_address shared_vip_services vip_services]\n Destination matching any IP address assigned to the interfaces (e.g from DHCP) and participating as listener(VIP)\n Port and protocol is picked up from listener config of each VIP\n Customer Edge : Applies the configuration to IP of interface if configured for services\n Regional Edge : tenants CANNOT use this option on RE",
                     "title": "Interface Services",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Interface Services"
                 },
                 "selected_vip_address": {
-                    "description": "Exclusive with [all_services destination_ip_address interface_services shared_vip_services vip_services]\nx-displayName: \"All Services on List of Public VIP(s)\"\nDestination will be all VIP in List and services advertised on them.\nPort and protocol is picked up from advertise acl config of each VIP\nValid only for RE.",
+                    "description": "Exclusive with [all_services destination_ip_address interface_services shared_vip_services vip_services]\n Destination will be all VIP in List and services advertised on them.\n Port and protocol is picked up from advertise acl config of each VIP\n Valid only for RE.",
                     "title": "All Service on List of Public VIP(s)",
-                    "$ref": "#/definitions/fast_aclSelectedVIPAddressType"
+                    "$ref": "#/definitions/fast_aclSelectedVIPAddressType",
+                    "x-displayname": "All Services on List of Public VIP(s)"
                 },
                 "shared_vip_services": {
-                    "description": "Exclusive with [all_services destination_ip_address interface_services selected_vip_address vip_services]\nx-displayName: \"Shared VIP services\"\nPort and protocol is picked up from listener config of shared VIP\nNote: This option is available only for volterra administrators\nCustomer Edge: Not applicable\nRegional Edge: Applies configuration on all shared VIPs used for services",
+                    "description": "Exclusive with [all_services destination_ip_address interface_services selected_vip_address vip_services]\n Port and protocol is picked up from listener config of shared VIP\n Note: This option is available only for volterra administrators\n Customer Edge: Not applicable\n Regional Edge: Applies configuration on all shared VIPs used for services",
                     "title": "Shared VIP services",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Shared VIP services"
                 },
                 "vip_services": {
-                    "description": "Exclusive with [all_services destination_ip_address interface_services selected_vip_address shared_vip_services]\nx-displayName: \"VIP Services\"\nDestination matching VIP configured as listener service\nPort and protocol is picked up from listener config of each VIP\nCustomer Edge: Applies the configuration to VIP configured for services and does not satisfy interface_service option\nRegional Edge: Applies the configuration to VIP which has been assigned by default to tenant. Not applicable for shared VIP(s)",
+                    "description": "Exclusive with [all_services destination_ip_address interface_services selected_vip_address shared_vip_services]\n Destination matching VIP configured as listener service\n Port and protocol is picked up from listener config of each VIP\n Customer Edge: Applies the configuration to VIP configured for services and does not satisfy interface_service option\n Regional Edge: Applies the configuration to VIP which has been assigned by default to tenant. Not applicable for shared VIP(s)",
                     "title": "VIP Services",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "VIP Services"
                 }
             }
         },
@@ -3274,14 +3286,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -3461,20 +3475,26 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.PortValueType",
             "properties": {
                 "all": {
-                    "description": "Exclusive with [dns user_defined]\nx-displayName: \"All port\"\nMatches all port",
+                    "description": "Exclusive with [dns user_defined]\n Matches all port",
                     "title": "All port",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All port"
                 },
                 "dns": {
-                    "description": "Exclusive with [all user_defined]\nx-displayName: \"DNS port\"\nMatches dns port 53",
+                    "description": "Exclusive with [all user_defined]\n Matches dns port 53",
                     "title": "DNS port",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "DNS port"
                 },
                 "user_defined": {
                     "type": "integer",
-                    "description": "Exclusive with [all dns]\nx-displayName: \"User defined port\"\nMatches the user defined port",
+                    "description": "Exclusive with [all dns]\n Matches the user defined port\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "User defined Port",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "User defined port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 }
             }
         },
@@ -3795,19 +3815,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.VirtualNetworkSelectorType",
             "properties": {
                 "public": {
-                    "description": "Exclusive with [site_local site_local_inside]\nx-displayName: \"Public Network\"\nIndicates use of public network",
+                    "description": "Exclusive with [site_local site_local_inside]\n Indicates use of public network",
                     "title": "Public Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Public Network"
                 },
                 "site_local": {
-                    "description": "Exclusive with [public site_local_inside]\nx-displayName: \"Site Local Network\"\nIndicates use of site local network",
+                    "description": "Exclusive with [public site_local_inside]\n Indicates use of site local network",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Network"
                 },
                 "site_local_inside": {
-                    "description": "Exclusive with [public site_local]\nx-displayName: \"Site Local Inside Network\"\nIndicates use of site local inside network",
+                    "description": "Exclusive with [public site_local]\n Indicates use of site local inside network",
                     "title": "SiteLocal Inside Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Inside Network"
                 }
             }
         },

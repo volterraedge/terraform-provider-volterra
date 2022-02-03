@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host_dns_info.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host_dns_info.crudapi.API.Replace"); rvFn != nil {
@@ -1565,7 +1571,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Get"
             },
@@ -1640,7 +1646,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Delete"
             },
@@ -1723,7 +1729,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Replace"
             },
@@ -1855,7 +1861,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.List"
             },
@@ -1932,7 +1938,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Create"
             },
@@ -2064,7 +2070,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.ListStream"
             },
@@ -2171,7 +2177,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Get"
             },
@@ -2303,7 +2309,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.List"
             },
@@ -2385,7 +2391,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Delete"
             },
@@ -2468,7 +2474,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Replace"
             },
@@ -2552,7 +2558,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Create"
             },

@@ -2391,14 +2391,19 @@ type ValidateRouteRedirect struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateRouteRedirect) PathRedirectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateRouteRedirect) RedirectPathChoicePathRedirectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PathRedirect, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path_redirect")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_PathRedirect, nil
+}
+func (v *ValidateRouteRedirect) RedirectPathChoicePrefixRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PrefixRewrite, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix_rewrite")
+	}
+	return oValidatorFn_PrefixRewrite, nil
 }
 
 func (v *ValidateRouteRedirect) ProtoRedirectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2439,15 +2444,6 @@ func (v *ValidateRouteRedirect) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("host_redirect"))
 		if err := fv(ctx, m.GetHostRedirect(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["path_redirect"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("path_redirect"))
-		if err := fv(ctx, m.GetPathRedirect(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2510,6 +2506,32 @@ func (v *ValidateRouteRedirect) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	switch m.GetRedirectPathChoice().(type) {
+	case *RouteRedirect_PathRedirect:
+		if fv, exists := v.FldValidators["redirect_path_choice.path_redirect"]; exists {
+			val := m.GetRedirectPathChoice().(*RouteRedirect_PathRedirect).PathRedirect
+			vOpts := append(opts,
+				db.WithValidateField("redirect_path_choice"),
+				db.WithValidateField("path_redirect"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteRedirect_PrefixRewrite:
+		if fv, exists := v.FldValidators["redirect_path_choice.prefix_rewrite"]; exists {
+			val := m.GetRedirectPathChoice().(*RouteRedirect_PrefixRewrite).PrefixRewrite
+			vOpts := append(opts,
+				db.WithValidateField("redirect_path_choice"),
+				db.WithValidateField("prefix_rewrite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["response_code"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("response_code"))
@@ -2534,17 +2556,29 @@ var DefaultRouteRedirectValidator = func() *ValidateRouteRedirect {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhPathRedirect := v.PathRedirectValidationRuleHandler
-	rulesPathRedirect := map[string]string{
+	vrhRedirectPathChoicePathRedirect := v.RedirectPathChoicePathRedirectValidationRuleHandler
+	rulesRedirectPathChoicePathRedirect := map[string]string{
 		"ves.io.schema.rules.string.http_path": "true",
 		"ves.io.schema.rules.string.max_len":   "256",
 	}
-	vFn, err = vrhPathRedirect(rulesPathRedirect)
+	vFnMap["redirect_path_choice.path_redirect"], err = vrhRedirectPathChoicePathRedirect(rulesRedirectPathChoicePathRedirect)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteRedirect.path_redirect: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteRedirect.redirect_path_choice_path_redirect: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["path_redirect"] = vFn
+	vrhRedirectPathChoicePrefixRewrite := v.RedirectPathChoicePrefixRewriteValidationRuleHandler
+	rulesRedirectPathChoicePrefixRewrite := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFnMap["redirect_path_choice.prefix_rewrite"], err = vrhRedirectPathChoicePrefixRewrite(rulesRedirectPathChoicePrefixRewrite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteRedirect.redirect_path_choice_prefix_rewrite: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["redirect_path_choice.path_redirect"] = vFnMap["redirect_path_choice.path_redirect"]
+	v.FldValidators["redirect_path_choice.prefix_rewrite"] = vFnMap["redirect_path_choice.prefix_rewrite"]
 
 	vrhProtoRedirect := v.ProtoRedirectValidationRuleHandler
 	rulesProtoRedirect := map[string]string{

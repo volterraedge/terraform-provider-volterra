@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.alert_receiver.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.alert_receiver.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.crudapi.API.Create"
             },
@@ -2598,29 +2604,34 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.GlobalSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\nx-displayName: \"Email\"\nSend alert notifications as Email",
+                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
                     "title": "Email",
-                    "$ref": "#/definitions/alert_receiverEmailConfig"
+                    "$ref": "#/definitions/alert_receiverEmailConfig",
+                    "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\nx-displayName: \"OpsGenie\"\nSend alert notifications to OpsGenie",
+                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
                     "title": "OpsGenie",
-                    "$ref": "#/definitions/alert_receiverOpsGenieConfig"
+                    "$ref": "#/definitions/alert_receiverOpsGenieConfig",
+                    "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\nx-displayName: \"PagerDuty\"\nSend alert notifications to PagerDuty",
+                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
                     "title": "PagerDuty",
-                    "$ref": "#/definitions/alert_receiverPagerDutyConfig"
+                    "$ref": "#/definitions/alert_receiverPagerDutyConfig",
+                    "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\nx-displayName: \"Slack\"\nSend alert notifications to Slack",
+                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
                     "title": "Slack",
-                    "$ref": "#/definitions/alert_receiverSlackConfig"
+                    "$ref": "#/definitions/alert_receiverSlackConfig",
+                    "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\nx-displayName: \"SMS\"\nSend alert notifications as SMS",
+                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
                     "title": "SMS",
-                    "$ref": "#/definitions/alert_receiverSMSConfig"
+                    "$ref": "#/definitions/alert_receiverSMSConfig",
+                    "x-displayname": "SMS"
                 }
             }
         },
@@ -3302,14 +3313,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },

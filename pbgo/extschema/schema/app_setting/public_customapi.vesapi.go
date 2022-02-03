@@ -241,6 +241,11 @@ func (c *CustomAPIInprocClient) SuspiciousUserStatus(ctx context.Context, in *Su
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_setting.CustomAPI.SuspiciousUserStatus"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {

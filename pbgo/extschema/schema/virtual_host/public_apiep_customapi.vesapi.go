@@ -533,6 +533,11 @@ func (c *ApiepCustomAPIInprocClient) GetAPIEndpointLearntSchema(ctx context.Cont
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -576,6 +581,11 @@ func (c *ApiepCustomAPIInprocClient) GetAPIEndpointPDF(ctx context.Context, in *
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF"); rvFn != nil {
@@ -621,6 +631,11 @@ func (c *ApiepCustomAPIInprocClient) GetAPIEndpoints(ctx context.Context, in *AP
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -664,6 +679,11 @@ func (c *ApiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *Swa
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec"); rvFn != nil {
@@ -817,7 +837,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-ApiepCustomAPI-GetAPIEndpointLearntSchema"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getapiendpointlearntschema"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"
             },
@@ -925,7 +945,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-ApiepCustomAPI-GetAPIEndpointPDF"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getapiendpointpdf"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF"
             },
@@ -1121,7 +1141,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-ApiepCustomAPI-GetSwaggerSpec"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getswaggerspec"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec"
             },

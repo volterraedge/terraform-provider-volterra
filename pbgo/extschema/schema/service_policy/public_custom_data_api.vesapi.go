@@ -341,6 +341,11 @@ func (c *CustomDataAPIInprocClient) ServicePolicyHits(ctx context.Context, in *S
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHits"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -384,6 +389,11 @@ func (c *CustomDataAPIInprocClient) ServicePolicyHitsLatency(ctx context.Context
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHitsLatency"); rvFn != nil {
@@ -521,7 +531,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-CustomDataAPI-ServicePolicyHits"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-customdataapi-servicepolicyhits"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHits"
             },
@@ -613,7 +623,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-CustomDataAPI-ServicePolicyHitsLatency"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-customdataapi-servicepolicyhitslatency"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHitsLatency"
             },

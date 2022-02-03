@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Delete"
             },
@@ -2351,8 +2359,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "LoadBalancer Algorithm"
                 },
                 "no_panic_threshold": {
-                    "description": "Exclusive with [panic_threshold]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [panic_threshold]\n\n Disable panic threshold. Only healthy endpoints are considered for loadbalancing.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Panic threshold"
                 },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
@@ -2361,8 +2370,12 @@ var APISwaggerJSON string = `{
                 },
                 "panic_threshold": {
                     "type": "integer",
-                    "description": "Exclusive with [no_panic_threshold]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_panic_threshold]\n\n Configure a threshold (percentage of unhealthy endpoints) below which\n all endpoints will be considered for loadbalancing ignoring its health status.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "format": "int64",
+                    "x-displayname": "Panic threshold",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -2638,8 +2651,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "LoadBalancer Algorithm"
                 },
                 "no_panic_threshold": {
-                    "description": "Exclusive with [panic_threshold]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [panic_threshold]\n\n Disable panic threshold. Only healthy endpoints are considered for loadbalancing.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Panic threshold"
                 },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
@@ -2648,8 +2662,12 @@ var APISwaggerJSON string = `{
                 },
                 "panic_threshold": {
                     "type": "integer",
-                    "description": "Exclusive with [no_panic_threshold]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_panic_threshold]\n\n Configure a threshold (percentage of unhealthy endpoints) below which\n all endpoints will be considered for loadbalancing ignoring its health status.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "format": "int64",
+                    "x-displayname": "Panic threshold",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -2780,9 +2798,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "LoadBalancer Algorithm"
                 },
                 "no_panic_threshold": {
-                    "description": "Exclusive with [panic_threshold]\nx-displayName: \"No Panic threshold\"\n\nDisable panic threshold. Only healthy endpoints are considered for loadbalancing.",
+                    "description": "Exclusive with [panic_threshold]\n\n Disable panic threshold. Only healthy endpoints are considered for loadbalancing.",
                     "title": "Disable panic threshold",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Panic threshold"
                 },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
@@ -2792,9 +2811,13 @@ var APISwaggerJSON string = `{
                 },
                 "panic_threshold": {
                     "type": "integer",
-                    "description": "Exclusive with [no_panic_threshold]\nx-displayName: \"Panic threshold\"\n\nConfigure a threshold (percentage of unhealthy endpoints) below which\nall endpoints will be considered for loadbalancing ignoring its health status.",
+                    "description": "Exclusive with [no_panic_threshold]\n\n Configure a threshold (percentage of unhealthy endpoints) below which\n all endpoints will be considered for loadbalancing ignoring its health status.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "Panic threshold",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Panic threshold",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -3180,8 +3203,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "LoadBalancer Algorithm"
                 },
                 "no_panic_threshold": {
-                    "description": "Exclusive with [panic_threshold]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [panic_threshold]\n\n Disable panic threshold. Only healthy endpoints are considered for loadbalancing.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Panic threshold"
                 },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
@@ -3190,8 +3214,12 @@ var APISwaggerJSON string = `{
                 },
                 "panic_threshold": {
                     "type": "integer",
-                    "description": "Exclusive with [no_panic_threshold]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_panic_threshold]\n\n Configure a threshold (percentage of unhealthy endpoints) below which\n all endpoints will be considered for loadbalancing ignoring its health status.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "format": "int64",
+                    "x-displayname": "Panic threshold",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -3850,14 +3878,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -4214,9 +4244,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_hash_algorithms": {
-                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
-                    "$ref": "#/definitions/schemaHashAlgorithms"
+                    "$ref": "#/definitions/schemaHashAlgorithms",
+                    "x-displayname": "Use hash algorithms in custom order"
                 },
                 "description": {
                     "type": "string",
@@ -4225,9 +4256,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Description"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable OCSP Stapling"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4240,9 +4272,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_system_defaults": {
-                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
                     "title": "Fetch with Volterra default settings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Fetch with Volterra default settings"
                 }
             }
         },
@@ -4363,19 +4396,27 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Common Parameters"
                 },
                 "disable_sni": {
-                    "description": "Exclusive with [sni use_host_header_as_sni]\nx-displayName: \"No SNI\"\nDo not use SNI.",
+                    "description": "Exclusive with [sni use_host_header_as_sni]\n Do not use SNI.",
                     "title": "disable_sni",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No SNI"
                 },
                 "sni": {
                     "type": "string",
-                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\nx-displayName: \"SNI Value\"\nSNI value to be used.",
-                    "title": "sni"
+                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\n SNI value to be used.\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "sni",
+                    "maxLength": 256,
+                    "x-displayname": "SNI Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "use_host_header_as_sni": {
-                    "description": "Exclusive with [disable_sni sni]\nx-displayName: \"Host Header\"\nUse the host header as SNI",
+                    "description": "Exclusive with [disable_sni sni]\n Use the host header as SNI",
                     "title": "use_host_headers_as_sni",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Host Header"
                 }
             }
         },

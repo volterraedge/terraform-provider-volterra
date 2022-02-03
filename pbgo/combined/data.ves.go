@@ -22266,6 +22266,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AppFirewallAttackTypeContext",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.AppFirewallAttackTypeContext"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AppFirewallDetectionControl",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -29840,7 +29847,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/namespaces/{namespace}/stored_objects", "/ves.io.schema/introspect/read/private/namespaces/{namespace}/stored_objects"}}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/namespaces/{namespace}/stored_objects/{object_type}", "/ves.io.schema/introspect/read/private/namespaces/{namespace}/stored_objects/{object_type}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListObjects")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.stored_object.CustomPrivateAPI.ListObjects"] = rpcInfo

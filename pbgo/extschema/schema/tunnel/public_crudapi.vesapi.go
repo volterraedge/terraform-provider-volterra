@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.tunnel.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.tunnel.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tunnel.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tunnel.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tunnel.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tunnel.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tunnel-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tunnel.API.Delete"
             },
@@ -2383,14 +2391,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -2743,14 +2753,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -3162,19 +3174,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.VirtualNetworkSelectorType",
             "properties": {
                 "public": {
-                    "description": "Exclusive with [site_local site_local_inside]\nx-displayName: \"Public Network\"\nIndicates use of public network",
+                    "description": "Exclusive with [site_local site_local_inside]\n Indicates use of public network",
                     "title": "Public Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Public Network"
                 },
                 "site_local": {
-                    "description": "Exclusive with [public site_local_inside]\nx-displayName: \"Site Local Network\"\nIndicates use of site local network",
+                    "description": "Exclusive with [public site_local_inside]\n Indicates use of site local network",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Network"
                 },
                 "site_local_inside": {
-                    "description": "Exclusive with [public site_local]\nx-displayName: \"Site Local Inside Network\"\nIndicates use of site local inside network",
+                    "description": "Exclusive with [public site_local]\n Indicates use of site local inside network",
                     "title": "SiteLocal Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside Network"
                 }
             }
         },
@@ -3645,14 +3660,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tunnel.LocalIpAddressSelector",
             "properties": {
                 "intf": {
-                    "description": "Exclusive with [ip_address]\nx-displayName: \"Local Interface\"\nSource IP and network is picked from the interface referred here",
+                    "description": "Exclusive with [ip_address]\n Source IP and network is picked from the interface referred here",
                     "title": "Local Interface",
-                    "$ref": "#/definitions/tunnelInterfaceType"
+                    "$ref": "#/definitions/tunnelInterfaceType",
+                    "x-displayname": "Local Interface"
                 },
                 "ip_address": {
-                    "description": "Exclusive with [intf]\nx-displayName: \"Local IP Address Type\"\nLocal Source IP configuration, provides IP address with virtual network to be used for transport",
+                    "description": "Exclusive with [intf]\n Local Source IP configuration, provides IP address with virtual network to be used for transport",
                     "title": "Local IP Address Type",
-                    "$ref": "#/definitions/tunnelLocalIpAddressType"
+                    "$ref": "#/definitions/tunnelLocalIpAddressType",
+                    "x-displayname": "Local IP Address Type"
                 }
             }
         },
@@ -3665,14 +3682,20 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tunnel.LocalIpAddressType",
             "properties": {
                 "auto": {
-                    "description": "Exclusive with [ip_address]\nx-displayName: \"Auto IP\"\nNo IP configured, system picks up IP from interface attached to virtual network",
+                    "description": "Exclusive with [ip_address]\n No IP configured, system picks up IP from interface attached to virtual network",
                     "title": "Auto IP allocation",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Auto IP"
                 },
                 "ip_address": {
-                    "description": "Exclusive with [auto]\nx-displayName: \"Local IP Address Type\"\nx-required\nLocal Source IP to be used for tunnel",
+                    "description": "Exclusive with [auto]\n Local Source IP to be used for tunnel\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Local IP Address",
-                    "$ref": "#/definitions/schemaIpAddressType"
+                    "$ref": "#/definitions/schemaIpAddressType",
+                    "x-displayname": "Local IP Address Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "virtual_network_type": {
                     "description": " Local Virtual network to be used for transporting encapsulated packets\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3742,14 +3765,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tunnel.RemoteIpAddressSelector",
             "properties": {
                 "endpoints": {
-                    "description": "Exclusive with [ip]\nx-displayName: \"Remote Endpoints\"\nMap of remote IP address to which tunnel will be established on per ver node basis\nEvery node can have a different IP address to connect to\nKey is ver node name and value is IP address",
+                    "description": "Exclusive with [ip]\n Map of remote IP address to which tunnel will be established on per ver node basis\n Every node can have a different IP address to connect to\n Key is ver node name and value is IP address",
                     "title": "Remote Endpoints",
-                    "$ref": "#/definitions/tunnelRemoteEndpointType"
+                    "$ref": "#/definitions/tunnelRemoteEndpointType",
+                    "x-displayname": "Remote Endpoints"
                 },
                 "ip": {
-                    "description": "Exclusive with [endpoints]\nx-displayName: \"Remote IP address\"\nRemote IP to which tunnel will be established",
+                    "description": "Exclusive with [endpoints]\n Remote IP to which tunnel will be established",
                     "title": "Remote IP Address",
-                    "$ref": "#/definitions/schemaIpAddressType"
+                    "$ref": "#/definitions/schemaIpAddressType",
+                    "x-displayname": "Remote IP address"
                 }
             }
         },
@@ -3888,9 +3913,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tunnel.TunnelParams",
             "properties": {
                 "ipsec": {
-                    "description": "Exclusive with []\nx-displayName: \"IPSEC parameters\"\nConfiguration for IPSec encapsulation",
+                    "description": "Exclusive with []\n Configuration for IPSec encapsulation",
                     "title": "IPSec configuration parameters",
-                    "$ref": "#/definitions/tunnelIpsecTunnelParams"
+                    "$ref": "#/definitions/tunnelIpsecTunnelParams",
+                    "x-displayname": "IPSEC parameters"
                 }
             }
         },

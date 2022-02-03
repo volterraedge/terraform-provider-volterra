@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.discovery.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.discovery.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.discovery.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.discovery.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.discovery.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.discovery.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-discovery-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.discovery.API.Delete"
             },
@@ -2231,14 +2239,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.ConsulVipDiscoveryInfoType",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [publish]\nx-displayName: \"Disable VIP Publishing\"\nDisable VIP Publishing",
+                    "description": "Exclusive with [publish]\n Disable VIP Publishing",
                     "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable VIP Publishing"
                 },
                 "publish": {
-                    "description": "Exclusive with [disable]\nx-displayName: \"Publish domain to VIP mapping\"\nPublish domain to VIP mapping.",
+                    "description": "Exclusive with [disable]\n Publish domain to VIP mapping.",
                     "title": "publish",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Publish domain to VIP mapping"
                 }
             }
         },
@@ -2296,12 +2306,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.CreateSpecType",
             "properties": {
                 "discovery_consul": {
-                    "description": "Exclusive with [discovery_k8s]\n",
-                    "$ref": "#/definitions/discoveryConsulDiscoveryType"
+                    "description": "Exclusive with [discovery_k8s]\n Discovery configuration for Hashicorp Consul",
+                    "$ref": "#/definitions/discoveryConsulDiscoveryType",
+                    "x-displayname": "Consul Discovery Configuration"
                 },
                 "discovery_k8s": {
-                    "description": "Exclusive with [discovery_consul]\n",
-                    "$ref": "#/definitions/discoveryK8SDiscoveryType"
+                    "description": "Exclusive with [discovery_consul]\n Discovery configuration for K8s.",
+                    "$ref": "#/definitions/discoveryK8SDiscoveryType",
+                    "x-displayname": "K8S Discovery Configuration"
                 },
                 "where": {
                     "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2509,12 +2521,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.GetSpecType",
             "properties": {
                 "discovery_consul": {
-                    "description": "Exclusive with [discovery_k8s]\n",
-                    "$ref": "#/definitions/discoveryConsulDiscoveryType"
+                    "description": "Exclusive with [discovery_k8s]\n Discovery configuration for Hashicorp Consul",
+                    "$ref": "#/definitions/discoveryConsulDiscoveryType",
+                    "x-displayname": "Consul Discovery Configuration"
                 },
                 "discovery_k8s": {
-                    "description": "Exclusive with [discovery_consul]\n",
-                    "$ref": "#/definitions/discoveryK8SDiscoveryType"
+                    "description": "Exclusive with [discovery_consul]\n Discovery configuration for K8s.",
+                    "$ref": "#/definitions/discoveryK8SDiscoveryType",
+                    "x-displayname": "K8S Discovery Configuration"
                 },
                 "where": {
                     "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2537,14 +2551,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.GlobalSpecType",
             "properties": {
                 "discovery_consul": {
-                    "description": "Exclusive with [discovery_k8s]\nx-displayName: \"Consul Discovery Configuration\"\nDiscovery configuration for Hashicorp Consul",
+                    "description": "Exclusive with [discovery_k8s]\n Discovery configuration for Hashicorp Consul",
                     "title": "discovery consul",
-                    "$ref": "#/definitions/discoveryConsulDiscoveryType"
+                    "$ref": "#/definitions/discoveryConsulDiscoveryType",
+                    "x-displayname": "Consul Discovery Configuration"
                 },
                 "discovery_k8s": {
-                    "description": "Exclusive with [discovery_consul]\nx-displayName: \"K8S Discovery Configuration\"\nDiscovery configuration for K8s.",
+                    "description": "Exclusive with [discovery_consul]\n Discovery configuration for K8s.",
                     "title": "discovery K8s",
-                    "$ref": "#/definitions/discoveryK8SDiscoveryType"
+                    "$ref": "#/definitions/discoveryK8SDiscoveryType",
+                    "x-displayname": "K8S Discovery Configuration"
                 },
                 "where": {
                     "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2569,24 +2585,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.K8SAccessInfo",
             "properties": {
                 "connection_info": {
-                    "description": "Exclusive with [kubeconfig_url]\nx-displayName: \"TLS parameters for HTTP REST\"\nProvide API server access details (endpoint and TLS parameters)",
+                    "description": "Exclusive with [kubeconfig_url]\n Provide API server access details (endpoint and TLS parameters)",
                     "title": "REST connection info",
-                    "$ref": "#/definitions/discoveryRestConfigType"
+                    "$ref": "#/definitions/discoveryRestConfigType",
+                    "x-displayname": "TLS parameters for HTTP REST"
                 },
                 "isolated": {
-                    "description": "Exclusive with [reachable]\nx-displayName: \"Kubernetes POD is isolated\"\nSpecifies Kubernetes POD network is isolated from VER. In this mode\nNodeIP is discovered when Kubernetes cluster is external and ClusterIP is\nis discovered when Kubernetes cluster is in InCluster mode.",
+                    "description": "Exclusive with [reachable]\n Specifies Kubernetes POD network is isolated from VER. In this mode\n NodeIP is discovered when Kubernetes cluster is external and ClusterIP is\n is discovered when Kubernetes cluster is in InCluster mode.",
                     "title": "isolated",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Kubernetes POD is isolated"
                 },
                 "kubeconfig_url": {
-                    "description": "Exclusive with [connection_info]\nx-displayName: \"Kubeconfig\"\nProvide kubeconfig file to connect to K8s cluster",
+                    "description": "Exclusive with [connection_info]\n Provide kubeconfig file to connect to K8s cluster",
                     "title": "Kubeconfig",
-                    "$ref": "#/definitions/schemaSecretType"
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Kubeconfig"
                 },
                 "reachable": {
-                    "description": "Exclusive with [isolated]\nx-displayName: \"Kubernetes POD reachable\"\nSpecifies Kubernetes POD is reachable from VER. When POD is reachable, VER\nalways discovers POD IP Address for configured endpoints.",
+                    "description": "Exclusive with [isolated]\n Specifies Kubernetes POD is reachable from VER. When POD is reachable, VER\n always discovers POD IP Address for configured endpoints.",
                     "title": "Kubernetes Pod reachability",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Kubernetes POD reachable"
                 }
             }
         },
@@ -2685,24 +2705,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.K8SVipDiscoveryInfoType",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [dns_delegation publish publish_fqdns]\nx-displayName: \"Disable VIP Publishing and DNS Delegation\"\nDisable VIP Publishing and DNS Delegation",
+                    "description": "Exclusive with [dns_delegation publish publish_fqdns]\n Disable VIP Publishing and DNS Delegation",
                     "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable VIP Publishing and DNS Delegation"
                 },
                 "dns_delegation": {
-                    "description": "Exclusive with [disable publish publish_fqdns]\nx-displayName: \"DNS delegation\"\nProgram DNS delegation for a sub-domain in external cluster",
+                    "description": "Exclusive with [disable publish publish_fqdns]\n Program DNS delegation for a sub-domain in external cluster",
                     "title": "dns delegation",
-                    "$ref": "#/definitions/discoveryK8SDelegationType"
+                    "$ref": "#/definitions/discoveryK8SDelegationType",
+                    "x-displayname": "DNS delegation"
                 },
                 "publish": {
-                    "description": "Exclusive with [disable dns_delegation publish_fqdns]\nx-displayName: \"Publish domain to VIP mapping\"\nPublish domain to VIP mapping.",
+                    "description": "Exclusive with [disable dns_delegation publish_fqdns]\n Publish domain to VIP mapping.",
                     "title": "publish",
-                    "$ref": "#/definitions/discoveryK8SPublishType"
+                    "$ref": "#/definitions/discoveryK8SPublishType",
+                    "x-displayname": "Publish domain to VIP mapping"
                 },
                 "publish_fqdns": {
-                    "description": "Exclusive with [disable dns_delegation publish]\nx-displayName: \"Publish Fully Qualified Domain to VIP mapping\"\nUse this option to publish domain to VIP mapping when all domains are expected to be fully qualified i.e. they include the namesapce.",
+                    "description": "Exclusive with [disable dns_delegation publish]\n Use this option to publish domain to VIP mapping when all domains are expected to be fully qualified i.e. they include the namesapce.",
                     "title": "publish_fqdns",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Publish Fully Qualified Domain to VIP mapping"
                 }
             }
         },
@@ -2966,12 +2990,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.ReplaceSpecType",
             "properties": {
                 "discovery_consul": {
-                    "description": "Exclusive with [discovery_k8s]\n",
-                    "$ref": "#/definitions/discoveryConsulDiscoveryType"
+                    "description": "Exclusive with [discovery_k8s]\n Discovery configuration for Hashicorp Consul",
+                    "$ref": "#/definitions/discoveryConsulDiscoveryType",
+                    "x-displayname": "Consul Discovery Configuration"
                 },
                 "discovery_k8s": {
-                    "description": "Exclusive with [discovery_consul]\n",
-                    "$ref": "#/definitions/discoveryK8SDiscoveryType"
+                    "description": "Exclusive with [discovery_consul]\n Discovery configuration for K8s.",
+                    "$ref": "#/definitions/discoveryK8SDiscoveryType",
+                    "x-displayname": "K8S Discovery Configuration"
                 },
                 "where": {
                     "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3476,19 +3502,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
                 "site": {
-                    "description": "Exclusive with [virtual_network virtual_site]\nx-displayName: \"Site\"\nDirect reference to site object",
+                    "description": "Exclusive with [virtual_network virtual_site]\n Direct reference to site object",
                     "title": "site",
-                    "$ref": "#/definitions/schemaSiteRefType"
+                    "$ref": "#/definitions/schemaSiteRefType",
+                    "x-displayname": "Site"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"Virtual Network\"\nDirect reference to virtual network object",
+                    "description": "Exclusive with [site virtual_site]\n Direct reference to virtual network object",
                     "title": "virtual_network",
-                    "$ref": "#/definitions/schemaNetworkRefType"
+                    "$ref": "#/definitions/schemaNetworkRefType",
+                    "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site virtual_network]\nx-displayName: \"Virtual Site\"\nDirect reference to virtual site object",
+                    "description": "Exclusive with [site virtual_network]\n Direct reference to virtual site object",
                     "title": "virtual_site",
-                    "$ref": "#/definitions/schemaVSiteRefType"
+                    "$ref": "#/definitions/schemaVSiteRefType",
+                    "x-displayname": "Virtual Site"
                 }
             }
         },
@@ -3803,14 +3832,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },

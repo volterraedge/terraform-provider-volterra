@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fast_acl_rule.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fast_acl_rule.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl_rule-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.crudapi.API.Create"
             },
@@ -2768,19 +2774,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl_rule.FastAclRuleAction",
             "properties": {
                 "policer_action": {
-                    "description": "Exclusive with [protocol_policer_action simple_action]\nx-displayName: \"Policer Action\"\nReference to policer object to which traffic would be subjected",
+                    "description": "Exclusive with [protocol_policer_action simple_action]\n Reference to policer object to which traffic would be subjected",
                     "title": "policer_action",
-                    "$ref": "#/definitions/schemaPolicerRefType"
+                    "$ref": "#/definitions/schemaPolicerRefType",
+                    "x-displayname": "Policer Action"
                 },
                 "protocol_policer_action": {
-                    "description": "Exclusive with [policer_action simple_action]\nx-displayName: \"Protocol Policer Action\"\nReference to protocol based policer object",
+                    "description": "Exclusive with [policer_action simple_action]\n Reference to protocol based policer object",
                     "title": "protocol_policer_action",
-                    "$ref": "#/definitions/schemaProtocolPolicerRefType"
+                    "$ref": "#/definitions/schemaProtocolPolicerRefType",
+                    "x-displayname": "Protocol Policer Action"
                 },
                 "simple_action": {
-                    "description": "Exclusive with [policer_action protocol_policer_action]\nx-displayName: \"Simple Action\"\nSimple action like dropping or forwarding the traffic",
+                    "description": "Exclusive with [policer_action protocol_policer_action]\n Simple action like dropping or forwarding the traffic",
                     "title": "simple_action",
-                    "$ref": "#/definitions/fast_acl_ruleFastAclRuleSimpleAction"
+                    "$ref": "#/definitions/fast_acl_ruleFastAclRuleSimpleAction",
+                    "x-displayname": "Simple Action"
                 }
             }
         },
@@ -2816,9 +2825,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [prefix]\nx-displayName: \"IP prefix Set\"\nReference to IP prefix set object",
+                    "description": "Exclusive with [prefix]\n Reference to IP prefix set object",
                     "title": "ip_prefix_set",
-                    "$ref": "#/definitions/schemaIpPrefixSetRefType"
+                    "$ref": "#/definitions/schemaIpPrefixSetRefType",
+                    "x-displayname": "IP prefix Set"
                 },
                 "port": {
                     "type": "array",
@@ -2834,9 +2844,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "prefix": {
-                    "description": "Exclusive with [ip_prefix_set]\nx-displayName: \"Prefix\"\nList of IP prefixes",
+                    "description": "Exclusive with [ip_prefix_set]\n List of IP prefixes",
                     "title": "prefix",
-                    "$ref": "#/definitions/schemaPrefixListType"
+                    "$ref": "#/definitions/schemaPrefixListType",
+                    "x-displayname": "Prefix"
                 }
             }
         },
@@ -3203,20 +3214,26 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.PortValueType",
             "properties": {
                 "all": {
-                    "description": "Exclusive with [dns user_defined]\nx-displayName: \"All port\"\nMatches all port",
+                    "description": "Exclusive with [dns user_defined]\n Matches all port",
                     "title": "All port",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All port"
                 },
                 "dns": {
-                    "description": "Exclusive with [all user_defined]\nx-displayName: \"DNS port\"\nMatches dns port 53",
+                    "description": "Exclusive with [all user_defined]\n Matches dns port 53",
                     "title": "DNS port",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "DNS port"
                 },
                 "user_defined": {
                     "type": "integer",
-                    "description": "Exclusive with [all dns]\nx-displayName: \"User defined port\"\nMatches the user defined port",
+                    "description": "Exclusive with [all dns]\n Matches the user defined port\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "User defined Port",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "User defined port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 }
             }
         },

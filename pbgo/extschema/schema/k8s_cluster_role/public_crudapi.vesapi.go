@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_cluster_role.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_cluster_role.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role.API.Delete"
             },
@@ -2200,16 +2208,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.CreateSpecType",
             "properties": {
                 "k8s_cluster_role_selector": {
-                    "description": "Exclusive with [policy_rule_list yaml]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [policy_rule_list yaml]\n This role is aggregation of all rules in roles selected by the label expression",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Aggregate Rule"
                 },
                 "policy_rule_list": {
-                    "description": "Exclusive with [k8s_cluster_role_selector yaml]\n",
-                    "$ref": "#/definitions/k8s_cluster_rolePolicyRuleListType"
+                    "description": "Exclusive with [k8s_cluster_role_selector yaml]\n Policy in terms of rule list.",
+                    "$ref": "#/definitions/k8s_cluster_rolePolicyRuleListType",
+                    "x-displayname": "Policy Rule List"
                 },
                 "yaml": {
                     "type": "string",
-                    "description": "Exclusive with [k8s_cluster_role_selector policy_rule_list]\n"
+                    "description": "Exclusive with [k8s_cluster_role_selector policy_rule_list]\n K8s YAML for ClusterRole\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 4096,
+                    "x-displayname": "K8s YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2328,16 +2344,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.GetSpecType",
             "properties": {
                 "k8s_cluster_role_selector": {
-                    "description": "Exclusive with [policy_rule_list yaml]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [policy_rule_list yaml]\n This role is aggregation of all rules in roles selected by the label expression",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Aggregate Rule"
                 },
                 "policy_rule_list": {
-                    "description": "Exclusive with [k8s_cluster_role_selector yaml]\n",
-                    "$ref": "#/definitions/k8s_cluster_rolePolicyRuleListType"
+                    "description": "Exclusive with [k8s_cluster_role_selector yaml]\n Policy in terms of rule list.",
+                    "$ref": "#/definitions/k8s_cluster_rolePolicyRuleListType",
+                    "x-displayname": "Policy Rule List"
                 },
                 "yaml": {
                     "type": "string",
-                    "description": "Exclusive with [k8s_cluster_role_selector policy_rule_list]\n"
+                    "description": "Exclusive with [k8s_cluster_role_selector policy_rule_list]\n K8s YAML for ClusterRole\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 4096,
+                    "x-displayname": "K8s YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2350,19 +2374,27 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.GlobalSpecType",
             "properties": {
                 "k8s_cluster_role_selector": {
-                    "description": "Exclusive with [policy_rule_list yaml]\nx-displayName: \"Aggregate Rule\"\nThis role is aggregation of all rules in roles selected by the label expression",
+                    "description": "Exclusive with [policy_rule_list yaml]\n This role is aggregation of all rules in roles selected by the label expression",
                     "title": "Aggregate Rule",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Aggregate Rule"
                 },
                 "policy_rule_list": {
-                    "description": "Exclusive with [k8s_cluster_role_selector yaml]\nx-displayName: \"Policy Rule List\"\nPolicy in terms of rule list.",
+                    "description": "Exclusive with [k8s_cluster_role_selector yaml]\n Policy in terms of rule list.",
                     "title": "Policy Rule List",
-                    "$ref": "#/definitions/k8s_cluster_rolePolicyRuleListType"
+                    "$ref": "#/definitions/k8s_cluster_rolePolicyRuleListType",
+                    "x-displayname": "Policy Rule List"
                 },
                 "yaml": {
                     "type": "string",
-                    "description": "Exclusive with [k8s_cluster_role_selector policy_rule_list]\nx-displayName: \"K8s YAML\"\nK8s YAML for ClusterRole",
-                    "title": "K8s YAML"
+                    "description": "Exclusive with [k8s_cluster_role_selector policy_rule_list]\n K8s YAML for ClusterRole\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "K8s YAML",
+                    "maxLength": 4096,
+                    "x-displayname": "K8s YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2607,14 +2639,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.PolicyRuleType",
             "properties": {
                 "non_resource_url_list": {
-                    "description": "Exclusive with [resource_list]\nx-displayName: \"List of Non Resource URL(s)\"\npermissions for URL(s) that do not represent K8s resource",
+                    "description": "Exclusive with [resource_list]\n permissions for URL(s) that do not represent K8s resource",
                     "title": "List of Non Resource URL(s)",
-                    "$ref": "#/definitions/k8s_cluster_roleNonResourceURLListType"
+                    "$ref": "#/definitions/k8s_cluster_roleNonResourceURLListType",
+                    "x-displayname": "List of Non Resource URL(s)"
                 },
                 "resource_list": {
-                    "description": "Exclusive with [non_resource_url_list]\nx-displayName: \"List of Resources\"\nList of resources in terms of api groups/resource types/resource instances and verbs allowed",
+                    "description": "Exclusive with [non_resource_url_list]\n List of resources in terms of api groups/resource types/resource instances and verbs allowed",
                     "title": "List of Resources",
-                    "$ref": "#/definitions/k8s_cluster_roleResourceListType"
+                    "$ref": "#/definitions/k8s_cluster_roleResourceListType",
+                    "x-displayname": "List of Resources"
                 }
             }
         },
@@ -2652,16 +2686,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.ReplaceSpecType",
             "properties": {
                 "k8s_cluster_role_selector": {
-                    "description": "Exclusive with [policy_rule_list yaml]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [policy_rule_list yaml]\n This role is aggregation of all rules in roles selected by the label expression",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Aggregate Rule"
                 },
                 "policy_rule_list": {
-                    "description": "Exclusive with [k8s_cluster_role_selector yaml]\n",
-                    "$ref": "#/definitions/k8s_cluster_rolePolicyRuleListType"
+                    "description": "Exclusive with [k8s_cluster_role_selector yaml]\n Policy in terms of rule list.",
+                    "$ref": "#/definitions/k8s_cluster_rolePolicyRuleListType",
+                    "x-displayname": "Policy Rule List"
                 },
                 "yaml": {
                     "type": "string",
-                    "description": "Exclusive with [k8s_cluster_role_selector policy_rule_list]\n"
+                    "description": "Exclusive with [k8s_cluster_role_selector policy_rule_list]\n K8s YAML for ClusterRole\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 4096,
+                    "x-displayname": "K8s YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },

@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.app_setting.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.app_setting.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_setting.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_setting.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_setting.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_setting.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_setting-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_setting.API.Delete"
             },
@@ -2209,14 +2217,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_setting.BusinessLogicMarkupSetting",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [enable]\nx-displayName: \"Disable learning from this namespace\"\nDisable learning API patterns from this namespace",
+                    "description": "Exclusive with [enable]\n Disable learning API patterns from this namespace",
                     "title": "Disable learning from this namespace",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable learning from this namespace"
                 },
                 "enable": {
-                    "description": "Exclusive with [disable]\nx-displayName: \"Enable learning from this namespace\"\nEnable learning API patterns from this namespace",
+                    "description": "Exclusive with [disable]\n Enable learning API patterns from this namespace",
                     "title": "Enable learning from this namespace",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable learning from this namespace"
                 }
             }
         },
@@ -2622,47 +2632,74 @@ var APISwaggerJSON string = `{
             "description": "Various factors abour user activity are monitored and analysed to determine malicious users.\nThese settings allow tuning those factors used by the system to detect malicious users.",
             "title": "Malicious User Detection Setting",
             "x-displayname": "Malicious User Detection Setting",
+            "x-ves-displayorder": "1,4,7,12,10",
             "x-ves-oneof-field-cooling_off_period_setting": "[\"cooling_off_period\"]",
             "x-ves-oneof-field-failed_login_activity_choice": "[\"exclude_failed_login_activity\",\"include_failed_login_activity\"]",
             "x-ves-oneof-field-forbidden_activity_choice": "[\"exclude_forbidden_activity\",\"include_forbidden_activity\"]",
+            "x-ves-oneof-field-ip_reputation_choice": "[\"exclude_ip_reputation\",\"include_ip_reputation\"]",
             "x-ves-oneof-field-waf_activity_choice": "[\"exclude_waf_activity\",\"include_waf_activity\"]",
             "x-ves-proto-message": "ves.io.schema.app_setting.MaliciousUserDetectionSetting",
             "properties": {
                 "cooling_off_period": {
                     "type": "integer",
-                    "description": "Exclusive with []\nx-displayName: \"Cooling off period (minutes)\"\nx-required\nMalicious user detection assigns a threat level to each user based on their activity. \nOnce a threat level is assigned, the system continues tracking activity from this user\nand if no further malicious activity is seen, it gradually reduces the threat assesment to lower levels.\nThis field specifies the time period, in minutes, used by the system to decay a user's threat level from \na high to medium or medium to low or low to none.",
+                    "description": "Exclusive with []\n Malicious user detection assigns a threat level to each user based on their activity. \n Once a threat level is assigned, the system continues tracking activity from this user\n and if no further malicious activity is seen, it gradually reduces the threat assesment to lower levels.\n This field specifies the time period, in minutes, used by the system to decay a user's threat level from \n a high to medium or medium to low or low to none. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 120\n",
                     "title": "Cooling Off Period",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Cooling off period (minutes)",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "120"
+                    }
                 },
                 "exclude_failed_login_activity": {
-                    "description": "Exclusive with [include_failed_login_activity]\nx-displayName: \"Exclude Failed Login Activity\"\nExclude persistent login failures activity (401 response code) in malicious user detection",
+                    "description": "Exclusive with [include_failed_login_activity]\n Exclude persistent login failures activity (401 response code) in malicious user detection",
                     "title": "exclude failed login activity",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Exclude Failed Login Activity"
                 },
                 "exclude_forbidden_activity": {
-                    "description": "Exclusive with [include_forbidden_activity]\nx-displayName: \"Exclude Forbidden Activity\"\nExclude forbidden activity by policy in malicious user detection",
+                    "description": "Exclusive with [include_forbidden_activity]\n Exclude forbidden activity by policy in malicious user detection",
                     "title": "exclude disallowed activity",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Exclude Forbidden Activity"
+                },
+                "exclude_ip_reputation": {
+                    "description": "Exclusive with [include_ip_reputation]\n Exclude IP Reputation by policy in malicious user detection",
+                    "title": "exclude disallowed activity",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Exclude IP Reputation"
                 },
                 "exclude_waf_activity": {
-                    "description": "Exclusive with [include_waf_activity]\nx-displayName: \"Exclude WAF Activity\"\nExclude WAF activity in malicious user detection",
+                    "description": "Exclusive with [include_waf_activity]\n Exclude WAF activity in malicious user detection",
                     "title": "exclude WAF activity",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Exclude WAF Activity"
                 },
                 "include_failed_login_activity": {
-                    "description": "Exclusive with [exclude_failed_login_activity]\nx-displayName: \"Include Failed Login Activity\"\nInclude persistent login failures activity (401 response code) in malicious user detection",
+                    "description": "Exclusive with [exclude_failed_login_activity]\n Include persistent login failures activity (401 response code) in malicious user detection",
                     "title": "include failed login activity",
-                    "$ref": "#/definitions/app_settingFailedLoginActivitySetting"
+                    "$ref": "#/definitions/app_settingFailedLoginActivitySetting",
+                    "x-displayname": "Include Failed Login Activity"
                 },
                 "include_forbidden_activity": {
-                    "description": "Exclusive with [exclude_forbidden_activity]\nx-displayName: \"Include Forbidden Activity\"\nInclude forbidden activity by policy in malicious user detection",
+                    "description": "Exclusive with [exclude_forbidden_activity]\n Include forbidden activity by policy in malicious user detection",
                     "title": "include forbidden activity",
-                    "$ref": "#/definitions/app_settingForbiddenActivitySetting"
+                    "$ref": "#/definitions/app_settingForbiddenActivitySetting",
+                    "x-displayname": "Include Forbidden Activity"
+                },
+                "include_ip_reputation": {
+                    "description": "Exclusive with [exclude_ip_reputation]\n Include IP Reputation by policy in malicious user detection",
+                    "title": "include IP Reputation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Include IP Reputation"
                 },
                 "include_waf_activity": {
-                    "description": "Exclusive with [exclude_waf_activity]\nx-displayName: \"Include WAF Activity\"\nInclude WAF activity in malicious user detection",
+                    "description": "Exclusive with [exclude_waf_activity]\n Include WAF activity in malicious user detection",
                     "title": "include WAF activity",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Include WAF Activity"
                 }
             }
         },
@@ -2877,24 +2914,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_setting.UserBehaviorAnalysisSetting",
             "properties": {
                 "disable_detection": {
-                    "description": "Exclusive with [enable_detection]\nx-displayName: \"Disable malicious user detection\"\nDisable malicious user detection",
+                    "description": "Exclusive with [enable_detection]\n Disable malicious user detection",
                     "title": "Disable malicious user detection",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable malicious user detection"
                 },
                 "disable_learning": {
-                    "description": "Exclusive with [enable_learning]\nx-displayName: \"Disable learning from this namespace\"\nDisable learning user behavior patterns from this namespace",
+                    "description": "Exclusive with [enable_learning]\n Disable learning user behavior patterns from this namespace",
                     "title": "Disable learning from this namespace",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable learning from this namespace"
                 },
                 "enable_detection": {
-                    "description": "Exclusive with [disable_detection]\nx-displayName: \"Enable malicious user detection\"\nEnable AI based malicious user detection",
+                    "description": "Exclusive with [disable_detection]\n Enable AI based malicious user detection",
                     "title": "Enable AI based malicious user detection",
-                    "$ref": "#/definitions/app_settingMaliciousUserDetectionSetting"
+                    "$ref": "#/definitions/app_settingMaliciousUserDetectionSetting",
+                    "x-displayname": "Enable malicious user detection"
                 },
                 "enable_learning": {
-                    "description": "Exclusive with [disable_learning]\nx-displayName: \"Enable learning from this namespace\"\nEnable learning user behavior patterns from this namespace",
+                    "description": "Exclusive with [disable_learning]\n Enable learning user behavior patterns from this namespace",
                     "title": "Enable learning from this namespace",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable learning from this namespace"
                 }
             }
         },

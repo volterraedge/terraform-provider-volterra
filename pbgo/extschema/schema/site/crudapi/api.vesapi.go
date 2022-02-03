@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.crudapi.API.Create"
             },
@@ -2911,14 +2917,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpSubnetType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Subnet\"\nIPv4 Subnet Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Subnet Address",
                     "title": "IPv4 Subnet",
-                    "$ref": "#/definitions/schemaIpv4SubnetType"
+                    "$ref": "#/definitions/schemaIpv4SubnetType",
+                    "x-displayname": "IPv4 Subnet"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Subnet\"\nIPv6 Subnet Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Subnet Address",
                     "title": "IPv6 Subnet",
-                    "$ref": "#/definitions/schemaIpv6SubnetType"
+                    "$ref": "#/definitions/schemaIpv6SubnetType",
+                    "x-displayname": "IPv6 Subnet"
                 }
             }
         },
@@ -3771,14 +3779,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.site.DefaultUnderlayNetworkType",
             "properties": {
                 "site_local_inside": {
-                    "description": "Exclusive with [site_local_outside]\nx-displayName: \"Site Local Inside\"\nUse site local inside as underlay protocol",
+                    "description": "Exclusive with [site_local_outside]\n Use site local inside as underlay protocol",
                     "title": "Site Local Inside",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Inside"
                 },
                 "site_local_outside": {
-                    "description": "Exclusive with [site_local_inside]\nx-displayName: \"Site Local Outside\"\nUse site local outside as underlay protocol",
+                    "description": "Exclusive with [site_local_inside]\n Use site local outside as underlay protocol",
                     "title": "Site Local Outside",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Outside"
                 }
             }
         },
@@ -4236,10 +4246,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Subtype"
                 },
                 "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
                     "title": "site_to_site_network_type",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Site To Site Network Type"
+                    "x-displayname": "Site To Site Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
                 },
                 "site_to_site_tunnel_ip": {
                     "type": "string",

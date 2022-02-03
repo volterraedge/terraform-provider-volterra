@@ -383,7 +383,7 @@ func local_request_CustomPrivateAPI_GetObject_1(ctx context.Context, marshaler r
 }
 
 var (
-	filter_CustomPrivateAPI_ListObjects_0 = &utilities.DoubleArray{Encoding: map[string]int{"namespace": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_CustomPrivateAPI_ListObjects_0 = &utilities.DoubleArray{Encoding: map[string]int{"namespace": 0, "object_type": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_CustomPrivateAPI_ListObjects_0(ctx context.Context, marshaler runtime.Marshaler, client CustomPrivateAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -406,6 +406,17 @@ func request_CustomPrivateAPI_ListObjects_0(ctx context.Context, marshaler runti
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["object_type"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "object_type")
+	}
+
+	protoReq.ObjectType, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "object_type", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -442,6 +453,17 @@ func local_request_CustomPrivateAPI_ListObjects_0(ctx context.Context, marshaler
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
 	}
 
+	val, ok = pathParams["object_type"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "object_type")
+	}
+
+	protoReq.ObjectType, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "object_type", err)
+	}
+
 	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_CustomPrivateAPI_ListObjects_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
@@ -452,7 +474,7 @@ func local_request_CustomPrivateAPI_ListObjects_0(ctx context.Context, marshaler
 }
 
 var (
-	filter_CustomPrivateAPI_ListObjects_1 = &utilities.DoubleArray{Encoding: map[string]int{"namespace": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_CustomPrivateAPI_ListObjects_1 = &utilities.DoubleArray{Encoding: map[string]int{"namespace": 0, "object_type": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_CustomPrivateAPI_ListObjects_1(ctx context.Context, marshaler runtime.Marshaler, client CustomPrivateAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -475,6 +497,17 @@ func request_CustomPrivateAPI_ListObjects_1(ctx context.Context, marshaler runti
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["object_type"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "object_type")
+	}
+
+	protoReq.ObjectType, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "object_type", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -509,6 +542,17 @@ func local_request_CustomPrivateAPI_ListObjects_1(ctx context.Context, marshaler
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["object_type"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "object_type")
+	}
+
+	protoReq.ObjectType, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "object_type", err)
 	}
 
 	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_CustomPrivateAPI_ListObjects_1); err != nil {
@@ -1104,9 +1148,9 @@ var (
 
 	pattern_CustomPrivateAPI_GetObject_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 2, 6, 1, 0, 4, 1, 5, 7, 1, 0, 4, 1, 5, 8, 1, 0, 4, 1, 5, 9}, []string{"ves.io.schema", "introspect", "read", "private", "namespaces", "namespace", "stored_objects", "object_type", "name", "version"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPrivateAPI_ListObjects_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"private", "namespaces", "namespace", "stored_objects"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPrivateAPI_ListObjects_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"private", "namespaces", "namespace", "stored_objects", "object_type"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPrivateAPI_ListObjects_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 2, 6}, []string{"ves.io.schema", "introspect", "read", "private", "namespaces", "namespace", "stored_objects"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPrivateAPI_ListObjects_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 2, 6, 1, 0, 4, 1, 5, 7}, []string{"ves.io.schema", "introspect", "read", "private", "namespaces", "namespace", "stored_objects", "object_type"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_CustomPrivateAPI_DeleteObject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"private", "namespaces", "namespace", "stored_objects", "object_type", "name", "version"}, "", runtime.AssumeColonVerbOpt(false)))
 

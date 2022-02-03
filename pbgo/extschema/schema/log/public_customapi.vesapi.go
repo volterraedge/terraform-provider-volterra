@@ -2224,6 +2224,11 @@ func (c *CustomAPIInprocClient) AccessLogAggregationQuery(ctx context.Context, i
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2267,6 +2272,11 @@ func (c *CustomAPIInprocClient) AccessLogQueryV2(ctx context.Context, in *Access
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogQueryV2"); rvFn != nil {
@@ -2312,6 +2322,11 @@ func (c *CustomAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *Lo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2355,6 +2370,11 @@ func (c *CustomAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogAggregationQuery"); rvFn != nil {
@@ -2400,6 +2420,11 @@ func (c *CustomAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogQueryV2"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2443,6 +2468,11 @@ func (c *CustomAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *Log
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogScrollQuery"); rvFn != nil {
@@ -2488,6 +2518,11 @@ func (c *CustomAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2531,6 +2566,11 @@ func (c *CustomAPIInprocClient) FirewallLogQuery(ctx context.Context, in *Firewa
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogQuery"); rvFn != nil {
@@ -2576,6 +2616,11 @@ func (c *CustomAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2619,6 +2664,11 @@ func (c *CustomAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context,
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"); rvFn != nil {
@@ -2664,6 +2714,11 @@ func (c *CustomAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAud
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2707,6 +2762,11 @@ func (c *CustomAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"); rvFn != nil {
@@ -2752,6 +2812,11 @@ func (c *CustomAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, i
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2795,6 +2860,11 @@ func (c *CustomAPIInprocClient) K8SEventsQuery(ctx context.Context, in *K8SEvent
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsQuery"); rvFn != nil {
@@ -2840,6 +2910,11 @@ func (c *CustomAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *Lo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2883,6 +2958,11 @@ func (c *CustomAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery"); rvFn != nil {
@@ -2928,6 +3008,11 @@ func (c *CustomAPIInprocClient) VK8SAuditLogQuery(ctx context.Context, in *VK8SA
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2971,6 +3056,11 @@ func (c *CustomAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in 
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"); rvFn != nil {
@@ -3016,6 +3106,11 @@ func (c *CustomAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -3060,6 +3155,11 @@ func (c *CustomAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEve
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -3103,6 +3203,11 @@ func (c *CustomAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *L
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"); rvFn != nil {
@@ -3240,7 +3345,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AccessLogQueryV2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogqueryv2"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogQueryV2"
             },
@@ -3332,7 +3437,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AccessLogAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogAggregationQuery"
             },
@@ -3424,7 +3529,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AccessLogScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogScrollQuery"
             },
@@ -3516,7 +3621,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AuditLogQueryV2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogqueryv2"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogQueryV2"
             },
@@ -3608,7 +3713,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AuditLogAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogAggregationQuery"
             },
@@ -3700,7 +3805,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AuditLogScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogScrollQuery"
             },
@@ -3792,7 +3897,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-FirewallLogQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogQuery"
             },
@@ -3884,7 +3989,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-FirewallLogAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery"
             },
@@ -3976,7 +4081,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-FirewallLogScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"
             },
@@ -4068,7 +4173,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SAuditLogScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"
             },
@@ -4160,7 +4265,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SEventsScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"
             },
@@ -4260,7 +4365,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SAuditLogQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogQuery"
             },
@@ -4360,7 +4465,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SAuditLogAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"
             },
@@ -4460,7 +4565,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SEventsQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsQuery"
             },
@@ -4560,7 +4665,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SEventsAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"
             },
@@ -4652,7 +4757,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SAuditLogQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogQuery"
             },
@@ -4744,7 +4849,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SAuditLogAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery"
             },
@@ -4836,7 +4941,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SAuditLogScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"
             },
@@ -4928,7 +5033,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SEventsQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsQuery"
             },
@@ -5020,7 +5125,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SEventsAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery"
             },
@@ -5112,7 +5217,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SEventsScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"
             },

@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.app_type.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.app_type.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.API.Delete"
             },
@@ -2155,14 +2163,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.BusinessLogicMarkupSetting",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [enable]\nx-displayName: \"Disable learning from redirect traffic\"\nDisable learning API patterns from traffic with redirect response codes 3xx",
+                    "description": "Exclusive with [enable]\n Disable learning API patterns from traffic with redirect response codes 3xx",
                     "title": "Disable learning from redirected request traffic",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable learning from redirect traffic"
                 },
                 "enable": {
-                    "description": "Exclusive with [disable]\nx-displayName: \"Enable learning from redirect traffic\"\nEnable learning API patterns from traffic with redirect response codes 3xx",
+                    "description": "Exclusive with [disable]\n Enable learning API patterns from traffic with redirect response codes 3xx",
                     "title": "Enable learning from redirected request traffic",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable learning from redirect traffic"
                 }
             }
         },

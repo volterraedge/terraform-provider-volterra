@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.Delete"
             },
@@ -2251,24 +2259,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.CreateSpecType",
             "properties": {
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface tunnel_interface]\nx-displayName: \"Dedicated Interface\"\nConfiguration can be used to set labels, MTU and priority for dedicated interfaces.\nNetworking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet, WLAN, or LTE/4G.",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
-                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType"
+                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
+                    "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface tunnel_interface]\nx-displayName: \"Dedicated Management Interface\"\nIn dc cluster sites fallback management interfaces can be made into dedicated management interface",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
-                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType"
+                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
+                    "x-displayname": "Dedicated Management Interface"
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface tunnel_interface]\nx-displayName: \"Ethernet Interface\"\nEthernet interface configuration.",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
-                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType"
+                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
+                    "x-displayname": "Ethernet Interface"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface]\nx-displayName: \"Tunnel Interface\"\nTunnel interface, Ipsec tunnels to other networking devices.",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
-                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType"
+                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
+                    "x-displayname": "Tunnel Interface"
                 }
             }
         },
@@ -2306,28 +2318,45 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dgw_address": {
                     "type": "string",
-                    "description": "Exclusive with [first_address last_address]\nx-displayName: \"Configured Address\"\nx-example: \"10.1.1.10\"\nConfigured address from the network prefix is chosen as default gateway.",
-                    "title": "Configured Address"
+                    "description": "Exclusive with [first_address last_address]\n Configured address from the network prefix is chosen as default gateway.\n\nExample: - \"10.1.1.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Configured Address",
+                    "x-displayname": "Configured Address",
+                    "x-ves-example": "10.1.1.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "dns_address": {
                     "type": "string",
-                    "description": "Exclusive with [same_as_dgw]\nx-displayName: \"Configured Address\"\nx-example: \"10.1.1.11\"\nConfigured address is chosen as DNS server address in DHCP response.",
-                    "title": "Configured Address"
+                    "description": "Exclusive with [same_as_dgw]\n Configured address is chosen as DNS server address in DHCP response.\n\nExample: - \"10.1.1.11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Configured Address",
+                    "x-displayname": "Configured Address",
+                    "x-ves-example": "10.1.1.11",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "first_address": {
-                    "description": "Exclusive with [dgw_address last_address]\nx-displayName: \"First Address of Network\"\nFirst usable address from the network prefix is chosen as default gateway",
+                    "description": "Exclusive with [dgw_address last_address]\n First usable address from the network prefix is chosen as default gateway",
                     "title": "First Address",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "First Address of Network"
                 },
                 "last_address": {
-                    "description": "Exclusive with [dgw_address first_address]\nx-displayName: \"Last Address of Network\"\nLast usable address from the network prefix is chosen as default gateway",
+                    "description": "Exclusive with [dgw_address first_address]\n Last usable address from the network prefix is chosen as default gateway",
                     "title": "Last Address",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Last Address of Network"
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with []\nx-displayName: \"Network Prefix\"\nx-example: \"10.1.1.0/24\"\nNetwork Prefix for a single site.",
-                    "title": "Network Prefix"
+                    "description": "Exclusive with []\n Network Prefix for a single site. \n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "title": "Network Prefix",
+                    "x-displayname": "Network Prefix",
+                    "x-ves-example": "10.1.1.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4_prefix": "true"
+                    }
                 },
                 "pool_settings": {
                     "description": " Controls how DHCP pools are handled\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2354,9 +2383,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "same_as_dgw": {
-                    "description": "Exclusive with [dns_address]\nx-displayName: \"Default Gateway Address\"\nDNS server address is same as default gateway address",
+                    "description": "Exclusive with [dns_address]\n DNS server address is same as default gateway address",
                     "title": "Default Gateway Address",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Gateway Address"
                 }
             }
         },
@@ -2407,14 +2437,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPServerParametersType",
             "properties": {
                 "automatic_from_end": {
-                    "description": "Exclusive with [automatic_from_start interface_ip_map]\nx-displayName: \"Automatic End\"\nAssign automatically from End of the first network in the list",
+                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from End of the first network in the list",
                     "title": "Automatic End",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic End"
                 },
                 "automatic_from_start": {
-                    "description": "Exclusive with [automatic_from_end interface_ip_map]\nx-displayName: \"Automatic Start\"\nAssign automatically from start of the first network in the list",
+                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the list",
                     "title": "Automatic Start",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic Start"
                 },
                 "dhcp_networks": {
                     "type": "array",
@@ -2447,9 +2479,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "interface_ip_map": {
-                    "description": "Exclusive with [automatic_from_end automatic_from_start]\nx-displayName: \"Configured\"\nConfigured address for every node",
+                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Configured address for every node",
                     "title": "Configured Address",
-                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPType"
+                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPType",
+                    "x-displayname": "Configured"
                 }
             }
         },
@@ -2464,9 +2497,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "Exclusive with [node]\n Configuration will apply to given device on all nodes of the site.",
                     "title": "Cluster",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Cluster, All Node of the site"
                 },
                 "device": {
                     "type": "string",
@@ -2484,19 +2518,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "is_primary": {
-                    "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
+                    "description": "Exclusive with [not_primary]\n This interface is primary",
                     "title": "Interface is Primary",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Interface is Primary"
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "Exclusive with [monitor_disabled]\n Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig",
+                    "x-displayname": "Enabled"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "Exclusive with [monitor]\n Link quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "mtu": {
                     "type": "integer",
@@ -2511,13 +2548,21 @@ var APISwaggerJSON string = `{
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
-                    "title": "Node"
+                    "description": "Exclusive with [cluster]\n Configuration will apply to a device on the given node of the site.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Specific Node",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "not_primary": {
-                    "description": "Exclusive with [is_primary]\nx-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
+                    "description": "Exclusive with [is_primary]\n This interface is not primary",
                     "title": "Interface is Not Primary",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Interface is Not Primary"
                 },
                 "priority": {
                     "type": "integer",
@@ -2542,9 +2587,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedManagementInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "Exclusive with [node]\n Configuration will apply to given device on all nodes of the site.",
                     "title": "Cluster",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Cluster, All Node of the site"
                 },
                 "device": {
                     "type": "string",
@@ -2574,8 +2620,15 @@ var APISwaggerJSON string = `{
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
-                    "title": "Node"
+                    "description": "Exclusive with [cluster]\n Configuration will apply to a device on the given node of the site.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Specific Node",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -2624,9 +2677,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.EthernetInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "Exclusive with [node]\n Configuration will apply to given device on all nodes of the site.",
                     "title": "Node Independent",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Cluster, All Nodes of the Site"
                 },
                 "device": {
                     "type": "string",
@@ -2644,29 +2698,34 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "dhcp_client": {
-                    "description": "Exclusive with [dhcp_server static_ip]\nx-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
+                    "description": "Exclusive with [dhcp_server static_ip]\n Interface gets it IP address from external DHCP server",
                     "title": "DHCP Client",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DHCP Client"
                 },
                 "dhcp_server": {
-                    "description": "Exclusive with [dhcp_client static_ip]\nx-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "description": "Exclusive with [dhcp_client static_ip]\n DHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
                     "title": "DHCP Server",
-                    "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
+                    "$ref": "#/definitions/network_interfaceDHCPServerParametersType",
+                    "x-displayname": "DHCP server"
                 },
                 "is_primary": {
-                    "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
+                    "description": "Exclusive with [not_primary]\n This interface is primary",
                     "title": "Interface is Primary",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Interface is Primary"
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "Exclusive with [monitor_disabled]\n Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig",
+                    "x-displayname": "Enabled"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "Exclusive with [monitor]\n Link quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "mtu": {
                     "type": "integer",
@@ -2680,19 +2739,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [static_ipv6_address]\nx-displayName: \"No IPv6 Address\"\nInterface does not have an IPv6 Address.",
+                    "description": "Exclusive with [static_ipv6_address]\n Interface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No IPv6 Address"
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
-                    "title": "Node"
+                    "description": "Exclusive with [cluster]\n Configuration will apply to a device on the given node.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Specific Node",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "not_primary": {
-                    "description": "Exclusive with [is_primary]\nx-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
+                    "description": "Exclusive with [is_primary]\n This interface is not primary",
                     "title": "Interface is Not Primary",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Interface is Not Primary"
                 },
                 "priority": {
                     "type": "integer",
@@ -2707,40 +2775,51 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [site_local_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [site_local_network storage_network]\n Interface belongs to site local network inside",
                     "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Network Inside"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [site_local_inside_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "Exclusive with [site_local_inside_network storage_network]\n Interface belongs to site local network (outside)",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Network (Outside)"
                 },
                 "static_ip": {
-                    "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "description": "Exclusive with [dhcp_client dhcp_server]\n Interface IP is configured statically",
                     "title": "Static IP",
-                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType",
+                    "x-displayname": "Static IP"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [no_ipv6_address]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "description": "Exclusive with [no_ipv6_address]\n Interface IP is configured statically",
                     "title": "Static IP",
-                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType",
+                    "x-displayname": "Static IP"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [site_local_inside_network site_local_network]\n Interface belongs to site local network inside",
                     "title": "Storage Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Storage Network"
                 },
                 "untagged": {
-                    "description": "Exclusive with [vlan_id]\nx-displayName: \"Untagged\"\nConfigure a untagged ethernet interface",
+                    "description": "Exclusive with [vlan_id]\n Configure a untagged ethernet interface",
                     "title": "Untagged",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Untagged"
                 },
                 "vlan_id": {
                     "type": "integer",
-                    "description": "Exclusive with [untagged]\nx-displayName: \"VLAN Id\"\nConfigure a VLAN tagged ethernet interface",
+                    "description": "Exclusive with [untagged]\n Configure a VLAN tagged ethernet interface\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
                     "title": "VLAN Id",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "VLAN Id",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "4095"
+                    }
                 }
             }
         },
@@ -2829,29 +2908,34 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.GetSpecType",
             "properties": {
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\nx-displayName: \"Dedicated Interface\"\nConfiguration can be used to set labels, MTU and priority for dedicated interfaces.\nNetworking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet, WLAN, or LTE/4G.",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
-                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType"
+                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
+                    "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface]\nx-displayName: \"Dedicated Management Interface\"\nIn dc cluster sites fallback management interfaces can be made into dedicated management interface",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
-                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType"
+                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
+                    "x-displayname": "Dedicated Management Interface"
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface]\nx-displayName: \"Ethernet Interface\"\nEthernet interface configuration.",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
-                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType"
+                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
+                    "x-displayname": "Ethernet Interface"
                 },
                 "legacy_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nx-displayName: \"Legacy Interface\"\nOld method of interface configuration",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nOld method of interface configuration",
                     "title": "Legacy Interface",
-                    "$ref": "#/definitions/network_interfaceLegacyInterfaceType"
+                    "$ref": "#/definitions/network_interfaceLegacyInterfaceType",
+                    "x-displayname": "Legacy Interface"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface]\nx-displayName: \"Tunnel Interface\"\nTunnel interface, Ipsec tunnels to other networking devices.",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
-                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType"
+                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
+                    "x-displayname": "Tunnel Interface"
                 }
             }
         },
@@ -2946,14 +3030,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Primary Interface"
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "Exclusive with [monitor_disabled]\n Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig",
+                    "x-displayname": "Enabled"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "Exclusive with [monitor]\n Link quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "mtu": {
                     "type": "integer",
@@ -3128,14 +3214,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "Exclusive with [monitor_disabled]\n Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig",
+                    "x-displayname": "Enabled"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "Exclusive with [monitor]\n Link quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "mtu": {
                     "type": "integer",
@@ -3596,29 +3684,34 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.ReplaceSpecType",
             "properties": {
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\nx-displayName: \"Dedicated Interface\"\nConfiguration can be used to set labels, MTU and priority for dedicated interfaces.\nNetworking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet, WLAN, or LTE/4G.",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
-                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType"
+                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
+                    "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface]\nx-displayName: \"Dedicated Management Interface\"\nIn dc cluster sites fallback management interfaces can be made into dedicated management interface",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
-                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType"
+                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
+                    "x-displayname": "Dedicated Management Interface"
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface]\nx-displayName: \"Ethernet Interface\"\nEthernet interface configuration.",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
-                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType"
+                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
+                    "x-displayname": "Ethernet Interface"
                 },
                 "legacy_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nx-displayName: \"Legacy Interface\"\nOld method of interface configuration",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nOld method of interface configuration",
                     "title": "Legacy Interface",
-                    "$ref": "#/definitions/network_interfaceLegacyInterfaceType"
+                    "$ref": "#/definitions/network_interfaceLegacyInterfaceType",
+                    "x-displayname": "Legacy Interface"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface]\nx-displayName: \"Tunnel Interface\"\nTunnel interface, Ipsec tunnels to other networking devices.",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
-                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType"
+                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
+                    "x-displayname": "Tunnel Interface"
                 }
             }
         },
@@ -3645,14 +3738,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
             "properties": {
                 "cluster_static_ip": {
-                    "description": "Exclusive with [node_static_ip]\nx-displayName: \"Cluster, All Nodes of the Site\"\nStatic IP configuration for a specific node",
+                    "description": "Exclusive with [node_static_ip]\n Static IP configuration for a specific node",
                     "title": "Node Specific",
-                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType"
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType",
+                    "x-displayname": "Cluster, All Nodes of the Site"
                 },
                 "node_static_ip": {
-                    "description": "Exclusive with [cluster_static_ip]\nx-displayName: \"Specific Node\"\nStatic IP configuration for the Node",
+                    "description": "Exclusive with [cluster_static_ip]\n Static IP configuration for the Node",
                     "title": "Node",
-                    "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType"
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType",
+                    "x-displayname": "Specific Node"
                 }
             }
         },
@@ -3800,8 +3895,15 @@ var APISwaggerJSON string = `{
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with []\nx-displayName: \"Specific Node\"\nConfiguration will apply to a given device on the given node.",
-                    "title": "Node"
+                    "description": "Exclusive with []\n Configuration will apply to a given device on the given node.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Specific Node",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "priority": {
                     "type": "integer",
@@ -3816,14 +3918,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [site_local_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [site_local_network]\n Interface belongs to site local network inside",
                     "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Network Inside"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [site_local_inside_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "Exclusive with [site_local_inside_network]\n Interface belongs to site local network (outside)",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Network (Outside)"
                 },
                 "static_ip": {
                     "description": " Interface IP is configured statically\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

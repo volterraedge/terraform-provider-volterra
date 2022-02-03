@@ -294,7 +294,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\", \"big-object\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -621,7 +621,7 @@ var DefaultDeleteObjectRequestValidator = func() *ValidateDeleteObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\", \"big-object\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -903,7 +903,7 @@ var DefaultGetObjectRequestValidator = func() *ValidateGetObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\", \"big-object\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1179,6 +1179,15 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["tenant"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant"))
+		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["versions"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("versions"))
@@ -1365,7 +1374,7 @@ var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\", \"swagger\", \"certificate\", \"javascript\", \"html\", \"generic\", \"big-object\"]",
+		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {

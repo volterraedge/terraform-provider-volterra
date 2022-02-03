@@ -5,6 +5,8 @@ go 1.14
 require (
 	github.com/Flaque/filet v0.0.0-20201012163910-45f684403088 // indirect
 	github.com/benbjohnson/clock v1.0.3 // indirect
+	github.com/emicklei/proto v1.9.0 // indirect
+	github.com/go-openapi/loads v0.20.2 // indirect
 	github.com/gogo/googleapis v1.4.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/mock v1.4.4 // indirect
@@ -18,6 +20,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.3.0 // indirect
 	github.com/hashicorp/terraform-json v0.5.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk v1.8.0
+	github.com/magefile/mage v1.11.0 // indirect
 	github.com/mitchellh/cli v1.1.1 // indirect
 	github.com/mitchellh/go-testing-interface v1.0.4 // indirect
 	github.com/moul/http2curl v1.0.0
@@ -25,7 +28,6 @@ require (
 	github.com/opentracing-contrib/go-zap v0.0.0-20190214083200-641545003d88 // indirect
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/prometheus/common v0.15.0 // indirect
-	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/spf13/viper v1.7.1 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/throttled/throttled v2.2.5+incompatible // indirect
@@ -38,7 +40,9 @@ require (
 	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154
 	google.golang.org/grpc v1.29.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gopkg.volterra.us/stdlib v0.0.0-20211230220617-2051e9000411
+	gopkg.volterra.us/codegen v0.0.0-20211230204802-e2720cea0a13 // indirect
+	gopkg.volterra.us/gft v0.0.0-20211105171438-8bddbd9becb9 // indirect
+	gopkg.volterra.us/stdlib v0.0.0-20220118192149-4116dd7e887b
 	honnef.co/go/tools v0.0.1-2020.1.5 // indirect
 	k8s.io/api v0.22.1
 	software.sslmate.com/src/go-pkcs12 v0.0.0-20201103104416-57fc603b7f52 // indirect

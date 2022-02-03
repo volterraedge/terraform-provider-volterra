@@ -430,6 +430,11 @@ func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Contex
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -474,6 +479,11 @@ func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -517,6 +527,11 @@ func (c *UamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Contex
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig"); rvFn != nil {
@@ -646,7 +661,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-RevokeGlobalKubeConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-revokeglobalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig"
             },
@@ -730,7 +745,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-ListGlobalKubeConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-listglobalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig"
             },
@@ -817,7 +832,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-CreateGlobalKubeConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-createglobalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"
             },

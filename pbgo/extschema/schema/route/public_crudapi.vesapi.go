@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Delete"
             },
@@ -2436,20 +2444,30 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.route.HashPolicyType",
             "properties": {
                 "cookie": {
-                    "description": "Exclusive with [header_name source_ip]\nx-displayName: \"Cookie\"\nHash based on cookie",
+                    "description": "Exclusive with [header_name source_ip]\n Hash based on cookie",
                     "title": "Cookie",
-                    "$ref": "#/definitions/routeCookieForHashing"
+                    "$ref": "#/definitions/routeCookieForHashing",
+                    "x-displayname": "Cookie"
                 },
                 "header_name": {
                     "type": "string",
-                    "description": "Exclusive with [cookie source_ip]\nx-displayName: \"Header Name\"\nx-example: \"host\"\nThe name or key of the request header that will be used to obtain the hash key",
-                    "title": "Header"
+                    "description": "Exclusive with [cookie source_ip]\n The name or key of the request header that will be used to obtain the hash key\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Header",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Header Name",
+                    "x-ves-example": "host",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "source_ip": {
                     "type": "boolean",
-                    "description": "Exclusive with [cookie header_name]\nx-displayName: \"Source IP\"\nx-example: true\nHash based on source IP address",
+                    "description": "Exclusive with [cookie header_name]\n Hash based on source IP address\n\nExample: - true-",
                     "title": "Source IP",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Source IP"
                 },
                 "terminal": {
                     "type": "boolean",
@@ -2755,9 +2773,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "auto_host_rewrite": {
                     "type": "boolean",
-                    "description": "Exclusive with [host_rewrite]\nx-displayName: \"Automatic Host Rewrite\"\nx-example: true\nIndicates that during forwarding, the host header will be swapped with the hostname\nof the upstream host chosen by the cluster",
+                    "description": "Exclusive with [host_rewrite]\n Indicates that during forwarding, the host header will be swapped with the hostname\n of the upstream host chosen by the cluster\n\nExample: - true-",
                     "title": "Auto Host Rewrite",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Automatic Host Rewrite"
                 },
                 "buffer_policy": {
                     "description": " Buffering configuration for requests\n Some upstream applications are not capable of handling streamed data. This config\n enables buffering the entire request before sending to upstream application. We can\n specify the maximum buffer size and buffer interval with this config.\n Route level buffer configuration overrides any configuration at VirtualHost level.",
@@ -2787,9 +2806,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "do_not_retract_cluster": {
-                    "description": "Exclusive with [retract_cluster]\nx-displayName: \"Disable cluster retraction\"\nWhen this option is configured, cluster with no healthy\nendpoints is not retracted from route having weighted cluster\nconfiguration.",
+                    "description": "Exclusive with [retract_cluster]\n When this option is configured, cluster with no healthy\n endpoints is not retracted from route having weighted cluster\n configuration.",
                     "title": "do_not_retract_cluster",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable cluster retraction"
                 },
                 "endpoint_subsets": {
                     "type": "object",
@@ -2815,8 +2835,10 @@ var APISwaggerJSON string = `{
                 },
                 "host_rewrite": {
                     "type": "string",
-                    "description": "Exclusive with [auto_host_rewrite]\nx-displayName: \"Host Rewrite\"\nx-example: \"one.volterra.com\"\nIndicates that during forwarding, the host header will be swapped with this value",
-                    "title": "HostRewrite"
+                    "description": "Exclusive with [auto_host_rewrite]\n Indicates that during forwarding, the host header will be swapped with this value\n\nExample: - \"one.volterra.com\"-",
+                    "title": "HostRewrite",
+                    "x-displayname": "Host Rewrite",
+                    "x-ves-example": "one.volterra.com"
                 },
                 "mirror_policy": {
                     "description": " MirrorPolicy is used for shadowing traffic from one cluster to another. The current\n implementation is \"fire and forget,\" meaning it will not wait for the shadow cluster to\n respond before returning the response from the primary cluster. All normal statistics are\n collected for the shadow cluster making this feature useful for testing.\n\n During shadowing, the host/authority header is altered such that *-shadow* is appended. This is\n useful for logging. For example, *cluster1* becomes *cluster1-shadow*.",
@@ -2843,9 +2865,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Priority"
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\nx-displayName: \"Retract cluster with no healthy endpoints\"\nWhen this option is enabled, weighted cluster will not be considered\nfor loadbalancing, if all its endpoints are unhealthy.\nSince the cluster with all unhealthy endpoints is removed, the traffic\nwill be distributed among remaining clusters as per their weight.\nAlso panic-threshold configuration is ignored for retracted cluster.\n\nThis option is ignored when single destination cluster is configured\nfor route",
+                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
                     "title": "retract_cluster",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Retract cluster with no healthy endpoints"
                 },
                 "retry_policy": {
                     "description": " Indicates that the route has a retry policy.",
@@ -2927,8 +2950,9 @@ var APISwaggerJSON string = `{
             "description": "route redirect parameters when match action is redirect.",
             "title": "RouteRedirect",
             "x-displayname": "Redirect",
-            "x-ves-displayorder": "3,1,2,6,7",
+            "x-ves-displayorder": "3,1,10,6,7",
             "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"retain_all_params\"]",
+            "x-ves-oneof-field-redirect_path_choice": "[\"path_redirect\",\"prefix_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteRedirect",
             "properties": {
                 "host_redirect": {
@@ -2940,11 +2964,23 @@ var APISwaggerJSON string = `{
                 },
                 "path_redirect": {
                     "type": "string",
-                    "description": " swap path part of incoming URL in redirect URL\n\nExample: - \"/api/register\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": "Exclusive with [prefix_rewrite]\n swap path part of incoming URL in redirect URL\n\nExample: - \"/api/register\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "path_redirect",
                     "maxLength": 256,
                     "x-displayname": "Path",
                     "x-ves-example": "/api/register",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "prefix_rewrite": {
+                    "type": "string",
+                    "description": "Exclusive with [path_redirect]\n In Redirect response, the matched prefix (or path) should be swapped with this value.\n This option allows redirect URLs be dynamically created based on the request\n\nExample: - \"/api/register/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "prefix_rewrite",
+                    "maxLength": 256,
+                    "x-displayname": "Prefix Rewrite",
+                    "x-ves-example": "/api/register/",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.http_path": "true",
                         "ves.io.schema.rules.string.max_len": "256"
@@ -2961,9 +2997,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "remove_all_params": {
-                    "description": "Exclusive with [retain_all_params]\nx-displayName: \"Remove All Parameters\"\nRemove all query parameters",
+                    "description": "Exclusive with [retain_all_params]\n Remove all query parameters",
                     "title": "Remove All Params",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Remove All Parameters"
                 },
                 "response_code": {
                     "type": "integer",
@@ -2976,9 +3013,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retain_all_params": {
-                    "description": "Exclusive with [remove_all_params]\nx-displayName: \"Retain All Parameters\"\nRetain all query parameters",
+                    "description": "Exclusive with [remove_all_params]\n Retain all query parameters",
                     "title": "Retain All Params",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Retain All Parameters"
                 }
             }
         },
@@ -3074,19 +3112,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "route_destination": {
-                    "description": "Exclusive with [route_direct_response route_redirect]\nx-displayName: \"Destination List\"\nSend request to one of the destination from list of destinations",
+                    "description": "Exclusive with [route_direct_response route_redirect]\n Send request to one of the destination from list of destinations",
                     "title": "route_destination",
-                    "$ref": "#/definitions/routeRouteDestinationList"
+                    "$ref": "#/definitions/routeRouteDestinationList",
+                    "x-displayname": "Destination List"
                 },
                 "route_direct_response": {
-                    "description": "Exclusive with [route_destination route_redirect]\nx-displayName: \"Direct Response\"\nSend direct response",
+                    "description": "Exclusive with [route_destination route_redirect]\n Send direct response",
                     "title": "route_direct_response",
-                    "$ref": "#/definitions/routeRouteDirectResponse"
+                    "$ref": "#/definitions/routeRouteDirectResponse",
+                    "x-displayname": "Direct Response"
                 },
                 "route_redirect": {
-                    "description": "Exclusive with [route_destination route_direct_response]\nx-displayName: \"Redirect\"\nSend redirect response",
+                    "description": "Exclusive with [route_destination route_direct_response]\n Send redirect response",
                     "title": "route_redirect",
-                    "$ref": "#/definitions/routeRouteRedirect"
+                    "$ref": "#/definitions/routeRouteRedirect",
+                    "x-displayname": "Redirect"
                 },
                 "service_policy": {
                     "description": " service policy configuration at route level which overrides configuration at virtual-host level",
@@ -3576,14 +3617,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "secret_value": {
-                    "description": "Exclusive with [value]\nx-displayName: \"Secret Value\"\nSecret Value of the HTTP header.",
+                    "description": "Exclusive with [value]\n Secret Value of the HTTP header.",
                     "title": "Secret Value",
-                    "$ref": "#/definitions/schemaSecretType"
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Secret Value"
                 },
                 "value": {
                     "type": "string",
-                    "description": "Exclusive with [secret_value]\nx-displayName: \"Value\"\nValue of the HTTP header.",
-                    "title": "value"
+                    "description": "Exclusive with [secret_value]\n Value of the HTTP header.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "value",
+                    "maxLength": 8096,
+                    "x-displayname": "Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
                 }
             }
         },
@@ -3597,8 +3644,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact": {
                     "type": "string",
-                    "description": "Exclusive with [presence regex]\nx-displayName: \"Exact\"\nx-example: \"application/json\"\nHeader value to match exactly",
-                    "title": "exact"
+                    "description": "Exclusive with [presence regex]\n Header value to match exactly\n\nExample: - \"application/json\"-",
+                    "title": "exact",
+                    "x-displayname": "Exact",
+                    "x-ves-example": "application/json"
                 },
                 "invert_match": {
                     "type": "boolean",
@@ -3616,14 +3665,23 @@ var APISwaggerJSON string = `{
                 },
                 "presence": {
                     "type": "boolean",
-                    "description": "Exclusive with [exact regex]\nx-displayName: \"Presence\"\nIf true, check for presence of header",
+                    "description": "Exclusive with [exact regex]\n If true, check for presence of header",
                     "title": "presence",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Presence"
                 },
                 "regex": {
                     "type": "string",
-                    "description": "Exclusive with [exact presence]\nx-displayName: \"Regex\"\nRegex match of the header value in re2 format",
-                    "title": "regex"
+                    "description": "Exclusive with [exact presence]\n Regex match of the header value in re2 format\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 }
             }
         },
@@ -3989,18 +4047,40 @@ var APISwaggerJSON string = `{
             "properties": {
                 "path": {
                     "type": "string",
-                    "description": "Exclusive with [prefix regex]\nx-displayName: \"Path\"\nx-example: \"/logout\"\nExact path value to match",
-                    "title": "path"
+                    "description": "Exclusive with [prefix regex]\n Exact path value to match\n\nExample: - \"/logout\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "path",
+                    "maxLength": 256,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/logout",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "prefix": {
                     "type": "string",
-                    "description": "Exclusive with [path regex]\nx-displayName: \"Prefix\"\nx-example: \"/register/\"\nPath prefix to match",
-                    "title": "prefix"
+                    "description": "Exclusive with [path regex]\n Path prefix to match\n\nExample: - \"/register/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "prefix",
+                    "maxLength": 256,
+                    "x-displayname": "Prefix",
+                    "x-ves-example": "/register/",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "regex": {
                     "type": "string",
-                    "description": "Exclusive with [path prefix]\nx-displayName: \"Regex\"\nRegular expression of path match",
-                    "title": "regex"
+                    "description": "Exclusive with [path prefix]\n Regular expression of path match\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 }
             }
         },
@@ -4014,8 +4094,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact": {
                     "type": "string",
-                    "description": "Exclusive with [regex]\nx-displayName: \"Exact\"\nExact match value for the query parameter key",
-                    "title": "exact"
+                    "description": "Exclusive with [regex]\n Exact match value for the query parameter key",
+                    "title": "exact",
+                    "x-displayname": "Exact"
                 },
                 "key": {
                     "type": "string",
@@ -4026,8 +4107,16 @@ var APISwaggerJSON string = `{
                 },
                 "regex": {
                     "type": "string",
-                    "description": "Exclusive with [exact]\nx-displayName: \"Regex\"\nRegex match value for the query parameter key",
-                    "title": "regex"
+                    "description": "Exclusive with [exact]\n Regex match value for the query parameter key\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 }
             }
         },
@@ -4206,14 +4295,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -4655,9 +4746,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.WafType",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with []\nx-displayName: \"Application Firewall\"\nA direct reference to an Application Firewall configuration object",
+                    "description": "Exclusive with []\n A direct reference to an Application Firewall configuration object",
                     "title": "app_firewall",
-                    "$ref": "#/definitions/schemaAppFirewallRefType"
+                    "$ref": "#/definitions/schemaAppFirewallRefType",
+                    "x-displayname": "Application Firewall"
                 }
             }
         },

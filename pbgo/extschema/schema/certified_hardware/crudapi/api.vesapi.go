@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.certified_hardware.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.certified_hardware.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.crudapi.API.Create"
             },
@@ -2582,9 +2588,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.Aws",
             "properties": {
                 "image_id": {
-                    "description": "Exclusive with []\nx-displayName: \"AWS image info\"\nAWS image info",
+                    "description": "Exclusive with []\n AWS image info",
                     "title": "ImageId",
-                    "$ref": "#/definitions/certified_hardwareAwsImage"
+                    "$ref": "#/definitions/certified_hardwareAwsImage",
+                    "x-displayname": "AWS image info"
                 }
             }
         },
@@ -2615,14 +2622,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.Azure",
             "properties": {
                 "image_id": {
-                    "description": "Exclusive with [marketplace]\nx-displayName: \"Azure image id info\"\nAzure image id",
+                    "description": "Exclusive with [marketplace]\n Azure image id",
                     "title": "ImageId",
-                    "$ref": "#/definitions/certified_hardwareAzureImage"
+                    "$ref": "#/definitions/certified_hardwareAzureImage",
+                    "x-displayname": "Azure image id info"
                 },
                 "marketplace": {
-                    "description": "Exclusive with [image_id]\nx-displayName: \"Azure Marketplace image info\"\nAzure Marketplace image information",
+                    "description": "Exclusive with [image_id]\n Azure Marketplace image information",
                     "title": "Marketplace",
-                    "$ref": "#/definitions/certified_hardwareMarketplace"
+                    "$ref": "#/definitions/certified_hardwareMarketplace",
+                    "x-displayname": "Azure Marketplace image info"
                 }
             }
         },
@@ -2715,9 +2724,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.Gcp",
             "properties": {
                 "image_id": {
-                    "description": "Exclusive with []\nx-displayName: \"GCP image info\"\nGCP image info",
+                    "description": "Exclusive with []\n GCP image info",
                     "title": "ImageId",
-                    "$ref": "#/definitions/certified_hardwareGcpImage"
+                    "$ref": "#/definitions/certified_hardwareGcpImage",
+                    "x-displayname": "GCP image info"
                 }
             }
         },
@@ -2815,19 +2825,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.ImageType",
             "properties": {
                 "aws": {
-                    "description": "Exclusive with [azure gcp]\nx-displayName: \"AWS\"\nAWS specific information",
+                    "description": "Exclusive with [azure gcp]\n AWS specific information",
                     "title": "AWS",
-                    "$ref": "#/definitions/certified_hardwareAws"
+                    "$ref": "#/definitions/certified_hardwareAws",
+                    "x-displayname": "AWS"
                 },
                 "azure": {
-                    "description": "Exclusive with [aws gcp]\nx-displayName: \"Azure\"\nAzure specific information",
+                    "description": "Exclusive with [aws gcp]\n Azure specific information",
                     "title": "Azure",
-                    "$ref": "#/definitions/certified_hardwareAzure"
+                    "$ref": "#/definitions/certified_hardwareAzure",
+                    "x-displayname": "Azure"
                 },
                 "gcp": {
-                    "description": "Exclusive with [aws azure]\nx-displayName: \"GCP\"\nGCP specific information",
+                    "description": "Exclusive with [aws azure]\n GCP specific information",
                     "title": "GCP",
-                    "$ref": "#/definitions/certified_hardwareGcp"
+                    "$ref": "#/definitions/certified_hardwareGcp",
+                    "x-displayname": "GCP"
                 },
                 "name": {
                     "type": "string",

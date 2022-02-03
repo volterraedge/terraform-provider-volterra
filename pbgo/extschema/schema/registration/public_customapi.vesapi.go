@@ -628,6 +628,11 @@ func (c *CustomAPIInprocClient) ListRegistrationsBySite(ctx context.Context, in 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.ListRegistrationsBySite"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -671,6 +676,11 @@ func (c *CustomAPIInprocClient) ListRegistrationsByState(ctx context.Context, in
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.ListRegistrationsByState"); rvFn != nil {
@@ -716,6 +726,11 @@ func (c *CustomAPIInprocClient) RegistrationApprove(ctx context.Context, in *App
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.RegistrationApprove"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -760,6 +775,11 @@ func (c *CustomAPIInprocClient) RegistrationConfig(ctx context.Context, in *Conf
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.RegistrationConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -803,6 +823,11 @@ func (c *CustomAPIInprocClient) RegistrationCreate(ctx context.Context, in *Regi
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.RegistrationCreate"); rvFn != nil {
@@ -940,7 +965,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-CustomAPI-ListRegistrationsByState"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-listregistrationsbystate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.ListRegistrationsByState"
             },
@@ -1040,7 +1065,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-CustomAPI-RegistrationApprove"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-registrationapprove"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.RegistrationApprove"
             },
@@ -1132,7 +1157,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-CustomAPI-ListRegistrationsBySite"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-listregistrationsbysite"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.ListRegistrationsBySite"
             },
@@ -1216,7 +1241,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-CustomAPI-RegistrationCreate"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-registrationcreate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.RegistrationCreate"
             },
@@ -1300,7 +1325,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-CustomAPI-RegistrationConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-registrationconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.RegistrationConfig"
             },
@@ -1901,14 +1926,16 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "default_os_version": {
-                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Default OS Version\"\nWill assign latest available OS version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "description": "Exclusive with [operating_system_version]\n Will assign latest available OS version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
                     "title": "Default OS Version",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default OS Version"
                 },
                 "default_sw_version": {
-                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Default SW Version\"\nWill assign latest available SW version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
                     "title": "Default SW Version",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default SW Version"
                 },
                 "latitude": {
                     "type": "number",
@@ -1936,8 +1963,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "operating_system_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target SW version for particular site e.g. 7.2009.10.",
-                    "title": "Operating System Version"
+                    "description": "Exclusive with [default_os_version]\n Operating System Version is optional parameter, which allows to specify target SW version for particular site e.g. 7.2009.10.\n\nExample: - \"7.2009.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Operating System Version",
+                    "maxLength": 20,
+                    "x-displayname": "Operating System Version",
+                    "x-ves-example": "7.2009.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 },
                 "private_network_name": {
                     "type": "string",
@@ -1952,8 +1985,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
-                    "title": "Volterra Software Version"
+                    "description": "Exclusive with [default_sw_version]\n Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Volterra Software Version",
+                    "maxLength": 20,
+                    "x-displayname": "Volterra Software Version",
+                    "x-ves-example": "crt-20210329-1002",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 }
             }
         },

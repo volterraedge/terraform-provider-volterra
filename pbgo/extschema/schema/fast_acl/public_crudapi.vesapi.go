@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fast_acl.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fast_acl.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.API.Delete"
             },
@@ -2275,34 +2283,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.DestinationType",
             "properties": {
                 "all_services": {
-                    "description": "Exclusive with [destination_ip_address interface_services selected_vip_address shared_vip_services vip_services]\nx-displayName: \"All Services\"\nDestination will be a union of all VIPs covered via interface_services and vip_services option\nPort and protocol is picked up from listener config of each VIP\nCustomer Edge: Applies the configuration to all the VIPs configured including interface_services VIP\nRegional Edge: Applies the configuration to all the VIPs assigned to tenant",
+                    "description": "Exclusive with [destination_ip_address interface_services selected_vip_address shared_vip_services vip_services]\n Destination will be a union of all VIPs covered via interface_services and vip_services option\n Port and protocol is picked up from listener config of each VIP\n Customer Edge: Applies the configuration to all the VIPs configured including interface_services VIP\n Regional Edge: Applies the configuration to all the VIPs assigned to tenant",
                     "title": "All Services",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All Services"
                 },
                 "destination_ip_address": {
-                    "description": "Exclusive with [all_services interface_services selected_vip_address shared_vip_services vip_services]\nx-displayName: \"Destination IP Address\"\nDestination is taken from configured ip address list\nPort and protocol are also picked from DestinationIPAddressType\nCustomer Edge : Tenant can configure it\nRegional Edge : Tenant can not configure it",
+                    "description": "Exclusive with [all_services interface_services selected_vip_address shared_vip_services vip_services]\n Destination is taken from configured ip address list\n Port and protocol are also picked from DestinationIPAddressType\n Customer Edge : Tenant can configure it\n Regional Edge : Tenant can not configure it",
                     "title": "Destination IP Address",
-                    "$ref": "#/definitions/fast_aclDestinationIPAddressType"
+                    "$ref": "#/definitions/fast_aclDestinationIPAddressType",
+                    "x-displayname": "Destination IP Address"
                 },
                 "interface_services": {
-                    "description": "Exclusive with [all_services destination_ip_address selected_vip_address shared_vip_services vip_services]\nx-displayName: \"Interface Services\"\nDestination matching any IP address assigned to the interfaces (e.g from DHCP) and participating as listener(VIP)\nPort and protocol is picked up from listener config of each VIP\nCustomer Edge : Applies the configuration to IP of interface if configured for services\nRegional Edge : tenants CANNOT use this option on RE",
+                    "description": "Exclusive with [all_services destination_ip_address selected_vip_address shared_vip_services vip_services]\n Destination matching any IP address assigned to the interfaces (e.g from DHCP) and participating as listener(VIP)\n Port and protocol is picked up from listener config of each VIP\n Customer Edge : Applies the configuration to IP of interface if configured for services\n Regional Edge : tenants CANNOT use this option on RE",
                     "title": "Interface Services",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Interface Services"
                 },
                 "selected_vip_address": {
-                    "description": "Exclusive with [all_services destination_ip_address interface_services shared_vip_services vip_services]\nx-displayName: \"All Services on List of Public VIP(s)\"\nDestination will be all VIP in List and services advertised on them.\nPort and protocol is picked up from advertise acl config of each VIP\nValid only for RE.",
+                    "description": "Exclusive with [all_services destination_ip_address interface_services shared_vip_services vip_services]\n Destination will be all VIP in List and services advertised on them.\n Port and protocol is picked up from advertise acl config of each VIP\n Valid only for RE.",
                     "title": "All Service on List of Public VIP(s)",
-                    "$ref": "#/definitions/fast_aclSelectedVIPAddressType"
+                    "$ref": "#/definitions/fast_aclSelectedVIPAddressType",
+                    "x-displayname": "All Services on List of Public VIP(s)"
                 },
                 "shared_vip_services": {
-                    "description": "Exclusive with [all_services destination_ip_address interface_services selected_vip_address vip_services]\nx-displayName: \"Shared VIP services\"\nPort and protocol is picked up from listener config of shared VIP\nNote: This option is available only for volterra administrators\nCustomer Edge: Not applicable\nRegional Edge: Applies configuration on all shared VIPs used for services",
+                    "description": "Exclusive with [all_services destination_ip_address interface_services selected_vip_address vip_services]\n Port and protocol is picked up from listener config of shared VIP\n Note: This option is available only for volterra administrators\n Customer Edge: Not applicable\n Regional Edge: Applies configuration on all shared VIPs used for services",
                     "title": "Shared VIP services",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Shared VIP services"
                 },
                 "vip_services": {
-                    "description": "Exclusive with [all_services destination_ip_address interface_services selected_vip_address shared_vip_services]\nx-displayName: \"VIP Services\"\nDestination matching VIP configured as listener service\nPort and protocol is picked up from listener config of each VIP\nCustomer Edge: Applies the configuration to VIP configured for services and does not satisfy interface_service option\nRegional Edge: Applies the configuration to VIP which has been assigned by default to tenant. Not applicable for shared VIP(s)",
+                    "description": "Exclusive with [all_services destination_ip_address interface_services selected_vip_address shared_vip_services]\n Destination matching VIP configured as listener service\n Port and protocol is picked up from listener config of each VIP\n Customer Edge: Applies the configuration to VIP configured for services and does not satisfy interface_service option\n Regional Edge: Applies the configuration to VIP which has been assigned by default to tenant. Not applicable for shared VIP(s)",
                     "title": "VIP Services",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "VIP Services"
                 }
             }
         },
@@ -2325,9 +2339,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [prefix]\nx-displayName: \"IP prefix Set\"\nReference to IP prefix set object",
+                    "description": "Exclusive with [prefix]\n Reference to IP prefix set object",
                     "title": "ip_prefix_set",
-                    "$ref": "#/definitions/schemaIpPrefixSetRefType"
+                    "$ref": "#/definitions/schemaIpPrefixSetRefType",
+                    "x-displayname": "IP prefix Set"
                 },
                 "metadata": {
                     "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2353,9 +2368,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "prefix": {
-                    "description": "Exclusive with [ip_prefix_set]\nx-displayName: \"Prefix\"\nList of IP prefixes",
+                    "description": "Exclusive with [ip_prefix_set]\n List of IP prefixes",
                     "title": "prefix",
-                    "$ref": "#/definitions/schemaPrefixListType"
+                    "$ref": "#/definitions/schemaPrefixListType",
+                    "x-displayname": "Prefix"
                 }
             }
         },
@@ -2625,14 +2641,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.ReACLType",
             "properties": {
                 "all_public_vips": {
-                    "description": "Exclusive with [default_tenant_vip selected_tenant_vip]\nx-displayName: \"ALL Public VIP(s)\"\nApply this Fast ACL to all public vips",
+                    "description": "Exclusive with [default_tenant_vip selected_tenant_vip]\n Apply this Fast ACL to all public vips",
                     "title": "All Public VIP(s)",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "ALL Public VIP(s)"
                 },
                 "default_tenant_vip": {
-                    "description": "Exclusive with [all_public_vips selected_tenant_vip]\nx-displayName: \"Default Tenant VIP\"\nApply this Fast ACL to Default(dedicated) Tenant VIP",
+                    "description": "Exclusive with [all_public_vips selected_tenant_vip]\n Apply this Fast ACL to Default(dedicated) Tenant VIP",
                     "title": "Default Tenant VIP(s)",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Tenant VIP"
                 },
                 "fast_acl_rules": {
                     "type": "array",
@@ -2649,9 +2667,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "selected_tenant_vip": {
-                    "description": "Exclusive with [all_public_vips default_tenant_vip]\nx-displayName: \"List of Specific VIP(s)\"\nDo not apply to dedicated Tenant VIP\nApply this Fast ACL to List of some selected public VIP(s)",
+                    "description": "Exclusive with [all_public_vips default_tenant_vip]\n Do not apply to dedicated Tenant VIP\n Apply this Fast ACL to List of some selected public VIP(s)",
                     "title": "Chose Specific VIP(s)",
-                    "$ref": "#/definitions/fast_aclSelectedTenantVIPsType"
+                    "$ref": "#/definitions/fast_aclSelectedTenantVIPsType",
+                    "x-displayname": "List of Specific VIP(s)"
                 }
             }
         },
@@ -2744,9 +2763,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.SiteACLType",
             "properties": {
                 "all_services": {
-                    "description": "Exclusive with [interface_services vip_services]\nx-displayName: \"All VIP(s)\"\nDestination will be all VIP(s), interface IP(s) and configured VIP(s)\nPort and protocol is picked up from advertise policies",
+                    "description": "Exclusive with [interface_services vip_services]\n Destination will be all VIP(s), interface IP(s) and configured VIP(s)\n Port and protocol is picked up from advertise policies",
                     "title": "All VIP(S)",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All VIP(s)"
                 },
                 "fast_acl_rules": {
                     "type": "array",
@@ -2763,24 +2783,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "inside_network": {
-                    "description": "Exclusive with [outside_network]\nx-displayName: \"Inside Network\"\nSite Local Inside network",
+                    "description": "Exclusive with [outside_network]\n Site Local Inside network",
                     "title": "Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inside Network"
                 },
                 "interface_services": {
-                    "description": "Exclusive with [all_services vip_services]\nx-displayName: \"All Interface IP(s) as VIP\"\nDestination matching any IP address assigned to the interfaces (e.g from DHCP) and is used as (VIP)\nPort and protocol is picked up from advertise policies",
+                    "description": "Exclusive with [all_services vip_services]\n Destination matching any IP address assigned to the interfaces (e.g from DHCP) and is used as (VIP)\n Port and protocol is picked up from advertise policies",
                     "title": "Interface Services",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All Interface IP(s) as VIP"
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network]\nx-displayName: \"Outside Network\"\nSite Local Outside network",
+                    "description": "Exclusive with [inside_network]\n Site Local Outside network",
                     "title": "Outside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Outside Network"
                 },
                 "vip_services": {
-                    "description": "Exclusive with [all_services interface_services]\nx-displayName: \"Configured VIP(s)\"\nDestination matching configured VIP(s)\nPort and protocol is picked up from advertise policies",
+                    "description": "Exclusive with [all_services interface_services]\n Destination matching configured VIP(s)\n Port and protocol is picked up from advertise policies",
                     "title": "VIP Services",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Configured VIP(s)"
                 }
             }
         },
@@ -2841,19 +2865,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl_rule.FastAclRuleAction",
             "properties": {
                 "policer_action": {
-                    "description": "Exclusive with [protocol_policer_action simple_action]\nx-displayName: \"Policer Action\"\nReference to policer object to which traffic would be subjected",
+                    "description": "Exclusive with [protocol_policer_action simple_action]\n Reference to policer object to which traffic would be subjected",
                     "title": "policer_action",
-                    "$ref": "#/definitions/schemaPolicerRefType"
+                    "$ref": "#/definitions/schemaPolicerRefType",
+                    "x-displayname": "Policer Action"
                 },
                 "protocol_policer_action": {
-                    "description": "Exclusive with [policer_action simple_action]\nx-displayName: \"Protocol Policer Action\"\nReference to protocol based policer object",
+                    "description": "Exclusive with [policer_action simple_action]\n Reference to protocol based policer object",
                     "title": "protocol_policer_action",
-                    "$ref": "#/definitions/schemaProtocolPolicerRefType"
+                    "$ref": "#/definitions/schemaProtocolPolicerRefType",
+                    "x-displayname": "Protocol Policer Action"
                 },
                 "simple_action": {
-                    "description": "Exclusive with [policer_action protocol_policer_action]\nx-displayName: \"Simple Action\"\nSimple action like dropping or forwarding the traffic",
+                    "description": "Exclusive with [policer_action protocol_policer_action]\n Simple action like dropping or forwarding the traffic",
                     "title": "simple_action",
-                    "$ref": "#/definitions/fast_acl_ruleFastAclRuleSimpleAction"
+                    "$ref": "#/definitions/fast_acl_ruleFastAclRuleSimpleAction",
+                    "x-displayname": "Simple Action"
                 }
             }
         },
@@ -3085,14 +3112,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -3469,20 +3498,26 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.PortValueType",
             "properties": {
                 "all": {
-                    "description": "Exclusive with [dns user_defined]\nx-displayName: \"All port\"\nMatches all port",
+                    "description": "Exclusive with [dns user_defined]\n Matches all port",
                     "title": "All port",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All port"
                 },
                 "dns": {
-                    "description": "Exclusive with [all user_defined]\nx-displayName: \"DNS port\"\nMatches dns port 53",
+                    "description": "Exclusive with [all user_defined]\n Matches dns port 53",
                     "title": "DNS port",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DNS port"
                 },
                 "user_defined": {
                     "type": "integer",
-                    "description": "Exclusive with [all dns]\nx-displayName: \"User defined port\"\nMatches the user defined port",
+                    "description": "Exclusive with [all dns]\n Matches the user defined port\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "User defined Port",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "User defined port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 }
             }
         },
@@ -3907,19 +3942,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.VirtualNetworkSelectorType",
             "properties": {
                 "public": {
-                    "description": "Exclusive with [site_local site_local_inside]\nx-displayName: \"Public Network\"\nIndicates use of public network",
+                    "description": "Exclusive with [site_local site_local_inside]\n Indicates use of public network",
                     "title": "Public Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Public Network"
                 },
                 "site_local": {
-                    "description": "Exclusive with [public site_local_inside]\nx-displayName: \"Site Local Network\"\nIndicates use of site local network",
+                    "description": "Exclusive with [public site_local_inside]\n Indicates use of site local network",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Network"
                 },
                 "site_local_inside": {
-                    "description": "Exclusive with [public site_local]\nx-displayName: \"Site Local Inside Network\"\nIndicates use of site local inside network",
+                    "description": "Exclusive with [public site_local]\n Indicates use of site local inside network",
                     "title": "SiteLocal Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside Network"
                 }
             }
         },
@@ -3937,14 +3975,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Protocol Policer"
                 },
                 "re_acl": {
-                    "description": "Exclusive with [site_acl]\nx-displayName: \"Site Type Regional Edge\"\nACL will be applied at regional edge sites",
+                    "description": "Exclusive with [site_acl]\nACL will be applied at regional edge sites",
                     "title": "ACL for RE",
-                    "$ref": "#/definitions/fast_aclReACLType"
+                    "$ref": "#/definitions/fast_aclReACLType",
+                    "x-displayname": "Site Type Regional Edge"
                 },
                 "site_acl": {
-                    "description": "Exclusive with [re_acl]\nx-displayName: \"Site Type Customer Edge\"\nACL will be applied at customer edge sites",
+                    "description": "Exclusive with [re_acl]\nACL will be applied at customer edge sites",
                     "title": "ACL for Site",
-                    "$ref": "#/definitions/fast_aclSiteACLType"
+                    "$ref": "#/definitions/fast_aclSiteACLType",
+                    "x-displayname": "Site Type Customer Edge"
                 }
             }
         },
@@ -3962,14 +4002,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Protocol Policer"
                 },
                 "re_acl": {
-                    "description": "Exclusive with [site_acl]\nx-displayName: \"Site Type Regional Edge\"\nACL will be applied at regional edge sites",
+                    "description": "Exclusive with [site_acl]\nACL will be applied at regional edge sites",
                     "title": "ACL for RE",
-                    "$ref": "#/definitions/fast_aclReACLType"
+                    "$ref": "#/definitions/fast_aclReACLType",
+                    "x-displayname": "Site Type Regional Edge"
                 },
                 "site_acl": {
-                    "description": "Exclusive with [re_acl]\nx-displayName: \"Site Type Customer Edge\"\nACL will be applied at customer edge sites",
+                    "description": "Exclusive with [re_acl]\nACL will be applied at customer edge sites",
                     "title": "ACL for Site",
-                    "$ref": "#/definitions/fast_aclSiteACLType"
+                    "$ref": "#/definitions/fast_aclSiteACLType",
+                    "x-displayname": "Site Type Customer Edge"
                 }
             }
         },
@@ -4049,14 +4091,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Protocol Policer"
                 },
                 "re_acl": {
-                    "description": "Exclusive with [site_acl]\nx-displayName: \"Site Type Regional Edge\"\nACL will be applied at regional edge sites",
+                    "description": "Exclusive with [site_acl]\nACL will be applied at regional edge sites",
                     "title": "ACL for RE",
-                    "$ref": "#/definitions/fast_aclReACLType"
+                    "$ref": "#/definitions/fast_aclReACLType",
+                    "x-displayname": "Site Type Regional Edge"
                 },
                 "site_acl": {
-                    "description": "Exclusive with [re_acl]\nx-displayName: \"Site Type Customer Edge\"\nACL will be applied at customer edge sites",
+                    "description": "Exclusive with [re_acl]\nACL will be applied at customer edge sites",
                     "title": "ACL for Site",
-                    "$ref": "#/definitions/fast_aclSiteACLType"
+                    "$ref": "#/definitions/fast_aclSiteACLType",
+                    "x-displayname": "Site Type Customer Edge"
                 }
             }
         },

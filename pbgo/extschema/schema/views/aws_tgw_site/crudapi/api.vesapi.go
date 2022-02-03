@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Create"
             },
@@ -2729,44 +2735,52 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.SecurityConfigType",
             "properties": {
                 "active_east_west_service_policies": {
-                    "description": "Exclusive with [east_west_service_policy_allow_all no_east_west_policy]\nx-displayName: \"Enable East-West Service Policy\"\nEnable service policy so east-west traffic goes via proxy",
+                    "description": "Exclusive with [east_west_service_policy_allow_all no_east_west_policy]\n Enable service policy so east-west traffic goes via proxy",
                     "title": "Enable East-West Service Policy",
-                    "$ref": "#/definitions/aws_tgw_siteActiveServicePoliciesType"
+                    "$ref": "#/definitions/aws_tgw_siteActiveServicePoliciesType",
+                    "x-displayname": "Enable East-West Service Policy"
                 },
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "east_west_service_policy_allow_all": {
-                    "description": "Exclusive with [active_east_west_service_policies no_east_west_policy]\nx-displayName: \"Enable East-West traffic Proxy with Allow All Policy\"\nEnable service policy with allow all so east-west traffic goes via proxy for monitoring",
+                    "description": "Exclusive with [active_east_west_service_policies no_east_west_policy]\n Enable service policy with allow all so east-west traffic goes via proxy for monitoring",
                     "title": "Enable East-West traffic Proxy with Allow All Policy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable East-West traffic Proxy with Allow All Policy"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "no_east_west_policy": {
-                    "description": "Exclusive with [active_east_west_service_policies east_west_service_policy_allow_all]\nx-displayName: \"Disable East-West Service Policy\"\nDisable service policy so that east-west traffic does not go via proxy",
+                    "description": "Exclusive with [active_east_west_service_policies east_west_service_policy_allow_all]\n Disable service policy so that east-west traffic does not go via proxy",
                     "title": "Disable East-West Service Policy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable East-West Service Policy"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 }
             }
         },
@@ -2782,9 +2796,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ServicesVPCType",
             "properties": {
                 "assisted": {
-                    "description": "Exclusive with [aws_cred]\nx-displayName: \"Assisted Deployment\"\nIn assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script.",
+                    "description": "Exclusive with [aws_cred]\n In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script.",
                     "title": "Assisted Deployment",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Assisted Deployment"
                 },
                 "aws_certified_hw": {
                     "type": "string",
@@ -2801,9 +2816,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "aws_cred": {
-                    "description": "Exclusive with [assisted]\nx-displayName: \"Automatic Deployment\"\nReference to AWS credentials for automatic deployment",
+                    "description": "Exclusive with [assisted]\n Reference to AWS credentials for automatic deployment",
                     "title": "Automatic Deployment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Automatic Deployment"
                 },
                 "aws_region": {
                     "type": "string",
@@ -2841,9 +2857,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "existing_tgw": {
-                    "description": "Exclusive with [new_tgw]\nx-displayName: \"Existing TGW\"\nInformation about existing TGW",
+                    "description": "Exclusive with [new_tgw]\n Information about existing TGW",
                     "title": "Existing TGW",
-                    "$ref": "#/definitions/aws_tgw_siteExistingTGWType"
+                    "$ref": "#/definitions/aws_tgw_siteExistingTGWType",
+                    "x-displayname": "Existing TGW"
                 },
                 "instance_type": {
                     "type": "string",
@@ -2859,25 +2876,34 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "new_tgw": {
-                    "description": "Exclusive with [existing_tgw]\nx-displayName: \"New TGW Parameters\"\nParameters for creating new TGW",
+                    "description": "Exclusive with [existing_tgw]\n Parameters for creating new TGW",
                     "title": "New Transit Gateway",
-                    "$ref": "#/definitions/aws_tgw_siteTGWParamsType"
+                    "$ref": "#/definitions/aws_tgw_siteTGWParamsType",
+                    "x-displayname": "New TGW Parameters"
                 },
                 "new_vpc": {
-                    "description": "Exclusive with [vpc_id]\nx-displayName: \"New VPC Parameters\"\nParameters for creating new VPC",
+                    "description": "Exclusive with [vpc_id]\n Parameters for creating new VPC",
                     "title": "New VPC",
-                    "$ref": "#/definitions/viewsAWSVPCParamsType"
+                    "$ref": "#/definitions/viewsAWSVPCParamsType",
+                    "x-displayname": "New VPC Parameters"
                 },
                 "no_worker_nodes": {
-                    "description": "Exclusive with [nodes_per_az total_nodes]\nx-displayName: \"No Worker Nodes\"\nWorker nodes is set to zero",
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n Worker nodes is set to zero",
                     "title": "No Worker Nodes",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Worker Nodes"
                 },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes total_nodes]\nx-displayName: \"Desired Worker Nodes Per AZ\"\nx-example: \"2\"\nDesired Worker Nodes Per AZ. Max limit is up to 21",
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 21\n",
                     "title": "Desired Worker Nodes Per AZ",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Desired Worker Nodes Per AZ",
+                    "x-ves-example": "2",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "21"
+                    }
                 },
                 "ssh_key": {
                     "type": "string",
@@ -2892,14 +2918,27 @@ var APISwaggerJSON string = `{
                 },
                 "total_nodes": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\nx-displayName: \"Total Number of Worker Nodes for a Site\"\nx-example: \"1\"\nTotal number of worker nodes to be deployed across all AZ's used in the Site",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n Total number of worker nodes to be deployed across all AZ's used in the Site\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 61\n",
                     "title": "Total Number of Worker Nodes for a Site",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Total Number of Worker Nodes for a Site",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "61"
+                    }
                 },
                 "vpc_id": {
                     "type": "string",
-                    "description": "Exclusive with [new_vpc]\nx-displayName: \"Existing VPC\"\nx-example: \"vpc-12345678901234567\"\nInformation about existing VPC",
-                    "title": "Existing VPC"
+                    "description": "Exclusive with [new_vpc]\n Information about existing VPC\n\nExample: - \"vpc-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Existing VPC",
+                    "maxLength": 64,
+                    "x-displayname": "Existing VPC",
+                    "x-ves-example": "vpc-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
                 }
             }
         },
@@ -2987,14 +3026,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.TGWParamsType",
             "properties": {
                 "system_generated": {
-                    "description": "Exclusive with [user_assigned]\nx-displayName: \"Automatic\"\nVolterra will automatically assign a private ASN for TGW and Volterra Site",
+                    "description": "Exclusive with [user_assigned]\n Volterra will automatically assign a private ASN for TGW and Volterra Site",
                     "title": "System Generated",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic"
                 },
                 "user_assigned": {
-                    "description": "Exclusive with [system_generated]\nx-displayName: \"User will assign ASN for TGW and Volterra Site\"\nUser is managing the ASN for TGW and Volterra Site.",
+                    "description": "Exclusive with [system_generated]\n User is managing the ASN for TGW and Volterra Site.",
                     "title": "User Assigned",
-                    "$ref": "#/definitions/aws_tgw_siteTGWAssignedASNType"
+                    "$ref": "#/definitions/aws_tgw_siteTGWAssignedASNType",
+                    "x-displayname": "User will assign ASN for TGW and Volterra Site"
                 }
             }
         },
@@ -3083,34 +3124,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VnConfiguration",
             "properties": {
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "inside_static_routes": {
-                    "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
+                    "description": "Exclusive with [no_inside_static_routes]\n Manage static routes for inside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_inside_static_routes": {
-                    "description": "Exclusive with [inside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for inside network.",
+                    "description": "Exclusive with [inside_static_routes]\n Static Routes disabled for inside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -3681,14 +3728,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -3702,14 +3751,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpSubnetType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Subnet\"\nIPv4 Subnet Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Subnet Address",
                     "title": "IPv4 Subnet",
-                    "$ref": "#/definitions/schemaIpv4SubnetType"
+                    "$ref": "#/definitions/schemaIpv4SubnetType",
+                    "x-displayname": "IPv4 Subnet"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Subnet\"\nIPv6 Subnet Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Subnet Address",
                     "title": "IPv6 Subnet",
-                    "$ref": "#/definitions/schemaIpv6SubnetType"
+                    "$ref": "#/definitions/schemaIpv6SubnetType",
+                    "x-displayname": "IPv6 Subnet"
                 }
             }
         },
@@ -4661,14 +4712,20 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.AWSVPCParamsType",
             "properties": {
                 "autogenerate": {
-                    "description": "Exclusive with [name_tag]\nx-displayName: \"Autogenerate VPC Name\"\nAutogenerate the VPC Name",
+                    "description": "Exclusive with [name_tag]\n Autogenerate the VPC Name",
                     "title": "autogenerate",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Autogenerate VPC Name"
                 },
                 "name_tag": {
                     "type": "string",
-                    "description": "Exclusive with [autogenerate]\nx-displayName: \"Choose VPC Name\"\nSpecify the VPC Name",
-                    "title": "name_tag"
+                    "description": "Exclusive with [autogenerate]\n Specify the VPC Name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "name_tag",
+                    "maxLength": 64,
+                    "x-displayname": "Choose VPC Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 },
                 "primary_ipv4": {
                     "type": "string",
@@ -4708,9 +4765,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "inside_subnet": {
-                    "description": "Exclusive with [reserved_inside_subnet]\nx-displayName: \"Specify Subnet\"\nSelect Existing Subnet or Create New",
+                    "description": "Exclusive with [reserved_inside_subnet]\n Select Existing Subnet or Create New",
                     "title": "Inside Subnet Choice",
-                    "$ref": "#/definitions/viewsCloudSubnetType"
+                    "$ref": "#/definitions/viewsCloudSubnetType",
+                    "x-displayname": "Specify Subnet"
                 },
                 "outside_subnet": {
                     "description": " Subnet for the outside interface of the node\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4723,9 +4781,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "reserved_inside_subnet": {
-                    "description": "Exclusive with [inside_subnet]\nx-displayName: \"Autogenerate Subnet\"\nAutogenerate and reserve a subnet from the Primary CIDR",
+                    "description": "Exclusive with [inside_subnet]\n Autogenerate and reserve a subnet from the Primary CIDR",
                     "title": "Reserved Subnet Choice",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Autogenerate Subnet"
                 },
                 "workload_subnet": {
                     "description": " Subnet in which workloads are launched",
@@ -4795,13 +4854,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "existing_subnet_id": {
                     "type": "string",
-                    "description": "Exclusive with [subnet_param]\nx-displayName: \"Existing Subnet ID\"\nx-example: \"subnet-12345678901234567\"\nInformation about existing subnet ID",
-                    "title": "Existing Subnet ID"
+                    "description": "Exclusive with [subnet_param]\n Information about existing subnet ID\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Existing Subnet ID",
+                    "maxLength": 64,
+                    "x-displayname": "Existing Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
                 },
                 "subnet_param": {
-                    "description": "Exclusive with [existing_subnet_id]\nx-displayName: \"New Subnet\"\nParameters for creating new subnet",
+                    "description": "Exclusive with [existing_subnet_id]\n Parameters for creating new subnet",
                     "title": "New Subnet",
-                    "$ref": "#/definitions/viewsCloudSubnetParamType"
+                    "$ref": "#/definitions/viewsCloudSubnetParamType",
+                    "x-displayname": "New Subnet"
                 }
             }
         },
@@ -4872,14 +4939,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.GlobalNetworkConnectionType",
             "properties": {
                 "sli_to_global_dr": {
-                    "description": "Exclusive with [slo_to_global_dr]\nx-displayName: \"Direct, Site Local Inside to a Global Network\"\nSite local inside is connected directly to a given global network",
+                    "description": "Exclusive with [slo_to_global_dr]\n Site local inside is connected directly to a given global network",
                     "title": "Site Local Inside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Inside to a Global Network"
                 },
                 "slo_to_global_dr": {
-                    "description": "Exclusive with [sli_to_global_dr]\nx-displayName: \"Direct, Site Local Outside to a Global Network\"\nSite local outside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_global_dr]\n Site local outside is connected directly to a given global network",
                     "title": "Site Local Outside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Outside to a Global Network"
                 }
             }
         },
@@ -4893,14 +4962,21 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.OperatingSystemType",
             "properties": {
                 "default_os_version": {
-                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Latest OS Version\"\nWill assign latest available OS version",
+                    "description": "Exclusive with [operating_system_version]\n Will assign latest available OS version",
                     "title": "Default OS Version",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Latest OS Version"
                 },
                 "operating_system_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.",
-                    "title": "Operating System Version"
+                    "description": "Exclusive with [default_os_version]\n Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.\n\nExample: - \"7.2009.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Operating System Version",
+                    "maxLength": 20,
+                    "x-displayname": "Operating System Version",
+                    "x-ves-example": "7.2009.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 }
             }
         },
@@ -4939,14 +5015,20 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.SiteStaticRoutesType",
             "properties": {
                 "custom_static_route": {
-                    "description": "Exclusive with [simple_static_route]\nx-displayName: \"Custom Static Route\"\nUse Custom static route to configure all advanced options",
+                    "description": "Exclusive with [simple_static_route]\n Use Custom static route to configure all advanced options",
                     "title": "Custom Static Route",
-                    "$ref": "#/definitions/schemaStaticRouteType"
+                    "$ref": "#/definitions/schemaStaticRouteType",
+                    "x-displayname": "Custom Static Route"
                 },
                 "simple_static_route": {
                     "type": "string",
-                    "description": "Exclusive with [custom_static_route]\nx-displayName: \"Simple Static Route\"\nx-example: \"10.5.1.0/24\"\nUse simple static route for prefix pointing to single interface in the network",
-                    "title": "Simple Static Route"
+                    "description": "Exclusive with [custom_static_route]\n Use simple static route for prefix pointing to single interface in the network\n\nExample: - \"10.5.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "title": "Simple Static Route",
+                    "x-displayname": "Simple Static Route",
+                    "x-ves-example": "10.5.1.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4_prefix": "true"
+                    }
                 }
             }
         },
@@ -4960,14 +5042,21 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
             "properties": {
                 "default_sw_version": {
-                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Latest SW Version\"\nWill assign latest available SW version",
+                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version",
                     "title": "Default SW Version",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Latest SW Version"
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
-                    "title": "Volterra Software Version"
+                    "description": "Exclusive with [default_sw_version]\n Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Volterra Software Version",
+                    "maxLength": 20,
+                    "x-displayname": "Volterra Software Version",
+                    "x-ves-example": "crt-20210329-1002",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 }
             }
         },
@@ -5007,14 +5096,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "title": "Disable Logs Streaming",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Logs Streaming"
                 },
                 "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "title": "Disable Logs Receiver",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Logs Streaming"
                 },
                 "os": {
                     "description": " Operating System Details",

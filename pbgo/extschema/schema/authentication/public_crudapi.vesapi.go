@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.authentication.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.authentication.API.Replace"); rvFn != nil {
@@ -1717,7 +1725,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Create"
             },
@@ -1816,7 +1824,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Replace"
             },
@@ -1932,7 +1940,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.List"
             },
@@ -2040,7 +2048,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Get"
             },
@@ -2133,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Delete"
             },
@@ -2152,9 +2160,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.authentication.CookieParams",
             "properties": {
                 "auth_hmac": {
-                    "description": "Exclusive with [kms_key_hmac]\nx-displayName: \"HMAC primary \u0026 secondary key\"\nHMAC pair provided as primary and secondary key",
+                    "description": "Exclusive with [kms_key_hmac]\n HMAC pair provided as primary and secondary key",
                     "title": "HMAC pair",
-                    "$ref": "#/definitions/authenticationHMACKeyPair"
+                    "$ref": "#/definitions/authenticationHMACKeyPair",
+                    "x-displayname": "HMAC primary \u0026 secondary key"
                 },
                 "cookie_expiry": {
                     "type": "integer",
@@ -2177,9 +2186,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "kms_key_hmac": {
-                    "description": "Exclusive with [auth_hmac]\nx-displayName: \"HMAC kms key\"\nHMAC configured using KMS_KEY",
+                    "description": "Exclusive with [auth_hmac]\n HMAC configured using KMS_KEY",
                     "title": "kms_key",
-                    "$ref": "#/definitions/authenticationKMSKeyRefType"
+                    "$ref": "#/definitions/authenticationKMSKeyRefType",
+                    "x-displayname": "HMAC kms key"
                 },
                 "session_expiry": {
                     "type": "integer",
@@ -2255,8 +2265,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "oidc_auth": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/authenticationOIDCAuthType"
+                    "description": "Exclusive with []\n OIDC Authentication Type",
+                    "$ref": "#/definitions/authenticationOIDCAuthType",
+                    "x-displayname": "OIDC Authentication"
                 }
             }
         },
@@ -2383,8 +2394,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "oidc_auth": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/authenticationOIDCAuthType"
+                    "description": "Exclusive with []\n OIDC Authentication Type",
+                    "$ref": "#/definitions/authenticationOIDCAuthType",
+                    "x-displayname": "OIDC Authentication"
                 }
             }
         },
@@ -2407,9 +2419,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "oidc_auth": {
-                    "description": "Exclusive with []\nx-displayName: \"OIDC Authentication\"\nOIDC Authentication Type",
+                    "description": "Exclusive with []\n OIDC Authentication Type",
                     "title": "OIDC Auth",
-                    "$ref": "#/definitions/authenticationOIDCAuthType"
+                    "$ref": "#/definitions/authenticationOIDCAuthType",
+                    "x-displayname": "OIDC Authentication"
                 }
             }
         },
@@ -2666,9 +2679,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "oidc_auth_params": {
-                    "description": "Exclusive with [oidc_well_known_config_url]\nx-displayName: \"Endpoint configuration URLs\"\nEndpoint configuration details for OIDC",
+                    "description": "Exclusive with [oidc_well_known_config_url]\n Endpoint configuration details for OIDC",
                     "title": "OIDC endpoint configuration",
-                    "$ref": "#/definitions/authenticationOIDCAuthParams"
+                    "$ref": "#/definitions/authenticationOIDCAuthParams",
+                    "x-displayname": "Endpoint configuration URLs"
                 },
                 "oidc_client_id": {
                     "type": "string",
@@ -2686,8 +2700,17 @@ var APISwaggerJSON string = `{
                 },
                 "oidc_well_known_config_url": {
                     "type": "string",
-                    "description": "Exclusive with [oidc_auth_params]\nx-displayName: \"Well-known Configuration URL\"\nx-example: \"https://login.microsoftonline.com/some-client-id/v2.0/.well-known/openid-configuration\"\nAn OIDC well-known configuration URL that will be used to fetch authentication related endpoints",
-                    "title": "OIDC Config URL"
+                    "description": "Exclusive with [oidc_auth_params]\n An OIDC well-known configuration URL that will be used to fetch authentication related endpoints\n\n\nExample: - \"https://login.microsoftonline.com/some-client-id/v2.0/.well-known/openid-configuration\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "OIDC Config URL",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Well-known Configuration URL",
+                    "x-ves-example": "https://login.microsoftonline.com/some-client-id/v2.0/.well-known/openid-configuration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2760,8 +2783,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "oidc_auth": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/authenticationOIDCAuthType"
+                    "description": "Exclusive with []\n OIDC Authentication Type",
+                    "$ref": "#/definitions/authenticationOIDCAuthType",
+                    "x-displayname": "OIDC Authentication"
                 }
             }
         },
@@ -3343,14 +3367,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },

@@ -859,6 +859,8 @@ github.com/seccomp/libseccomp-golang v0.9.1/go.mod h1:GbW5+tmTXfcxTToHLXlScSlAvW
 github.com/sergi/go-diff v1.0.0/go.mod h1:0CfEIISq7TuYL3j771MWULgwwjU+GofnZX9QAmXWZgo=
 github.com/sergi/go-diff v1.1.0 h1:we8PVUC3FE2uYfodKH/nBHMSetSfHDR6scGdBi+erh0=
 github.com/sergi/go-diff v1.1.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
+github.com/sergi/go-diff v1.2.0 h1:XU+rvMAioB0UC3q1MFrIQy4Vo5/4VsRDQQXHsEya6xQ=
+github.com/sergi/go-diff v1.2.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/sirupsen/logrus v1.4.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
@@ -1455,6 +1457,8 @@ gopkg.volterra.us/serelib v0.0.0-20191018222642-fac6c2539e27/go.mod h1:FoPLd1pmq
 gopkg.volterra.us/stdlib v0.0.0-20210527161352-b4e18b04ea45/go.mod h1:iLN+H84zUD+A8+gkyoTzSgVLdyCwGfHKdyEqKyIGSqE=
 gopkg.volterra.us/stdlib v0.0.0-20211230220617-2051e9000411 h1:xdMAPTDANLAAIyl4B6TV9n35Qr6dpO5pQhFMrRU0RpI=
 gopkg.volterra.us/stdlib v0.0.0-20211230220617-2051e9000411/go.mod h1:RWf5PNbAIv9yT9Q2GRSoCxCRJBy6cQJCvyWQ7nz+5CE=
+gopkg.volterra.us/stdlib v0.0.0-20220118192149-4116dd7e887b h1:5CwiNgf4okxhoSgXTMpQ2qLoCz6V9dvIVotLXahyY3k=
+gopkg.volterra.us/stdlib v0.0.0-20220118192149-4116dd7e887b/go.mod h1:+0zSpjzM4dEj/PYyyNUy+nFrL/Ce/+Cy46LWXcpBgOg=
 gotest.tools v2.2.0+incompatible/go.mod h1:DsYFclhRJ6vuDpmuTbkuFWG+y2sxOXAzmJt81HFBacw=
 honnef.co/go/tools v0.0.0-20180728063816-88497007e858/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=

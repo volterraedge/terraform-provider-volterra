@@ -1545,7 +1545,7 @@ var DefaultCustomBlockingPageValidator = func() *ValidateCustomBlockingPage {
 
 	vrhBlockingPage := v.BlockingPageValidationRuleHandler
 	rulesBlockingPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "65536",
+		"ves.io.schema.rules.string.max_len": "4096",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhBlockingPage(rulesBlockingPage)

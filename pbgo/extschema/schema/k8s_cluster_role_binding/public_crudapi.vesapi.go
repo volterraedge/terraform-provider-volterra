@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_cluster_role_binding.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_cluster_role_binding.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Delete"
             },
@@ -2756,18 +2764,35 @@ var APISwaggerJSON string = `{
             "properties": {
                 "group": {
                     "type": "string",
-                    "description": "Exclusive with [service_account user]\nx-displayName: \"Group\"\nx-example: \"group1\"\nGroup id of the user group",
-                    "title": "Group"
+                    "description": "Exclusive with [service_account user]\n Group id of the user group\n\nExample: - \"group1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Group",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Group",
+                    "x-ves-example": "group1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "service_account": {
-                    "description": "Exclusive with [group user]\nx-displayName: \"Service Account\"\nName and Namespace of the service account",
+                    "description": "Exclusive with [group user]\n Name and Namespace of the service account",
                     "title": "Service Account",
-                    "$ref": "#/definitions/k8s_cluster_role_bindingServiceAccountType"
+                    "$ref": "#/definitions/k8s_cluster_role_bindingServiceAccountType",
+                    "x-displayname": "Service Account"
                 },
                 "user": {
                     "type": "string",
-                    "description": "Exclusive with [group service_account]\nx-displayName: \"User\"\nx-example: \"user1@example.com\"\nUser id of the user",
-                    "title": "User"
+                    "description": "Exclusive with [group service_account]\n User id of the user\n\nExample: - \"user1@example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "User",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "User",
+                    "x-ves-example": "user1@example.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },

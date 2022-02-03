@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_k8s.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_k8s.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.API.Delete"
             },
@@ -3071,12 +3079,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Workload Flavor"
                 },
                 "disabled": {
-                    "description": "Exclusive with [isolated]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [isolated]\n K8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\n setting the ves.io/serviceIsolation annotation to true",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "isolated": {
-                    "description": "Exclusive with [disabled]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [disabled]\n Isolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\n overridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Isolated Services"
                 },
                 "vsite_refs": {
                     "type": "array",
@@ -3212,12 +3222,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Workload Flavor"
                 },
                 "disabled": {
-                    "description": "Exclusive with [isolated]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [isolated]\n K8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\n setting the ves.io/serviceIsolation annotation to true",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "isolated": {
-                    "description": "Exclusive with [disabled]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [disabled]\n Isolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\n overridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Isolated Services"
                 },
                 "vsite_refs": {
                     "type": "array",
@@ -3248,14 +3260,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Workload Flavor"
                 },
                 "disabled": {
-                    "description": "Exclusive with [isolated]\nx-displayName: \"Disabled\"\nK8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\nsetting the ves.io/serviceIsolation annotation to true",
+                    "description": "Exclusive with [isolated]\n K8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\n setting the ves.io/serviceIsolation annotation to true",
                     "title": "Disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "isolated": {
-                    "description": "Exclusive with [disabled]\nx-displayName: \"Isolated Services\"\nIsolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\noverridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
+                    "description": "Exclusive with [disabled]\n Isolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\n overridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
                     "title": "Isolated",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Isolated Services"
                 },
                 "vsite_refs": {
                     "type": "array",
@@ -3466,12 +3480,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Workload Flavor"
                 },
                 "disabled": {
-                    "description": "Exclusive with [isolated]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [isolated]\n K8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\n setting the ves.io/serviceIsolation annotation to true",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "isolated": {
-                    "description": "Exclusive with [disabled]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [disabled]\n Isolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\n overridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Isolated Services"
                 },
                 "vsite_refs": {
                     "type": "array",

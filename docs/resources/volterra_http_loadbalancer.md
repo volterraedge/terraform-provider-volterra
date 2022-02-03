@@ -20,40 +20,18 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  do_not_advertise = true
 
-  advertise_custom {
-    advertise_where {
-      // One of the arguments from this list "virtual_network site virtual_site vk8s_service" must be set
+  // One of the arguments from this list "js_challenge captcha_challenge policy_based_challenge no_challenge" must be set
+  no_challenge = true
 
-      site {
-        ip      = "ip"
-        network = "network"
-
-        site {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
-
-      // One of the arguments from this list "use_default_port port" must be set
-      use_default_port = true
-    }
-  }
-
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-
-  js_challenge {
-    cookie_expiry   = "cookie_expiry"
-    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    js_script_delay = "js_script_delay"
-  }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
-  source_ip_stickiness = true
 
-  // One of the arguments from this list "http https_auto_cert https" must be set
+  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
+  round_robin = true
+
+  // One of the arguments from this list "https_auto_cert https http" must be set
 
   http {
     dns_volterra_managed = true
@@ -75,26 +53,14 @@ resource "volterra_http_loadbalancer" "example" {
     // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
     enable_malicious_user_detection = true
   }
-  // One of the arguments from this list "rate_limit disable_rate_limit" must be set
+  // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
   service_policies_from_namespace = true
-
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
-
-  user_identification {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-
-  // One of the arguments from this list "waf_rule app_firewall disable_waf waf" must be set
-
-  waf {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  user_id_client_ip = true
+  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
+  disable_waf = true
 }
 
 ```
@@ -329,6 +295,8 @@ Use API definitions from OpenAPI specification files to specify API operations o
 ### App Firewall Detection Control
 
 App Firewall detection changes to be applied for this request.
+
+`exclude_attack_type_contexts` - (Optional) App Firewall attack types contexts to be excluded for this request. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
 
 `exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
 
@@ -582,7 +550,7 @@ Use default parameters.
 
 ### Default Mitigation Settings
 
-Use default parameters.
+For high level, users will be temporarily blocked. .
 
 ### Default Retry Policy
 
@@ -721,6 +689,12 @@ SPDY upgrade is enabled.
 ### Enable Strict Sni Host Header Check
 
 Enable strict SNI and Host header check".
+
+### Exclude Attack Type Contexts
+
+App Firewall attack types contexts to be excluded for this request.
+
+`exclude_attack_type` - (Required) App Firewall Attack type (`String`).
 
 ### Exclude List
 
@@ -1082,9 +1056,9 @@ Specifies the settings for policy rule based challenge.
 
 `js_challenge_parameters` - (Optional) Configure Javascript challenge parameters. See [Js Challenge Parameters ](#js-challenge-parameters) below for details.
 
-`default_mitigation_settings` - (Optional) Use default parameters (bool).
+`default_mitigation_settings` - (Optional) For high level, users will be temporarily blocked. (bool).
 
-`malicious_user_mitigation` - (Optional) The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.. See [ref](#ref) below for details.
+`malicious_user_mitigation` - (Optional) Define the mitigation actions to be taken for different threat levels. See [ref](#ref) below for details.
 
 `rule_list` - (Optional) list challenge rules to be used in policy based challenge. See [Rule List ](#rule-list) below for details.
 
@@ -1256,8 +1230,6 @@ Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
 
-`path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
-
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
@@ -1267,6 +1239,10 @@ Send redirect response.
 `retain_all_params` - (Optional) Retain all query parameters (bool).
 
 `strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Strip Query Params ](#strip-query-params) below for details.
+
+`path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
+
+`prefix_rewrite` - (Optional) This option allows redirect URLs be dynamically created based on the request (`String`).
 
 `response_code` - (Optional) code is MOVED_PERMANENTLY (301). (`Int`).
 

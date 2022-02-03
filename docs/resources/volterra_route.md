@@ -29,7 +29,7 @@ resource "volterra_route" "example" {
         invert_match = true
         name         = "Content-Type"
 
-        // One of the arguments from this list "exact regex presence" must be set
+        // One of the arguments from this list "regex presence exact" must be set
         exact = "application/json"
       }
 
@@ -53,7 +53,23 @@ resource "volterra_route" "example" {
       name   = "name"
 
       // One of the arguments from this list "value secret_value" must be set
-      value = "value"
+
+      secret_value {
+        blindfold_secret_info_internal {
+          decryption_provider = "decryption_provider"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "store_provider"
+        }
+
+        secret_encoding_type = "secret_encoding_type"
+
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+        clear_secret_info {
+          provider = "box-provider"
+          url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        }
+      }
     }
 
     request_headers_to_remove = ["host"]
@@ -70,9 +86,101 @@ resource "volterra_route" "example" {
 
     // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
-    route_direct_response {
-      response_body = "OK"
-      response_code = "response_code"
+    route_destination {
+      buffer_policy {
+        disabled          = true
+        max_request_bytes = "2048"
+        max_request_time  = "30"
+      }
+
+      // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
+      retract_cluster = true
+
+      cors_policy {
+        allow_credentials = true
+        allow_headers     = "allow_headers"
+        allow_methods     = "allow_methods"
+
+        allow_origin = ["allow_origin"]
+
+        allow_origin_regex = ["allow_origin_regex"]
+        disabled           = true
+        expose_headers     = "expose_headers"
+        max_age            = "max_age"
+        maximum_age        = "maximum_age"
+      }
+
+      destinations {
+        cluster {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        endpoint_subsets = {
+          "key1" = "value1"
+        }
+
+        priority = "priority"
+        weight   = "weight"
+      }
+
+      endpoint_subsets = {
+        "key1" = "value1"
+      }
+
+      hash_policy {
+        // One of the arguments from this list "header_name cookie source_ip" must be set
+        header_name = "host"
+
+        terminal = true
+      }
+
+      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
+      host_rewrite = "one.volterra.com"
+
+      mirror_policy {
+        cluster {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        percent {
+          denominator = "denominator"
+          numerator   = "5"
+        }
+      }
+
+      prefix_rewrite = "/"
+      priority       = "priority"
+
+      retry_policy {
+        back_off {
+          base_interval = "base_interval"
+          max_interval  = "max_interval"
+        }
+
+        num_retries     = "num_retries"
+        per_try_timeout = "per_try_timeout"
+
+        retriable_status_codes = ["retriable_status_codes"]
+
+        retry_condition = ["5xx"]
+        retry_on        = "5xx"
+      }
+
+      spdy_config {
+        use_spdy = true
+      }
+
+      timeout = "timeout"
+
+      web_socket_config {
+        idle_timeout         = "idle_timeout"
+        max_connect_attempts = "max_connect_attempts"
+        use_websocket        = true
+      }
     }
     service_policy {
       disable = true
@@ -80,8 +188,8 @@ resource "volterra_route" "example" {
     waf_type {
       // One of the arguments from this list "waf_rules app_firewall waf" must be set
 
-      app_firewall {
-        app_firewall {
+      waf {
+        waf {
           name      = "test1"
           namespace = "staging"
           tenant    = "acmecorp"
@@ -400,8 +508,6 @@ Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
 
-`path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
-
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
@@ -411,6 +517,10 @@ Send redirect response.
 `retain_all_params` - (Optional) Retain all query parameters (bool).
 
 `strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Strip Query Params ](#strip-query-params) below for details.
+
+`path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
+
+`prefix_rewrite` - (Optional) This option allows redirect URLs be dynamically created based on the request (`String`).
 
 `response_code` - (Optional) code is MOVED_PERMANENTLY (301). (`Int`).
 

@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_firewall.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_firewall.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.Delete"
             },
@@ -2331,34 +2339,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_firewall.CreateSpecType",
             "properties": {
                 "active_fast_acls": {
-                    "description": "Exclusive with [disable_fast_acl]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
+                    "description": "Exclusive with [disable_fast_acl]\nFast ACL Active for ths network firewall.",
                     "title": "Active Fast ACL(s)",
-                    "$ref": "#/definitions/network_firewallActiveFastACLsType"
+                    "$ref": "#/definitions/network_firewallActiveFastACLsType",
+                    "x-displayname": "Active Fast ACL(s)"
                 },
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [disable_forward_proxy_policy]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
+                    "description": "Exclusive with [disable_forward_proxy_policy]\nL7 firewall for forward proxy.",
                     "title": "Active Forward Proxy Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Active Forward Proxy Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [disable_network_policy]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
+                    "description": "Exclusive with [disable_network_policy]\nActive network policies for this network firewall(L3/L4 firewall).",
                     "title": "Active Network Policies",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "disable_fast_acl": {
-                    "description": "Exclusive with [active_fast_acls]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
+                    "description": "Exclusive with [active_fast_acls]\nFast ACL is disabled for this network firewall",
                     "title": "Disable Fast ACL",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Fast ACL"
                 },
                 "disable_forward_proxy_policy": {
-                    "description": "Exclusive with [active_forward_proxy_policies]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_forward_proxy_policies]\nForward Proxy Policy is disabled for this network firewall",
                     "title": "Disable Forward Proxy Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy Policy"
                 },
                 "disable_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_network_policies]\nNetwork Policy is disabled for this network firewall",
                     "title": "Disable Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 }
             }
         },
@@ -2479,34 +2493,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_firewall.GetSpecType",
             "properties": {
                 "active_fast_acls": {
-                    "description": "Exclusive with [disable_fast_acl]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
+                    "description": "Exclusive with [disable_fast_acl]\nFast ACL Active for ths network firewall.",
                     "title": "Active Fast ACL(s)",
-                    "$ref": "#/definitions/network_firewallActiveFastACLsType"
+                    "$ref": "#/definitions/network_firewallActiveFastACLsType",
+                    "x-displayname": "Active Fast ACL(s)"
                 },
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [disable_forward_proxy_policy]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
+                    "description": "Exclusive with [disable_forward_proxy_policy]\nL7 firewall for forward proxy.",
                     "title": "Active Forward Proxy Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Active Forward Proxy Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [disable_network_policy]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
+                    "description": "Exclusive with [disable_network_policy]\nActive network policies for this network firewall(L3/L4 firewall).",
                     "title": "Active Network Policies",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "disable_fast_acl": {
-                    "description": "Exclusive with [active_fast_acls]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
+                    "description": "Exclusive with [active_fast_acls]\nFast ACL is disabled for this network firewall",
                     "title": "Disable Fast ACL",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Fast ACL"
                 },
                 "disable_forward_proxy_policy": {
-                    "description": "Exclusive with [active_forward_proxy_policies]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_forward_proxy_policies]\nForward Proxy Policy is disabled for this network firewall",
                     "title": "Disable Forward Proxy Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy Policy"
                 },
                 "disable_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_network_policies]\nNetwork Policy is disabled for this network firewall",
                     "title": "Disable Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 }
             }
         },
@@ -2727,34 +2747,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_firewall.ReplaceSpecType",
             "properties": {
                 "active_fast_acls": {
-                    "description": "Exclusive with [disable_fast_acl]\nx-displayName: \"Active Fast ACL(s)\"\nFast ACL Active for ths network firewall.",
+                    "description": "Exclusive with [disable_fast_acl]\nFast ACL Active for ths network firewall.",
                     "title": "Active Fast ACL(s)",
-                    "$ref": "#/definitions/network_firewallActiveFastACLsType"
+                    "$ref": "#/definitions/network_firewallActiveFastACLsType",
+                    "x-displayname": "Active Fast ACL(s)"
                 },
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [disable_forward_proxy_policy]\nx-displayName: \"Active Forward Proxy Policies\"\nL7 firewall for forward proxy.",
+                    "description": "Exclusive with [disable_forward_proxy_policy]\nL7 firewall for forward proxy.",
                     "title": "Active Forward Proxy Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Active Forward Proxy Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [disable_network_policy]\nx-displayName: \"Active Network Policies\"\nActive network policies for this network firewall(L3/L4 firewall).",
+                    "description": "Exclusive with [disable_network_policy]\nActive network policies for this network firewall(L3/L4 firewall).",
                     "title": "Active Network Policies",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "disable_fast_acl": {
-                    "description": "Exclusive with [active_fast_acls]\nx-displayName: \"Disable Fast ACL\"\nFast ACL is disabled for this network firewall",
+                    "description": "Exclusive with [active_fast_acls]\nFast ACL is disabled for this network firewall",
                     "title": "Disable Fast ACL",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Fast ACL"
                 },
                 "disable_forward_proxy_policy": {
-                    "description": "Exclusive with [active_forward_proxy_policies]\nx-displayName: \"Disable Forward Proxy Policy\"\nForward Proxy Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_forward_proxy_policies]\nForward Proxy Policy is disabled for this network firewall",
                     "title": "Disable Forward Proxy Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy Policy"
                 },
                 "disable_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this network firewall",
+                    "description": "Exclusive with [active_network_policies]\nNetwork Policy is disabled for this network firewall",
                     "title": "Disable Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 }
             }
         },

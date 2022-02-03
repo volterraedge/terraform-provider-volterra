@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_network.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_network.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Delete"
             },
@@ -2362,14 +2370,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -2383,14 +2393,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpSubnetType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Subnet\"\nIPv4 Subnet Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Subnet Address",
                     "title": "IPv4 Subnet",
-                    "$ref": "#/definitions/schemaIpv4SubnetType"
+                    "$ref": "#/definitions/schemaIpv4SubnetType",
+                    "x-displayname": "IPv4 Subnet"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Subnet\"\nIPv6 Subnet Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Subnet Address",
                     "title": "IPv6 Subnet",
-                    "$ref": "#/definitions/schemaIpv6SubnetType"
+                    "$ref": "#/definitions/schemaIpv6SubnetType",
+                    "x-displayname": "IPv6 Subnet"
                 }
             }
         },
@@ -3444,20 +3456,27 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.CreateSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n Global network can extend to multiple sites.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Global Network"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n",
-                    "$ref": "#/definitions/schemaVirtualNetworkType"
+                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n Type of virtual network\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2,3,4,7]\n",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Legacy Network Config",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1,2,3,4,7]"
+                    }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_network legacy_type site_local_network]\n Site local Inside network, also known as inside network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside Network"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n Site local network, also known as outside network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local (Outside) Network"
                 },
                 "static_routes": {
                     "type": "array",
@@ -3605,20 +3624,27 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.GetSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n Global network can extend to multiple sites.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Global Network"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n",
-                    "$ref": "#/definitions/schemaVirtualNetworkType"
+                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n Type of virtual network\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2,3,4,7]\n",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Legacy Network Config",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1,2,3,4,7]"
+                    }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_network legacy_type site_local_network]\n Site local Inside network, also known as inside network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside Network"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n Site local network, also known as outside network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local (Outside) Network"
                 },
                 "static_routes": {
                     "type": "array",
@@ -3647,34 +3673,43 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.GlobalSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\nx-displayName: \"Global Network\"\nGlobal network can extend to multiple sites.",
+                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n Global network can extend to multiple sites.",
                     "title": "Global Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Global Network"
                 },
                 "interface_ip": {
-                    "description": "Exclusive with [site_snat_pool]\nx-displayName: \"Interface IP\"\nSNAT pool is interface ip of respective node",
+                    "description": "Exclusive with [site_snat_pool]\n SNAT pool is interface ip of respective node",
                     "title": "Interface IP",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Interface IP"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\nx-displayName: \"Legacy Network Config\"\nType of virtual network",
+                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n Type of virtual network\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2,3,4,7]\n",
                     "title": "Legacy Network config",
-                    "$ref": "#/definitions/schemaVirtualNetworkType"
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Legacy Network Config",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1,2,3,4,7]"
+                    }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_network]\nx-displayName: \"Site Local Inside Network\"\nSite local Inside network, also known as inside network",
+                    "description": "Exclusive with [global_network legacy_type site_local_network]\n Site local Inside network, also known as inside network",
                     "title": "Site Local Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside Network"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\nx-displayName: \"Site Local (Outside) Network\"\nSite local network, also known as outside network",
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n Site local network, also known as outside network",
                     "title": "Site Local Network (outside)",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local (Outside) Network"
                 },
                 "site_snat_pool": {
-                    "description": "Exclusive with [interface_ip]\nx-displayName: \"Per Node SNAT pool\"\nConfigure per node SNAT pool for a site",
+                    "description": "Exclusive with [interface_ip]\n Configure per node SNAT pool for a site",
                     "title": "Per Node SNAT pool",
-                    "$ref": "#/definitions/virtual_networkSNATPoolSiteType"
+                    "$ref": "#/definitions/virtual_networkSNATPoolSiteType",
+                    "x-displayname": "Per Node SNAT pool"
                 },
                 "static_routes": {
                     "type": "array",
@@ -4015,20 +4050,27 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.ReplaceSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n Global network can extend to multiple sites.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Global Network"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n",
-                    "$ref": "#/definitions/schemaVirtualNetworkType"
+                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n Type of virtual network\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2,3,4,7]\n",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Legacy Network Config",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1,2,3,4,7]"
+                    }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_network legacy_type site_local_network]\n Site local Inside network, also known as inside network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside Network"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n Site local network, also known as outside network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local (Outside) Network"
                 },
                 "static_routes": {
                     "type": "array",
@@ -4144,19 +4186,25 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\nx-displayName: \"Default Gateway\"\nTraffic matching the ip prefixes is sent to default gateway",
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway  ",
                     "title": "Default Gateway",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Gateway"
                 },
                 "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\nx-displayName: \"Interface\"\nTraffic matching the ip prefixes is sent to the interface",
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
                     "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Interface"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\nx-displayName: \"IP Address\"\nTraffic matching the ip prefixes is sent to IP Address",
-                    "title": "IP Address"
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IP Address",
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "ip_prefixes": {
                     "type": "array",

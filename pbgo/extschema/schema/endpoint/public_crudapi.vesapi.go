@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.API.Delete"
             },
@@ -2241,11 +2249,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advanced ip service_info]\n"
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Endpoint Name",
+                    "x-ves-example": "ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "dns_name_advanced": {
-                    "description": "Exclusive with [dns_name ip service_info]\n",
-                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
+                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
+                    "x-displayname": "Endpoint Name (Advanced)"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2259,7 +2275,12 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n"
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "port": {
                     "type": "integer",
@@ -2281,8 +2302,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
-                    "$ref": "#/definitions/endpointServiceInfoType"
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
+                    "$ref": "#/definitions/endpointServiceInfoType",
+                    "x-displayname": "Service Selector Info"
                 },
                 "where": {
                     "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
@@ -2349,19 +2371,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.endpoint.DiscoveredInfoType",
             "properties": {
                 "consul_info": {
-                    "description": "Exclusive with [dns_info k8s_info]\nx-displayName: \"Consul Info\"\nDiscovered Info of Consul service instance",
+                    "description": "Exclusive with [dns_info k8s_info]\n Discovered Info of Consul service instance",
                     "title": "consul_info",
-                    "$ref": "#/definitions/endpointConsulInfo"
+                    "$ref": "#/definitions/endpointConsulInfo",
+                    "x-displayname": "Consul Info"
                 },
                 "dns_info": {
-                    "description": "Exclusive with [consul_info k8s_info]\nx-displayName: \"dns Info\"\nDiscovered Info for DNS endpoints",
+                    "description": "Exclusive with [consul_info k8s_info]\n Discovered Info for DNS endpoints",
                     "title": "dns_info",
-                    "$ref": "#/definitions/endpointDNSInfo"
+                    "$ref": "#/definitions/endpointDNSInfo",
+                    "x-displayname": "dns Info"
                 },
                 "k8s_info": {
-                    "description": "Exclusive with [consul_info dns_info]\nx-displayName: \"K8s Info\"\nDiscovered Info Kubernetes endpoints",
+                    "description": "Exclusive with [consul_info dns_info]\n Discovered Info Kubernetes endpoints",
                     "title": "k8s_info",
-                    "$ref": "#/definitions/endpointK8SInfo"
+                    "$ref": "#/definitions/endpointK8SInfo",
+                    "x-displayname": "K8s Info"
                 }
             }
         },
@@ -2387,9 +2412,15 @@ var APISwaggerJSON string = `{
                 },
                 "refresh_interval": {
                     "type": "integer",
-                    "description": "Exclusive with []\nx-displayName: \"DNS Refresh interval\"\nx-example: \"20\"\nInterval for DNS refresh in seconds.",
+                    "description": "Exclusive with []\n Interval for DNS refresh in seconds.\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 10\n  ves.io.schema.rules.uint32.lte: 604800\n",
                     "title": "refresh_interval",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "DNS Refresh interval",
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "10",
+                        "ves.io.schema.rules.uint32.lte": "604800"
+                    }
                 }
             }
         },
@@ -2485,11 +2516,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advanced ip service_info]\n"
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Endpoint Name",
+                    "x-ves-example": "ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "dns_name_advanced": {
-                    "description": "Exclusive with [dns_name ip service_info]\n",
-                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
+                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
+                    "x-displayname": "Endpoint Name (Advanced)"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2503,7 +2542,12 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n"
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "port": {
                     "type": "integer",
@@ -2525,8 +2569,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
-                    "$ref": "#/definitions/endpointServiceInfoType"
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
+                    "$ref": "#/definitions/endpointServiceInfoType",
+                    "x-displayname": "Service Selector Info"
                 },
                 "where": {
                     "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
@@ -2545,13 +2590,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advanced ip service_info]\nx-displayName: \"Endpoint Name\"\nx-example: \"ves.io\"\nEndpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
-                    "title": "dns_name"
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "dns_name",
+                    "maxLength": 256,
+                    "x-displayname": "Endpoint Name",
+                    "x-ves-example": "ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "dns_name_advanced": {
-                    "description": "Exclusive with [dns_name ip service_info]\nx-displayName: \"Endpoint Name (Advanced)\"\nSpecifies name and TTL used for DNS resolution.",
+                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
                     "title": "dns_name_advanced",
-                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
+                    "x-displayname": "Endpoint Name (Advanced)"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2566,8 +2619,13 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\nx-displayName: \"Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
-                    "title": "Endpoint IP Address"
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Endpoint IP Address",
+                    "x-displayname": "Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "port": {
                     "type": "integer",
@@ -2591,9 +2649,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in K8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch K8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual K8s cluster, system already has access to it.\n    In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
                     "title": "Service Selector Info",
-                    "$ref": "#/definitions/endpointServiceInfoType"
+                    "$ref": "#/definitions/endpointServiceInfoType",
+                    "x-displayname": "Service Selector Info"
                 },
                 "where": {
                     "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
@@ -2852,11 +2911,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advanced ip service_info]\n"
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Endpoint Name",
+                    "x-ves-example": "ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "dns_name_advanced": {
-                    "description": "Exclusive with [dns_name ip service_info]\n",
-                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
+                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
+                    "x-displayname": "Endpoint Name (Advanced)"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2870,7 +2937,12 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n"
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "port": {
                     "type": "integer",
@@ -2892,8 +2964,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
-                    "$ref": "#/definitions/endpointServiceInfoType"
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
+                    "$ref": "#/definitions/endpointServiceInfoType",
+                    "x-displayname": "Service Selector Info"
                 },
                 "where": {
                     "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
@@ -2924,13 +2997,20 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": "Exclusive with [service_selector]\nx-displayName: \"Service Name\"\nx-example: \"productpage.default\"\nName of the service to discover with an optional namespace.\nThe format is service_name.namespace_name\nIf namespace is not specified, then discovery is done in \"default\" namespace.",
-                    "title": "service_name"
+                    "description": "Exclusive with [service_selector]\n Name of the service to discover with an optional namespace.\n The format is service_name.namespace_name\n If namespace is not specified, then discovery is done in \"default\" namespace.\n\nExample: - \"productpage.default\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "service_name",
+                    "maxLength": 256,
+                    "x-displayname": "Service Name",
+                    "x-ves-example": "productpage.default",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "service_selector": {
-                    "description": "Exclusive with [service_name]\nx-displayName: \"Service Selector\"\nLabels of the service to discover",
+                    "description": "Exclusive with [service_name]\n Labels of the service to discover",
                     "title": "service_selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Service Selector"
                 }
             }
         },
@@ -3236,14 +3316,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -3346,19 +3428,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
                 "site": {
-                    "description": "Exclusive with [virtual_network virtual_site]\nx-displayName: \"Site\"\nDirect reference to site object",
+                    "description": "Exclusive with [virtual_network virtual_site]\n Direct reference to site object",
                     "title": "site",
-                    "$ref": "#/definitions/schemaSiteRefType"
+                    "$ref": "#/definitions/schemaSiteRefType",
+                    "x-displayname": "Site"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"Virtual Network\"\nDirect reference to virtual network object",
+                    "description": "Exclusive with [site virtual_site]\n Direct reference to virtual network object",
                     "title": "virtual_network",
-                    "$ref": "#/definitions/schemaNetworkRefType"
+                    "$ref": "#/definitions/schemaNetworkRefType",
+                    "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site virtual_network]\nx-displayName: \"Virtual Site\"\nDirect reference to virtual site object",
+                    "description": "Exclusive with [site virtual_network]\n Direct reference to virtual site object",
                     "title": "virtual_site",
-                    "$ref": "#/definitions/schemaVSiteRefType"
+                    "$ref": "#/definitions/schemaVSiteRefType",
+                    "x-displayname": "Virtual Site"
                 }
             }
         },

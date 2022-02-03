@@ -428,6 +428,11 @@ func (c *CustomAPIInprocClient) Rules(ctx context.Context, in *RulesReq, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.Rules"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -472,6 +477,11 @@ func (c *CustomAPIInprocClient) VirtualHostWafRulesStatus(ctx context.Context, i
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.VirtualHostWafRulesStatus"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -515,6 +525,11 @@ func (c *CustomAPIInprocClient) WafRulesStatus(ctx context.Context, in *WafRules
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.WafRulesStatus"); rvFn != nil {
@@ -644,7 +659,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-CustomAPI-Rules"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-customapi-rules"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf_rules.CustomAPI.Rules"
             },
@@ -736,7 +751,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-CustomAPI-WafRulesStatus"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-customapi-wafrulesstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf_rules.CustomAPI.WafRulesStatus"
             },
@@ -828,7 +843,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-CustomAPI-VirtualHostWafRulesStatus"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-customapi-virtualhostwafrulesstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf_rules.CustomAPI.VirtualHostWafRulesStatus"
             },

@@ -336,6 +336,11 @@ func (c *CustomActionAPIInprocClient) ForceDelete(ctx context.Context, in *Force
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -379,6 +384,11 @@ func (c *CustomActionAPIInprocClient) Run(ctx context.Context, in *RunRequest, o
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomActionAPI.Run"); rvFn != nil {
@@ -532,7 +542,7 @@ var CustomActionAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomActionAPI-ForceDelete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-customactionapi-forcedelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete"
             },
@@ -640,7 +650,7 @@ var CustomActionAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomActionAPI-Run"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-customactionapi-run"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomActionAPI.Run"
             },

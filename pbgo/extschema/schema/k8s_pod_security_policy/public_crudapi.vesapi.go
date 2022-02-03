@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_pod_security_policy.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_pod_security_policy.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_pod_security_policy.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_pod_security_policy.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_pod_security_policy.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_pod_security_policy.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_pod_security_policy-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_pod_security_policy.API.Delete"
             },
@@ -2234,12 +2242,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.CreateSpecType",
             "properties": {
                 "psp_spec": {
-                    "description": "Exclusive with [yaml]\n",
-                    "$ref": "#/definitions/k8s_pod_security_policyPodSecurityPolicySpecType"
+                    "description": "Exclusive with [yaml]\n Form based pod security specification",
+                    "$ref": "#/definitions/k8s_pod_security_policyPodSecurityPolicySpecType",
+                    "x-displayname": "Pod Security Policy Specification"
                 },
                 "yaml": {
                     "type": "string",
-                    "description": "Exclusive with [psp_spec]\n"
+                    "description": "Exclusive with [psp_spec]\n K8s YAML for Pod Security Policy\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 4096,
+                    "x-displayname": "K8s YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2358,12 +2373,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.GetSpecType",
             "properties": {
                 "psp_spec": {
-                    "description": "Exclusive with [yaml]\n",
-                    "$ref": "#/definitions/k8s_pod_security_policyPodSecurityPolicySpecType"
+                    "description": "Exclusive with [yaml]\n Form based pod security specification",
+                    "$ref": "#/definitions/k8s_pod_security_policyPodSecurityPolicySpecType",
+                    "x-displayname": "Pod Security Policy Specification"
                 },
                 "yaml": {
                     "type": "string",
-                    "description": "Exclusive with [psp_spec]\n"
+                    "description": "Exclusive with [psp_spec]\n K8s YAML for Pod Security Policy\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 4096,
+                    "x-displayname": "K8s YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2376,14 +2398,21 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.GlobalSpecType",
             "properties": {
                 "psp_spec": {
-                    "description": "Exclusive with [yaml]\nx-displayName: \"Pod Security Policy Specification\"\nForm based pod security specification",
+                    "description": "Exclusive with [yaml]\n Form based pod security specification",
                     "title": "Pod Security Policy Specification",
-                    "$ref": "#/definitions/k8s_pod_security_policyPodSecurityPolicySpecType"
+                    "$ref": "#/definitions/k8s_pod_security_policyPodSecurityPolicySpecType",
+                    "x-displayname": "Pod Security Policy Specification"
                 },
                 "yaml": {
                     "type": "string",
-                    "description": "Exclusive with [psp_spec]\nx-displayName: \"K8s YAML\"\nK8s YAML for Pod Security Policy",
-                    "title": "K8s YAML"
+                    "description": "Exclusive with [psp_spec]\n K8s YAML for Pod Security Policy\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "K8s YAML",
+                    "maxLength": 4096,
+                    "x-displayname": "K8s YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2665,9 +2694,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow Privilege Escalation"
                 },
                 "allowed_capabilities": {
-                    "description": "Exclusive with [no_allowed_capabilities]\nx-displayName: \"Allowed Add Capabilities\"\nAllowed Capabilities to add pod spec in addition to default capabilities",
+                    "description": "Exclusive with [no_allowed_capabilities]\n Allowed Capabilities to add pod spec in addition to default capabilities",
                     "title": "Allowed Add Capabilities",
-                    "$ref": "#/definitions/k8s_pod_security_policyCapabilityListType"
+                    "$ref": "#/definitions/k8s_pod_security_policyCapabilityListType",
+                    "x-displayname": "Allowed Add Capabilities"
                 },
                 "allowed_csi_drivers": {
                     "type": "array",
@@ -2755,14 +2785,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Allow Privilege Escalation"
                 },
                 "default_capabilities": {
-                    "description": "Exclusive with [no_default_capabilities]\nx-displayName: \"Custom Default Capabilities\"\nDefault capabilities that will be added to container unless, Pod spec drops it.",
+                    "description": "Exclusive with [no_default_capabilities]\n Default capabilities that will be added to container unless, Pod spec drops it.",
                     "title": "Custom Default Capabilities",
-                    "$ref": "#/definitions/k8s_pod_security_policyCapabilityListType"
+                    "$ref": "#/definitions/k8s_pod_security_policyCapabilityListType",
+                    "x-displayname": "Custom Default Capabilities"
                 },
                 "drop_capabilities": {
-                    "description": "Exclusive with [no_drop_capabilities]\nx-displayName: \"Drop Capabilities\"\nCapabilities to drop from K8s default capabilities, should not used with custom default capabilities",
+                    "description": "Exclusive with [no_drop_capabilities]\n Capabilities to drop from K8s default capabilities, should not used with custom default capabilities",
                     "title": "Drop Capabilities",
-                    "$ref": "#/definitions/k8s_pod_security_policyCapabilityListType"
+                    "$ref": "#/definitions/k8s_pod_security_policyCapabilityListType",
+                    "x-displayname": "Drop Capabilities"
                 },
                 "forbidden_sysctls": {
                     "type": "array",
@@ -2779,9 +2811,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "fs_group_strategy_options": {
-                    "description": "Exclusive with [no_fs_groups]\nx-displayName: \"FS Groups Allowed\"\nFS Groups that are used by security context",
+                    "description": "Exclusive with [no_fs_groups]\n FS Groups that are used by security context",
                     "title": "FS Groups",
-                    "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType"
+                    "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType",
+                    "x-displayname": "FS Groups Allowed"
                 },
                 "host_ipc": {
                     "type": "boolean",
@@ -2815,49 +2848,58 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_allowed_capabilities": {
-                    "description": "Exclusive with [allowed_capabilities]\nx-displayName: \"Add Capabilities is Disabled\"\nAdd capabilities is not allowed in POD.",
+                    "description": "Exclusive with [allowed_capabilities]\n Add capabilities is not allowed in POD.",
                     "title": "Add Capabilities is Disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Add Capabilities is Disabled"
                 },
                 "no_default_capabilities": {
-                    "description": "Exclusive with [default_capabilities]\nx-displayName: \"K8s Default Capabilities\"\nK8s Default capabilities will be added to container unless pod spec drops it.",
+                    "description": "Exclusive with [default_capabilities]\n K8s Default capabilities will be added to container unless pod spec drops it.",
                     "title": "K8s Default Capabilities",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "K8s Default Capabilities"
                 },
                 "no_drop_capabilities": {
-                    "description": "Exclusive with [drop_capabilities]\nx-displayName: \"Capabilities are not Dropped\"\nCapabilities are not dropped from K8s default capabilities",
+                    "description": "Exclusive with [drop_capabilities]\n Capabilities are not dropped from K8s default capabilities",
                     "title": "Capabilities are not Dropped",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Capabilities are not Dropped"
                 },
                 "no_fs_groups": {
-                    "description": "Exclusive with [fs_group_strategy_options]\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed FS group ids can be used",
+                    "description": "Exclusive with [fs_group_strategy_options]\n Default K8s allowed FS group ids can be used",
                     "title": "Default K8s Restrictions",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Restrictions"
                 },
                 "no_run_as_group": {
-                    "description": "Exclusive with [run_as_group]\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed group ids can be used as run as group in POD spec.",
+                    "description": "Exclusive with [run_as_group]\n Default K8s allowed group ids can be used as run as group in POD spec.",
                     "title": "Default K8s Restrictions",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Restrictions"
                 },
                 "no_run_as_user": {
-                    "description": "Exclusive with [run_as_user]\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed user ids can be used as run as user in POD spec.",
+                    "description": "Exclusive with [run_as_user]\n Default K8s allowed user ids can be used as run as user in POD spec.",
                     "title": "Default K8s Restrictions",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Restrictions"
                 },
                 "no_runtime_class": {
-                    "description": "Exclusive with []\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed runtime  class options can be used",
+                    "description": "Exclusive with []\n Default K8s allowed runtime  class options can be used",
                     "title": "Default K8s Restrictions",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Restrictions"
                 },
                 "no_se_linux_options": {
-                    "description": "Exclusive with []\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed SE Linux options can be used",
+                    "description": "Exclusive with []\n Default K8s allowed SE Linux options can be used",
                     "title": "Default K8s Restrictions",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Restrictions"
                 },
                 "no_supplemental_groups": {
-                    "description": "Exclusive with [supplemental_groups]\nx-displayName: \"Default K8s Restrictions\"\nDefault K8s allowed supplemental group ids can be used",
+                    "description": "Exclusive with [supplemental_groups]\n Default K8s allowed supplemental group ids can be used",
                     "title": "Default K8s Restrictions",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Restrictions"
                 },
                 "privileged": {
                     "type": "boolean",
@@ -2874,19 +2916,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Read Only Root Filesystem"
                 },
                 "run_as_group": {
-                    "description": "Exclusive with [no_run_as_group]\nx-displayName: \"Run As Group\"\nControls Allowable run as group values",
+                    "description": "Exclusive with [no_run_as_group]\n Controls Allowable run as group values",
                     "title": "Run As Group",
-                    "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType"
+                    "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType",
+                    "x-displayname": "Run As Group"
                 },
                 "run_as_user": {
-                    "description": "Exclusive with [no_run_as_user]\nx-displayName: \"Run As User\"\nControls Allowable run as user values",
+                    "description": "Exclusive with [no_run_as_user]\n Controls Allowable run as user values",
                     "title": "Run As User",
-                    "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType"
+                    "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType",
+                    "x-displayname": "Run As User"
                 },
                 "supplemental_groups": {
-                    "description": "Exclusive with [no_supplemental_groups]\nx-displayName: \"Supplemental Groups Allowed\"\nSupplemental Groups that are used by security context",
+                    "description": "Exclusive with [no_supplemental_groups]\n Supplemental Groups that are used by security context",
                     "title": "Supplemental Groups",
-                    "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType"
+                    "$ref": "#/definitions/k8s_pod_security_policyIDStrategyOptionsType",
+                    "x-displayname": "Supplemental Groups Allowed"
                 },
                 "volumes": {
                     "type": "array",
@@ -2942,12 +2987,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.ReplaceSpecType",
             "properties": {
                 "psp_spec": {
-                    "description": "Exclusive with [yaml]\n",
-                    "$ref": "#/definitions/k8s_pod_security_policyPodSecurityPolicySpecType"
+                    "description": "Exclusive with [yaml]\n Form based pod security specification",
+                    "$ref": "#/definitions/k8s_pod_security_policyPodSecurityPolicySpecType",
+                    "x-displayname": "Pod Security Policy Specification"
                 },
                 "yaml": {
                     "type": "string",
-                    "description": "Exclusive with [psp_spec]\n"
+                    "description": "Exclusive with [psp_spec]\n K8s YAML for Pod Security Policy\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 4096,
+                    "x-displayname": "K8s YAML",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },

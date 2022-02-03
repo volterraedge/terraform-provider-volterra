@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.bgp.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.bgp.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-bgp-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.bgp.crudapi.API.Create"
             },
@@ -2595,19 +2601,25 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "from_site": {
-                    "description": "Exclusive with [ip_address local_address]\nx-displayName: \"From Site\"\nUse the Router ID field from the site object.",
+                    "description": "Exclusive with [ip_address local_address]\n Use the Router ID field from the site object.",
                     "title": "from_site",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "From Site"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [from_site local_address]\nx-displayName: \"IP Address\"\nUse the configured IPv4 Address as Router ID.",
-                    "title": "ip_address"
+                    "description": "Exclusive with [from_site local_address]\n Use the configured IPv4 Address as Router ID.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "ip_address",
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "local_address": {
-                    "description": "Exclusive with [from_site ip_address]\nx-displayName: \"From Interface Address\"\nUse an interface address of the site as the Router ID.",
+                    "description": "Exclusive with [from_site ip_address]\n Use an interface address of the site as the Router ID.",
                     "title": "local_address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "From Interface Address"
                 }
             }
         },
@@ -2996,9 +3008,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
                 "external": {
-                    "description": "Exclusive with []\nx-displayName: \"External\"\nExternal BGP peer.",
+                    "description": "Exclusive with []\n External BGP peer.",
                     "title": "external",
-                    "$ref": "#/definitions/bgpPeerExternal"
+                    "$ref": "#/definitions/bgpPeerExternal",
+                    "x-displayname": "External"
                 },
                 "metadata": {
                     "description": " Common attributes for the peer including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3024,8 +3037,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
-                    "title": "address"
+                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "address",
+                    "x-displayname": "Peer Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "asn": {
                     "type": "integer",
@@ -3040,24 +3057,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Default Gateway\"\nUse the default gateway address.",
+                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
                     "title": "default_gateway",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Gateway"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
+                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
                     "title": "from_site",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Address From Site Object"
                 },
                 "interface": {
-                    "description": "Exclusive with [interface_list]\nx-displayName: \"Interface\"\nSpecify interface.",
+                    "description": "Exclusive with [interface_list]\n Specify interface.",
                     "title": "interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Interface"
                 },
                 "interface_list": {
-                    "description": "Exclusive with [interface]\nx-displayName: \"Interface List\"\nList of network interfaces.",
+                    "description": "Exclusive with [interface]\n List of network interfaces.",
                     "title": "interface_list",
-                    "$ref": "#/definitions/bgpInterfaceList"
+                    "$ref": "#/definitions/bgpInterfaceList",
+                    "x-displayname": "Interface List"
                 },
                 "port": {
                     "type": "integer",
@@ -3072,15 +3093,25 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Offset From Beginning Of Subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
+                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_begin_offset",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Offset From Beginning Of Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_end_offset",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Offset From End Of Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 }
             }
         },
@@ -3590,14 +3621,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -3786,14 +3819,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SiteVirtualSiteRefSelector",
             "properties": {
                 "site": {
-                    "description": "Exclusive with [virtual_site]\nx-displayName: \"Site\"\nDirect reference to site object",
+                    "description": "Exclusive with [virtual_site]\n Direct reference to site object",
                     "title": "site",
-                    "$ref": "#/definitions/schemaSiteRefType"
+                    "$ref": "#/definitions/schemaSiteRefType",
+                    "x-displayname": "Site"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site]\nx-displayName: \"Virtual Site\"\nDirect reference to virtual site object",
+                    "description": "Exclusive with [site]\n Direct reference to virtual site object",
                     "title": "virtual_site",
-                    "$ref": "#/definitions/schemaVSiteRefType"
+                    "$ref": "#/definitions/schemaVSiteRefType",
+                    "x-displayname": "Virtual Site"
                 }
             }
         },

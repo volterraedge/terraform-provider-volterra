@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.log_receiver.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.log_receiver.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log_receiver.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log_receiver.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log_receiver.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log_receiver.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log_receiver-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log_receiver.API.Delete"
             },
@@ -2252,12 +2260,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.log_receiver.CreateSpecType",
             "properties": {
                 "site_local": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with []\n Log receiver is accessible local to the site where it is used.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Local Site"
                 },
                 "syslog": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/log_receiverSyslogReceiver"
+                    "description": "Exclusive with []\n Stream log to syslog server",
+                    "$ref": "#/definitions/log_receiverSyslogReceiver",
+                    "x-displayname": "Syslog Server"
                 }
             }
         },
@@ -2430,12 +2440,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.log_receiver.GetSpecType",
             "properties": {
                 "site_local": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with []\n Log receiver is accessible local to the site where it is used.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Local Site"
                 },
                 "syslog": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/log_receiverSyslogReceiver"
+                    "description": "Exclusive with []\n Stream log to syslog server",
+                    "$ref": "#/definitions/log_receiverSyslogReceiver",
+                    "x-displayname": "Syslog Server"
                 }
             }
         },
@@ -2449,14 +2461,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.log_receiver.GlobalSpecType",
             "properties": {
                 "site_local": {
-                    "description": "Exclusive with []\nx-displayName: \"Local Site\"\nLog receiver is accessible local to the site where it is used.",
+                    "description": "Exclusive with []\n Log receiver is accessible local to the site where it is used.",
                     "title": "Local Site",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Local Site"
                 },
                 "syslog": {
-                    "description": "Exclusive with []\nx-displayName: \"Syslog Server\"\nStream log to syslog server",
+                    "description": "Exclusive with []\n Stream log to syslog server",
                     "title": "Syslog Server",
-                    "$ref": "#/definitions/log_receiverSyslogReceiver"
+                    "$ref": "#/definitions/log_receiverSyslogReceiver",
+                    "x-displayname": "Syslog Server"
                 }
             }
         },
@@ -2686,12 +2700,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.log_receiver.ReplaceSpecType",
             "properties": {
                 "site_local": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with []\n Log receiver is accessible local to the site where it is used.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Local Site"
                 },
                 "syslog": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/log_receiverSyslogReceiver"
+                    "description": "Exclusive with []\n Stream log to syslog server",
+                    "$ref": "#/definitions/log_receiverSyslogReceiver",
+                    "x-displayname": "Syslog Server"
                 }
             }
         },
@@ -2780,24 +2796,33 @@ var APISwaggerJSON string = `{
             "properties": {
                 "syslog_rfc5424": {
                     "type": "integer",
-                    "description": "Exclusive with []\nx-displayName: \"Syslog RFC5424 Format\"\nx-example: \"500\"\nSelect RFC5424 syslog format and maximum message length.",
+                    "description": "Exclusive with []\n Select RFC5424 syslog format and maximum message length.\n\nExample: - \"500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 408\n  ves.io.schema.rules.uint32.lte: 268435456\n",
                     "title": "Syslog RFC5424 Format",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Syslog RFC5424 Format",
+                    "x-ves-example": "500",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "408",
+                        "ves.io.schema.rules.uint32.lte": "268435456"
+                    }
                 },
                 "tcp_server": {
-                    "description": "Exclusive with [tls_server udp_server]\nx-displayName: \"Mode TCP\"\nSyslog transport mode is TCP",
+                    "description": "Exclusive with [tls_server udp_server]\n Syslog transport mode is TCP",
                     "title": "Mode TCP",
-                    "$ref": "#/definitions/log_receiverTCPServerConfigType"
+                    "$ref": "#/definitions/log_receiverTCPServerConfigType",
+                    "x-displayname": "Mode TCP"
                 },
                 "tls_server": {
-                    "description": "Exclusive with [tcp_server udp_server]\nx-displayName: \"Mode TLS\"\nSyslog transport mode is TLS",
+                    "description": "Exclusive with [tcp_server udp_server]\n Syslog transport mode is TLS",
                     "title": "Mode TLS",
-                    "$ref": "#/definitions/log_receiverTLSConfigType"
+                    "$ref": "#/definitions/log_receiverTLSConfigType",
+                    "x-displayname": "Mode TLS"
                 },
                 "udp_server": {
-                    "description": "Exclusive with [tcp_server tls_server]\nx-displayName: \"Mode UDP\"\nSyslog transport mode is UDP",
+                    "description": "Exclusive with [tcp_server tls_server]\n Syslog transport mode is UDP",
                     "title": "Mode UDP",
-                    "$ref": "#/definitions/log_receiverUDPServerConfigType"
+                    "$ref": "#/definitions/log_receiverUDPServerConfigType",
+                    "x-displayname": "Mode UDP"
                 }
             }
         },
@@ -2874,30 +2899,42 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.log_receiver.TLSConfigType",
             "properties": {
                 "default_https_port": {
-                    "description": "Exclusive with [default_syslog_tls_port port]\nx-displayName: \"HTTPS Port\"\nDefault port number for HTTPS is 443.",
+                    "description": "Exclusive with [default_syslog_tls_port port]\n Default port number for HTTPS is 443.",
                     "title": "Default HTTPS Port",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTPS Port"
                 },
                 "default_syslog_tls_port": {
-                    "description": "Exclusive with [default_https_port port]\nx-displayName: \"Syslog TLS Port\"\nDefault port number for syslog TLS is 6514",
+                    "description": "Exclusive with [default_https_port port]\n Default port number for syslog TLS is 6514",
                     "title": "Default Syslog Port",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Syslog TLS Port"
                 },
                 "mtls_disabled": {
-                    "description": "Exclusive with [mtls_enable]\nx-displayName: \"mTLS is Disabled\"\nmTLS is disabled",
+                    "description": "Exclusive with [mtls_enable]\n mTLS is disabled",
                     "title": "mTLS is Disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "mTLS is Disabled"
                 },
                 "mtls_enable": {
-                    "description": "Exclusive with [mtls_disabled]\nx-displayName: \"Enable mTLS\"\nEnable mTLS configuration",
+                    "description": "Exclusive with [mtls_disabled]\n Enable mTLS configuration",
                     "title": "Enable mTLS configuration",
-                    "$ref": "#/definitions/log_receiverTLSClientConfigType"
+                    "$ref": "#/definitions/log_receiverTLSClientConfigType",
+                    "x-displayname": "Enable mTLS"
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [default_https_port default_syslog_tls_port]\nx-displayName: \"TCP Port Number\"\nx-required\nx-example: \"3000\"\nCustom port number used for communication",
+                    "description": "Exclusive with [default_https_port default_syslog_tls_port]\n Custom port number used for communication\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Custom Port Number",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "TCP Port Number",
+                    "x-ves-example": "3000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "server_name": {
                     "type": "string",
@@ -2915,13 +2952,20 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [volterra_ca]\nx-displayName: \"Server CA Certificates\"\nThe URL or value for trusted Server CA certificate or certificate chain\nCertificates in PEM format including the PEM headers.",
-                    "title": "Server CA certificates"
+                    "description": "Exclusive with [volterra_ca]\n The URL or value for trusted Server CA certificate or certificate chain\n Certificates in PEM format including the PEM headers.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Server CA certificates",
+                    "maxLength": 131072,
+                    "x-displayname": "Server CA Certificates",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "volterra_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\nx-displayName: \"Default Volterra CA\"\nUse Volterra default CA",
+                    "description": "Exclusive with [trusted_ca_url]\n Use Volterra default CA",
                     "title": "Default Volterra CA",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Volterra CA"
                 }
             }
         },
@@ -3469,14 +3513,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },

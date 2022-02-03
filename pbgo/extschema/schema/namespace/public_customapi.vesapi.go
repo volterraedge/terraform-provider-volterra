@@ -428,6 +428,11 @@ func (c *CustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.CustomAPI.CascadeDelete"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -472,6 +477,11 @@ func (c *CustomAPIInprocClient) EvaluateAPIAccess(ctx context.Context, in *Evalu
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -515,6 +525,11 @@ func (c *CustomAPIInprocClient) UpdateAllowAdvertiseOnPublic(ctx context.Context
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.CustomAPI.UpdateAllowAdvertiseOnPublic"); rvFn != nil {
@@ -644,7 +659,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-CustomAPI-EvaluateAPIAccess"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-evaluateapiaccess"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess"
             },
@@ -728,7 +743,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-CustomAPI-UpdateAllowAdvertiseOnPublic"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-updateallowadvertiseonpublic"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.UpdateAllowAdvertiseOnPublic"
             },
@@ -820,7 +835,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-CustomAPI-CascadeDelete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-cascadedelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.CascadeDelete"
             },

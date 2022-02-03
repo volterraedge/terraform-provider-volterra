@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.network_policy_view.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.network_policy_view.API.Replace"); rvFn != nil {
@@ -2220,29 +2228,36 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_policy.EndpointChoiceType",
             "properties": {
                 "any": {
-                    "description": "Exclusive with [inside_endpoints label_selector outside_endpoints prefix_list]\nx-displayName: \"Any Endpoint\"\nAny Endpoint that matches 0/0 ip prefix",
+                    "description": "Exclusive with [inside_endpoints label_selector outside_endpoints prefix_list]\n Any Endpoint that matches 0/0 ip prefix",
                     "title": "Any Endpoint",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Endpoint"
                 },
                 "inside_endpoints": {
-                    "description": "Exclusive with [any label_selector outside_endpoints prefix_list]\nx-displayName: \"Endpoints Reachable via all Inside Interfaces\"\nAll ip prefixes that are reachable via inside interfaces are chosen as Endpoints",
+                    "description": "Exclusive with [any label_selector outside_endpoints prefix_list]\n All ip prefixes that are reachable via inside interfaces are chosen as Endpoints",
                     "title": "All Endpoints Reachable via all inside interfaces",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Endpoints Reachable via all Inside Interfaces"
                 },
                 "label_selector": {
-                    "description": "Exclusive with [any inside_endpoints outside_endpoints prefix_list]\nx-displayName: \"Label Selector\"\nx-example: \"app != web\"\nlocal end point is set of prefixes determined by label selector expression",
+                    "description": "Exclusive with [any inside_endpoints outside_endpoints prefix_list]\n local end point is set of prefixes determined by label selector expression\n\nExample: - \"app != web\"-",
                     "title": "prefix Label selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Label Selector",
+                    "x-ves-example": "app != web"
                 },
                 "outside_endpoints": {
-                    "description": "Exclusive with [any inside_endpoints label_selector prefix_list]\nx-displayName: \"Endpoints Reachable via all Outside Interfaces\"\nAll ip prefixes that are reachable via outside interfaces are chosen as Endpoints",
+                    "description": "Exclusive with [any inside_endpoints label_selector prefix_list]\n All ip prefixes that are reachable via outside interfaces are chosen as Endpoints",
                     "title": "All Endpoints Reachable via all outside interfaces",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Endpoints Reachable via all Outside Interfaces"
                 },
                 "prefix_list": {
-                    "description": "Exclusive with [any inside_endpoints label_selector outside_endpoints]\nx-displayName: \"IPv4 Prefix List\"\nx-example: \"192.168.20.0/24\"\nList of ip prefixes that are representing endpoint\nFor egress rules: from this endpoints to remote endpoints these ip prefixes are source ip.\nFor Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip.",
+                    "description": "Exclusive with [any inside_endpoints label_selector outside_endpoints]\n List of ip prefixes that are representing endpoint\n For egress rules: from this endpoints to remote endpoints these ip prefixes are source ip.\n For Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip.\n\nExample: - \"192.168.20.0/24\"-",
                     "title": "ipv4 prefix list",
-                    "$ref": "#/definitions/viewsPrefixStringListType"
+                    "$ref": "#/definitions/viewsPrefixStringListType",
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24"
                 }
             }
         },
@@ -2268,39 +2283,46 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Logging Action"
                 },
                 "all_tcp_traffic": {
-                    "description": "Exclusive with [all_traffic all_udp_traffic applications protocol_port_range]\nx-displayName: \"Match All TCP Traffic\"\nSelect all TCP traffic to match",
+                    "description": "Exclusive with [all_traffic all_udp_traffic applications protocol_port_range]\n Select all TCP traffic to match",
                     "title": "All TCP Traffic",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Match All TCP Traffic"
                 },
                 "all_traffic": {
-                    "description": "Exclusive with [all_tcp_traffic all_udp_traffic applications protocol_port_range]\nx-displayName: \"Match All Traffic\"\nSelect all traffic to match",
+                    "description": "Exclusive with [all_tcp_traffic all_udp_traffic applications protocol_port_range]\n Select all traffic to match",
                     "title": "All Traffic",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Match All Traffic"
                 },
                 "all_udp_traffic": {
-                    "description": "Exclusive with [all_tcp_traffic all_traffic applications protocol_port_range]\nx-displayName: \"Match All UDP Traffic\"\nSelect all UDP traffic to match",
+                    "description": "Exclusive with [all_tcp_traffic all_traffic applications protocol_port_range]\n Select all UDP traffic to match",
                     "title": "All UDP Traffic",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Match All UDP Traffic"
                 },
                 "any": {
-                    "description": "Exclusive with [inside_endpoints ip_prefix_set label_selector outside_endpoints prefix_list]\nx-displayName: \"Any Endpoint\"\nAny Endpoint that matches 0/0 ip prefix",
+                    "description": "Exclusive with [inside_endpoints ip_prefix_set label_selector outside_endpoints prefix_list]\n Any Endpoint that matches 0/0 ip prefix",
                     "title": "Any Endpoint",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Endpoint"
                 },
                 "applications": {
-                    "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic protocol_port_range]\nx-displayName: \"Match Application Traffic\"\nSelect Application traffic to match",
+                    "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic protocol_port_range]\n Select Application traffic to match",
                     "title": "Specific Applications",
-                    "$ref": "#/definitions/network_policyApplicationsType"
+                    "$ref": "#/definitions/network_policyApplicationsType",
+                    "x-displayname": "Match Application Traffic"
                 },
                 "inside_endpoints": {
-                    "description": "Exclusive with [any ip_prefix_set label_selector outside_endpoints prefix_list]\nx-displayName: \"Endpoints Reachable via all Inside Interfaces\"\nAll ip prefixes that are reachable via inside interfaces are chosen as Endpoints",
+                    "description": "Exclusive with [any ip_prefix_set label_selector outside_endpoints prefix_list]\n All ip prefixes that are reachable via inside interfaces are chosen as Endpoints",
                     "title": "All Endpoints Reachable via all inside interfaces",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Endpoints Reachable via all Inside Interfaces"
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [any inside_endpoints label_selector outside_endpoints prefix_list]\nx-displayName: \"List IP Prefix Set\"\nReference to object which represents list of IP prefixes that will be referred as remote endpoint",
+                    "description": "Exclusive with [any inside_endpoints label_selector outside_endpoints prefix_list]\n Reference to object which represents list of IP prefixes that will be referred as remote endpoint",
                     "title": "ip prefix set",
-                    "$ref": "#/definitions/schemaIpPrefixSetRefType"
+                    "$ref": "#/definitions/schemaIpPrefixSetRefType",
+                    "x-displayname": "List IP Prefix Set"
                 },
                 "label_matcher": {
                     "description": " A list of label keys that identify the label values that need to be the same for the source and destination endpoints. Note that the actual label values are\n not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
@@ -2310,9 +2332,11 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "['environment', 'location', 'deployment']"
                 },
                 "label_selector": {
-                    "description": "Exclusive with [any inside_endpoints ip_prefix_set outside_endpoints prefix_list]\nx-displayName: \"Label Selector\"\nx-example: \"app != web\"\nlocal end point is set of prefixes determined by label selector expression",
+                    "description": "Exclusive with [any inside_endpoints ip_prefix_set outside_endpoints prefix_list]\n local end point is set of prefixes determined by label selector expression\n\nExample: - \"app != web\"-",
                     "title": "prefix Label selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Label Selector",
+                    "x-ves-example": "app != web"
                 },
                 "metadata": {
                     "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2325,19 +2349,23 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "outside_endpoints": {
-                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector prefix_list]\nx-displayName: \"Endpoints Reachable via all Outside Interfaces\"\nAll ip prefixes that are reachable via outside interfaces are chosen as Endpoints",
+                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector prefix_list]\n All ip prefixes that are reachable via outside interfaces are chosen as Endpoints",
                     "title": "All Endpoints Reachable via all outside interfaces",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Endpoints Reachable via all Outside Interfaces"
                 },
                 "prefix_list": {
-                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector outside_endpoints]\nx-displayName: \"IPv4 Prefix List\"\nx-example: \"192.168.20.0/24\"\nlist of ip prefixes that are representing endpoint\nFor Egress rules: from these endpoints to remote endpoints these ip prefixes are source IPs.\nFor Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.",
+                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector outside_endpoints]\n list of ip prefixes that are representing endpoint\n For Egress rules: from these endpoints to remote endpoints these ip prefixes are source IPs.\n For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.\n\nExample: - \"192.168.20.0/24\"-",
                     "title": "ipv4 prefix list",
-                    "$ref": "#/definitions/viewsPrefixStringListType"
+                    "$ref": "#/definitions/viewsPrefixStringListType",
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24"
                 },
                 "protocol_port_range": {
-                    "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic applications]\nx-displayName: \"Match Protocol and Port Ranges\"\nSelect specific protocol and port ranges traffic to match",
+                    "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic applications]\n Select specific protocol and port ranges traffic to match",
                     "title": "Protocol and Port Ranges",
-                    "$ref": "#/definitions/network_policyProtocolPortType"
+                    "$ref": "#/definitions/network_policyProtocolPortType",
+                    "x-displayname": "Match Protocol and Port Ranges"
                 }
             }
         },

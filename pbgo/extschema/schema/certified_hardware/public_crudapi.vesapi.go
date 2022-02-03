@@ -1124,7 +1124,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.API.List"
             },
@@ -1231,7 +1231,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-certified_hardware-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.certified_hardware.API.Get"
             },
@@ -1250,9 +1250,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.Aws",
             "properties": {
                 "image_id": {
-                    "description": "Exclusive with []\nx-displayName: \"AWS image info\"\nAWS image info",
+                    "description": "Exclusive with []\n AWS image info",
                     "title": "ImageId",
-                    "$ref": "#/definitions/certified_hardwareAwsImage"
+                    "$ref": "#/definitions/certified_hardwareAwsImage",
+                    "x-displayname": "AWS image info"
                 }
             }
         },
@@ -1283,14 +1284,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.Azure",
             "properties": {
                 "image_id": {
-                    "description": "Exclusive with [marketplace]\nx-displayName: \"Azure image id info\"\nAzure image id",
+                    "description": "Exclusive with [marketplace]\n Azure image id",
                     "title": "ImageId",
-                    "$ref": "#/definitions/certified_hardwareAzureImage"
+                    "$ref": "#/definitions/certified_hardwareAzureImage",
+                    "x-displayname": "Azure image id info"
                 },
                 "marketplace": {
-                    "description": "Exclusive with [image_id]\nx-displayName: \"Azure Marketplace image info\"\nAzure Marketplace image information",
+                    "description": "Exclusive with [image_id]\n Azure Marketplace image information",
                     "title": "Marketplace",
-                    "$ref": "#/definitions/certified_hardwareMarketplace"
+                    "$ref": "#/definitions/certified_hardwareMarketplace",
+                    "x-displayname": "Azure Marketplace image info"
                 }
             }
         },
@@ -1383,9 +1386,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.Gcp",
             "properties": {
                 "image_id": {
-                    "description": "Exclusive with []\nx-displayName: \"GCP image info\"\nGCP image info",
+                    "description": "Exclusive with []\n GCP image info",
                     "title": "ImageId",
-                    "$ref": "#/definitions/certified_hardwareGcpImage"
+                    "$ref": "#/definitions/certified_hardwareGcpImage",
+                    "x-displayname": "GCP image info"
                 }
             }
         },
@@ -1545,19 +1549,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.ImageType",
             "properties": {
                 "aws": {
-                    "description": "Exclusive with [azure gcp]\nx-displayName: \"AWS\"\nAWS specific information",
+                    "description": "Exclusive with [azure gcp]\n AWS specific information",
                     "title": "AWS",
-                    "$ref": "#/definitions/certified_hardwareAws"
+                    "$ref": "#/definitions/certified_hardwareAws",
+                    "x-displayname": "AWS"
                 },
                 "azure": {
-                    "description": "Exclusive with [aws gcp]\nx-displayName: \"Azure\"\nAzure specific information",
+                    "description": "Exclusive with [aws gcp]\n Azure specific information",
                     "title": "Azure",
-                    "$ref": "#/definitions/certified_hardwareAzure"
+                    "$ref": "#/definitions/certified_hardwareAzure",
+                    "x-displayname": "Azure"
                 },
                 "gcp": {
-                    "description": "Exclusive with [aws azure]\nx-displayName: \"GCP\"\nGCP specific information",
+                    "description": "Exclusive with [aws azure]\n GCP specific information",
                     "title": "GCP",
-                    "$ref": "#/definitions/certified_hardwareGcp"
+                    "$ref": "#/definitions/certified_hardwareGcp",
+                    "x-displayname": "GCP"
                 },
                 "name": {
                     "type": "string",

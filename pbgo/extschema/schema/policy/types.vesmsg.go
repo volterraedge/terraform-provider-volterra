@@ -29,6 +29,119 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AppFirewallAttackTypeContext) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AppFirewallAttackTypeContext) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AppFirewallAttackTypeContext) DeepCopy() *AppFirewallAttackTypeContext {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AppFirewallAttackTypeContext{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AppFirewallAttackTypeContext) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AppFirewallAttackTypeContext) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AppFirewallAttackTypeContextValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAppFirewallAttackTypeContext struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAppFirewallAttackTypeContext) ExcludeAttackTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_app_firewall.AttackType)
+		return int32(i)
+	}
+	// ves_io_schema_app_firewall.AttackType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_app_firewall.AttackType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exclude_attack_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppFirewallAttackTypeContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AppFirewallAttackTypeContext)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AppFirewallAttackTypeContext got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["exclude_attack_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("exclude_attack_type"))
+		if err := fv(ctx, m.GetExcludeAttackType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAppFirewallAttackTypeContextValidator = func() *ValidateAppFirewallAttackTypeContext {
+	v := &ValidateAppFirewallAttackTypeContext{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExcludeAttackType := v.ExcludeAttackTypeValidationRuleHandler
+	rulesExcludeAttackType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhExcludeAttackType(rulesExcludeAttackType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallAttackTypeContext.exclude_attack_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exclude_attack_type"] = vFn
+
+	return v
+}()
+
+func AppFirewallAttackTypeContextValidator() db.Validator {
+	return DefaultAppFirewallAttackTypeContextValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AppFirewallDetectionControl) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -148,6 +261,46 @@ func (v *ValidateAppFirewallDetectionControl) ExcludeViolationContextsValidation
 	return validatorFn, nil
 }
 
+func (v *ValidateAppFirewallDetectionControl) ExcludeAttackTypeContextsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*AppFirewallAttackTypeContext, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := AppFirewallAttackTypeContextValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_attack_type_contexts")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AppFirewallAttackTypeContext)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AppFirewallAttackTypeContext, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated exclude_attack_type_contexts")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items exclude_attack_type_contexts")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAppFirewallDetectionControl) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AppFirewallDetectionControl)
 	if !ok {
@@ -160,6 +313,14 @@ func (v *ValidateAppFirewallDetectionControl) Validate(ctx context.Context, pm i
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["exclude_attack_type_contexts"]; exists {
+		vOpts := append(opts, db.WithValidateField("exclude_attack_type_contexts"))
+		if err := fv(ctx, m.GetExcludeAttackTypeContexts(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["exclude_signature_contexts"]; exists {
@@ -216,6 +377,18 @@ var DefaultAppFirewallDetectionControlValidator = func() *ValidateAppFirewallDet
 		panic(errMsg)
 	}
 	v.FldValidators["exclude_violation_contexts"] = vFn
+
+	vrhExcludeAttackTypeContexts := v.ExcludeAttackTypeContextsValidationRuleHandler
+	rulesExcludeAttackTypeContexts := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExcludeAttackTypeContexts(rulesExcludeAttackTypeContexts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallDetectionControl.exclude_attack_type_contexts: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exclude_attack_type_contexts"] = vFn
 
 	return v
 }()

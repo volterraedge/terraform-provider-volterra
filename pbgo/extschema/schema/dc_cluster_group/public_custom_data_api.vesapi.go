@@ -243,6 +243,11 @@ func (c *CustomDataAPIInprocClient) Metrics(ctx context.Context, in *MetricsRequ
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.dc_cluster_group.CustomDataAPI.Metrics"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -379,7 +384,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dc_cluster_group-CustomDataAPI-Metrics"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dc_cluster_group-customdataapi-metrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dc_cluster_group.CustomDataAPI.Metrics"
             },

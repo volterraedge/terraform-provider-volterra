@@ -1377,6 +1377,21 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"exclude_attack_type_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"exclude_attack_type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"exclude_signature_contexts": {
 
 										Type:     schema.TypeList,
@@ -3220,6 +3235,25 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
+						actionTypeInt.AppFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
+						for i, set := range sl {
+							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
+							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
+
+								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["exclude_signature_contexts"]; ok && !isIntfNil(v) {
 
@@ -5110,6 +5144,25 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
+						actionTypeInt.AppFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
+						for i, set := range sl {
+							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
+							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
+
+								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["exclude_signature_contexts"]; ok && !isIntfNil(v) {
 

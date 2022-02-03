@@ -1384,6 +1384,14 @@ func (v *ValidateMaliciousUserDetectionSetting) ForbiddenActivityChoiceValidatio
 	return validatorFn, nil
 }
 
+func (v *ValidateMaliciousUserDetectionSetting) IpReputationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_reputation_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateMaliciousUserDetectionSetting) WafActivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1503,6 +1511,42 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 
 	}
 
+	if fv, exists := v.FldValidators["ip_reputation_choice"]; exists {
+		val := m.GetIpReputationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ip_reputation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetIpReputationChoice().(type) {
+	case *MaliciousUserDetectionSetting_IncludeIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.include_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*MaliciousUserDetectionSetting_IncludeIpReputation).IncludeIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("include_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaliciousUserDetectionSetting_ExcludeIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.exclude_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*MaliciousUserDetectionSetting_ExcludeIpReputation).ExcludeIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("exclude_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["waf_activity_choice"]; exists {
 		val := m.GetWafActivityChoice()
 		vOpts := append(opts,
@@ -1600,6 +1644,17 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["forbidden_activity_choice"] = vFn
+
+	vrhIpReputationChoice := v.IpReputationChoiceValidationRuleHandler
+	rulesIpReputationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhIpReputationChoice(rulesIpReputationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MaliciousUserDetectionSetting.ip_reputation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_reputation_choice"] = vFn
 
 	vrhWafActivityChoice := v.WafActivityChoiceValidationRuleHandler
 	rulesWafActivityChoice := map[string]string{

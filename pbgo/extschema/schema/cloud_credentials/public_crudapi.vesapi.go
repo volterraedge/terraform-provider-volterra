@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cloud_credentials.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cloud_credentials.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.API.Delete"
             },
@@ -2357,20 +2365,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.CreateSpecType",
             "properties": {
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAWSSecretType"
+                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
+                    "$ref": "#/definitions/cloud_credentialsAWSSecretType",
+                    "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAzureSecretType"
+                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
+                    "$ref": "#/definitions/cloud_credentialsAzureSecretType",
+                    "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAzurePfxType"
+                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
+                    "$ref": "#/definitions/cloud_credentialsAzurePfxType",
+                    "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n",
-                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType"
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
+                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
+                    "x-displayname": "GCP Credentials"
                 }
             }
         },
@@ -2508,20 +2520,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.GetSpecType",
             "properties": {
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAWSSecretType"
+                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
+                    "$ref": "#/definitions/cloud_credentialsAWSSecretType",
+                    "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAzureSecretType"
+                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
+                    "$ref": "#/definitions/cloud_credentialsAzureSecretType",
+                    "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAzurePfxType"
+                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
+                    "$ref": "#/definitions/cloud_credentialsAzurePfxType",
+                    "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n",
-                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType"
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
+                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
+                    "x-displayname": "GCP Credentials"
                 }
             }
         },
@@ -2534,24 +2550,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.GlobalSpecType",
             "properties": {
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\nx-displayName: \"AWS Programmatic Access Credentials\"\nAWS authentication using access keys",
+                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
                     "title": "AWS Programmatic Access Credentials",
-                    "$ref": "#/definitions/cloud_credentialsAWSSecretType"
+                    "$ref": "#/definitions/cloud_credentialsAWSSecretType",
+                    "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\nx-displayName: \"Azure Client Secret for Service Principal\"\nAzure authentication using a service principal account with client secret",
+                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
                     "title": "Azure Credential Client Password",
-                    "$ref": "#/definitions/cloud_credentialsAzureSecretType"
+                    "$ref": "#/definitions/cloud_credentialsAzureSecretType",
+                    "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\nx-displayName: \"Azure Credential Client Certificate\"\nAzure authentication using a service principal account with client certificate",
+                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
                     "title": "Azure Credential Client Certificate",
-                    "$ref": "#/definitions/cloud_credentialsAzurePfxType"
+                    "$ref": "#/definitions/cloud_credentialsAzurePfxType",
+                    "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\nx-displayName: \"GCP Credentials\"\nGoogle authentication using content of Google Credentials File",
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
                     "title": "GCP Credentials",
-                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType"
+                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
+                    "x-displayname": "GCP Credentials"
                 }
             }
         },
@@ -2744,20 +2764,24 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.ReplaceSpecType",
             "properties": {
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAWSSecretType"
+                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
+                    "$ref": "#/definitions/cloud_credentialsAWSSecretType",
+                    "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAzureSecretType"
+                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
+                    "$ref": "#/definitions/cloud_credentialsAzureSecretType",
+                    "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n",
-                    "$ref": "#/definitions/cloud_credentialsAzurePfxType"
+                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
+                    "$ref": "#/definitions/cloud_credentialsAzurePfxType",
+                    "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n",
-                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType"
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
+                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
+                    "x-displayname": "GCP Credentials"
                 }
             }
         },
@@ -3340,14 +3364,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },

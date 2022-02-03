@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.secret_policy_rule.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.secret_policy_rule.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy_rule-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy_rule.crudapi.API.Create"
             },
@@ -3452,18 +3458,26 @@ var APISwaggerJSON string = `{
                 },
                 "client_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_name_matcher client_selector]\nx-displayName: \"Client Name\"\nx-example: \"ver.re01.int.ves.io\"\nThe name of the client trying to access the secret. Name of the client will be extracted from client TLS certificate.\nThis predicate evaluates to true if client name matches the configured name",
-                    "title": "client name"
+                    "description": "Exclusive with [client_name_matcher client_selector]\n The name of the client trying to access the secret. Name of the client will be extracted from client TLS certificate.\n This predicate evaluates to true if client name matches the configured name\n\nExample: - \"ver.re01.int.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "client name",
+                    "maxLength": 256,
+                    "x-displayname": "Client Name",
+                    "x-ves-example": "ver.re01.int.ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "client_name_matcher": {
-                    "description": "Exclusive with [client_name client_selector]\nx-displayName: \"Group of Clients by Name\"\nA list of exact values and/or regular expressions for the expected name of the client. The actual names of the client are extracted from its TLS certificate.\nThis is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\nThe predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
+                    "description": "Exclusive with [client_name client_selector]\n A list of exact values and/or regular expressions for the expected name of the client. The actual names of the client are extracted from its TLS certificate.\n This is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\n The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
                     "title": "client name matcher",
-                    "$ref": "#/definitions/policyMatcherType"
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Group of Clients by Name"
                 },
                 "client_selector": {
-                    "description": "Exclusive with [client_name client_name_matcher]\nx-displayName: \"Group of Clients by Label Selector\"\nA label selector that describes the expected set of clients. The labels associated with the client trying to access the secret are used to evaluate the label\nexpressions in the selector. These labels are derived from the client TLS certificate.\nThis is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\nclient labels rather than being limited to relying on patterns in the client name.\nThe predicate evaluates to true if the expressions in the label selector are true for the client labels.",
+                    "description": "Exclusive with [client_name client_name_matcher]\n A label selector that describes the expected set of clients. The labels associated with the client trying to access the secret are used to evaluate the label\n expressions in the selector. These labels are derived from the client TLS certificate.\n This is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\n client labels rather than being limited to relying on patterns in the client name.\n The predicate evaluates to true if the expressions in the label selector are true for the client labels.",
                     "title": "client selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Clients by Label Selector"
                 }
             }
         },

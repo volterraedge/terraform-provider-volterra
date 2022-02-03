@@ -237,6 +237,11 @@ func (c *CustomAPIInprocClient) VirtualHostWafStatus(ctx context.Context, in *Vi
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf.CustomAPI.VirtualHostWafStatus"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -373,7 +378,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-CustomAPI-VirtualHostWafStatus"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-customapi-virtualhostwafstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf.CustomAPI.VirtualHostWafStatus"
             },

@@ -240,6 +240,11 @@ func (c *ApiepLBCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *S
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -376,7 +381,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-ApiepLBCustomAPI-GetSwaggerSpec"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getswaggerspec"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec"
             },

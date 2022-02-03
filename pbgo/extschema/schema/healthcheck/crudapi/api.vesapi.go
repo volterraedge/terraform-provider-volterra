@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.healthcheck.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.healthcheck.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-healthcheck-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.crudapi.API.Create"
             },
@@ -2783,9 +2789,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_health_check": {
-                    "description": "Exclusive with [tcp_health_check]\nx-displayName: \"HTTP HealthCheck\"\nSpecifies the following details for HTTP health check requests\n1. Host header\n2. Path\n3. Request headers to add\n4. Request headers to remove",
+                    "description": "Exclusive with [tcp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
                     "title": "http_health_check",
-                    "$ref": "#/definitions/healthcheckHttpHealthCheck"
+                    "$ref": "#/definitions/healthcheckHttpHealthCheck",
+                    "x-displayname": "HTTP HealthCheck"
                 },
                 "interval": {
                     "type": "integer",
@@ -2813,9 +2820,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check]\nx-displayName: \"TCP HealthCheck\"\nSpecifies send payload and expected response payload",
+                    "description": "Exclusive with [http_health_check]\n Specifies send payload and expected response payload",
                     "title": "tcp_health_check",
-                    "$ref": "#/definitions/healthcheckTcpHealthCheck"
+                    "$ref": "#/definitions/healthcheckTcpHealthCheck",
+                    "x-displayname": "TCP HealthCheck"
                 },
                 "timeout": {
                     "type": "integer",
@@ -2871,8 +2879,15 @@ var APISwaggerJSON string = `{
                 },
                 "host_header": {
                     "type": "string",
-                    "description": "Exclusive with [use_origin_server_name]\nx-displayName: \"Host Header Value\"\nx-example: \"one.volterra.com\"\nThe value of the host header.",
-                    "title": "host_header"
+                    "description": "Exclusive with [use_origin_server_name]\n The value of the host header.\n\nExample: - \"one.volterra.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostport: true\n  ves.io.schema.rules.string.max_len: 262\n",
+                    "title": "host_header",
+                    "maxLength": 262,
+                    "x-displayname": "Host Header Value",
+                    "x-ves-example": "one.volterra.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostport": "true",
+                        "ves.io.schema.rules.string.max_len": "262"
+                    }
                 },
                 "path": {
                     "type": "string",
@@ -2912,9 +2927,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Use HTTP2"
                 },
                 "use_origin_server_name": {
-                    "description": "Exclusive with [host_header]\nx-displayName: \"Origin Server Name\"\nUse the origin server name.",
+                    "description": "Exclusive with [host_header]\n Use the origin server name.",
                     "title": "use origin server name",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Origin Server Name"
                 }
             }
         },

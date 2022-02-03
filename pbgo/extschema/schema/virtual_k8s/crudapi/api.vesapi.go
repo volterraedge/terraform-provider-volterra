@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_k8s.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_k8s.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.crudapi.API.Create"
             },
@@ -3360,14 +3366,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Workload Flavor"
                 },
                 "disabled": {
-                    "description": "Exclusive with [isolated]\nx-displayName: \"Disabled\"\nK8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\nsetting the ves.io/serviceIsolation annotation to true",
+                    "description": "Exclusive with [isolated]\n K8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\n setting the ves.io/serviceIsolation annotation to true",
                     "title": "Disabled",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "isolated": {
-                    "description": "Exclusive with [disabled]\nx-displayName: \"Isolated Services\"\nIsolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\noverridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
+                    "description": "Exclusive with [disabled]\n Isolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\n overridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
                     "title": "Isolated",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Isolated Services"
                 },
                 "vsite_refs": {
                     "type": "array",

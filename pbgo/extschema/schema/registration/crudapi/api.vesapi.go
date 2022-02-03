@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.crudapi.API.Replace"); rvFn != nil {
@@ -1565,7 +1571,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Get"
             },
@@ -1640,7 +1646,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Delete"
             },
@@ -1723,7 +1729,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Replace"
             },
@@ -1855,7 +1861,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.List"
             },
@@ -1932,7 +1938,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Create"
             },
@@ -2064,7 +2070,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.ListStream"
             },
@@ -2171,7 +2177,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Get"
             },
@@ -2303,7 +2309,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.List"
             },
@@ -2385,7 +2391,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Delete"
             },
@@ -2468,7 +2474,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Replace"
             },
@@ -2552,7 +2558,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Create"
             },
@@ -3015,14 +3021,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_os_version": {
-                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Default OS Version\"\nWill assign latest available OS version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "description": "Exclusive with [operating_system_version]\n Will assign latest available OS version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
                     "title": "Default OS Version",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default OS Version"
                 },
                 "default_sw_version": {
-                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Default SW Version\"\nWill assign latest available SW version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
                     "title": "Default SW Version",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default SW Version"
                 },
                 "latitude": {
                     "type": "number",
@@ -3050,8 +3058,14 @@ var APISwaggerJSON string = `{
                 },
                 "operating_system_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target SW version for particular site e.g. 7.2009.10.",
-                    "title": "Operating System Version"
+                    "description": "Exclusive with [default_os_version]\n Operating System Version is optional parameter, which allows to specify target SW version for particular site e.g. 7.2009.10.\n\nExample: - \"7.2009.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Operating System Version",
+                    "maxLength": 20,
+                    "x-displayname": "Operating System Version",
+                    "x-ves-example": "7.2009.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 },
                 "private_network_name": {
                     "type": "string",
@@ -3066,8 +3080,14 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
-                    "title": "Volterra Software Version"
+                    "description": "Exclusive with [default_sw_version]\n Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Volterra Software Version",
+                    "maxLength": 20,
+                    "x-displayname": "Volterra Software Version",
+                    "x-ves-example": "crt-20210329-1002",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 }
             }
         },

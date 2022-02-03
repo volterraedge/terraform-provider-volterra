@@ -335,6 +335,11 @@ func (c *CustomAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.aws_vpc_site.CustomAPI.SetVIPInfo"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -378,6 +383,11 @@ func (c *CustomAPIInprocClient) SetVPCK8SHostnames(ctx context.Context, in *SetV
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.aws_vpc_site.CustomAPI.SetVPCK8SHostnames"); rvFn != nil {
@@ -523,7 +533,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-CustomAPI-SetVIPInfo"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setvipinfo"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetVIPInfo"
             },
@@ -623,7 +633,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-CustomAPI-SetVPCK8SHostnames"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setvpck8shostnames"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetVPCK8SHostnames"
             },

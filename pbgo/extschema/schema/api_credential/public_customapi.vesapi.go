@@ -1205,6 +1205,11 @@ func (c *CustomAPIInprocClient) Activate(ctx context.Context, in *GetRequest, op
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Activate"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1248,6 +1253,11 @@ func (c *CustomAPIInprocClient) ActivateServiceCredentials(ctx context.Context, 
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials"); rvFn != nil {
@@ -1293,6 +1303,11 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *CreateRequest, o
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Create"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1336,6 +1351,11 @@ func (c *CustomAPIInprocClient) CreateServiceCredentials(ctx context.Context, in
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"); rvFn != nil {
@@ -1381,6 +1401,11 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Get"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1424,6 +1449,11 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListRequest, opts 
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.List"); rvFn != nil {
@@ -1469,6 +1499,11 @@ func (c *CustomAPIInprocClient) ListServiceCredentials(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ListServiceCredentials"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1512,6 +1547,11 @@ func (c *CustomAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opt
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Renew"); rvFn != nil {
@@ -1557,6 +1597,11 @@ func (c *CustomAPIInprocClient) RenewServiceCredentials(ctx context.Context, in 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1601,6 +1646,11 @@ func (c *CustomAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Revoke"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1644,6 +1694,11 @@ func (c *CustomAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials"); rvFn != nil {
@@ -1781,7 +1836,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Activate"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-activate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Activate"
             },
@@ -1873,7 +1928,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-ActivateServiceCredentials"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-activateservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials"
             },
@@ -1957,7 +2012,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.List"
             },
@@ -2044,7 +2099,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Create"
             },
@@ -2136,7 +2191,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Get"
             },
@@ -2228,7 +2283,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Renew"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-renew"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Renew"
             },
@@ -2320,7 +2375,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-RenewServiceCredentials"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-renewservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials"
             },
@@ -2412,7 +2467,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Revoke"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-revoke"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Revoke"
             },
@@ -2504,7 +2559,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-RevokeServiceCredentials"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-revokeservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials"
             },
@@ -2588,7 +2643,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-ListServiceCredentials"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-listservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials"
             },
@@ -2675,7 +2730,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-CreateServiceCredentials"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-createservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"
             },

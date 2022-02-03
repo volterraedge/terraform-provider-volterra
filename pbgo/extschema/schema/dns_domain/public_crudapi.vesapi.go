@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.dns_domain.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.dns_domain.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.Delete"
             },
@@ -2217,8 +2225,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DNSSEC Mode"
                 },
                 "volterra_managed": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with []\n Volterra will automatically create DNS A records for the domains matching this\n sub domain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Managed by Volterra"
                 }
             }
         },
@@ -2463,8 +2472,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "TXT Record"
                 },
                 "volterra_managed": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with []\n Volterra will automatically create DNS A records for the domains matching this\n sub domain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Managed by Volterra"
                 }
             }
         },
@@ -2489,9 +2499,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "TXT Record"
                 },
                 "volterra_managed": {
-                    "description": "Exclusive with []\nx-displayName: \"Managed by Volterra\"\nVolterra will automatically create DNS A records for the domains matching this\nsub domain",
+                    "description": "Exclusive with []\n Volterra will automatically create DNS A records for the domains matching this\n sub domain",
                     "title": "Managed by Volterra",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Managed by Volterra"
                 }
             }
         },
@@ -2689,8 +2700,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DNSSEC Mode"
                 },
                 "volterra_managed": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with []\n Volterra will automatically create DNS A records for the domains matching this\n sub domain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Managed by Volterra"
                 }
             }
         },

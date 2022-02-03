@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.rate_limiter_policy.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.rate_limiter_policy.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.rate_limiter_policy.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.rate_limiter_policy.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.rate_limiter_policy.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.rate_limiter_policy.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-rate_limiter_policy-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.rate_limiter_policy.API.Delete"
             },
@@ -3619,14 +3627,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.HeaderMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the header is not present.",
+                    "description": "Exclusive with [check_present item]\n Check that the header is not present.",
                     "title": "check_not_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Present"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the header is present.",
+                    "description": "Exclusive with [check_not_present item]\n Check that the header is present.",
                     "title": "check_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Present"
                 },
                 "invert_matcher": {
                     "type": "boolean",
@@ -3636,9 +3646,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Header Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\n Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
                     "title": "item",
-                    "$ref": "#/definitions/policyMatcherType"
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Match Values"
                 },
                 "name": {
                     "type": "string",
@@ -3805,19 +3816,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.RateLimiterRuleSpec",
             "properties": {
                 "apply_rate_limiter": {
-                    "description": "Exclusive with [bypass_rate_limiter custom_rate_limiter]\nx-displayName: \"Apply Rate Limiter\"\nApply the rate limiter configured on the HTTP loadbalancer.",
+                    "description": "Exclusive with [bypass_rate_limiter custom_rate_limiter]\nApply the rate limiter configured on the HTTP loadbalancer.",
                     "title": "apply_rate_limiter",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Apply Rate Limiter"
                 },
                 "bypass_rate_limiter": {
-                    "description": "Exclusive with [apply_rate_limiter custom_rate_limiter]\nx-displayName: \"Bypass Rate Limiter\"\nBypass the rate limiter configured on the HTTP loadbalancer.",
+                    "description": "Exclusive with [apply_rate_limiter custom_rate_limiter]\nBypass the rate limiter configured on the HTTP loadbalancer.",
                     "title": "bypass_rate_limiter",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Bypass Rate Limiter"
                 },
                 "custom_rate_limiter": {
-                    "description": "Exclusive with [apply_rate_limiter bypass_rate_limiter]\nx-displayName: \"Apply Custom Rate Limiter\"\nApply a custom rate limiter.",
+                    "description": "Exclusive with [apply_rate_limiter bypass_rate_limiter]\nApply a custom rate limiter.",
                     "title": "custom_rate_limiter",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Apply Custom Rate Limiter"
                 },
                 "domain_matcher": {
                     "description": " A list of exact values and/or regular expressions for the expected name of the domain. The actual value of domain is the host component\n from the URL. The predicate evaluates to true if the domain value matches any of the exact values or regular expressions in the domain\n matcher.",
@@ -3853,8 +3867,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.rate_limiter_policy.CreateSpecType",
             "properties": {
                 "any_server": {
-                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n Any Server",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Server"
                 },
                 "rules": {
                     "type": "array",
@@ -3871,15 +3886,23 @@ var APISwaggerJSON string = `{
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n"
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Server Name",
+                    "x-ves-example": "database.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\n",
-                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                    "description": "Exclusive with [any_server server_name server_selector]\n A list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\n and the name of the virtual_host for the request. The predicate evaluates to true if any of the server's names match any of the specified exact values or\n regular expressions.",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "Group of Servers by Name"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\n A label selector that describes the expected set of servers. The labels associated with the server for the request is directed are used to evaluate the label\n expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. The predicate evaluates to\n true if the expressions in the label selector are true for the server labels.",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 }
             }
         },
@@ -3892,8 +3915,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.rate_limiter_policy.GetSpecType",
             "properties": {
                 "any_server": {
-                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n Any Server",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Server"
                 },
                 "rules": {
                     "type": "array",
@@ -3910,15 +3934,23 @@ var APISwaggerJSON string = `{
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n"
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Server Name",
+                    "x-ves-example": "database.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\n",
-                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                    "description": "Exclusive with [any_server server_name server_selector]\n A list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\n and the name of the virtual_host for the request. The predicate evaluates to true if any of the server's names match any of the specified exact values or\n regular expressions.",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "Group of Servers by Name"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\n A label selector that describes the expected set of servers. The labels associated with the server for the request is directed are used to evaluate the label\n expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. The predicate evaluates to\n true if the expressions in the label selector are true for the server labels.",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 }
             }
         },
@@ -3931,9 +3963,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.rate_limiter_policy.GlobalSpecType",
             "properties": {
                 "any_server": {
-                    "description": "Exclusive with [server_name server_name_matcher server_selector]\nx-displayName: \"Any Server\"\nAny Server",
+                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n Any Server",
                     "title": "any",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Server"
                 },
                 "rules": {
                     "type": "array",
@@ -3951,18 +3984,26 @@ var APISwaggerJSON string = `{
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\nx-displayName: \"Server Name\"\nx-example: \"database.production.customer.volterra.us\"\nThe expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request.",
-                    "title": "server name"
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "server name",
+                    "maxLength": 256,
+                    "x-displayname": "Server Name",
+                    "x-ves-example": "database.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\nx-displayName: \"Group of Servers by Name\"\nA list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\nand the name of the virtual_host for the request. The predicate evaluates to true if any of the server's names match any of the specified exact values or\nregular expressions.",
+                    "description": "Exclusive with [any_server server_name server_selector]\n A list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\n and the name of the virtual_host for the request. The predicate evaluates to true if any of the server's names match any of the specified exact values or\n regular expressions.",
                     "title": "server name matcher",
-                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "Group of Servers by Name"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\nx-displayName: \"Group of Servers by Label Selector\"\nA label selector that describes the expected set of servers. The labels associated with the server for the request is directed are used to evaluate the label\nexpressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. The predicate evaluates to\ntrue if the expressions in the label selector are true for the server labels.",
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\n A label selector that describes the expected set of servers. The labels associated with the server for the request is directed are used to evaluate the label\n expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. The predicate evaluates to\n true if the expressions in the label selector are true for the server labels.",
                     "title": "server selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 }
             }
         },
@@ -3975,8 +4016,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.rate_limiter_policy.ReplaceSpecType",
             "properties": {
                 "any_server": {
-                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n Any Server",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Server"
                 },
                 "rules": {
                     "type": "array",
@@ -3993,15 +4035,23 @@ var APISwaggerJSON string = `{
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n"
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Server Name",
+                    "x-ves-example": "database.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\n",
-                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                    "description": "Exclusive with [any_server server_name server_selector]\n A list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\n and the name of the virtual_host for the request. The predicate evaluates to true if any of the server's names match any of the specified exact values or\n regular expressions.",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "Group of Servers by Name"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\n A label selector that describes the expected set of servers. The labels associated with the server for the request is directed are used to evaluate the label\n expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. The predicate evaluates to\n true if the expressions in the label selector are true for the server labels.",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 }
             }
         }

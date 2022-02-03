@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.advertise_policy.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.advertise_policy.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Create"
             },
@@ -3183,19 +3189,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
                 "site": {
-                    "description": "Exclusive with [virtual_network virtual_site]\nx-displayName: \"Site\"\nDirect reference to site object",
+                    "description": "Exclusive with [virtual_network virtual_site]\n Direct reference to site object",
                     "title": "site",
-                    "$ref": "#/definitions/schemaSiteRefType"
+                    "$ref": "#/definitions/schemaSiteRefType",
+                    "x-displayname": "Site"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"Virtual Network\"\nDirect reference to virtual network object",
+                    "description": "Exclusive with [site virtual_site]\n Direct reference to virtual network object",
                     "title": "virtual_network",
-                    "$ref": "#/definitions/schemaNetworkRefType"
+                    "$ref": "#/definitions/schemaNetworkRefType",
+                    "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site virtual_network]\nx-displayName: \"Virtual Site\"\nDirect reference to virtual site object",
+                    "description": "Exclusive with [site virtual_network]\n Direct reference to virtual site object",
                     "title": "virtual_site",
-                    "$ref": "#/definitions/schemaVSiteRefType"
+                    "$ref": "#/definitions/schemaVSiteRefType",
+                    "x-displayname": "Virtual Site"
                 }
             }
         },
@@ -3331,14 +3340,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -3635,9 +3646,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_hash_algorithms": {
-                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
-                    "$ref": "#/definitions/schemaHashAlgorithms"
+                    "$ref": "#/definitions/schemaHashAlgorithms",
+                    "x-displayname": "Use hash algorithms in custom order"
                 },
                 "description": {
                     "type": "string",
@@ -3646,9 +3658,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Description"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable OCSP Stapling"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3661,9 +3674,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_system_defaults": {
-                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
                     "title": "Fetch with Volterra default settings",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Fetch with Volterra default settings"
                 }
             }
         },

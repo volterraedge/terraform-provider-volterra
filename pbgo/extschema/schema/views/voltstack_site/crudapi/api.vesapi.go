@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.voltstack_site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.voltstack_site.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Create"
             },
@@ -2695,9 +2701,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
                 "external": {
-                    "description": "Exclusive with []\nx-displayName: \"External\"\nExternal BGP peer.",
+                    "description": "Exclusive with []\n External BGP peer.",
                     "title": "external",
-                    "$ref": "#/definitions/bgpPeerExternal"
+                    "$ref": "#/definitions/bgpPeerExternal",
+                    "x-displayname": "External"
                 },
                 "metadata": {
                     "description": " Common attributes for the peer including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2723,8 +2730,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
-                    "title": "address"
+                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "address",
+                    "x-displayname": "Peer Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "asn": {
                     "type": "integer",
@@ -2739,24 +2750,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Default Gateway\"\nUse the default gateway address.",
+                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
                     "title": "default_gateway",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Gateway"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
+                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
                     "title": "from_site",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Address From Site Object"
                 },
                 "interface": {
-                    "description": "Exclusive with [interface_list]\nx-displayName: \"Interface\"\nSpecify interface.",
+                    "description": "Exclusive with [interface_list]\n Specify interface.",
                     "title": "interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Interface"
                 },
                 "interface_list": {
-                    "description": "Exclusive with [interface]\nx-displayName: \"Interface List\"\nList of network interfaces.",
+                    "description": "Exclusive with [interface]\n List of network interfaces.",
                     "title": "interface_list",
-                    "$ref": "#/definitions/bgpInterfaceList"
+                    "$ref": "#/definitions/bgpInterfaceList",
+                    "x-displayname": "Interface List"
                 },
                 "port": {
                     "type": "integer",
@@ -2771,15 +2786,25 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Offset From Beginning Of Subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
+                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_begin_offset",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Offset From Beginning Of Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_end_offset",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Offset From End Of Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 }
             }
         },
@@ -3153,13 +3178,25 @@ var APISwaggerJSON string = `{
                 },
                 "mgmt_dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [mgmt_ip]\nx-displayName: \"Management Endpoint Name\"\nx-example: \"storage.local\"\nManagement Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
-                    "title": "dns_name"
+                    "description": "Exclusive with [mgmt_ip]\n Management Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"storage.local\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "dns_name",
+                    "maxLength": 256,
+                    "x-displayname": "Management Endpoint Name",
+                    "x-ves-example": "storage.local",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "mgmt_ip": {
                     "type": "string",
-                    "description": "Exclusive with [mgmt_dns_name]\nx-displayName: \"Management Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nManagement Endpoint is reachable at the given ip address",
-                    "title": "Management Endpoint IP Address"
+                    "description": "Exclusive with [mgmt_dns_name]\n Management Endpoint is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Management Endpoint IP Address",
+                    "x-displayname": "Management Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 }
             }
         },
@@ -3293,23 +3330,47 @@ var APISwaggerJSON string = `{
                 },
                 "mgmt_dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [mgmt_ip]\nx-displayName: \"Management Endpoint Name\"\nx-example: \"storage.local\"\nManagement Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
-                    "title": "dns_name"
+                    "description": "Exclusive with [mgmt_ip]\n Management Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"storage.local\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "dns_name",
+                    "maxLength": 256,
+                    "x-displayname": "Management Endpoint Name",
+                    "x-ves-example": "storage.local",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "mgmt_ip": {
                     "type": "string",
-                    "description": "Exclusive with [mgmt_dns_name]\nx-displayName: \"Management Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nManagement Endpoint is reachable at the given ip address",
-                    "title": "Management Endpoint IP Address"
+                    "description": "Exclusive with [mgmt_dns_name]\n Management Endpoint is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Management Endpoint IP Address",
+                    "x-displayname": "Management Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "nfs_endpoint_dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [nfs_endpoint_ip]\nx-displayName: \"NFS DNS Name\"\nx-example: \"nfs.storage.local\"\nEndpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
-                    "title": "NFS DNS Name"
+                    "description": "Exclusive with [nfs_endpoint_ip]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"nfs.storage.local\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "NFS DNS Name",
+                    "maxLength": 256,
+                    "x-displayname": "NFS DNS Name",
+                    "x-ves-example": "nfs.storage.local",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "nfs_endpoint_ip": {
                     "type": "string",
-                    "description": "Exclusive with [nfs_endpoint_dns_name]\nx-displayName: \"NFS IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
-                    "title": "NFS IP Address"
+                    "description": "Exclusive with [nfs_endpoint_dns_name]\n Endpoint is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "NFS IP Address",
+                    "x-displayname": "NFS IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 }
             }
         },
@@ -3369,9 +3430,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.FleetBondDeviceType",
             "properties": {
                 "active_backup": {
-                    "description": "Exclusive with [lacp]\nx-displayName: \"Active/Backup\"\nConfigure active/backup based bond device",
+                    "description": "Exclusive with [lacp]\n Configure active/backup based bond device",
                     "title": "Active/Backup",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Active/Backup"
                 },
                 "devices": {
                     "type": "array",
@@ -3394,9 +3456,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "lacp": {
-                    "description": "Exclusive with [active_backup]\nx-displayName: \"LACP (802.3ad)\"\nConfigure LACP (802.3ad) based bond device",
+                    "description": "Exclusive with [active_backup]\n Configure LACP (802.3ad) based bond device",
                     "title": "LACP (802.3ad)",
-                    "$ref": "#/definitions/fleetBondLacpType"
+                    "$ref": "#/definitions/fleetBondLacpType",
+                    "x-displayname": "LACP (802.3ad)"
                 },
                 "link_polling_interval": {
                     "type": "integer",
@@ -3520,9 +3583,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow Volume Expansion"
                 },
                 "custom_storage": {
-                    "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\nx-displayName: \"Custom Storage\"\nStorage configuration for Custom Storage",
+                    "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\n Storage configuration for Custom Storage",
                     "title": "Custom Storage",
-                    "$ref": "#/definitions/fleetStorageClassCustomType"
+                    "$ref": "#/definitions/fleetStorageClassCustomType",
+                    "x-displayname": "Custom Storage"
                 },
                 "default_storage_class": {
                     "type": "boolean",
@@ -3542,19 +3606,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "netapp_trident": {
-                    "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nStorage class Device configuration for NetApp Trident",
+                    "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\n Storage class Device configuration for NetApp Trident",
                     "title": "NetApp Trident",
-                    "$ref": "#/definitions/fleetStorageClassNetappTridentType"
+                    "$ref": "#/definitions/fleetStorageClassNetappTridentType",
+                    "x-displayname": "NetApp Trident"
                 },
                 "openebs_enterprise": {
-                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\nx-displayName: \"OpenEBS Enterprise\"\nStorage class Device configuration for OpenEBS Enterprise",
+                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\n Storage class Device configuration for OpenEBS Enterprise",
                     "title": "OpenEBS Enterprise",
-                    "$ref": "#/definitions/fleetStorageClassOpenebsEnterpriseType"
+                    "$ref": "#/definitions/fleetStorageClassOpenebsEnterpriseType",
+                    "x-displayname": "OpenEBS Enterprise"
                 },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [custom_storage netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nStorage class Device configuration for Pure Service Orchestrator",
+                    "description": "Exclusive with [custom_storage netapp_trident openebs_enterprise]\n Storage class Device configuration for Pure Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
-                    "$ref": "#/definitions/fleetStorageClassPureServiceOrchestratorType"
+                    "$ref": "#/definitions/fleetStorageClassPureServiceOrchestratorType",
+                    "x-displayname": "Pure Storage Service Orchestrator"
                 },
                 "reclaim_policy": {
                     "type": "string",
@@ -3640,24 +3707,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_storage": {
-                    "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\nx-displayName: \"Custom Storage\"\nDevice configuration for Custom Storage",
+                    "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\n Device configuration for Custom Storage",
                     "title": "Custom Storage",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Custom Storage"
                 },
                 "netapp_trident": {
-                    "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nDevice configuration for NetApp Trident",
+                    "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\n Device configuration for NetApp Trident",
                     "title": "NetApp Trident",
-                    "$ref": "#/definitions/fleetStorageDeviceNetappTridentType"
+                    "$ref": "#/definitions/fleetStorageDeviceNetappTridentType",
+                    "x-displayname": "NetApp Trident"
                 },
                 "openebs_enterprise": {
-                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\nx-displayName: \"OpenEBS Enterprise\"\nDevice configuration for Pure Storage Service Orchestrator",
+                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\n Device configuration for Pure Storage Service Orchestrator",
                     "title": "OpenEBS Enterprise",
-                    "$ref": "#/definitions/fleetStorageDeviceOpenebsEnterpriseType"
+                    "$ref": "#/definitions/fleetStorageDeviceOpenebsEnterpriseType",
+                    "x-displayname": "OpenEBS Enterprise"
                 },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [custom_storage netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nDevice configuration for Pure Storage Service Orchestrator",
+                    "description": "Exclusive with [custom_storage netapp_trident openebs_enterprise]\n Device configuration for Pure Storage Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
-                    "$ref": "#/definitions/fleetStorageDevicePureStorageServiceOrchestratorType"
+                    "$ref": "#/definitions/fleetStorageDevicePureStorageServiceOrchestratorType",
+                    "x-displayname": "Pure Storage Service Orchestrator"
                 },
                 "storage_device": {
                     "type": "string",
@@ -3688,14 +3759,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "BGP Configuration"
                 },
                 "inside_vn": {
-                    "description": "Exclusive with [outside_vn]\nx-displayName: \"Inside Network\"\nLocal control plane will work on inside network",
+                    "description": "Exclusive with [outside_vn]\n Local control plane will work on inside network",
                     "title": "Inside Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Inside Network"
                 },
                 "outside_vn": {
-                    "description": "Exclusive with [inside_vn]\nx-displayName: \"Outside Network\"\nLocal control plane will work on outside network",
+                    "description": "Exclusive with [inside_vn]\n Local control plane will work on outside network",
                     "title": "Outside Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Outside Network"
                 }
             }
         },
@@ -3745,8 +3818,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "adaptive_qos_policy": {
                     "type": "string",
-                    "description": "Exclusive with [no_qos qos_policy]\nx-displayName: \"Adaptive QoS Policy name\"\nEnter Adaptive QoS Policy Name",
-                    "title": "Storage Server IP address"
+                    "description": "Exclusive with [no_qos qos_policy]\n Enter Adaptive QoS Policy Name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Storage Server IP address",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Adaptive QoS Policy name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "encryption": {
                     "type": "boolean",
@@ -3764,14 +3844,22 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "default"
                 },
                 "no_qos": {
-                    "description": "Exclusive with [adaptive_qos_policy qos_policy]\nx-displayName: \"No QoS\"\nNo QoS configured",
+                    "description": "Exclusive with [adaptive_qos_policy qos_policy]\n No QoS configured",
                     "title": "No QoS",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No QoS"
                 },
                 "qos_policy": {
                     "type": "string",
-                    "description": "Exclusive with [adaptive_qos_policy no_qos]\nx-displayName: \"QoS Policy Name\"\nEnter QoS Policy Name",
-                    "title": "QoS Policy Name"
+                    "description": "Exclusive with [adaptive_qos_policy no_qos]\n Enter QoS Policy Name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "QoS Policy Name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "QoS Policy Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "security_style": {
                     "type": "string",
@@ -4080,13 +4168,25 @@ var APISwaggerJSON string = `{
                 },
                 "data_lif_dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [data_lif_ip]\nx-displayName: \"Backend Data LIF Name\"\nx-example: \"storage.local\"\nBackend Data LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
-                    "title": "Backend Data LIF Name"
+                    "description": "Exclusive with [data_lif_ip]\n Backend Data LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"storage.local\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Backend Data LIF Name",
+                    "maxLength": 256,
+                    "x-displayname": "Backend Data LIF Name",
+                    "x-ves-example": "storage.local",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "data_lif_ip": {
                     "type": "string",
-                    "description": "Exclusive with [data_lif_dns_name]\nx-displayName: \"Backend Data LIF IP Address\"\nx-example: \"10.5.2.4\"\nBackend Data LIF IP Address is reachable at the given ip address",
-                    "title": "Backend Data LIF IP Address"
+                    "description": "Exclusive with [data_lif_dns_name]\n Backend Data LIF IP Address is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Backend Data LIF IP Address",
+                    "x-displayname": "Backend Data LIF IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "labels": {
                     "type": "object",
@@ -4118,13 +4218,25 @@ var APISwaggerJSON string = `{
                 },
                 "management_lif_dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [management_lif_ip]\nx-displayName: \"Backend Management LIF Name\"\nx-example: \"storage.local\"\nBackend Management LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
-                    "title": "Backend Management LIF Name"
+                    "description": "Exclusive with [management_lif_ip]\n Backend Management LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"storage.local\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Backend Management LIF Name",
+                    "maxLength": 256,
+                    "x-displayname": "Backend Management LIF Name",
+                    "x-ves-example": "storage.local",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "management_lif_ip": {
                     "type": "string",
-                    "description": "Exclusive with [management_lif_dns_name]\nx-displayName: \"Backend Management LIF IP Address\"\nx-example: \"10.5.2.4\"\nBackend Management LIF IP Address is reachable at the given ip address",
-                    "title": "Backend Management LIF IP Address"
+                    "description": "Exclusive with [management_lif_dns_name]\n Backend Management LIF IP Address is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Backend Management LIF IP Address",
+                    "x-displayname": "Backend Management LIF IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "nfs_mount_options": {
                     "type": "string",
@@ -4253,13 +4365,25 @@ var APISwaggerJSON string = `{
                 },
                 "data_lif_dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [data_lif_ip]\nx-displayName: \"Backend Data LIF Name\"\nx-example: \"storage.local\"\nBackend Data LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
-                    "title": "Backend Data LIF Name"
+                    "description": "Exclusive with [data_lif_ip]\n Backend Data LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"storage.local\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Backend Data LIF Name",
+                    "maxLength": 256,
+                    "x-displayname": "Backend Data LIF Name",
+                    "x-ves-example": "storage.local",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "data_lif_ip": {
                     "type": "string",
-                    "description": "Exclusive with [data_lif_dns_name]\nx-displayName: \"Backend Data LIF IP Address\"\nx-example: \"10.5.2.4\"\nBackend Data LIF IP Address is reachable at the given ip address",
-                    "title": "Backend Data LIF IP Address"
+                    "description": "Exclusive with [data_lif_dns_name]\n Backend Data LIF IP Address is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Backend Data LIF IP Address",
+                    "x-displayname": "Backend Data LIF IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "igroup_name": {
                     "type": "string",
@@ -4309,18 +4433,31 @@ var APISwaggerJSON string = `{
                 },
                 "management_lif_dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [management_lif_ip]\nx-displayName: \"Backend Management LIF Name\"\nx-example: \"storage.local\"\nBackend Management LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
-                    "title": "Backend Management LIF Name"
+                    "description": "Exclusive with [management_lif_ip]\n Backend Management LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"storage.local\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Backend Management LIF Name",
+                    "maxLength": 256,
+                    "x-displayname": "Backend Management LIF Name",
+                    "x-ves-example": "storage.local",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "management_lif_ip": {
                     "type": "string",
-                    "description": "Exclusive with [management_lif_dns_name]\nx-displayName: \"Backend Management LIF IP Address\"\nx-example: \"10.5.2.4\"\nBackend Management LIF IP Address is reachable at the given ip address",
-                    "title": "Backend Management LIF IP Address"
+                    "description": "Exclusive with [management_lif_dns_name]\n Backend Management LIF IP Address is reachable at the given ip address\n\nExample: - \"10.5.2.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Backend Management LIF IP Address",
+                    "x-displayname": "Backend Management LIF IP Address",
+                    "x-ves-example": "10.5.2.4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "no_chap": {
-                    "description": "Exclusive with [use_chap]\nx-displayName: \"CHAP Disabled\"\nCHAP disabled",
+                    "description": "Exclusive with [use_chap]\n CHAP disabled",
                     "title": "CHAP Disabled",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "CHAP Disabled"
                 },
                 "password": {
                     "description": " Please Enter you password. Password to connect to the cluster/SVM",
@@ -4398,9 +4535,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_chap": {
-                    "description": "Exclusive with [no_chap]\nx-displayName: \"Use Device NetApp Backend ONTAP SAN CHAP\"\nDevice NetApp Backend ONTAP SAN CHAP configuration options for enabled CHAP",
+                    "description": "Exclusive with [no_chap]\n Device NetApp Backend ONTAP SAN CHAP configuration options for enabled CHAP",
                     "title": "Use Device NetApp Backend ONTAP SAN CHAP configuration",
-                    "$ref": "#/definitions/fleetDeviceNetappBackendOntapSanChapType"
+                    "$ref": "#/definitions/fleetDeviceNetappBackendOntapSanChapType",
+                    "x-displayname": "Use Device NetApp Backend ONTAP SAN CHAP"
                 },
                 "username": {
                     "type": "string",
@@ -4434,14 +4572,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.StorageDeviceNetappTridentType",
             "properties": {
                 "netapp_backend_ontap_nas": {
-                    "description": "Exclusive with [netapp_backend_ontap_san]\nx-displayName: \"ONTAP NAS\"\nBackend configuration for ONTAP NAS",
+                    "description": "Exclusive with [netapp_backend_ontap_san]\n Backend configuration for ONTAP NAS",
                     "title": "ONTAP NAS",
-                    "$ref": "#/definitions/fleetStorageDeviceNetappBackendOntapNasType"
+                    "$ref": "#/definitions/fleetStorageDeviceNetappBackendOntapNasType",
+                    "x-displayname": "ONTAP NAS"
                 },
                 "netapp_backend_ontap_san": {
-                    "description": "Exclusive with [netapp_backend_ontap_nas]\nx-displayName: \"ONTAP SAN\"\nBackend configuration for ONTAP SAN",
+                    "description": "Exclusive with [netapp_backend_ontap_nas]\n Backend configuration for ONTAP SAN",
                     "title": "ONTAP SAN",
-                    "$ref": "#/definitions/fleetStorageDeviceNetappBackendOntapSanType"
+                    "$ref": "#/definitions/fleetStorageDeviceNetappBackendOntapSanType",
+                    "x-displayname": "ONTAP SAN"
                 }
             }
         },
@@ -4706,28 +4846,45 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dgw_address": {
                     "type": "string",
-                    "description": "Exclusive with [first_address last_address]\nx-displayName: \"Configured Address\"\nx-example: \"10.1.1.10\"\nConfigured address from the network prefix is chosen as default gateway.",
-                    "title": "Configured Address"
+                    "description": "Exclusive with [first_address last_address]\n Configured address from the network prefix is chosen as default gateway.\n\nExample: - \"10.1.1.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Configured Address",
+                    "x-displayname": "Configured Address",
+                    "x-ves-example": "10.1.1.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "dns_address": {
                     "type": "string",
-                    "description": "Exclusive with [same_as_dgw]\nx-displayName: \"Configured Address\"\nx-example: \"10.1.1.11\"\nConfigured address is chosen as DNS server address in DHCP response.",
-                    "title": "Configured Address"
+                    "description": "Exclusive with [same_as_dgw]\n Configured address is chosen as DNS server address in DHCP response.\n\nExample: - \"10.1.1.11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Configured Address",
+                    "x-displayname": "Configured Address",
+                    "x-ves-example": "10.1.1.11",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "first_address": {
-                    "description": "Exclusive with [dgw_address last_address]\nx-displayName: \"First Address of Network\"\nFirst usable address from the network prefix is chosen as default gateway",
+                    "description": "Exclusive with [dgw_address last_address]\n First usable address from the network prefix is chosen as default gateway",
                     "title": "First Address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "First Address of Network"
                 },
                 "last_address": {
-                    "description": "Exclusive with [dgw_address first_address]\nx-displayName: \"Last Address of Network\"\nLast usable address from the network prefix is chosen as default gateway",
+                    "description": "Exclusive with [dgw_address first_address]\n Last usable address from the network prefix is chosen as default gateway",
                     "title": "Last Address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Last Address of Network"
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with []\nx-displayName: \"Network Prefix\"\nx-example: \"10.1.1.0/24\"\nNetwork Prefix for a single site.",
-                    "title": "Network Prefix"
+                    "description": "Exclusive with []\n Network Prefix for a single site. \n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "title": "Network Prefix",
+                    "x-displayname": "Network Prefix",
+                    "x-ves-example": "10.1.1.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4_prefix": "true"
+                    }
                 },
                 "pool_settings": {
                     "description": " Controls how DHCP pools are handled\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4754,9 +4911,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "same_as_dgw": {
-                    "description": "Exclusive with [dns_address]\nx-displayName: \"Default Gateway Address\"\nDNS server address is same as default gateway address",
+                    "description": "Exclusive with [dns_address]\n DNS server address is same as default gateway address",
                     "title": "Default Gateway Address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Gateway Address"
                 }
             }
         },
@@ -4807,14 +4965,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPServerParametersType",
             "properties": {
                 "automatic_from_end": {
-                    "description": "Exclusive with [automatic_from_start interface_ip_map]\nx-displayName: \"Automatic End\"\nAssign automatically from End of the first network in the list",
+                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from End of the first network in the list",
                     "title": "Automatic End",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic End"
                 },
                 "automatic_from_start": {
-                    "description": "Exclusive with [automatic_from_end interface_ip_map]\nx-displayName: \"Automatic Start\"\nAssign automatically from start of the first network in the list",
+                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the list",
                     "title": "Automatic Start",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic Start"
                 },
                 "dhcp_networks": {
                     "type": "array",
@@ -4847,9 +5007,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "interface_ip_map": {
-                    "description": "Exclusive with [automatic_from_end automatic_from_start]\nx-displayName: \"Configured\"\nConfigured address for every node",
+                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Configured address for every node",
                     "title": "Configured Address",
-                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPType"
+                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPType",
+                    "x-displayname": "Configured"
                 }
             }
         },
@@ -4864,9 +5025,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "Exclusive with [node]\n Configuration will apply to given device on all nodes of the site.",
                     "title": "Cluster",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Cluster, All Node of the site"
                 },
                 "device": {
                     "type": "string",
@@ -4884,19 +5046,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "is_primary": {
-                    "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
+                    "description": "Exclusive with [not_primary]\n This interface is primary",
                     "title": "Interface is Primary",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Interface is Primary"
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "Exclusive with [monitor_disabled]\n Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig",
+                    "x-displayname": "Enabled"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "Exclusive with [monitor]\n Link quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "mtu": {
                     "type": "integer",
@@ -4911,13 +5076,21 @@ var APISwaggerJSON string = `{
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
-                    "title": "Node"
+                    "description": "Exclusive with [cluster]\n Configuration will apply to a device on the given node of the site.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Specific Node",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "not_primary": {
-                    "description": "Exclusive with [is_primary]\nx-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
+                    "description": "Exclusive with [is_primary]\n This interface is not primary",
                     "title": "Interface is Not Primary",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Interface is Not Primary"
                 },
                 "priority": {
                     "type": "integer",
@@ -4942,9 +5115,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedManagementInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "Exclusive with [node]\n Configuration will apply to given device on all nodes of the site.",
                     "title": "Cluster",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Cluster, All Node of the site"
                 },
                 "device": {
                     "type": "string",
@@ -4974,8 +5148,15 @@ var APISwaggerJSON string = `{
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
-                    "title": "Node"
+                    "description": "Exclusive with [cluster]\n Configuration will apply to a device on the given node of the site.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Specific Node",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -4994,9 +5175,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.EthernetInterfaceType",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "description": "Exclusive with [node]\n Configuration will apply to given device on all nodes of the site.",
                     "title": "Node Independent",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Cluster, All Nodes of the Site"
                 },
                 "device": {
                     "type": "string",
@@ -5014,29 +5196,34 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "dhcp_client": {
-                    "description": "Exclusive with [dhcp_server static_ip]\nx-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
+                    "description": "Exclusive with [dhcp_server static_ip]\n Interface gets it IP address from external DHCP server",
                     "title": "DHCP Client",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "DHCP Client"
                 },
                 "dhcp_server": {
-                    "description": "Exclusive with [dhcp_client static_ip]\nx-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "description": "Exclusive with [dhcp_client static_ip]\n DHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
                     "title": "DHCP Server",
-                    "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
+                    "$ref": "#/definitions/network_interfaceDHCPServerParametersType",
+                    "x-displayname": "DHCP server"
                 },
                 "is_primary": {
-                    "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
+                    "description": "Exclusive with [not_primary]\n This interface is primary",
                     "title": "Interface is Primary",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Interface is Primary"
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "Exclusive with [monitor_disabled]\n Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig",
+                    "x-displayname": "Enabled"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "Exclusive with [monitor]\n Link quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "mtu": {
                     "type": "integer",
@@ -5050,19 +5237,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [static_ipv6_address]\nx-displayName: \"No IPv6 Address\"\nInterface does not have an IPv6 Address.",
+                    "description": "Exclusive with [static_ipv6_address]\n Interface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No IPv6 Address"
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
-                    "title": "Node"
+                    "description": "Exclusive with [cluster]\n Configuration will apply to a device on the given node.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Specific Node",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "not_primary": {
-                    "description": "Exclusive with [is_primary]\nx-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
+                    "description": "Exclusive with [is_primary]\n This interface is not primary",
                     "title": "Interface is Not Primary",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Interface is Not Primary"
                 },
                 "priority": {
                     "type": "integer",
@@ -5077,40 +5273,51 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [site_local_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [site_local_network storage_network]\n Interface belongs to site local network inside",
                     "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Network Inside"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [site_local_inside_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "Exclusive with [site_local_inside_network storage_network]\n Interface belongs to site local network (outside)",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Network (Outside)"
                 },
                 "static_ip": {
-                    "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "description": "Exclusive with [dhcp_client dhcp_server]\n Interface IP is configured statically",
                     "title": "Static IP",
-                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType",
+                    "x-displayname": "Static IP"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [no_ipv6_address]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "description": "Exclusive with [no_ipv6_address]\n Interface IP is configured statically",
                     "title": "Static IP",
-                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType",
+                    "x-displayname": "Static IP"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [site_local_inside_network site_local_network]\n Interface belongs to site local network inside",
                     "title": "Storage Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Storage Network"
                 },
                 "untagged": {
-                    "description": "Exclusive with [vlan_id]\nx-displayName: \"Untagged\"\nConfigure a untagged ethernet interface",
+                    "description": "Exclusive with [vlan_id]\n Configure a untagged ethernet interface",
                     "title": "Untagged",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Untagged"
                 },
                 "vlan_id": {
                     "type": "integer",
-                    "description": "Exclusive with [untagged]\nx-displayName: \"VLAN Id\"\nConfigure a VLAN tagged ethernet interface",
+                    "description": "Exclusive with [untagged]\n Configure a VLAN tagged ethernet interface\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
                     "title": "VLAN Id",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "VLAN Id",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "4095"
+                    }
                 }
             }
         },
@@ -5130,14 +5337,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
             "properties": {
                 "cluster_static_ip": {
-                    "description": "Exclusive with [node_static_ip]\nx-displayName: \"Cluster, All Nodes of the Site\"\nStatic IP configuration for a specific node",
+                    "description": "Exclusive with [node_static_ip]\n Static IP configuration for a specific node",
                     "title": "Node Specific",
-                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType"
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType",
+                    "x-displayname": "Cluster, All Nodes of the Site"
                 },
                 "node_static_ip": {
-                    "description": "Exclusive with [cluster_static_ip]\nx-displayName: \"Specific Node\"\nStatic IP configuration for the Node",
+                    "description": "Exclusive with [cluster_static_ip]\n Static IP configuration for the Node",
                     "title": "Node",
-                    "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType"
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType",
+                    "x-displayname": "Specific Node"
                 }
             }
         },
@@ -5246,8 +5455,15 @@ var APISwaggerJSON string = `{
                 },
                 "node": {
                     "type": "string",
-                    "description": "Exclusive with []\nx-displayName: \"Specific Node\"\nConfiguration will apply to a given device on the given node.",
-                    "title": "Node"
+                    "description": "Exclusive with []\n Configuration will apply to a given device on the given node.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Specific Node",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "priority": {
                     "type": "integer",
@@ -5262,14 +5478,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [site_local_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [site_local_network]\n Interface belongs to site local network inside",
                     "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Network Inside"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [site_local_inside_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "Exclusive with [site_local_inside_network]\n Interface belongs to site local network (outside)",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Network (Outside)"
                 },
                 "static_ip": {
                     "description": " Interface IP is configured statically\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -5737,14 +5955,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -6231,14 +6451,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.GlobalNetworkConnectionType",
             "properties": {
                 "sli_to_global_dr": {
-                    "description": "Exclusive with [slo_to_global_dr]\nx-displayName: \"Direct, Site Local Inside to a Global Network\"\nSite local inside is connected directly to a given global network",
+                    "description": "Exclusive with [slo_to_global_dr]\n Site local inside is connected directly to a given global network",
                     "title": "Site Local Inside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Inside to a Global Network"
                 },
                 "slo_to_global_dr": {
-                    "description": "Exclusive with [sli_to_global_dr]\nx-displayName: \"Direct, Site Local Outside to a Global Network\"\nSite local outside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_global_dr]\n Site local outside is connected directly to a given global network",
                     "title": "Site Local Outside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Outside to a Global Network"
                 }
             }
         },
@@ -6348,14 +6570,21 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.OperatingSystemType",
             "properties": {
                 "default_os_version": {
-                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Latest OS Version\"\nWill assign latest available OS version",
+                    "description": "Exclusive with [operating_system_version]\n Will assign latest available OS version",
                     "title": "Default OS Version",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Latest OS Version"
                 },
                 "operating_system_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.",
-                    "title": "Operating System Version"
+                    "description": "Exclusive with [default_os_version]\n Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.\n\nExample: - \"7.2009.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Operating System Version",
+                    "maxLength": 20,
+                    "x-displayname": "Operating System Version",
+                    "x-ves-example": "7.2009.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 }
             }
         },
@@ -6398,14 +6627,21 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
             "properties": {
                 "default_sw_version": {
-                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Latest SW Version\"\nWill assign latest available SW version",
+                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version",
                     "title": "Default SW Version",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Latest SW Version"
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
-                    "title": "Volterra Software Version"
+                    "description": "Exclusive with [default_sw_version]\n Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Volterra Software Version",
+                    "maxLength": 20,
+                    "x-displayname": "Volterra Software Version",
+                    "x-ves-example": "crt-20210329-1002",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 }
             }
         },
@@ -6437,14 +6673,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "allow_all_usb": {
-                    "description": "Exclusive with [deny_all_usb usb_policy]\nx-displayName: \"Allow All USB Devices\"\nAll USB devices are allowed",
+                    "description": "Exclusive with [deny_all_usb usb_policy]\n All USB devices are allowed",
                     "title": "Allow All USB Devices",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Allow All USB Devices"
                 },
                 "bond_device_list": {
-                    "description": "Exclusive with [no_bond_devices]\nx-displayName: \"Configure Bond Interfaces\"\nConfigure Bond Devices for this voltstack site",
+                    "description": "Exclusive with [no_bond_devices]\n Configure Bond Devices for this voltstack site",
                     "title": "Configure Bond Devices",
-                    "$ref": "#/definitions/fleetFleetBondDevicesListType"
+                    "$ref": "#/definitions/fleetFleetBondDevicesListType",
+                    "x-displayname": "Configure Bond Interfaces"
                 },
                 "coordinates": {
                     "description": " Coordinates of the site, longitude and latitude",
@@ -6453,64 +6691,76 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Coordinates"
                 },
                 "custom_network_config": {
-                    "description": "Exclusive with [default_network_config]\nx-displayName: \"Custom Network Configuration\"\nUse custom networking configuration",
+                    "description": "Exclusive with [default_network_config]\n Use custom networking configuration",
                     "title": "Custom Network Configuration",
-                    "$ref": "#/definitions/voltstack_siteVssNetworkConfiguration"
+                    "$ref": "#/definitions/voltstack_siteVssNetworkConfiguration",
+                    "x-displayname": "Custom Network Configuration"
                 },
                 "custom_storage_config": {
-                    "description": "Exclusive with [default_storage_config]\nx-displayName: \"Custom Storage Configuration\"\nUse custom storage configuration",
+                    "description": "Exclusive with [default_storage_config]\n Use custom storage configuration",
                     "title": "Custom Storage Configuration",
-                    "$ref": "#/definitions/voltstack_siteVssStorageConfiguration"
+                    "$ref": "#/definitions/voltstack_siteVssStorageConfiguration",
+                    "x-displayname": "Custom Storage Configuration"
                 },
                 "default_network_config": {
-                    "description": "Exclusive with [custom_network_config]\nx-displayName: \"Default Network Configuration\"\nUse default networking configuration based on certified hardware.",
+                    "description": "Exclusive with [custom_network_config]\n Use default networking configuration based on certified hardware.",
                     "title": "Default Network Configuration",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Network Configuration"
                 },
                 "default_storage_config": {
-                    "description": "Exclusive with [custom_storage_config]\nx-displayName: \"Default Storage Configuration\"\nUse default storage configuration",
+                    "description": "Exclusive with [custom_storage_config]\n Use default storage configuration",
                     "title": "Default Storage Configuration",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Storage Configuration"
                 },
                 "deny_all_usb": {
-                    "description": "Exclusive with [allow_all_usb usb_policy]\nx-displayName: \"Deny All USB Devices\"\nAll USB devices are denied",
+                    "description": "Exclusive with [allow_all_usb usb_policy]\n All USB devices are denied",
                     "title": "Deny All USB Devices",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Deny All USB Devices"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu enable_vgpu]\nx-displayName: \"GPU Disabled\"\nGPU is not enabled for this Site",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\n GPU is not enabled for this Site",
                     "title": "GPU Disabled",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "GPU Disabled"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu enable_vgpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this Site",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\n GPU is enabled for this Site",
                     "title": "GPU Enabled",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "GPU Enabled"
                 },
                 "enable_vgpu": {
-                    "description": "Exclusive with [disable_gpu enable_gpu]\nx-displayName: \"vGPU Enabled\"\nEnable NVIDIA vGPU hosted on VMware",
+                    "description": "Exclusive with [disable_gpu enable_gpu]\n Enable NVIDIA vGPU hosted on VMware",
                     "title": "vGPU Enabled",
-                    "$ref": "#/definitions/fleetVGPUConfiguration"
+                    "$ref": "#/definitions/fleetVGPUConfiguration",
+                    "x-displayname": "vGPU Enabled"
                 },
                 "k8s_cluster": {
-                    "description": "Exclusive with [no_k8s_cluster]\nx-displayName: \"Enable Site Local K8s API access\"\nSite Local K8s API access is enabled, using k8s_cluster object",
+                    "description": "Exclusive with [no_k8s_cluster]\n Site Local K8s API access is enabled, using k8s_cluster object",
                     "title": "Enable Site Local K8s API access",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Site Local K8s API access"
                 },
                 "local_control_plane": {
-                    "description": "Exclusive with [no_local_control_plane]\nx-displayName: \"Enable Site Local Control Plane\"\nSite Local control plane is enabled",
+                    "description": "Exclusive with [no_local_control_plane]\n Site Local control plane is enabled",
                     "title": "Enable Site Local Control Plane",
-                    "$ref": "#/definitions/fleetLocalControlPlaneType"
+                    "$ref": "#/definitions/fleetLocalControlPlaneType",
+                    "x-displayname": "Enable Site Local Control Plane"
                 },
                 "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "title": "Disable Logs Streaming",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Logs Streaming"
                 },
                 "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "title": "Disable Logs Receiver",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Logs Streaming"
                 },
                 "master_nodes": {
                     "type": "array",
@@ -6531,19 +6781,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_bond_devices": {
-                    "description": "Exclusive with [bond_device_list]\nx-displayName: \"No Bond Devices\"\nNo Bond Devices configured for this voltstack site",
+                    "description": "Exclusive with [bond_device_list]\n No Bond Devices configured for this voltstack site",
                     "title": "No Bond Devices",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Bond Devices"
                 },
                 "no_k8s_cluster": {
-                    "description": "Exclusive with [k8s_cluster]\nx-displayName: \"Disable Site Local K8s API access\"\nSite Local K8s API access is disabled",
+                    "description": "Exclusive with [k8s_cluster]\n Site Local K8s API access is disabled",
                     "title": "Disable Site Local K8s API access",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Site Local K8s API access"
                 },
                 "no_local_control_plane": {
-                    "description": "Exclusive with [local_control_plane]\nx-displayName: \"Disable Site Local Control Plane\"\nSite Local control plane is disabled",
+                    "description": "Exclusive with [local_control_plane]\n Site Local control plane is disabled",
                     "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Site Local Control Plane"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -6569,9 +6822,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Volterra Software"
                 },
                 "usb_policy": {
-                    "description": "Exclusive with [allow_all_usb deny_all_usb]\nx-displayName: \"USB Device Policy\"\nAllow only specific USB devices",
+                    "description": "Exclusive with [allow_all_usb deny_all_usb]\n Allow only specific USB devices",
                     "title": "USB Device Policy",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "USB Device Policy"
                 },
                 "volterra_certified_hw": {
                     "type": "string",
@@ -6638,19 +6892,25 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\nx-displayName: \"Default Gateway\"\nTraffic matching the ip prefixes is sent to default gateway",
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway  ",
                     "title": "Default Gateway",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Gateway"
                 },
                 "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\nx-displayName: \"Interface\"\nTraffic matching the ip prefixes is sent to the interface",
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
                     "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Interface"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\nx-displayName: \"IP Address\"\nTraffic matching the ip prefixes is sent to IP Address",
-                    "title": "IP Address"
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IP Address",
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "ip_prefixes": {
                     "type": "array",
@@ -6682,14 +6942,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.Interface",
             "properties": {
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface tunnel_interface]\nx-displayName: \"Dedicated Interface\"\nConfiguration can be used to set labels, MTU and priority for dedicated interfaces.\nNetworking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface tunnel_interface]\n Configuration can be used to set labels, MTU and priority for dedicated interfaces.\n Networking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet",
                     "title": "Bootstrap Local Interface",
-                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType"
+                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
+                    "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface tunnel_interface]\nx-displayName: \"Dedicated Management Interface\"\nFallback management interfaces can be made into dedicated management interface",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface tunnel_interface]\n Fallback management interfaces can be made into dedicated management interface",
                     "title": "Dedicated Management Interface",
-                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType"
+                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
+                    "x-displayname": "Dedicated Management Interface"
                 },
                 "description": {
                     "type": "string",
@@ -6702,9 +6964,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface tunnel_interface]\nx-displayName: \"Ethernet Interface\"\nEthernet interface configuration.",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface tunnel_interface]\n Ethernet interface configuration.",
                     "title": "Ethernet Interface",
-                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType"
+                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
+                    "x-displayname": "Ethernet Interface"
                 },
                 "labels": {
                     "type": "object",
@@ -6713,9 +6976,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Interface Labels"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface]\nx-displayName: \"Tunnel Interface\"\nTunnel interface, Ipsec tunnels to other networking devices.",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface]\n Tunnel interface, Ipsec tunnels to other networking devices.",
                     "title": "Tunnel Interface Template",
-                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType"
+                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
+                    "x-displayname": "Tunnel Interface"
                 }
             }
         },
@@ -6755,14 +7019,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.SliVnConfiguration",
             "properties": {
                 "no_static_routes": {
-                    "description": "Exclusive with [static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for site local inside network.",
+                    "description": "Exclusive with [static_routes]\n Static Routes disabled for site local inside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "static_routes": {
-                    "description": "Exclusive with [no_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for site local inside network.",
+                    "description": "Exclusive with [no_static_routes]\n Manage static routes for site local inside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/voltstack_siteStaticRoutesListType"
+                    "$ref": "#/definitions/voltstack_siteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -6909,9 +7175,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.VnConfiguration",
             "properties": {
                 "dc_cluster_group": {
-                    "description": "Exclusive with [no_dc_cluster_group]\nx-displayName: \"Member of DC Cluster Group\"\nThis site is member of dc cluster group via network",
+                    "description": "Exclusive with [no_dc_cluster_group]\n This site is member of dc cluster group via network",
                     "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Member of DC Cluster Group"
                 },
                 "labels": {
                     "type": "object",
@@ -6920,19 +7187,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Network Labels"
                 },
                 "no_dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group]\nx-displayName: \"Not a Member\"\nThis site is not a member of dc cluster group",
+                    "description": "Exclusive with [dc_cluster_group]\n This site is not a member of dc cluster group",
                     "title": "Not a Member",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Not a Member"
                 },
                 "no_static_routes": {
-                    "description": "Exclusive with [static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for site local network.",
+                    "description": "Exclusive with [static_routes]\n Static Routes disabled for site local network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "static_routes": {
-                    "description": "Exclusive with [no_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for site local network.",
+                    "description": "Exclusive with [no_static_routes]\n Manage static routes for site local network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/voltstack_siteStaticRoutesListType"
+                    "$ref": "#/definitions/voltstack_siteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -6947,14 +7217,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.VssNetworkConfiguration",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "bgp_peer_address": {
                     "type": "string",
@@ -6977,49 +7249,58 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_config": {
-                    "description": "Exclusive with [slo_config]\nx-displayName: \"Default Configuration\"\nUse default configuration for site local network",
+                    "description": "Exclusive with [slo_config]\n Use default configuration for site local network",
                     "title": "Default Configuration",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Configuration"
                 },
                 "default_interface_config": {
-                    "description": "Exclusive with [interface_list]\nx-displayName: \"Bootstrap Interface Configuration\"\nInterface configuration is done based on certified hardware for this site",
+                    "description": "Exclusive with [interface_list]\n Interface configuration is done based on certified hardware for this site",
                     "title": "Bootstrap Interface Configuration",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Bootstrap Interface Configuration"
                 },
                 "default_sli_config": {
-                    "description": "Exclusive with [sli_config]\nx-displayName: \"Default Configuration\"\nUse default configuration for site local network",
+                    "description": "Exclusive with [sli_config]\n Use default configuration for site local network",
                     "title": "Default Configuration",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Configuration"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/schemaviewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/schemaviewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "interface_list": {
-                    "description": "Exclusive with [default_interface_config]\nx-displayName: \"List of Interface\"\nAdd all interfaces belonging to this site",
+                    "description": "Exclusive with [default_interface_config]\n Add all interfaces belonging to this site",
                     "title": "List of Interfaces",
-                    "$ref": "#/definitions/voltstack_siteInterfaceListType"
+                    "$ref": "#/definitions/voltstack_siteInterfaceListType",
+                    "x-displayname": "List of Interface"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "outside_nameserver": {
                     "type": "string",
@@ -7052,14 +7333,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "sli_config": {
-                    "description": "Exclusive with [default_sli_config]\nx-displayName: \"Configure Site Local Inside Network\"\nConfiguration for site local inside network",
+                    "description": "Exclusive with [default_sli_config]\n Configuration for site local inside network",
                     "title": "Configure Site Local Inside Network",
-                    "$ref": "#/definitions/voltstack_siteSliVnConfiguration"
+                    "$ref": "#/definitions/voltstack_siteSliVnConfiguration",
+                    "x-displayname": "Configure Site Local Inside Network"
                 },
                 "slo_config": {
-                    "description": "Exclusive with [default_config]\nx-displayName: \"Configure Site Local Network\"\nConfiguration for site local network",
+                    "description": "Exclusive with [default_config]\n Configuration for site local network",
                     "title": "Configure Site Local Network",
-                    "$ref": "#/definitions/voltstack_siteVnConfiguration"
+                    "$ref": "#/definitions/voltstack_siteVnConfiguration",
+                    "x-displayname": "Configure Site Local Network"
                 },
                 "tunnel_dead_timeout": {
                     "type": "integer",
@@ -7090,44 +7373,52 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.VssStorageConfiguration",
             "properties": {
                 "default_storage_class": {
-                    "description": "Exclusive with [storage_class_list]\nx-displayName: \"Default Storage Class\"\nUse only default storage class in kubernetes",
+                    "description": "Exclusive with [storage_class_list]\n Use only default storage class in kubernetes",
                     "title": "Default Storage Class",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Storage Class"
                 },
                 "no_static_routes": {
-                    "description": "Exclusive with [static_routes]\nx-displayName: \"No Static Routes\"\nStatic Routes not required for storage network.",
+                    "description": "Exclusive with [static_routes]\n Static Routes not required for storage network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Static Routes"
                 },
                 "no_storage_device": {
-                    "description": "Exclusive with [storage_device_list]\nx-displayName: \"No Storage Devices\"\nThis site does not have any storage devices",
+                    "description": "Exclusive with [storage_device_list]\n This site does not have any storage devices",
                     "title": "No Storage Devices",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Storage Devices"
                 },
                 "no_storage_interfaces": {
-                    "description": "Exclusive with [storage_interface_list]\nx-displayName: \"No Storage Interfaces\"\nThis site does not have any storage interfaces",
+                    "description": "Exclusive with [storage_interface_list]\n This site does not have any storage interfaces",
                     "title": "No Storage Interfaces",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Storage Interfaces"
                 },
                 "static_routes": {
-                    "description": "Exclusive with [no_static_routes]\nx-displayName: \"Manage Storage Static Routes\"\nManage static routes for storage network.",
+                    "description": "Exclusive with [no_static_routes]\n Manage static routes for storage network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/voltstack_siteStaticRoutesListType"
+                    "$ref": "#/definitions/voltstack_siteStaticRoutesListType",
+                    "x-displayname": "Manage Storage Static Routes"
                 },
                 "storage_class_list": {
-                    "description": "Exclusive with [default_storage_class]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes",
+                    "description": "Exclusive with [default_storage_class]\n Add additional custom storage classes in kubernetes",
                     "title": "Custom Storage Class",
-                    "$ref": "#/definitions/fleetFleetStorageClassListType"
+                    "$ref": "#/definitions/fleetFleetStorageClassListType",
+                    "x-displayname": "Add Custom Storage Class"
                 },
                 "storage_device_list": {
-                    "description": "Exclusive with [no_storage_device]\nx-displayName: \"List of Storage Devices\"\nAdd all storage devices belonging to this site",
+                    "description": "Exclusive with [no_storage_device]\n Add all storage devices belonging to this site",
                     "title": "List of Storage Interfaces",
-                    "$ref": "#/definitions/fleetFleetStorageDeviceListType"
+                    "$ref": "#/definitions/fleetFleetStorageDeviceListType",
+                    "x-displayname": "List of Storage Devices"
                 },
                 "storage_interface_list": {
-                    "description": "Exclusive with [no_storage_interfaces]\nx-displayName: \"List of Storage Interface\"\nAdd all storage interfaces belonging to this site",
+                    "description": "Exclusive with [no_storage_interfaces]\n Add all storage interfaces belonging to this site",
                     "title": "List of Storage Interfaces",
-                    "$ref": "#/definitions/voltstack_siteStorageInterfaceListType"
+                    "$ref": "#/definitions/voltstack_siteStorageInterfaceListType",
+                    "x-displayname": "List of Storage Interface"
                 }
             }
         }

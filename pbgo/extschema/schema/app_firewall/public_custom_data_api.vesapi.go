@@ -243,6 +243,11 @@ func (c *CustomDataAPIInprocClient) Metrics(ctx context.Context, in *MetricsRequ
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_firewall.CustomDataAPI.Metrics"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -379,7 +384,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-CustomDataAPI-Metrics"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-customdataapi-metrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_firewall.CustomDataAPI.Metrics"
             },
@@ -415,11 +420,12 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "app_firewallMetricLabel": {
             "type": "string",
-            "description": "Labels in the  Application Firewall metrics.\n\nRule hits counter and the security events counter can be sliced and diced based\non one or more labels listed below.\n\nNamespace in which this App Firewall instance is running\nVirtual host under which this App Firewall instance is running\nName of the BOT CLASSIFICATION",
+            "description": "Labels in the  Application Firewall metrics.\n\nRule hits counter and the security events counter can be sliced and diced based\non one or more labels listed below.\n\nNamespace in which this App Firewall instance is running\nVirtual host under which this App Firewall instance is running\nName of the BOT CLASSIFICATION\nName of the EVENT TYPE",
             "enum": [
                 "NAMESPACE",
                 "VIRTUAL_HOST",
-                "BOT_CLASSIFICATION"
+                "BOT_CLASSIFICATION",
+                "EVENT_TYPE"
             ],
             "default": "NAMESPACE",
             "x-displayname": "Application Firewall Metric Label",
@@ -571,7 +577,8 @@ var CustomDataAPISwaggerJSON string = `{
             "enum": [
                 "BOT_DETECTION",
                 "ATTACKED_REQUESTS",
-                "BLOCKED_REQUESTS"
+                "BLOCKED_REQUESTS",
+                "TOTAL_REQUESTS"
             ],
             "default": "BOT_DETECTION",
             "x-displayname": "Metric Type",

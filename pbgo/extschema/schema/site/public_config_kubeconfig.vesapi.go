@@ -336,6 +336,11 @@ func (c *ConfigKubeConfigAPIInprocClient) CreateLocalKubeConfig(ctx context.Cont
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.ConfigKubeConfigAPI.CreateLocalKubeConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -379,6 +384,11 @@ func (c *ConfigKubeConfigAPIInprocClient) ListLocalKubeConfig(ctx context.Contex
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.ConfigKubeConfigAPI.ListLocalKubeConfig"); rvFn != nil {
@@ -524,7 +534,7 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-ConfigKubeConfigAPI-CreateLocalKubeConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-configkubeconfigapi-createlocalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.ConfigKubeConfigAPI.CreateLocalKubeConfig"
             },
@@ -616,7 +626,7 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-ConfigKubeConfigAPI-ListLocalKubeConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-configkubeconfigapi-listlocalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.ConfigKubeConfigAPI.ListLocalKubeConfig"
             },

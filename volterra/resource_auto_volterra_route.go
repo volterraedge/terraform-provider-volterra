@@ -971,11 +971,6 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 									},
 
-									"path_redirect": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
 									"proto_redirect": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -1017,6 +1012,18 @@ func resourceVolterraRoute() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"path_redirect": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"prefix_rewrite": {
+
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 
 									"response_code": {
@@ -2355,12 +2362,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
-					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.PathRedirect = v.(string)
-
-					}
-
 					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
@@ -2426,6 +2427,30 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 							}
 
 						}
+
+					}
+
+					redirectPathChoiceTypeFound := false
+
+					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) && !redirectPathChoiceTypeFound {
+
+						redirectPathChoiceTypeFound = true
+						redirectPathChoiceInt := &ves_io_schema_route.RouteRedirect_PathRedirect{}
+
+						routeActionInt.RouteRedirect.RedirectPathChoice = redirectPathChoiceInt
+
+						redirectPathChoiceInt.PathRedirect = v.(string)
+
+					}
+
+					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) && !redirectPathChoiceTypeFound {
+
+						redirectPathChoiceTypeFound = true
+						redirectPathChoiceInt := &ves_io_schema_route.RouteRedirect_PrefixRewrite{}
+
+						routeActionInt.RouteRedirect.RedirectPathChoice = redirectPathChoiceInt
+
+						redirectPathChoiceInt.PrefixRewrite = v.(string)
 
 					}
 
@@ -3841,12 +3866,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
-					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.PathRedirect = v.(string)
-
-					}
-
 					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
@@ -3912,6 +3931,30 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 							}
 
 						}
+
+					}
+
+					redirectPathChoiceTypeFound := false
+
+					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) && !redirectPathChoiceTypeFound {
+
+						redirectPathChoiceTypeFound = true
+						redirectPathChoiceInt := &ves_io_schema_route.RouteRedirect_PathRedirect{}
+
+						routeActionInt.RouteRedirect.RedirectPathChoice = redirectPathChoiceInt
+
+						redirectPathChoiceInt.PathRedirect = v.(string)
+
+					}
+
+					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) && !redirectPathChoiceTypeFound {
+
+						redirectPathChoiceTypeFound = true
+						redirectPathChoiceInt := &ves_io_schema_route.RouteRedirect_PrefixRewrite{}
+
+						routeActionInt.RouteRedirect.RedirectPathChoice = redirectPathChoiceInt
+
+						redirectPathChoiceInt.PrefixRewrite = v.(string)
 
 					}
 

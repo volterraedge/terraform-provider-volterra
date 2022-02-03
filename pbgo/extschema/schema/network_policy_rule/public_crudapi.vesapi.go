@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_policy_rule.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_policy_rule.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_policy_rule.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_policy_rule.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_policy_rule.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_policy_rule.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_policy_rule-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_policy_rule.API.Delete"
             },
@@ -2255,8 +2263,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Logging Action"
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [prefix prefix_selector]\n",
-                    "$ref": "#/definitions/schemaIpPrefixSetRefType"
+                    "description": "Exclusive with [prefix prefix_selector]\n Reference to object which represents list of IP prefixes that will be referred as remote endpoint",
+                    "$ref": "#/definitions/schemaIpPrefixSetRefType",
+                    "x-displayname": "IP Prefix Set"
                 },
                 "label_matcher": {
                     "description": " \n List of label keys to be matched in prefix_selector configured in remote_endpoint\n\nExample: - label_matcher is \"app\" and say prefix_selector is \"app == web, site in (abc, xyz)\" then only label app will be matched and not site-",
@@ -2278,12 +2287,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "prefix": {
-                    "description": "Exclusive with [ip_prefix_set prefix_selector]\n",
-                    "$ref": "#/definitions/schemaPrefixListType"
+                    "description": "Exclusive with [ip_prefix_set prefix_selector]\n List of IP prefixes that are member of set representing remote endpoint. Prefix is the list\n of IP addresses to match. For egress rules these IP prefixes are source.For ingress rules\n these IP prefixes are destination\n\nExample: - \"192.168.10.0/24\"-",
+                    "$ref": "#/definitions/schemaPrefixListType",
+                    "x-displayname": "IP Prefix",
+                    "x-ves-example": "192.168.10.0/24"
                 },
                 "prefix_selector": {
-                    "description": "Exclusive with [ip_prefix_set prefix]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [ip_prefix_set prefix]\n Remote endpoint is determined by label selector expression. Prefix selector is the set of\n labels to match. Labels can be specified in BNF grammar format.\n Constraint :\n Only first expression is selected even though LabelSelectorType can provide multiple\n\nExample: - \"app != web\"-",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Prefix Selector",
+                    "x-ves-example": "app != web"
                 },
                 "protocol": {
                     "type": "string",
@@ -2422,8 +2435,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Logging Action"
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [prefix prefix_selector]\n",
-                    "$ref": "#/definitions/schemaIpPrefixSetRefType"
+                    "description": "Exclusive with [prefix prefix_selector]\n Reference to object which represents list of IP prefixes that will be referred as remote endpoint",
+                    "$ref": "#/definitions/schemaIpPrefixSetRefType",
+                    "x-displayname": "IP Prefix Set"
                 },
                 "label_matcher": {
                     "description": " \n List of label keys to be matched in prefix_selector configured in remote_endpoint\n\nExample: - label_matcher is \"app\" and say prefix_selector is \"app == web, site in (abc, xyz)\" then only label app will be matched and not site-",
@@ -2445,12 +2459,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "prefix": {
-                    "description": "Exclusive with [ip_prefix_set prefix_selector]\n",
-                    "$ref": "#/definitions/schemaPrefixListType"
+                    "description": "Exclusive with [ip_prefix_set prefix_selector]\n List of IP prefixes that are member of set representing remote endpoint. Prefix is the list\n of IP addresses to match. For egress rules these IP prefixes are source.For ingress rules\n these IP prefixes are destination\n\nExample: - \"192.168.10.0/24\"-",
+                    "$ref": "#/definitions/schemaPrefixListType",
+                    "x-displayname": "IP Prefix",
+                    "x-ves-example": "192.168.10.0/24"
                 },
                 "prefix_selector": {
-                    "description": "Exclusive with [ip_prefix_set prefix]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [ip_prefix_set prefix]\n Remote endpoint is determined by label selector expression. Prefix selector is the set of\n labels to match. Labels can be specified in BNF grammar format.\n Constraint :\n Only first expression is selected even though LabelSelectorType can provide multiple\n\nExample: - \"app != web\"-",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Prefix Selector",
+                    "x-ves-example": "app != web"
                 },
                 "protocol": {
                     "type": "string",
@@ -2484,9 +2502,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Logging Action"
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [prefix prefix_selector]\nx-displayName: \"IP Prefix Set\"\nReference to object which represents list of IP prefixes that will be referred as remote endpoint",
+                    "description": "Exclusive with [prefix prefix_selector]\n Reference to object which represents list of IP prefixes that will be referred as remote endpoint",
                     "title": "ip prefix set",
-                    "$ref": "#/definitions/schemaIpPrefixSetRefType"
+                    "$ref": "#/definitions/schemaIpPrefixSetRefType",
+                    "x-displayname": "IP Prefix Set"
                 },
                 "label_matcher": {
                     "description": " \n List of label keys to be matched in prefix_selector configured in remote_endpoint\n\nExample: - label_matcher is \"app\" and say prefix_selector is \"app == web, site in (abc, xyz)\" then only label app will be matched and not site-",
@@ -2510,14 +2529,18 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "prefix": {
-                    "description": "Exclusive with [ip_prefix_set prefix_selector]\nx-displayName: \"IP Prefix\"\nx-example: \"192.168.10.0/24\"\nList of IP prefixes that are member of set representing remote endpoint. Prefix is the list\nof IP addresses to match. For egress rules these IP prefixes are source.For ingress rules\nthese IP prefixes are destination",
+                    "description": "Exclusive with [ip_prefix_set prefix_selector]\n List of IP prefixes that are member of set representing remote endpoint. Prefix is the list\n of IP addresses to match. For egress rules these IP prefixes are source.For ingress rules\n these IP prefixes are destination\n\nExample: - \"192.168.10.0/24\"-",
                     "title": "prefix",
-                    "$ref": "#/definitions/schemaPrefixListType"
+                    "$ref": "#/definitions/schemaPrefixListType",
+                    "x-displayname": "IP Prefix",
+                    "x-ves-example": "192.168.10.0/24"
                 },
                 "prefix_selector": {
-                    "description": "Exclusive with [ip_prefix_set prefix]\nx-displayName: \"Prefix Selector\"\nx-example: \"app != web\"\nRemote endpoint is determined by label selector expression. Prefix selector is the set of\nlabels to match. Labels can be specified in BNF grammar format.\nConstraint :\nOnly first expression is selected even though LabelSelectorType can provide multiple",
+                    "description": "Exclusive with [ip_prefix_set prefix]\n Remote endpoint is determined by label selector expression. Prefix selector is the set of\n labels to match. Labels can be specified in BNF grammar format.\n Constraint :\n Only first expression is selected even though LabelSelectorType can provide multiple\n\nExample: - \"app != web\"-",
                     "title": "prefix selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Prefix Selector",
+                    "x-ves-example": "app != web"
                 },
                 "protocol": {
                     "type": "string",
@@ -2785,8 +2808,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Logging Action"
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [prefix prefix_selector]\n",
-                    "$ref": "#/definitions/schemaIpPrefixSetRefType"
+                    "description": "Exclusive with [prefix prefix_selector]\n Reference to object which represents list of IP prefixes that will be referred as remote endpoint",
+                    "$ref": "#/definitions/schemaIpPrefixSetRefType",
+                    "x-displayname": "IP Prefix Set"
                 },
                 "label_matcher": {
                     "description": " \n List of label keys to be matched in prefix_selector configured in remote_endpoint\n\nExample: - label_matcher is \"app\" and say prefix_selector is \"app == web, site in (abc, xyz)\" then only label app will be matched and not site-",
@@ -2808,12 +2832,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "prefix": {
-                    "description": "Exclusive with [ip_prefix_set prefix_selector]\n",
-                    "$ref": "#/definitions/schemaPrefixListType"
+                    "description": "Exclusive with [ip_prefix_set prefix_selector]\n List of IP prefixes that are member of set representing remote endpoint. Prefix is the list\n of IP addresses to match. For egress rules these IP prefixes are source.For ingress rules\n these IP prefixes are destination\n\nExample: - \"192.168.10.0/24\"-",
+                    "$ref": "#/definitions/schemaPrefixListType",
+                    "x-displayname": "IP Prefix",
+                    "x-ves-example": "192.168.10.0/24"
                 },
                 "prefix_selector": {
-                    "description": "Exclusive with [ip_prefix_set prefix]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [ip_prefix_set prefix]\n Remote endpoint is determined by label selector expression. Prefix selector is the set of\n labels to match. Labels can be specified in BNF grammar format.\n Constraint :\n Only first expression is selected even though LabelSelectorType can provide multiple\n\nExample: - \"app != web\"-",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Prefix Selector",
+                    "x-ves-example": "app != web"
                 },
                 "protocol": {
                     "type": "string",
