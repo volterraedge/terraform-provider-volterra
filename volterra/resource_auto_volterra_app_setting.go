@@ -270,6 +270,18 @@ func resourceVolterraAppSetting() *schema.Resource {
 													},
 												},
 
+												"exclude_ip_reputation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"include_ip_reputation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"exclude_waf_activity": {
 
 													Type:     schema.TypeBool,
@@ -650,6 +662,32 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 
 									}
 
+								}
+
+							}
+
+							ipReputationChoiceTypeFound := false
+
+							if v, ok := cs["exclude_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
+
+								ipReputationChoiceTypeFound = true
+
+								if v.(bool) {
+									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeIpReputation{}
+									ipReputationChoiceInt.ExcludeIpReputation = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["include_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
+
+								ipReputationChoiceTypeFound = true
+
+								if v.(bool) {
+									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
+									ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
 								}
 
 							}
@@ -1090,6 +1128,32 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 
 									}
 
+								}
+
+							}
+
+							ipReputationChoiceTypeFound := false
+
+							if v, ok := cs["exclude_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
+
+								ipReputationChoiceTypeFound = true
+
+								if v.(bool) {
+									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeIpReputation{}
+									ipReputationChoiceInt.ExcludeIpReputation = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["include_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
+
+								ipReputationChoiceTypeFound = true
+
+								if v.(bool) {
+									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
+									ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
 								}
 
 							}

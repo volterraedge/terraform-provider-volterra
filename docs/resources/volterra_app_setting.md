@@ -28,7 +28,7 @@ resource "volterra_app_setting" "example" {
     }
 
     business_logic_markup_setting {
-      // One of the arguments from this list "disable enable" must be set
+      // One of the arguments from this list "enable disable" must be set
       enable = true
     }
 
@@ -40,8 +40,8 @@ resource "volterra_app_setting" "example" {
     }
 
     user_behavior_analysis_setting {
-      // One of the arguments from this list "enable_learning disable_learning" must be set
-      disable_learning = true
+      // One of the arguments from this list "disable_learning enable_learning" must be set
+      enable_learning = true
 
       // One of the arguments from this list "enable_detection disable_detection" must be set
 
@@ -57,8 +57,10 @@ resource "volterra_app_setting" "example" {
         include_forbidden_activity {
           forbidden_requests_threshold = "forbidden_requests_threshold"
         }
-        // One of the arguments from this list "exclude_waf_activity include_waf_activity" must be set
-        include_waf_activity = true
+        // One of the arguments from this list "include_ip_reputation exclude_ip_reputation" must be set
+        include_ip_reputation = true
+        // One of the arguments from this list "include_waf_activity exclude_waf_activity" must be set
+        exclude_waf_activity = true
       }
     }
   }
@@ -141,6 +143,10 @@ Enable AI based malicious user detection.
 
 `include_forbidden_activity` - (Optional) Include forbidden activity by policy in malicious user detection. See [Include Forbidden Activity ](#include-forbidden-activity) below for details.
 
+`exclude_ip_reputation` - (Optional) Exclude IP Reputation by policy in malicious user detection (bool).
+
+`include_ip_reputation` - (Optional) Include IP Reputation by policy in malicious user detection (bool).
+
 `exclude_waf_activity` - (Optional) Exclude WAF activity in malicious user detection (bool).
 
 `include_waf_activity` - (Optional) Include WAF activity in malicious user detection (bool).
@@ -157,6 +163,10 @@ Exclude persistent login failures activity (401 response code) in malicious user
 
 Exclude forbidden activity by policy in malicious user detection.
 
+### Exclude Ip Reputation
+
+Exclude IP Reputation by policy in malicious user detection.
+
 ### Exclude Waf Activity
 
 Exclude WAF activity in malicious user detection.
@@ -172,6 +182,10 @@ Include persistent login failures activity (401 response code) in malicious user
 Include forbidden activity by policy in malicious user detection.
 
 `forbidden_requests_threshold` - (Required) The number of forbidden requests beyond which the system will flag this user as malicious (`Int`).
+
+### Include Ip Reputation
+
+Include IP Reputation by policy in malicious user detection.
 
 ### Include Waf Activity
 

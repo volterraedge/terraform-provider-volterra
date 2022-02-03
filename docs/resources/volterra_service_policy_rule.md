@@ -26,13 +26,22 @@ resource "volterra_service_policy_rule" "example" {
   challenge_action = ["challenge_action"]
 
   // One of the arguments from this list "client_name_matcher any_client client_name ip_threat_category_list client_selector" must be set
-  any_client = true
+
+  client_name_matcher {
+    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+  }
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-  any_ip = true
 
+  ip_prefix_list {
+    invert_match = true
+
+    ip_prefixes = ["192.168.20.0/24"]
+  }
   waf_action {
-    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control" must be set
+    // One of the arguments from this list "waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control none waf_skip_processing waf_rule_control" must be set
     none = true
   }
 }
@@ -159,6 +168,8 @@ The predicate evaluates to true if any of the actual API group names for the req
 ### App Firewall Detection Control
 
 App Firewall detection changes to be applied for this request.
+
+`exclude_attack_type_contexts` - (Optional) App Firewall attack types contexts to be excluded for this request. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
 
 `exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
 
@@ -312,6 +323,12 @@ The predicate evaluates to true if the destination address is covered by one or 
 
 `ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
 
+### Exclude Attack Type Contexts
+
+App Firewall attack types contexts to be excluded for this request.
+
+`exclude_attack_type` - (Required) App Firewall Attack type (`String`).
+
 ### Exclude Signature Contexts
 
 App Firewall signature contexts to be excluded for this request.
@@ -408,7 +425,7 @@ other labels do not matter..
 
 ### Mitigation
 
-Mitigation action for shape protected endpoint.
+Mitigation action for protected endpoint.
 
 `block` - (Optional) Block bot request and send response with custom content.. See [Block ](#block) below for details.
 
@@ -488,7 +505,7 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 
 `app_traffic_type` - (Required) Traffic type (`String`).
 
-`mitigation` - (Required) Mitigation action for shape protected endpoint. See [Mitigation ](#mitigation) below for details.
+`mitigation` - (Required) Mitigation action for protected endpoint. See [Mitigation ](#mitigation) below for details.
 
 ### Tls Fingerprint Matcher
 

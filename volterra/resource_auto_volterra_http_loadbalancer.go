@@ -3957,11 +3957,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
-												"path_redirect": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
 												"proto_redirect": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -4003,6 +3998,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															},
 														},
 													},
+												},
+
+												"path_redirect": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"prefix_rewrite": {
+
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 
 												"response_code": {
@@ -5201,6 +5208,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"exclude_attack_type_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"exclude_attack_type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
 
 									"exclude_signature_contexts": {
 
@@ -10658,10 +10680,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								routeRedirect.HostRedirect = w.(string)
 							}
 
-							if w, ok := routeRedirectMapStrToI["path_redirect"]; ok && !isIntfNil(w) {
-								routeRedirect.PathRedirect = w.(string)
-							}
-
 							if w, ok := routeRedirectMapStrToI["proto_redirect"]; ok && !isIntfNil(w) {
 								routeRedirect.ProtoRedirect = w.(string)
 							}
@@ -10725,6 +10743,30 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									}
 
 								}
+
+							}
+
+							redirectPathChoiceTypeFound := false
+
+							if v, ok := routeRedirectMapStrToI["path_redirect"]; ok && !isIntfNil(v) && !redirectPathChoiceTypeFound {
+
+								redirectPathChoiceTypeFound = true
+								redirectPathChoiceInt := &ves_io_schema_route.RouteRedirect_PathRedirect{}
+
+								routeRedirect.RedirectPathChoice = redirectPathChoiceInt
+
+								redirectPathChoiceInt.PathRedirect = v.(string)
+
+							}
+
+							if v, ok := routeRedirectMapStrToI["prefix_rewrite"]; ok && !isIntfNil(v) && !redirectPathChoiceTypeFound {
+
+								redirectPathChoiceTypeFound = true
+								redirectPathChoiceInt := &ves_io_schema_route.RouteRedirect_PrefixRewrite{}
+
+								routeRedirect.RedirectPathChoice = redirectPathChoiceInt
+
+								redirectPathChoiceInt.PrefixRewrite = v.(string)
 
 							}
 
@@ -12371,6 +12413,25 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				wafExclusionRules[i].AppFirewallDetectionControl = appFirewallDetectionControl
 				for _, set := range sl {
 					appFirewallDetectionControlMapStrToI := set.(map[string]interface{})
+
+					if v, ok := appFirewallDetectionControlMapStrToI["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
+						appFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
+						for i, set := range sl {
+							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
+							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
+
+								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
+
+							}
+
+						}
+
+					}
 
 					if v, ok := appFirewallDetectionControlMapStrToI["exclude_signature_contexts"]; ok && !isIntfNil(v) {
 
@@ -17873,10 +17934,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								routeRedirect.HostRedirect = w.(string)
 							}
 
-							if w, ok := routeRedirectMapStrToI["path_redirect"]; ok && !isIntfNil(w) {
-								routeRedirect.PathRedirect = w.(string)
-							}
-
 							if w, ok := routeRedirectMapStrToI["proto_redirect"]; ok && !isIntfNil(w) {
 								routeRedirect.ProtoRedirect = w.(string)
 							}
@@ -17940,6 +17997,30 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									}
 
 								}
+
+							}
+
+							redirectPathChoiceTypeFound := false
+
+							if v, ok := routeRedirectMapStrToI["path_redirect"]; ok && !isIntfNil(v) && !redirectPathChoiceTypeFound {
+
+								redirectPathChoiceTypeFound = true
+								redirectPathChoiceInt := &ves_io_schema_route.RouteRedirect_PathRedirect{}
+
+								routeRedirect.RedirectPathChoice = redirectPathChoiceInt
+
+								redirectPathChoiceInt.PathRedirect = v.(string)
+
+							}
+
+							if v, ok := routeRedirectMapStrToI["prefix_rewrite"]; ok && !isIntfNil(v) && !redirectPathChoiceTypeFound {
+
+								redirectPathChoiceTypeFound = true
+								redirectPathChoiceInt := &ves_io_schema_route.RouteRedirect_PrefixRewrite{}
+
+								routeRedirect.RedirectPathChoice = redirectPathChoiceInt
+
+								redirectPathChoiceInt.PrefixRewrite = v.(string)
 
 							}
 
@@ -19578,6 +19659,25 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				wafExclusionRules[i].AppFirewallDetectionControl = appFirewallDetectionControl
 				for _, set := range sl {
 					appFirewallDetectionControlMapStrToI := set.(map[string]interface{})
+
+					if v, ok := appFirewallDetectionControlMapStrToI["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
+						appFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
+						for i, set := range sl {
+							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
+							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
+
+								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
+
+							}
+
+						}
+
+					}
 
 					if v, ok := appFirewallDetectionControlMapStrToI["exclude_signature_contexts"]; ok && !isIntfNil(v) {
 
