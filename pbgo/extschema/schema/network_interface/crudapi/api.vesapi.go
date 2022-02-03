@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Create"
             },
@@ -2838,28 +2844,45 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dgw_address": {
                     "type": "string",
-                    "description": "Exclusive with [first_address last_address]\nx-displayName: \"Configured Address\"\nx-example: \"10.1.1.10\"\nConfigured address from the network prefix is chosen as default gateway.",
-                    "title": "Configured Address"
+                    "description": "Exclusive with [first_address last_address]\n Configured address from the network prefix is chosen as default gateway.\n\nExample: - \"10.1.1.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Configured Address",
+                    "x-displayname": "Configured Address",
+                    "x-ves-example": "10.1.1.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "dns_address": {
                     "type": "string",
-                    "description": "Exclusive with [same_as_dgw]\nx-displayName: \"Configured Address\"\nx-example: \"10.1.1.11\"\nConfigured address is chosen as DNS server address in DHCP response.",
-                    "title": "Configured Address"
+                    "description": "Exclusive with [same_as_dgw]\n Configured address is chosen as DNS server address in DHCP response.\n\nExample: - \"10.1.1.11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Configured Address",
+                    "x-displayname": "Configured Address",
+                    "x-ves-example": "10.1.1.11",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 },
                 "first_address": {
-                    "description": "Exclusive with [dgw_address last_address]\nx-displayName: \"First Address of Network\"\nFirst usable address from the network prefix is chosen as default gateway",
+                    "description": "Exclusive with [dgw_address last_address]\n First usable address from the network prefix is chosen as default gateway",
                     "title": "First Address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "First Address of Network"
                 },
                 "last_address": {
-                    "description": "Exclusive with [dgw_address first_address]\nx-displayName: \"Last Address of Network\"\nLast usable address from the network prefix is chosen as default gateway",
+                    "description": "Exclusive with [dgw_address first_address]\n Last usable address from the network prefix is chosen as default gateway",
                     "title": "Last Address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Last Address of Network"
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with []\nx-displayName: \"Network Prefix\"\nx-example: \"10.1.1.0/24\"\nNetwork Prefix for a single site.",
-                    "title": "Network Prefix"
+                    "description": "Exclusive with []\n Network Prefix for a single site. \n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "title": "Network Prefix",
+                    "x-displayname": "Network Prefix",
+                    "x-ves-example": "10.1.1.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4_prefix": "true"
+                    }
                 },
                 "pool_settings": {
                     "description": " Controls how DHCP pools are handled\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2886,9 +2909,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "same_as_dgw": {
-                    "description": "Exclusive with [dns_address]\nx-displayName: \"Default Gateway Address\"\nDNS server address is same as default gateway address",
+                    "description": "Exclusive with [dns_address]\n DNS server address is same as default gateway address",
                     "title": "Default Gateway Address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Gateway Address"
                 }
             }
         },
@@ -2939,14 +2963,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPServerParametersType",
             "properties": {
                 "automatic_from_end": {
-                    "description": "Exclusive with [automatic_from_start interface_ip_map]\nx-displayName: \"Automatic End\"\nAssign automatically from End of the first network in the list",
+                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from End of the first network in the list",
                     "title": "Automatic End",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic End"
                 },
                 "automatic_from_start": {
-                    "description": "Exclusive with [automatic_from_end interface_ip_map]\nx-displayName: \"Automatic Start\"\nAssign automatically from start of the first network in the list",
+                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the list",
                     "title": "Automatic Start",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic Start"
                 },
                 "dhcp_networks": {
                     "type": "array",
@@ -2979,9 +3005,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "interface_ip_map": {
-                    "description": "Exclusive with [automatic_from_end automatic_from_start]\nx-displayName: \"Configured\"\nConfigured address for every node",
+                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Configured address for every node",
                     "title": "Configured Address",
-                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPType"
+                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPType",
+                    "x-displayname": "Configured"
                 }
             }
         },
@@ -3273,14 +3300,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Primary Interface"
                 },
                 "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "description": "Exclusive with [monitor_disabled]\n Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
                     "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig",
+                    "x-displayname": "Enabled"
                 },
                 "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "description": "Exclusive with [monitor]\n Link quality monitoring disabled on the interface.",
                     "title": "Monitoring disabled",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
                 },
                 "mtu": {
                     "type": "integer",

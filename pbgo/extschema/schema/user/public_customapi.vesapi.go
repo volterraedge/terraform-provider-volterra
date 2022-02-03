@@ -1492,6 +1492,11 @@ func (c *CustomAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequ
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AcceptTOS"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1535,6 +1540,11 @@ func (c *CustomAPIInprocClient) AddUserToGroup(ctx context.Context, in *UserGrou
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AddUserToGroup"); rvFn != nil {
@@ -1580,6 +1590,11 @@ func (c *CustomAPIInprocClient) AssignRole(ctx context.Context, in *AssignRoleRe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AssignRole"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1623,6 +1638,11 @@ func (c *CustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.CascadeDelete"); rvFn != nil {
@@ -1668,6 +1688,11 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *UserRoleRequest,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Create"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1711,6 +1736,11 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetUserRoleRequest,
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Get"); rvFn != nil {
@@ -1756,6 +1786,11 @@ func (c *CustomAPIInprocClient) GetTOS(ctx context.Context, in *GetTOSRequest, o
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.GetTOS"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1799,6 +1834,11 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListUserRoleReques
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.List"); rvFn != nil {
@@ -1844,6 +1884,11 @@ func (c *CustomAPIInprocClient) RemoveUserFromGroup(ctx context.Context, in *Use
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.RemoveUserFromGroup"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1887,6 +1932,11 @@ func (c *CustomAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Replace"); rvFn != nil {
@@ -1932,6 +1982,11 @@ func (c *CustomAPIInprocClient) ResetPassword(ctx context.Context, in *Empty, op
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.ResetPassword"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1975,6 +2030,11 @@ func (c *CustomAPIInprocClient) ResetPasswordByAdmin(ctx context.Context, in *Re
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.ResetPasswordByAdmin"); rvFn != nil {
@@ -2020,6 +2080,11 @@ func (c *CustomAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendP
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.SendPasswordEmail"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2063,6 +2128,11 @@ func (c *CustomAPIInprocClient) SyncUser(ctx context.Context, in *Empty, opts ..
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.SyncUser"); rvFn != nil {
@@ -2192,7 +2262,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-SyncUser"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-syncuser"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.SyncUser"
             },
@@ -2276,7 +2346,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-AddUserToGroup"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-addusertogroup"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AddUserToGroup"
             },
@@ -2360,7 +2430,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-RemoveUserFromGroup"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-removeuserfromgroup"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.RemoveUserFromGroup"
             },
@@ -2452,7 +2522,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-AcceptTOS"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-accepttos"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AcceptTOS"
             },
@@ -2544,7 +2614,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-AssignRole"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-assignrole"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AssignRole"
             },
@@ -2636,7 +2706,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-SendPasswordEmail"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-sendpasswordemail"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.SendPasswordEmail"
             },
@@ -2720,7 +2790,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-GetTOS"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-gettos"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.GetTOS"
             },
@@ -2804,7 +2874,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.List"
             },
@@ -2891,7 +2961,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Create"
             },
@@ -2978,7 +3048,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Replace"
             },
@@ -3078,7 +3148,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Replace"
             },
@@ -3170,7 +3240,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-CascadeDelete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-cascadedelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.CascadeDelete"
             },
@@ -3254,7 +3324,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Get"
             },
@@ -3338,7 +3408,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-ResetPasswordByAdmin"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-resetpasswordbyadmin"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.ResetPasswordByAdmin"
             },
@@ -3422,7 +3492,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-ResetPassword"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-resetpassword"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.ResetPassword"
             },

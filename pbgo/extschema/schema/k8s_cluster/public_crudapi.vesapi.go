@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_cluster.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_cluster.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.API.Delete"
             },
@@ -2322,24 +2330,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.ClusterWideAppType",
             "properties": {
                 "argo_cd": {
-                    "description": "Exclusive with [dashboard metrics_server prometheus]\nx-displayName: \"Argo CD\"\nDeploy Argo Continuous Deployment(CD) application",
+                    "description": "Exclusive with [dashboard metrics_server prometheus]\n Deploy Argo Continuous Deployment(CD) application",
                     "title": "Argo CD",
-                    "$ref": "#/definitions/k8s_clusterApplicationArgoCDType"
+                    "$ref": "#/definitions/k8s_clusterApplicationArgoCDType",
+                    "x-displayname": "Argo CD"
                 },
                 "dashboard": {
-                    "description": "Exclusive with [argo_cd metrics_server prometheus]\nx-displayName: \"K8s Dashboard\"\nDeploy Kubernetes Dashboard application",
+                    "description": "Exclusive with [argo_cd metrics_server prometheus]\n Deploy Kubernetes Dashboard application",
                     "title": "K8s Dashboard",
-                    "$ref": "#/definitions/k8s_clusterApplicationDashboardType"
+                    "$ref": "#/definitions/k8s_clusterApplicationDashboardType",
+                    "x-displayname": "K8s Dashboard"
                 },
                 "metrics_server": {
-                    "description": "Exclusive with [argo_cd dashboard prometheus]\nx-displayName: \"K8s Metrics Server\"\nDeploy Kubernetes Metrics Server application",
+                    "description": "Exclusive with [argo_cd dashboard prometheus]\n Deploy Kubernetes Metrics Server application",
                     "title": "K8s Metrics Server",
-                    "$ref": "#/definitions/k8s_clusterApplicationMetricsServerType"
+                    "$ref": "#/definitions/k8s_clusterApplicationMetricsServerType",
+                    "x-displayname": "K8s Metrics Server"
                 },
                 "prometheus": {
-                    "description": "Exclusive with [argo_cd dashboard metrics_server]\nx-displayName: \"Prometheus\"\nPrometheus access via k8s api server endpoint",
+                    "description": "Exclusive with [argo_cd dashboard metrics_server]\n Prometheus access via k8s api server endpoint",
                     "title": "Prometheus",
-                    "$ref": "#/definitions/k8s_clusterApplicationPrometheusType"
+                    "$ref": "#/definitions/k8s_clusterApplicationPrometheusType",
+                    "x-displayname": "Prometheus"
                 }
             }
         },
@@ -2404,68 +2416,84 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.CreateSpecType",
             "properties": {
                 "cluster_scoped_access_deny": {
-                    "description": "Exclusive with [cluster_scoped_access_permit]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_scoped_access_permit]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny K8s API Access to ClusterRoles and ClusterRoleBindings"
                 },
                 "cluster_scoped_access_permit": {
-                    "description": "Exclusive with [cluster_scoped_access_deny]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_scoped_access_deny]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow K8s API Access to ClusterRoles and ClusterRoleBindings"
                 },
                 "cluster_wide_app_list": {
-                    "description": "Exclusive with [no_cluster_wide_apps]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                    "description": "Exclusive with [no_cluster_wide_apps]\n Select cluster wide applications to be deployed",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType",
+                    "x-displayname": "Add Cluster Wide Applications"
                 },
                 "global_access_enable": {
-                    "description": "Exclusive with [no_global_access]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [no_global_access]\n Access via VoltConsole to site K8s API server is enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable VoltConsole API Access"
                 },
                 "insecure_registry_list": {
-                    "description": "Exclusive with [no_insecure_registries]\n",
-                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType"
+                    "description": "Exclusive with [no_insecure_registries]\n Select Docker insecure registries for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType",
+                    "x-displayname": "Docker insecure registries"
                 },
                 "local_access_config": {
-                    "description": "Exclusive with [no_local_access]\n",
-                    "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                    "description": "Exclusive with [no_local_access]\n Local access to site K8s cluster is enabled",
+                    "$ref": "#/definitions/k8s_clusterLocalAccessConfigType",
+                    "x-displayname": "Enable Site Local API Access"
                 },
                 "no_cluster_wide_apps": {
-                    "description": "Exclusive with [cluster_wide_app_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_wide_app_list]\n There are no cluster wide applications to be deployed",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Cluster Wide Applications"
                 },
                 "no_global_access": {
-                    "description": "Exclusive with [global_access_enable]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_access_enable]\n Access via VoltConsole to site K8s API server is not enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable VoltConsole API Access"
                 },
                 "no_insecure_registries": {
-                    "description": "Exclusive with [insecure_registry_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [insecure_registry_list]\n There are no Docker insecure registries to be configured",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Docker insecure registries"
                 },
                 "no_local_access": {
-                    "description": "Exclusive with [local_access_config]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [local_access_config]\n Local access to site K8s cluster is not enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local API Access"
                 },
                 "use_custom_cluster_role_bindings": {
-                    "description": "Exclusive with [use_default_cluster_role_bindings]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterRoleBindingListType"
+                    "description": "Exclusive with [use_default_cluster_role_bindings]\n Select K8s cluster role bindings for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterClusterRoleBindingListType",
+                    "x-displayname": "K8s Cluster Role Bindings"
                 },
                 "use_custom_cluster_role_list": {
-                    "description": "Exclusive with [use_default_cluster_roles]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterRoleListType"
+                    "description": "Exclusive with [use_default_cluster_roles]\n Select custom K8s cluster roles for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterClusterRoleListType",
+                    "x-displayname": "Custom K8s Cluster Roles"
                 },
                 "use_custom_psp_list": {
-                    "description": "Exclusive with [use_default_psp]\n",
-                    "$ref": "#/definitions/k8s_clusterPodSecurityPolicyListType"
+                    "description": "Exclusive with [use_default_psp]\n Select custom pod security policies for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterPodSecurityPolicyListType",
+                    "x-displayname": "Custom Pod Security Policies"
                 },
                 "use_default_cluster_role_bindings": {
-                    "description": "Exclusive with [use_custom_cluster_role_bindings]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_cluster_role_bindings]\n Select default K8s cluster role bindings for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Cluster Role Bindings"
                 },
                 "use_default_cluster_roles": {
-                    "description": "Exclusive with [use_custom_cluster_role_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_cluster_role_list]\n Select default K8s cluster roles for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Cluster Roles"
                 },
                 "use_default_psp": {
-                    "description": "Exclusive with [use_custom_psp_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_psp_list]\n Select default pod security policies for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Pod Security Policies"
                 }
             }
         },
@@ -2591,68 +2619,84 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GetSpecType",
             "properties": {
                 "cluster_scoped_access_deny": {
-                    "description": "Exclusive with [cluster_scoped_access_permit]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_scoped_access_permit]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny K8s API Access to ClusterRoles and ClusterRoleBindings"
                 },
                 "cluster_scoped_access_permit": {
-                    "description": "Exclusive with [cluster_scoped_access_deny]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_scoped_access_deny]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow K8s API Access to ClusterRoles and ClusterRoleBindings"
                 },
                 "cluster_wide_app_list": {
-                    "description": "Exclusive with [no_cluster_wide_apps]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                    "description": "Exclusive with [no_cluster_wide_apps]\n Select cluster wide applications to be deployed",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType",
+                    "x-displayname": "Add Cluster Wide Applications"
                 },
                 "global_access_enable": {
-                    "description": "Exclusive with [no_global_access]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [no_global_access]\n Access via VoltConsole to site K8s API server is enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable VoltConsole API Access"
                 },
                 "insecure_registry_list": {
-                    "description": "Exclusive with [no_insecure_registries]\n",
-                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType"
+                    "description": "Exclusive with [no_insecure_registries]\n Select Docker insecure registries for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType",
+                    "x-displayname": "Docker insecure registries"
                 },
                 "local_access_config": {
-                    "description": "Exclusive with [no_local_access]\n",
-                    "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                    "description": "Exclusive with [no_local_access]\n Local access to site K8s cluster is enabled",
+                    "$ref": "#/definitions/k8s_clusterLocalAccessConfigType",
+                    "x-displayname": "Enable Site Local API Access"
                 },
                 "no_cluster_wide_apps": {
-                    "description": "Exclusive with [cluster_wide_app_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_wide_app_list]\n There are no cluster wide applications to be deployed",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Cluster Wide Applications"
                 },
                 "no_global_access": {
-                    "description": "Exclusive with [global_access_enable]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_access_enable]\n Access via VoltConsole to site K8s API server is not enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable VoltConsole API Access"
                 },
                 "no_insecure_registries": {
-                    "description": "Exclusive with [insecure_registry_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [insecure_registry_list]\n There are no Docker insecure registries to be configured",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Docker insecure registries"
                 },
                 "no_local_access": {
-                    "description": "Exclusive with [local_access_config]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [local_access_config]\n Local access to site K8s cluster is not enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local API Access"
                 },
                 "use_custom_cluster_role_bindings": {
-                    "description": "Exclusive with [use_default_cluster_role_bindings]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterRoleBindingListType"
+                    "description": "Exclusive with [use_default_cluster_role_bindings]\n Select K8s cluster role bindings for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterClusterRoleBindingListType",
+                    "x-displayname": "K8s Cluster Role Bindings"
                 },
                 "use_custom_cluster_role_list": {
-                    "description": "Exclusive with [use_default_cluster_roles]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterRoleListType"
+                    "description": "Exclusive with [use_default_cluster_roles]\n Select custom K8s cluster roles for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterClusterRoleListType",
+                    "x-displayname": "Custom K8s Cluster Roles"
                 },
                 "use_custom_psp_list": {
-                    "description": "Exclusive with [use_default_psp]\n",
-                    "$ref": "#/definitions/k8s_clusterPodSecurityPolicyListType"
+                    "description": "Exclusive with [use_default_psp]\n Select custom pod security policies for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterPodSecurityPolicyListType",
+                    "x-displayname": "Custom Pod Security Policies"
                 },
                 "use_default_cluster_role_bindings": {
-                    "description": "Exclusive with [use_custom_cluster_role_bindings]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_cluster_role_bindings]\n Select default K8s cluster role bindings for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Cluster Role Bindings"
                 },
                 "use_default_cluster_roles": {
-                    "description": "Exclusive with [use_custom_cluster_role_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_cluster_role_list]\n Select default K8s cluster roles for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Cluster Roles"
                 },
                 "use_default_psp": {
-                    "description": "Exclusive with [use_custom_psp_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_psp_list]\n Select default pod security policies for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Pod Security Policies"
                 }
             }
         },
@@ -2672,19 +2716,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GlobalSpecType",
             "properties": {
                 "cluster_scoped_access_deny": {
-                    "description": "Exclusive with [cluster_scoped_access_permit]\nx-displayName: \"Deny K8s API Access to ClusterRoles and ClusterRoleBindings\"\nAccess to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
+                    "description": "Exclusive with [cluster_scoped_access_permit]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
                     "title": "Deny K8s API Access to ClusterRoles and ClusterRoleBindings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny K8s API Access to ClusterRoles and ClusterRoleBindings"
                 },
                 "cluster_scoped_access_permit": {
-                    "description": "Exclusive with [cluster_scoped_access_deny]\nx-displayName: \"Allow K8s API Access to ClusterRoles and ClusterRoleBindings\"\nAccess to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
+                    "description": "Exclusive with [cluster_scoped_access_deny]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
                     "title": "Allow K8s API Access to ClusterRoles and ClusterRoleBindings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow K8s API Access to ClusterRoles and ClusterRoleBindings"
                 },
                 "cluster_wide_app_list": {
-                    "description": "Exclusive with [no_cluster_wide_apps]\nx-displayName: \"Add Cluster Wide Applications\"\nSelect cluster wide applications to be deployed",
+                    "description": "Exclusive with [no_cluster_wide_apps]\n Select cluster wide applications to be deployed",
                     "title": "Add Cluster Wide Applications",
-                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType",
+                    "x-displayname": "Add Cluster Wide Applications"
                 },
                 "final_cluster_role_bindings": {
                     "type": "array",
@@ -2729,69 +2776,82 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "global_access_enable": {
-                    "description": "Exclusive with [no_global_access]\nx-displayName: \"Enable VoltConsole API Access\"\nAccess via VoltConsole to site K8s API server is enabled",
+                    "description": "Exclusive with [no_global_access]\n Access via VoltConsole to site K8s API server is enabled",
                     "title": "Enable VoltConsole API Access",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable VoltConsole API Access"
                 },
                 "insecure_registry_list": {
-                    "description": "Exclusive with [no_insecure_registries]\nx-displayName: \"Docker insecure registries\"\nSelect Docker insecure registries for this K8s cluster",
+                    "description": "Exclusive with [no_insecure_registries]\n Select Docker insecure registries for this K8s cluster",
                     "title": "Custom Docker insecure registries",
-                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType"
+                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType",
+                    "x-displayname": "Docker insecure registries"
                 },
                 "local_access_config": {
-                    "description": "Exclusive with [no_local_access]\nx-displayName: \"Enable Site Local API Access\"\nLocal access to site K8s cluster is enabled",
+                    "description": "Exclusive with [no_local_access]\n Local access to site K8s cluster is enabled",
                     "title": "Enable Site Local API Access",
-                    "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                    "$ref": "#/definitions/k8s_clusterLocalAccessConfigType",
+                    "x-displayname": "Enable Site Local API Access"
                 },
                 "no_cluster_wide_apps": {
-                    "description": "Exclusive with [cluster_wide_app_list]\nx-displayName: \"No Cluster Wide Applications\"\nThere are no cluster wide applications to be deployed",
+                    "description": "Exclusive with [cluster_wide_app_list]\n There are no cluster wide applications to be deployed",
                     "title": "No Cluster Wide Applications",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Cluster Wide Applications"
                 },
                 "no_global_access": {
-                    "description": "Exclusive with [global_access_enable]\nx-displayName: \"Disable VoltConsole API Access\"\nAccess via VoltConsole to site K8s API server is not enabled",
+                    "description": "Exclusive with [global_access_enable]\n Access via VoltConsole to site K8s API server is not enabled",
                     "title": "Disable VoltConsole API Access",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable VoltConsole API Access"
                 },
                 "no_insecure_registries": {
-                    "description": "Exclusive with [insecure_registry_list]\nx-displayName: \"No Docker insecure registries\"\nThere are no Docker insecure registries to be configured",
+                    "description": "Exclusive with [insecure_registry_list]\n There are no Docker insecure registries to be configured",
                     "title": "No Docker insecure registries",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Docker insecure registries"
                 },
                 "no_local_access": {
-                    "description": "Exclusive with [local_access_config]\nx-displayName: \"Disable Site Local API Access\"\nLocal access to site K8s cluster is not enabled",
+                    "description": "Exclusive with [local_access_config]\n Local access to site K8s cluster is not enabled",
                     "title": "Disable Site Local API Access",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local API Access"
                 },
                 "use_custom_cluster_role_bindings": {
-                    "description": "Exclusive with [use_default_cluster_role_bindings]\nx-displayName: \"K8s Cluster Role Bindings\"\nSelect K8s cluster role bindings for this K8s cluster",
+                    "description": "Exclusive with [use_default_cluster_role_bindings]\n Select K8s cluster role bindings for this K8s cluster",
                     "title": "Custom Pod Security Policies",
-                    "$ref": "#/definitions/k8s_clusterClusterRoleBindingListType"
+                    "$ref": "#/definitions/k8s_clusterClusterRoleBindingListType",
+                    "x-displayname": "K8s Cluster Role Bindings"
                 },
                 "use_custom_cluster_role_list": {
-                    "description": "Exclusive with [use_default_cluster_roles]\nx-displayName: \"Custom K8s Cluster Roles\"\nSelect custom K8s cluster roles for this K8s cluster",
+                    "description": "Exclusive with [use_default_cluster_roles]\n Select custom K8s cluster roles for this K8s cluster",
                     "title": "Custom K8s Cluster Roles",
-                    "$ref": "#/definitions/k8s_clusterClusterRoleListType"
+                    "$ref": "#/definitions/k8s_clusterClusterRoleListType",
+                    "x-displayname": "Custom K8s Cluster Roles"
                 },
                 "use_custom_psp_list": {
-                    "description": "Exclusive with [use_default_psp]\nx-displayName: \"Custom Pod Security Policies\"\nSelect custom pod security policies for this K8s cluster",
+                    "description": "Exclusive with [use_default_psp]\n Select custom pod security policies for this K8s cluster",
                     "title": "Custom Pod Security Policies",
-                    "$ref": "#/definitions/k8s_clusterPodSecurityPolicyListType"
+                    "$ref": "#/definitions/k8s_clusterPodSecurityPolicyListType",
+                    "x-displayname": "Custom Pod Security Policies"
                 },
                 "use_default_cluster_role_bindings": {
-                    "description": "Exclusive with [use_custom_cluster_role_bindings]\nx-displayName: \"Default Cluster Role Bindings\"\nSelect default K8s cluster role bindings for this K8s cluster",
+                    "description": "Exclusive with [use_custom_cluster_role_bindings]\n Select default K8s cluster role bindings for this K8s cluster",
                     "title": "Default K8s Cluster Role Bindings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Cluster Role Bindings"
                 },
                 "use_default_cluster_roles": {
-                    "description": "Exclusive with [use_custom_cluster_role_list]\nx-displayName: \"Default K8s Cluster Roles\"\nSelect default K8s cluster roles for this K8s cluster",
+                    "description": "Exclusive with [use_custom_cluster_role_list]\n Select default K8s cluster roles for this K8s cluster",
                     "title": "Default K8s Cluster Roles",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Cluster Roles"
                 },
                 "use_default_psp": {
-                    "description": "Exclusive with [use_custom_psp_list]\nx-displayName: \"Default Pod Security Policies\"\nSelect default pod security policies for this K8s cluster",
+                    "description": "Exclusive with [use_custom_psp_list]\n Select default pod security policies for this K8s cluster",
                     "title": "Default Pod Security Policies",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Pod Security Policies"
                 }
             }
         },
@@ -2963,9 +3023,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.LocalAccessArgoCDType",
             "properties": {
                 "default_port": {
-                    "description": "Exclusive with [port]\nx-displayName: \"Default ArgoCD Port\"\nUse default port 443 for ArgoCD server.",
+                    "description": "Exclusive with [port]\n Use default port 443 for ArgoCD server.",
                     "title": "Default ArgoCD Port",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default ArgoCD Port"
                 },
                 "local_domain": {
                     "type": "string",
@@ -2995,9 +3056,14 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [default_port]\nx-displayName: \"Custom ArgoCD Port\"\nx-example: \"443\"\nUse custom ArgoCD port.\nAvailable port range is less than 65000 except reserved ports.",
+                    "description": "Exclusive with [default_port]\n Use custom ArgoCD port.\n Available port range is less than 65000 except reserved ports.\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.not_in_ranges: 0,6443,8005-8007,8443-8444,8505-8507,9005-9007,9090,9505-9507,9100,9115,9999,20914,23802,30805,30855,30905,30955,32222,18091-18095,65000-65334\n",
                     "title": "Custom ArgoCD Port",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Custom ArgoCD Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.not_in_ranges": "0,6443,8005-8007,8443-8444,8505-8507,9005-9007,9090,9505-9507,9100,9115,9999,20914,23802,30805,30855,30905,30955,32222,18091-18095,65000-65334"
+                    }
                 }
             }
         },
@@ -3010,9 +3076,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.LocalAccessConfigType",
             "properties": {
                 "default_port": {
-                    "description": "Exclusive with [port]\nx-displayName: \"Default k8s Port\"\nUse default port 65443 for K8s API server.",
+                    "description": "Exclusive with [port]\n Use default port 65443 for K8s API server.",
                     "title": "Default k8s Port",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default k8s Port"
                 },
                 "local_domain": {
                     "type": "string",
@@ -3032,9 +3099,14 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [default_port]\nx-displayName: \"Custom k8s Port\"\nx-example: \"443\"\nUse custom K8s port for API server.\nAvailable port range is less than 65000 except reserved ports.",
+                    "description": "Exclusive with [default_port]\n Use custom K8s port for API server.\n Available port range is less than 65000 except reserved ports.\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.not_in_ranges: 0,6443,8005-8007,8443-8444,8505-8507,9005-9007,9090,9505-9507,9100,9115,9999,20914,23802,30805,30855,30905,30955,32222,18091-18095,65000-65334\n",
                     "title": "Custom k8s Port",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Custom k8s Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.not_in_ranges": "0,6443,8005-8007,8443-8444,8505-8507,9005-9007,9090,9505-9507,9100,9115,9999,20914,23802,30805,30855,30905,30955,32222,18091-18095,65000-65334"
+                    }
                 }
             }
         },
@@ -3133,68 +3205,84 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.ReplaceSpecType",
             "properties": {
                 "cluster_scoped_access_deny": {
-                    "description": "Exclusive with [cluster_scoped_access_permit]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_scoped_access_permit]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny K8s API Access to ClusterRoles and ClusterRoleBindings"
                 },
                 "cluster_scoped_access_permit": {
-                    "description": "Exclusive with [cluster_scoped_access_deny]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_scoped_access_deny]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow K8s API Access to ClusterRoles and ClusterRoleBindings"
                 },
                 "cluster_wide_app_list": {
-                    "description": "Exclusive with [no_cluster_wide_apps]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                    "description": "Exclusive with [no_cluster_wide_apps]\n Select cluster wide applications to be deployed",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType",
+                    "x-displayname": "Add Cluster Wide Applications"
                 },
                 "global_access_enable": {
-                    "description": "Exclusive with [no_global_access]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [no_global_access]\n Access via VoltConsole to site K8s API server is enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable VoltConsole API Access"
                 },
                 "insecure_registry_list": {
-                    "description": "Exclusive with [no_insecure_registries]\n",
-                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType"
+                    "description": "Exclusive with [no_insecure_registries]\n Select Docker insecure registries for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType",
+                    "x-displayname": "Docker insecure registries"
                 },
                 "local_access_config": {
-                    "description": "Exclusive with [no_local_access]\n",
-                    "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                    "description": "Exclusive with [no_local_access]\n Local access to site K8s cluster is enabled",
+                    "$ref": "#/definitions/k8s_clusterLocalAccessConfigType",
+                    "x-displayname": "Enable Site Local API Access"
                 },
                 "no_cluster_wide_apps": {
-                    "description": "Exclusive with [cluster_wide_app_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [cluster_wide_app_list]\n There are no cluster wide applications to be deployed",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Cluster Wide Applications"
                 },
                 "no_global_access": {
-                    "description": "Exclusive with [global_access_enable]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [global_access_enable]\n Access via VoltConsole to site K8s API server is not enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable VoltConsole API Access"
                 },
                 "no_insecure_registries": {
-                    "description": "Exclusive with [insecure_registry_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [insecure_registry_list]\n There are no Docker insecure registries to be configured",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Docker insecure registries"
                 },
                 "no_local_access": {
-                    "description": "Exclusive with [local_access_config]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [local_access_config]\n Local access to site K8s cluster is not enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local API Access"
                 },
                 "use_custom_cluster_role_bindings": {
-                    "description": "Exclusive with [use_default_cluster_role_bindings]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterRoleBindingListType"
+                    "description": "Exclusive with [use_default_cluster_role_bindings]\n Select K8s cluster role bindings for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterClusterRoleBindingListType",
+                    "x-displayname": "K8s Cluster Role Bindings"
                 },
                 "use_custom_cluster_role_list": {
-                    "description": "Exclusive with [use_default_cluster_roles]\n",
-                    "$ref": "#/definitions/k8s_clusterClusterRoleListType"
+                    "description": "Exclusive with [use_default_cluster_roles]\n Select custom K8s cluster roles for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterClusterRoleListType",
+                    "x-displayname": "Custom K8s Cluster Roles"
                 },
                 "use_custom_psp_list": {
-                    "description": "Exclusive with [use_default_psp]\n",
-                    "$ref": "#/definitions/k8s_clusterPodSecurityPolicyListType"
+                    "description": "Exclusive with [use_default_psp]\n Select custom pod security policies for this K8s cluster",
+                    "$ref": "#/definitions/k8s_clusterPodSecurityPolicyListType",
+                    "x-displayname": "Custom Pod Security Policies"
                 },
                 "use_default_cluster_role_bindings": {
-                    "description": "Exclusive with [use_custom_cluster_role_bindings]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_cluster_role_bindings]\n Select default K8s cluster role bindings for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Cluster Role Bindings"
                 },
                 "use_default_cluster_roles": {
-                    "description": "Exclusive with [use_custom_cluster_role_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_cluster_role_list]\n Select default K8s cluster roles for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default K8s Cluster Roles"
                 },
                 "use_default_psp": {
-                    "description": "Exclusive with [use_custom_psp_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_custom_psp_list]\n Select default pod security policies for this K8s cluster",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Pod Security Policies"
                 }
             }
         },
@@ -3732,14 +3820,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },

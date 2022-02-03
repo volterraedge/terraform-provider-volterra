@@ -1220,6 +1220,22 @@ func (v *ValidateCreateSpecType) OutsideVipValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) SiteToSiteNetworkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.VirtualNetworkType)
+		return int32(i)
+	}
+	// ves_io_schema.VirtualNetworkType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.VirtualNetworkType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_network_type")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) InsideNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -1561,6 +1577,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip"] = vFn
+
+	vrhSiteToSiteNetworkType := v.SiteToSiteNetworkTypeValidationRuleHandler
+	rulesSiteToSiteNetworkType := map[string]string{
+		"ves.io.schema.rules.enum.in": "[0,1]",
+	}
+	vFn, err = vrhSiteToSiteNetworkType(rulesSiteToSiteNetworkType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.site_to_site_network_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_network_type"] = vFn
 
 	vrhInsideNameserver := v.InsideNameserverValidationRuleHandler
 	rulesInsideNameserver := map[string]string{
@@ -2671,6 +2698,22 @@ func (v *ValidateGetSpecType) OutsideVipValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) SiteToSiteNetworkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.VirtualNetworkType)
+		return int32(i)
+	}
+	// ves_io_schema.VirtualNetworkType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.VirtualNetworkType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_network_type")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) InsideNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -3152,6 +3195,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip"] = vFn
+
+	vrhSiteToSiteNetworkType := v.SiteToSiteNetworkTypeValidationRuleHandler
+	rulesSiteToSiteNetworkType := map[string]string{
+		"ves.io.schema.rules.enum.in": "[0,1]",
+	}
+	vFn, err = vrhSiteToSiteNetworkType(rulesSiteToSiteNetworkType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.site_to_site_network_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_network_type"] = vFn
 
 	vrhInsideNameserver := v.InsideNameserverValidationRuleHandler
 	rulesInsideNameserver := map[string]string{
@@ -3868,6 +3922,22 @@ func (v *ValidateGlobalSpecType) OutsideVipValidationRuleHandler(rules map[strin
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_vip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) SiteToSiteNetworkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.VirtualNetworkType)
+		return int32(i)
+	}
+	// ves_io_schema.VirtualNetworkType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.VirtualNetworkType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_network_type")
 	}
 
 	return validatorFn, nil
@@ -4713,6 +4783,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip"] = vFn
+
+	vrhSiteToSiteNetworkType := v.SiteToSiteNetworkTypeValidationRuleHandler
+	rulesSiteToSiteNetworkType := map[string]string{
+		"ves.io.schema.rules.enum.in": "[0,1]",
+	}
+	vFn, err = vrhSiteToSiteNetworkType(rulesSiteToSiteNetworkType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.site_to_site_network_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_network_type"] = vFn
 
 	vrhInsideNameserver := v.InsideNameserverValidationRuleHandler
 	rulesInsideNameserver := map[string]string{
@@ -7101,6 +7182,22 @@ func (v *ValidateReplaceSpecType) OutsideVipValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) SiteToSiteNetworkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.VirtualNetworkType)
+		return int32(i)
+	}
+	// ves_io_schema.VirtualNetworkType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.VirtualNetworkType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_network_type")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) InsideNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -7422,6 +7519,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip"] = vFn
+
+	vrhSiteToSiteNetworkType := v.SiteToSiteNetworkTypeValidationRuleHandler
+	rulesSiteToSiteNetworkType := map[string]string{
+		"ves.io.schema.rules.enum.in": "[0,1]",
+	}
+	vFn, err = vrhSiteToSiteNetworkType(rulesSiteToSiteNetworkType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.site_to_site_network_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_network_type"] = vFn
 
 	vrhInsideNameserver := v.InsideNameserverValidationRuleHandler
 	rulesInsideNameserver := map[string]string{

@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.app_firewall.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.app_firewall.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_firewall.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_firewall.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_firewall.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_firewall.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_firewall.API.Delete"
             },
@@ -2163,7 +2171,7 @@ var APISwaggerJSON string = `{
                         "type": "integer",
                         "format": "int64"
                     },
-                    "x-displayname": "Response Codes",
+                    "x-displayname": "Response Code",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2185,19 +2193,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_firewall.AnonymizationConfiguration",
             "properties": {
                 "cookie": {
-                    "description": "Exclusive with [http_header query_parameter]\nx-displayName: \"Cookie\"\nAnonymize sensitive HTTP Cookie information",
+                    "description": "Exclusive with [http_header query_parameter]\n",
                     "title": "AnonymizeCookie",
-                    "$ref": "#/definitions/app_firewallAnonymizeHttpCookie"
+                    "$ref": "#/definitions/app_firewallAnonymizeHttpCookie",
+                    "x-displayname": "Cookie"
                 },
                 "http_header": {
-                    "description": "Exclusive with [cookie query_parameter]\nx-displayName: \"HTTP Header\"\nAnonymize sensitive HTTP Header information",
+                    "description": "Exclusive with [cookie query_parameter]\n",
                     "title": "http_header",
-                    "$ref": "#/definitions/app_firewallAnonymizeHttpHeader"
+                    "$ref": "#/definitions/app_firewallAnonymizeHttpHeader",
+                    "x-displayname": "HTTP Header"
                 },
                 "query_parameter": {
-                    "description": "Exclusive with [cookie http_header]\nx-displayName: \"Query Parameter\"\nAnonymize sensitive HTTP query parameters",
+                    "description": "Exclusive with [cookie http_header]\n",
                     "title": "AnonymizeParameter",
-                    "$ref": "#/definitions/app_firewallAnonymizeHttpQueryParameter"
+                    "$ref": "#/definitions/app_firewallAnonymizeHttpQueryParameter",
+                    "x-displayname": "Query Parameter"
                 }
             }
         },
@@ -2210,7 +2221,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "anonymization_config": {
                     "type": "array",
-                    "description": " List of HTTP headers, cookies and query parameters which values will be masked.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of HTTP headers, cookies and query parameters whose values will be masked\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "AnonymizationConfiguration",
                     "maxItems": 64,
                     "items": {
@@ -2235,7 +2246,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_name": {
                     "type": "string",
-                    "description": " Specify name of the sensitive HTTP Cookie\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Masks the cookie value. The setting does not mask the cookie name.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "cookie_name",
                     "maxLength": 256,
                     "x-displayname": "Cookie Name",
@@ -2256,7 +2267,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "header_name": {
                     "type": "string",
-                    "description": " Specify name of the sensitive HTTP Header\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
+                    "description": " Masks the HTTP header value. The setting does not mask the HTTP header name.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "header_name",
                     "x-displayname": "Header Name",
                     "x-ves-required": "true",
@@ -2276,7 +2287,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "query_param_name": {
                     "type": "string",
-                    "description": " Specify name of the sensitive HTTP Query Parameter\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Masks the query parameter value. The setting does not mask the query parameter name.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "query_param_name",
                     "maxLength": 256,
                     "x-displayname": "Query Parameter Name",
@@ -2290,7 +2301,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal\nMalformed request\nMultiple decoding",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2324,7 +2335,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAttackType": {
             "type": "string",
-            "description": "List of all Attack Types\n\nNo attack\nNon-Browser Client\nOther Application Attack\nTrojan Backdoor Spyware\nDetection Evasion\nVulnerability Scan\nAbuse of Functionality\nAuthentication Authorization Attack\nBuffer Overflow\nPredictable Resource Location\nInformation Leakage\nDirectory Indexing\nPath Traversal\nXPath Injection\nLDAP Injection\nServer-Side Code Injection\nCommand Execution\nSQL Injection\nCross-Site Scripting\nDenial of Service\nHTTP Parser Attack\nSession Hijacking\nHTTP Response Splitting\nForceful Browsing",
+            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING",
             "title": "AttackType",
             "enum": [
                 "ATTACK_TYPE_NONE",
@@ -2353,7 +2364,7 @@ var APISwaggerJSON string = `{
                 "ATTACK_TYPE_FORCEFUL_BROWSING"
             ],
             "default": "ATTACK_TYPE_NONE",
-            "x-displayname": "Attack Type",
+            "x-displayname": "Attack Types",
             "x-ves-proto-enum": "ves.io.schema.app_firewall.AttackType"
         },
         "app_firewallAttackTypeSettings": {
@@ -2365,7 +2376,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "disabled_attack_types": {
                     "type": "array",
-                    "description": " List of attack types that will be ignored and not trigger a detection\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 22\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of Attack Types that will be ignored and not trigger a detection\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 22\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Disabled Attack Types",
                     "maxItems": 22,
                     "items": {
@@ -2383,7 +2394,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallBotAction": {
             "type": "string",
-            "description": "Action to be performed on the request\n",
+            "description": "Action to be performed on the request\n\nLog and block\nLog only\nDisable detection",
             "title": "Bot Action",
             "enum": [
                 "BLOCK",
@@ -2402,22 +2413,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_firewall.BotProtectionSetting",
             "properties": {
                 "good_bot_action": {
-                    "description": " Action to be taken when a good (benign) bot agent is detected",
+                    "description": " A client that exhibits known search engine behaviors and signatures",
                     "title": "good_bot_action",
                     "$ref": "#/definitions/app_firewallBotAction",
-                    "x-displayname": "Good Bot Action"
+                    "x-displayname": "Good Bot"
                 },
                 "malicious_bot_action": {
-                    "description": " Action to be taken when a malicious bot agent is detected",
+                    "description": " A client that exhibits malicious intent such as DoS tools, known exploit tools, and vulnerability scanners",
                     "title": "malicious_bot_action",
                     "$ref": "#/definitions/app_firewallBotAction",
-                    "x-displayname": "Malicious Bot Action"
+                    "x-displayname": "Malicious Bot"
                 },
                 "suspicious_bot_action": {
-                    "description": " Action to be taken when a suspicious bot agent is detected",
+                    "description": " A client that exhibits non-malicious tools such as site crawlers, monitors, spiders, web downloaders and bots behaviors, signatures such as search bots and social media agents",
                     "title": "suspicious_bot_action",
                     "$ref": "#/definitions/app_firewallBotAction",
-                    "x-displayname": "Suspicious Bot Action"
+                    "x-displayname": "Suspicious Bot"
                 }
             }
         },
@@ -2480,56 +2491,69 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_firewall.CreateSpecType",
             "properties": {
                 "allow_all_response_codes": {
-                    "description": "Exclusive with [allowed_response_codes]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allowed_response_codes]\n All HTTP response status codes are allowed",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "allowed_response_codes": {
-                    "description": "Exclusive with [allow_all_response_codes]\n",
-                    "$ref": "#/definitions/app_firewallAllowedResponseCodes"
+                    "description": "Exclusive with [allow_all_response_codes]\n Define list of HTTP response status codes that are allowed",
+                    "$ref": "#/definitions/app_firewallAllowedResponseCodes",
+                    "x-displayname": "Custom"
                 },
                 "blocking": {
-                    "description": "Exclusive with [monitoring]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [monitoring]\n Log and block threats",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Blocking"
                 },
                 "blocking_page": {
-                    "description": "Exclusive with [use_default_blocking_page]\n",
-                    "$ref": "#/definitions/app_firewallCustomBlockingPage"
+                    "description": "Exclusive with [use_default_blocking_page]\n The system returns a response page with HTML code that you define",
+                    "$ref": "#/definitions/app_firewallCustomBlockingPage",
+                    "x-displayname": "Custom"
                 },
                 "bot_protection_setting": {
-                    "description": "Exclusive with [default_bot_setting]\n",
-                    "$ref": "#/definitions/app_firewallBotProtectionSetting"
+                    "description": "Exclusive with [default_bot_setting]\n Define custom Bot Protection settings",
+                    "$ref": "#/definitions/app_firewallBotProtectionSetting",
+                    "x-displayname": "Custom"
                 },
                 "custom_anonymization": {
-                    "description": "Exclusive with [default_anonymization disable_anonymization]\n",
-                    "$ref": "#/definitions/app_firewallAnonymizationSetting"
+                    "description": "Exclusive with [default_anonymization disable_anonymization]\n Define HTTP headers, query parameters, or cookies whose values should be masked",
+                    "$ref": "#/definitions/app_firewallAnonymizationSetting",
+                    "x-displayname": "Custom"
                 },
                 "default_anonymization": {
-                    "description": "Exclusive with [custom_anonymization disable_anonymization]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [custom_anonymization disable_anonymization]\n Default settings will be applied.\n Values of query parameters \"card\", \"pass\", \"pwd\" and \"password\" will be masked.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_bot_setting": {
-                    "description": "Exclusive with [bot_protection_setting]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [bot_protection_setting]\n Default Bot Protection settings will be applied.\n Malicious bots will be blocked, Suspicious and Good bots will be reported.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "detection_settings": {
-                    "description": "Exclusive with [default_detection_settings]\n",
-                    "$ref": "#/definitions/app_firewallDetectionSetting"
+                    "description": "Exclusive with [default_detection_settings]\n Define Custom Security Policy settings",
+                    "$ref": "#/definitions/app_firewallDetectionSetting",
+                    "x-displayname": "Custom"
                 },
                 "disable_anonymization": {
-                    "description": "Exclusive with [custom_anonymization default_anonymization]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [custom_anonymization default_anonymization]\n Disable masking of sensitive parameters in logs",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "monitoring": {
-                    "description": "Exclusive with [blocking]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [blocking]\n Log threats",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Monitoring"
                 },
                 "use_default_blocking_page": {
-                    "description": "Exclusive with [blocking_page]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [blocking_page]\n The system returns the system-supplied response page in HTML. No further configuration is needed.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 }
             }
         },
@@ -2542,12 +2566,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "blocking_page": {
                     "type": "string",
-                    "description": " Custom blocking response page body\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 65536\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " Define the HTML code for the response page, use the {{request_id}} placeholder to provide users with a unique\n identifier to be able to trace the blocked request in the logs. Response body can't exceed 4 KB in size.\n\nExample: - \"\u003chtml\u003e\u003chead\u003e\u003ctitle\u003eRequest Rejected\u003c/title\u003e\u003c/head\u003e\u003cbody\u003eThe requested URL was rejected. Please consult with your administrator.\u003cbr/\u003e\u003cbr/\u003eYour support ID is{{request_id}}\u003cbr/\u003e\u003cbr/\u003e\u003ca href=\\\"javascript:history.back()\\\"\u003e[Go Back]\u003c/a\u003e\u003c/body\u003e\u003c/html\u003e\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "blocking_page",
-                    "maxLength": 65536,
+                    "maxLength": 4096,
                     "x-displayname": "Custom Blocking Response Page Body",
+                    "x-ves-example": "\u003chtml\u003e\u003chead\u003e\u003ctitle\u003eRequest Rejected\u003c/title\u003e\u003c/head\u003e\u003cbody\u003eThe requested URL was rejected. Please consult with your administrator.\u003cbr/\u003e\u003cbr/\u003eYour support ID is: {{request_id}}\u003cbr/\u003e\u003cbr/\u003e\u003ca href=\\\"javascript:history.back()\\\"\u003e[Go Back]\u003c/a\u003e\u003c/body\u003e\u003c/html\u003e",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "65536",
+                        "ves.io.schema.rules.string.max_len": "4096",
                         "ves.io.schema.rules.string.uri_ref": "true"
                     }
                 }
@@ -2586,48 +2611,58 @@ var APISwaggerJSON string = `{
         "app_firewallDetectionSetting": {
             "type": "object",
             "description": "Specifies detection settings to be used by WAF",
-            "title": "Detection Setting",
-            "x-displayname": "Detection Setting",
+            "title": "Detection Settings",
+            "x-displayname": "Detection Settings",
             "x-ves-oneof-field-false_positive_suppression": "[\"disable_suppression\",\"enable_suppression\"]",
             "x-ves-oneof-field-threat_campaign_choice": "[\"disable_threat_campaigns\",\"enable_threat_campaigns\"]",
             "x-ves-oneof-field-violation_detection_setting": "[\"default_violation_settings\",\"violation_settings\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.DetectionSetting",
             "properties": {
                 "default_violation_settings": {
-                    "description": "Exclusive with [violation_settings]\nx-displayName: \"Default Violation Settings\"\nUse default violation settings. This will enable all violation types for detection.",
+                    "description": "Exclusive with [violation_settings]\n All violations are enabled for detection",
                     "title": "Default Violation Settings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "disable_suppression": {
-                    "description": "Exclusive with [enable_suppression]\nx-displayName: \"Disable Suppression\"\nDisable Suppression",
+                    "description": "Exclusive with [enable_suppression]\n",
                     "title": "Disable Suppression",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "disable_threat_campaigns": {
-                    "description": "Exclusive with [enable_threat_campaigns]\nx-displayName: \"Disable Threat Campaigns\"\nDisable Threat Campaigns",
+                    "description": "Exclusive with [enable_threat_campaigns]\n",
                     "title": "disable_threat_campaigns",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "enable_suppression": {
-                    "description": "Exclusive with [disable_suppression]\nx-displayName: \"Enable Suppression\"\nEnable Suppression",
+                    "description": "Exclusive with [disable_suppression]\n",
                     "title": "Enable Suppression",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
                 },
                 "enable_threat_campaigns": {
-                    "description": "Exclusive with [disable_threat_campaigns]\nx-displayName: \"Enable Threat Campaigns\"\nEnable Threat Campaigns",
+                    "description": "Exclusive with [disable_threat_campaigns]\n",
                     "title": "enable_threat_campaigns",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
                 },
                 "signature_selection_setting": {
-                    "description": " Specifies signature settings to be used by WAF",
+                    "description": " Attack Signatures are patterns that identify attacks on a web application and its components",
                     "title": "Signature Selection Setting",
                     "$ref": "#/definitions/app_firewallSignatureSelectionSetting",
-                    "x-displayname": "Signature Selection Setting"
+                    "x-displayname": "Attack Signatures"
                 },
                 "violation_settings": {
-                    "description": "Exclusive with [default_violation_settings]\nx-displayName: \"Custom Violation Settings\"\nx-required\nSpecifies violation settings to be used by WAF",
+                    "description": "Exclusive with [default_violation_settings]\n Define violations to be disabled for detection\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Custom Violation Settings",
-                    "$ref": "#/definitions/app_firewallViolationSettings"
+                    "$ref": "#/definitions/app_firewallViolationSettings",
+                    "x-displayname": "Custom",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2721,56 +2756,69 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_firewall.GetSpecType",
             "properties": {
                 "allow_all_response_codes": {
-                    "description": "Exclusive with [allowed_response_codes]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allowed_response_codes]\n All HTTP response status codes are allowed",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "allowed_response_codes": {
-                    "description": "Exclusive with [allow_all_response_codes]\n",
-                    "$ref": "#/definitions/app_firewallAllowedResponseCodes"
+                    "description": "Exclusive with [allow_all_response_codes]\n Define list of HTTP response status codes that are allowed",
+                    "$ref": "#/definitions/app_firewallAllowedResponseCodes",
+                    "x-displayname": "Custom"
                 },
                 "blocking": {
-                    "description": "Exclusive with [monitoring]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [monitoring]\n Log and block threats",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Blocking"
                 },
                 "blocking_page": {
-                    "description": "Exclusive with [use_default_blocking_page]\n",
-                    "$ref": "#/definitions/app_firewallCustomBlockingPage"
+                    "description": "Exclusive with [use_default_blocking_page]\n The system returns a response page with HTML code that you define",
+                    "$ref": "#/definitions/app_firewallCustomBlockingPage",
+                    "x-displayname": "Custom"
                 },
                 "bot_protection_setting": {
-                    "description": "Exclusive with [default_bot_setting]\n",
-                    "$ref": "#/definitions/app_firewallBotProtectionSetting"
+                    "description": "Exclusive with [default_bot_setting]\n Define custom Bot Protection settings",
+                    "$ref": "#/definitions/app_firewallBotProtectionSetting",
+                    "x-displayname": "Custom"
                 },
                 "custom_anonymization": {
-                    "description": "Exclusive with [default_anonymization disable_anonymization]\n",
-                    "$ref": "#/definitions/app_firewallAnonymizationSetting"
+                    "description": "Exclusive with [default_anonymization disable_anonymization]\n Define HTTP headers, query parameters, or cookies whose values should be masked",
+                    "$ref": "#/definitions/app_firewallAnonymizationSetting",
+                    "x-displayname": "Custom"
                 },
                 "default_anonymization": {
-                    "description": "Exclusive with [custom_anonymization disable_anonymization]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [custom_anonymization disable_anonymization]\n Default settings will be applied.\n Values of query parameters \"card\", \"pass\", \"pwd\" and \"password\" will be masked.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_bot_setting": {
-                    "description": "Exclusive with [bot_protection_setting]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [bot_protection_setting]\n Default Bot Protection settings will be applied.\n Malicious bots will be blocked, Suspicious and Good bots will be reported.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "detection_settings": {
-                    "description": "Exclusive with [default_detection_settings]\n",
-                    "$ref": "#/definitions/app_firewallDetectionSetting"
+                    "description": "Exclusive with [default_detection_settings]\n Define Custom Security Policy settings",
+                    "$ref": "#/definitions/app_firewallDetectionSetting",
+                    "x-displayname": "Custom"
                 },
                 "disable_anonymization": {
-                    "description": "Exclusive with [custom_anonymization default_anonymization]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [custom_anonymization default_anonymization]\n Disable masking of sensitive parameters in logs",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "monitoring": {
-                    "description": "Exclusive with [blocking]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [blocking]\n Log threats",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Monitoring"
                 },
                 "use_default_blocking_page": {
-                    "description": "Exclusive with [blocking_page]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [blocking_page]\n The system returns the system-supplied response page in HTML. No further configuration is needed.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 }
             }
         },
@@ -2787,69 +2835,82 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_firewall.GlobalSpecType",
             "properties": {
                 "allow_all_response_codes": {
-                    "description": "Exclusive with [allowed_response_codes]\nx-displayName: \"Default\"\nAll HTTP response status codes are allowed",
+                    "description": "Exclusive with [allowed_response_codes]\n All HTTP response status codes are allowed",
                     "title": "Default",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "allowed_response_codes": {
-                    "description": "Exclusive with [allow_all_response_codes]\nx-displayName: \"Custom\"\nDefine list of HTTP response status codes that are allowed",
+                    "description": "Exclusive with [allow_all_response_codes]\n Define list of HTTP response status codes that are allowed",
                     "title": "Custom",
-                    "$ref": "#/definitions/app_firewallAllowedResponseCodes"
+                    "$ref": "#/definitions/app_firewallAllowedResponseCodes",
+                    "x-displayname": "Custom"
                 },
                 "blocking": {
-                    "description": "Exclusive with [monitoring]\nx-displayName: \"Blocking\"\nOverride the load balancer setting and set mode to blocking",
+                    "description": "Exclusive with [monitoring]\n Log and block threats",
                     "title": "Blocking",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Blocking"
                 },
                 "blocking_page": {
-                    "description": "Exclusive with [use_default_blocking_page]\nx-displayName: \"Custom\"\nDefine custom blocking response page that should be returned to the client",
+                    "description": "Exclusive with [use_default_blocking_page]\n The system returns a response page with HTML code that you define",
                     "title": "Custom Blocking Page",
-                    "$ref": "#/definitions/app_firewallCustomBlockingPage"
+                    "$ref": "#/definitions/app_firewallCustomBlockingPage",
+                    "x-displayname": "Custom"
                 },
                 "bot_protection_setting": {
-                    "description": "Exclusive with [default_bot_setting]\nx-displayName: \"Custom Settings\"\nBot protection configuration, mitigation actions for the different types of bots",
+                    "description": "Exclusive with [default_bot_setting]\n Define custom Bot Protection settings",
                     "title": "Custom Settings",
-                    "$ref": "#/definitions/app_firewallBotProtectionSetting"
+                    "$ref": "#/definitions/app_firewallBotProtectionSetting",
+                    "x-displayname": "Custom"
                 },
                 "custom_anonymization": {
-                    "description": "Exclusive with [default_anonymization disable_anonymization]\nx-displayName: \"Custom\"\nCustom settings will be applied.\nConfigure full names of http headers, cookies or parameters which values may contain sensitive data.\nWAF performs full case-insensitive match.",
+                    "description": "Exclusive with [default_anonymization disable_anonymization]\n Define HTTP headers, query parameters, or cookies whose values should be masked",
                     "title": "CustomAnonymization",
-                    "$ref": "#/definitions/app_firewallAnonymizationSetting"
+                    "$ref": "#/definitions/app_firewallAnonymizationSetting",
+                    "x-displayname": "Custom"
                 },
                 "default_anonymization": {
-                    "description": "Exclusive with [custom_anonymization disable_anonymization]\nx-displayName: \"Default\"\nDefault settings will be applied.\nValues of query parameters \"card\", \"pass\", \"pwd\" and \"password\" will be masked.",
+                    "description": "Exclusive with [custom_anonymization disable_anonymization]\n Default settings will be applied.\n Values of query parameters \"card\", \"pass\", \"pwd\" and \"password\" will be masked.",
                     "title": "DefaultAnonymization",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_bot_setting": {
-                    "description": "Exclusive with [bot_protection_setting]\nx-displayName: \"Default Bot Settings\"\nDefault bot protection settings will be applied.\nMalicious bots will be blocked.\nSuspicious and Good bots will be reported.",
+                    "description": "Exclusive with [bot_protection_setting]\n Default Bot Protection settings will be applied.\n Malicious bots will be blocked, Suspicious and Good bots will be reported.",
                     "title": "Default Bot Settings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\nx-displayName: \"Default Detection Settings\"\nUse default recommended detection settings.\nThese settings are recommended for detecting malicious requests with a low false positive rate.",
+                    "description": "Exclusive with [detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
                     "title": "Default Detection Settings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "detection_settings": {
-                    "description": "Exclusive with [default_detection_settings]\nx-displayName: \"Custom Detection Settings\"\nCustom detection settings",
+                    "description": "Exclusive with [default_detection_settings]\n Define Custom Security Policy settings",
                     "title": "Custom Detection Settings",
-                    "$ref": "#/definitions/app_firewallDetectionSetting"
+                    "$ref": "#/definitions/app_firewallDetectionSetting",
+                    "x-displayname": "Custom"
                 },
                 "disable_anonymization": {
-                    "description": "Exclusive with [custom_anonymization default_anonymization]\nx-displayName: \"Disable\"\nDisable masking of sensitive parameters in logs.",
+                    "description": "Exclusive with [custom_anonymization default_anonymization]\n Disable masking of sensitive parameters in logs",
                     "title": "DisableAnonymization",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "monitoring": {
-                    "description": "Exclusive with [blocking]\nx-displayName: \"Monitoring\"\nOverride the load balancer setting and set mode to monitoring",
+                    "description": "Exclusive with [blocking]\n Log threats",
                     "title": "Monitoring",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Monitoring"
                 },
                 "use_default_blocking_page": {
-                    "description": "Exclusive with [blocking_page]\nx-displayName: \"Default\"\nDefault blocking response page will be returned to the client",
+                    "description": "Exclusive with [blocking_page]\n The system returns the system-supplied response page in HTML. No further configuration is needed.",
                     "title": "Default Blocking Page",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 }
             }
         },
@@ -3047,93 +3108,111 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_firewall.ReplaceSpecType",
             "properties": {
                 "allow_all_response_codes": {
-                    "description": "Exclusive with [allowed_response_codes]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allowed_response_codes]\n All HTTP response status codes are allowed",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "allowed_response_codes": {
-                    "description": "Exclusive with [allow_all_response_codes]\n",
-                    "$ref": "#/definitions/app_firewallAllowedResponseCodes"
+                    "description": "Exclusive with [allow_all_response_codes]\n Define list of HTTP response status codes that are allowed",
+                    "$ref": "#/definitions/app_firewallAllowedResponseCodes",
+                    "x-displayname": "Custom"
                 },
                 "blocking": {
-                    "description": "Exclusive with [monitoring]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [monitoring]\n Log and block threats",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Blocking"
                 },
                 "blocking_page": {
-                    "description": "Exclusive with [use_default_blocking_page]\n",
-                    "$ref": "#/definitions/app_firewallCustomBlockingPage"
+                    "description": "Exclusive with [use_default_blocking_page]\n The system returns a response page with HTML code that you define",
+                    "$ref": "#/definitions/app_firewallCustomBlockingPage",
+                    "x-displayname": "Custom"
                 },
                 "bot_protection_setting": {
-                    "description": "Exclusive with [default_bot_setting]\n",
-                    "$ref": "#/definitions/app_firewallBotProtectionSetting"
+                    "description": "Exclusive with [default_bot_setting]\n Define custom Bot Protection settings",
+                    "$ref": "#/definitions/app_firewallBotProtectionSetting",
+                    "x-displayname": "Custom"
                 },
                 "custom_anonymization": {
-                    "description": "Exclusive with [default_anonymization disable_anonymization]\n",
-                    "$ref": "#/definitions/app_firewallAnonymizationSetting"
+                    "description": "Exclusive with [default_anonymization disable_anonymization]\n Define HTTP headers, query parameters, or cookies whose values should be masked",
+                    "$ref": "#/definitions/app_firewallAnonymizationSetting",
+                    "x-displayname": "Custom"
                 },
                 "default_anonymization": {
-                    "description": "Exclusive with [custom_anonymization disable_anonymization]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [custom_anonymization disable_anonymization]\n Default settings will be applied.\n Values of query parameters \"card\", \"pass\", \"pwd\" and \"password\" will be masked.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_bot_setting": {
-                    "description": "Exclusive with [bot_protection_setting]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [bot_protection_setting]\n Default Bot Protection settings will be applied.\n Malicious bots will be blocked, Suspicious and Good bots will be reported.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "detection_settings": {
-                    "description": "Exclusive with [default_detection_settings]\n",
-                    "$ref": "#/definitions/app_firewallDetectionSetting"
+                    "description": "Exclusive with [default_detection_settings]\n Define Custom Security Policy settings",
+                    "$ref": "#/definitions/app_firewallDetectionSetting",
+                    "x-displayname": "Custom"
                 },
                 "disable_anonymization": {
-                    "description": "Exclusive with [custom_anonymization default_anonymization]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [custom_anonymization default_anonymization]\n Disable masking of sensitive parameters in logs",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "monitoring": {
-                    "description": "Exclusive with [blocking]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [blocking]\n Log threats",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Monitoring"
                 },
                 "use_default_blocking_page": {
-                    "description": "Exclusive with [blocking_page]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [blocking_page]\n The system returns the system-supplied response page in HTML. No further configuration is needed.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 }
             }
         },
         "app_firewallSignatureSelectionSetting": {
             "type": "object",
-            "description": "Specifies signature settings to be used by WAF",
-            "title": "Signature Selection Setting",
-            "x-displayname": "Signature Selection Setting",
+            "description": "Attack Signatures are patterns that identify attacks on a web application and its components",
+            "title": "Attack Signatures",
+            "x-displayname": "Attack Signatures",
             "x-ves-displayorder": "5,1",
             "x-ves-oneof-field-attack_type_setting": "[\"attack_type_settings\",\"default_attack_type_settings\"]",
             "x-ves-oneof-field-signature_selection_by_accuracy": "[\"high_medium_accuracy_signatures\",\"high_medium_low_accuracy_signatures\",\"only_high_accuracy_signatures\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.SignatureSelectionSetting",
             "properties": {
                 "attack_type_settings": {
-                    "description": "Exclusive with [default_attack_type_settings]\nx-displayName: \"Custom Attack Type Settings\"\nSpecifies attack-type settings to be used by WAF",
+                    "description": "Exclusive with [default_attack_type_settings]\n Define Attack Types to be disabled for detection",
                     "title": "Custom Attack Type Settings",
-                    "$ref": "#/definitions/app_firewallAttackTypeSettings"
+                    "$ref": "#/definitions/app_firewallAttackTypeSettings",
+                    "x-displayname": "Custom"
                 },
                 "default_attack_type_settings": {
-                    "description": "Exclusive with [attack_type_settings]\nx-displayName: \"Default Attack Type Settings\"\nUse default settings. This will enable all attack types for detection.",
+                    "description": "Exclusive with [attack_type_settings]\n All Attack Types are enabled for detection",
                     "title": "Default Attack Type settings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "high_medium_accuracy_signatures": {
-                    "description": "Exclusive with [high_medium_low_accuracy_signatures only_high_accuracy_signatures]\nx-displayName: \"Enable High and Medium Accuracy Signatures\"\nEnables high and medium accuracy signatures",
+                    "description": "Exclusive with [high_medium_low_accuracy_signatures only_high_accuracy_signatures]\n Enables high and medium accuracy signatures",
                     "title": "High/Medium Accuracy Signatures",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "High and Medium"
                 },
                 "high_medium_low_accuracy_signatures": {
-                    "description": "Exclusive with [high_medium_accuracy_signatures only_high_accuracy_signatures]\nx-displayName: \"Enable High, Medium, Low Accuracy Signatures\"\nEnables high, medium and low accuracy signatures",
+                    "description": "Exclusive with [high_medium_accuracy_signatures only_high_accuracy_signatures]\n Enables high, medium and low accuracy signatures",
                     "title": "High/Medium/Low Accuracy Signatures",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "High, Medium and Low"
                 },
                 "only_high_accuracy_signatures": {
-                    "description": "Exclusive with [high_medium_accuracy_signatures high_medium_low_accuracy_signatures]\nx-displayName: \"Enable Only High Accuracy Signatures\"\nEnables only high accuracy signatures",
+                    "description": "Exclusive with [high_medium_accuracy_signatures high_medium_low_accuracy_signatures]\n Enables only high accuracy signatures",
                     "title": "Only High Accuracy Signatures",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "High"
                 }
             }
         },

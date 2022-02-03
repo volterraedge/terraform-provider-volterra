@@ -14,6 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -164,6 +166,46 @@ func (v *ValidateBigIPAWSType) SshKeyValidationRuleHandler(rules map[string]stri
 	return validatorFn, nil
 }
 
+func (v *ValidateBigIPAWSType) VolterraSubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSSubnetIdsType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.AWSSubnetIdsTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for volterra_subnet_ids")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AWSSubnetIdsType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AWSSubnetIdsType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated volterra_subnet_ids")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items volterra_subnet_ids")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateBigIPAWSType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*BigIPAWSType)
 	if !ok {
@@ -247,6 +289,14 @@ func (v *ValidateBigIPAWSType) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("vip_address"))
 		if err := fv(ctx, m.GetVipAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["volterra_subnet_ids"]; exists {
+		vOpts := append(opts, db.WithValidateField("volterra_subnet_ids"))
+		if err := fv(ctx, m.GetVolterraSubnetIds(), vOpts...); err != nil {
 			return err
 		}
 
@@ -354,6 +404,17 @@ var DefaultBigIPAWSTypeValidator = func() *ValidateBigIPAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["ssh_key"] = vFn
+
+	vrhVolterraSubnetIds := v.VolterraSubnetIdsValidationRuleHandler
+	rulesVolterraSubnetIds := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVolterraSubnetIds(rulesVolterraSubnetIds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIPAWSType.volterra_subnet_ids: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["volterra_subnet_ids"] = vFn
 
 	return v
 }()

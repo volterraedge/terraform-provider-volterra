@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_cluster_role_binding.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.k8s_cluster_role_binding.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.crudapi.API.Create"
             },
@@ -2934,18 +2940,35 @@ var APISwaggerJSON string = `{
             "properties": {
                 "group": {
                     "type": "string",
-                    "description": "Exclusive with [service_account user]\nx-displayName: \"Group\"\nx-example: \"group1\"\nGroup id of the user group",
-                    "title": "Group"
+                    "description": "Exclusive with [service_account user]\n Group id of the user group\n\nExample: - \"group1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Group",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Group",
+                    "x-ves-example": "group1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "service_account": {
-                    "description": "Exclusive with [group user]\nx-displayName: \"Service Account\"\nName and Namespace of the service account",
+                    "description": "Exclusive with [group user]\n Name and Namespace of the service account",
                     "title": "Service Account",
-                    "$ref": "#/definitions/k8s_cluster_role_bindingServiceAccountType"
+                    "$ref": "#/definitions/k8s_cluster_role_bindingServiceAccountType",
+                    "x-displayname": "Service Account"
                 },
                 "user": {
                     "type": "string",
-                    "description": "Exclusive with [group service_account]\nx-displayName: \"User\"\nx-example: \"user1@example.com\"\nUser id of the user",
-                    "title": "User"
+                    "description": "Exclusive with [group service_account]\n User id of the user\n\nExample: - \"user1@example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "User",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "User",
+                    "x-ves-example": "user1@example.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },

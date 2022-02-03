@@ -905,6 +905,11 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Cont
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -948,6 +953,11 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Co
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies"); rvFn != nil {
@@ -993,6 +1003,11 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveServicePolicies(ctx context.Co
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1036,6 +1051,11 @@ func (c *NamespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs"); rvFn != nil {
@@ -1082,6 +1102,11 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Cont
 	}()
 	if err := c.svc.CustomAPIProcessDRef(ctx, in); err != nil {
 		return nil, err
+	}
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
 	if c.svc.Config().EnableAPIValidation {
@@ -1131,6 +1156,11 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveNetworkPolicies(ctx context.Co
 		return nil, err
 	}
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1178,6 +1208,11 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveServicePolicies(ctx context.Co
 		return nil, err
 	}
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1223,6 +1258,11 @@ func (c *NamespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.
 	}()
 	if err := c.svc.CustomAPIProcessDRef(ctx, in); err != nil {
 		return nil, err
+	}
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
 	if c.svc.Config().EnableAPIValidation {
@@ -1353,7 +1393,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-GetActiveAlertPolicies"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactivealertpolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"
             },
@@ -1440,7 +1480,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-SetActiveAlertPolicies"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactivealertpolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies"
             },
@@ -1524,7 +1564,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-GetActiveNetworkPolicies"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactivenetworkpolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies"
             },
@@ -1611,7 +1651,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-SetActiveNetworkPolicies"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactivenetworkpolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies"
             },
@@ -1695,7 +1735,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-GetActiveServicePolicies"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactiveservicepolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies"
             },
@@ -1782,7 +1822,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-SetActiveServicePolicies"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactiveservicepolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies"
             },
@@ -1866,7 +1906,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-GetFastACLsForInternetVIPs"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getfastaclsforinternetvips"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs"
             },
@@ -1953,7 +1993,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-SetFastACLsForInternetVIPs"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setfastaclsforinternetvips"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs"
             },

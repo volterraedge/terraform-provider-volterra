@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.user_identification.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.user_identification.API.Replace"); rvFn != nil {
@@ -3438,34 +3446,60 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.user_identification.UserIdentificationRule",
             "properties": {
                 "client_asn": {
-                    "description": "Exclusive with [client_ip cookie_name http_header_name none query_param_key]\nx-displayName: \"Client Autonomous System\"\nUse client ASN as user identifier.\nThe client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
+                    "description": "Exclusive with [client_ip cookie_name http_header_name none query_param_key]\n Use client ASN as user identifier.\n The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
                     "title": "client asn",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client Autonomous System"
                 },
                 "client_ip": {
-                    "description": "Exclusive with [client_asn cookie_name http_header_name none query_param_key]\nx-displayName: \"Client IP Address\"\nUse client IP address as user identifier.",
+                    "description": "Exclusive with [client_asn cookie_name http_header_name none query_param_key]\n Use client IP address as user identifier.",
                     "title": "client ip address",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client IP Address"
                 },
                 "cookie_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip http_header_name none query_param_key]\nx-displayName: \"Cookie Name\"\nx-example: \"Session\"\nUse the HTTP cookie value for the given name as user identifier.",
-                    "title": "Cookie Name"
+                    "description": "Exclusive with [client_asn client_ip http_header_name none query_param_key]\n Use the HTTP cookie value for the given name as user identifier.\n\nExample: - \"Session\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "Cookie Name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Cookie Name",
+                    "x-ves-example": "Session",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "http_header_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip cookie_name none query_param_key]\nx-displayName: \"HTTP Header Name\"\nUse the HTTP header value for the given name as user identifier.",
-                    "title": "HTTP header name"
+                    "description": "Exclusive with [client_asn client_ip cookie_name none query_param_key]\n Use the HTTP header value for the given name as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "HTTP header name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "HTTP Header Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "none": {
-                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name query_param_key]\nx-displayName: \"No User Identifier\"\nDo not use any user identifier.",
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name query_param_key]\n Do not use any user identifier.",
                     "title": "none",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No User Identifier"
                 },
                 "query_param_key": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name none]\nx-displayName: \"Query Parameter Key\"\nUse the query parameter value for the given key as user identifier.",
-                    "title": "query param key"
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name none]\n Use the query parameter value for the given key as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "query param key",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Query Parameter Key",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 }
             }
         }

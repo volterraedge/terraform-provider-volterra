@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.API.Delete"
             },
@@ -2148,7 +2156,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal\nMalformed request\nMultiple decoding",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2179,6 +2187,38 @@ var APISwaggerJSON string = `{
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
             "x-ves-proto-enum": "ves.io.schema.app_firewall.AppFirewallViolationType"
+        },
+        "app_firewallAttackType": {
+            "type": "string",
+            "description": "x-displayName: \"Attack Types\"\nList of all Attack Types\n\n - ATTACK_TYPE_NONE: x-displayName: \"No attack\"\nATTACK_TYPE_NONE\n - ATTACK_TYPE_NON_BROWSER_CLIENT: x-displayName: \"Non-Browser Client\"\nATTACK_TYPE_NON_BROWSER_CLIENT\n - ATTACK_TYPE_OTHER_APPLICATION_ATTACKS: x-displayName: \"Other Application Attack\"\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\n - ATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE: x-displayName: \"Trojan Backdoor Spyware\"\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\n - ATTACK_TYPE_DETECTION_EVASION: x-displayName: \"Detection Evasion\"\nATTACK_TYPE_DETECTION_EVASION\n - ATTACK_TYPE_VULNERABILITY_SCAN: x-displayName: \"Vulnerability Scan\"\nATTACK_TYPE_VULNERABILITY_SCAN\n - ATTACK_TYPE_ABUSE_OF_FUNCTIONALITY: x-displayName: \"Abuse of Functionality\"\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\n - ATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS: x-displayName: \"Authentication Authorization Attack\"\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\n - ATTACK_TYPE_BUFFER_OVERFLOW: x-displayName: \"Buffer Overflow\"\nATTACK_TYPE_BUFFER_OVERFLOW\n - ATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION: x-displayName: \"Predictable Resource Location\"\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\n - ATTACK_TYPE_INFORMATION_LEAKAGE: x-displayName: \"Information Leakage\"\nATTACK_TYPE_INFORMATION_LEAKAGE\n - ATTACK_TYPE_DIRECTORY_INDEXING: x-displayName: \"Directory Indexing\"\nATTACK_TYPE_DIRECTORY_INDEXING\n - ATTACK_TYPE_PATH_TRAVERSAL: x-displayName: \"Path Traversal\"\nATTACK_TYPE_PATH_TRAVERSAL\n - ATTACK_TYPE_XPATH_INJECTION: x-displayName: \"XPath Injection\"\nATTACK_TYPE_XPATH_INJECTION\n - ATTACK_TYPE_LDAP_INJECTION: x-displayName: \"LDAP Injection\"\nATTACK_TYPE_LDAP_INJECTION\n - ATTACK_TYPE_SERVER_SIDE_CODE_INJECTION: x-displayName: \"Server-Side Code Injection\"\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\n - ATTACK_TYPE_COMMAND_EXECUTION: x-displayName: \"Command Execution\"\nATTACK_TYPE_COMMAND_EXECUTION\n - ATTACK_TYPE_SQL_INJECTION: x-displayName: \"SQL Injection\"\nATTACK_TYPE_SQL_INJECTION\n - ATTACK_TYPE_CROSS_SITE_SCRIPTING: x-displayName: \"Cross-Site Scripting\"\nATTACK_TYPE_CROSS_SITE_SCRIPTING\n - ATTACK_TYPE_DENIAL_OF_SERVICE: x-displayName: \"Denial of Service\"\nATTACK_TYPE_DENIAL_OF_SERVICE\n - ATTACK_TYPE_HTTP_PARSER_ATTACK: x-displayName: \"HTTP Parser Attack\"\nATTACK_TYPE_HTTP_PARSER_ATTACK\n - ATTACK_TYPE_SESSION_HIJACKING: x-displayName: \"Session Hijacking\"\nATTACK_TYPE_SESSION_HIJACKING\n - ATTACK_TYPE_HTTP_RESPONSE_SPLITTING: x-displayName: \"HTTP Response Splitting\"\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\n - ATTACK_TYPE_FORCEFUL_BROWSING: x-displayName: \"Forceful Browsing\"\nATTACK_TYPE_FORCEFUL_BROWSING",
+            "title": "AttackType",
+            "enum": [
+                "ATTACK_TYPE_NONE",
+                "ATTACK_TYPE_NON_BROWSER_CLIENT",
+                "ATTACK_TYPE_OTHER_APPLICATION_ATTACKS",
+                "ATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE",
+                "ATTACK_TYPE_DETECTION_EVASION",
+                "ATTACK_TYPE_VULNERABILITY_SCAN",
+                "ATTACK_TYPE_ABUSE_OF_FUNCTIONALITY",
+                "ATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS",
+                "ATTACK_TYPE_BUFFER_OVERFLOW",
+                "ATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION",
+                "ATTACK_TYPE_INFORMATION_LEAKAGE",
+                "ATTACK_TYPE_DIRECTORY_INDEXING",
+                "ATTACK_TYPE_PATH_TRAVERSAL",
+                "ATTACK_TYPE_XPATH_INJECTION",
+                "ATTACK_TYPE_LDAP_INJECTION",
+                "ATTACK_TYPE_SERVER_SIDE_CODE_INJECTION",
+                "ATTACK_TYPE_COMMAND_EXECUTION",
+                "ATTACK_TYPE_SQL_INJECTION",
+                "ATTACK_TYPE_CROSS_SITE_SCRIPTING",
+                "ATTACK_TYPE_DENIAL_OF_SERVICE",
+                "ATTACK_TYPE_HTTP_PARSER_ATTACK",
+                "ATTACK_TYPE_SESSION_HIJACKING",
+                "ATTACK_TYPE_HTTP_RESPONSE_SPLITTING",
+                "ATTACK_TYPE_FORCEFUL_BROWSING"
+            ],
+            "default": "ATTACK_TYPE_NONE"
         },
         "ioschemaEmpty": {
             "type": "object",
@@ -2228,6 +2268,18 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "policyAppFirewallAttackTypeContext": {
+            "type": "object",
+            "description": "x-displayName: \"App Firewall Attack Type Context\"\nApp Firewall Attack Type context changes to be applied for this request",
+            "title": "App Firewall Attack Type Context",
+            "properties": {
+                "exclude_attack_type": {
+                    "description": "x-displayName: \"Attack Type\"\nx-example: \"ATTACK_TYPE_SQL_INJECTION\"\nx-required\nApp Firewall Attack type",
+                    "title": "AttackType",
+                    "$ref": "#/definitions/app_firewallAttackType"
                 }
             }
         },
@@ -2331,14 +2383,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.ArgMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the argument is not present.",
+                    "description": "Exclusive with [check_present item]\n Check that the argument is not present.",
                     "title": "check_not_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Present"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the argument is present.",
+                    "description": "Exclusive with [check_not_present item]\n Check that the argument is present.",
                     "title": "check_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Present"
                 },
                 "invert_matcher": {
                     "type": "boolean",
@@ -2348,9 +2402,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\n Criteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
                     "title": "item",
-                    "$ref": "#/definitions/policyMatcherType"
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Match Values"
                 },
                 "name": {
                     "type": "string",
@@ -2466,14 +2521,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.CookieMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the cookie is not present.",
+                    "description": "Exclusive with [check_present item]\n Check that the cookie is not present.",
                     "title": "check_not_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Present"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the cookie is present.",
+                    "description": "Exclusive with [check_not_present item]\n Check that the cookie is present.",
                     "title": "check_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Present"
                 },
                 "invert_matcher": {
                     "type": "boolean",
@@ -2483,9 +2540,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\n Criteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
                     "title": "item",
-                    "$ref": "#/definitions/policyMatcherType"
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Match Values"
                 },
                 "name": {
                     "type": "string",
@@ -2830,7 +2888,7 @@ var APISwaggerJSON string = `{
         },
         "policyIPThreatCategory": {
             "type": "string",
-            "description": "The IP threat categories to use when a policy based IP threat category is configured.\n\n - SPAM_SOURCES: SPAM_SOURCES\n\nUncategorized\n - WINDOWS_EXPLOITS: WINDOWS_EXPLOITS\n\nWindows Exploits\n - WEB_ATTACKS: WEB_ATTACKS\n\nWeb Attacks\n - BOTNETS: BOTNETS\n\nBotnets\n - SCANNERS: SCANNERS\n\nScanners\n - REPUTATION: REPUTATION\n\nReputation\n - PHISHING: PHISHING\n\nPhishing\n - PROXY: PROXY\n\nAnonymous Proxies\n - MOBILE_THREATS: MOBILE_THREATS\n\nMobile Threats\n - TOR_PROXY: TOR_PROXY\n\nTor Proxy\n - DENIAL_OF_SERVICE: DENIAL_OF_SERVICE\n\nDenial of service\n - NETWORK: NETWORK\n\nNetwork Attacks",
+            "description": "The IP threat categories to use when a policy based IP threat category is configured.\n\n - SPAM_SOURCES: SPAM_SOURCES\n\nSpam Sources\n - WINDOWS_EXPLOITS: WINDOWS_EXPLOITS\n\nWindows Exploits\n - WEB_ATTACKS: WEB_ATTACKS\n\nWeb Attacks\n - BOTNETS: BOTNETS\n\nBotnets\n - SCANNERS: SCANNERS\n\nScanners\n - REPUTATION: REPUTATION\n\nReputation\n - PHISHING: PHISHING\n\nPhishing\n - PROXY: PROXY\n\nAnonymous Proxies\n - MOBILE_THREATS: MOBILE_THREATS\n\nMobile Threats\n - TOR_PROXY: TOR_PROXY\n\nTor Proxy\n - DENIAL_OF_SERVICE: DENIAL_OF_SERVICE\n\nDenial of service\n - NETWORK: NETWORK\n\nNetwork Attacks",
             "title": "IP Threat Category",
             "enum": [
                 "SPAM_SOURCES",
@@ -3369,19 +3427,25 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
                 "app_firewall_detection_control": {
-                    "description": "Exclusive with [none waf_skip_processing]\nx-displayName: \"App Firewall Detection Control\"\nApp Firewall detection changes to be applied for this request",
+                    "description": "Exclusive with [none waf_skip_processing]\n App Firewall detection changes to be applied for this request\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
                     "title": "App Firewall Detection control",
-                    "$ref": "#/definitions/policyAppFirewallDetectionControl"
+                    "$ref": "#/definitions/policyAppFirewallDetectionControl",
+                    "x-displayname": "App Firewall Detection Control",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required_one_nonzero_field": "true"
+                    }
                 },
                 "none": {
-                    "description": "Exclusive with [app_firewall_detection_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
+                    "description": "Exclusive with [app_firewall_detection_control waf_skip_processing]\n Perform normal App Firewall processing for this request",
                     "title": "Normal App Firewall Processing",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do not modify App Firewall Processing"
                 },
                 "waf_skip_processing": {
-                    "description": "Exclusive with [app_firewall_detection_control none]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
+                    "description": "Exclusive with [app_firewall_detection_control none]\n Skip all App Firewall processing for this request",
                     "title": "Skip App Firewall Processing",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip App Firewall Processing"
                 }
             }
         },
@@ -4416,14 +4480,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.HeaderMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the header is not present.",
+                    "description": "Exclusive with [check_present item]\n Check that the header is not present.",
                     "title": "check_not_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Present"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the header is present.",
+                    "description": "Exclusive with [check_not_present item]\n Check that the header is present.",
                     "title": "check_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Present"
                 },
                 "invert_matcher": {
                     "type": "boolean",
@@ -4433,9 +4499,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Header Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\n Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
                     "title": "item",
-                    "$ref": "#/definitions/policyMatcherType"
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Match Values"
                 },
                 "name": {
                     "type": "string",
@@ -4557,14 +4624,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.QueryParameterMatcherType",
             "properties": {
                 "check_not_present": {
-                    "description": "Exclusive with [check_present item]\nx-displayName: \"Not Present\"\nCheck that the query parameter is not present.",
+                    "description": "Exclusive with [check_present item]\n Check that the query parameter is not present.",
                     "title": "check_not_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Present"
                 },
                 "check_present": {
-                    "description": "Exclusive with [check_not_present item]\nx-displayName: \"Present\"\nCheck that the query parameter is present.",
+                    "description": "Exclusive with [check_not_present item]\n Check that the query parameter is present.",
                     "title": "check_present",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Present"
                 },
                 "invert_matcher": {
                     "type": "boolean",
@@ -4574,9 +4643,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Invert Query Parameter Matcher"
                 },
                 "item": {
-                    "description": "Exclusive with [check_not_present check_present]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the given query parameter. The match is successful if any of the values for the query parameter satisfies the\ncriteria in the matcher.",
+                    "description": "Exclusive with [check_not_present check_present]\n Criteria for matching the values for the given query parameter. The match is successful if any of the values for the query parameter satisfies the\n criteria in the matcher.",
                     "title": "item",
-                    "$ref": "#/definitions/policyMatcherType"
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Match Values"
                 },
                 "key": {
                     "type": "string",
@@ -4603,40 +4673,54 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.CreateSpecType",
             "properties": {
                 "allow_all_requests": {
-                    "description": "Exclusive with [allow_list deny_all_requests deny_list rule_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list rule_list]\n Allow all requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow All Requests"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list rule_list]\n",
-                    "$ref": "#/definitions/service_policySourceList"
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list rule_list]\n List of allowed sources for requests",
+                    "$ref": "#/definitions/service_policySourceList",
+                    "x-displayname": "Allowed Sources"
                 },
                 "any_server": {
-                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n Any Server",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Server"
                 },
                 "deny_all_requests": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_list rule_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list rule_list]\n Deny all requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny All Requests"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests rule_list]\n",
-                    "$ref": "#/definitions/service_policySourceList"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests rule_list]\n List of denied sources for requests",
+                    "$ref": "#/definitions/service_policySourceList",
+                    "x-displayname": "Denied Sources"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list]\n",
-                    "$ref": "#/definitions/service_policyRuleList"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list]\n List of custom rules",
+                    "$ref": "#/definitions/service_policyRuleList",
+                    "x-displayname": "Custom Rule List"
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n"
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\n of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\n service.\n The predicate evaluates to true if any of the actual names is the same as the expected server name.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Server Name",
+                    "x-ves-example": "database.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\n",
-                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                    "description": "Exclusive with [any_server server_name server_selector]\n A list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\n and the name of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the\n name of that service.\n This is a generalized version of the server name predicate that allows the same rule to be applicable to a set of server rather than a single server.\n The predicate evaluates to true if any of the server's actual names match any of the exact values or regular expressions in the server name matcher.",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "Group of Servers by Name"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\n A label selector that describes the expected set of servers. The labels associated with the server to which the API request is directed are used to evaluate\n the label expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. If the request is\n directed to a virtual K8s service, the K8s labels for the service are also included in the set of server labels.\n This is a more flexible and powerful version of the server name matcher predicate that allows a given policy to be applicable to a set of servers based on the\n server labels rather than being limited to relying on patterns in the server name.\n The predicate evaluates to true if the expressions in the label selector are true for the server labels.",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 }
             }
         },
@@ -4650,44 +4734,59 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.GetSpecType",
             "properties": {
                 "allow_all_requests": {
-                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n Allow all requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow All Requests"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n",
-                    "$ref": "#/definitions/service_policySourceList"
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n List of allowed sources for requests",
+                    "$ref": "#/definitions/service_policySourceList",
+                    "x-displayname": "Allowed Sources"
                 },
                 "any_server": {
-                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n Any Server",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Server"
                 },
                 "deny_all_requests": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n Deny all requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny All Requests"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n",
-                    "$ref": "#/definitions/service_policySourceList"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n List of denied sources for requests",
+                    "$ref": "#/definitions/service_policySourceList",
+                    "x-displayname": "Denied Sources"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n",
-                    "$ref": "#/definitions/service_policyLegacyRuleList"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n List of references to service_policy_rule objects",
+                    "$ref": "#/definitions/service_policyLegacyRuleList",
+                    "x-displayname": "Legacy Rule List"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n",
-                    "$ref": "#/definitions/service_policyRuleList"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n List of custom rules",
+                    "$ref": "#/definitions/service_policyRuleList",
+                    "x-displayname": "Custom Rule List"
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n"
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\n of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\n service.\n The predicate evaluates to true if any of the actual names is the same as the expected server name.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Server Name",
+                    "x-ves-example": "database.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\n",
-                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                    "description": "Exclusive with [any_server server_name server_selector]\n A list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\n and the name of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the\n name of that service.\n This is a generalized version of the server name predicate that allows the same rule to be applicable to a set of server rather than a single server.\n The predicate evaluates to true if any of the server's actual names match any of the exact values or regular expressions in the server name matcher.",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "Group of Servers by Name"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\n A label selector that describes the expected set of servers. The labels associated with the server to which the API request is directed are used to evaluate\n the label expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. If the request is\n directed to a virtual K8s service, the K8s labels for the service are also included in the set of server labels.\n This is a more flexible and powerful version of the server name matcher predicate that allows a given policy to be applicable to a set of servers based on the\n server labels rather than being limited to relying on patterns in the server name.\n The predicate evaluates to true if the expressions in the label selector are true for the server labels.",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 }
             }
         },
@@ -4701,54 +4800,69 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.GlobalSpecType",
             "properties": {
                 "allow_all_requests": {
-                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\nx-displayName: \"Allow All Requests\"\nAllow all requests",
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n Allow all requests",
                     "title": "allow_all_requests",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow All Requests"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\nx-displayName: \"Allowed Sources\"\nList of allowed sources for requests",
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n List of allowed sources for requests",
                     "title": "allow_list",
-                    "$ref": "#/definitions/service_policySourceList"
+                    "$ref": "#/definitions/service_policySourceList",
+                    "x-displayname": "Allowed Sources"
                 },
                 "any_server": {
-                    "description": "Exclusive with [server_name server_name_matcher server_selector]\nx-displayName: \"Any Server\"\nAny Server",
+                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n Any Server",
                     "title": "any",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Server"
                 },
                 "deny_all_requests": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\nx-displayName: \"Deny All Requests\"\nDeny all requests",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n Deny all requests",
                     "title": "deny_all_requests",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny All Requests"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\nx-displayName: \"Denied Sources\"\nList of denied sources for requests",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n List of denied sources for requests",
                     "title": "deny_list",
-                    "$ref": "#/definitions/service_policySourceList"
+                    "$ref": "#/definitions/service_policySourceList",
+                    "x-displayname": "Denied Sources"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\nx-displayName: \"Legacy Rule List\"\nList of references to service_policy_rule objects",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n List of references to service_policy_rule objects",
                     "title": "legacy_rule_list",
-                    "$ref": "#/definitions/service_policyLegacyRuleList"
+                    "$ref": "#/definitions/service_policyLegacyRuleList",
+                    "x-displayname": "Legacy Rule List"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\nx-displayName: \"Custom Rule List\"\nList of custom rules",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n List of custom rules",
                     "title": "rule_list",
-                    "$ref": "#/definitions/service_policyRuleList"
+                    "$ref": "#/definitions/service_policyRuleList",
+                    "x-displayname": "Custom Rule List"
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\nx-displayName: \"Server Name\"\nx-example: \"database.production.customer.volterra.us\"\nThe expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\nof the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\nservice.\nThe predicate evaluates to true if any of the actual names is the same as the expected server name.",
-                    "title": "server name"
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\n of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\n service.\n The predicate evaluates to true if any of the actual names is the same as the expected server name.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "server name",
+                    "maxLength": 256,
+                    "x-displayname": "Server Name",
+                    "x-ves-example": "database.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\nx-displayName: \"Group of Servers by Name\"\nA list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\nand the name of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the\nname of that service.\nThis is a generalized version of the server name predicate that allows the same rule to be applicable to a set of server rather than a single server.\nThe predicate evaluates to true if any of the server's actual names match any of the exact values or regular expressions in the server name matcher.",
+                    "description": "Exclusive with [any_server server_name server_selector]\n A list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\n and the name of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the\n name of that service.\n This is a generalized version of the server name predicate that allows the same rule to be applicable to a set of server rather than a single server.\n The predicate evaluates to true if any of the server's actual names match any of the exact values or regular expressions in the server name matcher.",
                     "title": "server name matcher",
-                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "Group of Servers by Name"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\nx-displayName: \"Group of Servers by Label Selector\"\nA label selector that describes the expected set of servers. The labels associated with the server to which the API request is directed are used to evaluate\nthe label expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. If the request is\ndirected to a virtual K8s service, the K8s labels for the service are also included in the set of server labels.\nThis is a more flexible and powerful version of the server name matcher predicate that allows a given policy to be applicable to a set of servers based on the\nserver labels rather than being limited to relying on patterns in the server name.\nThe predicate evaluates to true if the expressions in the label selector are true for the server labels.",
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\n A label selector that describes the expected set of servers. The labels associated with the server to which the API request is directed are used to evaluate\n the label expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. If the request is\n directed to a virtual K8s service, the K8s labels for the service are also included in the set of server labels.\n This is a more flexible and powerful version of the server name matcher predicate that allows a given policy to be applicable to a set of servers based on the\n server labels rather than being limited to relying on patterns in the server name.\n The predicate evaluates to true if the expressions in the label selector are true for the server labels.",
                     "title": "server selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 }
             }
         },
@@ -4762,44 +4876,59 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.ReplaceSpecType",
             "properties": {
                 "allow_all_requests": {
-                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n Allow all requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow All Requests"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n",
-                    "$ref": "#/definitions/service_policySourceList"
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n List of allowed sources for requests",
+                    "$ref": "#/definitions/service_policySourceList",
+                    "x-displayname": "Allowed Sources"
                 },
                 "any_server": {
-                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [server_name server_name_matcher server_selector]\n Any Server",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Server"
                 },
                 "deny_all_requests": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n Deny all requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny All Requests"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n",
-                    "$ref": "#/definitions/service_policySourceList"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n List of denied sources for requests",
+                    "$ref": "#/definitions/service_policySourceList",
+                    "x-displayname": "Denied Sources"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n",
-                    "$ref": "#/definitions/service_policyLegacyRuleList"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n List of references to service_policy_rule objects",
+                    "$ref": "#/definitions/service_policyLegacyRuleList",
+                    "x-displayname": "Legacy Rule List"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n",
-                    "$ref": "#/definitions/service_policyRuleList"
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n List of custom rules",
+                    "$ref": "#/definitions/service_policyRuleList",
+                    "x-displayname": "Custom Rule List"
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n"
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\n of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\n service.\n The predicate evaluates to true if any of the actual names is the same as the expected server name.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Server Name",
+                    "x-ves-example": "database.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\n",
-                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                    "description": "Exclusive with [any_server server_name server_selector]\n A list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\n and the name of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the\n name of that service.\n This is a generalized version of the server name predicate that allows the same rule to be applicable to a set of server rather than a single server.\n The predicate evaluates to true if any of the server's actual names match any of the exact values or regular expressions in the server name matcher.",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "Group of Servers by Name"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\n A label selector that describes the expected set of servers. The labels associated with the server to which the API request is directed are used to evaluate\n the label expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. If the request is\n directed to a virtual K8s service, the K8s labels for the service are also included in the set of server labels.\n This is a more flexible and powerful version of the server name matcher predicate that allows a given policy to be applicable to a set of servers based on the\n server labels rather than being limited to relying on patterns in the server name.\n The predicate evaluates to true if the expressions in the label selector are true for the server labels.",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 }
             }
         },
@@ -4826,19 +4955,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "any_asn": {
-                    "description": "Exclusive with [asn_list asn_matcher]\nx-displayName: \"Any Source ASN\"\nAny origin ASN.",
+                    "description": "Exclusive with [asn_list asn_matcher]\n Any origin ASN.",
                     "title": "any asn",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Source ASN"
                 },
                 "any_client": {
-                    "description": "Exclusive with [client_name client_name_matcher client_selector ip_threat_category_list]\nx-displayName: \"Any Client\"\nAny Client",
+                    "description": "Exclusive with [client_name client_name_matcher client_selector ip_threat_category_list]\n Any Client",
                     "title": "any ip",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Client"
                 },
                 "any_ip": {
-                    "description": "Exclusive with [ip_matcher ip_prefix_list]\nx-displayName: \"Any Source IP\"\nAny Source IP",
+                    "description": "Exclusive with [ip_matcher ip_prefix_list]\n Any Source IP",
                     "title": "any ip",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Source IP"
                 },
                 "api_group_matcher": {
                     "description": " The list of expected API group names to which the request API belongs. The actual list of API group names for the request API is determined from the api\n group and api group element configuration objects using the HTTP method and the HTTP path as inputs.\n The predicate evaluates to true if any of the actual API group names for the request is equal to any of the values in the api group matcher.",
@@ -4860,14 +4992,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "asn_list": {
-                    "description": "Exclusive with [any_asn asn_matcher]\nx-displayName: \"ASN List\"\nList of 4-byte ASN values.\nThe predicate evaluates to true if the origin ASN is present in the ASN list.",
+                    "description": "Exclusive with [any_asn asn_matcher]\n List of 4-byte ASN values.\n The predicate evaluates to true if the origin ASN is present in the ASN list.",
                     "title": "asn list",
-                    "$ref": "#/definitions/policyAsnMatchList"
+                    "$ref": "#/definitions/policyAsnMatchList",
+                    "x-displayname": "ASN List"
                 },
                 "asn_matcher": {
-                    "description": "Exclusive with [any_asn asn_list]\nx-displayName: \"BGP ASN Sets\"\nList of references to BGP ASN Set objects.\nThe predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.",
+                    "description": "Exclusive with [any_asn asn_list]\n List of references to BGP ASN Set objects.\n The predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.",
                     "title": "asn matcher",
-                    "$ref": "#/definitions/policyAsnMatcherType"
+                    "$ref": "#/definitions/policyAsnMatcherType",
+                    "x-displayname": "BGP ASN Sets"
                 },
                 "body_matcher": {
                     "description": " Predicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\n The actual request body value is extracted from the request API as a string.",
@@ -4877,18 +5011,26 @@ var APISwaggerJSON string = `{
                 },
                 "client_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_client client_name_matcher client_selector ip_threat_category_list]\nx-displayName: \"Client Name\"\nx-example: \"backend.production.customer.volterra.us\"\nThe expected name of the client invoking the request API.\nThe predicate evaluates to true if any of the actual names is the same as the expected client name.",
-                    "title": "client name"
+                    "description": "Exclusive with [any_client client_name_matcher client_selector ip_threat_category_list]\n The expected name of the client invoking the request API.\n The predicate evaluates to true if any of the actual names is the same as the expected client name.\n\nExample: - \"backend.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "client name",
+                    "maxLength": 256,
+                    "x-displayname": "Client Name",
+                    "x-ves-example": "backend.production.customer.volterra.us",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "client_name_matcher": {
-                    "description": "Exclusive with [any_client client_name client_selector ip_threat_category_list]\nx-displayName: \"Group of Clients by Name\"\nA list of exact values and/or regular expressions for the expected name of the client.\nThis is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\nThe predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
+                    "description": "Exclusive with [any_client client_name client_selector ip_threat_category_list]\n A list of exact values and/or regular expressions for the expected name of the client.\n This is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\n The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
                     "title": "client name matcher",
-                    "$ref": "#/definitions/policyMatcherType"
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Group of Clients by Name"
                 },
                 "client_selector": {
-                    "description": "Exclusive with [any_client client_name client_name_matcher ip_threat_category_list]\nx-displayName: \"Group of Clients by Label Selector\"\nA label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\nexpressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\nThis is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\nclient labels rather than being limited to relying on patterns in the client name.\nThe predicate evaluates to true if the expressions in the label selector are true for the client labels.",
+                    "description": "Exclusive with [any_client client_name client_name_matcher ip_threat_category_list]\n A label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\n expressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\n This is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\n client labels rather than being limited to relying on patterns in the client name.\n The predicate evaluates to true if the expressions in the label selector are true for the client labels.",
                     "title": "client selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Clients by Label Selector"
                 },
                 "cookie_matchers": {
                     "type": "array",
@@ -4937,19 +5079,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "HTTP Method"
                 },
                 "ip_matcher": {
-                    "description": "Exclusive with [any_ip ip_prefix_list]\nx-displayName: \"IP Prefix Sets\"\nList of references to IP Prefix Set objects.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
+                    "description": "Exclusive with [any_ip ip_prefix_list]\n List of references to IP Prefix Set objects.\n The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
                     "title": "ip matcher",
-                    "$ref": "#/definitions/policyIpMatcherType"
+                    "$ref": "#/definitions/policyIpMatcherType",
+                    "x-displayname": "IP Prefix Sets"
                 },
                 "ip_prefix_list": {
-                    "description": "Exclusive with [any_ip ip_matcher]\nx-displayName: \"IPv4 Prefix List\"\nList of IPv4 Prefixes values.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.",
+                    "description": "Exclusive with [any_ip ip_matcher]\n List of IPv4 Prefixes values.\n The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.",
                     "title": "ip prefix list",
-                    "$ref": "#/definitions/policyPrefixMatchList"
+                    "$ref": "#/definitions/policyPrefixMatchList",
+                    "x-displayname": "IPv4 Prefix List"
                 },
                 "ip_threat_category_list": {
-                    "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\nx-displayName: \"List of IP Threat Categories\"\nIP threat categories to choose from",
+                    "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
                     "title": "IP Threat Category List",
-                    "$ref": "#/definitions/service_policy_ruleIPThreatCategoryListType"
+                    "$ref": "#/definitions/service_policy_ruleIPThreatCategoryListType",
+                    "x-displayname": "List of IP Threat Categories"
                 },
                 "label_matcher": {
                     "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
@@ -5636,19 +5781,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_action_allow": {
-                    "description": "Exclusive with [default_action_deny default_action_next_policy]\nx-displayName: \"Allow\"\nAllow all requests",
+                    "description": "Exclusive with [default_action_deny default_action_next_policy]\n Allow all requests",
                     "title": "Allow",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow"
                 },
                 "default_action_deny": {
-                    "description": "Exclusive with [default_action_allow default_action_next_policy]\nx-displayName: \"Deny\"\nDeny all requests",
+                    "description": "Exclusive with [default_action_allow default_action_next_policy]\n Deny all requests",
                     "title": "Deny",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny"
                 },
                 "default_action_next_policy": {
-                    "description": "Exclusive with [default_action_allow default_action_deny]\nx-displayName: \"Next Policy\"\nEvaluate the next service policy",
+                    "description": "Exclusive with [default_action_allow default_action_deny]\n Evaluate the next service policy",
                     "title": "Next Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Next Policy"
                 },
                 "ip_prefix_set": {
                     "type": "array",
@@ -5757,9 +5905,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip_threat_categories": {
                     "type": "array",
-                    "description": " The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 15\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP Threat Categories",
-                    "maxItems": 10,
+                    "maxItems": 15,
                     "items": {
                         "$ref": "#/definitions/policyIPThreatCategory"
                     },
@@ -5767,7 +5915,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "10",
+                        "ves.io.schema.rules.repeated.max_items": "15",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

@@ -1583,6 +1583,11 @@ func (c *CustomDataK8SAPIInprocClient) ConfigMapList(ctx context.Context, in *Co
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1626,6 +1631,11 @@ func (c *CustomDataK8SAPIInprocClient) CronJobList(ctx context.Context, in *Cron
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.CronJobList"); rvFn != nil {
@@ -1671,6 +1681,11 @@ func (c *CustomDataK8SAPIInprocClient) DaemonSetList(ctx context.Context, in *Da
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1714,6 +1729,11 @@ func (c *CustomDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *D
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.DeploymentList"); rvFn != nil {
@@ -1759,6 +1779,11 @@ func (c *CustomDataK8SAPIInprocClient) EndpointsList(ctx context.Context, in *En
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.EndpointsList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1802,6 +1827,11 @@ func (c *CustomDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListR
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.JobList"); rvFn != nil {
@@ -1847,6 +1877,11 @@ func (c *CustomDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *Na
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.NamespaceList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1890,6 +1925,11 @@ func (c *CustomDataK8SAPIInprocClient) NodeList(ctx context.Context, in *NodeLis
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.NodeList"); rvFn != nil {
@@ -1935,6 +1975,11 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Con
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1978,6 +2023,11 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context,
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"); rvFn != nil {
@@ -2023,6 +2073,11 @@ func (c *CustomDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListR
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PodList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2066,6 +2121,11 @@ func (c *CustomDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *R
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"); rvFn != nil {
@@ -2111,6 +2171,11 @@ func (c *CustomDataK8SAPIInprocClient) SecretList(ctx context.Context, in *Secre
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.SecretList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2155,6 +2220,11 @@ func (c *CustomDataK8SAPIInprocClient) ServiceList(ctx context.Context, in *Serv
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ServiceList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -2198,6 +2268,11 @@ func (c *CustomDataK8SAPIInprocClient) StatefulSetList(ctx context.Context, in *
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"); rvFn != nil {
@@ -2335,7 +2410,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ConfigMapList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-configmaplist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"
             },
@@ -2427,7 +2502,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-EndpointsList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-endpointslist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList"
             },
@@ -2511,7 +2586,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-NamespaceList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-namespacelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.NamespaceList"
             },
@@ -2603,7 +2678,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ConfigMapList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-configmaplist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"
             },
@@ -2695,7 +2770,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-EndpointsList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-endpointslist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList"
             },
@@ -2787,7 +2862,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeClaimList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumeclaimlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"
             },
@@ -2879,7 +2954,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PodList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-podlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodList"
             },
@@ -2971,7 +3046,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-SecretList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-secretlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.SecretList"
             },
@@ -3063,7 +3138,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ServiceList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-servicelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ServiceList"
             },
@@ -3147,7 +3222,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-NodeList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-nodelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.NodeList"
             },
@@ -3239,7 +3314,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeClaimList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumeclaimlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"
             },
@@ -3323,7 +3398,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"
             },
@@ -3415,7 +3490,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PodList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-podlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodList"
             },
@@ -3507,7 +3582,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-SecretList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-secretlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.SecretList"
             },
@@ -3599,7 +3674,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ServiceList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-servicelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ServiceList"
             },
@@ -3691,7 +3766,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-DaemonSetList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-daemonsetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"
             },
@@ -3783,7 +3858,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-DeploymentList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-deploymentlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList"
             },
@@ -3875,7 +3950,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-DaemonSetList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-daemonsetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"
             },
@@ -3967,7 +4042,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-DeploymentList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-deploymentlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList"
             },
@@ -4059,7 +4134,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ReplicaSetList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-replicasetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"
             },
@@ -4151,7 +4226,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-StatefulSetList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-statefulsetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"
             },
@@ -4243,7 +4318,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ReplicaSetList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-replicasetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"
             },
@@ -4335,7 +4410,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-StatefulSetList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-statefulsetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"
             },
@@ -4427,7 +4502,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-JobList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-joblist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.JobList"
             },
@@ -4519,7 +4594,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-JobList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-joblist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.JobList"
             },
@@ -4611,7 +4686,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-CronJobList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-cronjoblist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.CronJobList"
             },
@@ -4703,7 +4778,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-CronJobList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-cronjoblist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.CronJobList"
             },

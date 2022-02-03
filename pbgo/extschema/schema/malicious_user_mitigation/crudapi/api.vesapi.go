@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.malicious_user_mitigation.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.malicious_user_mitigation.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.crudapi.API.Create"
             },
@@ -2768,10 +2774,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.GlobalSpecType",
             "properties": {
                 "mitigation_type": {
-                    "description": " Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
+                    "description": " Malicious user mitigation rules specifies the actions to be taken for users to different threat levels",
                     "title": "MaliciousUserMitigationType",
                     "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationType",
-                    "x-displayname": "Malicious User Mitigation Type"
+                    "x-displayname": "Mitigation Rules"
                 }
             }
         },
@@ -2780,41 +2786,34 @@ var APISwaggerJSON string = `{
             "description": "Supported actions that can be taken to mitigate malicious activity from a user",
             "title": "MaliciousUserMitigationAction",
             "x-displayname": "Malicious User Mitigation Action",
-            "x-ves-oneof-field-mitigation_action": "[\"alert_only\",\"block_temporarily\",\"captcha_challenge\",\"javascript_challenge\",\"none\"]",
+            "x-ves-oneof-field-mitigation_action": "[\"block_temporarily\",\"captcha_challenge\",\"javascript_challenge\"]",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationAction",
             "properties": {
-                "alert_only": {
-                    "description": "Exclusive with [block_temporarily captcha_challenge javascript_challenge none]\nx-displayName: \"Alert Only\"\nGenerate alert while not taking any invasive actions",
-                    "title": "Alert Only",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "block_temporarily": {
-                    "description": "Exclusive with [alert_only captcha_challenge javascript_challenge none]\nx-displayName: \"Block Temporarily\"\nBlock user temporarily. The blocking duration is determined by user activity.\nSettings for temporary blocking are derived from the virtual host that the request is sent to\nIf temporary blocking is not configured for the virtual host, a software default configuration is used",
+                    "description": "Exclusive with [captcha_challenge javascript_challenge]\n Block user temporarily. The blocking duration is determined by user activity.\n Settings for temporary blocking are derived from the virtual host that the request is sent to\n If temporary blocking is not configured for the virtual host, a software default configuration is used",
                     "title": "Block User Temporarily",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Block Temporarily"
                 },
                 "captcha_challenge": {
-                    "description": "Exclusive with [alert_only block_temporarily javascript_challenge none]\nx-displayName: \"Captcha Challenge\"\nSend a Captcha Challenge\nSettings for Captcha Challenge are derived from the virtual host that the request is sent to\nIf Captcha Challenge is not configured for the virtual host, a software default configuration is used",
+                    "description": "Exclusive with [block_temporarily javascript_challenge]\n Send a Captcha Challenge\n Settings for Captcha Challenge are derived from the virtual host that the request is sent to\n If Captcha Challenge is not configured for the virtual host, a software default configuration is used",
                     "title": "Captcha Challenge",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Captcha Challenge"
                 },
                 "javascript_challenge": {
-                    "description": "Exclusive with [alert_only block_temporarily captcha_challenge none]\nx-displayName: \"Javascript Challenge\"\nSend a Javascript Challenge. \nSettings for Javascript Challenge are derived from the virtual host that the request is sent to\nIf Javascript Challenge is not configured for the virtual host, a software default configuration is used",
+                    "description": "Exclusive with [block_temporarily captcha_challenge]\n Send a Javascript Challenge. \n Settings for Javascript Challenge are derived from the virtual host that the request is sent to\n If Javascript Challenge is not configured for the virtual host, a software default configuration is used",
                     "title": "Javascript Challenge",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "none": {
-                    "description": "Exclusive with [alert_only block_temporarily captcha_challenge javascript_challenge]\nx-displayName: \"No Action\"\nNo mitigation actions",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Javascript Challenge"
                 }
             }
         },
         "malicious_user_mitigationMaliciousUserMitigationRule": {
             "type": "object",
-            "description": "Specifies the mitigation action that will be taken for users detected to be at the specified threat level",
+            "description": "Malicious user mitigation rules specify the actions to be taken for users mapped to different threat levels",
             "title": "MaliciousUserMitigationRule",
-            "x-displayname": "Malicious User Mitigation Rule",
+            "x-displayname": "Mitigation Rule",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationRule",
             "properties": {
                 "mitigation_action": {
@@ -2841,20 +2840,20 @@ var APISwaggerJSON string = `{
         },
         "malicious_user_mitigationMaliciousUserMitigationType": {
             "type": "object",
-            "description": "Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\nA threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
+            "description": "Settings that specify the actions to be taken when malicious users are determined to be at different threat levels. \nUser's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat-level \nis assigned to each user. The settings defined in malicious user mitigation specify what mitigation actions to take \nfor user determined to be at different threat levels.",
             "title": "MaliciousUserMitigationType",
-            "x-displayname": "Malicious User Mitigation Type",
+            "x-displayname": "Malicious User Mitigation Settings",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationType",
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " Malicious user mitigation rules specify the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Define the threat levels and the corresponding mitigation actions to be taken\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "malicious user mitigation rules",
                     "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationRule"
                     },
-                    "x-displayname": "Malicious User Mitigation Rules",
+                    "x-displayname": "Rules",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2873,19 +2872,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserThreatLevel",
             "properties": {
                 "high": {
-                    "description": "Exclusive with [low medium]\nx-displayName: \"Threat Level High\"\nUser estimated to be high threat",
+                    "description": "Exclusive with [low medium]\n  ",
                     "title": "High",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "High"
                 },
                 "low": {
-                    "description": "Exclusive with [high medium]\nx-displayName: \"Threat Level Low\"\nUser estimated to be low threat",
+                    "description": "Exclusive with [high medium]\n  ",
                     "title": "Low",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Low"
                 },
                 "medium": {
-                    "description": "Exclusive with [high low]\nx-displayName: \"Threat Level Medium\"\nUser estimated to be medium threat",
+                    "description": "Exclusive with [high low]\n  ",
                     "title": "Medium",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Medium"
                 }
             }
         },

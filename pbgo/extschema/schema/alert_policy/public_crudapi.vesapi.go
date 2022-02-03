@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.alert_policy.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.alert_policy.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.Delete"
             },
@@ -2550,13 +2558,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact_match": {
                     "type": "string",
-                    "description": "Exclusive with [regex_match]\nx-displayName: \"Exact Match\"\nx-example: \"Major\"\nEquality match value for the label",
-                    "title": "Exact Match"
+                    "description": "Exclusive with [regex_match]\n Equality match value for the label\n\nExample: - \"Major\"-",
+                    "title": "Exact Match",
+                    "x-displayname": "Exact Match",
+                    "x-ves-example": "Major"
                 },
                 "regex_match": {
                     "type": "string",
-                    "description": "Exclusive with [exact_match]\nx-displayName: \"RegEx Match\"\nx-example: \"Major|Critical\"\nRegular expression match value for the label",
-                    "title": "Regex Match"
+                    "description": "Exclusive with [exact_match]\n Regular expression match value for the label\n\nExample: - \"Major|Critical\"-",
+                    "title": "Regex Match",
+                    "x-displayname": "RegEx Match",
+                    "x-ves-example": "Major|Critical"
                 }
             }
         },
@@ -2697,14 +2709,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_policy.NotificationParameters",
             "properties": {
                 "custom": {
-                    "description": "Exclusive with [default individual ves_io_group]\nx-displayName: \"Custom\"\nSpecify set of labels for grouping the alerts",
+                    "description": "Exclusive with [default individual ves_io_group]\n Specify set of labels for grouping the alerts",
                     "title": "Custom",
-                    "$ref": "#/definitions/alert_policyCustomGroupBy"
+                    "$ref": "#/definitions/alert_policyCustomGroupBy",
+                    "x-displayname": "Custom"
                 },
                 "default": {
-                    "description": "Exclusive with [custom individual ves_io_group]\nx-displayName: \"Default\"\nGroup the alerts by severity, group name and alert name",
+                    "description": "Exclusive with [custom individual ves_io_group]\n Group the alerts by severity, group name and alert name",
                     "title": "Default",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "group_interval": {
                     "type": "string",
@@ -2731,9 +2745,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "individual": {
-                    "description": "Exclusive with [custom default ves_io_group]\nx-displayName: \"Individual\"\nThis option disables grouping of alerts",
+                    "description": "Exclusive with [custom default ves_io_group]\n This option disables grouping of alerts",
                     "title": "Individual",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Individual"
                 },
                 "repeat_interval": {
                     "type": "string",
@@ -2748,9 +2763,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ves_io_group": {
-                    "description": "Exclusive with [custom default individual]\nx-displayName: \"Volterra Defined Group\"\nGroup the alerts by severity, group name and alert name",
+                    "description": "Exclusive with [custom default individual]\n Group the alerts by severity, group name and alert name",
                     "title": "Volterra Defined Group",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Volterra Defined Group"
                 }
             }
         },
@@ -2859,34 +2875,40 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_policy.Route",
             "properties": {
                 "alertname": {
-                    "description": "Exclusive with [alertname_regex any custom group severity]\nx-displayName: \"Matching Alertname\"\nMatches the alertname of the alert",
+                    "description": "Exclusive with [alertname_regex any custom group severity]\n Matches the alertname of the alert",
                     "title": "Alertname",
-                    "$ref": "#/definitions/alert_policyAlertName"
+                    "$ref": "#/definitions/alert_policyAlertName",
+                    "x-displayname": "Matching Alertname"
                 },
                 "alertname_regex": {
                     "type": "string",
-                    "description": "Exclusive with [alertname any custom group severity]\nx-displayName: \"Matching RegEx of Alertname\"\nRegular Expression match for the alertname",
-                    "title": "Alertname Regex Match"
+                    "description": "Exclusive with [alertname any custom group severity]\n Regular Expression match for the alertname",
+                    "title": "Alertname Regex Match",
+                    "x-displayname": "Matching RegEx of Alertname"
                 },
                 "any": {
-                    "description": "Exclusive with [alertname alertname_regex custom group severity]\nx-displayName: \"Any\"\nMatches all alerts in the namespace",
+                    "description": "Exclusive with [alertname alertname_regex custom group severity]\n Matches all alerts in the namespace",
                     "title": "Any",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
                 },
                 "custom": {
-                    "description": "Exclusive with [alertname alertname_regex any group severity]\nx-displayName: \"Matching Custom Criteria\"\nA set of custom equality/regex matchers an alert has to fulfill to match the route.",
+                    "description": "Exclusive with [alertname alertname_regex any group severity]\n A set of custom equality/regex matchers an alert has to fulfill to match the route.",
                     "title": "Custom Match",
-                    "$ref": "#/definitions/alert_policyCustomMatcher"
+                    "$ref": "#/definitions/alert_policyCustomMatcher",
+                    "x-displayname": "Matching Custom Criteria"
                 },
                 "dont_send": {
-                    "description": "Exclusive with [send]\nx-displayName: \"Do Not Send\"\nDo not send the alert",
+                    "description": "Exclusive with [send]\n Do not send the alert",
                     "title": "Do Not Send",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Send"
                 },
                 "group": {
-                    "description": "Exclusive with [alertname alertname_regex any custom severity]\nx-displayName: \"Matching Group\"\nMatches the group name of the alert",
+                    "description": "Exclusive with [alertname alertname_regex any custom severity]\n Matches the group name of the alert",
                     "title": "Group",
-                    "$ref": "#/definitions/alert_policyGroupMatcher"
+                    "$ref": "#/definitions/alert_policyGroupMatcher",
+                    "x-displayname": "Matching Group"
                 },
                 "notification_parameters": {
                     "description": " Notification parameters to decide how and when the alerts should be sent to the receivers.\n If the notification_config is not specified for the route, then the route inherits the config from the\n notification_config defined in the policy.",
@@ -2895,14 +2917,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Policy Rule Notification Parameters"
                 },
                 "send": {
-                    "description": "Exclusive with [dont_send]\nx-displayName: \"Send\"\nSend the alert",
+                    "description": "Exclusive with [dont_send]\n Send the alert",
                     "title": "Send",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Send"
                 },
                 "severity": {
-                    "description": "Exclusive with [alertname alertname_regex any custom group]\nx-displayName: \"Matching Severity\"\nMatches the severity level of the alert",
+                    "description": "Exclusive with [alertname alertname_regex any custom group]\n Matches the severity level of the alert",
                     "title": "Severity",
-                    "$ref": "#/definitions/alert_policySeverityMatcher"
+                    "$ref": "#/definitions/alert_policySeverityMatcher",
+                    "x-displayname": "Matching Severity"
                 }
             }
         },

@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.azure_vnet_site.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.azure_vnet_site.API.Replace"); rvFn != nil {
@@ -2139,59 +2147,70 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARReplaceType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "inside_static_routes": {
-                    "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
+                    "description": "Exclusive with [no_inside_static_routes]\n Manage static routes for inside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_inside_static_routes": {
-                    "description": "Exclusive with [inside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for inside network.",
+                    "description": "Exclusive with [inside_static_routes]\n Static Routes disabled for inside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -2208,14 +2227,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "azure_certified_hw": {
                     "type": "string",
@@ -2232,44 +2253,52 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "inside_static_routes": {
-                    "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
+                    "description": "Exclusive with [no_inside_static_routes]\n Manage static routes for inside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_inside_static_routes": {
-                    "description": "Exclusive with [inside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for inside network.",
+                    "description": "Exclusive with [inside_static_routes]\n Static Routes disabled for inside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "node": {
                     "description": " Ingress/Egress Gateway (Two Interface) Node information.",
@@ -2278,9 +2307,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Ingress/Egress Gateway (Two Interface) Node information"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -2297,59 +2327,70 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwReplaceType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "inside_static_routes": {
-                    "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
+                    "description": "Exclusive with [no_inside_static_routes]\n Manage static routes for inside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_inside_static_routes": {
-                    "description": "Exclusive with [inside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for inside network.",
+                    "description": "Exclusive with [inside_static_routes]\n Static Routes disabled for inside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -2366,14 +2407,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "az_nodes": {
                     "type": "array",
@@ -2402,49 +2445,58 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "inside_static_routes": {
-                    "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
+                    "description": "Exclusive with [no_inside_static_routes]\n Manage static routes for inside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_inside_static_routes": {
-                    "description": "Exclusive with [inside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for inside network.",
+                    "description": "Exclusive with [inside_static_routes]\n Static Routes disabled for inside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -2540,49 +2592,58 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARReplaceType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -2600,14 +2661,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "azure_certified_hw": {
                     "type": "string",
@@ -2624,49 +2687,58 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_storage": {
-                    "description": "Exclusive with [storage_class_list]\nx-displayName: \"Default Storage Class\"\nUse standard storage class configured as AWS EBS",
+                    "description": "Exclusive with [storage_class_list]\n Use standard storage class configured as AWS EBS",
                     "title": "Default Storage Class",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Storage Class"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "k8s_cluster": {
-                    "description": "Exclusive with [no_k8s_cluster]\nx-displayName: \"Enable Site Local K8s API access\"\nSite Local K8s API access is enabled, using k8s_cluster object",
+                    "description": "Exclusive with [no_k8s_cluster]\n Site Local K8s API access is enabled, using k8s_cluster object",
                     "title": "Enable Site Local K8s API access",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Site Local K8s API access"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_k8s_cluster": {
-                    "description": "Exclusive with [k8s_cluster]\nx-displayName: \"Disable Site Local K8s API access\"\nSite Local K8s API access is disabled",
+                    "description": "Exclusive with [k8s_cluster]\n Site Local K8s API access is disabled",
                     "title": "Disable Site Local K8s API access",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local K8s API access"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "node": {
                     "description": " Only Single AZ or Three AZ(s) nodes are supported currently.",
@@ -2675,14 +2747,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Ingress Gateway (One Interface) Node information"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 },
                 "storage_class_list": {
-                    "description": "Exclusive with [default_storage]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes for site",
+                    "description": "Exclusive with [default_storage]\n Add additional custom storage classes in kubernetes for site",
                     "title": "Custom Storage Class",
-                    "$ref": "#/definitions/viewsStorageClassListType"
+                    "$ref": "#/definitions/viewsStorageClassListType",
+                    "x-displayname": "Add Custom Storage Class"
                 }
             }
         },
@@ -2698,49 +2772,58 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterReplaceType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 }
             }
         },
@@ -2758,14 +2841,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
-                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "description": "Exclusive with [no_network_policy]\n Network Policies active for  this site.",
                     "title": "Manage Network Policy",
-                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
+                    "x-displayname": "Active Network Policies"
                 },
                 "az_nodes": {
                     "type": "array",
@@ -2794,59 +2879,70 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_storage": {
-                    "description": "Exclusive with [storage_class_list]\nx-displayName: \"Default Storage Class\"\nUse standard storage class configured as AWS EBS",
+                    "description": "Exclusive with [storage_class_list]\n Use standard storage class configured as AWS EBS",
                     "title": "Default Storage Class",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Storage Class"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
                 "global_network_list": {
-                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
-                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
+                    "x-displayname": "Connect Global Networks"
                 },
                 "k8s_cluster": {
-                    "description": "Exclusive with [no_k8s_cluster]\nx-displayName: \"Enable Site Local K8s API access\"\nSite Local K8s API access is enabled, using k8s_cluster object",
+                    "description": "Exclusive with [no_k8s_cluster]\n Site Local K8s API access is enabled, using k8s_cluster object",
                     "title": "Enable Site Local K8s API access",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Site Local K8s API access"
                 },
                 "no_forward_proxy": {
-                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\n Disable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
                 },
                 "no_global_network": {
-                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "description": "Exclusive with [global_network_list]\n No global network to connect",
                     "title": "Do not Connect Global Networks",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Connect Global Networks"
                 },
                 "no_k8s_cluster": {
-                    "description": "Exclusive with [k8s_cluster]\nx-displayName: \"Disable Site Local K8s API access\"\nSite Local K8s API access is disabled",
+                    "description": "Exclusive with [k8s_cluster]\n Site Local K8s API access is disabled",
                     "title": "Disable Site Local K8s API access",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local K8s API access"
                 },
                 "no_network_policy": {
-                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "description": "Exclusive with [active_network_policies]\n Network Policy is disabled for this site.",
                     "title": "Do Not Manage Network Policy",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Network Policy"
                 },
                 "no_outside_static_routes": {
-                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "description": "Exclusive with [outside_static_routes]\n Static Routes disabled for outside network.",
                     "title": "Do Not Manage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Static Routes"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
-                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType",
+                    "x-displayname": "Manage Static routes"
                 },
                 "storage_class_list": {
-                    "description": "Exclusive with [default_storage]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes for site",
+                    "description": "Exclusive with [default_storage]\n Add additional custom storage classes in kubernetes for site",
                     "title": "Custom Storage Class",
-                    "$ref": "#/definitions/viewsStorageClassListType"
+                    "$ref": "#/definitions/viewsStorageClassListType",
+                    "x-displayname": "Add Custom Storage Class"
                 }
             }
         },
@@ -3626,14 +3722,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -3647,14 +3745,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpSubnetType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Subnet\"\nIPv4 Subnet Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Subnet Address",
                     "title": "IPv4 Subnet",
-                    "$ref": "#/definitions/schemaIpv4SubnetType"
+                    "$ref": "#/definitions/schemaIpv4SubnetType",
+                    "x-displayname": "IPv4 Subnet"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Subnet\"\nIPv6 Subnet Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Subnet Address",
                     "title": "IPv6 Subnet",
-                    "$ref": "#/definitions/schemaIpv6SubnetType"
+                    "$ref": "#/definitions/schemaIpv6SubnetType",
+                    "x-displayname": "IPv6 Subnet"
                 }
             }
         },
@@ -4827,14 +4927,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.AzureSubnetChoiceType",
             "properties": {
                 "subnet": {
-                    "description": "Exclusive with [subnet_param]\nx-displayName: \"Existing Subnet\"\nInformation about existing subnet.",
+                    "description": "Exclusive with [subnet_param]\n Information about existing subnet.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Existing Subnet",
-                    "$ref": "#/definitions/viewsAzureSubnetType"
+                    "$ref": "#/definitions/viewsAzureSubnetType",
+                    "x-displayname": "Existing Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "subnet_param": {
-                    "description": "Exclusive with [subnet]\nx-displayName: \"New Subnet\"\nParameters for creating new subnet.",
+                    "description": "Exclusive with [subnet]\n Parameters for creating new subnet.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "New Subnet",
-                    "$ref": "#/definitions/viewsCloudSubnetParamType"
+                    "$ref": "#/definitions/viewsCloudSubnetParamType",
+                    "x-displayname": "New Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -4862,13 +4970,19 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_resource_grp": {
                     "type": "string",
-                    "description": "Exclusive with [vnet_resource_group]\nx-displayName: \"Resource Group Name\"\nSpecify name of Resource Group",
-                    "title": "subnet_resource_grp"
+                    "description": "Exclusive with [vnet_resource_group]\n Specify name of Resource Group\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "subnet_resource_grp",
+                    "maxLength": 64,
+                    "x-displayname": "Resource Group Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 },
                 "vnet_resource_group": {
-                    "description": "Exclusive with [subnet_resource_grp]\nx-displayName: \"Vnet Resource Group\"\nUse the same Resource Group as the Vnet",
+                    "description": "Exclusive with [subnet_resource_grp]\n Use the same Resource Group as the Vnet",
                     "title": "vnet_resource_group",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Vnet Resource Group"
                 }
             }
         },
@@ -4881,14 +4995,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetChoiceType",
             "properties": {
                 "existing_vnet": {
-                    "description": "Exclusive with [new_vnet]\nx-displayName: \"Existing Vnet\"\nInformation about existing Vnet",
+                    "description": "Exclusive with [new_vnet]\n Information about existing Vnet",
                     "title": "Existing VPC",
-                    "$ref": "#/definitions/viewsAzureVnetType"
+                    "$ref": "#/definitions/viewsAzureVnetType",
+                    "x-displayname": "Existing Vnet"
                 },
                 "new_vnet": {
-                    "description": "Exclusive with [existing_vnet]\nx-displayName: \"New Vnet Parameters\"\nParameters for creating new Vnet",
+                    "description": "Exclusive with [existing_vnet]\n Parameters for creating new Vnet",
                     "title": "New VPC",
-                    "$ref": "#/definitions/viewsAzureVnetParamsType"
+                    "$ref": "#/definitions/viewsAzureVnetParamsType",
+                    "x-displayname": "New Vnet Parameters"
                 }
             }
         },
@@ -4982,14 +5098,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetParamsType",
             "properties": {
                 "autogenerate": {
-                    "description": "Exclusive with [name]\nx-displayName: \"Autogenerate Vnet Name\"\nAutogenerate the Vnet Name",
+                    "description": "Exclusive with [name]\n Autogenerate the Vnet Name",
                     "title": "autogenerate",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Autogenerate Vnet Name"
                 },
                 "name": {
                     "type": "string",
-                    "description": "Exclusive with [autogenerate]\nx-displayName: \"Choose Vnet Name\"\nSpecify the Vnet Name",
-                    "title": "name"
+                    "description": "Exclusive with [autogenerate]\n Specify the Vnet Name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Choose Vnet Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "primary_ipv4": {
                     "type": "string",
@@ -5214,14 +5338,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.GlobalNetworkConnectionType",
             "properties": {
                 "sli_to_global_dr": {
-                    "description": "Exclusive with [slo_to_global_dr]\nx-displayName: \"Direct, Site Local Inside to a Global Network\"\nSite local inside is connected directly to a given global network",
+                    "description": "Exclusive with [slo_to_global_dr]\n Site local inside is connected directly to a given global network",
                     "title": "Site Local Inside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Inside to a Global Network"
                 },
                 "slo_to_global_dr": {
-                    "description": "Exclusive with [sli_to_global_dr]\nx-displayName: \"Direct, Site Local Outside to a Global Network\"\nSite local outside is connected directly to a given global network",
+                    "description": "Exclusive with [sli_to_global_dr]\n Site local outside is connected directly to a given global network",
                     "title": "Site Local Outside to a Global Network\"",
-                    "$ref": "#/definitions/viewsGlobalConnectorType"
+                    "$ref": "#/definitions/viewsGlobalConnectorType",
+                    "x-displayname": "Direct, Site Local Outside to a Global Network"
                 }
             }
         },
@@ -5235,14 +5361,21 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.OperatingSystemType",
             "properties": {
                 "default_os_version": {
-                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Latest OS Version\"\nWill assign latest available OS version",
+                    "description": "Exclusive with [operating_system_version]\n Will assign latest available OS version",
                     "title": "Default OS Version",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Latest OS Version"
                 },
                 "operating_system_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.",
-                    "title": "Operating System Version"
+                    "description": "Exclusive with [default_os_version]\n Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.\n\nExample: - \"7.2009.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Operating System Version",
+                    "maxLength": 20,
+                    "x-displayname": "Operating System Version",
+                    "x-ves-example": "7.2009.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 }
             }
         },
@@ -5281,14 +5414,20 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.SiteStaticRoutesType",
             "properties": {
                 "custom_static_route": {
-                    "description": "Exclusive with [simple_static_route]\nx-displayName: \"Custom Static Route\"\nUse Custom static route to configure all advanced options",
+                    "description": "Exclusive with [simple_static_route]\n Use Custom static route to configure all advanced options",
                     "title": "Custom Static Route",
-                    "$ref": "#/definitions/schemaStaticRouteType"
+                    "$ref": "#/definitions/schemaStaticRouteType",
+                    "x-displayname": "Custom Static Route"
                 },
                 "simple_static_route": {
                     "type": "string",
-                    "description": "Exclusive with [custom_static_route]\nx-displayName: \"Simple Static Route\"\nx-example: \"10.5.1.0/24\"\nUse simple static route for prefix pointing to single interface in the network",
-                    "title": "Simple Static Route"
+                    "description": "Exclusive with [custom_static_route]\n Use simple static route for prefix pointing to single interface in the network\n\nExample: - \"10.5.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "title": "Simple Static Route",
+                    "x-displayname": "Simple Static Route",
+                    "x-ves-example": "10.5.1.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4_prefix": "true"
+                    }
                 }
             }
         },
@@ -5359,9 +5498,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Storage Class"
                 },
                 "openebs_enterprise": {
-                    "description": "Exclusive with []\nx-displayName: \"OpenEBS Enterprise\"\nStorage class Device configuration for OpenEBS Enterprise",
+                    "description": "Exclusive with []\n Storage class Device configuration for OpenEBS Enterprise",
                     "title": "OpenEBS Enterprise",
-                    "$ref": "#/definitions/viewsStorageClassOpenebsEnterpriseType"
+                    "$ref": "#/definitions/viewsStorageClassOpenebsEnterpriseType",
+                    "x-displayname": "OpenEBS Enterprise"
                 },
                 "storage_class_name": {
                     "type": "string",
@@ -5387,14 +5527,21 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
             "properties": {
                 "default_sw_version": {
-                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Latest SW Version\"\nWill assign latest available SW version",
+                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version",
                     "title": "Default SW Version",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Latest SW Version"
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
-                    "title": "Volterra Software Version"
+                    "description": "Exclusive with [default_sw_version]\n Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "Volterra Software Version",
+                    "maxLength": 20,
+                    "x-displayname": "Volterra Software Version",
+                    "x-ves-example": "crt-20210329-1002",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20"
+                    }
                 }
             }
         },
@@ -5422,19 +5569,31 @@ var APISwaggerJSON string = `{
                 },
                 "alternate_region": {
                     "type": "string",
-                    "description": "Exclusive with [azure_region]\n"
+                    "description": "Exclusive with [azure_region]\n Name of the azure region which does not support availability zones.\n\nExample: - \"northcentralus\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"northcentralus\\\",\\\"koreacentral\\\",\\\"centralindia\\\",\\\"southindia\\\",\\\"australiacentral2\\\",\\\"australiacentral\\\",\\\"southafricanorth\\\",\\\"norwayeast\\\",\\\"swedencentral\\\",\\\"switzerlandnorth\\\",\\\"uaenorth\\\",\\\"uaecentral\\\",\\\"switzerlandwest\\\",\\\"norwaywest\\\",\\\"germanynorth\\\",\\\"francesouth\\\",\\\"canadaeast\\\",\\\"koreasouth\\\"]\n",
+                    "x-displayname": "Alternate Azure Region Name",
+                    "x-ves-example": "northcentralus",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"northcentralus\\\",\\\"koreacentral\\\",\\\"centralindia\\\",\\\"southindia\\\",\\\"australiacentral2\\\",\\\"australiacentral\\\",\\\"southafricanorth\\\",\\\"norwayeast\\\",\\\"swedencentral\\\",\\\"switzerlandnorth\\\",\\\"uaenorth\\\",\\\"uaecentral\\\",\\\"switzerlandwest\\\",\\\"norwaywest\\\",\\\"germanynorth\\\",\\\"francesouth\\\",\\\"canadaeast\\\",\\\"koreasouth\\\"]"
+                    }
                 },
                 "assisted": {
-                    "description": "Exclusive with [azure_cred]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [azure_cred]\n In assisted deployment get Azure parameters generated in status of this objects and run volterra provided terraform script.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Assisted Deployment"
                 },
                 "azure_cred": {
-                    "description": "Exclusive with [assisted]\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "description": "Exclusive with [assisted]\n Reference to Azure credentials for automatic deployment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Automatic Deployment"
                 },
                 "azure_region": {
                     "type": "string",
-                    "description": "Exclusive with [alternate_region]\n"
+                    "description": "Exclusive with [alternate_region]\n Name of the azure region which supports availability zones.\n\nExample: - \"eastus\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"southeastasia\\\",\\\"centralus\\\",\\\"eastus\\\",\\\"eastus2\\\",\\\"southcentralus\\\",\\\"northeurope\\\",\\\"westeurope\\\",\\\"japaneast\\\",\\\"australiaeast\\\",\\\"canadacentral\\\",\\\"uksouth\\\",\\\"westus2\\\",\\\"westus3\\\",\\\"francecentral\\\",\\\"southafricanorth\\\",\\\"brazilsouth\\\",\\\"germanywestcentral\\\"]\n",
+                    "x-displayname": "Recommended Azure Region Name",
+                    "x-ves-example": "eastus",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"southeastasia\\\",\\\"centralus\\\",\\\"eastus\\\",\\\"eastus2\\\",\\\"southcentralus\\\",\\\"northeurope\\\",\\\"westeurope\\\",\\\"japaneast\\\",\\\"australiaeast\\\",\\\"canadacentral\\\",\\\"uksouth\\\",\\\"westus2\\\",\\\"westus3\\\",\\\"francecentral\\\",\\\"southafricanorth\\\",\\\"brazilsouth\\\",\\\"germanywestcentral\\\"]"
+                    }
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
@@ -5452,28 +5611,34 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType"
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) on Recommended Region"
                 },
                 "ingress_egress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) on Alternate Region"
                 },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType",
+                    "x-displayname": "Ingress Gateway (One Interface) on Recommended Region"
                 },
                 "ingress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType",
+                    "x-displayname": "Ingress Gateway (One Interface) on Alternate Region"
                 },
                 "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Logs Streaming"
                 },
                 "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Logs Streaming"
                 },
                 "machine_type": {
                     "type": "string",
@@ -5486,13 +5651,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_worker_nodes": {
-                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n Worker nodes is set to zero",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Worker Nodes"
                 },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 21\n",
+                    "format": "int64",
+                    "x-displayname": "Desired Worker Nodes Per AZ",
+                    "x-ves-example": "2",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "21"
+                    }
                 },
                 "os": {
                     "description": " Operating System Details",
@@ -5552,8 +5724,14 @@ var APISwaggerJSON string = `{
                 },
                 "total_nodes": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n Total number of worker nodes to be deployed across all AZ's used in the Site\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 61\n",
+                    "format": "int64",
+                    "x-displayname": "Total Number of Worker Nodes for a Site",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "61"
+                    }
                 },
                 "vnet": {
                     "description": " Choice of using existing Vnet or create new Vnet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -5565,12 +5743,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType",
+                    "x-displayname": "Voltstack Cluster (One Interface) on Recommended Region"
                 },
                 "voltstack_cluster_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType",
+                    "x-displayname": "Voltstack Cluster (One Interface) on Alternate Region"
                 }
             }
         },
@@ -5598,19 +5778,31 @@ var APISwaggerJSON string = `{
                 },
                 "alternate_region": {
                     "type": "string",
-                    "description": "Exclusive with [azure_region]\n"
+                    "description": "Exclusive with [azure_region]\n Name of the azure region which does not support availability zones.\n\nExample: - \"northcentralus\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"northcentralus\\\",\\\"koreacentral\\\",\\\"centralindia\\\",\\\"southindia\\\",\\\"australiacentral2\\\",\\\"australiacentral\\\",\\\"southafricanorth\\\",\\\"norwayeast\\\",\\\"swedencentral\\\",\\\"switzerlandnorth\\\",\\\"uaenorth\\\",\\\"uaecentral\\\",\\\"switzerlandwest\\\",\\\"norwaywest\\\",\\\"germanynorth\\\",\\\"francesouth\\\",\\\"canadaeast\\\",\\\"koreasouth\\\"]\n",
+                    "x-displayname": "Alternate Azure Region Name",
+                    "x-ves-example": "northcentralus",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"northcentralus\\\",\\\"koreacentral\\\",\\\"centralindia\\\",\\\"southindia\\\",\\\"australiacentral2\\\",\\\"australiacentral\\\",\\\"southafricanorth\\\",\\\"norwayeast\\\",\\\"swedencentral\\\",\\\"switzerlandnorth\\\",\\\"uaenorth\\\",\\\"uaecentral\\\",\\\"switzerlandwest\\\",\\\"norwaywest\\\",\\\"germanynorth\\\",\\\"francesouth\\\",\\\"canadaeast\\\",\\\"koreasouth\\\"]"
+                    }
                 },
                 "assisted": {
-                    "description": "Exclusive with [azure_cred]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [azure_cred]\n In assisted deployment get Azure parameters generated in status of this objects and run volterra provided terraform script.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Assisted Deployment"
                 },
                 "azure_cred": {
-                    "description": "Exclusive with [assisted]\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "description": "Exclusive with [assisted]\n Reference to Azure credentials for automatic deployment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Automatic Deployment"
                 },
                 "azure_region": {
                     "type": "string",
-                    "description": "Exclusive with [alternate_region]\n"
+                    "description": "Exclusive with [alternate_region]\n Name of the azure region which supports availability zones.\n\nExample: - \"eastus\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"southeastasia\\\",\\\"centralus\\\",\\\"eastus\\\",\\\"eastus2\\\",\\\"southcentralus\\\",\\\"northeurope\\\",\\\"westeurope\\\",\\\"japaneast\\\",\\\"australiaeast\\\",\\\"canadacentral\\\",\\\"uksouth\\\",\\\"westus2\\\",\\\"westus3\\\",\\\"francecentral\\\",\\\"southafricanorth\\\",\\\"brazilsouth\\\",\\\"germanywestcentral\\\"]\n",
+                    "x-displayname": "Recommended Azure Region Name",
+                    "x-ves-example": "eastus",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"southeastasia\\\",\\\"centralus\\\",\\\"eastus\\\",\\\"eastus2\\\",\\\"southcentralus\\\",\\\"northeurope\\\",\\\"westeurope\\\",\\\"japaneast\\\",\\\"australiaeast\\\",\\\"canadacentral\\\",\\\"uksouth\\\",\\\"westus2\\\",\\\"westus3\\\",\\\"francecentral\\\",\\\"southafricanorth\\\",\\\"brazilsouth\\\",\\\"germanywestcentral\\\"]"
+                    }
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
@@ -5628,28 +5820,34 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType"
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) on Recommended Region"
                 },
                 "ingress_egress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) on Alternate Region"
                 },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType",
+                    "x-displayname": "Ingress Gateway (One Interface) on Recommended Region"
                 },
                 "ingress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType",
+                    "x-displayname": "Ingress Gateway (One Interface) on Alternate Region"
                 },
                 "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Logs Streaming"
                 },
                 "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Logs Streaming"
                 },
                 "machine_type": {
                     "type": "string",
@@ -5662,13 +5860,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_worker_nodes": {
-                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n Worker nodes is set to zero",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Worker Nodes"
                 },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 21\n",
+                    "format": "int64",
+                    "x-displayname": "Desired Worker Nodes Per AZ",
+                    "x-ves-example": "2",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "21"
+                    }
                 },
                 "resource_group": {
                     "type": "string",
@@ -5722,8 +5927,14 @@ var APISwaggerJSON string = `{
                 },
                 "total_nodes": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n Total number of worker nodes to be deployed across all AZ's used in the Site\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 61\n",
+                    "format": "int64",
+                    "x-displayname": "Total Number of Worker Nodes for a Site",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "61"
+                    }
                 },
                 "vnet": {
                     "description": " Choice of using existing Vnet or create new Vnet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -5735,12 +5946,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType",
+                    "x-displayname": "Voltstack Cluster (One Interface) on Recommended Region"
                 },
                 "voltstack_cluster_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType"
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType",
+                    "x-displayname": "Voltstack Cluster (One Interface) on Alternate Region"
                 }
             }
         },
@@ -5769,23 +5982,35 @@ var APISwaggerJSON string = `{
                 },
                 "alternate_region": {
                     "type": "string",
-                    "description": "Exclusive with [azure_region]\nx-displayName: \"Alternate Azure Region Name\"\nx-example: \"northcentralus\"\nName of the azure region which does not support availability zones.",
-                    "title": "Alternate Azure Region Name"
+                    "description": "Exclusive with [azure_region]\n Name of the azure region which does not support availability zones.\n\nExample: - \"northcentralus\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"northcentralus\\\",\\\"koreacentral\\\",\\\"centralindia\\\",\\\"southindia\\\",\\\"australiacentral2\\\",\\\"australiacentral\\\",\\\"southafricanorth\\\",\\\"norwayeast\\\",\\\"swedencentral\\\",\\\"switzerlandnorth\\\",\\\"uaenorth\\\",\\\"uaecentral\\\",\\\"switzerlandwest\\\",\\\"norwaywest\\\",\\\"germanynorth\\\",\\\"francesouth\\\",\\\"canadaeast\\\",\\\"koreasouth\\\"]\n",
+                    "title": "Alternate Azure Region Name",
+                    "x-displayname": "Alternate Azure Region Name",
+                    "x-ves-example": "northcentralus",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"northcentralus\\\",\\\"koreacentral\\\",\\\"centralindia\\\",\\\"southindia\\\",\\\"australiacentral2\\\",\\\"australiacentral\\\",\\\"southafricanorth\\\",\\\"norwayeast\\\",\\\"swedencentral\\\",\\\"switzerlandnorth\\\",\\\"uaenorth\\\",\\\"uaecentral\\\",\\\"switzerlandwest\\\",\\\"norwaywest\\\",\\\"germanynorth\\\",\\\"francesouth\\\",\\\"canadaeast\\\",\\\"koreasouth\\\"]"
+                    }
                 },
                 "assisted": {
-                    "description": "Exclusive with [azure_cred]\nx-displayName: \"Assisted Deployment\"\nIn assisted deployment get Azure parameters generated in status of this objects and run volterra provided terraform script.",
+                    "description": "Exclusive with [azure_cred]\n In assisted deployment get Azure parameters generated in status of this objects and run volterra provided terraform script.",
                     "title": "Assisted Deployment",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Assisted Deployment"
                 },
                 "azure_cred": {
-                    "description": "Exclusive with [assisted]\nx-displayName: \"Automatic Deployment\"\nReference to Azure credentials for automatic deployment",
+                    "description": "Exclusive with [assisted]\n Reference to Azure credentials for automatic deployment",
                     "title": "Automatic Deployment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Automatic Deployment"
                 },
                 "azure_region": {
                     "type": "string",
-                    "description": "Exclusive with [alternate_region]\nx-displayName: \"Recommended Azure Region Name\"\nx-example: \"eastus\"\nName of the azure region which supports availability zones.",
-                    "title": "Recommended Azure Region Name"
+                    "description": "Exclusive with [alternate_region]\n Name of the azure region which supports availability zones.\n\nExample: - \"eastus\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"southeastasia\\\",\\\"centralus\\\",\\\"eastus\\\",\\\"eastus2\\\",\\\"southcentralus\\\",\\\"northeurope\\\",\\\"westeurope\\\",\\\"japaneast\\\",\\\"australiaeast\\\",\\\"canadacentral\\\",\\\"uksouth\\\",\\\"westus2\\\",\\\"westus3\\\",\\\"francecentral\\\",\\\"southafricanorth\\\",\\\"brazilsouth\\\",\\\"germanywestcentral\\\"]\n",
+                    "title": "Recommended Azure Region Name",
+                    "x-displayname": "Recommended Azure Region Name",
+                    "x-ves-example": "eastus",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"southeastasia\\\",\\\"centralus\\\",\\\"eastus\\\",\\\"eastus2\\\",\\\"southcentralus\\\",\\\"northeurope\\\",\\\"westeurope\\\",\\\"japaneast\\\",\\\"australiaeast\\\",\\\"canadacentral\\\",\\\"uksouth\\\",\\\"westus2\\\",\\\"westus3\\\",\\\"francecentral\\\",\\\"southafricanorth\\\",\\\"brazilsouth\\\",\\\"germanywestcentral\\\"]"
+                    }
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
@@ -5805,34 +6030,40 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress/Egress Gateway (Two Interface) on Recommended Region\"\nTwo interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
                     "title": "Ingress/Egress Gateway on Recommended Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) on Recommended Region"
                 },
                 "ingress_egress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress/Egress Gateway (Two Interface) on Alternate Region\"\nTwo interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
                     "title": "Ingress/Egress Gateway on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) on Alternate Region"
                 },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway (One Interface) on Recommended Region\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
                     "title": "Ingress Gateway on Recommended Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType",
+                    "x-displayname": "Ingress Gateway (One Interface) on Recommended Region"
                 },
                 "ingress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway (One Interface) on Alternate Region\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
                     "title": "Ingress Gateway on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType",
+                    "x-displayname": "Ingress Gateway (One Interface) on Alternate Region"
                 },
                 "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "title": "Disable Logs Streaming",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Logs Streaming"
                 },
                 "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "title": "Disable Logs Receiver",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Logs Streaming"
                 },
                 "machine_type": {
                     "type": "string",
@@ -5846,15 +6077,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_worker_nodes": {
-                    "description": "Exclusive with [nodes_per_az total_nodes]\nx-displayName: \"No Worker Nodes\"\nWorker nodes is set to zero",
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n Worker nodes is set to zero",
                     "title": "No Worker Nodes",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Worker Nodes"
                 },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes total_nodes]\nx-displayName: \"Desired Worker Nodes Per AZ\"\nx-example: \"2\"\nDesired Worker Nodes Per AZ. Max limit is up to 21",
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 21\n",
                     "title": "Desired Worker Nodes Per AZ",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Desired Worker Nodes Per AZ",
+                    "x-ves-example": "2",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "21"
+                    }
                 },
                 "os": {
                     "description": " Operating System Details",
@@ -5918,9 +6156,15 @@ var APISwaggerJSON string = `{
                 },
                 "total_nodes": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\nx-displayName: \"Total Number of Worker Nodes for a Site\"\nx-example: \"1\"\nTotal number of worker nodes to be deployed across all AZ's used in the Site",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n Total number of worker nodes to be deployed across all AZ's used in the Site\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 61\n",
                     "title": "Total Number of Worker Nodes for a Site",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Total Number of Worker Nodes for a Site",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "61"
+                    }
                 },
                 "vnet": {
                     "description": " Choice of using existing Vnet or create new Vnet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -5933,14 +6177,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\nx-displayName: \"Voltstack Cluster (One Interface) on Recommended Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
                     "title": "Voltstack Cluster on Recommended Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType",
+                    "x-displayname": "Voltstack Cluster (One Interface) on Recommended Region"
                 },
                 "voltstack_cluster_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\nx-displayName: \"Voltstack Cluster (One Interface) on Alternate Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
                     "title": "Voltstack Cluster on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType",
+                    "x-displayname": "Voltstack Cluster (One Interface) on Alternate Region"
                 }
             }
         },
@@ -5970,41 +6216,54 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Egress Gateway on Recommended Region\"\nIngress-egress gateway choice can not be changed, edit networking config.",
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
                     "title": "Ingress Egress Gateway on Recommended Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwReplaceType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) on Recommended Region"
                 },
                 "ingress_egress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress/Egress Gateway (Two Interface) on Alternate Region\"\nTwo interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
                     "title": "Ingress/Egress Gateway on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARReplaceType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) on Alternate Region"
                 },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway on Recommended Region\"\nIngress gateway choice can not be changed (no config available for editing)",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
                     "title": "Ingress Gateway on Recommended Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwReplaceType",
+                    "x-displayname": "Ingress Gateway (One Interface) on Recommended Region"
                 },
                 "ingress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway (One Interface) on Alternate Region\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
                     "title": "Ingress Gateway on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARReplaceType",
+                    "x-displayname": "Ingress Gateway (One Interface) on Alternate Region"
                 },
                 "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Logs Streaming"
                 },
                 "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Logs Streaming"
                 },
                 "no_worker_nodes": {
-                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n Worker nodes is set to zero",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Worker Nodes"
                 },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 21\n",
+                    "format": "int64",
+                    "x-displayname": "Desired Worker Nodes Per AZ",
+                    "x-ves-example": "2",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "21"
+                    }
                 },
                 "site_to_site_tunnel_ip": {
                     "type": "string",
@@ -6017,18 +6276,26 @@ var APISwaggerJSON string = `{
                 },
                 "total_nodes": {
                     "type": "integer",
-                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n Total number of worker nodes to be deployed across all AZ's used in the Site\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 61\n",
+                    "format": "int64",
+                    "x-displayname": "Total Number of Worker Nodes for a Site",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "61"
+                    }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\nx-displayName: \"Voltstack Cluster (One Interface) on Recommended Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
                     "title": "Voltstack Cluster on Recommended Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterReplaceType",
+                    "x-displayname": "Voltstack Cluster (One Interface) on Recommended Region"
                 },
                 "voltstack_cluster_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\nx-displayName: \"Voltstack Cluster (One Interface) on Alternate Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
                     "title": "Voltstack Cluster on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARReplaceType",
+                    "x-displayname": "Voltstack Cluster (One Interface) on Alternate Region"
                 }
             }
         }

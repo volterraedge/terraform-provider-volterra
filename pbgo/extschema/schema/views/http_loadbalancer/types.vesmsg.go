@@ -6036,6 +6036,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["downstream_tls_certificate_expiration_timestamps"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("downstream_tls_certificate_expiration_timestamps"))
+		for idx, item := range m.GetDownstreamTlsCertificateExpirationTimestamps() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
 		val := m.GetHashPolicyChoice()
 		vOpts := append(opts,
@@ -8004,6 +8016,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["downstream_tls_certificate_expiration_timestamps"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("downstream_tls_certificate_expiration_timestamps"))
+		for idx, item := range m.GetDownstreamTlsCertificateExpirationTimestamps() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -17635,6 +17659,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.DnsInfo = f.GetDnsInfo()
 	m.Domains = f.GetDomains()
+	m.DownstreamTlsCertificateExpirationTimestamps = f.GetDownstreamTlsCertificateExpirationTimestamps()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.HostName = f.GetHostName()
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
@@ -17670,6 +17695,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.DnsInfo = m1.DnsInfo
 	f.Domains = m1.Domains
+	f.DownstreamTlsCertificateExpirationTimestamps = m1.DownstreamTlsCertificateExpirationTimestamps
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.HostName = m1.HostName
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)

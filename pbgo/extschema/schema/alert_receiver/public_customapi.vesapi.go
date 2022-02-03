@@ -430,6 +430,11 @@ func (c *CustomAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *Co
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -474,6 +479,11 @@ func (c *CustomAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestA
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -517,6 +527,11 @@ func (c *CustomAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *Ver
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver"); rvFn != nil {
@@ -662,7 +677,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-CustomAPI-ConfirmAlertReceiver"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-customapi-confirmalertreceiver"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver"
             },
@@ -762,7 +777,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-CustomAPI-TestAlertReceiver"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-customapi-testalertreceiver"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver"
             },
@@ -862,7 +877,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-CustomAPI-VerifyAlertReceiver"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-customapi-verifyalertreceiver"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver"
             },

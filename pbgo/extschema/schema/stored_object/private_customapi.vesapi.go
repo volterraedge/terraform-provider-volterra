@@ -523,6 +523,11 @@ func (c *CustomPrivateAPIInprocClient) CreateObject(ctx context.Context, in *Cre
 		err error
 	)
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomPrivateAPI.CreateObject"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -550,6 +555,11 @@ func (c *CustomPrivateAPIInprocClient) DeleteObject(ctx context.Context, in *Del
 		rsp *DeleteObjectResponse
 		err error
 	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject"); rvFn != nil {
@@ -579,6 +589,11 @@ func (c *CustomPrivateAPIInprocClient) GetObject(ctx context.Context, in *GetObj
 		err error
 	)
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomPrivateAPI.GetObject"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -606,6 +621,11 @@ func (c *CustomPrivateAPIInprocClient) ListObjects(ctx context.Context, in *List
 		rsp *ListObjectsResponse
 		err error
 	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomPrivateAPI.ListObjects"); rvFn != nil {
@@ -656,7 +676,7 @@ var CustomPrivateAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/private/namespaces/{namespace}/stored_objects": {
+        "/private/namespaces/{namespace}/stored_objects/{object_type}": {
             "get": {
                 "summary": "ListObjects",
                 "description": "ListObjects is a private API to list objects in object store",
@@ -728,9 +748,9 @@ var CustomPrivateAPISwaggerJSON string = `{
                     },
                     {
                         "name": "object_type",
-                        "description": "x-example: \"swagger\"\nOptional query parameter. Type of the stored_object",
-                        "in": "query",
-                        "required": false,
+                        "description": "object_type\n\nx-example: \"swagger\"\nOptional query parameter. Type of the stored_object",
+                        "in": "path",
+                        "required": true,
                         "type": "string",
                         "x-displayname": "Object Type"
                     },
@@ -770,7 +790,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-ListObjects"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customprivateapi-listobjects"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.ListObjects"
             },
@@ -887,7 +907,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-DeleteObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customprivateapi-deleteobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject"
             },
@@ -990,7 +1010,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-CreateObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customprivateapi-createobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.CreateObject"
             },
@@ -1098,7 +1118,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-GetObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customprivateapi-getobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.GetObject"
             },
@@ -1210,7 +1230,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-DeleteObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customprivateapi-deleteobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject"
             },
@@ -1218,7 +1238,7 @@ var CustomPrivateAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.stored_object.CustomPrivateAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         },
-        "/ves.io.schema/introspect/read/private/namespaces/{namespace}/stored_objects": {
+        "/ves.io.schema/introspect/read/private/namespaces/{namespace}/stored_objects/{object_type}": {
             "get": {
                 "summary": "ListObjects",
                 "description": "ListObjects is a private API to list objects in object store",
@@ -1290,9 +1310,9 @@ var CustomPrivateAPISwaggerJSON string = `{
                     },
                     {
                         "name": "object_type",
-                        "description": "x-example: \"swagger\"\nOptional query parameter. Type of the stored_object",
-                        "in": "query",
-                        "required": false,
+                        "description": "object_type\n\nx-example: \"swagger\"\nOptional query parameter. Type of the stored_object",
+                        "in": "path",
+                        "required": true,
                         "type": "string",
                         "x-displayname": "Object Type"
                     },
@@ -1332,7 +1352,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-ListObjects"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customprivateapi-listobjects"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.ListObjects"
             },
@@ -1440,7 +1460,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomPrivateAPI-GetObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customprivateapi-getobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomPrivateAPI.GetObject"
             },
@@ -1487,9 +1507,14 @@ var CustomPrivateAPISwaggerJSON string = `{
             "properties": {
                 "bytes_value": {
                     "type": "string",
-                    "description": "Exclusive with [string_value]\nx-displayName: \"Byte Value\"\nBinary object contents. Should be encoded in base64 scheme.",
+                    "description": "Exclusive with [string_value]\n Binary object contents. Should be encoded in base64 scheme.\n\nValidation Rules:\n  ves.io.schema.rules.bytes.max_len: 1048576\n",
                     "title": "bytes_value",
-                    "format": "byte"
+                    "format": "byte",
+                    "maximum": 1048576,
+                    "x-displayname": "Byte Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.bytes.max_len": "1048576"
+                    }
                 },
                 "content_format": {
                     "type": "string",
@@ -1541,20 +1566,25 @@ var CustomPrivateAPISwaggerJSON string = `{
                 },
                 "object_type": {
                     "type": "string",
-                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"certificate\\\", \\\"javascript\\\", \\\"html\\\", \\\"generic\\\", \\\"big-object\\\"]\n",
+                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\"]\n",
                     "title": "object_type",
                     "x-displayname": "Object Type",
                     "x-ves-example": "swagger",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"certificate\\\", \\\"javascript\\\", \\\"html\\\", \\\"generic\\\", \\\"big-object\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\"]"
                     }
                 },
                 "string_value": {
                     "type": "string",
-                    "description": "Exclusive with [bytes_value]\nx-displayName: \"String Value\"\nString formatted contents",
-                    "title": "contents"
+                    "description": "Exclusive with [bytes_value]\n String formatted contents\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1048576\n",
+                    "title": "contents",
+                    "maxLength": 1048576,
+                    "x-displayname": "String Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1048576"
+                    }
                 }
             }
         },
@@ -1573,14 +1603,16 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "no_additional_info": {
-                    "description": "Exclusive with [presigned_url]\nx-displayName: \"No Additional Info\"\nThere is no additional information for the response",
+                    "description": "Exclusive with [presigned_url]\n There is no additional information for the response",
                     "title": "no additional info",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Additional Info"
                 },
                 "presigned_url": {
-                    "description": "Exclusive with [no_additional_info]\nx-displayName: \"Pre Signed Url Data\"\nThe url to download the resource",
+                    "description": "Exclusive with [no_additional_info]\n The url to download the resource",
                     "title": "presigned_url",
-                    "$ref": "#/definitions/stored_objectPreSignedUrl"
+                    "$ref": "#/definitions/stored_objectPreSignedUrl",
+                    "x-displayname": "Pre Signed Url Data"
                 }
             }
         },
@@ -1613,9 +1645,14 @@ var CustomPrivateAPISwaggerJSON string = `{
             "properties": {
                 "bytes_value": {
                     "type": "string",
-                    "description": "Exclusive with [presigned_url string_value]\nx-displayName: \"Byte Value\"\nx-example: \"\"\nBinary object contents. This will be a base64 encoded string. The client should decode it to see the actual contents of the object.",
+                    "description": "Exclusive with [presigned_url string_value]\n Binary object contents. This will be a base64 encoded string. The client should decode it to see the actual contents of the object.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.bytes.max_len: 1048576\n",
                     "title": "bytes_value",
-                    "format": "byte"
+                    "format": "byte",
+                    "maximum": 1048576,
+                    "x-displayname": "Byte Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.bytes.max_len": "1048576"
+                    }
                 },
                 "content_format": {
                     "type": "string",
@@ -1631,14 +1668,20 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "presigned_url": {
-                    "description": "Exclusive with [bytes_value string_value]\nx-displayName: \"Pre Signed Url Data\"\nThe url to download the resource",
+                    "description": "Exclusive with [bytes_value string_value]\n The url to download the resource",
                     "title": "presigned_url",
-                    "$ref": "#/definitions/stored_objectPreSignedUrl"
+                    "$ref": "#/definitions/stored_objectPreSignedUrl",
+                    "x-displayname": "Pre Signed Url Data"
                 },
                 "string_value": {
                     "type": "string",
-                    "description": "Exclusive with [bytes_value presigned_url]\nx-displayName: \"Contents\"\nx-example: \"\"\nString formatted contents",
-                    "title": "contents"
+                    "description": "Exclusive with [bytes_value presigned_url]\n String formatted contents\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1048576\n",
+                    "title": "contents",
+                    "maxLength": 1048576,
+                    "x-displayname": "Contents",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1048576"
+                    }
                 }
             }
         },
@@ -1654,6 +1697,13 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "description": " Name of the stored object.",
                     "title": "name",
                     "x-displayname": "Object Name"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " Tenant to which this object belongs.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
                 },
                 "versions": {
                     "type": "array",
@@ -1693,9 +1743,10 @@ var CustomPrivateAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.stored_object.PreSignedUrl",
             "properties": {
                 "aws": {
-                    "description": "Exclusive with []\nx-displayName: \"AWS\"\nRelevant only for big_object type. The presigned url relevant data to upload or download the resource",
+                    "description": "Exclusive with []\n Relevant only for big_object type. The presigned url relevant data to upload or download the resource",
                     "title": "aws_big_object_url",
-                    "$ref": "#/definitions/stored_objectPresignedUrlData"
+                    "$ref": "#/definitions/stored_objectPresignedUrlData",
+                    "x-displayname": "AWS"
                 }
             }
         },

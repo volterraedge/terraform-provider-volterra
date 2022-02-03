@@ -1878,6 +1878,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.policer.crudapi.ObjectReplaceReq"] = ves_io_schema_policer_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policer.crudapi.ObjectReplaceRsp"] = ves_io_schema_policer_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.policy.AppFirewallAttackTypeContext"] = ves_io_schema_policy.AppFirewallAttackTypeContextValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.AppFirewallDetectionControl"] = ves_io_schema_policy.AppFirewallDetectionControlValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.AppFirewallSignatureContext"] = ves_io_schema_policy.AppFirewallSignatureContextValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.AppFirewallViolationContext"] = ves_io_schema_policy.AppFirewallViolationContextValidator()

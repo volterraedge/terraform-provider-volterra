@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.protocol_policer.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.protocol_policer.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.protocol_policer.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.protocol_policer.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.protocol_policer.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.protocol_policer.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-protocol_policer-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.protocol_policer.API.Delete"
             },
@@ -2620,24 +2628,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.protocol_policer.ProtocolType",
             "properties": {
                 "dns": {
-                    "description": "Exclusive with [icmp tcp udp]\nx-displayName: \"DNS Packet Type\"\nMatch all DNS packets",
+                    "description": "Exclusive with [icmp tcp udp]\n Match all DNS packets",
                     "title": "DNS packet type",
-                    "$ref": "#/definitions/protocol_policerDnsType"
+                    "$ref": "#/definitions/protocol_policerDnsType",
+                    "x-displayname": "DNS Packet Type"
                 },
                 "icmp": {
-                    "description": "Exclusive with [dns tcp udp]\nx-displayName: \"ICMP Packet Type\"\nICMP message types to be matched in packet",
+                    "description": "Exclusive with [dns tcp udp]\n ICMP message types to be matched in packet",
                     "title": "ICMP packet type",
-                    "$ref": "#/definitions/protocol_policerIcmpType"
+                    "$ref": "#/definitions/protocol_policerIcmpType",
+                    "x-displayname": "ICMP Packet Type"
                 },
                 "tcp": {
-                    "description": "Exclusive with [dns icmp udp]\nx-displayName: \"TCP Packet Type\"\nTCP flags to be matched in packet",
+                    "description": "Exclusive with [dns icmp udp]\n TCP flags to be matched in packet",
                     "title": "TCP packet type",
-                    "$ref": "#/definitions/protocol_policerTcpType"
+                    "$ref": "#/definitions/protocol_policerTcpType",
+                    "x-displayname": "TCP Packet Type"
                 },
                 "udp": {
-                    "description": "Exclusive with [dns icmp tcp]\nx-displayName: \"UDP Packet Type\"\nMatch all UDP packets",
+                    "description": "Exclusive with [dns icmp tcp]\n Match all UDP packets",
                     "title": "UDP packet type",
-                    "$ref": "#/definitions/protocol_policerUdpType"
+                    "$ref": "#/definitions/protocol_policerUdpType",
+                    "x-displayname": "UDP Packet Type"
                 }
             }
         },

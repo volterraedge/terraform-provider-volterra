@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cloud_credentials.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cloud_credentials.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_credentials-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_credentials.crudapi.API.Create"
             },
@@ -2758,24 +2764,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.GlobalSpecType",
             "properties": {
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\nx-displayName: \"AWS Programmatic Access Credentials\"\nAWS authentication using access keys",
+                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
                     "title": "AWS Programmatic Access Credentials",
-                    "$ref": "#/definitions/cloud_credentialsAWSSecretType"
+                    "$ref": "#/definitions/cloud_credentialsAWSSecretType",
+                    "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\nx-displayName: \"Azure Client Secret for Service Principal\"\nAzure authentication using a service principal account with client secret",
+                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
                     "title": "Azure Credential Client Password",
-                    "$ref": "#/definitions/cloud_credentialsAzureSecretType"
+                    "$ref": "#/definitions/cloud_credentialsAzureSecretType",
+                    "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\nx-displayName: \"Azure Credential Client Certificate\"\nAzure authentication using a service principal account with client certificate",
+                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
                     "title": "Azure Credential Client Certificate",
-                    "$ref": "#/definitions/cloud_credentialsAzurePfxType"
+                    "$ref": "#/definitions/cloud_credentialsAzurePfxType",
+                    "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\nx-displayName: \"GCP Credentials\"\nGoogle authentication using content of Google Credentials File",
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
                     "title": "GCP Credentials",
-                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType"
+                    "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
+                    "x-displayname": "GCP Credentials"
                 }
             }
         },
@@ -3352,14 +3362,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },

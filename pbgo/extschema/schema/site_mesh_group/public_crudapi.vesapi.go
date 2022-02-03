@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site_mesh_group.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site_mesh_group.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.Delete"
             },

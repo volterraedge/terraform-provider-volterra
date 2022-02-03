@@ -335,6 +335,11 @@ func (c *UpgradeAPIInprocClient) UpgradeOS(ctx context.Context, in *UpgradeOSReq
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UpgradeAPI.UpgradeOS"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -378,6 +383,11 @@ func (c *UpgradeAPIInprocClient) UpgradeSW(ctx context.Context, in *UpgradeSWReq
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UpgradeAPI.UpgradeSW"); rvFn != nil {
@@ -523,7 +533,7 @@ var UpgradeAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UpgradeAPI-UpgradeOS"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-upgradeapi-upgradeos"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UpgradeAPI.UpgradeOS"
             },
@@ -623,7 +633,7 @@ var UpgradeAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UpgradeAPI-UpgradeSW"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-upgradeapi-upgradesw"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UpgradeAPI.UpgradeSW"
             },

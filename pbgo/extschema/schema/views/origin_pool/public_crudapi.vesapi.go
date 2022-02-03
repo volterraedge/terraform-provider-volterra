@@ -1102,6 +1102,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1157,6 +1161,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.API.Replace"); rvFn != nil {
@@ -1678,7 +1686,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.API.Create"
             },
@@ -1778,7 +1786,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.API.Replace"
             },
@@ -1894,7 +1902,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.API.List"
             },
@@ -2002,7 +2010,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.API.Get"
             },
@@ -2095,7 +2103,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.API.Delete"
             },
@@ -2647,9 +2655,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions",
             "properties": {
                 "circuit_breaker": {
-                    "description": "Exclusive with [disable_circuit_breaker]\nx-displayName: \"Enable Circuit Breaker\"\nCircuitBreaker provides a mechanism for watching failures in upstream connections or requests\nand if the failures reach a certain threshold, automatically fail subsequent requests which\nallows to apply back pressure on downstream quickly.",
+                    "description": "Exclusive with [disable_circuit_breaker]\n CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "title": "circuit_breaker",
-                    "$ref": "#/definitions/clusterCircuitBreaker"
+                    "$ref": "#/definitions/clusterCircuitBreaker",
+                    "x-displayname": "Enable Circuit Breaker"
                 },
                 "connection_timeout": {
                     "type": "integer",
@@ -2663,24 +2672,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "disable_circuit_breaker": {
-                    "description": "Exclusive with [circuit_breaker]\nx-displayName: \"Disable Circuit Breaker\"\nCircuit Breaker is disabled",
+                    "description": "Exclusive with [circuit_breaker]\n Circuit Breaker is disabled",
                     "title": "Disable Circuit Breaker",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Circuit Breaker"
                 },
                 "disable_outlier_detection": {
-                    "description": "Exclusive with [outlier_detection]\nx-displayName: \"Disable Outlier Detection\"\nOutlier detection is disabled",
+                    "description": "Exclusive with [outlier_detection]\n Outlier detection is disabled",
                     "title": "Disable Outlier Detection",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Outlier Detection"
                 },
                 "disable_subsets": {
-                    "description": "Exclusive with [enable_subsets]\nx-displayName: \"Disable Subset Load Balancing\"\nSubset load balancing is disabled. All eligible origin servers will be considered for load balancing.",
+                    "description": "Exclusive with [enable_subsets]\n Subset load balancing is disabled. All eligible origin servers will be considered for load balancing.",
                     "title": "Subset Load Balancing is Disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Subset Load Balancing"
                 },
                 "enable_subsets": {
-                    "description": "Exclusive with [disable_subsets]\nx-displayName: \"Enable Subset Load Balancing\"\nSubset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing.",
+                    "description": "Exclusive with [disable_subsets]\n Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing.",
                     "title": "Subset Load Balancing is Enable",
-                    "$ref": "#/definitions/origin_poolOriginPoolSubsets"
+                    "$ref": "#/definitions/origin_poolOriginPoolSubsets",
+                    "x-displayname": "Enable Subset Load Balancing"
                 },
                 "http2_options": {
                     "description": " Http2 Protocol options for upstream connections",
@@ -2700,20 +2713,26 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_panic_threshold": {
-                    "description": "Exclusive with [panic_threshold]\nx-displayName: \"No Panic threshold\"\n\nDisable panic threshold. Only healthy endpoints are considered for load balancing.",
+                    "description": "Exclusive with [panic_threshold]\n\n Disable panic threshold. Only healthy endpoints are considered for load balancing.",
                     "title": "Disable panic threshold",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Panic threshold"
                 },
                 "outlier_detection": {
-                    "description": "Exclusive with [disable_outlier_detection]\nx-displayName: \"Enable Outlier Detection\"\nOutlier detection and ejection is the process of dynamically determining whether some number\nof hosts in an upstream cluster are performing unlike the others and removing them from the\nhealthy load balancing set. Outlier detection is a form of passive health checking.",
+                    "description": "Exclusive with [disable_outlier_detection]\n Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
                     "title": "Enable Outlier Detection",
-                    "$ref": "#/definitions/clusterOutlierDetectionType"
+                    "$ref": "#/definitions/clusterOutlierDetectionType",
+                    "x-displayname": "Enable Outlier Detection"
                 },
                 "panic_threshold": {
                     "type": "integer",
-                    "description": "Exclusive with [no_panic_threshold]\nx-displayName: \"Panic threshold\"\nx-example:\"25\"\nConfigure a threshold (percentage of unhealthy endpoints) below which\nall endpoints will be considered for load balancing ignoring its health status.",
+                    "description": "Exclusive with [no_panic_threshold]\n x-example:\"25\"\n Configure a threshold (percentage of unhealthy endpoints) below which\n all endpoints will be considered for load balancing ignoring its health status.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "Panic threshold",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Panic threshold",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
                 }
             }
         },
@@ -2745,14 +2764,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolSubsets",
             "properties": {
                 "any_endpoint": {
-                    "description": "Exclusive with [default_subset fail_request]\nx-displayName: \"Select Any Origin Server\"\nSelect any origin server from available healthy origin servers in this pool",
+                    "description": "Exclusive with [default_subset fail_request]\n Select any origin server from available healthy origin servers in this pool",
                     "title": "Select Any Origin Server",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Select Any Origin Server"
                 },
                 "default_subset": {
-                    "description": "Exclusive with [any_endpoint fail_request]\nx-displayName: \"Use Default Subset\"\nUse the default subset provided here. Select endpoints matching default subset.",
+                    "description": "Exclusive with [any_endpoint fail_request]\n Use the default subset provided here. Select endpoints matching default subset.",
                     "title": "Use Default Subset",
-                    "$ref": "#/definitions/origin_poolOriginPoolDefaultSubset"
+                    "$ref": "#/definitions/origin_poolOriginPoolDefaultSubset",
+                    "x-displayname": "Use Default Subset"
                 },
                 "endpoint_subsets": {
                     "type": "array",
@@ -2768,9 +2789,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "fail_request": {
-                    "description": "Exclusive with [any_endpoint default_subset]\nx-displayName: \"Fail the Request\"\nRequest will be failed and error returned, as if cluster has no origin servers.",
+                    "description": "Exclusive with [any_endpoint default_subset]\n Request will be failed and error returned, as if cluster has no origin servers.",
                     "title": "Fail the Request",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Fail the Request"
                 }
             }
         },
@@ -2784,14 +2806,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerConsulService",
             "properties": {
                 "inside_network": {
-                    "description": "Exclusive with [outside_network]\nx-displayName: \"Inside Network\"\nInside network on the site",
+                    "description": "Exclusive with [outside_network]\n Inside network on the site",
                     "title": "Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inside Network"
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network]\nx-displayName: \"Outside Network\"\nOutside network on the site",
+                    "description": "Exclusive with [inside_network]\n Outside network on the site",
                     "title": "Outside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Outside Network"
                 },
                 "service_name": {
                     "type": "string",
@@ -2845,14 +2869,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerK8SService",
             "properties": {
                 "inside_network": {
-                    "description": "Exclusive with [outside_network vk8s_networks]\nx-displayName: \"Inside Network\"\nInside network on the site",
+                    "description": "Exclusive with [outside_network vk8s_networks]\n Inside network on the site",
                     "title": "Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inside Network"
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network vk8s_networks]\nx-displayName: \"Outside Network\"\nOutside network on the site",
+                    "description": "Exclusive with [inside_network vk8s_networks]\n Outside network on the site",
                     "title": "Outside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Outside Network"
                 },
                 "service_name": {
                     "type": "string",
@@ -2875,9 +2901,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "vk8s_networks": {
-                    "description": "Exclusive with [inside_network outside_network]\nx-displayName: \"vK8s Networks on Site\"\norigin server are on vK8s network on the site",
+                    "description": "Exclusive with [inside_network outside_network]\n origin server are on vK8s network on the site",
                     "title": "vK8s Networks on site",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "vK8s Networks on Site"
                 }
             }
         },
@@ -2891,9 +2918,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateIP",
             "properties": {
                 "inside_network": {
-                    "description": "Exclusive with [outside_network]\nx-displayName: \"Inside Network\"\nInside network on the site",
+                    "description": "Exclusive with [outside_network]\n Inside network on the site",
                     "title": "Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inside Network"
                 },
                 "ip": {
                     "type": "string",
@@ -2907,9 +2935,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network]\nx-displayName: \"Outside Network\"\nOutside network on the site",
+                    "description": "Exclusive with [inside_network]\n Outside network on the site",
                     "title": "Outside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Outside Network"
                 },
                 "site_locator": {
                     "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2943,14 +2972,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "inside_network": {
-                    "description": "Exclusive with [outside_network]\nx-displayName: \"Inside Network\"\nInside network on the site",
+                    "description": "Exclusive with [outside_network]\n Inside network on the site",
                     "title": "Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inside Network"
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network]\nx-displayName: \"Outside Network\"\nOutside network on the site",
+                    "description": "Exclusive with [inside_network]\n Outside network on the site",
                     "title": "Outside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Outside Network"
                 },
                 "site_locator": {
                     "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3019,19 +3050,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
                 "consul_service": {
-                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"Consul Service Name of Origin Server on given Sites\"\nSpecify origin server with Hashi Corp Consul service name and site information",
+                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
                     "title": "OriginServerConsulService",
-                    "$ref": "#/definitions/origin_poolOriginServerConsulService"
+                    "$ref": "#/definitions/origin_poolOriginServerConsulService",
+                    "x-displayname": "Consul Service Name of Origin Server on given Sites"
                 },
                 "custom_endpoint_object": {
-                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"Custom Endpoint Object for Origin Server\"\nSpecify origin server with a reference to endpoint object",
+                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
                     "title": "OriginServerCustomEndpoint",
-                    "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint"
+                    "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint",
+                    "x-displayname": "Custom Endpoint Object for Origin Server"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"K8s Service Name of Origin Server on given Sites\"\nSpecify origin server with K8s service name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
-                    "$ref": "#/definitions/origin_poolOriginServerK8SService"
+                    "$ref": "#/definitions/origin_poolOriginServerK8SService",
+                    "x-displayname": "K8s Service Name of Origin Server on given Sites"
                 },
                 "labels": {
                     "type": "object",
@@ -3040,34 +3074,40 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Origin Server Labels"
                 },
                 "private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"IP address of Origin Server on given Sites\"\nSpecify origin server with private or public IP address and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
                     "title": "OriginServerPrivateIP",
-                    "$ref": "#/definitions/origin_poolOriginServerPrivateIP"
+                    "$ref": "#/definitions/origin_poolOriginServerPrivateIP",
+                    "x-displayname": "IP address of Origin Server on given Sites"
                 },
                 "private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"DNS Name of Origin Server on given Sites\"\nSpecify origin server with private or public DNS name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
                     "title": "OriginServerPrivateName",
-                    "$ref": "#/definitions/origin_poolOriginServerPrivateName"
+                    "$ref": "#/definitions/origin_poolOriginServerPrivateName",
+                    "x-displayname": "DNS Name of Origin Server on given Sites"
                 },
                 "public_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\nx-displayName: \"Public IP of Origin Server\"\nSpecify origin server with public IP",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
                     "title": "OriginServerPublicName",
-                    "$ref": "#/definitions/origin_poolOriginServerPublicIP"
+                    "$ref": "#/definitions/origin_poolOriginServerPublicIP",
+                    "x-displayname": "Public IP of Origin Server"
                 },
                 "public_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\nx-displayName: \"Public DNS Name of Origin Server\"\nSpecify origin server with public DNS name",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
                     "title": "OriginServerPublicName",
-                    "$ref": "#/definitions/origin_poolOriginServerPublicName"
+                    "$ref": "#/definitions/origin_poolOriginServerPublicName",
+                    "x-displayname": "Public DNS Name of Origin Server"
                 },
                 "vn_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\nx-displayName: \"IP address on Virtual Network\"\nSpecify origin server IP address on virtual network other than inside or outside network",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkIP",
-                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkIP"
+                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkIP",
+                    "x-displayname": "IP address on Virtual Network"
                 },
                 "vn_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\nx-displayName: \"Name on Virtual Network\"\nSpecify origin server name on virtual network other than inside or outside network",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkName",
-                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkName"
+                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkName",
+                    "x-displayname": "Name on Virtual Network"
                 }
             }
         },
@@ -3207,24 +3247,33 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
             "properties": {
                 "disable_sni": {
-                    "description": "Exclusive with [sni use_host_header_as_sni]\nx-displayName: \"No SNI\"\nDo not use SNI.",
+                    "description": "Exclusive with [sni use_host_header_as_sni]\n Do not use SNI.",
                     "title": "disable_sni",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\nx-displayName: \"No MTLS\"\nDo not use MTLS for this pool",
+                    "description": "Exclusive with [use_mtls]\n Do not use MTLS for this pool",
                     "title": "No MTLS",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No MTLS"
                 },
                 "skip_server_verification": {
-                    "description": "Exclusive with [use_server_verification volterra_trusted_ca]\nx-displayName: \"Skip Verification\"\nSkip origin server verification",
+                    "description": "Exclusive with [use_server_verification volterra_trusted_ca]\n Skip origin server verification",
                     "title": "Skip Server Verification",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip Verification"
                 },
                 "sni": {
                     "type": "string",
-                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\nx-displayName: \"SNI Value\"\nSNI value to be used.",
-                    "title": "sni"
+                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\n SNI value to be used.\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "sni",
+                    "maxLength": 256,
+                    "x-displayname": "SNI Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "tls_config": {
                     "description": " TLS parameters such as min/max TLS version and ciphers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3237,24 +3286,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_host_header_as_sni": {
-                    "description": "Exclusive with [disable_sni sni]\nx-displayName: \"Host Header\"\nUse the host header as SNI. The host header value is extracted after any configured rewrites have been applied.",
+                    "description": "Exclusive with [disable_sni sni]\n Use the host header as SNI. The host header value is extracted after any configured rewrites have been applied.",
                     "title": "use_host_header_as_sni",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\nx-displayName: \"MTLS\"\nUse MTLS for this pool using provided certificates",
+                    "description": "Exclusive with [no_mtls]\n Use MTLS for this pool using provided certificates",
                     "title": "Use MTLS",
-                    "$ref": "#/definitions/origin_poolTlsCertificatesType"
+                    "$ref": "#/definitions/origin_poolTlsCertificatesType",
+                    "x-displayname": "MTLS"
                 },
                 "use_server_verification": {
-                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\nx-displayName: \"Use Custom CA List\"\nPerform origin server verification using the provided trusted CA list",
+                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided trusted CA list",
                     "title": "Use Server Verification",
-                    "$ref": "#/definitions/origin_poolUpstreamTlsValidationContext"
+                    "$ref": "#/definitions/origin_poolUpstreamTlsValidationContext",
+                    "x-displayname": "Use Custom CA List"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [skip_server_verification use_server_verification]\nx-displayName: \"Use Default Trusted CA List\"\nPerform origin server verification using Volterra default trusted CA list",
+                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using Volterra default trusted CA list",
                     "title": "Volterra Trusted CA",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Use Default Trusted CA List"
                 }
             }
         },
@@ -3767,14 +3820,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -4057,9 +4112,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_hash_algorithms": {
-                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
-                    "$ref": "#/definitions/schemaHashAlgorithms"
+                    "$ref": "#/definitions/schemaHashAlgorithms",
+                    "x-displayname": "Use hash algorithms in custom order"
                 },
                 "description": {
                     "type": "string",
@@ -4068,9 +4124,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Description"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable OCSP Stapling"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4083,9 +4140,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_system_defaults": {
-                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
                     "title": "Fetch with Volterra default settings",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Fetch with Volterra default settings"
                 }
             }
         },
@@ -4278,14 +4336,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.SiteLocator",
             "properties": {
                 "site": {
-                    "description": "Exclusive with [virtual_site]\nx-displayName: \"Site\"\nReference to site object",
+                    "description": "Exclusive with [virtual_site]\n Reference to site object",
                     "title": "site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Site"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site]\nx-displayName: \"Virtual Site\"\nReference to virtual site object",
+                    "description": "Exclusive with [site]\n Reference to virtual site object",
                     "title": "Virtual Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Virtual Site"
                 }
             }
         },
@@ -4299,24 +4359,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.TlsConfig",
             "properties": {
                 "custom_security": {
-                    "description": "Exclusive with [default_security low_security medium_security]\nx-displayName: \"Custom\"\nCustom selection of TLS versions and cipher suites",
+                    "description": "Exclusive with [default_security low_security medium_security]\n Custom selection of TLS versions and cipher suites",
                     "title": "Custom Security",
-                    "$ref": "#/definitions/viewsCustomCiphers"
+                    "$ref": "#/definitions/viewsCustomCiphers",
+                    "x-displayname": "Custom"
                 },
                 "default_security": {
-                    "description": "Exclusive with [custom_security low_security medium_security]\nx-displayName: \"High\"\nHigh Option chooses highest level of security.\nTLS v1.2+ with PFS ciphers with strong crypto algorithms.",
+                    "description": "Exclusive with [custom_security low_security medium_security]\n High Option chooses highest level of security.\n TLS v1.2+ with PFS ciphers with strong crypto algorithms.",
                     "title": "Default Security",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "High"
                 },
                 "low_security": {
-                    "description": "Exclusive with [custom_security default_security medium_security]\nx-displayName: \"Low\"\nLow Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms.",
+                    "description": "Exclusive with [custom_security default_security medium_security]\n Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms.",
                     "title": "Low Security",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Low"
                 },
                 "medium_security": {
-                    "description": "Exclusive with [custom_security default_security low_security]\nx-displayName: \"Medium\"\nMedium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms.",
+                    "description": "Exclusive with [custom_security default_security low_security]\n Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms.",
                     "title": "Medium Security",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Medium"
                 }
             }
         },
@@ -4345,8 +4409,12 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": "Exclusive with [same_as_endpoint_port]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [same_as_endpoint_port]\n Port used for performing health check\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Health check port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "healthcheck": {
                     "type": "array",
@@ -4370,8 +4438,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_tls": {
-                    "description": "Exclusive with [use_tls]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No TLS"
                 },
                 "origin_servers": {
                     "type": "array",
@@ -4404,12 +4473,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "same_as_endpoint_port": {
-                    "description": "Exclusive with [health_check_port]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [health_check_port]\n Health check is performed on endpoint port itself",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Endpoint port"
                 },
                 "use_tls": {
-                    "description": "Exclusive with [no_tls]\n",
-                    "$ref": "#/definitions/origin_poolUpstreamTlsParameters"
+                    "description": "Exclusive with [no_tls]\n Origin servers use TLS",
+                    "$ref": "#/definitions/origin_poolUpstreamTlsParameters",
+                    "x-displayname": "TLS"
                 }
             }
         },
@@ -4438,8 +4509,12 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": "Exclusive with [same_as_endpoint_port]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [same_as_endpoint_port]\n Port used for performing health check\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Health check port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "healthcheck": {
                     "type": "array",
@@ -4463,8 +4538,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_tls": {
-                    "description": "Exclusive with [use_tls]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No TLS"
                 },
                 "origin_servers": {
                     "type": "array",
@@ -4497,12 +4573,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "same_as_endpoint_port": {
-                    "description": "Exclusive with [health_check_port]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [health_check_port]\n Health check is performed on endpoint port itself",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Endpoint port"
                 },
                 "use_tls": {
-                    "description": "Exclusive with [no_tls]\n",
-                    "$ref": "#/definitions/origin_poolUpstreamTlsParameters"
+                    "description": "Exclusive with [no_tls]\n Origin servers use TLS",
+                    "$ref": "#/definitions/origin_poolUpstreamTlsParameters",
+                    "x-displayname": "TLS"
                 }
             }
         },
@@ -4533,9 +4611,13 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": "Exclusive with [same_as_endpoint_port]\nx-displayName: \"Health check port\"\nPort used for performing health check",
+                    "description": "Exclusive with [same_as_endpoint_port]\n Port used for performing health check\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Health check port",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Health check port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "healthcheck": {
                     "type": "array",
@@ -4561,9 +4643,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_tls": {
-                    "description": "Exclusive with [use_tls]\nx-displayName: \"No TLS\"\nOrigin servers do not use TLS",
+                    "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
                     "title": "No TLS",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No TLS"
                 },
                 "origin_servers": {
                     "type": "array",
@@ -4598,14 +4681,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "same_as_endpoint_port": {
-                    "description": "Exclusive with [health_check_port]\nx-displayName: \"Endpoint port\"\nHealth check is performed on endpoint port itself",
+                    "description": "Exclusive with [health_check_port]\n Health check is performed on endpoint port itself",
                     "title": "Same as endpoint port",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Endpoint port"
                 },
                 "use_tls": {
-                    "description": "Exclusive with [no_tls]\nx-displayName: \"TLS\"\nOrigin servers use TLS",
+                    "description": "Exclusive with [no_tls]\n Origin servers use TLS",
                     "title": "Use TLS",
-                    "$ref": "#/definitions/origin_poolUpstreamTlsParameters"
+                    "$ref": "#/definitions/origin_poolUpstreamTlsParameters",
+                    "x-displayname": "TLS"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",
@@ -4640,8 +4725,12 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": "Exclusive with [same_as_endpoint_port]\n",
-                    "format": "int64"
+                    "description": "Exclusive with [same_as_endpoint_port]\n Port used for performing health check\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Health check port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "healthcheck": {
                     "type": "array",
@@ -4665,8 +4754,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_tls": {
-                    "description": "Exclusive with [use_tls]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No TLS"
                 },
                 "origin_servers": {
                     "type": "array",
@@ -4699,12 +4789,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "same_as_endpoint_port": {
-                    "description": "Exclusive with [health_check_port]\n",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": "Exclusive with [health_check_port]\n Health check is performed on endpoint port itself",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Endpoint port"
                 },
                 "use_tls": {
-                    "description": "Exclusive with [no_tls]\n",
-                    "$ref": "#/definitions/origin_poolUpstreamTlsParameters"
+                    "description": "Exclusive with [no_tls]\n Origin servers use TLS",
+                    "$ref": "#/definitions/origin_poolUpstreamTlsParameters",
+                    "x-displayname": "TLS"
                 }
             }
         }

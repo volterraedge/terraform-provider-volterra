@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.forward_proxy_policy.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.forward_proxy_policy.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Create"
             },
@@ -2802,54 +2808,66 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "all_destinations": {
-                    "description": "Exclusive with [dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"All Destinations\"\nMatch on all destinations",
+                    "description": "Exclusive with [dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\n Match on all destinations",
                     "title": "All Destinations",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All Destinations"
                 },
                 "all_sources": {
-                    "description": "Exclusive with [ip_prefix_set label_selector prefix_list]\nx-displayName: \"All Sources\"\nAny source that matches 0/0 ip prefix",
+                    "description": "Exclusive with [ip_prefix_set label_selector prefix_list]\n Any source that matches 0/0 ip prefix",
                     "title": "All Sources",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All Sources"
                 },
                 "dst_asn_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"BGP ASN List\"\nAddresses that belong to the ASNs in the given list\nThe ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
+                    "description": "Exclusive with [all_destinations dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\n Addresses that belong to the ASNs in the given list\n The ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
                     "title": "Dst ASN List",
-                    "$ref": "#/definitions/policyAsnMatchList"
+                    "$ref": "#/definitions/policyAsnMatchList",
+                    "x-displayname": "BGP ASN List"
                 },
                 "dst_asn_set": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"BGP ASN Set\"\nAddresses that belong to the ASNs in the given bgp_asn_set\nThe ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\n Addresses that belong to the ASNs in the given bgp_asn_set\n The ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
                     "title": "Dst ASN Set",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "BGP ASN Set"
                 },
                 "dst_ip_prefix_set": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"IP Prefix Set\"\nAddresses that are covered by the prefixes in the given ip_prefix_set",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\n Addresses that are covered by the prefixes in the given ip_prefix_set",
                     "title": "Dst IP Prefix Set",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "IP Prefix Set"
                 },
                 "dst_label_selector": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"Label Selector\"\nx-example: \"geoip.ves.io/country == KY\"\nDestination is the set of prefixes determined by the label selector expression",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_prefix_list http_list tls_list url_category_list]\n Destination is the set of prefixes determined by the label selector expression\n\nExample: - \"geoip.ves.io/country == KY\"-",
                     "title": "Dst Label Selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Label Selector",
+                    "x-ves-example": "geoip.ves.io/country == KY"
                 },
                 "dst_prefix_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector http_list tls_list url_category_list]\nx-displayName: \"IPv4 Prefix List\"\nAddresses that are covered by the given list of IPv4 prefixes",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector http_list tls_list url_category_list]\n Addresses that are covered by the given list of IPv4 prefixes",
                     "title": "Dst IP Prefix List",
-                    "$ref": "#/definitions/viewsPrefixStringListType"
+                    "$ref": "#/definitions/viewsPrefixStringListType",
+                    "x-displayname": "IPv4 Prefix List"
                 },
                 "http_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list tls_list url_category_list]\nx-displayName: \"HTTP URLs\"\nURLs for HTTP connections",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list tls_list url_category_list]\n URLs for HTTP connections",
                     "title": "HTTP URLs",
-                    "$ref": "#/definitions/forward_proxy_policyURLListType"
+                    "$ref": "#/definitions/forward_proxy_policyURLListType",
+                    "x-displayname": "HTTP URLs"
                 },
                 "ip_prefix_set": {
-                    "description": "Exclusive with [all_sources label_selector prefix_list]\nx-displayName: \"IP Prefix Set\"\nAll ip prefixes that are in a given ip prefix set.",
+                    "description": "Exclusive with [all_sources label_selector prefix_list]\n All ip prefixes that are in a given ip prefix set.",
                     "title": "IP Prefix Set",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "IP Prefix Set"
                 },
                 "label_selector": {
-                    "description": "Exclusive with [all_sources ip_prefix_set prefix_list]\nx-displayName: \"Source Label Selector\"\nx-example: \"app != web\"\nSources is set of prefixes determined by label selector expression",
+                    "description": "Exclusive with [all_sources ip_prefix_set prefix_list]\n Sources is set of prefixes determined by label selector expression\n\nExample: - \"app != web\"-",
                     "title": "Source Label selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Source Label Selector",
+                    "x-ves-example": "app != web"
                 },
                 "metadata": {
                     "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2862,29 +2880,35 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_http_connect_port": {
-                    "description": "Exclusive with [port_matcher]\nx-displayName: \"Do Not Match\"\nIgnore destination ports for connections",
+                    "description": "Exclusive with [port_matcher]\n Ignore destination ports for connections",
                     "title": "Do not Match",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Do Not Match"
                 },
                 "port_matcher": {
-                    "description": "Exclusive with [no_http_connect_port]\nx-displayName: \"Port Matcher\"\nThe list of port ranges to which the destination port should belong.\nIn case of an HTTP Connect, the destination port is extracted from the connect destination.",
+                    "description": "Exclusive with [no_http_connect_port]\n The list of port ranges to which the destination port should belong.\n In case of an HTTP Connect, the destination port is extracted from the connect destination.",
                     "title": "port matcher",
-                    "$ref": "#/definitions/policyPortMatcherType"
+                    "$ref": "#/definitions/policyPortMatcherType",
+                    "x-displayname": "Port Matcher"
                 },
                 "prefix_list": {
-                    "description": "Exclusive with [all_sources ip_prefix_set label_selector]\nx-displayName: \"IPv4 Prefix List\"\nx-example: \"192.168.20.0/24\"\nlist of ip prefixes that are representing source of traffic seen by proxy",
+                    "description": "Exclusive with [all_sources ip_prefix_set label_selector]\n list of ip prefixes that are representing source of traffic seen by proxy\n\nExample: - \"192.168.20.0/24\"-",
                     "title": "ipv4 prefix list",
-                    "$ref": "#/definitions/viewsPrefixStringListType"
+                    "$ref": "#/definitions/viewsPrefixStringListType",
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24"
                 },
                 "tls_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list url_category_list]\nx-displayName: \"TLS Domains\"\nDomains in SNI for TLS connections",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list url_category_list]\n Domains in SNI for TLS connections",
                     "title": "TLS Domains",
-                    "$ref": "#/definitions/forward_proxy_policyDomainListType"
+                    "$ref": "#/definitions/forward_proxy_policyDomainListType",
+                    "x-displayname": "TLS Domains"
                 },
                 "url_category_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"List of URL Categories\"\nURL categories to choose, so that the corresponding label selector expressions can be derived from it",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\n URL categories to choose, so that the corresponding label selector expressions can be derived from it",
                     "title": "URL Category List",
-                    "$ref": "#/definitions/forward_proxy_policyURLCategoryListType"
+                    "$ref": "#/definitions/forward_proxy_policyURLCategoryListType",
+                    "x-displayname": "List of URL Categories"
                 }
             }
         },
@@ -2925,19 +2949,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.ForwardProxySimpleRuleType",
             "properties": {
                 "default_action_allow": {
-                    "description": "Exclusive with [default_action_deny default_action_next_policy]\nx-displayName: \"Allow\"\nAllow all connections",
+                    "description": "Exclusive with [default_action_deny default_action_next_policy]\n Allow all connections",
                     "title": "Allow",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Allow"
                 },
                 "default_action_deny": {
-                    "description": "Exclusive with [default_action_allow default_action_next_policy]\nx-displayName: \"Deny\"\nDeny all connections",
+                    "description": "Exclusive with [default_action_allow default_action_next_policy]\n Deny all connections",
                     "title": "Deny",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Deny"
                 },
                 "default_action_next_policy": {
-                    "description": "Exclusive with [default_action_allow default_action_deny]\nx-displayName: \"Next Policy\"\nEvaluate the next forward proxy policy in the active list",
+                    "description": "Exclusive with [default_action_allow default_action_deny]\n Evaluate the next forward proxy policy in the active list",
                     "title": "Next Policy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Next Policy"
                 },
                 "dest_list": {
                     "type": "array",
@@ -3082,39 +3109,94 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.URLType",
             "properties": {
                 "any_path": {
-                    "description": "Exclusive with [path_exact_value path_prefix_value path_regex_value]\nx-displayName: \"Any Path\"\nAll paths are considered match",
+                    "description": "Exclusive with [path_exact_value path_prefix_value path_regex_value]\n All paths are considered match",
                     "title": "Any Path",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any Path"
                 },
                 "exact_value": {
                     "type": "string",
-                    "description": "Exclusive with [regex_value suffix_value]\nx-displayName: \"Exact Values\"\nx-example: \"abc.zyz.com\"\nExact domain name",
-                    "title": "exact value"
+                    "description": "Exclusive with [regex_value suffix_value]\n Exact domain name\n\nExample: - \"abc.zyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "exact value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "abc.zyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "path_exact_value": {
                     "type": "string",
-                    "description": "Exclusive with [any_path path_prefix_value path_regex_value]\nx-displayName: \"Exact Path\"\nx-example: \"/abc/zyz\"\nExact Path to match.",
-                    "title": "exact value"
+                    "description": "Exclusive with [any_path path_prefix_value path_regex_value]\n Exact Path to match.\n\nExample: - \"/abc/zyz\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "exact value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Exact Path",
+                    "x-ves-example": "/abc/zyz",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "path_prefix_value": {
                     "type": "string",
-                    "description": "Exclusive with [any_path path_exact_value path_regex_value]\nx-displayName: \"Prefix of Path\"\nx-example: \"/abc/xyz/\"\nPrefix of Path  e.g \"/abc/xyz\" will match \"/abc/xyz/.*\"",
-                    "title": "Prefix value"
+                    "description": "Exclusive with [any_path path_exact_value path_regex_value]\n Prefix of Path  e.g \"/abc/xyz\" will match \"/abc/xyz/.*\"\n\nExample: - \"/abc/xyz/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Prefix value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Prefix of Path",
+                    "x-ves-example": "/abc/xyz/",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "path_regex_value": {
                     "type": "string",
-                    "description": "Exclusive with [any_path path_exact_value path_prefix_value]\nx-displayName: \"Regex of Path\"\nx-example: \"/abc/([a-z]([-a-z0-9]*[a-z0-9])?)/xyz$'\"\nRegular Expression value for the Path to match",
-                    "title": "regex value of Paths"
+                    "description": "Exclusive with [any_path path_exact_value path_prefix_value]\n Regular Expression value for the Path to match\n\nExample: - \"/abc/([a-z]([-a-z0-9]*[a-z0-9])?)/xyz$'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex value of Paths",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex of Path",
+                    "x-ves-example": "/abc/([a-z]([-a-z0-9]*[a-z0-9])?)/xyz$'",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 },
                 "regex_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value suffix_value]\nx-displayName: \"Regex Values of Domains\"\nx-example: \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"\nRegular Expression value for the domain name",
-                    "title": "regex value of Domains"
+                    "description": "Exclusive with [exact_value suffix_value]\n Regular Expression value for the domain name\n\nExample: - \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex value of Domains",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex Values of Domains",
+                    "x-ves-example": "([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 },
                 "suffix_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value regex_value]\nx-displayName: \"Suffix Values\"\nx-example: \"xyz.com\"\nSuffix of domain names e.g \"xyz.com\" will match \"*.xyz.com\"",
-                    "title": "suffix value"
+                    "description": "Exclusive with [exact_value regex_value]\n Suffix of domain names e.g \"xyz.com\" will match \"*.xyz.com\"\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "suffix value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Suffix Values",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -3439,18 +3521,45 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact_value": {
                     "type": "string",
-                    "description": "Exclusive with [regex_value suffix_value]\nx-displayName: \"Exact Value\"\nx-example: \"abc.zyz.com\"\nExact domain name.",
-                    "title": "exact value"
+                    "description": "Exclusive with [regex_value suffix_value]\n Exact domain name.\n\nExample: - \"abc.zyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "exact value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Exact Value",
+                    "x-ves-example": "abc.zyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "regex_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value suffix_value]\nx-displayName: \"Regex Values of Domains\"\nx-example: \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"\nRegular Expression value for the domain name",
-                    "title": "regex values of Domains"
+                    "description": "Exclusive with [exact_value suffix_value]\n Regular Expression value for the domain name\n\nExample: - \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex values of Domains",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex Values of Domains",
+                    "x-ves-example": "([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 },
                 "suffix_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value regex_value]\nx-displayName: \"Suffix Value\"\nx-example: \"xyz.com\"\nSuffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"",
-                    "title": "suffix value"
+                    "description": "Exclusive with [exact_value regex_value]\n Suffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "suffix value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Suffix Value",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -4047,44 +4156,53 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.GlobalSpecType",
             "properties": {
                 "allow_all": {
-                    "description": "Exclusive with [allow_list deny_list rule_list]\nx-displayName: \"Allow all connections\"\nAllow all connections through this forward proxy",
+                    "description": "Exclusive with [allow_list deny_list rule_list]\n Allow all connections through this forward proxy",
                     "title": "Allow all connections",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Allow all connections"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [allow_all deny_list rule_list]\nx-displayName: \"Allowed connections\"\nList of allowed connections",
+                    "description": "Exclusive with [allow_all deny_list rule_list]\n List of allowed connections",
                     "title": "List of allowed connections",
-                    "$ref": "#/definitions/forward_proxy_policyForwardProxySimpleRuleType"
+                    "$ref": "#/definitions/forward_proxy_policyForwardProxySimpleRuleType",
+                    "x-displayname": "Allowed connections"
                 },
                 "any_proxy": {
-                    "description": "Exclusive with [drp_http_connect network_connector proxy_label_selector]\nx-displayName: \"All Forward Proxies on Site\"\nThis policy is applied to all forward proxies on this site, and not drp/http-connect proxies",
+                    "description": "Exclusive with [drp_http_connect network_connector proxy_label_selector]\n This policy is applied to all forward proxies on this site, and not drp/http-connect proxies",
                     "title": "All Proxies on this site",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All Forward Proxies on Site"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_all allow_list rule_list]\nx-displayName: \"Denied connections\"\nList of denied connections",
+                    "description": "Exclusive with [allow_all allow_list rule_list]\n List of denied connections",
                     "title": "List of denied connections",
-                    "$ref": "#/definitions/forward_proxy_policyForwardProxySimpleRuleType"
+                    "$ref": "#/definitions/forward_proxy_policyForwardProxySimpleRuleType",
+                    "x-displayname": "Denied connections"
                 },
                 "drp_http_connect": {
-                    "description": "Exclusive with [any_proxy network_connector proxy_label_selector]\nx-displayName: \"DRP/HTTP-Connect Proxy\"\nThis policy is applied to attached DRP/HTTP-Connect Proxy (applicable only in App namespace)",
+                    "description": "Exclusive with [any_proxy network_connector proxy_label_selector]\n This policy is applied to attached DRP/HTTP-Connect Proxy (applicable only in App namespace)",
                     "title": "DRP or HTTP Connect Proxy",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "DRP/HTTP-Connect Proxy"
                 },
                 "network_connector": {
-                    "description": "Exclusive with [any_proxy drp_http_connect proxy_label_selector]\nx-displayName: \"Network Connector\"\nProxy for given network connector",
+                    "description": "Exclusive with [any_proxy drp_http_connect proxy_label_selector]\n Proxy for given network connector",
                     "title": "Specific Network Connector",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Network Connector"
                 },
                 "proxy_label_selector": {
-                    "description": "Exclusive with [any_proxy drp_http_connect network_connector]\nx-displayName: \"Network Connector Label Selector\"\nx-example: \"app != web\"\nProxy for Network Connector or HTTP connect proxy selected by Label selector",
+                    "description": "Exclusive with [any_proxy drp_http_connect network_connector]\n Proxy for Network Connector or HTTP connect proxy selected by Label selector\n\nExample: - \"app != web\"-",
                     "title": "Network Connector Label selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Network Connector Label Selector",
+                    "x-ves-example": "app != web"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_all allow_list deny_list]\nx-displayName: \"Custom Rule List\"\nList of custom rules",
+                    "description": "Exclusive with [allow_all allow_list deny_list]\n List of custom rules",
                     "title": "List of custom rules",
-                    "$ref": "#/definitions/forward_proxy_policyForwardProxyRuleListType"
+                    "$ref": "#/definitions/forward_proxy_policyForwardProxyRuleListType",
+                    "x-displayname": "Custom Rule List"
                 }
             }
         }

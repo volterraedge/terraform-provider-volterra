@@ -1019,6 +1019,11 @@ func (c *CustomAPIInprocClient) APIEndpointPDF(ctx context.Context, in *APIEndpo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.APIEndpointPDF"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1062,6 +1067,11 @@ func (c *CustomAPIInprocClient) APIEndpoints(ctx context.Context, in *APIEndpoin
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.APIEndpoints"); rvFn != nil {
@@ -1107,6 +1117,11 @@ func (c *CustomAPIInprocClient) GetAPIEndpointLearntSchema(ctx context.Context, 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.GetAPIEndpointLearntSchema"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1150,6 +1165,11 @@ func (c *CustomAPIInprocClient) GetServiceAPIEndpointPDF(ctx context.Context, in
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpointPDF"); rvFn != nil {
@@ -1195,6 +1215,11 @@ func (c *CustomAPIInprocClient) GetServiceAPIEndpoints(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpoints"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1238,6 +1263,11 @@ func (c *CustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerS
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.GetSwaggerSpec"); rvFn != nil {
@@ -1283,6 +1313,11 @@ func (c *CustomAPIInprocClient) OverridePop(ctx context.Context, in *OverridePop
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.OverridePop"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1327,6 +1362,11 @@ func (c *CustomAPIInprocClient) OverridePush(ctx context.Context, in *OverridePu
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.OverridePush"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -1370,6 +1410,11 @@ func (c *CustomAPIInprocClient) Overrides(ctx context.Context, in *OverridesReq,
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.app_type.CustomAPI.Overrides"); rvFn != nil {
@@ -1515,7 +1560,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-GetAPIEndpointLearntSchema"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-getapiendpointlearntschema"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetAPIEndpointLearntSchema"
             },
@@ -1623,7 +1668,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-APIEndpointPDF"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-apiendpointpdf"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.APIEndpointPDF"
             },
@@ -1819,7 +1864,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-GetSwaggerSpec"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-getswaggerspec"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetSwaggerSpec"
             },
@@ -1919,7 +1964,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-OverridePop"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-overridepop"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.OverridePop"
             },
@@ -2019,7 +2064,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-OverridePush"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-overridepush"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.OverridePush"
             },
@@ -2111,7 +2156,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-Overrides"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-overrides"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.Overrides"
             },
@@ -2219,7 +2264,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-GetServiceAPIEndpointPDF"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-getserviceapiendpointpdf"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpointPDF"
             },
@@ -2327,7 +2372,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-GetServiceAPIEndpoints"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-getserviceapiendpoints"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpoints"
             },

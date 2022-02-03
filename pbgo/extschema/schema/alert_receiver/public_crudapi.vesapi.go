@@ -1113,6 +1113,10 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.alert_receiver.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1168,6 +1172,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.alert_receiver.API.Replace"); rvFn != nil {
@@ -1718,7 +1726,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.API.Create"
             },
@@ -1818,7 +1826,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.API.Replace"
             },
@@ -1934,7 +1942,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.API.List"
             },
@@ -2043,7 +2051,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.API.Get"
             },
@@ -2136,7 +2144,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.API.Delete"
             },
@@ -2200,24 +2208,29 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.CreateSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverEmailConfig"
+                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
+                    "$ref": "#/definitions/alert_receiverEmailConfig",
+                    "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverOpsGenieConfig"
+                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
+                    "$ref": "#/definitions/alert_receiverOpsGenieConfig",
+                    "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverPagerDutyConfig"
+                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
+                    "$ref": "#/definitions/alert_receiverPagerDutyConfig",
+                    "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\n",
-                    "$ref": "#/definitions/alert_receiverSlackConfig"
+                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
+                    "$ref": "#/definitions/alert_receiverSlackConfig",
+                    "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\n",
-                    "$ref": "#/definitions/alert_receiverSMSConfig"
+                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
+                    "$ref": "#/definitions/alert_receiverSMSConfig",
+                    "x-displayname": "SMS"
                 }
             }
         },
@@ -2352,24 +2365,29 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.GetSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverEmailConfig"
+                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
+                    "$ref": "#/definitions/alert_receiverEmailConfig",
+                    "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverOpsGenieConfig"
+                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
+                    "$ref": "#/definitions/alert_receiverOpsGenieConfig",
+                    "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverPagerDutyConfig"
+                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
+                    "$ref": "#/definitions/alert_receiverPagerDutyConfig",
+                    "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\n",
-                    "$ref": "#/definitions/alert_receiverSlackConfig"
+                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
+                    "$ref": "#/definitions/alert_receiverSlackConfig",
+                    "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\n",
-                    "$ref": "#/definitions/alert_receiverSMSConfig"
+                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
+                    "$ref": "#/definitions/alert_receiverSMSConfig",
+                    "x-displayname": "SMS"
                 }
             }
         },
@@ -2382,29 +2400,34 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.GlobalSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\nx-displayName: \"Email\"\nSend alert notifications as Email",
+                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
                     "title": "Email",
-                    "$ref": "#/definitions/alert_receiverEmailConfig"
+                    "$ref": "#/definitions/alert_receiverEmailConfig",
+                    "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\nx-displayName: \"OpsGenie\"\nSend alert notifications to OpsGenie",
+                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
                     "title": "OpsGenie",
-                    "$ref": "#/definitions/alert_receiverOpsGenieConfig"
+                    "$ref": "#/definitions/alert_receiverOpsGenieConfig",
+                    "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\nx-displayName: \"PagerDuty\"\nSend alert notifications to PagerDuty",
+                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
                     "title": "PagerDuty",
-                    "$ref": "#/definitions/alert_receiverPagerDutyConfig"
+                    "$ref": "#/definitions/alert_receiverPagerDutyConfig",
+                    "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\nx-displayName: \"Slack\"\nSend alert notifications to Slack",
+                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
                     "title": "Slack",
-                    "$ref": "#/definitions/alert_receiverSlackConfig"
+                    "$ref": "#/definitions/alert_receiverSlackConfig",
+                    "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\nx-displayName: \"SMS\"\nSend alert notifications as SMS",
+                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
                     "title": "SMS",
-                    "$ref": "#/definitions/alert_receiverSMSConfig"
+                    "$ref": "#/definitions/alert_receiverSMSConfig",
+                    "x-displayname": "SMS"
                 }
             }
         },
@@ -2657,24 +2680,29 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.ReplaceSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverEmailConfig"
+                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
+                    "$ref": "#/definitions/alert_receiverEmailConfig",
+                    "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverOpsGenieConfig"
+                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
+                    "$ref": "#/definitions/alert_receiverOpsGenieConfig",
+                    "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\n",
-                    "$ref": "#/definitions/alert_receiverPagerDutyConfig"
+                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
+                    "$ref": "#/definitions/alert_receiverPagerDutyConfig",
+                    "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\n",
-                    "$ref": "#/definitions/alert_receiverSlackConfig"
+                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
+                    "$ref": "#/definitions/alert_receiverSlackConfig",
+                    "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\n",
-                    "$ref": "#/definitions/alert_receiverSMSConfig"
+                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
+                    "$ref": "#/definitions/alert_receiverSMSConfig",
+                    "x-displayname": "SMS"
                 }
             }
         },
@@ -3302,14 +3330,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },

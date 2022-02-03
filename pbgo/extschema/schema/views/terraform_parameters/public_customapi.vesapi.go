@@ -335,6 +335,11 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomAPI.Get"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -378,6 +383,11 @@ func (c *CustomAPIInprocClient) GetStatus(ctx context.Context, in *GetRequest, o
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus"); rvFn != nil {
@@ -523,7 +533,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomAPI-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomAPI.Get"
             },
@@ -623,7 +633,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomAPI-GetStatus"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-customapi-getstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus"
             },
@@ -788,14 +798,16 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.ApplyStatus",
             "properties": {
                 "apply_state": {
-                    "description": "Exclusive with [destroy_state infra_state]\nx-displayName: \"Apply State\"\nTerraform state during apply stage",
+                    "description": "Exclusive with [destroy_state infra_state]\n Terraform state during apply stage",
                     "title": "apply_state",
-                    "$ref": "#/definitions/terraform_parametersApplyStageState"
+                    "$ref": "#/definitions/terraform_parametersApplyStageState",
+                    "x-displayname": "Apply State"
                 },
                 "destroy_state": {
-                    "description": "Exclusive with [apply_state infra_state]\nx-displayName: \"Destroy State\"\nTerraform state during destroy stage",
+                    "description": "Exclusive with [apply_state infra_state]\n Terraform state during destroy stage",
                     "title": "destroy_state",
-                    "$ref": "#/definitions/terraform_parametersDestroyStageState"
+                    "$ref": "#/definitions/terraform_parametersDestroyStageState",
+                    "x-displayname": "Destroy State"
                 },
                 "error_output": {
                     "type": "string",
@@ -805,9 +817,10 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "infra_state": {
-                    "description": "Exclusive with [apply_state destroy_state]\nx-displayName: \"Infra State\"\nInfrastructure state of the view provisioning",
+                    "description": "Exclusive with [apply_state destroy_state]\n Infrastructure state of the view provisioning",
                     "title": "infra_state",
-                    "$ref": "#/definitions/terraform_parametersInfraState"
+                    "$ref": "#/definitions/terraform_parametersInfraState",
+                    "x-displayname": "Infra State"
                 },
                 "modification_timestamp": {
                     "type": "string",
@@ -917,9 +930,10 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "infra_state": {
-                    "description": "Exclusive with [plan_state]\nx-displayName: \"Infra State\"\nInfrastructure state of the view provisioning",
+                    "description": "Exclusive with [plan_state]\n Infrastructure state of the view provisioning",
                     "title": "infra_state",
-                    "$ref": "#/definitions/terraform_parametersInfraState"
+                    "$ref": "#/definitions/terraform_parametersInfraState",
+                    "x-displayname": "Infra State"
                 },
                 "modification_timestamp": {
                     "type": "string",
@@ -929,9 +943,10 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Modification Timestamp"
                 },
                 "plan_state": {
-                    "description": "Exclusive with [infra_state]\nx-displayName: \"Plan State\"\nTerraform state during plan stage",
+                    "description": "Exclusive with [infra_state]\n Terraform state during plan stage",
                     "title": "plan_state",
-                    "$ref": "#/definitions/terraform_parametersPlanStageState"
+                    "$ref": "#/definitions/terraform_parametersPlanStageState",
+                    "x-displayname": "Plan State"
                 },
                 "tf_plan_output": {
                     "type": "string",

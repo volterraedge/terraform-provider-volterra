@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.user_identification.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.user_identification.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user_identification-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.crudapi.API.Create"
             },
@@ -3382,34 +3388,60 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.user_identification.UserIdentificationRule",
             "properties": {
                 "client_asn": {
-                    "description": "Exclusive with [client_ip cookie_name http_header_name none query_param_key]\nx-displayName: \"Client Autonomous System\"\nUse client ASN as user identifier.\nThe client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
+                    "description": "Exclusive with [client_ip cookie_name http_header_name none query_param_key]\n Use client ASN as user identifier.\n The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
                     "title": "client asn",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Client Autonomous System"
                 },
                 "client_ip": {
-                    "description": "Exclusive with [client_asn cookie_name http_header_name none query_param_key]\nx-displayName: \"Client IP Address\"\nUse client IP address as user identifier.",
+                    "description": "Exclusive with [client_asn cookie_name http_header_name none query_param_key]\n Use client IP address as user identifier.",
                     "title": "client ip address",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Client IP Address"
                 },
                 "cookie_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip http_header_name none query_param_key]\nx-displayName: \"Cookie Name\"\nx-example: \"Session\"\nUse the HTTP cookie value for the given name as user identifier.",
-                    "title": "Cookie Name"
+                    "description": "Exclusive with [client_asn client_ip http_header_name none query_param_key]\n Use the HTTP cookie value for the given name as user identifier.\n\nExample: - \"Session\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "Cookie Name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Cookie Name",
+                    "x-ves-example": "Session",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "http_header_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip cookie_name none query_param_key]\nx-displayName: \"HTTP Header Name\"\nUse the HTTP header value for the given name as user identifier.",
-                    "title": "HTTP header name"
+                    "description": "Exclusive with [client_asn client_ip cookie_name none query_param_key]\n Use the HTTP header value for the given name as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "HTTP header name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "HTTP Header Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "none": {
-                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name query_param_key]\nx-displayName: \"No User Identifier\"\nDo not use any user identifier.",
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name query_param_key]\n Do not use any user identifier.",
                     "title": "none",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No User Identifier"
                 },
                 "query_param_key": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name none]\nx-displayName: \"Query Parameter Key\"\nUse the query parameter value for the given key as user identifier.",
-                    "title": "query param key"
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name none]\n Use the query parameter value for the given key as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "query param key",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Query Parameter Key",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 }
             }
         }

@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_network.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_network.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Create"
             },
@@ -2955,14 +2961,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
@@ -2976,14 +2984,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpSubnetType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Subnet\"\nIPv4 Subnet Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Subnet Address",
                     "title": "IPv4 Subnet",
-                    "$ref": "#/definitions/schemaIpv4SubnetType"
+                    "$ref": "#/definitions/schemaIpv4SubnetType",
+                    "x-displayname": "IPv4 Subnet"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Subnet\"\nIPv6 Subnet Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Subnet Address",
                     "title": "IPv6 Subnet",
-                    "$ref": "#/definitions/schemaIpv6SubnetType"
+                    "$ref": "#/definitions/schemaIpv6SubnetType",
+                    "x-displayname": "IPv6 Subnet"
                 }
             }
         },
@@ -3725,34 +3735,43 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.GlobalSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\nx-displayName: \"Global Network\"\nGlobal network can extend to multiple sites.",
+                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n Global network can extend to multiple sites.",
                     "title": "Global Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Global Network"
                 },
                 "interface_ip": {
-                    "description": "Exclusive with [site_snat_pool]\nx-displayName: \"Interface IP\"\nSNAT pool is interface ip of respective node",
+                    "description": "Exclusive with [site_snat_pool]\n SNAT pool is interface ip of respective node",
                     "title": "Interface IP",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Interface IP"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\nx-displayName: \"Legacy Network Config\"\nType of virtual network",
+                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n Type of virtual network\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2,3,4,7]\n",
                     "title": "Legacy Network config",
-                    "$ref": "#/definitions/schemaVirtualNetworkType"
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Legacy Network Config",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1,2,3,4,7]"
+                    }
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_network]\nx-displayName: \"Site Local Inside Network\"\nSite local Inside network, also known as inside network",
+                    "description": "Exclusive with [global_network legacy_type site_local_network]\n Site local Inside network, also known as inside network",
                     "title": "Site Local Inside Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Inside Network"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\nx-displayName: \"Site Local (Outside) Network\"\nSite local network, also known as outside network",
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n Site local network, also known as outside network",
                     "title": "Site Local Network (outside)",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local (Outside) Network"
                 },
                 "site_snat_pool": {
-                    "description": "Exclusive with [interface_ip]\nx-displayName: \"Per Node SNAT pool\"\nConfigure per node SNAT pool for a site",
+                    "description": "Exclusive with [interface_ip]\n Configure per node SNAT pool for a site",
                     "title": "Per Node SNAT pool",
-                    "$ref": "#/definitions/virtual_networkSNATPoolSiteType"
+                    "$ref": "#/definitions/virtual_networkSNATPoolSiteType",
+                    "x-displayname": "Per Node SNAT pool"
                 },
                 "static_routes": {
                     "type": "array",

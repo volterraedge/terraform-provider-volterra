@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"
             },
@@ -3433,9 +3439,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.OriginPoolWithWeight",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [pool]\nx-displayName: \"Custom Cluster\"\nx-required\nMore flexible, advanced feature control with cluster",
+                    "description": "Exclusive with [pool]\n More flexible, advanced feature control with cluster\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Cluster",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Custom Cluster",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "endpoint_subsets": {
                     "type": "object",
@@ -3447,9 +3458,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "pool": {
-                    "description": "Exclusive with [cluster]\nx-displayName: \"Origin Pool\"\nx-required\nSimple, commonly used pool parameters with origin pool",
+                    "description": "Exclusive with [cluster]\n Simple, commonly used pool parameters with origin pool\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Pool",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Origin Pool",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "priority": {
                     "type": "integer",
@@ -3535,34 +3551,44 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [use_default_port]\nx-displayName: \"TCP Listen Port\"\nTCP port to Listen.",
+                    "description": "Exclusive with [use_default_port]\n TCP port to Listen. \n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "TCP port to listen",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "TCP Listen Port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "site": {
-                    "description": "Exclusive with [virtual_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
+                    "description": "Exclusive with [virtual_network virtual_site vk8s_service]\n Advertise on a customer site and a given network. ",
                     "title": "Site",
-                    "$ref": "#/definitions/viewsWhereSite"
+                    "$ref": "#/definitions/viewsWhereSite",
+                    "x-displayname": "Site"
                 },
                 "use_default_port": {
-                    "description": "Exclusive with [port]\nx-displayName: \"Use Default TCP Listen Port\"\nFor HTTP, default is 80. For HTTPS/SNI, default is 443.",
+                    "description": "Exclusive with [port]\n For HTTP, default is 80. For HTTPS/SNI, default is 443.",
                     "title": "Use Default port",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Use Default TCP Listen Port"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [site virtual_site vk8s_service]\nx-displayName: \"Virtual Network\"\nAdvertise on a virtual network",
+                    "description": "Exclusive with [site virtual_site vk8s_service]\n Advertise on a virtual network",
                     "title": "Virtual Network",
-                    "$ref": "#/definitions/viewsWhereVirtualNetwork"
+                    "$ref": "#/definitions/viewsWhereVirtualNetwork",
+                    "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site virtual_network vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [site virtual_network vk8s_service]\n Advertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
-                    "$ref": "#/definitions/viewsWhereVirtualSite"
+                    "$ref": "#/definitions/viewsWhereVirtualSite",
+                    "x-displayname": "Virtual Site"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [site virtual_network virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [site virtual_network virtual_site]\n Advertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
-                    "$ref": "#/definitions/viewsWhereVK8SService"
+                    "$ref": "#/definitions/viewsWhereVK8SService",
+                    "x-displayname": "vK8s Service Network on RE"
                 }
             }
         },
@@ -3576,14 +3602,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.WhereVK8SService",
             "properties": {
                 "site": {
-                    "description": "Exclusive with [virtual_site]\nx-displayName: \"RE Reference\"\nReference to site object",
+                    "description": "Exclusive with [virtual_site]\n Reference to site object",
                     "title": "RE Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "RE Reference"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site]\nx-displayName: \"Virtual Site Reference\"\nReference to virtual site object",
+                    "description": "Exclusive with [site]\n Reference to virtual site object",
                     "title": "Virtual Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Virtual Site Reference"
                 }
             }
         },
@@ -3597,14 +3625,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.WhereVirtualNetwork",
             "properties": {
                 "default_vip": {
-                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP\"\nUse the default VIP, system allocated or configured in the virtual network",
+                    "description": "Exclusive with [specific_vip]\n Use the default VIP, system allocated or configured in the virtual network",
                     "title": "Default VIP for VoltADN Private Network",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default VIP"
                 },
                 "specific_vip": {
                     "type": "string",
-                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
-                    "title": "Specific VIP"
+                    "description": "Exclusive with [default_vip]\n Use given IP address as VIP on VoltADN private Network\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Specific VIP",
+                    "x-displayname": "Specific VIP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "virtual_network": {
                     "description": " Select virtual network reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3659,19 +3692,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType",
             "properties": {
                 "advertise_custom": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\nx-displayName: \"Advertise Custom\"\nAdvertise this VIP on specific sites",
+                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this VIP on specific sites",
                     "title": "Advertise Custom",
-                    "$ref": "#/definitions/viewsAdvertiseCustom"
+                    "$ref": "#/definitions/viewsAdvertiseCustom",
+                    "x-displayname": "Advertise Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\nx-displayName: \"Advertise On Public With Specified VIP\"\nAdvertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
                     "title": "Advertise On Public",
-                    "$ref": "#/definitions/viewsAdvertisePublic"
+                    "$ref": "#/definitions/viewsAdvertisePublic",
+                    "x-displayname": "Advertise On Public With Specified VIP"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\nx-displayName: \"Advertise On Public\"\nAdvertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
                     "title": "Advertise On Public Default VIP",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Advertise On Public"
                 },
                 "dns_info": {
                     "type": "array",
@@ -3690,14 +3726,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\nx-displayName: \"Do Not Advertise\"\nDo not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
                     "title": "Do Not Advertise",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Do Not Advertise"
                 },
                 "do_not_retract_cluster": {
-                    "description": "Exclusive with [retract_cluster]\nx-displayName: \"Disable cluster retraction\"\nWhen this option is configured, cluster with no healthy\nendpoints is not retracted from route having weighted cluster\nconfiguration.",
+                    "description": "Exclusive with [retract_cluster]\n When this option is configured, cluster with no healthy\n endpoints is not retracted from route having weighted cluster\n configuration.",
                     "title": "do_not_retract_cluster",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable cluster retraction"
                 },
                 "domains": {
                     "type": "array",
@@ -3716,24 +3754,28 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "hash_policy_choice_least_active": {
-                    "description": "Exclusive with [hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Least Active Connections\"\nConnections are sent to origin server that has least active connections",
+                    "description": "Exclusive with [hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n Connections are sent to origin server that has least active connections",
                     "title": "Least Active Connections",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Least Active Connections"
                 },
                 "hash_policy_choice_random": {
-                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Random\"\nConnections are sent to all eligible origin servers in random fashion",
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n Connections are sent to all eligible origin servers in random fashion",
                     "title": "Random",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Random"
                 },
                 "hash_policy_choice_round_robin": {
-                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Round Robin\"\nConnections are sent to all eligible origin servers in round robin fashion",
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness]\n Connections are sent to all eligible origin servers in round robin fashion",
                     "title": "Round Robin",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Round Robin"
                 },
                 "hash_policy_choice_source_ip_stickiness": {
-                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\nx-displayName: \"Source IP Stickiness\"\nConnections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\n Connections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
                     "title": "Source IP Stickiness",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Source IP Stickiness"
                 },
                 "host_name": {
                     "type": "string",
@@ -3779,9 +3821,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\nx-displayName: \"Retract cluster with no healthy endpoints\"\nWhen this option is enabled, weighted cluster will not be considered\nfor loadbalancing, if all its endpoints are unhealthy.\nSince the cluster with all unhealthy endpoints is removed, the traffic\nwill be distributed among remaining clusters as per their weight.\nAlso panic-threshold configuration is ignored for retracted cluster.\n\nThis option is ignored when single destination cluster is configured\nfor route",
+                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
                     "title": "retract_cluster",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Retract cluster with no healthy endpoints"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",

@@ -1053,6 +1053,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1085,6 +1088,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
+	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		return nil, errors.Wrapf(err, "Filling oneof default choice")
 	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Replace"); rvFn != nil {
@@ -1574,7 +1580,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Get"
             },
@@ -1649,7 +1655,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Delete"
             },
@@ -1732,7 +1738,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Replace"
             },
@@ -1864,7 +1870,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.List"
             },
@@ -1941,7 +1947,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Create"
             },
@@ -2073,7 +2079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.ListStream"
             },
@@ -2180,7 +2186,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Get"
             },
@@ -2312,7 +2318,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.List"
             },
@@ -2394,7 +2400,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Delete"
             },
@@ -2477,7 +2483,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Replace"
             },
@@ -2561,7 +2567,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Create"
             },
@@ -2582,9 +2588,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.authentication.CookieParams",
             "properties": {
                 "auth_hmac": {
-                    "description": "Exclusive with [kms_key_hmac]\nx-displayName: \"HMAC primary \u0026 secondary key\"\nHMAC pair provided as primary and secondary key",
+                    "description": "Exclusive with [kms_key_hmac]\n HMAC pair provided as primary and secondary key",
                     "title": "HMAC pair",
-                    "$ref": "#/definitions/authenticationHMACKeyPair"
+                    "$ref": "#/definitions/authenticationHMACKeyPair",
+                    "x-displayname": "HMAC primary \u0026 secondary key"
                 },
                 "cookie_expiry": {
                     "type": "integer",
@@ -2607,9 +2614,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "kms_key_hmac": {
-                    "description": "Exclusive with [auth_hmac]\nx-displayName: \"HMAC kms key\"\nHMAC configured using KMS_KEY",
+                    "description": "Exclusive with [auth_hmac]\n HMAC configured using KMS_KEY",
                     "title": "kms_key",
-                    "$ref": "#/definitions/authenticationKMSKeyRefType"
+                    "$ref": "#/definitions/authenticationKMSKeyRefType",
+                    "x-displayname": "HMAC kms key"
                 },
                 "session_expiry": {
                     "type": "integer",
@@ -3258,18 +3266,45 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact_value": {
                     "type": "string",
-                    "description": "Exclusive with [regex_value suffix_value]\nx-displayName: \"Exact Value\"\nx-example: \"abc.zyz.com\"\nExact domain name.",
-                    "title": "exact value"
+                    "description": "Exclusive with [regex_value suffix_value]\n Exact domain name.\n\nExample: - \"abc.zyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "exact value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Exact Value",
+                    "x-ves-example": "abc.zyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "regex_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value suffix_value]\nx-displayName: \"Regex Values of Domains\"\nx-example: \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"\nRegular Expression value for the domain name",
-                    "title": "regex values of Domains"
+                    "description": "Exclusive with [exact_value suffix_value]\n Regular Expression value for the domain name\n\nExample: - \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex values of Domains",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex Values of Domains",
+                    "x-ves-example": "([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 },
                 "suffix_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value regex_value]\nx-displayName: \"Suffix Value\"\nx-example: \"xyz.com\"\nSuffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"",
-                    "title": "suffix value"
+                    "description": "Exclusive with [exact_value regex_value]\n Suffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "suffix value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Suffix Value",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -3370,14 +3405,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "secret_value": {
-                    "description": "Exclusive with [value]\nx-displayName: \"Secret Value\"\nSecret Value of the HTTP header.",
+                    "description": "Exclusive with [value]\n Secret Value of the HTTP header.",
                     "title": "Secret Value",
-                    "$ref": "#/definitions/schemaSecretType"
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Secret Value"
                 },
                 "value": {
                     "type": "string",
-                    "description": "Exclusive with [secret_value]\nx-displayName: \"Value\"\nValue of the HTTP header.",
-                    "title": "value"
+                    "description": "Exclusive with [secret_value]\n Value of the HTTP header.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "value",
+                    "maxLength": 8096,
+                    "x-displayname": "Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
                 }
             }
         },
@@ -3609,14 +3650,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -3885,9 +3928,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_hash_algorithms": {
-                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\nx-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
-                    "$ref": "#/definitions/schemaHashAlgorithms"
+                    "$ref": "#/definitions/schemaHashAlgorithms",
+                    "x-displayname": "Use hash algorithms in custom order"
                 },
                 "description": {
                     "type": "string",
@@ -3896,9 +3940,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Description"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\nx-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable OCSP Stapling"
                 },
                 "private_key": {
                     "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3911,9 +3956,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_system_defaults": {
-                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\nx-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
                     "title": "Fetch with Volterra default settings",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Fetch with Volterra default settings"
                 }
             }
         },
@@ -3953,9 +3999,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.TlsInterceptionRule",
             "properties": {
                 "disable_interception": {
-                    "description": "Exclusive with [enable_interception]\nx-displayName: \"Disable Interception\"\nDisable Interception",
+                    "description": "Exclusive with [enable_interception]\n Disable Interception",
                     "title": "Disable Interception",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Interception"
                 },
                 "domain_match": {
                     "description": " Domain value or regular expression to match\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3968,9 +4015,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "enable_interception": {
-                    "description": "Exclusive with [disable_interception]\nx-displayName: \"Enable Interception\"\nEnable Interception",
+                    "description": "Exclusive with [disable_interception]\n Enable Interception",
                     "title": "Enable Interception",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Interception"
                 }
             }
         },
@@ -3985,34 +4033,45 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.TlsInterceptionType",
             "properties": {
                 "custom_certificate": {
-                    "description": "Exclusive with [volterra_certificate]\nx-displayName: \"Custom Signing Certificate\"\nCertificates for generating intermediate certificate for TLS interception.",
+                    "description": "Exclusive with [volterra_certificate]\n Certificates for generating intermediate certificate for TLS interception.",
                     "title": "Custom Signing Certificate",
-                    "$ref": "#/definitions/schemaTlsCertificateType"
+                    "$ref": "#/definitions/schemaTlsCertificateType",
+                    "x-displayname": "Custom Signing Certificate"
                 },
                 "enable_for_all_domains": {
-                    "description": "Exclusive with [policy]\nx-displayName: \"Enable For All Domains\"\nEnable interception for all domains",
+                    "description": "Exclusive with [policy]\n Enable interception for all domains",
                     "title": "Enable For All Domains",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable For All Domains"
                 },
                 "policy": {
-                    "description": "Exclusive with [enable_for_all_domains]\nx-displayName: \"Enable/Disable for Specific Domains\"\nPolicy to enable/disable specific domains, with implicit enable all domains",
+                    "description": "Exclusive with [enable_for_all_domains]\n Policy to enable/disable specific domains, with implicit enable all domains",
                     "title": "Policy for specific domains",
-                    "$ref": "#/definitions/schemaTlsInterceptionPolicy"
+                    "$ref": "#/definitions/schemaTlsInterceptionPolicy",
+                    "x-displayname": "Enable/Disable for Specific Domains"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [volterra_trusted_ca]\nx-displayName: \"Custom Trusted CA List\"\nCustom trusted CA certificates for validating upstream server certificate",
-                    "title": "Custom List"
+                    "description": "Exclusive with [volterra_trusted_ca]\n Custom trusted CA certificates for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Custom List",
+                    "maxLength": 131072,
+                    "x-displayname": "Custom Trusted CA List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "volterra_certificate": {
-                    "description": "Exclusive with [custom_certificate]\nx-displayName: \"Volterra Signing Certificate\"\nVolterra certificates for generating intermediate certificate for TLS interception.",
+                    "description": "Exclusive with [custom_certificate]\n Volterra certificates for generating intermediate certificate for TLS interception.",
                     "title": "Volterra Signing Certificate",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Volterra Signing Certificate"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\nx-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Default volterra trusted CA list for validating upstream server certificate",
                     "title": "Volterra List",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Trusted CA List"
                 }
             }
         },
@@ -4248,9 +4307,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.WafType",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with []\nx-displayName: \"Application Firewall\"\nA direct reference to an Application Firewall configuration object",
+                    "description": "Exclusive with []\n A direct reference to an Application Firewall configuration object",
                     "title": "app_firewall",
-                    "$ref": "#/definitions/schemaAppFirewallRefType"
+                    "$ref": "#/definitions/schemaAppFirewallRefType",
+                    "x-displayname": "Application Firewall"
                 }
             }
         },
@@ -4320,13 +4380,19 @@ var APISwaggerJSON string = `{
                 },
                 "append_server_name": {
                     "type": "string",
-                    "description": "Exclusive with [default_header pass_through server_name]\nx-displayName: \"Append Server Name if absent\"\nSpecifies the value to be used for Server header if it is not already present.\nIf Server Header is already present it is not overwritten. It is just passed.",
-                    "title": "append_server_name"
+                    "description": "Exclusive with [default_header pass_through server_name]\n Specifies the value to be used for Server header if it is not already present.\n If Server Header is already present it is not overwritten. It is just passed.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "append_server_name",
+                    "maxLength": 8096,
+                    "x-displayname": "Append Server Name if absent",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
                 },
                 "authentication": {
-                    "description": "Exclusive with [no_authentication]\nx-displayName: \"Enable Authentication\"\nConfigure authentication details",
+                    "description": "Exclusive with [no_authentication]\n Configure authentication details",
                     "title": "Authentication Enabled",
-                    "$ref": "#/definitions/virtual_hostAuthenticationDetails"
+                    "$ref": "#/definitions/virtual_hostAuthenticationDetails",
+                    "x-displayname": "Enable Authentication"
                 },
                 "auto_cert": {
                     "type": "boolean",
@@ -4354,9 +4420,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Buffer Policy"
                 },
                 "captcha_challenge": {
-                    "description": "Exclusive with [js_challenge no_challenge]\nx-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on Virtual Host",
+                    "description": "Exclusive with [js_challenge no_challenge]\n Configure Captcha challenge on Virtual Host",
                     "title": "Captcha Challenge",
-                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType"
+                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
+                    "x-displayname": "Captcha Challenge"
                 },
                 "cdn_service": {
                     "description": " Configure CDN parameters",
@@ -4391,9 +4458,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_header": {
-                    "description": "Exclusive with [append_server_name pass_through server_name]\nx-displayName: \"Default value for Server header\"\nSpecifies that the default value of \"volt-adc\" should be used for Server Header",
+                    "description": "Exclusive with [append_server_name pass_through server_name]\n Specifies that the default value of \"volt-adc\" should be used for Server Header",
                     "title": "default_header",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default value for Server header"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -4412,9 +4480,10 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "false"
                 },
                 "disable_path_normalize": {
-                    "description": "Exclusive with [enable_path_normalize]\nx-displayName: \"Disable path normalization\"\nPath normalization is disabled",
+                    "description": "Exclusive with [enable_path_normalize]\n Path normalization is disabled",
                     "title": "Disable Path normalization",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable path normalization"
                 },
                 "dns_domains": {
                     "type": "array",
@@ -4468,9 +4537,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Dynamic Reverse Proxy"
                 },
                 "enable_path_normalize": {
-                    "description": "Exclusive with [disable_path_normalize]\nx-displayName: \"Enable path normalization\"\nPath normalization is enabled",
+                    "description": "Exclusive with [disable_path_normalize]\n Path normalization is enabled",
                     "title": "Enable Path normalization",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable path normalization"
                 },
                 "host_name": {
                     "type": "string",
@@ -4494,9 +4564,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Javascript Info"
                 },
                 "js_challenge": {
-                    "description": "Exclusive with [captcha_challenge no_challenge]\nx-displayName: \"Javascript Challenge\"\nConfigure Javascript challenge on Virtual Host",
+                    "description": "Exclusive with [captcha_challenge no_challenge]\n Configure Javascript challenge on Virtual Host",
                     "title": "Javascript Challenge",
-                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType"
+                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
+                    "x-displayname": "Javascript Challenge"
                 },
                 "jwt": {
                     "type": "array",
@@ -4519,19 +4590,22 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_authentication": {
-                    "description": "Exclusive with [authentication]\nx-displayName: \"Disable Authentication\"\nDisable Authentication",
+                    "description": "Exclusive with [authentication]\n Disable Authentication",
                     "title": "Disable Authentication",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Authentication"
                 },
                 "no_challenge": {
-                    "description": "Exclusive with [captcha_challenge js_challenge]\nx-displayName: \"No Challenge\"\nNo challenge is enabled for this virtual host",
+                    "description": "Exclusive with [captcha_challenge js_challenge]\n No challenge is enabled for this virtual host",
                     "title": "No Challenge",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Challenge"
                 },
                 "pass_through": {
-                    "description": "Exclusive with [append_server_name default_header server_name]\nx-displayName: \"Pass existing Server header\"\nPasses existing Server Header as is. If server header is absent, nothing is\nappended.",
+                    "description": "Exclusive with [append_server_name default_header server_name]\n Passes existing Server Header as is. If server header is absent, nothing is\n appended.",
                     "title": "pass_through",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Pass existing Server header"
                 },
                 "proxy": {
                     "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
@@ -4644,8 +4718,13 @@ var APISwaggerJSON string = `{
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [append_server_name default_header pass_through]\nx-displayName: \"Server Name\"\nSpecifies the value to be used for Server header inserted in responses.\nThis will overwrite existing values if any for Server Header",
-                    "title": "server_name"
+                    "description": "Exclusive with [append_server_name default_header pass_through]\n Specifies the value to be used for Server header inserted in responses.\n This will overwrite existing values if any for Server Header\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "server_name",
+                    "maxLength": 8096,
+                    "x-displayname": "Server Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
                 },
                 "state": {
                     "description": " State of the virtual host",
@@ -4753,24 +4832,35 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "cookie_params": {
-                    "description": "Exclusive with [use_auth_object_config]\nx-displayName: \"Configure Cookie Params\"\nConfigure all Cookie params",
+                    "description": "Exclusive with [use_auth_object_config]\n Configure all Cookie params",
                     "title": "Cookie param configuration details",
-                    "$ref": "#/definitions/authenticationCookieParams"
+                    "$ref": "#/definitions/authenticationCookieParams",
+                    "x-displayname": "Configure Cookie Params"
                 },
                 "redirect_dynamic": {
-                    "description": "Exclusive with [redirect_url]\nx-displayName: \"Set the Redirect URL dynamically\"\nIf redirect URL is set to dynamic , then the redirect URL will be obtained from the incoming request\nThis URL must match with the redirect URL configured with the OIDC provider",
+                    "description": "Exclusive with [redirect_url]\n If redirect URL is set to dynamic , then the redirect URL will be obtained from the incoming request\n This URL must match with the redirect URL configured with the OIDC provider",
                     "title": "set the redirect URL dynamically",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Set the Redirect URL dynamically"
                 },
                 "redirect_url": {
                     "type": "string",
-                    "description": "Exclusive with [redirect_dynamic]\nx-displayName: \"Configure Redirect URL\"\nx-example: https://abc.xyz.com\n\nuser can provide a url for e.g https://abc.xyz.com where user gets redirected. This URL configured here\nmust match with the redirect URL configured with the OIDC provider",
-                    "title": "Redirect URL"
+                    "description": "Exclusive with [redirect_dynamic]\n\n user can provide a url for e.g https://abc.xyz.com where user gets redirected. This URL configured here\n must match with the redirect URL configured with the OIDC provider\n\nExample: - https://abc.xyz.com-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Redirect URL",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Configure Redirect URL",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "use_auth_object_config": {
-                    "description": "Exclusive with [cookie_params]\nx-displayName: \"Use from Authentication Object\"\nUse the Cookie Params configured in Authentication Object",
+                    "description": "Exclusive with [cookie_params]\n Use the Cookie Params configured in Authentication Object",
                     "title": "Use the Cookie params configured in Authentication Config Object",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Use from Authentication Object"
                 }
             }
         },
@@ -4863,14 +4953,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "3600"
                 },
                 "download_delivery": {
-                    "description": "Exclusive with [live_streaming]\nx-displayName: \"Download Delivery\"\nContent type is download delivery",
+                    "description": "Exclusive with [live_streaming]\n Content type is download delivery",
                     "title": "Download Delivery",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Download Delivery"
                 },
                 "live_streaming": {
-                    "description": "Exclusive with [download_delivery]\nx-displayName: \"Live Streaming\"\nContent type is live streaming",
+                    "description": "Exclusive with [download_delivery]\n Content type is live streaming",
                     "title": "Live Streaming",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Live Streaming"
                 }
             }
         },

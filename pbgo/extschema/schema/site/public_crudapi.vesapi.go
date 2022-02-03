@@ -848,6 +848,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
 	}
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.sf, req); err != nil {
+		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1348,7 +1352,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.API.Replace"
             },
@@ -1464,7 +1468,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.API.List"
             },
@@ -1572,7 +1576,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.API.Get"
             },
@@ -1754,14 +1758,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.IpSubnetType",
             "properties": {
                 "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Subnet\"\nIPv4 Subnet Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Subnet Address",
                     "title": "IPv4 Subnet",
-                    "$ref": "#/definitions/schemaIpv4SubnetType"
+                    "$ref": "#/definitions/schemaIpv4SubnetType",
+                    "x-displayname": "IPv4 Subnet"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Subnet\"\nIPv6 Subnet Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Subnet Address",
                     "title": "IPv6 Subnet",
-                    "$ref": "#/definitions/schemaIpv6SubnetType"
+                    "$ref": "#/definitions/schemaIpv6SubnetType",
+                    "x-displayname": "IPv6 Subnet"
                 }
             }
         },
@@ -2815,14 +2821,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.site.DefaultUnderlayNetworkType",
             "properties": {
                 "site_local_inside": {
-                    "description": "Exclusive with [site_local_outside]\nx-displayName: \"Site Local Inside\"\nUse site local inside as underlay protocol",
+                    "description": "Exclusive with [site_local_outside]\n Use site local inside as underlay protocol",
                     "title": "Site Local Inside",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside"
                 },
                 "site_local_outside": {
-                    "description": "Exclusive with [site_local_inside]\nx-displayName: \"Site Local Outside\"\nUse site local outside as underlay protocol",
+                    "description": "Exclusive with [site_local_inside]\n Use site local outside as underlay protocol",
                     "title": "Site Local Outside",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Outside"
                 }
             }
         },
@@ -3233,9 +3241,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Subtype"
                 },
                 "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Site To Site Network Type"
+                    "x-displayname": "Site To Site Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
                 },
                 "site_to_site_tunnel_ip": {
                     "type": "string",
@@ -3576,10 +3587,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Subtype"
                 },
                 "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
                     "title": "site_to_site_network_type",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Site To Site Network Type"
+                    "x-displayname": "Site To Site Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
                 },
                 "site_to_site_tunnel_ip": {
                     "type": "string",
@@ -4527,9 +4541,12 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "east-us-2"
                 },
                 "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Site To Site Network Type"
+                    "x-displayname": "Site To Site Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
                 },
                 "site_to_site_tunnel_ip": {
                     "type": "string",

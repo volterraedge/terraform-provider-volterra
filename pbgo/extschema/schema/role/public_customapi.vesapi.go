@@ -528,6 +528,11 @@ func (c *CustomAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCrea
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomCreate"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -571,6 +576,11 @@ func (c *CustomAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequ
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomGet"); rvFn != nil {
@@ -616,6 +626,11 @@ func (c *CustomAPIInprocClient) CustomList(ctx context.Context, in *CustomListRe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -659,6 +674,11 @@ func (c *CustomAPIInprocClient) CustomReplace(ctx context.Context, in *CustomRep
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomReplace"); rvFn != nil {
@@ -788,7 +808,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-CustomAPI-CustomList"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-customapi-customlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomList"
             },
@@ -875,7 +895,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-CustomAPI-CustomCreate"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-customapi-customcreate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomCreate"
             },
@@ -967,7 +987,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-CustomAPI-CustomGet"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-customapi-customget"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomGet"
             },

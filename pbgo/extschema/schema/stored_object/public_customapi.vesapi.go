@@ -537,6 +537,11 @@ func (c *CustomAPIInprocClient) CreateObject(ctx context.Context, in *CreateObje
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomAPI.CreateObject"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -580,6 +585,11 @@ func (c *CustomAPIInprocClient) DeleteObject(ctx context.Context, in *DeleteObje
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomAPI.DeleteObject"); rvFn != nil {
@@ -625,6 +635,11 @@ func (c *CustomAPIInprocClient) GetObject(ctx context.Context, in *GetObjectRequ
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomAPI.GetObject"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
@@ -668,6 +683,11 @@ func (c *CustomAPIInprocClient) ListObjects(ctx context.Context, in *ListObjects
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
 
 	if c.svc.Config().EnableAPIValidation {
 		if rvFn := c.svc.GetRPCValidator("ves.io.schema.stored_object.CustomAPI.ListObjects"); rvFn != nil {
@@ -834,7 +854,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomAPI-ListObjects"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-listobjects"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.ListObjects"
             },
@@ -951,7 +971,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomAPI-DeleteObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-deleteobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.DeleteObject"
             },
@@ -1054,7 +1074,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomAPI-CreateObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-createobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.CreateObject"
             },
@@ -1162,7 +1182,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomAPI-GetObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-getobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.GetObject"
             },
@@ -1274,7 +1294,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-CustomAPI-DeleteObject"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-deleteobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.DeleteObject"
             },
@@ -1321,9 +1341,14 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "bytes_value": {
                     "type": "string",
-                    "description": "Exclusive with [string_value]\nx-displayName: \"Byte Value\"\nBinary object contents. Should be encoded in base64 scheme.",
+                    "description": "Exclusive with [string_value]\n Binary object contents. Should be encoded in base64 scheme.\n\nValidation Rules:\n  ves.io.schema.rules.bytes.max_len: 1048576\n",
                     "title": "bytes_value",
-                    "format": "byte"
+                    "format": "byte",
+                    "maximum": 1048576,
+                    "x-displayname": "Byte Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.bytes.max_len": "1048576"
+                    }
                 },
                 "content_format": {
                     "type": "string",
@@ -1375,20 +1400,25 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "object_type": {
                     "type": "string",
-                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"certificate\\\", \\\"javascript\\\", \\\"html\\\", \\\"generic\\\", \\\"big-object\\\"]\n",
+                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\"]\n",
                     "title": "object_type",
                     "x-displayname": "Object Type",
                     "x-ves-example": "swagger",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"certificate\\\", \\\"javascript\\\", \\\"html\\\", \\\"generic\\\", \\\"big-object\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\"]"
                     }
                 },
                 "string_value": {
                     "type": "string",
-                    "description": "Exclusive with [bytes_value]\nx-displayName: \"String Value\"\nString formatted contents",
-                    "title": "contents"
+                    "description": "Exclusive with [bytes_value]\n String formatted contents\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1048576\n",
+                    "title": "contents",
+                    "maxLength": 1048576,
+                    "x-displayname": "String Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1048576"
+                    }
                 }
             }
         },
@@ -1407,14 +1437,16 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "no_additional_info": {
-                    "description": "Exclusive with [presigned_url]\nx-displayName: \"No Additional Info\"\nThere is no additional information for the response",
+                    "description": "Exclusive with [presigned_url]\n There is no additional information for the response",
                     "title": "no additional info",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Additional Info"
                 },
                 "presigned_url": {
-                    "description": "Exclusive with [no_additional_info]\nx-displayName: \"Pre Signed Url Data\"\nThe url to download the resource",
+                    "description": "Exclusive with [no_additional_info]\n The url to download the resource",
                     "title": "presigned_url",
-                    "$ref": "#/definitions/stored_objectPreSignedUrl"
+                    "$ref": "#/definitions/stored_objectPreSignedUrl",
+                    "x-displayname": "Pre Signed Url Data"
                 }
             }
         },
@@ -1447,9 +1479,14 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "bytes_value": {
                     "type": "string",
-                    "description": "Exclusive with [presigned_url string_value]\nx-displayName: \"Byte Value\"\nx-example: \"\"\nBinary object contents. This will be a base64 encoded string. The client should decode it to see the actual contents of the object.",
+                    "description": "Exclusive with [presigned_url string_value]\n Binary object contents. This will be a base64 encoded string. The client should decode it to see the actual contents of the object.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.bytes.max_len: 1048576\n",
                     "title": "bytes_value",
-                    "format": "byte"
+                    "format": "byte",
+                    "maximum": 1048576,
+                    "x-displayname": "Byte Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.bytes.max_len": "1048576"
+                    }
                 },
                 "content_format": {
                     "type": "string",
@@ -1465,14 +1502,20 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "presigned_url": {
-                    "description": "Exclusive with [bytes_value string_value]\nx-displayName: \"Pre Signed Url Data\"\nThe url to download the resource",
+                    "description": "Exclusive with [bytes_value string_value]\n The url to download the resource",
                     "title": "presigned_url",
-                    "$ref": "#/definitions/stored_objectPreSignedUrl"
+                    "$ref": "#/definitions/stored_objectPreSignedUrl",
+                    "x-displayname": "Pre Signed Url Data"
                 },
                 "string_value": {
                     "type": "string",
-                    "description": "Exclusive with [bytes_value presigned_url]\nx-displayName: \"Contents\"\nx-example: \"\"\nString formatted contents",
-                    "title": "contents"
+                    "description": "Exclusive with [bytes_value presigned_url]\n String formatted contents\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1048576\n",
+                    "title": "contents",
+                    "maxLength": 1048576,
+                    "x-displayname": "Contents",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1048576"
+                    }
                 }
             }
         },
@@ -1488,6 +1531,13 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Name of the stored object.",
                     "title": "name",
                     "x-displayname": "Object Name"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " Tenant to which this object belongs.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
                 },
                 "versions": {
                     "type": "array",
@@ -1527,9 +1577,10 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.stored_object.PreSignedUrl",
             "properties": {
                 "aws": {
-                    "description": "Exclusive with []\nx-displayName: \"AWS\"\nRelevant only for big_object type. The presigned url relevant data to upload or download the resource",
+                    "description": "Exclusive with []\n Relevant only for big_object type. The presigned url relevant data to upload or download the resource",
                     "title": "aws_big_object_url",
-                    "$ref": "#/definitions/stored_objectPresignedUrlData"
+                    "$ref": "#/definitions/stored_objectPresignedUrlData",
+                    "x-displayname": "AWS"
                 }
             }
         },
