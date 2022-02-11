@@ -15,6 +15,7 @@ import (
 	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_sp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_uid "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -40,6 +41,7 @@ func TestHTTPLB(t *testing.T) {
 		ves_io_schema_app_setting.ObjectType,
 		ves_io_schema_tenant.ObjectType,
 		origin_pool.ObjectType,
+		ves_io_schema_sp.ObjectType,
 	})
 	defer stopFunc()
 	tenantName := "tenant1"
@@ -243,6 +245,34 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string) string {
 		    good_bot_action       = "REPORT"
 		  }
 		}
+		resource "volterra_service_policy" "allow_ns" {
+		  name       = "allow-ns"
+		  namespace  = volterra_namespace.app.name
+		  algo       = "FIRST_MATCH"
+		  any_server = true
+		  rule_list {
+		    rules {
+		      metadata {
+		        name = "allow-ns"
+		      }
+
+		      spec {
+		        action = "ALLOW"
+		        client_selector {
+		          expressions = [
+		           "name.ves.io/namespace in (foo)"
+		          ]
+		        }
+		        any_ip           = true
+		        any_asn          = true
+		        challenge_action = "DEFAULT_CHALLENGE"
+		        waf_action {
+		        none = true
+		        }
+		      }
+		    }
+		  }
+		}
 		resource "volterra_http_loadbalancer" "%[1]s" {
 		  name = "%[1]s"
 		  namespace = volterra_namespace.app.name
@@ -258,7 +288,12 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string) string {
 		  app_firewall {
 		    name      = volterra_app_firewall.app_fwd_athena.name
 		  }
-		  no_service_policies = true
+		  no_service_policies = false
+		  active_service_policies {
+		    policies {
+		      name = volterra_service_policy.allow_ns.name
+		    }
+		  }
 		  round_robin = true
 		  domains = ["http.helloclouds.app"]
 		  multi_lb_app = true
