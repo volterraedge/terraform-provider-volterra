@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
@@ -118,7 +119,7 @@ func resourceVolterraServicePolicy() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Required: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeInt,
 										},
@@ -212,7 +213,7 @@ func resourceVolterraServicePolicy() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Required: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -268,7 +269,7 @@ func resourceVolterraServicePolicy() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Required: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeInt,
 										},
@@ -362,7 +363,7 @@ func resourceVolterraServicePolicy() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Required: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -609,7 +610,7 @@ func resourceVolterraServicePolicy() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Required: true,
 																Elem: &schema.Schema{
 																	Type: schema.TypeInt,
 																},
@@ -696,6 +697,28 @@ func resourceVolterraServicePolicy() *schema.Resource {
 													},
 												},
 
+												"bot_action": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"bot_skip_processing": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"none": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"challenge_action": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -773,6 +796,26 @@ func resourceVolterraServicePolicy() *schema.Resource {
 													},
 												},
 
+												"ip_threat_category_list": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ip_threat_categories": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
 												"client_role": {
 
 													Type:     schema.TypeSet,
@@ -781,6 +824,31 @@ func resourceVolterraServicePolicy() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"match": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"content_rewrite_action": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"element_selector": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"insert_content": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"position": {
 																Type:     schema.TypeString,
 																Optional: true,
 															},
@@ -923,7 +991,7 @@ func resourceVolterraServicePolicy() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Required: true,
 																Elem: &schema.Schema{
 																	Type: schema.TypeInt,
 																},
@@ -1342,15 +1410,6 @@ func resourceVolterraServicePolicy() *schema.Resource {
 													},
 												},
 
-												"malicious_user_mitigation_bypass": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{},
-													},
-												},
-
 												"path": {
 
 													Type:     schema.TypeSet,
@@ -1379,6 +1438,16 @@ func resourceVolterraServicePolicy() *schema.Resource {
 															},
 
 															"regex_values": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"suffix_values": {
 
 																Type: schema.TypeList,
 
@@ -1562,6 +1631,78 @@ func resourceVolterraServicePolicy() *schema.Resource {
 													},
 												},
 
+												"shape_protected_endpoint_action": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"app_traffic_type": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"mitigation": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"block": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"body": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"status": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"flag": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"redirect": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"uri": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
 												"tls_fingerprint_matcher": {
 
 													Type:     schema.TypeSet,
@@ -1703,6 +1844,61 @@ func resourceVolterraServicePolicy() *schema.Resource {
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
+
+															"app_firewall_detection_control": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exclude_attack_type_contexts": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exclude_attack_type": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"exclude_signature_contexts": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"signature_id": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"exclude_violation_contexts": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exclude_violation": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
 
 															"none": {
 
@@ -1990,7 +2186,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 					if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
 						ls := make([]uint32, len(w.([]interface{})))
 						for i, v := range w.([]interface{}) {
-
 							ls[i] = uint32(v.(int))
 						}
 						asnList.AsNumbers = ls
@@ -2178,7 +2373,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 					if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
 						ls := make([]uint32, len(w.([]interface{})))
 						for i, v := range w.([]interface{}) {
-
 							ls[i] = uint32(v.(int))
 						}
 						asnList.AsNumbers = ls
@@ -2564,8 +2758,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 										argMatchers[i].Match = matchInt
 
-										matchInt.Presence =
-											v.(bool)
+										matchInt.Presence = v.(bool)
 
 									}
 
@@ -2606,7 +2799,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										asnChoiceInt.AsnList.AsNumbers = ls
@@ -2695,6 +2887,44 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 										}
 										bodyMatcher.Transformers = transformersList
+
+									}
+
+								}
+
+							}
+
+							if v, ok := specMapStrToI["bot_action"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								botAction := &ves_io_schema_policy.BotAction{}
+								spec.BotAction = botAction
+								for _, set := range sl {
+									botActionMapStrToI := set.(map[string]interface{})
+
+									actionTypeTypeFound := false
+
+									if v, ok := botActionMapStrToI["bot_skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+										actionTypeTypeFound = true
+
+										if v.(bool) {
+											actionTypeInt := &ves_io_schema_policy.BotAction_BotSkipProcessing{}
+											actionTypeInt.BotSkipProcessing = &ves_io_schema.Empty{}
+											botAction.ActionType = actionTypeInt
+										}
+
+									}
+
+									if v, ok := botActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+										actionTypeTypeFound = true
+
+										if v.(bool) {
+											actionTypeInt := &ves_io_schema_policy.BotAction_None{}
+											actionTypeInt.None = &ves_io_schema.Empty{}
+											botAction.ActionType = actionTypeInt
+										}
 
 									}
 
@@ -2803,6 +3033,31 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if v, ok := specMapStrToI["ip_threat_category_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_service_policy_rule.GlobalSpecType_IpThreatCategoryList{}
+								clientChoiceInt.IpThreatCategoryList = &ves_io_schema_service_policy_rule.IPThreatCategoryListType{}
+								spec.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+										ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+										for _, j := range v.([]interface{}) {
+											ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+										}
+										clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
+
+									}
+
+								}
+
+							}
+
 							if v, ok := specMapStrToI["client_role"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
@@ -2813,6 +3068,32 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 									if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
 										clientRole.Match = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := specMapStrToI["content_rewrite_action"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								contentRewriteAction := &ves_io_schema_policy.ContentRewriteAction{}
+								spec.ContentRewriteAction = contentRewriteAction
+								for _, set := range sl {
+									contentRewriteActionMapStrToI := set.(map[string]interface{})
+
+									if w, ok := contentRewriteActionMapStrToI["element_selector"]; ok && !isIntfNil(w) {
+										contentRewriteAction.ElementSelector = w.(string)
+									}
+
+									if w, ok := contentRewriteActionMapStrToI["insert_content"]; ok && !isIntfNil(w) {
+										contentRewriteAction.InsertContent = w.(string)
+									}
+
+									if v, ok := contentRewriteActionMapStrToI["position"]; ok && !isIntfNil(v) {
+
+										contentRewriteAction.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
+
 									}
 
 								}
@@ -2910,8 +3191,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 										cookieMatchers[i].Match = matchInt
 
-										matchInt.Presence =
-											v.(bool)
+										matchInt.Presence = v.(bool)
 
 									}
 
@@ -2990,7 +3270,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										dstAsnChoiceInt.DstAsnList.AsNumbers = ls
@@ -3076,6 +3355,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 										dstIpChoiceInt.DstIpMatcher.InvertMatcher = v.(bool)
+
 									}
 
 									if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -3128,6 +3408,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 										dstIpChoiceInt.DstIpPrefixList.InvertMatch = v.(bool)
+
 									}
 
 									if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -3307,8 +3588,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 										headers[i].Match = matchInt
 
-										matchInt.Presence =
-											v.(bool)
+										matchInt.Presence = v.(bool)
 
 									}
 
@@ -3374,6 +3654,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 										ipChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
 									}
 
 									if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -3426,6 +3707,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 										ipChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
 									}
 
 									if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -3503,10 +3785,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 							}
 
-							if v, ok := specMapStrToI["malicious_user_mitigation_bypass"]; ok && v.(bool) {
-								spec.MaliciousUserMitigationBypass = &ves_io_schema.Empty{}
-							}
-
 							if v, ok := specMapStrToI["path"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
@@ -3537,6 +3815,14 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											ls[i] = v.(string)
 										}
 										path.RegexValues = ls
+									}
+
+									if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										path.SuffixValues = ls
 									}
 
 									if v, ok := pathMapStrToI["transformers"]; ok && !isIntfNil(v) {
@@ -3672,8 +3958,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 										queryParams[i].Match = matchInt
 
-										matchInt.Presence =
-											v.(bool)
+										matchInt.Presence = v.(bool)
 
 									}
 
@@ -3735,6 +4020,110 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											ls[i] = v.(string)
 										}
 										serverSelector.Expressions = ls
+									}
+
+								}
+
+							}
+
+							if v, ok := specMapStrToI["shape_protected_endpoint_action"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								shapeProtectedEndpointAction := &ves_io_schema_policy.ShapeProtectedEndpointAction{}
+								spec.ShapeProtectedEndpointAction = shapeProtectedEndpointAction
+								for _, set := range sl {
+									shapeProtectedEndpointActionMapStrToI := set.(map[string]interface{})
+
+									if v, ok := shapeProtectedEndpointActionMapStrToI["app_traffic_type"]; ok && !isIntfNil(v) {
+
+										shapeProtectedEndpointAction.AppTrafficType = ves_io_schema_policy.AppTrafficType(ves_io_schema_policy.AppTrafficType_value[v.(string)])
+
+									}
+
+									if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										mitigation := &ves_io_schema_policy.ShapeBotMitigationAction{}
+										shapeProtectedEndpointAction.Mitigation = mitigation
+										for _, set := range sl {
+											mitigationMapStrToI := set.(map[string]interface{})
+
+											actionTypeTypeFound := false
+
+											if v, ok := mitigationMapStrToI["block"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+												actionTypeTypeFound = true
+												actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Block{}
+												actionTypeInt.Block = &ves_io_schema_policy.ShapeBotBlockMitigationActionType{}
+												mitigation.ActionType = actionTypeInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["body"]; ok && !isIntfNil(v) {
+
+														actionTypeInt.Block.Body = v.(string)
+
+													}
+
+													if v, ok := cs["status"]; ok && !isIntfNil(v) {
+
+														actionTypeInt.Block.Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+													}
+
+												}
+
+											}
+
+											if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+												actionTypeTypeFound = true
+
+												if v.(bool) {
+													actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+													actionTypeInt.Flag = &ves_io_schema.Empty{}
+													mitigation.ActionType = actionTypeInt
+												}
+
+											}
+
+											if v, ok := mitigationMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+												actionTypeTypeFound = true
+
+												if v.(bool) {
+													actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_None{}
+													actionTypeInt.None = &ves_io_schema.Empty{}
+													mitigation.ActionType = actionTypeInt
+												}
+
+											}
+
+											if v, ok := mitigationMapStrToI["redirect"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+												actionTypeTypeFound = true
+												actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Redirect{}
+												actionTypeInt.Redirect = &ves_io_schema_policy.ShapeBotRedirectMitigationActionType{}
+												mitigation.ActionType = actionTypeInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["uri"]; ok && !isIntfNil(v) {
+
+														actionTypeInt.Redirect.Uri = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
 									}
 
 								}
@@ -3915,6 +4304,76 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 									actionTypeTypeFound := false
 
+									if v, ok := wafActionMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+										actionTypeTypeFound = true
+										actionTypeInt := &ves_io_schema_policy.WafAction_AppFirewallDetectionControl{}
+										actionTypeInt.AppFirewallDetectionControl = &ves_io_schema_policy.AppFirewallDetectionControl{}
+										wafAction.ActionType = actionTypeInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
+												actionTypeInt.AppFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
+												for i, set := range sl {
+													excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
+													excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+													if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
+
+														excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["exclude_signature_contexts"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
+												actionTypeInt.AppFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
+												for i, set := range sl {
+													excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
+													excludeSignatureContextsMapStrToI := set.(map[string]interface{})
+
+													if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
+														excludeSignatureContexts[i].SignatureId = uint32(w.(int))
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["exclude_violation_contexts"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
+												actionTypeInt.AppFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
+												for i, set := range sl {
+													excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
+													excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+													if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
+
+														excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									if v, ok := wafActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 										actionTypeTypeFound = true
@@ -3963,6 +4422,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
 
 												actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
+
 											}
 
 										}
@@ -4015,6 +4475,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
 
 												actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
+
 											}
 
 										}
@@ -4300,7 +4761,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 					if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
 						ls := make([]uint32, len(w.([]interface{})))
 						for i, v := range w.([]interface{}) {
-
 							ls[i] = uint32(v.(int))
 						}
 						asnList.AsNumbers = ls
@@ -4488,7 +4948,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 					if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
 						ls := make([]uint32, len(w.([]interface{})))
 						for i, v := range w.([]interface{}) {
-
 							ls[i] = uint32(v.(int))
 						}
 						asnList.AsNumbers = ls
@@ -4874,8 +5333,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 										argMatchers[i].Match = matchInt
 
-										matchInt.Presence =
-											v.(bool)
+										matchInt.Presence = v.(bool)
 
 									}
 
@@ -4916,7 +5374,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										asnChoiceInt.AsnList.AsNumbers = ls
@@ -5005,6 +5462,44 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 										}
 										bodyMatcher.Transformers = transformersList
+
+									}
+
+								}
+
+							}
+
+							if v, ok := specMapStrToI["bot_action"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								botAction := &ves_io_schema_policy.BotAction{}
+								spec.BotAction = botAction
+								for _, set := range sl {
+									botActionMapStrToI := set.(map[string]interface{})
+
+									actionTypeTypeFound := false
+
+									if v, ok := botActionMapStrToI["bot_skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+										actionTypeTypeFound = true
+
+										if v.(bool) {
+											actionTypeInt := &ves_io_schema_policy.BotAction_BotSkipProcessing{}
+											actionTypeInt.BotSkipProcessing = &ves_io_schema.Empty{}
+											botAction.ActionType = actionTypeInt
+										}
+
+									}
+
+									if v, ok := botActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+										actionTypeTypeFound = true
+
+										if v.(bool) {
+											actionTypeInt := &ves_io_schema_policy.BotAction_None{}
+											actionTypeInt.None = &ves_io_schema.Empty{}
+											botAction.ActionType = actionTypeInt
+										}
 
 									}
 
@@ -5113,6 +5608,31 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if v, ok := specMapStrToI["ip_threat_category_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_service_policy_rule.GlobalSpecType_IpThreatCategoryList{}
+								clientChoiceInt.IpThreatCategoryList = &ves_io_schema_service_policy_rule.IPThreatCategoryListType{}
+								spec.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+										ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+										for _, j := range v.([]interface{}) {
+											ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+										}
+										clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
+
+									}
+
+								}
+
+							}
+
 							if v, ok := specMapStrToI["client_role"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
@@ -5123,6 +5643,32 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 									if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
 										clientRole.Match = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := specMapStrToI["content_rewrite_action"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								contentRewriteAction := &ves_io_schema_policy.ContentRewriteAction{}
+								spec.ContentRewriteAction = contentRewriteAction
+								for _, set := range sl {
+									contentRewriteActionMapStrToI := set.(map[string]interface{})
+
+									if w, ok := contentRewriteActionMapStrToI["element_selector"]; ok && !isIntfNil(w) {
+										contentRewriteAction.ElementSelector = w.(string)
+									}
+
+									if w, ok := contentRewriteActionMapStrToI["insert_content"]; ok && !isIntfNil(w) {
+										contentRewriteAction.InsertContent = w.(string)
+									}
+
+									if v, ok := contentRewriteActionMapStrToI["position"]; ok && !isIntfNil(v) {
+
+										contentRewriteAction.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
+
 									}
 
 								}
@@ -5220,8 +5766,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 										cookieMatchers[i].Match = matchInt
 
-										matchInt.Presence =
-											v.(bool)
+										matchInt.Presence = v.(bool)
 
 									}
 
@@ -5300,7 +5845,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										dstAsnChoiceInt.DstAsnList.AsNumbers = ls
@@ -5386,6 +5930,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 										dstIpChoiceInt.DstIpMatcher.InvertMatcher = v.(bool)
+
 									}
 
 									if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -5438,6 +5983,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 										dstIpChoiceInt.DstIpPrefixList.InvertMatch = v.(bool)
+
 									}
 
 									if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -5617,8 +6163,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 										headers[i].Match = matchInt
 
-										matchInt.Presence =
-											v.(bool)
+										matchInt.Presence = v.(bool)
 
 									}
 
@@ -5684,6 +6229,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 										ipChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
 									}
 
 									if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -5736,6 +6282,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 										ipChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
 									}
 
 									if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -5813,10 +6360,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
-							if v, ok := specMapStrToI["malicious_user_mitigation_bypass"]; ok && v.(bool) {
-								spec.MaliciousUserMitigationBypass = &ves_io_schema.Empty{}
-							}
-
 							if v, ok := specMapStrToI["path"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
@@ -5847,6 +6390,14 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											ls[i] = v.(string)
 										}
 										path.RegexValues = ls
+									}
+
+									if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										path.SuffixValues = ls
 									}
 
 									if v, ok := pathMapStrToI["transformers"]; ok && !isIntfNil(v) {
@@ -5982,8 +6533,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 										queryParams[i].Match = matchInt
 
-										matchInt.Presence =
-											v.(bool)
+										matchInt.Presence = v.(bool)
 
 									}
 
@@ -6045,6 +6595,110 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											ls[i] = v.(string)
 										}
 										serverSelector.Expressions = ls
+									}
+
+								}
+
+							}
+
+							if v, ok := specMapStrToI["shape_protected_endpoint_action"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								shapeProtectedEndpointAction := &ves_io_schema_policy.ShapeProtectedEndpointAction{}
+								spec.ShapeProtectedEndpointAction = shapeProtectedEndpointAction
+								for _, set := range sl {
+									shapeProtectedEndpointActionMapStrToI := set.(map[string]interface{})
+
+									if v, ok := shapeProtectedEndpointActionMapStrToI["app_traffic_type"]; ok && !isIntfNil(v) {
+
+										shapeProtectedEndpointAction.AppTrafficType = ves_io_schema_policy.AppTrafficType(ves_io_schema_policy.AppTrafficType_value[v.(string)])
+
+									}
+
+									if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										mitigation := &ves_io_schema_policy.ShapeBotMitigationAction{}
+										shapeProtectedEndpointAction.Mitigation = mitigation
+										for _, set := range sl {
+											mitigationMapStrToI := set.(map[string]interface{})
+
+											actionTypeTypeFound := false
+
+											if v, ok := mitigationMapStrToI["block"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+												actionTypeTypeFound = true
+												actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Block{}
+												actionTypeInt.Block = &ves_io_schema_policy.ShapeBotBlockMitigationActionType{}
+												mitigation.ActionType = actionTypeInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["body"]; ok && !isIntfNil(v) {
+
+														actionTypeInt.Block.Body = v.(string)
+
+													}
+
+													if v, ok := cs["status"]; ok && !isIntfNil(v) {
+
+														actionTypeInt.Block.Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+													}
+
+												}
+
+											}
+
+											if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+												actionTypeTypeFound = true
+
+												if v.(bool) {
+													actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+													actionTypeInt.Flag = &ves_io_schema.Empty{}
+													mitigation.ActionType = actionTypeInt
+												}
+
+											}
+
+											if v, ok := mitigationMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+												actionTypeTypeFound = true
+
+												if v.(bool) {
+													actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_None{}
+													actionTypeInt.None = &ves_io_schema.Empty{}
+													mitigation.ActionType = actionTypeInt
+												}
+
+											}
+
+											if v, ok := mitigationMapStrToI["redirect"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+												actionTypeTypeFound = true
+												actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Redirect{}
+												actionTypeInt.Redirect = &ves_io_schema_policy.ShapeBotRedirectMitigationActionType{}
+												mitigation.ActionType = actionTypeInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["uri"]; ok && !isIntfNil(v) {
+
+														actionTypeInt.Redirect.Uri = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
 									}
 
 								}
@@ -6225,6 +6879,76 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 									actionTypeTypeFound := false
 
+									if v, ok := wafActionMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+										actionTypeTypeFound = true
+										actionTypeInt := &ves_io_schema_policy.WafAction_AppFirewallDetectionControl{}
+										actionTypeInt.AppFirewallDetectionControl = &ves_io_schema_policy.AppFirewallDetectionControl{}
+										wafAction.ActionType = actionTypeInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
+												actionTypeInt.AppFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
+												for i, set := range sl {
+													excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
+													excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+													if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
+
+														excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["exclude_signature_contexts"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
+												actionTypeInt.AppFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
+												for i, set := range sl {
+													excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
+													excludeSignatureContextsMapStrToI := set.(map[string]interface{})
+
+													if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
+														excludeSignatureContexts[i].SignatureId = uint32(w.(int))
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["exclude_violation_contexts"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
+												actionTypeInt.AppFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
+												for i, set := range sl {
+													excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
+													excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+													if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
+
+														excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									if v, ok := wafActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 										actionTypeTypeFound = true
@@ -6273,6 +6997,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
 
 												actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
+
 											}
 
 										}
@@ -6325,6 +7050,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
 
 												actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
+
 											}
 
 										}
