@@ -49,7 +49,16 @@ func isIntfNil(v interface{}) bool {
 		if foundVal.Len() == 0 {
 			return true
 		}
-
+	case reflect.Slice:
+		log.Printf("[DEBUG] interface value kind Slice")
+		if reflect.ValueOf(v).Len() == 0 {
+			return true
+		}
+	case reflect.Array:
+		log.Printf("[DEBUG] interface value kind Array")
+		if reflect.ValueOf(v).Len() == 0 {
+			return true
+		}
 	default:
 		value := reflect.ValueOf(v)
 		if valueIsZero(value, value.Kind()) {
