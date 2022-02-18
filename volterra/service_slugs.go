@@ -25,6 +25,7 @@ var (
 		"ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver":              "alert",
 		"ves.io.schema.api_credential.CustomAPI.Create":                         "web",
 		"ves.io.schema.api_credential.CustomAPI.Get":                            "web",
+		"ves.io.schema.views.api_definition.Object":                             "config",
 		"ves.io.schema.app_firewall.Object":                                     "config",
 		"ves.io.schema.virtual_host.CustomAPI.GetDnsInfo":                       "config",
 		"ves.io.schema.registration.CustomAPI.ListRegistrationsByState":         "register",
