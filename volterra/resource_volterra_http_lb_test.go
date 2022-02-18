@@ -19,6 +19,7 @@ import (
 	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_uid "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
 	http_lb "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
@@ -42,6 +43,7 @@ func TestHTTPLB(t *testing.T) {
 		ves_io_schema_tenant.ObjectType,
 		origin_pool.ObjectType,
 		ves_io_schema_sp.ObjectType,
+		ves_io_schema_views_api_definition.ObjectType,
 	})
 	defer stopFunc()
 	tenantName := "tenant1"
@@ -344,6 +346,13 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		    }
 		  }
 		}
+		resource "volterra_api_definition" "example" {
+			name      = "api-def-boutique"
+			namespace = volterra_namespace.app.name
+
+			swagger_specs = [ "https://console.volterra.ves.io/api/object_store/namespaces/ws-namespace/stored_objects/swagger/api-swagger-boutique/v2-22-02-09" ]
+		      }
+
 		data "volterra_http_loadbalancer_state" "http_lb" {
 			name = volterra_http_loadbalancer.%[1]s.name
 			namespace = volterra_namespace.app.name
