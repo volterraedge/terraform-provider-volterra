@@ -146,22 +146,37 @@ func TestHTTPLB(t *testing.T) {
 	os.Setenv("VOLT_VESENV", "true")
 	os.Setenv("VOLT_TENANT", "tenant1")
 	dataSourceName := "data.volterra_http_loadbalancer_state.exist_http_lb"
+	httpLbResourceName := fmt.Sprintf("volterra_http_loadbalancer.%s", name)
 	resource.Test(t, resource.TestCase{
 		Providers: testAccProviders,
 		PreCheck:  func() { testAccPreCheck() },
 		Steps: []resource.TestStep{
 			{
-				Config: testConfigHTTPLB(name, "app-test", lbName, nsName),
+				Config: testConfigHTTPLB(name, "app-test", lbName, nsName, 3000),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(dataSourceName, "cname", "ves-io-082258df-c45e-4163-8884-7878453eeb2a"),
 					resource.TestCheckResourceAttr(dataSourceName, "ip_address", "1.1.1.1"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.648059762.request_headers_to_add.#", "1"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.648059762.request_headers_to_add.0.append", "false"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.648059762.request_headers_to_add.0.name", "X-real-ip"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.648059762.request_headers_to_add.0.value", "$[client_address]"),
+				),
+			},
+			{
+				// Test replace of http loadbalancer
+				Config: testConfigHTTPLB(name, "app-test", lbName, nsName, 600),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.#", "1"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.append", "false"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.name", "X-real-ip"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.value", "$[client_address]"),
 				),
 			},
 		},
 	})
 }
 
-func testConfigHTTPLB(name, namespace, existLbName, existNsName string) string {
+func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout int32) string {
 	return fmt.Sprintf(`
 		resource "volterra_namespace" "app" {
 		  name = "%[2]s"
@@ -312,6 +327,22 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string) string {
 		      }
 		    }
 		  }
+		  more_option {
+		    disable_default_error_pages         = false
+		    disable_path_normalize              = true
+		    enable_path_normalize               = false
+		    enable_strict_sni_host_header_check = false
+		    idle_timeout                        = %[5]d
+		    max_request_header_size             = 80
+		    request_headers_to_remove           = []
+		    response_headers_to_remove          = []
+
+		    request_headers_to_add {
+		      append = false
+		      name   = "X-real-ip"
+		      value  = "$[client_address]"
+		    }
+		  }
 		}
 		data "volterra_http_loadbalancer_state" "http_lb" {
 			name = volterra_http_loadbalancer.%[1]s.name
@@ -343,5 +374,5 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string) string {
 			name = "%[3]s"
 			namespace = "%[4]s"
 		}
-		`, name, namespace, existLbName, existNsName)
+		`, name, namespace, existLbName, existNsName, timeout)
 }
