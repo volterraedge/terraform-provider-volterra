@@ -39,9 +39,9 @@ type GlobalSpecType struct {
 	// swagger_specs
 	//
 	// x-displayName: "Swagger Specs"
-	// x-example: ""
+	// x-example: "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12"
 	// x-required
-	// Swagger Specs for this API Definition.
+	// Upload your swagger files via Web App & API Protection-> Files-> Swagger Files. Copy Version's URL of the file, from its Action menu.
 	SwaggerSpecs []string `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
 	// default_api_groups_builders
 	//

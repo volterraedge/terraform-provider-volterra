@@ -2143,6 +2143,15 @@ func (v *ValidateRepeatedRules) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["unique_threat_level"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("unique_threat_level"))
+		if err := fv(ctx, m.GetUniqueThreatLevel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

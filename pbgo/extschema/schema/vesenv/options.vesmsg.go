@@ -499,6 +499,17 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesNfvServiceBigIpPassword:
+		if fv, exists := v.FldValidators["choice.ves_nfv_service_big_ip_password"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesNfvServiceBigIpPassword).VesNfvServiceBigIpPassword
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_nfv_service_big_ip_password"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1445,6 +1456,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("recognize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Dns:
+		if fv, exists := v.FldValidators["choice.dns"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Dns).Dns
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("dns"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

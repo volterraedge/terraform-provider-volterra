@@ -2425,9 +2425,9 @@ var APISwaggerJSON string = `{
         },
         "aws_vpc_siteAWSVPCVoltstackClusterReplaceType": {
             "type": "object",
-            "description": "Voltstack cluster of single interface AWS nodes",
-            "title": "AWS Voltstack Cluster",
-            "x-displayname": "AWS  Voltstack Cluster",
+            "description": "App Stack cluster of single interface AWS nodes",
+            "title": "AWS App Stack Cluster",
+            "x-displayname": "AWS App Stack Cluster",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
@@ -2498,9 +2498,9 @@ var APISwaggerJSON string = `{
         },
         "aws_vpc_siteAWSVPCVoltstackClusterType": {
             "type": "object",
-            "description": "Voltstack cluster of single interface AWS nodes",
-            "title": "AWS Voltstack Cluster",
-            "x-displayname": "AWS  Voltstack Cluster",
+            "description": "App Stack cluster of single interface AWS nodes",
+            "title": "AWS App Stack Cluster",
+            "x-displayname": "AWS App Stack Cluster",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
@@ -2548,7 +2548,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/viewsAWSVPCOneInterfaceNodeType"
                     },
-                    "x-displayname": "VoltStack Cluster (One Interface) Nodes in AZ",
+                    "x-displayname": "App Stack Cluster (One Interface) Nodes in AZ",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.num_items": "1,3"
                     }
@@ -5273,9 +5273,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
                     "$ref": "#/definitions/aws_vpc_siteAWSVPCVoltstackClusterType",
-                    "x-displayname": "Voltstack Cluster (One Interface)"
+                    "x-displayname": "App Stack Cluster (One Interface)"
                 },
                 "vpc": {
                     "description": " Choice of using existing VPC or create new VPC",
@@ -5437,9 +5437,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
                     "$ref": "#/definitions/aws_vpc_siteAWSVPCVoltstackClusterType",
-                    "x-displayname": "Voltstack Cluster (One Interface)"
+                    "x-displayname": "App Stack Cluster (One Interface)"
                 },
                 "vpc": {
                     "description": " Choice of using existing VPC or create new VPC",
@@ -5624,10 +5624,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "App Stack Cluster",
                     "$ref": "#/definitions/aws_vpc_siteAWSVPCVoltstackClusterType",
-                    "x-displayname": "Voltstack Cluster (One Interface)"
+                    "x-displayname": "App Stack Cluster (One Interface)"
                 },
                 "vpc": {
                     "description": " Choice of using existing VPC or create new VPC",
@@ -5721,10 +5721,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "App Stack Cluster",
                     "$ref": "#/definitions/aws_vpc_siteAWSVPCVoltstackClusterReplaceType",
-                    "x-displayname": "Voltstack Cluster (One Interface)"
+                    "x-displayname": "App Stack Cluster (One Interface)"
                 }
             }
         }

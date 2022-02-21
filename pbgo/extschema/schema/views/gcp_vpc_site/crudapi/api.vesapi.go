@@ -2978,9 +2978,9 @@ var APISwaggerJSON string = `{
         },
         "gcp_vpc_siteGCPVPCVoltstackClusterType": {
             "type": "object",
-            "description": "Voltstack cluster of single interface GCP site",
-            "title": "GCP Voltstack Cluster",
-            "x-displayname": "GCP Voltstack Cluster",
+            "description": "App Stack cluster of single interface GCP site",
+            "title": "GCP App Stack Cluster",
+            "x-displayname": "GCP App Stack Cluster",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
@@ -5010,10 +5010,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Volterra Software"
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "App Stack Cluster",
                     "$ref": "#/definitions/gcp_vpc_siteGCPVPCVoltstackClusterType",
-                    "x-displayname": "Voltstack Cluster (One Interface)"
+                    "x-displayname": "App Stack Cluster (One Interface)"
                 }
             }
         }

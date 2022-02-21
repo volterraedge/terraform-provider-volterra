@@ -3063,9 +3063,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "url_categories": {
                     "type": "array",
-                    "description": " List of url categories to be selected\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of url categories to be selected\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "URL Categories",
-                    "maxItems": 64,
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/policyURLCategory"
                     },
@@ -3073,7 +3073,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

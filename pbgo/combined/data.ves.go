@@ -6615,6 +6615,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.bgp.FamilyRtarget"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "FamilyUuidvpn",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.FamilyUuidvpn"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -22336,6 +22343,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.policy.CookieMatcherType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "DataGuardControl",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.DataGuardControl"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "DenyInformation",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -22453,6 +22467,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.policy.ShapeProtectedEndpointAction"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SimpleDataGuardRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.SimpleDataGuardRule"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "SimpleWafExclusionRule",

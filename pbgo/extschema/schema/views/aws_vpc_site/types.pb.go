@@ -453,10 +453,10 @@ func (*AWSVPCIngressEgressGwType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// AWS Voltstack Cluster
+// AWS App Stack Cluster
 //
-// x-displayName: "AWS  Voltstack Cluster"
-// Voltstack cluster of single interface AWS nodes
+// x-displayName: "AWS App Stack Cluster"
+// App Stack cluster of single interface AWS nodes
 type AWSVPCVoltstackClusterType struct {
 	// AWS Certified Hardware
 	//
@@ -467,7 +467,7 @@ type AWSVPCVoltstackClusterType struct {
 	AwsCertifiedHw string `protobuf:"bytes,1,opt,name=aws_certified_hw,json=awsCertifiedHw,proto3" json:"aws_certified_hw,omitempty"`
 	// Nodes
 	//
-	// x-displayName: "VoltStack Cluster (One Interface) Nodes in AZ"
+	// x-displayName: "App Stack Cluster (One Interface) Nodes in AZ"
 	// Only Single AZ or Three AZ(s) nodes are supported currently.
 	AzNodes []*views.AWSVPCOneInterfaceNodeType `protobuf:"bytes,2,rep,name=az_nodes,json=azNodes,proto3" json:"az_nodes,omitempty"`
 	// Manage Network Policy
@@ -1204,10 +1204,10 @@ func (*AWSVPCIngressEgressGwReplaceType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// AWS Voltstack Cluster
+// AWS App Stack Cluster
 //
-// x-displayName: "AWS  Voltstack Cluster"
-// Voltstack cluster of single interface AWS nodes
+// x-displayName: "AWS App Stack Cluster"
+// App Stack cluster of single interface AWS nodes
 type AWSVPCVoltstackClusterReplaceType struct {
 	// Manage Network Policy
 	//

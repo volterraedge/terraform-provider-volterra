@@ -1892,6 +1892,138 @@ func FamilyRtargetValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *FamilyUuidvpn) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FamilyUuidvpn) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FamilyUuidvpn) DeepCopy() *FamilyUuidvpn {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FamilyUuidvpn{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FamilyUuidvpn) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FamilyUuidvpn) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FamilyUuidvpnValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFamilyUuidvpn struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFamilyUuidvpn) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enable_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateFamilyUuidvpn) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FamilyUuidvpn)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FamilyUuidvpn got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable_choice"]; exists {
+		val := m.GetEnableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnableChoice().(type) {
+	case *FamilyUuidvpn_Enable:
+		if fv, exists := v.FldValidators["enable_choice.enable"]; exists {
+			val := m.GetEnableChoice().(*FamilyUuidvpn_Enable).Enable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FamilyUuidvpn_Disable:
+		if fv, exists := v.FldValidators["enable_choice.disable"]; exists {
+			val := m.GetEnableChoice().(*FamilyUuidvpn_Disable).Disable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFamilyUuidvpnValidator = func() *ValidateFamilyUuidvpn {
+	v := &ValidateFamilyUuidvpn{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
+	rulesEnableChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnableChoice(rulesEnableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FamilyUuidvpn.enable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable_choice"] = vFn
+
+	return v
+}()
+
+func FamilyUuidvpnValidator() db.Validator {
+	return DefaultFamilyUuidvpnValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3840,6 +3972,15 @@ func (v *ValidatePeerInternal) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["family_uuidvpn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("family_uuidvpn"))
+		if err := fv(ctx, m.GetFamilyUuidvpn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetMtlsChoice().(type) {
 	case *PeerInternal_DisableMtls:
 		if fv, exists := v.FldValidators["mtls_choice.disable_mtls"]; exists {
@@ -3940,6 +4081,8 @@ var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
 	v.FldValidators["family_rtarget"] = FamilyRtargetValidator().Validate
 
 	v.FldValidators["family_inet6vpn"] = FamilyInet6VpnValidator().Validate
+
+	v.FldValidators["family_uuidvpn"] = FamilyUuidvpnValidator().Validate
 
 	return v
 }()

@@ -909,9 +909,7 @@ var DefaultApiDefinitionListValidator = func() *ValidateApiDefinitionList {
 
 	vrhApiDefinitions := v.ApiDefinitionsValidationRuleHandler
 	rulesApiDefinitions := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "1",
-		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiDefinitions(rulesApiDefinitions)
@@ -2804,6 +2802,46 @@ func (v *ValidateCreateSpecType) DdosMitigationRulesValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -2990,6 +3028,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3603,6 +3649,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -5791,6 +5849,46 @@ func (v *ValidateGetSpecType) DdosMitigationRulesValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -5995,6 +6093,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6650,6 +6756,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -7775,6 +7893,46 @@ func (v *ValidateGlobalSpecType) DdosMitigationRulesValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -7979,6 +8137,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8692,6 +8858,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -11480,6 +11658,46 @@ func (v *ValidateReplaceSpecType) DdosMitigationRulesValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -11666,6 +11884,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -12279,6 +12505,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -17173,6 +17411,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.DataGuardRules = f.GetDataGuardRules()
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
@@ -17203,6 +17442,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.DataGuardRules = m1.DataGuardRules
 	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
@@ -17655,6 +17895,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.DataGuardRules = f.GetDataGuardRules()
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.DnsInfo = f.GetDnsInfo()
@@ -17691,6 +17932,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.DataGuardRules = m1.DataGuardRules
 	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.DnsInfo = m1.DnsInfo
@@ -18145,6 +18387,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.DataGuardRules = f.GetDataGuardRules()
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
@@ -18175,6 +18418,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.DataGuardRules = m1.DataGuardRules
 	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains

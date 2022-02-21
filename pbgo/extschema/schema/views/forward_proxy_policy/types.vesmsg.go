@@ -3087,7 +3087,7 @@ var DefaultURLCategoryListTypeValidator = func() *ValidateURLCategoryListType {
 	vrhUrlCategories := v.UrlCategoriesValidationRuleHandler
 	rulesUrlCategories := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "128",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhUrlCategories(rulesUrlCategories)

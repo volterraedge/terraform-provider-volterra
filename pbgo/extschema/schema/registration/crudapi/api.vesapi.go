@@ -3021,13 +3021,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_os_version": {
-                    "description": "Exclusive with [operating_system_version]\n Will assign latest available OS version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "description": "Exclusive with [operating_system_version]\n Will assign latest available OS version or version defined on parent object such as Fleet, App Stack site, AWS, Azure, etc.",
                     "title": "Default OS Version",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default OS Version"
                 },
                 "default_sw_version": {
-                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version or version defined on parent object such as Fleet, App Stack site, AWS, Azure, etc.",
                     "title": "Default SW Version",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default SW Version"

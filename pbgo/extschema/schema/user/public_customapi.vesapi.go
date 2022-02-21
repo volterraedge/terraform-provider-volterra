@@ -4300,6 +4300,12 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Email Address",
                     "x-ves-example": "value"
                 },
+                "environment": {
+                    "type": "string",
+                    "description": " current global controller deployment enviroment.",
+                    "title": "Environment",
+                    "x-displayname": "Environment"
+                },
                 "feature_flags": {
                     "type": "array",
                     "description": " feature flag that shows whether this feature should be enabled on UI for the current plan",

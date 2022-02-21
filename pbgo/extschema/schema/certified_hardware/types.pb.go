@@ -173,7 +173,7 @@ type HardwareType int32
 const (
 	// x-displayName: "Billed as VoltMesh"
 	VOLTMESH HardwareType = 0
-	// x-displayName: "Billed as VoltStack Combo"
+	// x-displayName: "Billed as App Stack Combo"
 	VOLTSTACK_COMBO HardwareType = 1
 	// x-displayName: "Not Billed by Volterra"
 	CLOUD_MARKET_PLACE HardwareType = 2
