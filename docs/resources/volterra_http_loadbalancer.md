@@ -23,15 +23,15 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
   do_not_advertise = true
 
-  // One of the arguments from this list "js_challenge captcha_challenge policy_based_challenge no_challenge" must be set
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
   no_challenge = true
 
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
+  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
   round_robin = true
 
-  // One of the arguments from this list "https_auto_cert https http" must be set
+  // One of the arguments from this list "http https_auto_cert https" must be set
 
   http {
     dns_volterra_managed = true
@@ -44,7 +44,7 @@ resource "volterra_http_loadbalancer" "example" {
 
     enable_discovery {
       // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
-      disable_learn_from_redirect_traffic = true
+      enable_learn_from_redirect_traffic = true
     }
 
     // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
@@ -56,10 +56,10 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  service_policies_from_namespace = true
+  no_service_policies = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
-  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
+  // One of the arguments from this list "waf waf_rule app_firewall disable_waf" must be set
   disable_waf = true
 }
 
@@ -94,7 +94,7 @@ Argument Reference
 
 `do_not_advertise` - (Optional) Do not advertise this loadbalancer (bool).
 
-`api_definitions` - (Optional) Use API definitions from OpenAPI specification files to specify API operations of an application. See [Api Definitions ](#api-definitions) below for details.
+`api_definitions` - (Optional) Specify API definition which includes application API paths and methods derived from swagger files.. See [Api Definitions ](#api-definitions) below for details.
 
 `blocked_clients` - (Optional) Rules that specify the clients to be blocked. See [Blocked Clients ](#blocked-clients) below for details.
 
@@ -111,6 +111,8 @@ Argument Reference
 `policy_based_challenge` - (Optional) Specifies the settings for policy rule based challenge. See [Policy Based Challenge ](#policy-based-challenge) below for details.
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
+
+`data_guard_rules` - (Optional) Note: App Firewall should be enabled, to use Data Guard feature.. See [Data Guard Rules ](#data-guard-rules) below for details.
 
 `ddos_mitigation_rules` - (Optional) Rules that specify the DDoS clients to be blocked. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
 
@@ -288,9 +290,9 @@ Any Domain..
 
 ### Api Definitions
 
-Use API definitions from OpenAPI specification files to specify API operations of an application.
+Specify API definition which includes application API paths and methods derived from swagger files..
 
-`api_definitions` - (Required) API Definitions using OpenAPI specification files. See [ref](#ref) below for details.
+`api_definitions` - (Optional) API Definitions using OpenAPI specification files. See [ref](#ref) below for details.
 
 ### App Firewall Detection Control
 
@@ -512,6 +514,20 @@ Custom selection of TLS versions and cipher suites.
 
 `min_version` - (Optional) Minimum TLS protocol version. (`String`).
 
+### Data Guard Rules
+
+Note: App Firewall should be enabled, to use Data Guard feature..
+
+`any_domain` - (Optional) Enable Data Guard for any domain (bool).
+
+`exact_value` - (Optional) Exact domain name (`String`).
+
+`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`path` - (Required) URI path matcher.. See [Path ](#path) below for details.
+
 ### Ddos Client Source
 
 Combination of Region, ASN and TLS Fingerprints.
@@ -550,7 +566,7 @@ Use default parameters.
 
 ### Default Mitigation Settings
 
-For high level, users will be temporarily blocked. .
+For high level, users will be temporarily blocked..
 
 ### Default Retry Policy
 

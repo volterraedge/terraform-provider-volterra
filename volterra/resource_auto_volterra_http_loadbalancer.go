@@ -2155,6 +2155,87 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				},
 			},
 
+			"data_guard_rules": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"any_domain": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"exact_value": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"suffix_value": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"metadata": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"path": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"path": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"prefix": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"regex": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"ddos_mitigation_rules": {
 
 				Type:     schema.TypeList,
@@ -8199,6 +8280,127 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
 				corsPolicy.MaximumAge = int32(w.(int))
+			}
+
+		}
+
+	}
+
+	//data_guard_rules
+	if v, ok := d.GetOk("data_guard_rules"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		dataGuardRules := make([]*ves_io_schema_policy.SimpleDataGuardRule, len(sl))
+		createSpec.DataGuardRules = dataGuardRules
+		for i, set := range sl {
+			dataGuardRules[i] = &ves_io_schema_policy.SimpleDataGuardRule{}
+			dataGuardRulesMapStrToI := set.(map[string]interface{})
+
+			domainChoiceTypeFound := false
+
+			if v, ok := dataGuardRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+
+				if v.(bool) {
+					domainChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_AnyDomain{}
+					domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+					dataGuardRules[i].DomainChoice = domainChoiceInt
+				}
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_ExactValue{}
+
+				dataGuardRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.ExactValue = v.(string)
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_SuffixValue{}
+
+				dataGuardRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.SuffixValue = v.(string)
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				dataGuardRules[i].Metadata = metadata
+				for _, set := range sl {
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["path"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				path := &ves_io_schema.PathMatcherType{}
+				dataGuardRules[i].Path = path
+				for _, set := range sl {
+					pathMapStrToI := set.(map[string]interface{})
+
+					pathMatchTypeFound := false
+
+					if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+						pathMatchTypeFound = true
+						pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+						path.PathMatch = pathMatchInt
+
+						pathMatchInt.Path = v.(string)
+
+					}
+
+					if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+						pathMatchTypeFound = true
+						pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+						path.PathMatch = pathMatchInt
+
+						pathMatchInt.Prefix = v.(string)
+
+					}
+
+					if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+						pathMatchTypeFound = true
+						pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+						path.PathMatch = pathMatchInt
+
+						pathMatchInt.Regex = v.(string)
+
+					}
+
+				}
+
 			}
 
 		}
@@ -15467,6 +15669,126 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
 				corsPolicy.MaximumAge = int32(w.(int))
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("data_guard_rules"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		dataGuardRules := make([]*ves_io_schema_policy.SimpleDataGuardRule, len(sl))
+		updateSpec.DataGuardRules = dataGuardRules
+		for i, set := range sl {
+			dataGuardRules[i] = &ves_io_schema_policy.SimpleDataGuardRule{}
+			dataGuardRulesMapStrToI := set.(map[string]interface{})
+
+			domainChoiceTypeFound := false
+
+			if v, ok := dataGuardRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+
+				if v.(bool) {
+					domainChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_AnyDomain{}
+					domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+					dataGuardRules[i].DomainChoice = domainChoiceInt
+				}
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_ExactValue{}
+
+				dataGuardRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.ExactValue = v.(string)
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_SuffixValue{}
+
+				dataGuardRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.SuffixValue = v.(string)
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				dataGuardRules[i].Metadata = metadata
+				for _, set := range sl {
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["path"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				path := &ves_io_schema.PathMatcherType{}
+				dataGuardRules[i].Path = path
+				for _, set := range sl {
+					pathMapStrToI := set.(map[string]interface{})
+
+					pathMatchTypeFound := false
+
+					if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+						pathMatchTypeFound = true
+						pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+						path.PathMatch = pathMatchInt
+
+						pathMatchInt.Path = v.(string)
+
+					}
+
+					if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+						pathMatchTypeFound = true
+						pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+						path.PathMatch = pathMatchInt
+
+						pathMatchInt.Prefix = v.(string)
+
+					}
+
+					if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+						pathMatchTypeFound = true
+						pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+						path.PathMatch = pathMatchInt
+
+						pathMatchInt.Regex = v.(string)
+
+					}
+
+				}
+
 			}
 
 		}
