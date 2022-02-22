@@ -2790,19 +2790,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationAction",
             "properties": {
                 "block_temporarily": {
-                    "description": "Exclusive with [captcha_challenge javascript_challenge]\n Block user temporarily. The blocking duration is determined by user activity.\n Settings for temporary blocking are derived from the virtual host that the request is sent to\n If temporary blocking is not configured for the virtual host, a software default configuration is used",
+                    "description": "Exclusive with [captcha_challenge javascript_challenge]\n The user is blocked for the duration, they are in the corresponding threat level \n assigned to this mitigation action",
                     "title": "Block User Temporarily",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Block Temporarily"
                 },
                 "captcha_challenge": {
-                    "description": "Exclusive with [block_temporarily javascript_challenge]\n Send a Captcha Challenge\n Settings for Captcha Challenge are derived from the virtual host that the request is sent to\n If Captcha Challenge is not configured for the virtual host, a software default configuration is used",
+                    "description": "Exclusive with [block_temporarily javascript_challenge]\n Default Captcha Challenge settings will be used, if custom parameters are not \n configured on the corresponding http load balancer",
                     "title": "Captcha Challenge",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Captcha Challenge"
                 },
                 "javascript_challenge": {
-                    "description": "Exclusive with [block_temporarily captcha_challenge]\n Send a Javascript Challenge. \n Settings for Javascript Challenge are derived from the virtual host that the request is sent to\n If Javascript Challenge is not configured for the virtual host, a software default configuration is used",
+                    "description": "Exclusive with [block_temporarily captcha_challenge]\n Default Javascript Challenge settings will be used, if custom parameters are not \n configured on the corresponding http load balancer",
                     "title": "Javascript Challenge",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Javascript Challenge"
@@ -2847,7 +2847,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " Define the threat levels and the corresponding mitigation actions to be taken\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Define the threat levels and the corresponding mitigation actions to be taken\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.repeated.unique_threat_level: true\n",
                     "title": "malicious user mitigation rules",
                     "maxItems": 4,
                     "items": {
@@ -2858,7 +2858,8 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "4",
-                        "ves.io.schema.rules.repeated.unique": "true"
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.repeated.unique_threat_level": "true"
                     }
                 }
             }

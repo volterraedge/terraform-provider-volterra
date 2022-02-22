@@ -2263,7 +2263,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Swagger Specs for this API Definition.\n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files. Copy Version's URL of the file, from its Action menu.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 10,
                     "items": {
@@ -2271,6 +2271,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 512
                     },
                     "x-displayname": "Swagger Specs",
+                    "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2398,7 +2399,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Swagger Specs for this API Definition.\n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files. Copy Version's URL of the file, from its Action menu.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 10,
                     "items": {
@@ -2406,6 +2407,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 512
                     },
                     "x-displayname": "Swagger Specs",
+                    "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2427,7 +2429,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Swagger Specs for this API Definition.\n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files. Copy Version's URL of the file, from its Action menu.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "swagger_specs",
                     "minItems": 1,
                     "maxItems": 10,
@@ -2436,6 +2438,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 512
                     },
                     "x-displayname": "Swagger Specs",
+                    "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2636,7 +2639,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Swagger Specs for this API Definition.\n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files. Copy Version's URL of the file, from its Action menu.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 10,
                     "items": {
@@ -2644,6 +2647,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 512
                     },
                     "x-displayname": "Swagger Specs",
+                    "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

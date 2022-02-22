@@ -1626,6 +1626,84 @@ func CookieMatcherTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DataGuardControl) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DataGuardControl) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DataGuardControl) DeepCopy() *DataGuardControl {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DataGuardControl{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DataGuardControl) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DataGuardControl) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DataGuardControlValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDataGuardControl struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDataGuardControl) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DataGuardControl)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DataGuardControl got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["policy_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("policy_name"))
+		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDataGuardControlValidator = func() *ValidateDataGuardControl {
+	v := &ValidateDataGuardControl{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DataGuardControlValidator() db.Validator {
+	return DefaultDataGuardControlValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DenyInformation) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2867,6 +2945,7 @@ var DefaultMatcherTypeValidator = func() *ValidateMatcherType {
 	vrhExactValues := v.ExactValuesValidationRuleHandler
 	rulesExactValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -2880,6 +2959,7 @@ var DefaultMatcherTypeValidator = func() *ValidateMatcherType {
 	vrhRegexValues := v.RegexValuesValidationRuleHandler
 	rulesRegexValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.items.string.regex":     "true",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
@@ -3083,6 +3163,7 @@ var DefaultMatcherTypeBasicValidator = func() *ValidateMatcherTypeBasic {
 	vrhExactValues := v.ExactValuesValidationRuleHandler
 	rulesExactValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -3096,6 +3177,7 @@ var DefaultMatcherTypeBasicValidator = func() *ValidateMatcherTypeBasic {
 	vrhRegexValues := v.RegexValuesValidationRuleHandler
 	rulesRegexValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.items.string.regex":     "true",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
@@ -3444,6 +3526,7 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 	rulesPrefixValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.http_path": "true",
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -3458,6 +3541,7 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 	rulesExactValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.http_path": "true",
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -3471,6 +3555,7 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 	vrhRegexValues := v.RegexValuesValidationRuleHandler
 	rulesRegexValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.items.string.regex":     "true",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
@@ -3497,6 +3582,7 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 	vrhSuffixValues := v.SuffixValuesValidationRuleHandler
 	rulesSuffixValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "64",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.max_items":              "64",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -4639,6 +4725,272 @@ var DefaultShapeProtectedEndpointActionValidator = func() *ValidateShapeProtecte
 
 func ShapeProtectedEndpointActionValidator() db.Validator {
 	return DefaultShapeProtectedEndpointActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SimpleDataGuardRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SimpleDataGuardRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SimpleDataGuardRule) DeepCopy() *SimpleDataGuardRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SimpleDataGuardRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SimpleDataGuardRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SimpleDataGuardRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SimpleDataGuardRuleValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSimpleDataGuardRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSimpleDataGuardRule) DomainChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleDataGuardRule) DomainChoiceExactValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ExactValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exact_value")
+	}
+	return oValidatorFn_ExactValue, nil
+}
+func (v *ValidateSimpleDataGuardRule) DomainChoiceSuffixValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SuffixValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for suffix_value")
+	}
+	return oValidatorFn_SuffixValue, nil
+}
+
+func (v *ValidateSimpleDataGuardRule) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for path")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.PathMatcherTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleDataGuardRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleDataGuardRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SimpleDataGuardRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SimpleDataGuardRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain_choice"]; exists {
+		val := m.GetDomainChoice()
+		vOpts := append(opts,
+			db.WithValidateField("domain_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDomainChoice().(type) {
+	case *SimpleDataGuardRule_AnyDomain:
+		if fv, exists := v.FldValidators["domain_choice.any_domain"]; exists {
+			val := m.GetDomainChoice().(*SimpleDataGuardRule_AnyDomain).AnyDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("any_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SimpleDataGuardRule_ExactValue:
+		if fv, exists := v.FldValidators["domain_choice.exact_value"]; exists {
+			val := m.GetDomainChoice().(*SimpleDataGuardRule_ExactValue).ExactValue
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("exact_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SimpleDataGuardRule_SuffixValue:
+		if fv, exists := v.FldValidators["domain_choice.suffix_value"]; exists {
+			val := m.GetDomainChoice().(*SimpleDataGuardRule_SuffixValue).SuffixValue
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("suffix_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSimpleDataGuardRuleValidator = func() *ValidateSimpleDataGuardRule {
+	v := &ValidateSimpleDataGuardRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
+	rulesDomainChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDomainChoice(rulesDomainChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleDataGuardRule.domain_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_choice"] = vFn
+
+	vrhDomainChoiceExactValue := v.DomainChoiceExactValueValidationRuleHandler
+	rulesDomainChoiceExactValue := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
+	}
+	vFnMap["domain_choice.exact_value"], err = vrhDomainChoiceExactValue(rulesDomainChoiceExactValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleDataGuardRule.domain_choice_exact_value: %s", err)
+		panic(errMsg)
+	}
+	vrhDomainChoiceSuffixValue := v.DomainChoiceSuffixValueValidationRuleHandler
+	rulesDomainChoiceSuffixValue := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
+	}
+	vFnMap["domain_choice.suffix_value"], err = vrhDomainChoiceSuffixValue(rulesDomainChoiceSuffixValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleDataGuardRule.domain_choice_suffix_value: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["domain_choice.exact_value"] = vFnMap["domain_choice.exact_value"]
+	v.FldValidators["domain_choice.suffix_value"] = vFnMap["domain_choice.suffix_value"]
+
+	vrhPath := v.PathValidationRuleHandler
+	rulesPath := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPath(rulesPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleDataGuardRule.path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["path"] = vFn
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleDataGuardRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	return v
+}()
+
+func SimpleDataGuardRuleValidator() db.Validator {
+	return DefaultSimpleDataGuardRuleValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5987,6 +6339,10 @@ func (m *WafAction) GetActionTypeDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *WafAction_DataGuardControl:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -6095,6 +6451,17 @@ func (v *ValidateWafAction) Validate(ctx context.Context, pm interface{}, opts .
 			vOpts := append(opts,
 				db.WithValidateField("action_type"),
 				db.WithValidateField("app_firewall_detection_control"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WafAction_DataGuardControl:
+		if fv, exists := v.FldValidators["action_type.data_guard_control"]; exists {
+			val := m.GetActionType().(*WafAction_DataGuardControl).DataGuardControl
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("data_guard_control"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

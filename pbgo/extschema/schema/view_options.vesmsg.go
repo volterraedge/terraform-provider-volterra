@@ -2058,6 +2058,18 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["environment_in"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("environment_in"))
+		for idx, item := range m.GetEnvironmentIn() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["invert_match"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("invert_match"))

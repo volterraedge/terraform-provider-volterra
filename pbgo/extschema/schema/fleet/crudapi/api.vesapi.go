@@ -2664,6 +2664,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bgpFamilyUuidvpn": {
+            "type": "object",
+            "description": "x-displayName: \"BGP Family Uuidvpn\"\nParameters for uuidvpn family.",
+            "title": "FamilyUuidvpn",
+            "properties": {
+                "disable": {
+                    "description": "x-displayName: \"Disable UUID VPN Unicast\"\nDisable the UUID Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "x-displayName: \"Enable UUID VPN Unicast\"\nEnable the UUID Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "bgpInterfaceList": {
             "type": "object",
             "description": "x-displayName: \"Interface List\"\nList of network interfaces.",
@@ -2816,6 +2833,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Family Route Target\"\nParameters for Route Target family.",
                     "title": "family_rtarget",
                     "$ref": "#/definitions/bgpFamilyRtarget"
+                },
+                "family_uuidvpn": {
+                    "description": "x-displayName: \"Family UUID VPN Unicast\"\nParameters for UUID VPN Unicast family.",
+                    "title": "family_inetvpn",
+                    "$ref": "#/definitions/bgpFamilyUuidvpn"
                 },
                 "from_site": {
                     "description": "x-displayName: \"Use address from site object\"\nUse the address specified in the site object.",

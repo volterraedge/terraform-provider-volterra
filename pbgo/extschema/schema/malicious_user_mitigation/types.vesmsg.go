@@ -707,9 +707,10 @@ var DefaultMaliciousUserMitigationTypeValidator = func() *ValidateMaliciousUserM
 
 	vrhRules := v.RulesValidationRuleHandler
 	rulesRules := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "4",
-		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.message.required":             "true",
+		"ves.io.schema.rules.repeated.max_items":           "4",
+		"ves.io.schema.rules.repeated.unique":              "true",
+		"ves.io.schema.rules.repeated.unique_threat_level": "true",
 	}
 	vFn, err = vrhRules(rulesRules)
 	if err != nil {

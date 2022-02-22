@@ -804,10 +804,10 @@ func (*AzureVnetIngressEgressGwARType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// Azure Voltstack Cluster on Recommended Region
+// Azure App Stack Cluster on Recommended Region
 //
-// x-displayName: "Azure Voltstack Cluster on Recommended Region"
-// Voltstack Cluster of single interface Azure nodes
+// x-displayName: "Azure App Stack Cluster on Recommended Region"
+// App Stack Cluster of single interface Azure nodes
 type AzureVnetVoltstackClusterType struct {
 	// Azure Certified Hardware
 	//
@@ -818,7 +818,7 @@ type AzureVnetVoltstackClusterType struct {
 	AzureCertifiedHw string `protobuf:"bytes,1,opt,name=azure_certified_hw,json=azureCertifiedHw,proto3" json:"azure_certified_hw,omitempty"`
 	// Nodes
 	//
-	// x-displayName: "VoltStack Cluster (One Interface) Nodes in AZ"
+	// x-displayName: "App Stack Cluster (One Interface) Nodes in AZ"
 	// Only Single AZ or Three AZ(s) nodes are supported currently.
 	AzNodes []*views.AzureVnetOneInterfaceNodeType `protobuf:"bytes,2,rep,name=az_nodes,json=azNodes,proto3" json:"az_nodes,omitempty"`
 	// Manage Network Policy
@@ -1176,10 +1176,10 @@ func (*AzureVnetVoltstackClusterType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// Azure Voltstack Cluster on Alternate Region
+// Azure App Stack Cluster on Alternate Region
 //
-// x-displayName: "Azure Voltstack Cluster on Alternate Region"
-// Voltstack Cluster of single interface Azure nodes
+// x-displayName: "Azure App Stack Cluster on Alternate Region"
+// App Stack Cluster of single interface Azure nodes
 type AzureVnetVoltstackClusterARType struct {
 	// Azure Certified Hardware
 	//
@@ -2217,10 +2217,10 @@ func (*AzureVnetIngressEgressGwARReplaceType) XXX_OneofWrappers() []interface{} 
 	}
 }
 
-// Azure VoltStack Cluster
+// Azure App Stack Cluster
 //
-// x-displayName: "Azure VoltStack Cluster"
-// Voltstack cluster of single interface Azure nodes
+// x-displayName: "Azure App Stack Cluster"
+// App Stack cluster of single interface Azure nodes
 type AzureVnetVoltstackClusterReplaceType struct {
 	// Manage Network Policy
 	//
@@ -2468,10 +2468,10 @@ func (*AzureVnetVoltstackClusterReplaceType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// Azure VoltStack Cluster for Alternate Region
+// Azure App Stack Cluster for Alternate Region
 //
-// x-displayName: "Azure VoltStack Cluster for Alternate Region"
-// Voltstack cluster of single interface Azure nodes
+// x-displayName: "Azure App Stack Cluster for Alternate Region"
+// App Stack cluster of single interface Azure nodes
 type AzureVnetVoltstackClusterARReplaceType struct {
 	// Manage Network Policy
 	//

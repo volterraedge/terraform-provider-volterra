@@ -25,23 +25,22 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_name_matcher any_client client_name ip_threat_category_list client_selector" must be set
-
-  client_name_matcher {
-    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-  }
+  // One of the arguments from this list "ip_threat_category_list client_selector client_name_matcher any_client client_name" must be set
+  any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
 
-  ip_prefix_list {
-    invert_match = true
+  ip_matcher {
+    invert_matcher = true
 
-    ip_prefixes = ["192.168.20.0/24"]
+    prefix_sets {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
   }
   waf_action {
-    // One of the arguments from this list "waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control none waf_skip_processing waf_rule_control" must be set
+    // One of the arguments from this list "waf_in_monitoring_mode app_firewall_detection_control data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
     none = true
   }
 }
@@ -286,6 +285,12 @@ Note that all specified cookie matcher predicates must evaluate to true..
 `presence` - (Optional) Check if the cookie is present or absent. (`Bool`).
 
 `name` - (Required) A case-sensitive cookie name. (`String`).
+
+### Data Guard Control
+
+Data Guard changes to be applied for this request.
+
+`policy_name` - (Optional) Sets the BD Policy to use (`String`).
 
 ### Domain Matcher
 
@@ -552,6 +557,8 @@ Hidden because this will be used only in system generated rate limiting service_
 App Firewall action to be enforced if the input request matches the rule..
 
 `app_firewall_detection_control` - (Optional) App Firewall detection changes to be applied for this request. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
+
+`data_guard_control` - (Optional) Data Guard changes to be applied for this request. See [Data Guard Control ](#data-guard-control) below for details.
 
 `none` - (Optional) Perform normal App Firewall processing for this request (bool).
 

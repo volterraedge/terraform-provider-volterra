@@ -1425,6 +1425,21 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							},
 						},
 
+						"data_guard_control": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"policy_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"none": {
 
 							Type:     schema.TypeBool,
@@ -3288,6 +3303,27 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 							}
 
 						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := wafActionMapStrToI["data_guard_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+				actionTypeInt := &ves_io_schema_policy.WafAction_DataGuardControl{}
+				actionTypeInt.DataGuardControl = &ves_io_schema_policy.DataGuardControl{}
+				wafAction.ActionType = actionTypeInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["policy_name"]; ok && !isIntfNil(v) {
+
+						actionTypeInt.DataGuardControl.PolicyName = v.(string)
 
 					}
 
@@ -5197,6 +5233,27 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 							}
 
 						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := wafActionMapStrToI["data_guard_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+				actionTypeInt := &ves_io_schema_policy.WafAction_DataGuardControl{}
+				actionTypeInt.DataGuardControl = &ves_io_schema_policy.DataGuardControl{}
+				wafAction.ActionType = actionTypeInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["policy_name"]; ok && !isIntfNil(v) {
+
+						actionTypeInt.DataGuardControl.PolicyName = v.(string)
 
 					}
 

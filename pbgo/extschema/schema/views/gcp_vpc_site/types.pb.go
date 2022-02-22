@@ -517,10 +517,10 @@ func (*GCPVPCIngressEgressGwType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// GCP Voltstack Cluster
+// GCP App Stack Cluster
 //
-// x-displayName: "GCP Voltstack Cluster"
-// Voltstack cluster of single interface GCP site
+// x-displayName: "GCP App Stack Cluster"
+// App Stack cluster of single interface GCP site
 type GCPVPCVoltstackClusterType struct {
 	// GCP Certified Hardware
 	//
@@ -1259,10 +1259,10 @@ func (*GCPVPCIngressEgressGwReplaceType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// GCP Voltstack Cluster
+// GCP App Stack Cluster
 //
-// x-displayName: "GCP Voltstack Cluster"
-// Voltstack cluster of single interface GCP nodes
+// x-displayName: "GCP App Stack Cluster"
+// App Stack cluster of single interface GCP nodes
 type GCPVPCVoltstackClusterReplaceType struct {
 	// Manage Network Policy
 	//

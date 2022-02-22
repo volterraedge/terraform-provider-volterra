@@ -179,13 +179,13 @@ func (*Interface) XXX_OneofWrappers() []interface{} {
 // List of Interfaces
 //
 // x-displayName: "List of Interface"
-// Configure network interfaces for this voltstack
+// Configure network interfaces for this App Stack site
 type InterfaceListType struct {
 	// List of Interfaces
 	//
 	// x-displayName: "List of Interface"
 	// x-required
-	// Configure network interfaces for this voltstack
+	// Configure network interfaces for this App Stack site
 	Interfaces []*Interface `protobuf:"bytes,1,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
 }
 
@@ -227,7 +227,7 @@ func (m *InterfaceListType) GetInterfaces() []*Interface {
 // Storage Interfaces
 //
 // x-displayName: "Storage Interface"
-// Configure storage interface for this voltstack
+// Configure storage interface for this App Stack site
 type StorageInterfaceType struct {
 	// Interface Description
 	//
@@ -243,7 +243,7 @@ type StorageInterfaceType struct {
 	//
 	// x-displayName: "Interface"
 	// x-required
-	// Configure storage interface for this voltstack
+	// Configure storage interface for this App Stack site
 	StorageInterface *network_interface.EthernetInterfaceType `protobuf:"bytes,3,opt,name=storage_interface,json=storageInterface,proto3" json:"storage_interface,omitempty"`
 }
 
@@ -299,13 +299,13 @@ func (m *StorageInterfaceType) GetStorageInterface() *network_interface.Ethernet
 // List of Interfaces
 //
 // x-displayName: "List of Interface"
-// Configure storage interfaces for this voltstack
+// Configure storage interfaces for this App Stack site
 type StorageInterfaceListType struct {
 	// List of Interfaces
 	//
 	// x-displayName: "List of Interface"
 	// x-required
-	// Configure storage interfaces for this voltstack
+	// Configure storage interfaces for this App Stack site
 	StorageInterfaces []*StorageInterfaceType `protobuf:"bytes,1,rep,name=storage_interfaces,json=storageInterfaces,proto3" json:"storage_interfaces,omitempty"`
 }
 
@@ -1467,14 +1467,14 @@ func (*VssStorageConfiguration) XXX_OneofWrappers() []interface{} {
 // GlobalSpecType
 //
 // x-displayName: "Global Specification"
-// Shape of the voltstack site specification
+// Shape of the App Stack site specification
 type GlobalSpecType struct {
 	// Generic Server Certified Hardware
 	//
 	// x-displayName: "Generic Server Certified Hardware"
 	// x-example: "isv-8000-series-voltstack-combo"
 	// x-required
-	// Name for generic server certified hardware to form this voltstack site.
+	// Name for generic server certified hardware to form this App Stack site.
 	VolterraCertifiedHw string `protobuf:"bytes,1,opt,name=volterra_certified_hw,json=volterraCertifiedHw,proto3" json:"volterra_certified_hw,omitempty"`
 	// Master Nodes
 	//
@@ -1505,7 +1505,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Select Bond Configuration"
 	// x-required
-	// Add bond interface devices to the voltstack site
+	// Add bond interface devices to the App Stack site
 	//
 	// Types that are valid to be assigned to BondChoice:
 	//	*GlobalSpecType_NoBondDevices
@@ -2077,8 +2077,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 
 // CreateSpecType
 //
-// x-displayName: "Create voltstack site VPC site"
-// Shape of the voltstack site VPC site specification
+// x-displayName: "Create App Stack site"
+// Shape of the App Stack site specification
 type CreateSpecType struct {
 	VolterraCertifiedHw string   `protobuf:"bytes,1,opt,name=volterra_certified_hw,json=volterraCertifiedHw,proto3" json:"volterra_certified_hw,omitempty"`
 	MasterNodes         []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes,proto3" json:"master_nodes,omitempty"`
@@ -2572,8 +2572,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 
 // ReplaceSpecType
 //
-// x-displayName: "Replace voltstack site VPC site"
-// Shape of the voltstack site VPC site replace specification
+// x-displayName: "Replace App Stack site"
+// Shape of the App Stack site replace specification
 type ReplaceSpecType struct {
 	VolterraCertifiedHw string   `protobuf:"bytes,1,opt,name=volterra_certified_hw,json=volterraCertifiedHw,proto3" json:"volterra_certified_hw,omitempty"`
 	MasterNodes         []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes,proto3" json:"master_nodes,omitempty"`
@@ -3043,8 +3043,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 
 // GetSpecType
 //
-// x-displayName: "Get voltstack site VPC site"
-// Shape of the voltstack site VPC site specification
+// x-displayName: "Get App Stack site"
+// Shape of the App Stack site specification
 type GetSpecType struct {
 	VolterraCertifiedHw     string   `protobuf:"bytes,1,opt,name=volterra_certified_hw,json=volterraCertifiedHw,proto3" json:"volterra_certified_hw,omitempty"`
 	MasterNodes             []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes,proto3" json:"master_nodes,omitempty"`

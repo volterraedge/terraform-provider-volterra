@@ -2664,6 +2664,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bgpFamilyUuidvpn": {
+            "type": "object",
+            "description": "x-displayName: \"BGP Family Uuidvpn\"\nParameters for uuidvpn family.",
+            "title": "FamilyUuidvpn",
+            "properties": {
+                "disable": {
+                    "description": "x-displayName: \"Disable UUID VPN Unicast\"\nDisable the UUID Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "x-displayName: \"Enable UUID VPN Unicast\"\nEnable the UUID Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "bgpInterfaceList": {
             "type": "object",
             "description": "List of network interfaces.",
@@ -2847,6 +2864,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Family Route Target\"\nParameters for Route Target family.",
                     "title": "family_rtarget",
                     "$ref": "#/definitions/bgpFamilyRtarget"
+                },
+                "family_uuidvpn": {
+                    "description": "x-displayName: \"Family UUID VPN Unicast\"\nParameters for UUID VPN Unicast family.",
+                    "title": "family_inetvpn",
+                    "$ref": "#/definitions/bgpFamilyUuidvpn"
                 },
                 "from_site": {
                     "description": "x-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
@@ -6647,7 +6669,7 @@ var APISwaggerJSON string = `{
         },
         "viewsvoltstack_siteGlobalSpecType": {
             "type": "object",
-            "description": "Shape of the voltstack site specification",
+            "description": "Shape of the App Stack site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
@@ -6679,7 +6701,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow All USB Devices"
                 },
                 "bond_device_list": {
-                    "description": "Exclusive with [no_bond_devices]\n Configure Bond Devices for this voltstack site",
+                    "description": "Exclusive with [no_bond_devices]\n Configure Bond Devices for this App Stack site",
                     "title": "Configure Bond Devices",
                     "$ref": "#/definitions/fleetFleetBondDevicesListType",
                     "x-displayname": "Configure Bond Interfaces"
@@ -6781,7 +6803,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_bond_devices": {
-                    "description": "Exclusive with [bond_device_list]\n No Bond Devices configured for this voltstack site",
+                    "description": "Exclusive with [bond_device_list]\n No Bond Devices configured for this App Stack site",
                     "title": "No Bond Devices",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No Bond Devices"
@@ -6829,7 +6851,7 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_certified_hw": {
                     "type": "string",
-                    "description": " Name for generic server certified hardware to form this voltstack site.\n\nExample: - \"isv-8000-series-voltstack-combo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "description": " Name for generic server certified hardware to form this App Stack site.\n\nExample: - \"isv-8000-series-voltstack-combo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
                     "title": "Generic Server Certified Hardware",
                     "minLength": 1,
                     "x-displayname": "Generic Server Certified Hardware",
@@ -6985,14 +7007,14 @@ var APISwaggerJSON string = `{
         },
         "voltstack_siteInterfaceListType": {
             "type": "object",
-            "description": "Configure network interfaces for this voltstack",
+            "description": "Configure network interfaces for this App Stack site",
             "title": "List of Interfaces",
             "x-displayname": "List of Interface",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.InterfaceListType",
             "properties": {
                 "interfaces": {
                     "type": "array",
-                    "description": " Configure network interfaces for this voltstack\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure network interfaces for this App Stack site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Interfaces",
                     "minItems": 1,
                     "maxItems": 32,
@@ -7094,7 +7116,7 @@ var APISwaggerJSON string = `{
                 },
                 "object_refs": {
                     "type": "array",
-                    "description": " Volterra voltstack site Site object direct reference",
+                    "description": " Volterra App Stack site object direct reference",
                     "title": "object_refs",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
@@ -7105,14 +7127,14 @@ var APISwaggerJSON string = `{
         },
         "voltstack_siteStorageInterfaceListType": {
             "type": "object",
-            "description": "Configure storage interfaces for this voltstack",
+            "description": "Configure storage interfaces for this App Stack site",
             "title": "List of Interfaces",
             "x-displayname": "List of Interface",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.StorageInterfaceListType",
             "properties": {
                 "storage_interfaces": {
                     "type": "array",
-                    "description": " Configure storage interfaces for this voltstack\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure storage interfaces for this App Stack site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Interfaces",
                     "minItems": 1,
                     "maxItems": 32,
@@ -7132,7 +7154,7 @@ var APISwaggerJSON string = `{
         },
         "voltstack_siteStorageInterfaceType": {
             "type": "object",
-            "description": "Configure storage interface for this voltstack",
+            "description": "Configure storage interface for this App Stack site",
             "title": "Storage Interfaces",
             "x-displayname": "Storage Interface",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.StorageInterfaceType",
@@ -7154,7 +7176,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Interface Labels"
                 },
                 "storage_interface": {
-                    "description": " Configure storage interface for this voltstack\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Configure storage interface for this App Stack site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Interface",
                     "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
                     "x-displayname": "Interface",

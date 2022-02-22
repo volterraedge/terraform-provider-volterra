@@ -2582,9 +2582,9 @@ var APISwaggerJSON string = `{
         },
         "azure_vnet_siteAzureVnetVoltstackClusterARReplaceType": {
             "type": "object",
-            "description": "Voltstack cluster of single interface Azure nodes",
-            "title": "Azure VoltStack Cluster for Alternate Region",
-            "x-displayname": "Azure VoltStack Cluster for Alternate Region",
+            "description": "App Stack cluster of single interface Azure nodes",
+            "title": "Azure App Stack Cluster for Alternate Region",
+            "x-displayname": "Azure App Stack Cluster for Alternate Region",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
@@ -2649,9 +2649,9 @@ var APISwaggerJSON string = `{
         },
         "azure_vnet_siteAzureVnetVoltstackClusterARType": {
             "type": "object",
-            "description": "Voltstack Cluster of single interface Azure nodes",
-            "title": "Azure Voltstack Cluster on Alternate Region",
-            "x-displayname": "Azure Voltstack Cluster on Alternate Region",
+            "description": "App Stack Cluster of single interface Azure nodes",
+            "title": "Azure App Stack Cluster on Alternate Region",
+            "x-displayname": "Azure App Stack Cluster on Alternate Region",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
@@ -2762,9 +2762,9 @@ var APISwaggerJSON string = `{
         },
         "azure_vnet_siteAzureVnetVoltstackClusterReplaceType": {
             "type": "object",
-            "description": "Voltstack cluster of single interface Azure nodes",
-            "title": "Azure VoltStack Cluster",
-            "x-displayname": "Azure VoltStack Cluster",
+            "description": "App Stack cluster of single interface Azure nodes",
+            "title": "Azure App Stack Cluster",
+            "x-displayname": "Azure App Stack Cluster",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
@@ -2829,9 +2829,9 @@ var APISwaggerJSON string = `{
         },
         "azure_vnet_siteAzureVnetVoltstackClusterType": {
             "type": "object",
-            "description": "Voltstack Cluster of single interface Azure nodes",
-            "title": "Azure Voltstack Cluster on Recommended Region",
-            "x-displayname": "Azure Voltstack Cluster on Recommended Region",
+            "description": "App Stack Cluster of single interface Azure nodes",
+            "title": "Azure App Stack Cluster on Recommended Region",
+            "x-displayname": "Azure App Stack Cluster on Recommended Region",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
@@ -2859,7 +2859,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeType"
                     },
-                    "x-displayname": "VoltStack Cluster (One Interface) Nodes in AZ",
+                    "x-displayname": "App Stack Cluster (One Interface) Nodes in AZ",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.num_items": "1,3"
                     }
@@ -5743,14 +5743,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType",
-                    "x-displayname": "Voltstack Cluster (One Interface) on Recommended Region"
+                    "x-displayname": "App Stack Cluster (One Interface) on Recommended Region"
                 },
                 "voltstack_cluster_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType",
-                    "x-displayname": "Voltstack Cluster (One Interface) on Alternate Region"
+                    "x-displayname": "App Stack Cluster (One Interface) on Alternate Region"
                 }
             }
         },
@@ -5946,14 +5946,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType",
-                    "x-displayname": "Voltstack Cluster (One Interface) on Recommended Region"
+                    "x-displayname": "App Stack Cluster (One Interface) on Recommended Region"
                 },
                 "voltstack_cluster_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType",
-                    "x-displayname": "Voltstack Cluster (One Interface) on Alternate Region"
+                    "x-displayname": "App Stack Cluster (One Interface) on Alternate Region"
                 }
             }
         },
@@ -6177,16 +6177,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster on Recommended Region",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "App Stack Cluster on Recommended Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType",
-                    "x-displayname": "Voltstack Cluster (One Interface) on Recommended Region"
+                    "x-displayname": "App Stack Cluster (One Interface) on Recommended Region"
                 },
                 "voltstack_cluster_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster on Alternate Region",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "App Stack Cluster on Alternate Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType",
-                    "x-displayname": "Voltstack Cluster (One Interface) on Alternate Region"
+                    "x-displayname": "App Stack Cluster (One Interface) on Alternate Region"
                 }
             }
         },
@@ -6286,16 +6286,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster on Recommended Region",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "App Stack Cluster on Recommended Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterReplaceType",
-                    "x-displayname": "Voltstack Cluster (One Interface) on Recommended Region"
+                    "x-displayname": "App Stack Cluster (One Interface) on Recommended Region"
                 },
                 "voltstack_cluster_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n Voltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster on Alternate Region",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "App Stack Cluster on Alternate Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARReplaceType",
-                    "x-displayname": "Voltstack Cluster (One Interface) on Alternate Region"
+                    "x-displayname": "App Stack Cluster (One Interface) on Alternate Region"
                 }
             }
         }

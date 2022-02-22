@@ -820,7 +820,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "name",
-                        "description": "x-example: \"volt-api-specs\"\nOptional query parameter. Name of the stored_object",
+                        "description": "x-example: \"my-file, shared/my-file, my-ns/my-file\"\nOptional query parameter. Name of the stored_object",
                         "in": "query",
                         "required": false,
                         "type": "string",

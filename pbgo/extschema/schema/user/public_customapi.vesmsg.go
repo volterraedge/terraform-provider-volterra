@@ -1235,6 +1235,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["environment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("environment"))
+		if err := fv(ctx, m.GetEnvironment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["feature_flags"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("feature_flags"))

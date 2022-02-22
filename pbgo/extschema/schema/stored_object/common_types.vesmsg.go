@@ -1385,8 +1385,8 @@ var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.string.max_len":         "512",
-		"ves.io.schema.rules.string.ves_object_name": "true",
+		"ves.io.schema.rules.string.max_len": "512",
+		"ves.io.schema.rules.string.pattern": "^(([a-z]([-a-z0-9]*[a-z0-9])?/)?[a-z]([-a-z0-9]*[a-z0-9])?)?$",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
