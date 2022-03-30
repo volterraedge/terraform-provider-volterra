@@ -295,6 +295,7 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  namespace = volterra_namespace.app.name
 		  labels = {
 			  "ves.io/app_type" = volterra_app_type.app_type.name
+			  "new-test"        = "true"
 		  }
 		  advertise_on_public_default_vip = true
 		  no_challenge = true
