@@ -11537,6 +11537,7 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 		if v.(bool) {
 			vmChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_EnableVm{}
 			vmChoiceInt.EnableVm = &ves_io_schema_fleet.VMConfiguration{}
+			createSpec.VmChoice = vmChoiceInt
 		}
 	}
 
@@ -18162,8 +18163,9 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 		vmChoiceTypeFound = true
 		if v.(bool) {
-			vmChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_EnableVm{}
+			vmChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_EnableVm{}
 			vmChoiceInt.EnableVm = &ves_io_schema_fleet.VMConfiguration{}
+			updateSpec.VmChoice = vmChoiceInt
 		}
 	}
 
