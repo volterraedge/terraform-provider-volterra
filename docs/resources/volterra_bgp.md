@@ -24,7 +24,7 @@ resource "volterra_bgp" "example" {
     asn = "asn"
 
     bgp_router_id {
-      // One of the arguments from this list "ipv4 ipv6" must be set
+      // One of the arguments from this list "ipv6 ipv4" must be set
 
       ipv4 {
         addr = "192.168.1.1"
@@ -34,8 +34,8 @@ resource "volterra_bgp" "example" {
     bgp_router_id_key  = "bgp_router_id_key"
     bgp_router_id_type = "bgp_router_id_type"
 
-    // One of the arguments from this list "local_address from_site ip_address" must be set
-    local_address = true
+    // One of the arguments from this list "ip_address local_address from_site" must be set
+    from_site = true
   }
 
   peers {
@@ -50,23 +50,28 @@ resource "volterra_bgp" "example" {
     // One of the arguments from this list "external internal" must be set
 
     external {
-      // One of the arguments from this list "subnet_begin_offset subnet_end_offset from_site default_gateway address" must be set
-      from_site = true
-      asn       = "asn"
+      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
+      default_gateway = true
+      asn             = "asn"
 
       family_inet {
         // One of the arguments from this list "enable disable" must be set
-        disable = true
+        enable = true
       }
 
-      // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
-      outside_interfaces = true
-      port               = "port"
+      // One of the arguments from this list "inside_interfaces outside_interfaces interface interface_list" must be set
+
+      interface {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+      port = "port"
     }
   }
 
   where {
-    // One of the arguments from this list "virtual_site site" must be set
+    // One of the arguments from this list "site virtual_site" must be set
 
     site {
       network_type = "network_type"
@@ -213,6 +218,14 @@ Parameters for Route Target family..
 
 `enable` - (Optional) Enable the Route Target family. (bool).
 
+### Family Uuidvpn
+
+Parameters for UUID VPN Unicast family..
+
+`disable` - (Optional) Disable the UUID Unicast family. (bool).
+
+`enable` - (Optional) Enable the UUID Unicast family. (bool).
+
 ### From Site
 
 Use the Router ID field from the site object..
@@ -242,6 +255,8 @@ External BGP peer..
 `family_inetvpn` - (Optional) Parameters for IPv4 VPN Unicast family.. See [Family Inetvpn ](#family-inetvpn) below for details.
 
 `family_rtarget` - (Optional) Parameters for Route Target family.. See [Family Rtarget ](#family-rtarget) below for details.
+
+`family_uuidvpn` - (Optional) Parameters for UUID VPN Unicast family.. See [Family Uuidvpn ](#family-uuidvpn) below for details.
 
 `disable_mtls` - (Optional) Disable MTLS (bool).
 

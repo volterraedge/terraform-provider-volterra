@@ -420,6 +420,58 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 							},
 						},
 
+						"dc_cluster_group_inside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"dc_cluster_group_outside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"active_forward_proxy_policies": {
 
 							Type:     schema.TypeSet,
@@ -1096,6 +1148,28 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -1438,6 +1512,28 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 								},
 							},
 						},
+
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -1551,6 +1647,35 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"dc_cluster_group": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 
 						"active_forward_proxy_policies": {
@@ -2066,6 +2191,28 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
 						},
 
 						"active_network_policies": {
@@ -3064,6 +3211,86 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
+
 			forwardProxyChoiceTypeFound := false
 
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
@@ -3997,6 +4224,44 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.IngressEgressGw.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -4481,6 +4746,44 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.IngressGw.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -4642,6 +4945,53 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterType_DcClusterGroup{}
+				dcClusterGroupChoiceInt.DcClusterGroup = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
 				}
 
 			}
@@ -5358,6 +5708,44 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 					k8SClusterChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterType_NoK8SCluster{}
 					k8SClusterChoiceInt.NoK8SCluster = &ves_io_schema.Empty{}
 					siteTypeInt.VoltstackCluster.K8SClusterChoice = k8SClusterChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.VoltstackCluster.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
 				}
 
 			}
@@ -6266,6 +6654,86 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwReplaceType_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwReplaceType_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwReplaceType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
 				}
 
 			}
@@ -7690,6 +8158,53 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterReplaceType_DcClusterGroup{}
+				dcClusterGroupChoiceInt.DcClusterGroup = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterReplaceType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
 				}
 
 			}

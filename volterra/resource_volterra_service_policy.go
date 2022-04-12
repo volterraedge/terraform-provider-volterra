@@ -1670,12 +1670,6 @@ func resourceVolterraServicePolicy() *schema.Resource {
 																			},
 																		},
 
-																		"flag": {
-
-																			Type:     schema.TypeBool,
-																			Optional: true,
-																		},
-
 																		"none": {
 
 																			Type:     schema.TypeBool,
@@ -4073,18 +4067,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 													}
 
-												}
-
-											}
-
-											if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-												actionTypeTypeFound = true
-
-												if v.(bool) {
-													actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
-													actionTypeInt.Flag = &ves_io_schema.Empty{}
-													mitigation.ActionType = actionTypeInt
 												}
 
 											}
@@ -6652,17 +6634,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 											}
 
-											if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-												actionTypeTypeFound = true
-
-												if v.(bool) {
-													actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
-													actionTypeInt.Flag = &ves_io_schema.Empty{}
-													mitigation.ActionType = actionTypeInt
-												}
-
-											}
 
 											if v, ok := mitigationMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 

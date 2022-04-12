@@ -174,6 +174,11 @@ func resourceVolterraAppFirewall() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+
+						"response_code": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -589,6 +594,12 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["blocking_page"]; ok && !isIntfNil(v) {
 
 				blockingPageChoiceInt.BlockingPage.BlockingPage = v.(string)
+
+			}
+
+			if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+
+				blockingPageChoiceInt.BlockingPage.ResponseCode = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
 
 			}
 
@@ -1180,6 +1191,12 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["blocking_page"]; ok && !isIntfNil(v) {
 
 				blockingPageChoiceInt.BlockingPage.BlockingPage = v.(string)
+
+			}
+
+			if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+
+				blockingPageChoiceInt.BlockingPage.ResponseCode = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
 
 			}
 

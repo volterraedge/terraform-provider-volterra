@@ -36,7 +36,7 @@ resource "volterra_aws_vpc_site" "example" {
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "custom_ports use_http_port use_https_port use_http_https_port" must be set
+      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
       use_http_port = true
     }
 
@@ -54,6 +54,11 @@ resource "volterra_aws_vpc_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
+    }
+
+    local_control_plane {
+      // One of the arguments from this list "no_local_control_plane default_local_control_plane" must be set
+      default_local_control_plane = true
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
@@ -107,7 +112,7 @@ Argument Reference
 
 `ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the VPC.. See [Ingress Gw ](#ingress-gw) below for details.
 
-`voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
+`voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
@@ -131,9 +136,9 @@ Enable Forward Proxy for this site and manage policies.
 
 ### Active Network Policies
 
-Network Policies active for this site..
+Firewall Policies active for this site..
 
-`network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
 ### Allowed Vip Port
 
@@ -255,6 +260,10 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
 
+### Default Local Control Plane
+
+Enable Site Local Control Plane.
+
 ### Default Os Version
 
 Will assign latest available OS version.
@@ -347,6 +356,12 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
+`dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
+
+`dc_cluster_group_outside_vn` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
+
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
 `forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
@@ -361,9 +376,11 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
@@ -378,6 +395,8 @@ One interface site is useful when site is only used as ingress gateway to the VP
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
 `az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 ### Inside Static Routes
 
@@ -415,6 +434,14 @@ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
+### Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
+
 ### New Vpc
 
 Parameters for creating new VPC.
@@ -445,6 +472,10 @@ Nexthop address when type is "Use-Configured".
 
 `ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
 
+### No Dc Cluster Group
+
+This site is not a member of dc cluster group.
+
 ### No Forward Proxy
 
 Disable Forward Proxy for this site.
@@ -465,9 +496,13 @@ No TLS interception is enabled for this network connector.
 
 Site Local K8s API access is disabled.
 
+### No Local Control Plane
+
+Disable Site Local Control Plane.
+
 ### No Network Policy
 
-Network Policy is disabled for this site..
+Firewall Policy is disabled for this site..
 
 ### No Outside Static Routes
 
@@ -655,13 +690,17 @@ Default volterra trusted CA list for validating upstream server certificate.
 
 ### Voltstack Cluster
 
-Voltstack Cluster using single interface, useful for deploying K8s cluster..
+App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
 
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
 `az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+
+`dc_cluster_group` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
@@ -677,9 +716,11 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for site local network. (bool).
 

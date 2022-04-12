@@ -61,6 +61,39 @@ func resourceVolterraFleet() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"blocked_services": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"dns": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ssh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"web_user_interface": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"network_type": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"bond_device_list": {
 
 				Type:     schema.TypeSet,
@@ -2877,6 +2910,64 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	//blocked_services
+	if v, ok := d.GetOk("blocked_services"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		blockedServices := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+		createSpec.BlockedServices = blockedServices
+		for i, set := range sl {
+			blockedServices[i] = &ves_io_schema_fleet.BlockedServices{}
+			blockedServicesMapStrToI := set.(map[string]interface{})
+
+			blockedServicesValueTypeChoiceTypeFound := false
+
+			if v, ok := blockedServicesMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+				blockedServicesValueTypeChoiceTypeFound = true
+
+				if v.(bool) {
+					blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+					blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+					blockedServices[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+				}
+
+			}
+
+			if v, ok := blockedServicesMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+				blockedServicesValueTypeChoiceTypeFound = true
+
+				if v.(bool) {
+					blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+					blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+					blockedServices[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+				}
+
+			}
+
+			if v, ok := blockedServicesMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+				blockedServicesValueTypeChoiceTypeFound = true
+
+				if v.(bool) {
+					blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+					blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+					blockedServices[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+				}
+
+			}
+
+			if v, ok := blockedServicesMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+				blockedServices[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+			}
+
+		}
+
 	}
 
 	//bond_choice
@@ -6595,6 +6686,63 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	if v, ok := d.GetOk("blocked_services"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		blockedServices := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+		updateSpec.BlockedServices = blockedServices
+		for i, set := range sl {
+			blockedServices[i] = &ves_io_schema_fleet.BlockedServices{}
+			blockedServicesMapStrToI := set.(map[string]interface{})
+
+			blockedServicesValueTypeChoiceTypeFound := false
+
+			if v, ok := blockedServicesMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+				blockedServicesValueTypeChoiceTypeFound = true
+
+				if v.(bool) {
+					blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+					blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+					blockedServices[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+				}
+
+			}
+
+			if v, ok := blockedServicesMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+				blockedServicesValueTypeChoiceTypeFound = true
+
+				if v.(bool) {
+					blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+					blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+					blockedServices[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+				}
+
+			}
+
+			if v, ok := blockedServicesMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+				blockedServicesValueTypeChoiceTypeFound = true
+
+				if v.(bool) {
+					blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+					blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+					blockedServices[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+				}
+
+			}
+
+			if v, ok := blockedServicesMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+				blockedServices[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+			}
+
+		}
+
 	}
 
 	bondChoiceTypeFound := false

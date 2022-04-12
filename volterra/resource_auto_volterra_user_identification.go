@@ -91,6 +91,18 @@ func resourceVolterraUserIdentification() *schema.Resource {
 							Optional: true,
 						},
 
+						"ip_and_http_header_name": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"ip_and_tls_fingerprint": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"none": {
 
 							Type:     schema.TypeBool,
@@ -100,6 +112,12 @@ func resourceVolterraUserIdentification() *schema.Resource {
 						"query_param_key": {
 
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"tls_fingerprint": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 					},
@@ -220,6 +238,29 @@ func resourceVolterraUserIdentificationCreate(d *schema.ResourceData, meta inter
 
 			}
 
+			if v, ok := rulesMapStrToI["ip_and_http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndHttpHeaderName{}
+
+				rules[i].Identifier = identifierInt
+
+				identifierInt.IpAndHttpHeaderName = v.(string)
+
+			}
+
+			if v, ok := rulesMapStrToI["ip_and_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndTlsFingerprint{}
+					identifierInt.IpAndTlsFingerprint = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
+
+			}
+
 			if v, ok := rulesMapStrToI["none"]; ok && !isIntfNil(v) && !identifierTypeFound {
 
 				identifierTypeFound = true
@@ -240,6 +281,18 @@ func resourceVolterraUserIdentificationCreate(d *schema.ResourceData, meta inter
 				rules[i].Identifier = identifierInt
 
 				identifierInt.QueryParamKey = v.(string)
+
+			}
+
+			if v, ok := rulesMapStrToI["tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_TlsFingerprint{}
+					identifierInt.TlsFingerprint = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
 
 			}
 
@@ -402,6 +455,29 @@ func resourceVolterraUserIdentificationUpdate(d *schema.ResourceData, meta inter
 
 			}
 
+			if v, ok := rulesMapStrToI["ip_and_http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndHttpHeaderName{}
+
+				rules[i].Identifier = identifierInt
+
+				identifierInt.IpAndHttpHeaderName = v.(string)
+
+			}
+
+			if v, ok := rulesMapStrToI["ip_and_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndTlsFingerprint{}
+					identifierInt.IpAndTlsFingerprint = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
+
+			}
+
 			if v, ok := rulesMapStrToI["none"]; ok && !isIntfNil(v) && !identifierTypeFound {
 
 				identifierTypeFound = true
@@ -422,6 +498,18 @@ func resourceVolterraUserIdentificationUpdate(d *schema.ResourceData, meta inter
 				rules[i].Identifier = identifierInt
 
 				identifierInt.QueryParamKey = v.(string)
+
+			}
+
+			if v, ok := rulesMapStrToI["tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_TlsFingerprint{}
+					identifierInt.TlsFingerprint = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
 
 			}
 

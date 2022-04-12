@@ -29,14 +29,8 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
-
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
@@ -117,7 +111,7 @@ Argument Reference
 
 `ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the VPC network.. See [Ingress Gw ](#ingress-gw) below for details.
 
-`voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
+`voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
@@ -131,9 +125,9 @@ Enable Forward Proxy for this site and manage policies.
 
 ### Active Network Policies
 
-Network Policies active for this site..
+Firewall Policies active for this site..
 
-`network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
 ### Blindfold Secret Info
 
@@ -301,6 +295,12 @@ List of global network connections.
 
 Two interface site is useful when site is used as ingress/egress gateway to the VPC network..
 
+`dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
+
+`dc_cluster_group_outside_vn` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
+
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
 `forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
@@ -323,9 +323,9 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `inside_subnet` - (Optional) Subnet for the inside interface of the node.. See [Inside Subnet ](#inside-subnet) below for details.
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 
@@ -453,6 +453,10 @@ Nexthop address when type is "Use-Configured".
 
 `ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
 
+### No Dc Cluster Group
+
+This site is not a member of dc cluster group.
+
 ### No Forward Proxy
 
 Disable Forward Proxy for this site.
@@ -475,7 +479,7 @@ Site Local K8s API access is disabled.
 
 ### No Network Policy
 
-Network Policy is disabled for this site..
+Firewall Policy is disabled for this site..
 
 ### No Outside Static Routes
 
@@ -667,7 +671,11 @@ Default volterra trusted CA list for validating upstream server certificate.
 
 ### Voltstack Cluster
 
-Voltstack Cluster using single interface, useful for deploying K8s cluster..
+App Stack Cluster using single interface, useful for deploying K8s cluster..
+
+`dc_cluster_group` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
@@ -687,9 +695,9 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 

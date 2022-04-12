@@ -428,6 +428,28 @@ func resourceVolterraBgp() *schema.Resource {
 										},
 									},
 
+									"family_uuidvpn": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"disable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"enable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"disable_mtls": {
 
 										Type:     schema.TypeBool,
@@ -1169,6 +1191,44 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 									enableChoiceInt := &ves_io_schema_bgp.FamilyRtarget_Enable{}
 									enableChoiceInt.Enable = &ves_io_schema.Empty{}
 									familyRtarget.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["family_uuidvpn"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyUuidvpn := &ves_io_schema_bgp.FamilyUuidvpn{}
+						typeChoiceInt.Internal.FamilyUuidvpn = familyUuidvpn
+						for _, set := range sl {
+							familyUuidvpnMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyUuidvpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyUuidvpn_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyUuidvpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyUuidvpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyUuidvpn_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyUuidvpn.EnableChoice = enableChoiceInt
 								}
 
 							}
@@ -2000,6 +2060,44 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 									enableChoiceInt := &ves_io_schema_bgp.FamilyRtarget_Enable{}
 									enableChoiceInt.Enable = &ves_io_schema.Empty{}
 									familyRtarget.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["family_uuidvpn"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyUuidvpn := &ves_io_schema_bgp.FamilyUuidvpn{}
+						typeChoiceInt.Internal.FamilyUuidvpn = familyUuidvpn
+						for _, set := range sl {
+							familyUuidvpnMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyUuidvpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyUuidvpn_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyUuidvpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyUuidvpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyUuidvpn_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyUuidvpn.EnableChoice = enableChoiceInt
 								}
 
 							}

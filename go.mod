@@ -31,6 +31,7 @@ require (
 	github.com/throttled/throttled v2.2.5+incompatible // indirect
 	github.com/ulikunitz/xz v0.5.7 // indirect
 	github.com/yudai/gojsondiff v1.0.0 // indirect
+	go.etcd.io/etcd v0.5.0-alpha.5.0.20200824191128-ae9734ed278b // indirect
 	go.opencensus.io v0.22.4 // indirect
 	go.uber.org/goleak v1.1.10 // indirect
 	go.uber.org/zap v1.17.0
@@ -38,9 +39,9 @@ require (
 	google.golang.org/genproto v0.0.0-20210831024726-fe130286e0e2
 	google.golang.org/grpc v1.40.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gopkg.volterra.us/codegen v0.0.0-20220126015058-37653f32c084 // indirect
+	gopkg.volterra.us/codegen v0.0.0-20220221123310-f138846556ee // indirect
 	gopkg.volterra.us/gft v0.0.0-20211105171438-8bddbd9becb9 // indirect
-	gopkg.volterra.us/stdlib v0.0.0-20220124194742-cf3bbe1627eb
+	gopkg.volterra.us/stdlib v0.0.0-20220325025208-7a45c9586b4c
 	honnef.co/go/tools v0.0.1-2020.1.5 // indirect
 	k8s.io/api v0.22.1
 	software.sslmate.com/src/go-pkcs12 v0.0.0-20201103104416-57fc603b7f52 // indirect
