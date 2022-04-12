@@ -493,7 +493,11 @@ type OriginServerK8SService struct {
 	//
 	// x-displayName: "Service Name"
 	// x-required
-	// K8s service name of the origin server, including the namespace (servicename.namespace). For example, if the servicename is "frontend" and namespace is "speedtest", then you will enter "frontend.speedtest".
+	// K8s service name of the origin server, including the namespace and cluster-id
+	// (servicename.namespace.cluster-id). For example, if the servicename is "frontend",
+	// namespace is "speedtest" and cluster-id is "prod", then you will enter "frontend.speedtest.prod".
+	// Both namespace and cluster-id are optional. cluster-id can be specified only if namespace is
+	// configured.
 	ServiceName string `protobuf:"bytes,1,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
 	// Site Locator
 	//

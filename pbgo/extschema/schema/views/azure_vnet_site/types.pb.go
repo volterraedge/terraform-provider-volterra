@@ -164,11 +164,11 @@ type AzureVnetIngressEgressGwType struct {
 	// x-displayName: "Ingress/Egress Gateway (two Interface) Nodes in AZ"
 	// Only Single AZ or Three AZ(s) nodes are supported currently.
 	AzNodes []*views.AzureVnetTwoInterfaceNodeType `protobuf:"bytes,1,rep,name=az_nodes,json=azNodes,proto3" json:"az_nodes,omitempty"`
-	// Manage Network Policy
+	// Manage Firewall Policy
 	//
-	// x-displayName: "Manage Network Policy"
+	// x-displayName: "Manage Firewall Policy"
 	// x-required
-	// Manage Network Policy via this view
+	// Manage Firewall Policy via this view
 	//
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*AzureVnetIngressEgressGwType_NoNetworkPolicy
@@ -222,6 +222,17 @@ type AzureVnetIngressEgressGwType struct {
 	//	*AzureVnetIngressEgressGwType_NoGlobalNetwork
 	//	*AzureVnetIngressEgressGwType_GlobalNetworkList
 	GlobalNetworkChoice isAzureVnetIngressEgressGwType_GlobalNetworkChoice `protobuf_oneof:"global_network_choice"`
+	// Select DC Cluster Group
+	//
+	// x-displayName: "Select DC Cluster Group"
+	// x-required
+	// Is this site member of a dc cluster group via selected network type
+	//
+	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//	*AzureVnetIngressEgressGwType_NoDcClusterGroup
+	//	*AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn
+	//	*AzureVnetIngressEgressGwType_DcClusterGroupInsideVn
+	DcClusterGroupChoice isAzureVnetIngressEgressGwType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 }
 
 func (m *AzureVnetIngressEgressGwType) Reset()      { *m = AzureVnetIngressEgressGwType{} }
@@ -282,6 +293,12 @@ type isAzureVnetIngressEgressGwType_GlobalNetworkChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetIngressEgressGwType_DcClusterGroupChoice interface {
+	isAzureVnetIngressEgressGwType_DcClusterGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetIngressEgressGwType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,2,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -316,6 +333,15 @@ type AzureVnetIngressEgressGwType_NoGlobalNetwork struct {
 type AzureVnetIngressEgressGwType_GlobalNetworkList struct {
 	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,19,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
+type AzureVnetIngressEgressGwType_NoDcClusterGroup struct {
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,22,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
+}
+type AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn struct {
+	DcClusterGroupOutsideVn *views.ObjectRefType `protobuf:"bytes,23,opt,name=dc_cluster_group_outside_vn,json=dcClusterGroupOutsideVn,proto3,oneof" json:"dc_cluster_group_outside_vn,omitempty"`
+}
+type AzureVnetIngressEgressGwType_DcClusterGroupInsideVn struct {
+	DcClusterGroupInsideVn *views.ObjectRefType `protobuf:"bytes,24,opt,name=dc_cluster_group_inside_vn,json=dcClusterGroupInsideVn,proto3,oneof" json:"dc_cluster_group_inside_vn,omitempty"`
+}
 
 func (*AzureVnetIngressEgressGwType_NoNetworkPolicy) isAzureVnetIngressEgressGwType_NetworkPolicyChoice() {
 }
@@ -338,6 +364,12 @@ func (*AzureVnetIngressEgressGwType_OutsideStaticRoutes) isAzureVnetIngressEgres
 func (*AzureVnetIngressEgressGwType_NoGlobalNetwork) isAzureVnetIngressEgressGwType_GlobalNetworkChoice() {
 }
 func (*AzureVnetIngressEgressGwType_GlobalNetworkList) isAzureVnetIngressEgressGwType_GlobalNetworkChoice() {
+}
+func (*AzureVnetIngressEgressGwType_NoDcClusterGroup) isAzureVnetIngressEgressGwType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn) isAzureVnetIngressEgressGwType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwType_DcClusterGroupInsideVn) isAzureVnetIngressEgressGwType_DcClusterGroupChoice() {
 }
 
 func (m *AzureVnetIngressEgressGwType) GetNetworkPolicyChoice() isAzureVnetIngressEgressGwType_NetworkPolicyChoice {
@@ -367,6 +399,12 @@ func (m *AzureVnetIngressEgressGwType) GetOutsideStaticRouteChoice() isAzureVnet
 func (m *AzureVnetIngressEgressGwType) GetGlobalNetworkChoice() isAzureVnetIngressEgressGwType_GlobalNetworkChoice {
 	if m != nil {
 		return m.GlobalNetworkChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwType) GetDcClusterGroupChoice() isAzureVnetIngressEgressGwType_DcClusterGroupChoice {
+	if m != nil {
+		return m.DcClusterGroupChoice
 	}
 	return nil
 }
@@ -462,6 +500,27 @@ func (m *AzureVnetIngressEgressGwType) GetGlobalNetworkList() *views.GlobalNetwo
 	return nil
 }
 
+func (m *AzureVnetIngressEgressGwType) GetNoDcClusterGroup() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwType_NoDcClusterGroup); ok {
+		return x.NoDcClusterGroup
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwType) GetDcClusterGroupOutsideVn() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn); ok {
+		return x.DcClusterGroupOutsideVn
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwType) GetDcClusterGroupInsideVn() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwType_DcClusterGroupInsideVn); ok {
+		return x.DcClusterGroupInsideVn
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetIngressEgressGwType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -476,6 +535,9 @@ func (*AzureVnetIngressEgressGwType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetIngressEgressGwType_OutsideStaticRoutes)(nil),
 		(*AzureVnetIngressEgressGwType_NoGlobalNetwork)(nil),
 		(*AzureVnetIngressEgressGwType_GlobalNetworkList)(nil),
+		(*AzureVnetIngressEgressGwType_NoDcClusterGroup)(nil),
+		(*AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn)(nil),
+		(*AzureVnetIngressEgressGwType_DcClusterGroupInsideVn)(nil),
 	}
 }
 
@@ -489,11 +551,11 @@ type AzureVnetIngressEgressGwARType struct {
 	// x-displayName: "Ingress/Egress Gateway (Two Interface) Node information"
 	// Ingress/Egress Gateway (Two Interface) Node information.
 	Node *views.AzureVnetTwoInterfaceNodeARType `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
-	// Manage Network Policy
+	// Manage Firewall Policy
 	//
-	// x-displayName: "Manage Network Policy"
+	// x-displayName: "Manage Firewall Policy"
 	// x-required
-	// Manage Network Policy via this view
+	// Manage Firewall Policy via this view
 	//
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*AzureVnetIngressEgressGwARType_NoNetworkPolicy
@@ -547,6 +609,17 @@ type AzureVnetIngressEgressGwARType struct {
 	//	*AzureVnetIngressEgressGwARType_NoGlobalNetwork
 	//	*AzureVnetIngressEgressGwARType_GlobalNetworkList
 	GlobalNetworkChoice isAzureVnetIngressEgressGwARType_GlobalNetworkChoice `protobuf_oneof:"global_network_choice"`
+	// Select DC Cluster Group
+	//
+	// x-displayName: "Select DC Cluster Group"
+	// x-required
+	// Is this site member of a dc cluster group via selected network type
+	//
+	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//	*AzureVnetIngressEgressGwARType_NoDcClusterGroup
+	//	*AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn
+	//	*AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn
+	DcClusterGroupChoice isAzureVnetIngressEgressGwARType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 }
 
 func (m *AzureVnetIngressEgressGwARType) Reset()      { *m = AzureVnetIngressEgressGwARType{} }
@@ -607,6 +680,12 @@ type isAzureVnetIngressEgressGwARType_GlobalNetworkChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetIngressEgressGwARType_DcClusterGroupChoice interface {
+	isAzureVnetIngressEgressGwARType_DcClusterGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetIngressEgressGwARType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,2,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -641,6 +720,15 @@ type AzureVnetIngressEgressGwARType_NoGlobalNetwork struct {
 type AzureVnetIngressEgressGwARType_GlobalNetworkList struct {
 	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,19,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
+type AzureVnetIngressEgressGwARType_NoDcClusterGroup struct {
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,22,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
+}
+type AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn struct {
+	DcClusterGroupOutsideVn *views.ObjectRefType `protobuf:"bytes,23,opt,name=dc_cluster_group_outside_vn,json=dcClusterGroupOutsideVn,proto3,oneof" json:"dc_cluster_group_outside_vn,omitempty"`
+}
+type AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn struct {
+	DcClusterGroupInsideVn *views.ObjectRefType `protobuf:"bytes,24,opt,name=dc_cluster_group_inside_vn,json=dcClusterGroupInsideVn,proto3,oneof" json:"dc_cluster_group_inside_vn,omitempty"`
+}
 
 func (*AzureVnetIngressEgressGwARType_NoNetworkPolicy) isAzureVnetIngressEgressGwARType_NetworkPolicyChoice() {
 }
@@ -663,6 +751,12 @@ func (*AzureVnetIngressEgressGwARType_OutsideStaticRoutes) isAzureVnetIngressEgr
 func (*AzureVnetIngressEgressGwARType_NoGlobalNetwork) isAzureVnetIngressEgressGwARType_GlobalNetworkChoice() {
 }
 func (*AzureVnetIngressEgressGwARType_GlobalNetworkList) isAzureVnetIngressEgressGwARType_GlobalNetworkChoice() {
+}
+func (*AzureVnetIngressEgressGwARType_NoDcClusterGroup) isAzureVnetIngressEgressGwARType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn) isAzureVnetIngressEgressGwARType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn) isAzureVnetIngressEgressGwARType_DcClusterGroupChoice() {
 }
 
 func (m *AzureVnetIngressEgressGwARType) GetNetworkPolicyChoice() isAzureVnetIngressEgressGwARType_NetworkPolicyChoice {
@@ -692,6 +786,12 @@ func (m *AzureVnetIngressEgressGwARType) GetOutsideStaticRouteChoice() isAzureVn
 func (m *AzureVnetIngressEgressGwARType) GetGlobalNetworkChoice() isAzureVnetIngressEgressGwARType_GlobalNetworkChoice {
 	if m != nil {
 		return m.GlobalNetworkChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwARType) GetDcClusterGroupChoice() isAzureVnetIngressEgressGwARType_DcClusterGroupChoice {
+	if m != nil {
+		return m.DcClusterGroupChoice
 	}
 	return nil
 }
@@ -787,6 +887,27 @@ func (m *AzureVnetIngressEgressGwARType) GetGlobalNetworkList() *views.GlobalNet
 	return nil
 }
 
+func (m *AzureVnetIngressEgressGwARType) GetNoDcClusterGroup() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwARType_NoDcClusterGroup); ok {
+		return x.NoDcClusterGroup
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARType) GetDcClusterGroupOutsideVn() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn); ok {
+		return x.DcClusterGroupOutsideVn
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARType) GetDcClusterGroupInsideVn() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn); ok {
+		return x.DcClusterGroupInsideVn
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetIngressEgressGwARType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -801,6 +922,9 @@ func (*AzureVnetIngressEgressGwARType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetIngressEgressGwARType_OutsideStaticRoutes)(nil),
 		(*AzureVnetIngressEgressGwARType_NoGlobalNetwork)(nil),
 		(*AzureVnetIngressEgressGwARType_GlobalNetworkList)(nil),
+		(*AzureVnetIngressEgressGwARType_NoDcClusterGroup)(nil),
+		(*AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn)(nil),
+		(*AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn)(nil),
 	}
 }
 
@@ -821,11 +945,11 @@ type AzureVnetVoltstackClusterType struct {
 	// x-displayName: "App Stack Cluster (One Interface) Nodes in AZ"
 	// Only Single AZ or Three AZ(s) nodes are supported currently.
 	AzNodes []*views.AzureVnetOneInterfaceNodeType `protobuf:"bytes,2,rep,name=az_nodes,json=azNodes,proto3" json:"az_nodes,omitempty"`
-	// Manage Network Policy
+	// Manage Firewall Policy
 	//
-	// x-displayName: "Manage Network Policy"
+	// x-displayName: "Manage Firewall Policy"
 	// x-required
-	// Manage Network Policy via this view
+	// Manage Firewall Policy via this view
 	//
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*AzureVnetVoltstackClusterType_NoNetworkPolicy
@@ -862,6 +986,16 @@ type AzureVnetVoltstackClusterType struct {
 	//	*AzureVnetVoltstackClusterType_NoGlobalNetwork
 	//	*AzureVnetVoltstackClusterType_GlobalNetworkList
 	GlobalNetworkChoice isAzureVnetVoltstackClusterType_GlobalNetworkChoice `protobuf_oneof:"global_network_choice"`
+	// Select DC Cluster Group
+	//
+	// x-displayName: "Select DC Cluster Group"
+	// x-required
+	// Is this site member of a dc cluster group via selected network type
+	//
+	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//	*AzureVnetVoltstackClusterType_NoDcClusterGroup
+	//	*AzureVnetVoltstackClusterType_DcClusterGroup
+	DcClusterGroupChoice isAzureVnetVoltstackClusterType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 	// Site Local K8s API access
 	//
 	// x-displayName: "Site Local K8s API access"
@@ -936,6 +1070,12 @@ type isAzureVnetVoltstackClusterType_GlobalNetworkChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetVoltstackClusterType_DcClusterGroupChoice interface {
+	isAzureVnetVoltstackClusterType_DcClusterGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 type isAzureVnetVoltstackClusterType_K8SClusterChoice interface {
 	isAzureVnetVoltstackClusterType_K8SClusterChoice()
 	Equal(interface{}) bool
@@ -976,6 +1116,12 @@ type AzureVnetVoltstackClusterType_NoGlobalNetwork struct {
 type AzureVnetVoltstackClusterType_GlobalNetworkList struct {
 	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,14,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
+type AzureVnetVoltstackClusterType_NoDcClusterGroup struct {
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,30,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
+}
+type AzureVnetVoltstackClusterType_DcClusterGroup struct {
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,31,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
+}
 type AzureVnetVoltstackClusterType_NoK8SCluster struct {
 	NoK8SCluster *schema.Empty `protobuf:"bytes,27,opt,name=no_k8s_cluster,json=noK8sCluster,proto3,oneof" json:"no_k8s_cluster,omitempty"`
 }
@@ -1007,6 +1153,10 @@ func (*AzureVnetVoltstackClusterType_NoGlobalNetwork) isAzureVnetVoltstackCluste
 }
 func (*AzureVnetVoltstackClusterType_GlobalNetworkList) isAzureVnetVoltstackClusterType_GlobalNetworkChoice() {
 }
+func (*AzureVnetVoltstackClusterType_NoDcClusterGroup) isAzureVnetVoltstackClusterType_DcClusterGroupChoice() {
+}
+func (*AzureVnetVoltstackClusterType_DcClusterGroup) isAzureVnetVoltstackClusterType_DcClusterGroupChoice() {
+}
 func (*AzureVnetVoltstackClusterType_NoK8SCluster) isAzureVnetVoltstackClusterType_K8SClusterChoice() {
 }
 func (*AzureVnetVoltstackClusterType_K8SCluster) isAzureVnetVoltstackClusterType_K8SClusterChoice() {}
@@ -1036,6 +1186,12 @@ func (m *AzureVnetVoltstackClusterType) GetOutsideStaticRouteChoice() isAzureVne
 func (m *AzureVnetVoltstackClusterType) GetGlobalNetworkChoice() isAzureVnetVoltstackClusterType_GlobalNetworkChoice {
 	if m != nil {
 		return m.GlobalNetworkChoice
+	}
+	return nil
+}
+func (m *AzureVnetVoltstackClusterType) GetDcClusterGroupChoice() isAzureVnetVoltstackClusterType_DcClusterGroupChoice {
+	if m != nil {
+		return m.DcClusterGroupChoice
 	}
 	return nil
 }
@@ -1129,6 +1285,20 @@ func (m *AzureVnetVoltstackClusterType) GetGlobalNetworkList() *views.GlobalNetw
 	return nil
 }
 
+func (m *AzureVnetVoltstackClusterType) GetNoDcClusterGroup() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetVoltstackClusterType_NoDcClusterGroup); ok {
+		return x.NoDcClusterGroup
+	}
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterType) GetDcClusterGroup() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetVoltstackClusterType_DcClusterGroup); ok {
+		return x.DcClusterGroup
+	}
+	return nil
+}
+
 func (m *AzureVnetVoltstackClusterType) GetNoK8SCluster() *schema.Empty {
 	if x, ok := m.GetK8SClusterChoice().(*AzureVnetVoltstackClusterType_NoK8SCluster); ok {
 		return x.NoK8SCluster
@@ -1169,6 +1339,8 @@ func (*AzureVnetVoltstackClusterType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetVoltstackClusterType_OutsideStaticRoutes)(nil),
 		(*AzureVnetVoltstackClusterType_NoGlobalNetwork)(nil),
 		(*AzureVnetVoltstackClusterType_GlobalNetworkList)(nil),
+		(*AzureVnetVoltstackClusterType_NoDcClusterGroup)(nil),
+		(*AzureVnetVoltstackClusterType_DcClusterGroup)(nil),
 		(*AzureVnetVoltstackClusterType_NoK8SCluster)(nil),
 		(*AzureVnetVoltstackClusterType_K8SCluster)(nil),
 		(*AzureVnetVoltstackClusterType_DefaultStorage)(nil),
@@ -1193,11 +1365,11 @@ type AzureVnetVoltstackClusterARType struct {
 	// x-displayName: "Ingress Gateway (One Interface) Node information"
 	// Only Single AZ or Three AZ(s) nodes are supported currently.
 	Node *views.AzureVnetOneInterfaceNodeARType `protobuf:"bytes,2,opt,name=node,proto3" json:"node,omitempty"`
-	// Manage Network Policy
+	// Manage Firewall Policy
 	//
-	// x-displayName: "Manage Network Policy"
+	// x-displayName: "Manage Firewall Policy"
 	// x-required
-	// Manage Network Policy via this view
+	// Manage Firewall Policy via this view
 	//
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*AzureVnetVoltstackClusterARType_NoNetworkPolicy
@@ -1234,6 +1406,16 @@ type AzureVnetVoltstackClusterARType struct {
 	//	*AzureVnetVoltstackClusterARType_NoGlobalNetwork
 	//	*AzureVnetVoltstackClusterARType_GlobalNetworkList
 	GlobalNetworkChoice isAzureVnetVoltstackClusterARType_GlobalNetworkChoice `protobuf_oneof:"global_network_choice"`
+	// Select DC Cluster Group
+	//
+	// x-displayName: "Select DC Cluster Group"
+	// x-required
+	// Is this site member of a dc cluster group via selected network type
+	//
+	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//	*AzureVnetVoltstackClusterARType_NoDcClusterGroup
+	//	*AzureVnetVoltstackClusterARType_DcClusterGroup
+	DcClusterGroupChoice isAzureVnetVoltstackClusterARType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 	// Site Local K8s API access
 	//
 	// x-displayName: "Site Local K8s API access"
@@ -1308,6 +1490,12 @@ type isAzureVnetVoltstackClusterARType_GlobalNetworkChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetVoltstackClusterARType_DcClusterGroupChoice interface {
+	isAzureVnetVoltstackClusterARType_DcClusterGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 type isAzureVnetVoltstackClusterARType_K8SClusterChoice interface {
 	isAzureVnetVoltstackClusterARType_K8SClusterChoice()
 	Equal(interface{}) bool
@@ -1348,6 +1536,12 @@ type AzureVnetVoltstackClusterARType_NoGlobalNetwork struct {
 type AzureVnetVoltstackClusterARType_GlobalNetworkList struct {
 	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,14,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
+type AzureVnetVoltstackClusterARType_NoDcClusterGroup struct {
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,30,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
+}
+type AzureVnetVoltstackClusterARType_DcClusterGroup struct {
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,31,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
+}
 type AzureVnetVoltstackClusterARType_NoK8SCluster struct {
 	NoK8SCluster *schema.Empty `protobuf:"bytes,27,opt,name=no_k8s_cluster,json=noK8sCluster,proto3,oneof" json:"no_k8s_cluster,omitempty"`
 }
@@ -1379,6 +1573,10 @@ func (*AzureVnetVoltstackClusterARType_NoGlobalNetwork) isAzureVnetVoltstackClus
 }
 func (*AzureVnetVoltstackClusterARType_GlobalNetworkList) isAzureVnetVoltstackClusterARType_GlobalNetworkChoice() {
 }
+func (*AzureVnetVoltstackClusterARType_NoDcClusterGroup) isAzureVnetVoltstackClusterARType_DcClusterGroupChoice() {
+}
+func (*AzureVnetVoltstackClusterARType_DcClusterGroup) isAzureVnetVoltstackClusterARType_DcClusterGroupChoice() {
+}
 func (*AzureVnetVoltstackClusterARType_NoK8SCluster) isAzureVnetVoltstackClusterARType_K8SClusterChoice() {
 }
 func (*AzureVnetVoltstackClusterARType_K8SCluster) isAzureVnetVoltstackClusterARType_K8SClusterChoice() {
@@ -1409,6 +1607,12 @@ func (m *AzureVnetVoltstackClusterARType) GetOutsideStaticRouteChoice() isAzureV
 func (m *AzureVnetVoltstackClusterARType) GetGlobalNetworkChoice() isAzureVnetVoltstackClusterARType_GlobalNetworkChoice {
 	if m != nil {
 		return m.GlobalNetworkChoice
+	}
+	return nil
+}
+func (m *AzureVnetVoltstackClusterARType) GetDcClusterGroupChoice() isAzureVnetVoltstackClusterARType_DcClusterGroupChoice {
+	if m != nil {
+		return m.DcClusterGroupChoice
 	}
 	return nil
 }
@@ -1502,6 +1706,20 @@ func (m *AzureVnetVoltstackClusterARType) GetGlobalNetworkList() *views.GlobalNe
 	return nil
 }
 
+func (m *AzureVnetVoltstackClusterARType) GetNoDcClusterGroup() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetVoltstackClusterARType_NoDcClusterGroup); ok {
+		return x.NoDcClusterGroup
+	}
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterARType) GetDcClusterGroup() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetVoltstackClusterARType_DcClusterGroup); ok {
+		return x.DcClusterGroup
+	}
+	return nil
+}
+
 func (m *AzureVnetVoltstackClusterARType) GetNoK8SCluster() *schema.Empty {
 	if x, ok := m.GetK8SClusterChoice().(*AzureVnetVoltstackClusterARType_NoK8SCluster); ok {
 		return x.NoK8SCluster
@@ -1542,6 +1760,8 @@ func (*AzureVnetVoltstackClusterARType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetVoltstackClusterARType_OutsideStaticRoutes)(nil),
 		(*AzureVnetVoltstackClusterARType_NoGlobalNetwork)(nil),
 		(*AzureVnetVoltstackClusterARType_GlobalNetworkList)(nil),
+		(*AzureVnetVoltstackClusterARType_NoDcClusterGroup)(nil),
+		(*AzureVnetVoltstackClusterARType_DcClusterGroup)(nil),
 		(*AzureVnetVoltstackClusterARType_NoK8SCluster)(nil),
 		(*AzureVnetVoltstackClusterARType_K8SCluster)(nil),
 		(*AzureVnetVoltstackClusterARType_DefaultStorage)(nil),
@@ -1624,11 +1844,11 @@ var xxx_messageInfo_AzureVnetIngressGwARReplaceType proto.InternalMessageInfo
 // x-displayName: "Azure Ingress/Egress Gateway"
 // Two interface Azure ingress/egress site
 type AzureVnetIngressEgressGwReplaceType struct {
-	// Manage Network Policy
+	// Manage Firewall Policy
 	//
-	// x-displayName: "Manage Network Policy"
+	// x-displayName: "Manage Firewall Policy"
 	// x-required
-	// Manage Network Policy via this view
+	// Manage Firewall Policy via this view
 	//
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*AzureVnetIngressEgressGwReplaceType_NoNetworkPolicy
@@ -1675,6 +1895,17 @@ type AzureVnetIngressEgressGwReplaceType struct {
 	//	*AzureVnetIngressEgressGwReplaceType_NoGlobalNetwork
 	//	*AzureVnetIngressEgressGwReplaceType_GlobalNetworkList
 	GlobalNetworkChoice isAzureVnetIngressEgressGwReplaceType_GlobalNetworkChoice `protobuf_oneof:"global_network_choice"`
+	// Select DC Cluster Group
+	//
+	// x-displayName: "Select DC Cluster Group"
+	// x-required
+	// Is this site member of a dc cluster group via selected network type
+	//
+	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//	*AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup
+	//	*AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn
+	//	*AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn
+	DcClusterGroupChoice isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 }
 
 func (m *AzureVnetIngressEgressGwReplaceType) Reset()      { *m = AzureVnetIngressEgressGwReplaceType{} }
@@ -1735,6 +1966,12 @@ type isAzureVnetIngressEgressGwReplaceType_GlobalNetworkChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice interface {
+	isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetIngressEgressGwReplaceType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,2,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -1769,6 +2006,15 @@ type AzureVnetIngressEgressGwReplaceType_NoGlobalNetwork struct {
 type AzureVnetIngressEgressGwReplaceType_GlobalNetworkList struct {
 	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,19,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
+type AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup struct {
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,22,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
+}
+type AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn struct {
+	DcClusterGroupOutsideVn *views.ObjectRefType `protobuf:"bytes,23,opt,name=dc_cluster_group_outside_vn,json=dcClusterGroupOutsideVn,proto3,oneof" json:"dc_cluster_group_outside_vn,omitempty"`
+}
+type AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn struct {
+	DcClusterGroupInsideVn *views.ObjectRefType `protobuf:"bytes,24,opt,name=dc_cluster_group_inside_vn,json=dcClusterGroupInsideVn,proto3,oneof" json:"dc_cluster_group_inside_vn,omitempty"`
+}
 
 func (*AzureVnetIngressEgressGwReplaceType_NoNetworkPolicy) isAzureVnetIngressEgressGwReplaceType_NetworkPolicyChoice() {
 }
@@ -1791,6 +2037,12 @@ func (*AzureVnetIngressEgressGwReplaceType_OutsideStaticRoutes) isAzureVnetIngre
 func (*AzureVnetIngressEgressGwReplaceType_NoGlobalNetwork) isAzureVnetIngressEgressGwReplaceType_GlobalNetworkChoice() {
 }
 func (*AzureVnetIngressEgressGwReplaceType_GlobalNetworkList) isAzureVnetIngressEgressGwReplaceType_GlobalNetworkChoice() {
+}
+func (*AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup) isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn) isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice() {
 }
 
 func (m *AzureVnetIngressEgressGwReplaceType) GetNetworkPolicyChoice() isAzureVnetIngressEgressGwReplaceType_NetworkPolicyChoice {
@@ -1820,6 +2072,12 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetOutsideStaticRouteChoice() isAz
 func (m *AzureVnetIngressEgressGwReplaceType) GetGlobalNetworkChoice() isAzureVnetIngressEgressGwReplaceType_GlobalNetworkChoice {
 	if m != nil {
 		return m.GlobalNetworkChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwReplaceType) GetDcClusterGroupChoice() isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice {
+	if m != nil {
+		return m.DcClusterGroupChoice
 	}
 	return nil
 }
@@ -1901,6 +2159,27 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetGlobalNetworkList() *views.Glob
 	return nil
 }
 
+func (m *AzureVnetIngressEgressGwReplaceType) GetNoDcClusterGroup() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup); ok {
+		return x.NoDcClusterGroup
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) GetDcClusterGroupOutsideVn() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn); ok {
+		return x.DcClusterGroupOutsideVn
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) GetDcClusterGroupInsideVn() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn); ok {
+		return x.DcClusterGroupInsideVn
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetIngressEgressGwReplaceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1915,6 +2194,9 @@ func (*AzureVnetIngressEgressGwReplaceType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetIngressEgressGwReplaceType_OutsideStaticRoutes)(nil),
 		(*AzureVnetIngressEgressGwReplaceType_NoGlobalNetwork)(nil),
 		(*AzureVnetIngressEgressGwReplaceType_GlobalNetworkList)(nil),
+		(*AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup)(nil),
+		(*AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn)(nil),
+		(*AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn)(nil),
 	}
 }
 
@@ -1923,11 +2205,11 @@ func (*AzureVnetIngressEgressGwReplaceType) XXX_OneofWrappers() []interface{} {
 // x-displayName: "Azure Ingress/Egress Gateway for Alternate Region"
 // Two interface Azure ingress/egress site for Alternate Region
 type AzureVnetIngressEgressGwARReplaceType struct {
-	// Manage Network Policy
+	// Manage Firewall Policy
 	//
-	// x-displayName: "Manage Network Policy"
+	// x-displayName: "Manage Firewall Policy"
 	// x-required
-	// Manage Network Policy via this view
+	// Manage Firewall Policy via this view
 	//
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*AzureVnetIngressEgressGwARReplaceType_NoNetworkPolicy
@@ -1974,6 +2256,17 @@ type AzureVnetIngressEgressGwARReplaceType struct {
 	//	*AzureVnetIngressEgressGwARReplaceType_NoGlobalNetwork
 	//	*AzureVnetIngressEgressGwARReplaceType_GlobalNetworkList
 	GlobalNetworkChoice isAzureVnetIngressEgressGwARReplaceType_GlobalNetworkChoice `protobuf_oneof:"global_network_choice"`
+	// Select DC Cluster Group
+	//
+	// x-displayName: "Select DC Cluster Group"
+	// x-required
+	// Is this site member of a dc cluster group via selected network type
+	//
+	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//	*AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup
+	//	*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn
+	//	*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn
+	DcClusterGroupChoice isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 }
 
 func (m *AzureVnetIngressEgressGwARReplaceType) Reset()      { *m = AzureVnetIngressEgressGwARReplaceType{} }
@@ -2034,6 +2327,12 @@ type isAzureVnetIngressEgressGwARReplaceType_GlobalNetworkChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice interface {
+	isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetIngressEgressGwARReplaceType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,2,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -2068,6 +2367,15 @@ type AzureVnetIngressEgressGwARReplaceType_NoGlobalNetwork struct {
 type AzureVnetIngressEgressGwARReplaceType_GlobalNetworkList struct {
 	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,19,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
+type AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup struct {
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,22,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
+}
+type AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn struct {
+	DcClusterGroupOutsideVn *views.ObjectRefType `protobuf:"bytes,23,opt,name=dc_cluster_group_outside_vn,json=dcClusterGroupOutsideVn,proto3,oneof" json:"dc_cluster_group_outside_vn,omitempty"`
+}
+type AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn struct {
+	DcClusterGroupInsideVn *views.ObjectRefType `protobuf:"bytes,24,opt,name=dc_cluster_group_inside_vn,json=dcClusterGroupInsideVn,proto3,oneof" json:"dc_cluster_group_inside_vn,omitempty"`
+}
 
 func (*AzureVnetIngressEgressGwARReplaceType_NoNetworkPolicy) isAzureVnetIngressEgressGwARReplaceType_NetworkPolicyChoice() {
 }
@@ -2090,6 +2398,12 @@ func (*AzureVnetIngressEgressGwARReplaceType_OutsideStaticRoutes) isAzureVnetIng
 func (*AzureVnetIngressEgressGwARReplaceType_NoGlobalNetwork) isAzureVnetIngressEgressGwARReplaceType_GlobalNetworkChoice() {
 }
 func (*AzureVnetIngressEgressGwARReplaceType_GlobalNetworkList) isAzureVnetIngressEgressGwARReplaceType_GlobalNetworkChoice() {
+}
+func (*AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup) isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn) isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice() {
 }
 
 func (m *AzureVnetIngressEgressGwARReplaceType) GetNetworkPolicyChoice() isAzureVnetIngressEgressGwARReplaceType_NetworkPolicyChoice {
@@ -2119,6 +2433,12 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetOutsideStaticRouteChoice() is
 func (m *AzureVnetIngressEgressGwARReplaceType) GetGlobalNetworkChoice() isAzureVnetIngressEgressGwARReplaceType_GlobalNetworkChoice {
 	if m != nil {
 		return m.GlobalNetworkChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwARReplaceType) GetDcClusterGroupChoice() isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice {
+	if m != nil {
+		return m.DcClusterGroupChoice
 	}
 	return nil
 }
@@ -2200,6 +2520,27 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetGlobalNetworkList() *views.Gl
 	return nil
 }
 
+func (m *AzureVnetIngressEgressGwARReplaceType) GetNoDcClusterGroup() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup); ok {
+		return x.NoDcClusterGroup
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) GetDcClusterGroupOutsideVn() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn); ok {
+		return x.DcClusterGroupOutsideVn
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) GetDcClusterGroupInsideVn() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn); ok {
+		return x.DcClusterGroupInsideVn
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetIngressEgressGwARReplaceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2214,6 +2555,9 @@ func (*AzureVnetIngressEgressGwARReplaceType) XXX_OneofWrappers() []interface{} 
 		(*AzureVnetIngressEgressGwARReplaceType_OutsideStaticRoutes)(nil),
 		(*AzureVnetIngressEgressGwARReplaceType_NoGlobalNetwork)(nil),
 		(*AzureVnetIngressEgressGwARReplaceType_GlobalNetworkList)(nil),
+		(*AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup)(nil),
+		(*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn)(nil),
+		(*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn)(nil),
 	}
 }
 
@@ -2222,11 +2566,11 @@ func (*AzureVnetIngressEgressGwARReplaceType) XXX_OneofWrappers() []interface{} 
 // x-displayName: "Azure App Stack Cluster"
 // App Stack cluster of single interface Azure nodes
 type AzureVnetVoltstackClusterReplaceType struct {
-	// Manage Network Policy
+	// Manage Firewall Policy
 	//
-	// x-displayName: "Manage Network Policy"
+	// x-displayName: "Manage Firewall Policy"
 	// x-required
-	// Manage Network Policy via this view
+	// Manage Firewall Policy via this view
 	//
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*AzureVnetVoltstackClusterReplaceType_NoNetworkPolicy
@@ -2263,6 +2607,16 @@ type AzureVnetVoltstackClusterReplaceType struct {
 	//	*AzureVnetVoltstackClusterReplaceType_NoGlobalNetwork
 	//	*AzureVnetVoltstackClusterReplaceType_GlobalNetworkList
 	GlobalNetworkChoice isAzureVnetVoltstackClusterReplaceType_GlobalNetworkChoice `protobuf_oneof:"global_network_choice"`
+	// Select DC Cluster Group
+	//
+	// x-displayName: "Select DC Cluster Group"
+	// x-required
+	// Is this site member of a dc cluster group via selected network type
+	//
+	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//	*AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup
+	//	*AzureVnetVoltstackClusterReplaceType_DcClusterGroup
+	DcClusterGroupChoice isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 }
 
 func (m *AzureVnetVoltstackClusterReplaceType) Reset()      { *m = AzureVnetVoltstackClusterReplaceType{} }
@@ -2317,6 +2671,12 @@ type isAzureVnetVoltstackClusterReplaceType_GlobalNetworkChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice interface {
+	isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetVoltstackClusterReplaceType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,4,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -2345,6 +2705,12 @@ type AzureVnetVoltstackClusterReplaceType_NoGlobalNetwork struct {
 type AzureVnetVoltstackClusterReplaceType_GlobalNetworkList struct {
 	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,14,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
+type AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup struct {
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,29,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
+}
+type AzureVnetVoltstackClusterReplaceType_DcClusterGroup struct {
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,30,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
+}
 
 func (*AzureVnetVoltstackClusterReplaceType_NoNetworkPolicy) isAzureVnetVoltstackClusterReplaceType_NetworkPolicyChoice() {
 }
@@ -2363,6 +2729,10 @@ func (*AzureVnetVoltstackClusterReplaceType_OutsideStaticRoutes) isAzureVnetVolt
 func (*AzureVnetVoltstackClusterReplaceType_NoGlobalNetwork) isAzureVnetVoltstackClusterReplaceType_GlobalNetworkChoice() {
 }
 func (*AzureVnetVoltstackClusterReplaceType_GlobalNetworkList) isAzureVnetVoltstackClusterReplaceType_GlobalNetworkChoice() {
+}
+func (*AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup) isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetVoltstackClusterReplaceType_DcClusterGroup) isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice() {
 }
 
 func (m *AzureVnetVoltstackClusterReplaceType) GetNetworkPolicyChoice() isAzureVnetVoltstackClusterReplaceType_NetworkPolicyChoice {
@@ -2386,6 +2756,12 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetOutsideStaticRouteChoice() isA
 func (m *AzureVnetVoltstackClusterReplaceType) GetGlobalNetworkChoice() isAzureVnetVoltstackClusterReplaceType_GlobalNetworkChoice {
 	if m != nil {
 		return m.GlobalNetworkChoice
+	}
+	return nil
+}
+func (m *AzureVnetVoltstackClusterReplaceType) GetDcClusterGroupChoice() isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice {
+	if m != nil {
+		return m.DcClusterGroupChoice
 	}
 	return nil
 }
@@ -2453,6 +2829,20 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetGlobalNetworkList() *views.Glo
 	return nil
 }
 
+func (m *AzureVnetVoltstackClusterReplaceType) GetNoDcClusterGroup() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup); ok {
+		return x.NoDcClusterGroup
+	}
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType) GetDcClusterGroup() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetVoltstackClusterReplaceType_DcClusterGroup); ok {
+		return x.DcClusterGroup
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetVoltstackClusterReplaceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2465,6 +2855,8 @@ func (*AzureVnetVoltstackClusterReplaceType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetVoltstackClusterReplaceType_OutsideStaticRoutes)(nil),
 		(*AzureVnetVoltstackClusterReplaceType_NoGlobalNetwork)(nil),
 		(*AzureVnetVoltstackClusterReplaceType_GlobalNetworkList)(nil),
+		(*AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup)(nil),
+		(*AzureVnetVoltstackClusterReplaceType_DcClusterGroup)(nil),
 	}
 }
 
@@ -2473,11 +2865,11 @@ func (*AzureVnetVoltstackClusterReplaceType) XXX_OneofWrappers() []interface{} {
 // x-displayName: "Azure App Stack Cluster for Alternate Region"
 // App Stack cluster of single interface Azure nodes
 type AzureVnetVoltstackClusterARReplaceType struct {
-	// Manage Network Policy
+	// Manage Firewall Policy
 	//
-	// x-displayName: "Manage Network Policy"
+	// x-displayName: "Manage Firewall Policy"
 	// x-required
-	// Manage Network Policy via this view
+	// Manage Firewall Policy via this view
 	//
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*AzureVnetVoltstackClusterARReplaceType_NoNetworkPolicy
@@ -2514,6 +2906,16 @@ type AzureVnetVoltstackClusterARReplaceType struct {
 	//	*AzureVnetVoltstackClusterARReplaceType_NoGlobalNetwork
 	//	*AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList
 	GlobalNetworkChoice isAzureVnetVoltstackClusterARReplaceType_GlobalNetworkChoice `protobuf_oneof:"global_network_choice"`
+	// Select DC Cluster Group
+	//
+	// x-displayName: "Select DC Cluster Group"
+	// x-required
+	// Is this site member of a dc cluster group via selected network type
+	//
+	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//	*AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup
+	//	*AzureVnetVoltstackClusterARReplaceType_DcClusterGroup
+	DcClusterGroupChoice isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 }
 
 func (m *AzureVnetVoltstackClusterARReplaceType) Reset() {
@@ -2570,6 +2972,12 @@ type isAzureVnetVoltstackClusterARReplaceType_GlobalNetworkChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice interface {
+	isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetVoltstackClusterARReplaceType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,4,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -2598,6 +3006,12 @@ type AzureVnetVoltstackClusterARReplaceType_NoGlobalNetwork struct {
 type AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList struct {
 	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,14,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
+type AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup struct {
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,30,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
+}
+type AzureVnetVoltstackClusterARReplaceType_DcClusterGroup struct {
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,31,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
+}
 
 func (*AzureVnetVoltstackClusterARReplaceType_NoNetworkPolicy) isAzureVnetVoltstackClusterARReplaceType_NetworkPolicyChoice() {
 }
@@ -2616,6 +3030,10 @@ func (*AzureVnetVoltstackClusterARReplaceType_OutsideStaticRoutes) isAzureVnetVo
 func (*AzureVnetVoltstackClusterARReplaceType_NoGlobalNetwork) isAzureVnetVoltstackClusterARReplaceType_GlobalNetworkChoice() {
 }
 func (*AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList) isAzureVnetVoltstackClusterARReplaceType_GlobalNetworkChoice() {
+}
+func (*AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup) isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice() {
 }
 
 func (m *AzureVnetVoltstackClusterARReplaceType) GetNetworkPolicyChoice() isAzureVnetVoltstackClusterARReplaceType_NetworkPolicyChoice {
@@ -2639,6 +3057,12 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetOutsideStaticRouteChoice() i
 func (m *AzureVnetVoltstackClusterARReplaceType) GetGlobalNetworkChoice() isAzureVnetVoltstackClusterARReplaceType_GlobalNetworkChoice {
 	if m != nil {
 		return m.GlobalNetworkChoice
+	}
+	return nil
+}
+func (m *AzureVnetVoltstackClusterARReplaceType) GetDcClusterGroupChoice() isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice {
+	if m != nil {
+		return m.DcClusterGroupChoice
 	}
 	return nil
 }
@@ -2706,6 +3130,20 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetGlobalNetworkList() *views.G
 	return nil
 }
 
+func (m *AzureVnetVoltstackClusterARReplaceType) GetNoDcClusterGroup() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup); ok {
+		return x.NoDcClusterGroup
+	}
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType) GetDcClusterGroup() *views.ObjectRefType {
+	if x, ok := m.GetDcClusterGroupChoice().(*AzureVnetVoltstackClusterARReplaceType_DcClusterGroup); ok {
+		return x.DcClusterGroup
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetVoltstackClusterARReplaceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2718,6 +3156,8 @@ func (*AzureVnetVoltstackClusterARReplaceType) XXX_OneofWrappers() []interface{}
 		(*AzureVnetVoltstackClusterARReplaceType_OutsideStaticRoutes)(nil),
 		(*AzureVnetVoltstackClusterARReplaceType_NoGlobalNetwork)(nil),
 		(*AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList)(nil),
+		(*AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup)(nil),
+		(*AzureVnetVoltstackClusterARReplaceType_DcClusterGroup)(nil),
 	}
 }
 
@@ -4398,253 +4838,291 @@ func init() {
 }
 
 var fileDescriptor_c594b6b9dd0a0c2b = []byte{
-	// 3937 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x5f, 0x6c, 0x1b, 0x47,
-	0x7a, 0xd7, 0x90, 0x94, 0x44, 0x8e, 0x48, 0x6a, 0xb9, 0xa6, 0xec, 0xb5, 0x64, 0xd3, 0xb4, 0x7c,
-	0x49, 0x64, 0x7b, 0xf5, 0x87, 0xa4, 0xfe, 0x37, 0xd1, 0x59, 0xab, 0xe4, 0x2c, 0x2b, 0x8d, 0xad,
-	0x5b, 0xf9, 0xdc, 0xa6, 0x48, 0x6f, 0xb1, 0x22, 0x47, 0xd4, 0x46, 0xab, 0x1d, 0x76, 0x77, 0x29,
-	0x59, 0x6a, 0x7c, 0xbd, 0x2a, 0x08, 0xd0, 0x3f, 0x28, 0xae, 0x30, 0x50, 0x14, 0x0d, 0x50, 0xa0,
-	0x8f, 0x45, 0x9e, 0x0a, 0xf4, 0xad, 0x74, 0x01, 0xc3, 0x45, 0x81, 0x83, 0x9f, 0xfc, 0x52, 0x34,
-	0x30, 0x50, 0xe0, 0xa2, 0x3c, 0x24, 0x7d, 0x0b, 0x8a, 0x3e, 0x1c, 0xd4, 0x87, 0x2b, 0x66, 0x76,
-	0xb9, 0xda, 0x5d, 0x2e, 0x29, 0x45, 0xb2, 0x93, 0x5c, 0xc0, 0x17, 0x69, 0xb9, 0xf3, 0xfd, 0x99,
-	0xf9, 0x66, 0xe6, 0xfb, 0x7d, 0xdf, 0x37, 0x43, 0xc2, 0xd1, 0x2d, 0x64, 0x8c, 0x28, 0x78, 0xd4,
-	0x28, 0xae, 0xa3, 0x4d, 0x79, 0x74, 0x4b, 0x41, 0xdb, 0xc6, 0xa8, 0xbc, 0x5b, 0xd5, 0x91, 0xb4,
-	0xa5, 0x21, 0x53, 0x32, 0x14, 0x13, 0x8d, 0x9a, 0x3b, 0x15, 0x64, 0x8c, 0x54, 0x74, 0x6c, 0x62,
-	0xf6, 0x8a, 0xc5, 0x30, 0x62, 0x31, 0x8c, 0x50, 0x86, 0x11, 0x1f, 0x43, 0xff, 0x70, 0x59, 0x31,
-	0xd7, 0xab, 0xab, 0x23, 0x45, 0xbc, 0x39, 0x5a, 0xc6, 0x65, 0x3c, 0x4a, 0x79, 0x57, 0xab, 0x6b,
-	0xf4, 0x13, 0xfd, 0x40, 0x9f, 0x2c, 0x99, 0xfd, 0xd7, 0xbc, 0x9d, 0xd0, 0x90, 0xb9, 0x8d, 0xf5,
-	0x0d, 0x69, 0x4d, 0xd1, 0xd1, 0xb6, 0xac, 0xaa, 0x6e, 0xfd, 0xfd, 0x03, 0x5e, 0x5a, 0x5c, 0x31,
-	0x15, 0xac, 0xd5, 0x1b, 0x33, 0xde, 0x46, 0x7f, 0xe7, 0xfb, 0xcf, 0x7b, 0xdb, 0xdd, 0x4d, 0x17,
-	0x7c, 0x86, 0x90, 0x55, 0xa5, 0x24, 0x9b, 0xc8, 0x6e, 0xcd, 0x36, 0x9a, 0x49, 0xf2, 0xaa, 0xfe,
-	0x41, 0x90, 0x21, 0x49, 0x07, 0x24, 0xb7, 0x96, 0xd7, 0x02, 0xa9, 0x4c, 0xac, 0xcb, 0x65, 0x2f,
-	0xe1, 0xa5, 0x20, 0x42, 0x17, 0xc1, 0xe0, 0x17, 0x00, 0x9e, 0x9d, 0x27, 0x66, 0xbf, 0xa7, 0x21,
-	0xf3, 0x96, 0x56, 0xd6, 0x91, 0x61, 0xdc, 0xdc, 0xbe, 0xbb, 0x53, 0x41, 0xec, 0x7b, 0x30, 0x2a,
-	0xef, 0x4a, 0x1a, 0x2e, 0x21, 0x83, 0x03, 0xd9, 0xf0, 0x50, 0x4f, 0x3e, 0x3f, 0x12, 0x34, 0x6b,
-	0x0e, 0xfb, 0x1d, 0x0d, 0xdd, 0xd2, 0x4c, 0xa4, 0xaf, 0xc9, 0x45, 0x74, 0x1b, 0x97, 0x10, 0x91,
-	0x22, 0x24, 0xfe, 0xe5, 0xbf, 0x1f, 0x87, 0xa3, 0x0f, 0x41, 0xe7, 0xb5, 0x70, 0x8e, 0x2f, 0x88,
-	0xdd, 0xf2, 0x2e, 0x69, 0x32, 0xd8, 0x32, 0x64, 0xad, 0xe9, 0x2e, 0x22, 0xdd, 0x54, 0xd6, 0x14,
-	0x54, 0x92, 0xd6, 0xb7, 0xb9, 0x50, 0x16, 0x0c, 0xc5, 0x84, 0x99, 0xe7, 0x35, 0x70, 0x86, 0xb6,
-	0x0e, 0xaf, 0xee, 0x60, 0x75, 0x78, 0x0b, 0xab, 0xe6, 0x26, 0x32, 0xd6, 0x7f, 0x5d, 0x03, 0x1d,
-	0x44, 0xdc, 0x79, 0xfd, 0x1c, 0x77, 0x43, 0x0c, 0xa2, 0x10, 0x19, 0xfa, 0x72, 0xa1, 0x2e, 0x73,
-	0x71, 0x7b, 0xb6, 0xeb, 0x7f, 0xe6, 0xc2, 0x79, 0x3e, 0x37, 0xf8, 0x1f, 0x00, 0x72, 0x8d, 0x23,
-	0x9d, 0x17, 0xe9, 0x58, 0x17, 0x61, 0x84, 0x0c, 0x94, 0x03, 0x59, 0x30, 0xd4, 0x93, 0x1f, 0xff,
-	0x7a, 0xe3, 0xb4, 0x64, 0x88, 0x54, 0xc2, 0xb7, 0x30, 0xae, 0x38, 0xbc, 0xe0, 0x1f, 0xd7, 0x5b,
-	0xa7, 0x9a, 0xc7, 0xbb, 0xdb, 0xf8, 0xf8, 0xf3, 0x28, 0xc0, 0x94, 0x86, 0xa5, 0xfa, 0x5e, 0xab,
-	0x60, 0x55, 0x29, 0xee, 0xd0, 0xe1, 0xf6, 0xe4, 0xd3, 0x3e, 0x35, 0x6f, 0x6d, 0x56, 0xcc, 0x9d,
-	0xc5, 0x0e, 0xb1, 0x57, 0xc3, 0xb7, 0x2d, 0xfa, 0x65, 0x4a, 0xce, 0x1a, 0xf0, 0x9c, 0x5c, 0x34,
-	0x95, 0x2d, 0xe4, 0x95, 0xa3, 0x20, 0x83, 0x83, 0x54, 0xd2, 0x8c, 0x4f, 0x92, 0x7f, 0x6b, 0x8f,
-	0xcc, 0x53, 0x76, 0xb7, 0x54, 0x05, 0x19, 0xa4, 0xdf, 0x8b, 0x1d, 0x62, 0x9f, 0x1c, 0xd4, 0xc8,
-	0xde, 0x80, 0x8c, 0x86, 0xa5, 0x35, 0xac, 0x6f, 0xcb, 0x7a, 0x49, 0xaa, 0xe8, 0xf8, 0xfe, 0x0e,
-	0x17, 0x69, 0xd1, 0x6f, 0x20, 0x26, 0x35, 0xfc, 0x23, 0x8b, 0x7c, 0x99, 0x50, 0xb3, 0x1f, 0x02,
-	0x78, 0xd1, 0xee, 0xb7, 0x47, 0xcc, 0x61, 0xef, 0x63, 0x54, 0xde, 0xdc, 0xf1, 0x7a, 0xef, 0x96,
-	0xed, 0x19, 0x02, 0x10, 0xfb, 0xe5, 0xa6, 0x14, 0xec, 0x3b, 0xf0, 0x9c, 0x57, 0xbb, 0xac, 0xaa,
-	0x78, 0x9b, 0xfc, 0xe5, 0xd2, 0x2d, 0x87, 0x93, 0x5e, 0x73, 0x89, 0x9b, 0x27, 0x4c, 0xf3, 0xaa,
-	0xca, 0xfe, 0x71, 0xe0, 0xfa, 0x8d, 0xd2, 0xf5, 0xfb, 0xce, 0xf3, 0x1a, 0xb8, 0xe8, 0x5a, 0x9d,
-	0x9b, 0x55, 0xd5, 0x54, 0x86, 0x35, 0xa5, 0xd8, 0xb0, 0x92, 0xaf, 0xe8, 0x97, 0xb9, 0x1b, 0x62,
-	0x6b, 0xda, 0xc6, 0x35, 0xcd, 0xae, 0xc0, 0x73, 0x1a, 0x96, 0x14, 0xcd, 0x50, 0x4a, 0x48, 0x32,
-	0x4c, 0xd9, 0x54, 0x8a, 0x92, 0x8e, 0xab, 0x26, 0x32, 0xb8, 0x78, 0xf3, 0xb1, 0x08, 0x91, 0xc7,
-	0x35, 0x00, 0x16, 0x43, 0x62, 0x5a, 0xc3, 0xb7, 0x28, 0xef, 0x0a, 0x65, 0x15, 0x29, 0x27, 0x5b,
-	0x86, 0xe9, 0x40, 0x89, 0x09, 0x2a, 0x71, 0x38, 0x70, 0x2f, 0xac, 0x28, 0xa6, 0x47, 0xc8, 0xef,
-	0x2a, 0x86, 0x49, 0xb7, 0x41, 0x5d, 0x15, 0xab, 0x34, 0x2a, 0xfa, 0x09, 0xe4, 0x34, 0x2c, 0xe1,
-	0xaa, 0x19, 0xa0, 0xac, 0xf7, 0xc8, 0xee, 0x87, 0xc5, 0x3e, 0x0d, 0xdf, 0xb1, 0x98, 0x3d, 0x62,
-	0x15, 0xd8, 0x17, 0x2c, 0x93, 0x39, 0xf9, 0x00, 0xc2, 0xe2, 0x19, 0x1c, 0xa0, 0xca, 0xda, 0xcc,
-	0x65, 0x15, 0xaf, 0xca, 0x6a, 0x7d, 0x2f, 0x72, 0x6c, 0x8b, 0x55, 0x14, 0x21, 0x9b, 0xf9, 0x26,
-	0xa5, 0xb7, 0xf7, 0x17, 0xbb, 0x06, 0xcf, 0x78, 0x05, 0x48, 0xaa, 0x62, 0x98, 0xdc, 0x99, 0x16,
-	0x9e, 0xd5, 0x23, 0x60, 0x01, 0x6b, 0x1a, 0x2a, 0x12, 0x4c, 0xac, 0xf7, 0x79, 0x31, 0x22, 0xa6,
-	0xca, 0x6e, 0x12, 0xd2, 0x30, 0x7b, 0xfb, 0x49, 0x0d, 0x2c, 0xc1, 0x38, 0xec, 0xb4, 0xfc, 0x50,
-	0x78, 0x9a, 0xcf, 0xc1, 0x0b, 0xb0, 0x8f, 0x0c, 0x3c, 0x6b, 0xd3, 0x65, 0x7f, 0x64, 0xef, 0x30,
-	0x36, 0x3c, 0xc9, 0x4f, 0xc1, 0x0b, 0x90, 0x99, 0x2f, 0x6d, 0xc9, 0x5a, 0x11, 0x95, 0xb2, 0x77,
-	0x2c, 0xd4, 0x65, 0xa3, 0xb9, 0x29, 0x3e, 0x97, 0xe3, 0x73, 0xe3, 0xc2, 0x55, 0xd8, 0xe7, 0xf5,
-	0x62, 0x52, 0x71, 0x1d, 0x2b, 0x45, 0xc4, 0x32, 0x8f, 0x6b, 0x20, 0xf4, 0xac, 0x06, 0xba, 0xf6,
-	0x6b, 0x20, 0x92, 0xe7, 0x73, 0x63, 0xc2, 0x35, 0x98, 0xf6, 0x6e, 0x39, 0x9b, 0x92, 0x7d, 0x5c,
-	0x03, 0x91, 0x67, 0x35, 0xd0, 0xbd, 0x5f, 0x03, 0x5d, 0xe3, 0x7c, 0x7e, 0x8c, 0x9f, 0x11, 0x0a,
-	0xb0, 0x3f, 0x60, 0xf5, 0xd5, 0x39, 0xfa, 0x1e, 0xd7, 0x40, 0xfc, 0x97, 0x35, 0x00, 0x9e, 0xd5,
-	0x40, 0xcf, 0x7e, 0x0d, 0x74, 0xe6, 0xf2, 0x7c, 0xae, 0x20, 0x8c, 0xc3, 0x81, 0xa0, 0x29, 0x77,
-	0x73, 0xf5, 0xda, 0x5c, 0x49, 0xca, 0x35, 0xc1, 0xe7, 0x26, 0x85, 0x11, 0xd8, 0xe7, 0xb3, 0xbc,
-	0x8b, 0x9e, 0xb5, 0xe9, 0x53, 0x94, 0x7e, 0x9a, 0xcf, 0xcd, 0x2c, 0x45, 0xa2, 0x5d, 0x4c, 0xf7,
-	0x52, 0x24, 0xda, 0xcd, 0x44, 0x97, 0x22, 0xd1, 0x1e, 0x26, 0xbe, 0x14, 0x89, 0x26, 0x99, 0xde,
-	0xa5, 0x48, 0x34, 0xc5, 0xb0, 0x83, 0xff, 0x16, 0x87, 0x99, 0x66, 0xb8, 0x72, 0x12, 0xd4, 0xf4,
-	0xa3, 0x8a, 0x07, 0x35, 0xdb, 0x28, 0xd2, 0x46, 0x91, 0x36, 0x8a, 0xb4, 0x51, 0xa4, 0x8d, 0x22,
-	0xdf, 0x33, 0x14, 0xf9, 0x9b, 0x24, 0xbc, 0xe8, 0x40, 0xc0, 0x3d, 0xac, 0x9a, 0x86, 0x29, 0x17,
-	0x37, 0x16, 0xd4, 0xaa, 0x61, 0x22, 0x9d, 0x82, 0x48, 0x35, 0xd0, 0x55, 0x00, 0xea, 0x2a, 0x6e,
-	0x3e, 0xaf, 0x81, 0x7e, 0x5f, 0x3a, 0x44, 0x05, 0x0c, 0x17, 0xf1, 0xe6, 0x2a, 0xae, 0xfb, 0x89,
-	0xac, 0x9e, 0xe1, 0x6e, 0x88, 0x2d, 0x08, 0x03, 0x9c, 0x84, 0x3b, 0x2b, 0x0a, 0xbd, 0xf0, 0xec,
-	0x36, 0x10, 0xcf, 0x22, 0x2f, 0x0c, 0xcf, 0x3a, 0xbf, 0x51, 0x3c, 0xeb, 0x7e, 0xc1, 0x78, 0x16,
-	0xfd, 0x76, 0xf1, 0xac, 0xf7, 0x04, 0x78, 0xd6, 0xca, 0x29, 0xc3, 0x63, 0x60, 0xca, 0xd7, 0x75,
-	0xca, 0x3d, 0xa7, 0x41, 0x95, 0xe3, 0x3b, 0xe5, 0x44, 0x0b, 0x53, 0x84, 0x8f, 0xed, 0x94, 0x93,
-	0xa7, 0x70, 0xca, 0xe1, 0x00, 0xa7, 0xcc, 0x0a, 0x30, 0xa9, 0x61, 0x69, 0x63, 0xda, 0x90, 0x8a,
-	0x96, 0xa3, 0xe0, 0x06, 0x8e, 0xb4, 0x71, 0x44, 0x8c, 0x6b, 0xf8, 0xed, 0x69, 0xc3, 0x76, 0x2d,
-	0xec, 0xbb, 0xb0, 0xc7, 0x2d, 0xe0, 0x02, 0x15, 0x30, 0x18, 0xd8, 0xc7, 0x3b, 0xab, 0xef, 0xa3,
-	0xa2, 0x29, 0xa2, 0x35, 0x6a, 0x45, 0xf6, 0x93, 0x07, 0x6e, 0x4e, 0x5b, 0x38, 0xdc, 0x38, 0x14,
-	0xfd, 0x43, 0xd8, 0x5b, 0x42, 0x6b, 0x72, 0x55, 0x35, 0x25, 0xbb, 0xe6, 0xc6, 0xa5, 0x5a, 0x18,
-	0xb2, 0x53, 0x4c, 0xda, 0xe4, 0x2b, 0x16, 0x35, 0xfb, 0x2e, 0x64, 0xeb, 0xc5, 0xba, 0xa2, 0x2a,
-	0x1b, 0x86, 0x65, 0x46, 0x0b, 0x21, 0xaf, 0x06, 0xcf, 0xb9, 0x45, 0xbe, 0x40, 0xa8, 0x1d, 0xdb,
-	0x75, 0x8a, 0x8c, 0xe1, 0x7b, 0x3f, 0xfb, 0xfe, 0x93, 0x1a, 0x58, 0x73, 0xe1, 0x59, 0x8e, 0xcf,
-	0xb7, 0xc0, 0xb3, 0x02, 0x3f, 0x09, 0x07, 0x60, 0x9f, 0x2d, 0x3d, 0xbb, 0x80, 0xb5, 0x35, 0xa5,
-	0x5c, 0xd5, 0x65, 0x32, 0x45, 0x6c, 0x28, 0x47, 0x1a, 0x1b, 0xc1, 0xae, 0x7b, 0x86, 0xcf, 0xe5,
-	0xf9, 0xfc, 0xa4, 0x30, 0xd4, 0x0c, 0xeb, 0x7a, 0x6d, 0x04, 0x0b, 0xef, 0xd7, 0x40, 0x78, 0x9c,
-	0x9f, 0x68, 0x09, 0x75, 0xdd, 0x36, 0x28, 0x76, 0x4d, 0xf1, 0xb9, 0x09, 0x7e, 0xfa, 0x38, 0xa8,
-	0x05, 0x6d, 0x14, 0x8a, 0x51, 0x14, 0x1a, 0xe3, 0x73, 0xb9, 0xd6, 0xa8, 0x95, 0xb0, 0xe9, 0xe3,
-	0x94, 0xbe, 0x40, 0x70, 0xfa, 0x3a, 0x64, 0x5d, 0x93, 0xec, 0x26, 0x1e, 0xb0, 0x89, 0xfb, 0x09,
-	0x71, 0x7e, 0x8a, 0xcf, 0x4f, 0x0b, 0xc3, 0x30, 0xed, 0x9d, 0x2f, 0x17, 0x79, 0xca, 0x26, 0x67,
-	0xa8, 0xec, 0x29, 0x3e, 0x37, 0xbd, 0x14, 0x89, 0x86, 0x99, 0x88, 0x83, 0x8b, 0x31, 0x06, 0x2e,
-	0x45, 0xa2, 0x71, 0x26, 0xb1, 0x14, 0x89, 0xf6, 0x33, 0x03, 0x4b, 0x91, 0x28, 0xc3, 0xa4, 0x06,
-	0x3f, 0x4c, 0xc2, 0x4b, 0x4d, 0x71, 0xd1, 0x4e, 0xaf, 0xbe, 0x25, 0x64, 0xac, 0x67, 0x75, 0xa1,
-	0x53, 0xd7, 0x42, 0xdb, 0x28, 0xd8, 0x46, 0xc1, 0x36, 0x0a, 0xb6, 0x51, 0xb0, 0x8d, 0x82, 0x6d,
-	0x14, 0x0c, 0x44, 0xc1, 0x59, 0x57, 0x72, 0xe8, 0x1c, 0xc9, 0x89, 0xa8, 0xa2, 0xca, 0x45, 0x9a,
-	0x5f, 0xcd, 0x9e, 0x7f, 0x3a, 0xd7, 0xe4, 0x78, 0x72, 0x70, 0xce, 0x05, 0xa0, 0xae, 0xe3, 0x3c,
-	0x37, 0xf7, 0xc0, 0xd3, 0xb9, 0xa6, 0x47, 0x7e, 0x83, 0x7f, 0x17, 0x87, 0x57, 0x9a, 0xd5, 0x37,
-	0x5d, 0x42, 0xda, 0xa5, 0xc9, 0xef, 0x59, 0x69, 0xb2, 0x5d, 0x1d, 0x6c, 0x57, 0x07, 0x8f, 0x5b,
-	0x1d, 0x94, 0x9e, 0xce, 0xb5, 0x3c, 0x5b, 0x7f, 0x52, 0x03, 0xaf, 0x9f, 0xaa, 0x5c, 0x28, 0x34,
-	0x03, 0x8f, 0xab, 0xfe, 0x72, 0xe1, 0xde, 0x01, 0x08, 0x26, 0x15, 0x84, 0x26, 0xb0, 0x72, 0xad,
-	0xb1, 0x8e, 0xb8, 0x77, 0x00, 0x02, 0x69, 0x85, 0x1f, 0xb7, 0xac, 0x2f, 0x16, 0x02, 0xeb, 0x8b,
-	0x7b, 0x07, 0xa0, 0x05, 0x93, 0xb0, 0xd2, 0x1a, 0xc1, 0xc6, 0x03, 0xab, 0x8f, 0x7b, 0x07, 0xa0,
-	0x15, 0x97, 0x70, 0xb3, 0x19, 0xc0, 0x8d, 0x04, 0x16, 0x27, 0x89, 0xd1, 0x02, 0xe9, 0x8f, 0xa8,
-	0x5a, 0xfe, 0x7d, 0x1c, 0xbe, 0xd2, 0xfc, 0xec, 0xab, 0x8d, 0x0e, 0x6d, 0x74, 0x68, 0xa3, 0x43,
-	0x1b, 0x1d, 0xe4, 0xa7, 0x73, 0x47, 0x9c, 0x90, 0xb7, 0xf1, 0xe1, 0xfb, 0x89, 0x0f, 0x7f, 0x09,
-	0xe1, 0x0f, 0x9a, 0x56, 0xef, 0x8e, 0x84, 0x87, 0x76, 0x05, 0xac, 0x5d, 0x01, 0x6b, 0x57, 0xc0,
-	0x8e, 0xae, 0x80, 0xcd, 0xbe, 0xf7, 0x74, 0xae, 0xf5, 0xe1, 0xf1, 0x93, 0x1a, 0x98, 0x3e, 0xa2,
-	0xb0, 0xc3, 0x05, 0xf8, 0xd7, 0xc8, 0x0c, 0x9f, 0xcb, 0x0b, 0xf3, 0xcd, 0x7c, 0xeb, 0x90, 0xaf,
-	0x70, 0x73, 0x32, 0xd7, 0xea, 0xab, 0xe8, 0x34, 0x75, 0xad, 0xc7, 0xf0, 0x83, 0x8d, 0x95, 0x9e,
-	0x53, 0xf9, 0xc1, 0xc6, 0x42, 0x50, 0x2b, 0x3f, 0x08, 0x98, 0xd0, 0x52, 0x24, 0x1a, 0x62, 0xc2,
-	0xcd, 0x2a, 0x3a, 0x83, 0xbf, 0x80, 0xf0, 0xd5, 0x16, 0x67, 0x19, 0x6d, 0x7f, 0xd8, 0xf6, 0x87,
-	0x6d, 0x7f, 0xf8, 0x22, 0xfc, 0xe1, 0x4f, 0x9f, 0xce, 0x1d, 0x75, 0x68, 0xd8, 0xf6, 0x88, 0xdf,
-	0x05, 0x8f, 0xf8, 0xe8, 0x02, 0x4c, 0x5a, 0x33, 0xbc, 0x52, 0x41, 0x45, 0xea, 0xf9, 0x26, 0x61,
-	0x52, 0x47, 0x06, 0xae, 0xea, 0x45, 0x24, 0x95, 0x75, 0x5c, 0xad, 0xd8, 0x07, 0xb9, 0xbd, 0xf5,
-	0xa3, 0xda, 0x2e, 0x3d, 0xc2, 0x00, 0xee, 0x86, 0x98, 0xa8, 0x93, 0xdd, 0x24, 0x54, 0xec, 0x5f,
-	0x85, 0x60, 0xdc, 0x3a, 0x05, 0xd6, 0x51, 0x59, 0xc1, 0x9a, 0xfd, 0x55, 0x92, 0x2f, 0x40, 0x9d,
-	0xef, 0xbf, 0x80, 0xfe, 0x1c, 0x88, 0x09, 0x03, 0x57, 0xcd, 0x75, 0x24, 0x1b, 0xa6, 0x6c, 0x28,
-	0xb2, 0x18, 0x2b, 0x22, 0xcd, 0xd4, 0x65, 0xb5, 0x6a, 0x88, 0x5d, 0xe4, 0x65, 0xd5, 0x10, 0xbb,
-	0xad, 0xff, 0x79, 0x31, 0x49, 0x49, 0x0f, 0x09, 0x7a, 0x34, 0xac, 0x9b, 0xeb, 0xa8, 0xaa, 0xe3,
-	0x0a, 0x12, 0xe1, 0x36, 0x32, 0x4c, 0xfb, 0x39, 0xf6, 0xbe, 0x5c, 0x91, 0x35, 0xc2, 0x26, 0x26,
-	0xe4, 0xaa, 0x41, 0xc8, 0x15, 0xd9, 0xfa, 0x58, 0x94, 0x35, 0xb9, 0x24, 0xdb, 0x32, 0xc4, 0xee,
-	0xea, 0x06, 0x95, 0x29, 0x76, 0x13, 0x6e, 0xa2, 0xc3, 0x7e, 0x28, 0x88, 0x89, 0x35, 0x9d, 0xac,
-	0xb4, 0x3a, 0x25, 0x43, 0xe9, 0xe4, 0x35, 0x5d, 0x29, 0xca, 0x54, 0xad, 0xd8, 0xb3, 0xaa, 0xcb,
-	0xbb, 0x8a, 0x6a, 0xf1, 0xb3, 0x65, 0xa4, 0x6f, 0xca, 0xda, 0x0e, 0xe1, 0xb6, 0x59, 0x16, 0x3b,
-	0xc4, 0x1e, 0x3a, 0x7e, 0x91, 0x0e, 0x9f, 0xfd, 0xd7, 0x10, 0x64, 0x64, 0xd5, 0x44, 0xba, 0x26,
-	0x9b, 0x8e, 0x4d, 0x2e, 0x51, 0x9b, 0xfc, 0x22, 0x54, 0xb7, 0xc9, 0x47, 0x21, 0x7d, 0x2f, 0x44,
-	0x3c, 0xb0, 0xee, 0x1e, 0x68, 0x7c, 0x03, 0xeb, 0xc8, 0xe9, 0x74, 0xdc, 0x7e, 0x50, 0xb4, 0x92,
-	0x22, 0x8b, 0x90, 0x76, 0xc0, 0x7a, 0x4e, 0x39, 0x83, 0xb5, 0x49, 0xf2, 0x22, 0xe3, 0x7f, 0x15,
-	0x30, 0x12, 0xa8, 0x91, 0xc5, 0xbc, 0x63, 0x19, 0xc8, 0xd8, 0x46, 0x25, 0xa4, 0x1d, 0x12, 0x6f,
-	0x2b, 0xe6, 0x2e, 0xd2, 0x55, 0x59, 0x2b, 0x59, 0xc4, 0xd1, 0xaa, 0x8c, 0x6c, 0xb6, 0xaa, 0xec,
-	0x98, 0xa7, 0xd7, 0x45, 0x47, 0x6c, 0x50, 0x97, 0x49, 0x9f, 0xe3, 0xb6, 0x71, 0x6c, 0xbb, 0x59,
-	0x86, 0xb5, 0xec, 0x06, 0xad, 0xf9, 0xa0, 0xaa, 0x21, 0x1d, 0x25, 0x7d, 0x4f, 0xd0, 0xd3, 0xb1,
-	0x95, 0x6d, 0x3f, 0x01, 0x46, 0xb6, 0x34, 0x64, 0x72, 0x61, 0xea, 0x9c, 0x86, 0x5a, 0x9f, 0xee,
-	0x2f, 0xd0, 0x25, 0x6f, 0x39, 0xd1, 0x7f, 0x7a, 0x04, 0x80, 0x48, 0x79, 0xd9, 0x55, 0x08, 0x15,
-	0x2b, 0xdd, 0x95, 0xca, 0xdb, 0x36, 0xe8, 0xfe, 0xce, 0xc8, 0x31, 0xbe, 0xd1, 0x37, 0x12, 0x7c,
-	0x96, 0x23, 0x10, 0xdf, 0x02, 0x16, 0x81, 0x18, 0x53, 0xea, 0xaf, 0xd9, 0x2a, 0x4c, 0xd5, 0x75,
-	0x20, 0x47, 0x55, 0x17, 0x55, 0x35, 0x7f, 0x22, 0x55, 0x6f, 0x05, 0x29, 0xec, 0x55, 0xbc, 0x8d,
-	0xec, 0x36, 0x4c, 0x39, 0x37, 0x24, 0x9c, 0x63, 0x53, 0xeb, 0x5c, 0x53, 0xf8, 0x7a, 0x6a, 0x83,
-	0xe2, 0x55, 0x47, 0x2f, 0xb3, 0xe5, 0x6b, 0x65, 0x15, 0x98, 0x38, 0xb4, 0xa9, 0x24, 0xeb, 0x5c,
-	0x96, 0x2a, 0x7d, 0xe3, 0x84, 0x66, 0xb5, 0xd0, 0xc0, 0xd1, 0xd7, 0xe3, 0x18, 0x76, 0x5e, 0x67,
-	0x3f, 0x80, 0xe9, 0x06, 0xd3, 0x12, 0x8d, 0x97, 0xa9, 0xc6, 0x85, 0x53, 0x59, 0xd7, 0xa7, 0x37,
-	0xe5, 0xb3, 0xef, 0xbc, 0xce, 0xfe, 0x0c, 0xa6, 0x1b, 0x2c, 0x4c, 0xb4, 0x0f, 0x52, 0xed, 0x6f,
-	0x9e, 0xce, 0xc8, 0x3e, 0xf5, 0xac, 0xdf, 0xcc, 0xf3, 0x3a, 0x5b, 0x80, 0xb1, 0x92, 0x62, 0x6c,
-	0x48, 0x86, 0xb2, 0x8b, 0x68, 0x01, 0x2b, 0x21, 0x9c, 0x25, 0x01, 0x02, 0xf1, 0x1d, 0x7f, 0xf6,
-	0x08, 0xa4, 0x88, 0xff, 0xe8, 0xbc, 0x16, 0xe6, 0x7e, 0x73, 0x49, 0x8c, 0x12, 0xc2, 0x15, 0x65,
-	0x17, 0xb1, 0xef, 0x42, 0x68, 0x5f, 0xc5, 0xd1, 0x51, 0xc9, 0x0e, 0xd4, 0x8e, 0x73, 0x8c, 0x9e,
-	0xfe, 0xe4, 0x41, 0xaa, 0xa8, 0xe2, 0x6a, 0x89, 0x32, 0x22, 0xcd, 0x54, 0x64, 0xd5, 0x58, 0x0c,
-	0x89, 0x31, 0xeb, 0xd6, 0x8d, 0x8e, 0x4a, 0x6c, 0x1e, 0x46, 0x65, 0xc3, 0x50, 0x0c, 0x13, 0x95,
-	0xec, 0x82, 0x69, 0x70, 0xdc, 0x11, 0x12, 0x1d, 0x3a, 0xf6, 0xff, 0x00, 0x8c, 0x6f, 0xca, 0xc5,
-	0x75, 0x45, 0xb3, 0xbe, 0xee, 0x49, 0x63, 0xad, 0x98, 0xf0, 0x9f, 0xe0, 0x79, 0x0d, 0x24, 0x57,
-	0x4c, 0x59, 0x2b, 0x11, 0x50, 0x7d, 0xb3, 0x20, 0x6d, 0xe5, 0xc9, 0xb0, 0x1e, 0x3e, 0x02, 0xff,
-	0x0c, 0xe0, 0x0c, 0xf4, 0x35, 0xb1, 0xaf, 0x0d, 0x8d, 0x67, 0xef, 0x67, 0xb7, 0x16, 0x96, 0x7f,
-	0xc2, 0x67, 0x73, 0xe3, 0x37, 0x85, 0xac, 0x38, 0xff, 0xce, 0xd5, 0xec, 0x26, 0x2a, 0x29, 0xd5,
-	0xcd, 0x6c, 0x05, 0xe9, 0x6b, 0x98, 0x38, 0x9c, 0x22, 0x82, 0x53, 0x6e, 0xd6, 0x71, 0xc2, 0xfa,
-	0xca, 0xd0, 0xb4, 0xc3, 0x9a, 0x9f, 0xae, 0xb3, 0xae, 0x2b, 0xe5, 0x75, 0x0f, 0xe3, 0x1b, 0x6e,
-	0xc6, 0x09, 0xc2, 0x78, 0x7d, 0x28, 0x37, 0xe9, 0x70, 0x4e, 0x4c, 0xd6, 0x39, 0xb7, 0x90, 0xbe,
-	0xd3, 0xc0, 0x4e, 0xa6, 0x22, 0xa2, 0x87, 0xb8, 0x1b, 0x62, 0x8f, 0x3d, 0x5a, 0x1b, 0x4a, 0xe3,
-	0xf4, 0xde, 0xae, 0x54, 0x21, 0x2b, 0x67, 0x97, 0x06, 0xae, 0x09, 0x81, 0x7d, 0x5e, 0x03, 0x60,
-	0xac, 0x8e, 0x00, 0x91, 0x6b, 0x21, 0xae, 0x6f, 0x31, 0x4c, 0x1c, 0x68, 0x09, 0x19, 0xcb, 0x48,
-	0x9f, 0xdf, 0x65, 0x27, 0x60, 0x8f, 0x89, 0x4d, 0x82, 0xe8, 0xf4, 0xd6, 0xef, 0x40, 0x13, 0xb6,
-	0x37, 0x08, 0x1b, 0x25, 0xb4, 0x6e, 0x0f, 0xcc, 0xc1, 0x5e, 0x0d, 0x4b, 0x24, 0x04, 0x40, 0xba,
-	0xcd, 0x7a, 0xa1, 0x65, 0x7c, 0x98, 0xd0, 0xf0, 0xef, 0x51, 0x6a, 0x8b, 0x7f, 0x19, 0x9e, 0x27,
-	0xcb, 0x10, 0xe9, 0xba, 0x2c, 0x19, 0x78, 0xcd, 0xdc, 0x96, 0xc9, 0x5a, 0x46, 0xba, 0x41, 0x90,
-	0x2b, 0x4e, 0x27, 0x2e, 0xfd, 0xe9, 0x03, 0xf0, 0xa5, 0xbd, 0x06, 0x0f, 0x07, 0x7d, 0xae, 0xce,
-	0xb6, 0x62, 0x73, 0xdd, 0xb3, 0x98, 0xd8, 0xdb, 0x90, 0xc3, 0x15, 0xa4, 0xcb, 0xa6, 0xa2, 0x95,
-	0x25, 0x63, 0xc7, 0x30, 0xd1, 0xa6, 0x23, 0x30, 0xd1, 0x42, 0xe0, 0x59, 0x87, 0x6b, 0x85, 0x32,
-	0xd5, 0xe5, 0xbd, 0x06, 0xbb, 0x0d, 0x63, 0x5d, 0xda, 0x40, 0x3b, 0x34, 0x66, 0x8d, 0x09, 0xc9,
-	0x5f, 0xd7, 0x40, 0x98, 0x6e, 0x04, 0x3d, 0xcc, 0xfd, 0xfc, 0x86, 0xd8, 0x65, 0x18, 0xeb, 0x6f,
-	0xa3, 0x1d, 0x76, 0x08, 0x76, 0xcb, 0xa5, 0x12, 0xd9, 0xca, 0xb4, 0x26, 0x1b, 0x13, 0x92, 0x64,
-	0xe7, 0x38, 0x84, 0x21, 0xb1, 0xde, 0xcc, 0xde, 0x84, 0x3d, 0x45, 0x8c, 0xf5, 0x92, 0x42, 0xa0,
-	0xc7, 0xb0, 0x6b, 0xaf, 0x97, 0x7c, 0x06, 0xa3, 0x7b, 0x79, 0xe1, 0x90, 0xcc, 0x8a, 0xd4, 0x45,
-	0x37, 0x27, 0x7b, 0x17, 0x9e, 0x53, 0x71, 0xd9, 0x90, 0x0c, 0x53, 0x47, 0xf2, 0x26, 0x19, 0x70,
-	0x49, 0x31, 0xe4, 0x55, 0x15, 0x95, 0xb8, 0xbe, 0x63, 0x5c, 0x87, 0xe9, 0x23, 0xcc, 0x2b, 0x75,
-	0xde, 0x37, 0x6d, 0x56, 0xf6, 0x3d, 0x18, 0x57, 0x71, 0x59, 0xd2, 0x51, 0x11, 0x29, 0x5b, 0x48,
-	0xe7, 0xce, 0x1e, 0x7b, 0x47, 0x9f, 0xf9, 0xe4, 0x81, 0x87, 0xd5, 0xd6, 0xd3, 0xa3, 0xe2, 0xb2,
-	0x68, 0xbf, 0x62, 0x17, 0x60, 0xc8, 0xd8, 0xe6, 0xce, 0xb5, 0xb8, 0xc9, 0x72, 0xcf, 0x37, 0xb3,
-	0x54, 0x74, 0x94, 0xc8, 0xfa, 0x8a, 0x58, 0x20, 0x64, 0x6c, 0xb3, 0x02, 0x0c, 0x61, 0x83, 0xe3,
-	0x5a, 0xc0, 0xf4, 0x1d, 0xef, 0x6c, 0xfa, 0x65, 0x60, 0x83, 0xfd, 0x73, 0x00, 0x23, 0xa6, 0x5c,
-	0x36, 0xb8, 0x21, 0x7a, 0xc3, 0xfd, 0x78, 0x60, 0xe2, 0x0d, 0x5c, 0x47, 0xee, 0xca, 0x65, 0xe3,
-	0x2d, 0xcd, 0xd4, 0x77, 0x84, 0xc9, 0xfa, 0x64, 0xc7, 0x3e, 0x06, 0x5d, 0x83, 0x64, 0x49, 0xfd,
-	0x09, 0x9d, 0xfa, 0x8f, 0x41, 0x88, 0xe9, 0x24, 0x4f, 0xf0, 0x63, 0xd0, 0x7d, 0x8d, 0xac, 0x84,
-	0xdf, 0x80, 0xfd, 0x5f, 0xfd, 0x7b, 0xb8, 0xeb, 0x2f, 0x1e, 0x81, 0x50, 0xb4, 0x43, 0xa4, 0x5d,
-	0x60, 0xff, 0x14, 0xc0, 0xd4, 0x96, 0x52, 0x91, 0x2a, 0xb2, 0x2e, 0x6f, 0x3a, 0x7b, 0xf7, 0x3c,
-	0xed, 0xd8, 0xd5, 0xa0, 0x85, 0xb1, 0x5c, 0x5d, 0x55, 0x15, 0x63, 0xfd, 0xde, 0xad, 0xe5, 0x65,
-	0xca, 0x42, 0x37, 0xb1, 0x70, 0xdd, 0x5e, 0xd9, 0x54, 0xdf, 0x43, 0xa2, 0x6f, 0x8c, 0xcf, 0xf1,
-	0x05, 0xda, 0x91, 0x87, 0x20, 0xc4, 0x59, 0x9a, 0x1f, 0x12, 0xcd, 0x40, 0x4c, 0x6e, 0x29, 0x15,
-	0x17, 0x33, 0xfb, 0x06, 0x3c, 0x6b, 0x7d, 0x97, 0x1e, 0x4b, 0xd6, 0xff, 0xaa, 0xa6, 0x21, 0x55,
-	0x52, 0x2a, 0xdc, 0x15, 0xba, 0x9c, 0x63, 0xf6, 0x5e, 0xa9, 0x00, 0x91, 0x25, 0x04, 0x77, 0x31,
-	0xc9, 0xa3, 0xee, 0x52, 0xaa, 0x5b, 0x15, 0xf6, 0x0f, 0x61, 0xcc, 0x5c, 0xb3, 0x07, 0xc0, 0x7d,
-	0xd1, 0x7d, 0xec, 0x35, 0x33, 0xf0, 0xc9, 0x83, 0x34, 0x9d, 0x6e, 0xe2, 0xd8, 0x2c, 0x7e, 0x64,
-	0x22, 0xdd, 0x20, 0xe3, 0x10, 0xa3, 0xe6, 0x9a, 0xd5, 0x45, 0xf6, 0xa7, 0x30, 0x41, 0x7f, 0x11,
-	0x40, 0xd1, 0x68, 0xc8, 0xa6, 0x72, 0x5f, 0x76, 0x7f, 0x1d, 0xa0, 0xf1, 0x32, 0x53, 0xd9, 0x71,
-	0xf2, 0xea, 0x96, 0xfd, 0xa6, 0x7f, 0x0a, 0xc6, 0x9c, 0xc9, 0x64, 0x19, 0x18, 0x26, 0xfb, 0x9d,
-	0x26, 0x21, 0x22, 0x79, 0x64, 0xd3, 0xb0, 0x73, 0x4b, 0x56, 0xab, 0xd6, 0xc5, 0xcf, 0x98, 0x68,
-	0x7d, 0x98, 0x0d, 0x4d, 0x83, 0xd9, 0x0f, 0x9e, 0xd4, 0xc0, 0x7d, 0x78, 0x19, 0x9e, 0xa1, 0x59,
-	0x25, 0xd1, 0x97, 0x5d, 0x41, 0xaa, 0x95, 0xb1, 0xb2, 0x30, 0xc7, 0x17, 0xc6, 0xf8, 0x02, 0x3f,
-	0xce, 0x4f, 0xc1, 0x57, 0x61, 0xda, 0x4a, 0x3c, 0x71, 0x09, 0x65, 0x97, 0x9d, 0x71, 0xb2, 0x49,
-	0x92, 0xa2, 0x4d, 0xf2, 0xb9, 0x71, 0x9e, 0x96, 0xdd, 0xe1, 0x75, 0x78, 0xd6, 0x49, 0x41, 0xbd,
-	0xd7, 0xad, 0x52, 0xf9, 0x31, 0x3e, 0x5f, 0xe0, 0xf3, 0xe3, 0xfc, 0xf8, 0x18, 0x9f, 0x9f, 0xe1,
-	0x0b, 0x13, 0xc2, 0xab, 0x30, 0x61, 0x85, 0xf9, 0xee, 0x0b, 0x47, 0xa1, 0x67, 0x35, 0x90, 0xa1,
-	0x77, 0x93, 0xf8, 0x6c, 0x21, 0x47, 0x06, 0x2b, 0xf0, 0x30, 0xe6, 0xfc, 0x50, 0x02, 0x7b, 0xe9,
-	0x71, 0x0d, 0x74, 0x3e, 0xab, 0x81, 0xc8, 0x7e, 0x0d, 0xf4, 0x4e, 0xf0, 0x93, 0x7c, 0x6e, 0x8a,
-	0x2f, 0xe4, 0xf9, 0x42, 0x81, 0x2f, 0x8c, 0x53, 0xea, 0x8b, 0x10, 0x96, 0x50, 0x45, 0xc5, 0x3b,
-	0x9b, 0x48, 0x33, 0xe9, 0x5d, 0xad, 0xa8, 0x7d, 0x16, 0x12, 0x9e, 0xe6, 0x67, 0x84, 0x21, 0x18,
-	0x77, 0x7b, 0x7c, 0x96, 0x7b, 0x5c, 0x03, 0x17, 0xec, 0x2c, 0xf1, 0xe2, 0x7e, 0x0d, 0x44, 0x73,
-	0x13, 0xbc, 0x73, 0x2d, 0x8a, 0x3a, 0xa8, 0xba, 0x43, 0x70, 0xf7, 0xb2, 0xcf, 0xe6, 0x48, 0xd3,
-	0x9e, 0xe6, 0xf8, 0x7c, 0x7e, 0x29, 0x12, 0xcd, 0x30, 0x97, 0x96, 0x22, 0xd1, 0x08, 0xd3, 0xe9,
-	0x1c, 0x2f, 0x5c, 0x64, 0x32, 0xce, 0x21, 0x43, 0x9a, 0xe9, 0x1b, 0xfc, 0x88, 0x81, 0xc9, 0x05,
-	0x1d, 0xc9, 0x26, 0x72, 0xd2, 0xc7, 0x57, 0x82, 0xd3, 0x47, 0x7f, 0xb6, 0x78, 0x25, 0x28, 0x59,
-	0xf4, 0xa7, 0x50, 0xd7, 0x9b, 0x65, 0x50, 0x41, 0xf9, 0xc2, 0xeb, 0x27, 0xcb, 0x17, 0xec, 0x4c,
-	0xe1, 0xbd, 0x17, 0x9c, 0x29, 0x78, 0x73, 0x04, 0xfc, 0x32, 0x73, 0x84, 0xa0, 0xec, 0xe0, 0x8f,
-	0x5e, 0x6a, 0x76, 0x10, 0x98, 0x17, 0x14, 0x5f, 0x46, 0x5e, 0xe0, 0xcf, 0x08, 0xb6, 0x5e, 0x7a,
-	0x46, 0x10, 0x9c, 0x0b, 0xdc, 0x7f, 0xf9, 0xb9, 0x40, 0x93, 0x2c, 0xe0, 0x3b, 0x16, 0xd0, 0x5f,
-	0x0e, 0x8a, 0xe7, 0xbd, 0x51, 0xef, 0x40, 0x43, 0xde, 0xe2, 0xca, 0x4f, 0xce, 0xf9, 0x22, 0x38,
-	0x27, 0x62, 0xe3, 0x7c, 0x11, 0xdb, 0x61, 0x84, 0x36, 0x7f, 0x92, 0x08, 0xcd, 0x1b, 0x9b, 0xdd,
-	0x3e, 0x51, 0x6c, 0xb6, 0x18, 0x6e, 0x16, 0x95, 0xfd, 0xfe, 0x89, 0xa3, 0xb2, 0x5e, 0x5f, 0x54,
-	0xb6, 0x18, 0xf6, 0x46, 0x64, 0x3f, 0x3c, 0x59, 0x44, 0x16, 0x71, 0xa2, 0xb1, 0xb9, 0x13, 0x45,
-	0x63, 0x11, 0x27, 0x12, 0xfb, 0xf1, 0x09, 0x02, 0x31, 0x2f, 0x04, 0x1c, 0x06, 0x62, 0x76, 0x40,
-	0x35, 0x18, 0x94, 0x06, 0x2d, 0x46, 0x3c, 0x29, 0xcf, 0xe5, 0x80, 0x94, 0x87, 0x90, 0x9c, 0x3c,
-	0xbd, 0x89, 0xf8, 0xd3, 0x9b, 0xd3, 0xc5, 0x54, 0x27, 0x0f, 0x4a, 0x52, 0x4f, 0xe7, 0x7c, 0x35,
-	0x56, 0x61, 0xd0, 0x1f, 0x29, 0xa4, 0xf6, 0x0e, 0x80, 0xf7, 0x95, 0xd0, 0xef, 0x8e, 0x12, 0x12,
-	0x7b, 0x07, 0xe0, 0xf0, 0xa3, 0x70, 0xc1, 0x13, 0x13, 0x24, 0xf7, 0x0e, 0x80, 0xeb, 0xb3, 0x30,
-	0xd6, 0x04, 0xe8, 0xb9, 0xbd, 0x03, 0x10, 0xd8, 0x22, 0x64, 0x7d, 0x41, 0x04, 0xb3, 0x77, 0x00,
-	0x3c, 0x6f, 0x7c, 0x71, 0x80, 0x75, 0x3d, 0x3a, 0xc1, 0x24, 0xed, 0x38, 0xe0, 0x1f, 0x7a, 0x60,
-	0xaf, 0x7d, 0x7a, 0xe6, 0x04, 0x02, 0x4a, 0x00, 0xa2, 0x0a, 0x27, 0x04, 0x03, 0xd7, 0xc9, 0x9c,
-	0x5d, 0x32, 0xe9, 0x70, 0xc3, 0xeb, 0x07, 0xcd, 0xe1, 0x75, 0xf1, 0x54, 0x90, 0x10, 0xa4, 0xb7,
-	0x01, 0x6b, 0x7f, 0xd6, 0x1c, 0x6b, 0x6f, 0x9d, 0x0e, 0x18, 0x82, 0xd4, 0x37, 0x02, 0x6f, 0x25,
-	0x18, 0x78, 0xdf, 0x3c, 0x31, 0xf0, 0x06, 0xa9, 0xf5, 0xa0, 0xf0, 0x87, 0xa0, 0x25, 0x0c, 0x2f,
-	0x9d, 0x12, 0x86, 0x83, 0xf4, 0x07, 0x60, 0xf2, 0x47, 0xa0, 0x25, 0x28, 0xbf, 0x7d, 0x5a, 0x50,
-	0x0e, 0xea, 0x46, 0x10, 0x42, 0x7f, 0x17, 0x91, 0x0b, 0x7c, 0x03, 0xc8, 0x05, 0xbc, 0xc8, 0x15,
-	0xec, 0xe5, 0x43, 0x47, 0x7b, 0xf9, 0xd0, 0x69, 0xbc, 0x7c, 0xe8, 0xc5, 0x7a, 0xf9, 0xd9, 0x3b,
-	0x0d, 0xce, 0xfa, 0x49, 0x0d, 0xcc, 0xc2, 0xb3, 0x30, 0x65, 0x9f, 0x51, 0x2a, 0x5a, 0xd9, 0xce,
-	0x04, 0x59, 0x30, 0x0e, 0xb3, 0x4d, 0xf2, 0xc8, 0x28, 0x4d, 0x1f, 0xf9, 0xfc, 0x4c, 0x4b, 0x37,
-	0xfe, 0x32, 0x1d, 0xb5, 0xdf, 0x45, 0xff, 0x2f, 0x03, 0x7b, 0x6e, 0x22, 0xb3, 0x9d, 0xa7, 0xb5,
-	0xf3, 0xb4, 0x76, 0x9e, 0xd6, 0xce, 0xd3, 0x8e, 0xca, 0xd3, 0x66, 0x8f, 0x3c, 0x0b, 0x68, 0x5e,
-	0xf5, 0x9f, 0x3e, 0xaa, 0xea, 0xdf, 0xb4, 0xbe, 0xdf, 0xce, 0x0e, 0x5b, 0x67, 0x87, 0xb7, 0x3d,
-	0xc9, 0xd9, 0xec, 0xf1, 0xaa, 0xe4, 0x87, 0x4e, 0xbf, 0x21, 0x33, 0x7b, 0x1d, 0x42, 0x8a, 0x46,
-	0x86, 0x29, 0x9b, 0x88, 0x66, 0x9d, 0xc9, 0xfc, 0xc5, 0x20, 0xdb, 0xd5, 0xaf, 0x2c, 0x21, 0x91,
-	0xc2, 0x17, 0x7d, 0x64, 0xef, 0xbe, 0x88, 0x3a, 0x79, 0x43, 0xe9, 0xfb, 0x3b, 0x92, 0x2d, 0xe6,
-	0x5b, 0xc7, 0x11, 0x2f, 0x36, 0x45, 0x4c, 0x37, 0x44, 0x1d, 0x5f, 0xce, 0x81, 0xdf, 0xfa, 0x2c,
-	0x31, 0xcd, 0xf4, 0x09, 0x7f, 0x0b, 0x9e, 0x7d, 0x96, 0xe9, 0xf8, 0xf4, 0xb3, 0x4c, 0xc7, 0x57,
-	0x9f, 0x65, 0xc0, 0xcf, 0xf7, 0x33, 0xe0, 0x1f, 0xf7, 0x33, 0xe0, 0x97, 0xfb, 0x19, 0xf0, 0x6c,
-	0x3f, 0x03, 0x3e, 0xdd, 0xcf, 0x80, 0x5f, 0xed, 0x67, 0xc0, 0x97, 0xfb, 0x99, 0x8e, 0xaf, 0xf6,
-	0x33, 0xe0, 0xaf, 0x3f, 0xcf, 0x74, 0x3c, 0xfe, 0x3c, 0x03, 0x9e, 0x7d, 0x9e, 0xe9, 0xf8, 0xf4,
-	0xf3, 0x4c, 0xc7, 0x1f, 0xbc, 0x5b, 0xc6, 0x95, 0x8d, 0xf2, 0x48, 0xdd, 0xd3, 0x8c, 0x54, 0x8d,
-	0x51, 0xe7, 0x7c, 0x62, 0xb8, 0xa2, 0xe3, 0x2d, 0xa5, 0x84, 0xf4, 0xe1, 0x7a, 0xf3, 0x68, 0x65,
-	0xb5, 0x8c, 0x47, 0xd1, 0x7d, 0xb3, 0xfe, 0x7b, 0xc8, 0x2d, 0x7e, 0xe4, 0x79, 0xb5, 0x8b, 0xfe,
-	0xae, 0x70, 0xe1, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff, 0x94, 0xe3, 0x7c, 0x81, 0x12, 0x5a, 0x00,
+	// 4545 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5d, 0x4b, 0x6c, 0x1b, 0x49,
+	0x7a, 0x56, 0x91, 0x94, 0x44, 0x95, 0x1e, 0x6c, 0x95, 0xf5, 0x68, 0xeb, 0x41, 0xd3, 0xf2, 0xec,
+	0x0c, 0x65, 0xb7, 0x1e, 0x24, 0x25, 0x59, 0xd2, 0xec, 0x68, 0xac, 0x96, 0x3d, 0x96, 0xe5, 0xd8,
+	0xd6, 0xb4, 0x6c, 0x6f, 0x26, 0x98, 0x84, 0x68, 0x91, 0x25, 0xaa, 0xd7, 0x54, 0x37, 0xd3, 0xdd,
+	0xa4, 0x2c, 0xef, 0x78, 0xb3, 0xd1, 0x62, 0x83, 0x6c, 0x4e, 0x81, 0x11, 0x60, 0x81, 0xc9, 0x25,
+	0xc7, 0x60, 0x2e, 0x09, 0x10, 0xe4, 0x12, 0xfa, 0x60, 0x18, 0x08, 0xb0, 0xf0, 0xc9, 0x87, 0x04,
+	0x19, 0x18, 0x39, 0xec, 0x68, 0x80, 0xec, 0xe4, 0x36, 0x08, 0x16, 0xc8, 0x42, 0x39, 0x6c, 0x50,
+	0xd5, 0x0f, 0x75, 0x37, 0x9b, 0x94, 0x4c, 0xca, 0xb3, 0xb3, 0x09, 0x2f, 0x36, 0xbb, 0xeb, 0x7f,
+	0xd5, 0xe3, 0xaf, 0xef, 0xff, 0xff, 0x2a, 0x52, 0x70, 0xaa, 0x84, 0xb5, 0x49, 0x49, 0x99, 0xd2,
+	0x32, 0xdb, 0x78, 0x47, 0x9c, 0x2a, 0x49, 0x78, 0x57, 0x9b, 0x12, 0x1f, 0x15, 0x55, 0x9c, 0x2e,
+	0xc9, 0x58, 0x4f, 0x6b, 0x92, 0x8e, 0xa7, 0xf4, 0xbd, 0x02, 0xd6, 0x26, 0x0b, 0xaa, 0xa2, 0x2b,
+	0xe8, 0x82, 0xc1, 0x30, 0x69, 0x30, 0x4c, 0x52, 0x86, 0x49, 0x0f, 0xc3, 0xd0, 0x44, 0x4e, 0xd2,
+	0xb7, 0x8b, 0x9b, 0x93, 0x19, 0x65, 0x67, 0x2a, 0xa7, 0xe4, 0x94, 0x29, 0xca, 0xbb, 0x59, 0xdc,
+	0xa2, 0x4f, 0xf4, 0x81, 0x7e, 0x32, 0x64, 0x0e, 0x5d, 0x74, 0x1b, 0x21, 0x63, 0x7d, 0x57, 0x51,
+	0x1f, 0xa4, 0xb7, 0x24, 0x15, 0xef, 0x8a, 0xf9, 0xbc, 0x53, 0xff, 0xd0, 0xb0, 0x9b, 0x56, 0x29,
+	0xe8, 0x92, 0x22, 0x5b, 0x8d, 0x51, 0x77, 0xa3, 0xd7, 0xf8, 0xa1, 0xb3, 0xee, 0x76, 0x67, 0xd3,
+	0x88, 0x67, 0x20, 0xc4, 0xbc, 0x94, 0x15, 0x75, 0x6c, 0xb6, 0xc6, 0x2a, 0x87, 0x29, 0xed, 0x56,
+	0xfd, 0x96, 0xdf, 0x40, 0x12, 0x03, 0xd2, 0x4e, 0x2d, 0xef, 0xf8, 0x52, 0xe9, 0x8a, 0x2a, 0xe6,
+	0xdc, 0x84, 0xe7, 0xfc, 0x08, 0x1d, 0x04, 0x63, 0xbf, 0x04, 0x70, 0x60, 0x99, 0x0c, 0xfb, 0x7d,
+	0x19, 0xeb, 0x37, 0xe4, 0x9c, 0x8a, 0x35, 0xed, 0xfa, 0xee, 0xdd, 0xbd, 0x02, 0x46, 0x1f, 0xc3,
+	0xb0, 0xf8, 0x28, 0x2d, 0x2b, 0x59, 0xac, 0xb1, 0x20, 0x16, 0x8c, 0x77, 0x26, 0x93, 0x93, 0x7e,
+	0xb3, 0x66, 0xb3, 0xdf, 0x91, 0xf1, 0x0d, 0x59, 0xc7, 0xea, 0x96, 0x98, 0xc1, 0xb7, 0x95, 0x2c,
+	0x26, 0x52, 0xf8, 0xee, 0x7f, 0xfa, 0xcf, 0x67, 0xc1, 0xf0, 0x13, 0xd0, 0x7a, 0x31, 0x98, 0xe0,
+	0x52, 0x42, 0xbb, 0xf8, 0x88, 0x34, 0x69, 0x28, 0x07, 0x91, 0x31, 0xdd, 0x19, 0xac, 0xea, 0xd2,
+	0x96, 0x84, 0xb3, 0xe9, 0xed, 0x5d, 0x36, 0x10, 0x03, 0xf1, 0x0e, 0x7e, 0xe1, 0x55, 0x19, 0x9c,
+	0xa1, 0xad, 0x13, 0x9b, 0x7b, 0x4a, 0x7e, 0xa2, 0xa4, 0xe4, 0xf5, 0x1d, 0xac, 0x6d, 0xff, 0xba,
+	0x0c, 0x5a, 0x88, 0xb8, 0xb3, 0xea, 0x20, 0x7b, 0x45, 0xf0, 0xa3, 0x10, 0x18, 0xfa, 0x72, 0xc5,
+	0x92, 0xb9, 0xba, 0xbb, 0xd8, 0xf6, 0x5f, 0x4b, 0xc1, 0x24, 0x97, 0x18, 0xfb, 0x57, 0x00, 0xd9,
+	0xca, 0x9e, 0x2e, 0x0b, 0xb4, 0xaf, 0xab, 0x30, 0x44, 0x3a, 0xca, 0x82, 0x18, 0x88, 0x77, 0x26,
+	0x67, 0x5e, 0xaf, 0x9f, 0x86, 0x0c, 0x81, 0x4a, 0xf8, 0xe6, 0xfb, 0xf5, 0xef, 0x11, 0x38, 0xe2,
+	0xed, 0xd7, 0xb5, 0x86, 0xe6, 0xf1, 0xee, 0xae, 0x72, 0xf2, 0x79, 0xe4, 0x61, 0xaf, 0xac, 0xa4,
+	0x2d, 0x5f, 0x2b, 0x28, 0x79, 0x29, 0xb3, 0x47, 0xbb, 0xdb, 0x99, 0xec, 0xf3, 0xa8, 0xb9, 0xb6,
+	0x53, 0xd0, 0xf7, 0x56, 0x5b, 0x84, 0x88, 0xac, 0xdc, 0x36, 0xe8, 0xd7, 0x29, 0x39, 0xd2, 0xe0,
+	0xa0, 0x98, 0xd1, 0xa5, 0x12, 0x76, 0xcb, 0x91, 0xb0, 0xc6, 0x42, 0x2a, 0x69, 0xc1, 0x23, 0xc9,
+	0xeb, 0xda, 0x93, 0xcb, 0x94, 0xdd, 0x29, 0x55, 0xc2, 0x1a, 0xb1, 0x7b, 0xb5, 0x45, 0xe8, 0x17,
+	0xfd, 0x1a, 0xd1, 0x15, 0xc8, 0xc8, 0x4a, 0x7a, 0x4b, 0x51, 0x77, 0x45, 0x35, 0x9b, 0x2e, 0xa8,
+	0xca, 0xc3, 0x3d, 0x36, 0x54, 0xc3, 0x6e, 0x20, 0xf4, 0xc8, 0xca, 0x07, 0x06, 0xf9, 0x3a, 0xa1,
+	0x46, 0x3f, 0x06, 0x70, 0xd4, 0xb4, 0xdb, 0x25, 0xe6, 0xc8, 0xfa, 0x0e, 0x2a, 0x6f, 0xe9, 0x64,
+	0xd6, 0x3b, 0x65, 0xbb, 0xba, 0x00, 0x84, 0x21, 0xb1, 0x2a, 0x05, 0xba, 0x05, 0x07, 0xdd, 0xda,
+	0xc5, 0x7c, 0x5e, 0xd9, 0x25, 0xff, 0xb2, 0x7d, 0x35, 0xbb, 0xd3, 0xb7, 0xe5, 0x10, 0xb7, 0x4c,
+	0x98, 0x96, 0xf3, 0x79, 0xf4, 0x03, 0xdf, 0xf5, 0x1b, 0xa6, 0xeb, 0xf7, 0xd6, 0xab, 0x32, 0x18,
+	0x75, 0xac, 0xce, 0x9d, 0x62, 0x5e, 0x97, 0x26, 0x64, 0x29, 0x53, 0xb1, 0x92, 0x2f, 0xa8, 0xe7,
+	0xd9, 0x2b, 0x42, 0x6d, 0xda, 0xca, 0x35, 0x8d, 0x36, 0xe0, 0xa0, 0xac, 0xa4, 0x25, 0x59, 0x93,
+	0xb2, 0x38, 0xad, 0xe9, 0xa2, 0x2e, 0x65, 0xd2, 0xaa, 0x52, 0xd4, 0xb1, 0xc6, 0x76, 0x55, 0xef,
+	0x0b, 0x1f, 0x7a, 0x56, 0x06, 0x60, 0x35, 0x20, 0xf4, 0xc9, 0xca, 0x0d, 0xca, 0xbb, 0x41, 0x59,
+	0x05, 0xca, 0x89, 0x72, 0xb0, 0xcf, 0x57, 0x62, 0x37, 0x95, 0x38, 0xe1, 0xeb, 0x0b, 0x1b, 0x92,
+	0xee, 0x12, 0xf2, 0x7b, 0x92, 0xa6, 0x53, 0x37, 0xb0, 0x54, 0x21, 0xa9, 0x52, 0xd1, 0x3d, 0xc8,
+	0xca, 0x4a, 0x5a, 0x29, 0xea, 0x3e, 0xca, 0x22, 0xc7, 0x9a, 0x1f, 0x14, 0xfa, 0x65, 0xe5, 0x8e,
+	0xc1, 0xec, 0x12, 0x2b, 0xc1, 0x7e, 0x7f, 0x99, 0x4c, 0xfd, 0x1d, 0x08, 0x0a, 0x67, 0x14, 0x1f,
+	0x55, 0x86, 0x33, 0xe7, 0xf2, 0xca, 0xa6, 0x98, 0xb7, 0x7c, 0x91, 0x45, 0x35, 0x56, 0x51, 0x88,
+	0x38, 0xf3, 0x75, 0x4a, 0x6f, 0xfa, 0x17, 0xda, 0x82, 0x67, 0xdc, 0x02, 0xd2, 0x79, 0x49, 0xd3,
+	0xd9, 0x33, 0x35, 0x76, 0x56, 0x97, 0x80, 0x15, 0x45, 0x96, 0x71, 0x86, 0x60, 0xa2, 0x65, 0xf3,
+	0x6a, 0x48, 0xe8, 0xcd, 0x39, 0x49, 0x48, 0x03, 0xba, 0x09, 0xcf, 0xc8, 0x4a, 0x3a, 0x9b, 0x49,
+	0x67, 0xf2, 0x45, 0x4d, 0xc7, 0x6a, 0x3a, 0xa7, 0x2a, 0xc5, 0x02, 0x3b, 0x70, 0xec, 0x40, 0xb7,
+	0x0a, 0x8c, 0xac, 0x5c, 0xcd, 0xac, 0x18, 0x6c, 0xd7, 0x09, 0x17, 0xfa, 0x01, 0x1c, 0xf6, 0x4a,
+	0xb2, 0x27, 0xb2, 0x24, 0xb3, 0x83, 0x54, 0xe8, 0x98, 0xaf, 0xf1, 0x77, 0x36, 0xbf, 0x8f, 0x33,
+	0xba, 0x80, 0xb7, 0xe8, 0xf0, 0x0e, 0x7e, 0xf6, 0x98, 0xf1, 0x4a, 0x32, 0xb5, 0x0e, 0x66, 0x5d,
+	0x3a, 0xcd, 0xa9, 0xbe, 0x2f, 0xa3, 0xc7, 0x70, 0xa8, 0x42, 0xb9, 0xb9, 0x62, 0x4b, 0x32, 0xcb,
+	0x9e, 0x58, 0xf7, 0x70, 0x15, 0xdd, 0x5f, 0x19, 0xfa, 0x07, 0xdc, 0xfa, 0x0d, 0x4f, 0xb9, 0x2f,
+	0x2f, 0x7e, 0xf8, 0xbc, 0x0c, 0x6e, 0xc1, 0x2e, 0xd8, 0x6a, 0x6c, 0xe8, 0xc1, 0x79, 0x2e, 0x01,
+	0x47, 0x60, 0x3f, 0x59, 0x41, 0x31, 0x73, 0xc0, 0x63, 0x1f, 0x98, 0x5b, 0x15, 0x0a, 0xce, 0x71,
+	0x97, 0xe1, 0x39, 0xc8, 0x2c, 0x67, 0x4b, 0xa2, 0x9c, 0xc1, 0xd9, 0xd8, 0x1d, 0x23, 0x7c, 0x41,
+	0x9d, 0x89, 0xcb, 0x5c, 0x32, 0xc1, 0x25, 0x12, 0x5c, 0x62, 0x86, 0x1f, 0x87, 0xfd, 0x6e, 0x44,
+	0x48, 0x67, 0xb6, 0x15, 0x29, 0x83, 0x11, 0xf3, 0xac, 0x0c, 0x02, 0x2f, 0xcb, 0xa0, 0xed, 0xa0,
+	0x0c, 0x42, 0x49, 0x2e, 0x31, 0xcd, 0x5f, 0x84, 0x7d, 0xee, 0xed, 0xcb, 0xa4, 0x44, 0xcf, 0xca,
+	0x20, 0xf4, 0xb2, 0x0c, 0xda, 0x0f, 0xca, 0xa0, 0x6d, 0x86, 0x4b, 0x4e, 0x73, 0x0b, 0x7c, 0x0a,
+	0x0e, 0xf9, 0x78, 0xb2, 0xc5, 0xd1, 0xff, 0xac, 0x0c, 0xba, 0x7e, 0x5e, 0x06, 0xe0, 0x65, 0x19,
+	0x74, 0x1e, 0x94, 0x41, 0x6b, 0x22, 0xc9, 0x25, 0x52, 0xfc, 0x0c, 0x1c, 0xf6, 0x73, 0x1f, 0x27,
+	0x57, 0xc4, 0xe4, 0xea, 0xa1, 0x5c, 0xb3, 0x5c, 0x62, 0x8e, 0x9f, 0x84, 0xfd, 0x9e, 0x55, 0xec,
+	0xa0, 0x47, 0x26, 0x7d, 0x2f, 0xa5, 0x9f, 0xe7, 0x12, 0xc4, 0xb4, 0xc1, 0x8a, 0x39, 0x34, 0x39,
+	0xd8, 0x67, 0x65, 0x30, 0x60, 0x72, 0xf4, 0x1f, 0x94, 0x41, 0x38, 0x99, 0xe4, 0x92, 0x29, 0x2e,
+	0x39, 0xb3, 0x16, 0x0a, 0xb7, 0x31, 0xed, 0x6b, 0xa1, 0x70, 0x3b, 0x13, 0x5e, 0x0b, 0x85, 0x3b,
+	0x99, 0xae, 0xb5, 0x50, 0xb8, 0x87, 0x89, 0xac, 0x85, 0xc2, 0xbd, 0x0c, 0x5a, 0x0b, 0x85, 0xfb,
+	0x99, 0x81, 0xb1, 0x17, 0x11, 0x18, 0xad, 0x06, 0xef, 0xf5, 0x04, 0x2f, 0x5e, 0x70, 0x77, 0x05,
+	0x2f, 0x4d, 0x30, 0x6f, 0x82, 0x79, 0x13, 0xcc, 0x9b, 0x60, 0xde, 0x04, 0xf3, 0x26, 0x98, 0x37,
+	0xc1, 0xfc, 0xf4, 0xc1, 0xfc, 0xcf, 0x18, 0x38, 0x6a, 0x23, 0xf1, 0x7d, 0x25, 0xaf, 0x6b, 0xba,
+	0x98, 0x79, 0x60, 0x4e, 0x24, 0xc5, 0xf2, 0xa2, 0xef, 0x8e, 0x0d, 0xe8, 0x8e, 0x7d, 0xfd, 0x55,
+	0x19, 0x0c, 0x79, 0x8a, 0x03, 0x54, 0xc0, 0x44, 0x46, 0xd9, 0xd9, 0x54, 0xac, 0xed, 0x3a, 0xa6,
+	0x46, 0xd9, 0x2b, 0x42, 0x0d, 0x42, 0x9f, 0xbd, 0xda, 0x59, 0x23, 0x08, 0x9c, 0x7a, 0xad, 0xc7,
+	0x37, 0xac, 0x08, 0x9d, 0x5a, 0x58, 0xd1, 0xfa, 0x8d, 0x86, 0x15, 0xed, 0xa7, 0x1c, 0x56, 0x84,
+	0x7f, 0xbb, 0x61, 0x45, 0xa4, 0x8e, 0xb0, 0xa2, 0x16, 0x36, 0xc2, 0x13, 0x40, 0xfb, 0xeb, 0x62,
+	0x63, 0x67, 0x23, 0xe0, 0x7e, 0x72, 0x6c, 0xec, 0xae, 0x31, 0x14, 0xc1, 0x13, 0x63, 0x63, 0x4f,
+	0x03, 0xd8, 0x18, 0x7c, 0x0d, 0x6c, 0x8c, 0x1e, 0x3b, 0xd0, 0x21, 0x1f, 0x6c, 0xcc, 0xc1, 0x0a,
+	0x54, 0x61, 0xcf, 0x35, 0x0e, 0x88, 0x21, 0xa1, 0xc7, 0x0d, 0x48, 0x88, 0x87, 0x3d, 0xb2, 0x92,
+	0x7e, 0x30, 0xaf, 0x59, 0xd4, 0xec, 0xf0, 0x09, 0xc0, 0xbc, 0x4b, 0x56, 0x6e, 0xce, 0x6b, 0xa6,
+	0x20, 0xf4, 0x11, 0xec, 0x74, 0x0a, 0x18, 0x39, 0xb1, 0x9d, 0xe8, 0xb3, 0xc7, 0x4e, 0x4e, 0x53,
+	0x38, 0x7c, 0x70, 0x24, 0xfa, 0x7d, 0x18, 0xc9, 0xe2, 0x2d, 0xb1, 0x98, 0xd7, 0xd3, 0x66, 0xdd,
+	0x9c, 0xed, 0xad, 0x31, 0xfd, 0x6d, 0x42, 0x8f, 0x49, 0xbe, 0x61, 0x50, 0xa3, 0x8f, 0x20, 0xb2,
+	0x0a, 0xee, 0x99, 0xbc, 0xa8, 0x69, 0xc6, 0xe4, 0x1b, 0xe1, 0xd5, 0xb8, 0xff, 0x4a, 0x35, 0xc8,
+	0x57, 0x08, 0xb5, 0x3d, 0xe3, 0x6d, 0x02, 0xa3, 0x79, 0xde, 0x2f, 0xee, 0x3c, 0x2f, 0x03, 0xc9,
+	0x81, 0xe1, 0x09, 0x2e, 0x59, 0x03, 0xc3, 0x53, 0xdc, 0x1c, 0x1c, 0x86, 0xfd, 0xa6, 0xf4, 0xd8,
+	0x8a, 0x22, 0x6f, 0x49, 0xb9, 0xa2, 0x2a, 0x92, 0x85, 0x85, 0x02, 0x89, 0x39, 0x18, 0xf5, 0x01,
+	0x78, 0xb8, 0xc0, 0x25, 0x92, 0x5c, 0x72, 0x81, 0x4b, 0xce, 0xf1, 0xf1, 0x6a, 0xf8, 0x1e, 0x31,
+	0x51, 0x3b, 0x78, 0x50, 0x06, 0xc1, 0x19, 0x6e, 0xb6, 0x26, 0xbc, 0xb7, 0x9b, 0x81, 0x40, 0xdb,
+	0x65, 0x2e, 0x31, 0xcb, 0xcd, 0x9f, 0x04, 0xa9, 0xa1, 0x89, 0xa3, 0x1d, 0x14, 0x79, 0xa7, 0xb9,
+	0x44, 0xa2, 0x36, 0x52, 0x77, 0x9b, 0xf4, 0x5d, 0x94, 0x3e, 0x45, 0x62, 0x93, 0xe9, 0xea, 0x48,
+	0x4d, 0x38, 0xa2, 0x26, 0xc7, 0x28, 0xe1, 0x48, 0x4d, 0x73, 0xa9, 0x04, 0x7f, 0x09, 0x22, 0xc7,
+	0xca, 0x70, 0x12, 0x0f, 0x9b, 0xc4, 0x43, 0x84, 0x38, 0x79, 0x99, 0x4b, 0xce, 0xf3, 0x13, 0xb0,
+	0xcf, 0x3d, 0xc9, 0x0e, 0xf2, 0x5e, 0x93, 0x9c, 0xa1, 0xd6, 0x5c, 0xe6, 0x12, 0xf3, 0x6b, 0xa1,
+	0x70, 0x90, 0x09, 0xd9, 0x81, 0x40, 0x07, 0x03, 0xd7, 0x42, 0xe1, 0x2e, 0xa6, 0x7b, 0x2d, 0x14,
+	0x1e, 0x65, 0xa2, 0x6b, 0xa1, 0xf0, 0x10, 0x33, 0xbc, 0x16, 0x0a, 0x33, 0x4c, 0xef, 0xd8, 0xaf,
+	0x22, 0xf0, 0x5c, 0xd5, 0x40, 0xc0, 0x4c, 0xeb, 0x7f, 0x4b, 0xa1, 0x80, 0x55, 0x4d, 0x08, 0x34,
+	0x7c, 0x14, 0xd2, 0x84, 0xfd, 0x26, 0xec, 0x37, 0x61, 0xbf, 0x09, 0xfb, 0x4d, 0xd8, 0x6f, 0xc2,
+	0x7e, 0x13, 0xf6, 0x09, 0xec, 0x2f, 0x3a, 0xd2, 0x7f, 0xfb, 0x0a, 0x82, 0x80, 0x0b, 0x79, 0x31,
+	0x43, 0x33, 0xe8, 0xc5, 0xb3, 0x2f, 0x96, 0xaa, 0x5c, 0xc7, 0x18, 0x5b, 0x72, 0x44, 0x0c, 0x8e,
+	0xeb, 0x0b, 0x4e, 0xee, 0xe1, 0x17, 0x4b, 0x55, 0xaf, 0x38, 0x8c, 0x95, 0x23, 0xf0, 0x42, 0xb5,
+	0x83, 0x04, 0x87, 0x90, 0xe6, 0x19, 0xc0, 0xff, 0xb1, 0x33, 0x80, 0x66, 0x19, 0xbe, 0x59, 0x86,
+	0x6f, 0x96, 0xe1, 0xbf, 0xe1, 0x32, 0xfc, 0xe6, 0x8b, 0xa5, 0x9a, 0x97, 0xb2, 0x9e, 0x97, 0xc1,
+	0xfb, 0x8d, 0xd6, 0xe5, 0xf9, 0x6a, 0x00, 0x3e, 0xee, 0xad, 0xcb, 0xef, 0x1f, 0x02, 0x7f, 0x52,
+	0x9e, 0xaf, 0x02, 0xed, 0x17, 0x2b, 0x0b, 0xf6, 0xfb, 0x87, 0xc0, 0x97, 0x96, 0xff, 0xb0, 0x66,
+	0x21, 0x3f, 0xe5, 0x5b, 0xc8, 0xdf, 0x3f, 0x04, 0x35, 0x98, 0xf8, 0x8d, 0xda, 0x51, 0xc4, 0x8c,
+	0x6f, 0x99, 0x7f, 0xff, 0x10, 0xd4, 0xe2, 0xe2, 0xaf, 0x57, 0x0b, 0x32, 0x26, 0x7d, 0x4f, 0x01,
+	0xc8, 0xa0, 0xf9, 0xd2, 0xf3, 0xb7, 0xab, 0x47, 0x1f, 0xa9, 0x6a, 0xc7, 0x03, 0xfb, 0x87, 0xa0,
+	0x1a, 0xd3, 0x89, 0x4e, 0x0e, 0x9e, 0x46, 0xe0, 0x77, 0xaa, 0x5f, 0x03, 0x68, 0xe2, 0x77, 0x13,
+	0xbf, 0x9b, 0xf8, 0xdd, 0xc4, 0xef, 0x26, 0x7e, 0x9f, 0x12, 0x7e, 0x67, 0x5f, 0x2c, 0x1d, 0x73,
+	0xeb, 0xaa, 0x89, 0xe0, 0xbf, 0xc3, 0x08, 0x7e, 0xb3, 0x3a, 0x82, 0x4f, 0x7b, 0x10, 0xbc, 0x95,
+	0x22, 0x78, 0xa3, 0xf0, 0xfd, 0xb3, 0x2e, 0xf8, 0x56, 0xd5, 0x7a, 0xff, 0xb1, 0xe8, 0xdd, 0xac,
+	0x99, 0x37, 0x6b, 0xe6, 0xcd, 0x9a, 0x79, 0xfd, 0x35, 0xf3, 0xd1, 0x53, 0xab, 0x99, 0x47, 0xdf,
+	0x40, 0xcd, 0x7c, 0x31, 0xfd, 0x62, 0xa9, 0xf6, 0xad, 0xa0, 0xe7, 0x65, 0xf0, 0xee, 0xb1, 0xa5,
+	0xe0, 0x4a, 0xac, 0x69, 0x37, 0xaa, 0xbd, 0xf3, 0xfc, 0x72, 0x35, 0x9c, 0x89, 0x7b, 0x4a, 0xbd,
+	0xf5, 0xc1, 0x8c, 0xa7, 0x06, 0x5c, 0x15, 0x66, 0x4e, 0x80, 0x09, 0x95, 0xb5, 0xe1, 0x86, 0x30,
+	0xa1, 0xb2, 0x74, 0x5c, 0x37, 0x26, 0x8c, 0x9a, 0xa2, 0x46, 0x28, 0x26, 0x2c, 0x70, 0xa9, 0xe9,
+	0xda, 0x98, 0x00, 0x98, 0xc0, 0x5a, 0x28, 0x1c, 0x60, 0x82, 0x35, 0xca, 0xc3, 0x23, 0xcc, 0xe8,
+	0xd8, 0x5f, 0x77, 0xc1, 0xb7, 0x6b, 0x9c, 0x04, 0x37, 0xb1, 0xa1, 0x89, 0x0d, 0x4d, 0x6c, 0xf8,
+	0x7f, 0x7b, 0x9e, 0xba, 0x28, 0xbe, 0x58, 0x3a, 0xee, 0xa2, 0x48, 0x63, 0xe8, 0xb0, 0xd0, 0x44,
+	0x87, 0x53, 0x40, 0x87, 0xca, 0x13, 0xc7, 0xc6, 0xd1, 0x61, 0x94, 0x89, 0x8e, 0xfd, 0xe3, 0xdb,
+	0xb0, 0xc7, 0x58, 0xed, 0x1b, 0x05, 0x9c, 0xa1, 0x28, 0x30, 0x07, 0x7b, 0x54, 0xac, 0x29, 0x45,
+	0x35, 0x83, 0xcd, 0x85, 0x67, 0x5c, 0x09, 0x8a, 0x58, 0x97, 0x7e, 0xda, 0xd4, 0x10, 0x03, 0xd8,
+	0x2b, 0x42, 0xb7, 0x45, 0x66, 0x2c, 0xd9, 0xbf, 0x6b, 0x83, 0x5d, 0xc6, 0x7d, 0x22, 0x15, 0xe7,
+	0x24, 0x45, 0x36, 0xbf, 0x93, 0xfc, 0xd3, 0x36, 0xc2, 0xf7, 0xe4, 0x29, 0xf8, 0xef, 0x56, 0x38,
+	0x0b, 0xbb, 0x35, 0xa5, 0xa8, 0x6f, 0x63, 0x51, 0xd3, 0x45, 0x4d, 0x12, 0xd1, 0x5b, 0xf1, 0x65,
+	0x4d, 0x12, 0x63, 0xeb, 0x62, 0x46, 0xda, 0x92, 0x32, 0xe3, 0xb1, 0x0d, 0xab, 0x35, 0x46, 0xdf,
+	0x0b, 0x54, 0x10, 0x1c, 0x81, 0x1d, 0x19, 0x2c, 0xeb, 0xaa, 0x98, 0x2f, 0x6a, 0x28, 0x12, 0xbf,
+	0xb7, 0x31, 0x1e, 0x5b, 0x31, 0x9e, 0x63, 0xf7, 0x36, 0xe0, 0x28, 0x6c, 0x23, 0x1c, 0x45, 0x0d,
+	0x9d, 0xa1, 0x4d, 0xd7, 0x08, 0xfb, 0xbd, 0x0d, 0x8b, 0x39, 0x06, 0xdb, 0x8d, 0xe6, 0x24, 0xea,
+	0x77, 0xb5, 0x27, 0x2d, 0x8a, 0x49, 0xd8, 0x43, 0xad, 0x3a, 0xd2, 0x31, 0x42, 0x09, 0xa9, 0x31,
+	0x0e, 0x4d, 0x16, 0xfd, 0x25, 0xd8, 0x29, 0x2b, 0xaa, 0xbe, 0x8d, 0x8b, 0xaa, 0x52, 0xc0, 0x68,
+	0x24, 0x7e, 0x8d, 0x7e, 0x18, 0x8f, 0xdd, 0x26, 0x6f, 0x63, 0xc6, 0x93, 0x45, 0x3c, 0x0e, 0xe1,
+	0x2e, 0xd6, 0x74, 0x93, 0x76, 0xd8, 0xa6, 0xfd, 0x1e, 0xd6, 0x74, 0x0f, 0xe9, 0x04, 0xec, 0xf8,
+	0xbe, 0x58, 0x10, 0x65, 0x62, 0x2e, 0x8a, 0x79, 0x46, 0x66, 0x8d, 0xb4, 0x18, 0xb6, 0x9b, 0xe4,
+	0xb3, 0xb0, 0x5b, 0x2c, 0x6a, 0xc4, 0x36, 0x49, 0xa4, 0x2c, 0xde, 0xc1, 0x5c, 0xb6, 0x5a, 0x5d,
+	0x6c, 0x53, 0xb0, 0x3b, 0x23, 0xca, 0x62, 0x56, 0x34, 0xbb, 0x8b, 0xa2, 0xf1, 0x15, 0xfa, 0x3c,
+	0x1e, 0x33, 0xfe, 0xb7, 0x7b, 0x6c, 0x32, 0x5c, 0x80, 0xed, 0xc5, 0x07, 0x74, 0x80, 0x10, 0x6b,
+	0x9b, 0x7f, 0xef, 0xa6, 0x39, 0x3c, 0x47, 0xa3, 0x4c, 0xba, 0x79, 0x34, 0xca, 0xb4, 0x7f, 0xce,
+	0x51, 0xb6, 0x29, 0x52, 0x1e, 0x8a, 0x94, 0xc3, 0xb2, 0x2d, 0x95, 0xec, 0x21, 0x47, 0x96, 0x59,
+	0xea, 0x3e, 0xa0, 0xef, 0xbd, 0x96, 0xcd, 0x41, 0x86, 0xda, 0x25, 0x6e, 0xa9, 0x52, 0x46, 0xa4,
+	0x73, 0x82, 0xc6, 0xe2, 0xcb, 0xf4, 0xc9, 0x9a, 0x3e, 0xe3, 0xc9, 0x9c, 0x1a, 0x93, 0x2f, 0x09,
+	0x3b, 0x37, 0x55, 0xf1, 0x91, 0x94, 0x37, 0x7a, 0x75, 0x21, 0x6e, 0x92, 0xee, 0x60, 0x83, 0x93,
+	0xa7, 0x8d, 0xee, 0x0e, 0x2e, 0x42, 0x94, 0xc3, 0xea, 0x8e, 0x28, 0xef, 0x91, 0x5e, 0x58, 0x16,
+	0xbe, 0x65, 0x5b, 0x78, 0xdd, 0x68, 0x34, 0x7a, 0xe5, 0xb6, 0x93, 0xf8, 0x4c, 0x48, 0x0d, 0xb0,
+	0x57, 0x56, 0x5b, 0x84, 0x4e, 0xea, 0x21, 0xc6, 0x7b, 0xf4, 0x57, 0x61, 0xc8, 0x88, 0x79, 0x1d,
+	0xab, 0xb2, 0xa8, 0xdb, 0x5e, 0x73, 0x8e, 0x7a, 0xcd, 0x7f, 0xb4, 0x9b, 0x5e, 0xf3, 0x2f, 0xed,
+	0x64, 0x7d, 0xd2, 0xbe, 0x79, 0xd7, 0xa7, 0xd1, 0xa7, 0xca, 0xf5, 0xc9, 0xc1, 0x6e, 0x87, 0x8d,
+	0x45, 0x0d, 0x0d, 0x1f, 0x8d, 0x77, 0x25, 0xf5, 0x28, 0x6c, 0x33, 0xe6, 0xc5, 0x74, 0x1f, 0x6b,
+	0x5a, 0xcc, 0xe6, 0x14, 0xec, 0x7a, 0xa0, 0xa8, 0xd8, 0x5e, 0x2d, 0x17, 0x3c, 0x8b, 0xec, 0x26,
+	0x69, 0xf4, 0x4e, 0x4c, 0x0a, 0x76, 0x99, 0xf4, 0x92, 0x9c, 0x95, 0xc4, 0x0a, 0x26, 0x8b, 0xfc,
+	0x06, 0x69, 0x3d, 0x9a, 0x7e, 0x48, 0xe7, 0xc3, 0x60, 0x39, 0xef, 0xb7, 0x33, 0xb8, 0x19, 0x96,
+	0x60, 0xaf, 0xed, 0x00, 0xa6, 0xba, 0x24, 0x1a, 0xaf, 0xea, 0x04, 0x96, 0x52, 0x7b, 0x45, 0xbe,
+	0x0b, 0x19, 0x2f, 0x3f, 0x7a, 0xe7, 0x58, 0xf6, 0x06, 0xd7, 0xde, 0x38, 0x84, 0x32, 0x41, 0xa7,
+	0x3d, 0xea, 0xb2, 0xc3, 0xce, 0xbd, 0x63, 0x57, 0xdc, 0xf3, 0x7a, 0xaa, 0xb6, 0x8b, 0xb3, 0x58,
+	0xae, 0xf4, 0x87, 0x0d, 0xfa, 0xde, 0x6b, 0xd3, 0x2c, 0x64, 0xb4, 0x5d, 0x49, 0x7f, 0x84, 0xd5,
+	0xbc, 0x28, 0x67, 0x0d, 0x9b, 0xce, 0x3b, 0x78, 0xec, 0x26, 0xb7, 0x49, 0x17, 0x61, 0xb8, 0x28,
+	0x62, 0x83, 0x3c, 0x1a, 0xbf, 0x25, 0x65, 0xb3, 0x79, 0x4c, 0x0d, 0x19, 0x8f, 0xdd, 0x5b, 0xbe,
+	0xe6, 0xa6, 0x9d, 0x84, 0xb0, 0x28, 0xda, 0x0e, 0x1a, 0xab, 0xa4, 0xae, 0x58, 0x09, 0x11, 0x87,
+	0x49, 0x64, 0xa1, 0xa1, 0x98, 0xaf, 0x45, 0x74, 0xd9, 0x79, 0xc7, 0x88, 0xd2, 0x57, 0x8c, 0x91,
+	0x93, 0x74, 0x02, 0x76, 0x99, 0x6e, 0x69, 0xd8, 0x3f, 0x5a, 0xe1, 0x90, 0x2e, 0xf3, 0x2f, 0xc1,
+	0x4e, 0x63, 0x8b, 0x31, 0x3c, 0x7f, 0xc4, 0xbb, 0xc1, 0xb8, 0x5c, 0x7e, 0x1c, 0x42, 0x63, 0xa7,
+	0x34, 0xa7, 0xca, 0xb3, 0x4d, 0xba, 0xa7, 0x0a, 0x52, 0x2f, 0x31, 0xc4, 0x9e, 0xf7, 0xf5, 0x11,
+	0xa7, 0x6c, 0xe7, 0x96, 0x10, 0xb1, 0xb7, 0x00, 0x73, 0x5b, 0xe0, 0x61, 0xa8, 0x24, 0x63, 0x9d,
+	0x0d, 0xd2, 0x78, 0x2f, 0x5e, 0xfb, 0x82, 0xec, 0x0a, 0x45, 0x7c, 0x23, 0x92, 0xfe, 0xfb, 0xa7,
+	0x00, 0x08, 0x94, 0x17, 0x6d, 0x42, 0x28, 0x19, 0x55, 0xe5, 0x74, 0x6e, 0xd7, 0xcc, 0xbc, 0xde,
+	0x9d, 0x3c, 0xc1, 0x6f, 0xe2, 0x4c, 0xfa, 0xdf, 0x0e, 0xe2, 0x49, 0x9c, 0x06, 0x56, 0x81, 0xd0,
+	0x21, 0x59, 0xaf, 0x51, 0x11, 0xf6, 0x5a, 0x3a, 0xb0, 0xad, 0xaa, 0x8d, 0xaa, 0x5a, 0xae, 0x4b,
+	0xd5, 0x35, 0x3f, 0x85, 0x11, 0xc9, 0xdd, 0x88, 0x76, 0x61, 0xaf, 0x7d, 0xc9, 0xd8, 0xbe, 0xc3,
+	0x67, 0x5c, 0xb2, 0xe3, 0x5f, 0x4f, 0xad, 0x5f, 0x29, 0xc4, 0xd6, 0xcb, 0x94, 0x3c, 0xad, 0x48,
+	0x82, 0xdd, 0x47, 0x63, 0x9a, 0x16, 0x55, 0x36, 0x46, 0x95, 0xbe, 0x57, 0xe7, 0xb0, 0x1a, 0xc1,
+	0xb5, 0xad, 0xaf, 0xd3, 0x1e, 0xd8, 0x65, 0x15, 0x7d, 0x02, 0xfb, 0x2a, 0x86, 0x96, 0x68, 0x3c,
+	0x4f, 0x35, 0xae, 0x34, 0x34, 0xba, 0x1e, 0xbd, 0xbd, 0x9e, 0xf1, 0x5d, 0x56, 0xd1, 0x0f, 0x61,
+	0x5f, 0xc5, 0x08, 0x13, 0xed, 0x63, 0x54, 0xfb, 0xd5, 0xc6, 0x06, 0xd9, 0xa3, 0x1e, 0x79, 0x87,
+	0x79, 0x59, 0x45, 0x29, 0xd8, 0x91, 0x95, 0xb4, 0x07, 0x69, 0x4d, 0x7a, 0x84, 0xe9, 0x81, 0x5b,
+	0x37, 0x3f, 0x40, 0xd2, 0x17, 0x02, 0x89, 0x7f, 0xfe, 0x14, 0xf4, 0x12, 0xef, 0x69, 0xbd, 0x18,
+	0x64, 0x7f, 0x73, 0x4e, 0x08, 0x13, 0xc2, 0x0d, 0xe9, 0x11, 0x46, 0x1f, 0x41, 0x68, 0xde, 0x66,
+	0x57, 0x71, 0xd6, 0xcc, 0xd6, 0x4f, 0x92, 0x2b, 0xf5, 0x7d, 0xf6, 0xb8, 0x37, 0x93, 0x57, 0x8a,
+	0x59, 0xca, 0x88, 0x65, 0x5d, 0x12, 0xf3, 0xda, 0x6a, 0x40, 0xe8, 0x30, 0x2e, 0xae, 0xab, 0x38,
+	0x8b, 0x92, 0x30, 0x2c, 0x6a, 0x9a, 0xa4, 0xe9, 0x38, 0x6b, 0x1e, 0xf0, 0xfa, 0x27, 0x9f, 0x01,
+	0xc1, 0xa6, 0x43, 0xff, 0x03, 0x60, 0xd7, 0x8e, 0x98, 0xd9, 0x96, 0x64, 0xe3, 0x07, 0x93, 0x68,
+	0xc2, 0xdd, 0xc1, 0xff, 0x1b, 0x78, 0x55, 0x06, 0x3d, 0x1b, 0xba, 0x28, 0x67, 0x49, 0x82, 0x72,
+	0x35, 0x95, 0x2e, 0x25, 0x4d, 0xa4, 0xff, 0x07, 0x00, 0x17, 0xa0, 0xa7, 0x09, 0xbd, 0x13, 0x9f,
+	0x89, 0x3d, 0x8c, 0x95, 0x56, 0xd6, 0xef, 0x71, 0xb1, 0xc4, 0xcc, 0x75, 0x3e, 0x26, 0x2c, 0xdf,
+	0x1a, 0x8f, 0xed, 0xe0, 0xac, 0x54, 0xdc, 0x89, 0x15, 0xb0, 0xba, 0xa5, 0x90, 0x5d, 0x2e, 0x83,
+	0xe1, 0x65, 0x27, 0xeb, 0x0c, 0x61, 0xfd, 0x4e, 0x7c, 0xde, 0x66, 0x4d, 0xce, 0x5b, 0xac, 0xdb,
+	0x52, 0x6e, 0xdb, 0xc5, 0xf8, 0x9e, 0x93, 0x71, 0x96, 0x30, 0x5e, 0x8a, 0x27, 0xe6, 0x6c, 0xce,
+	0xd9, 0x39, 0x8b, 0xb3, 0x84, 0xd5, 0xbd, 0x0a, 0x76, 0x7b, 0x23, 0x13, 0x3a, 0xcd, 0xde, 0x9a,
+	0x39, 0x44, 0x17, 0xfd, 0xae, 0x5f, 0xba, 0x40, 0x56, 0xce, 0x23, 0x5a, 0xbd, 0xe8, 0xe6, 0xd1,
+	0xab, 0x32, 0x00, 0xd3, 0x56, 0x1a, 0x11, 0xba, 0x18, 0x60, 0xfb, 0x57, 0x83, 0x02, 0xa4, 0x94,
+	0xeb, 0x58, 0x5d, 0x7e, 0x84, 0x66, 0x61, 0xa7, 0xae, 0xe8, 0x24, 0x3b, 0xa2, 0xdf, 0x14, 0x1c,
+	0xae, 0xc2, 0xf6, 0x1e, 0x61, 0xa3, 0x84, 0xc6, 0x55, 0xd6, 0x25, 0x18, 0x91, 0x95, 0x34, 0x49,
+	0xa7, 0xb0, 0x6a, 0xb2, 0x8e, 0xd4, 0x2c, 0x12, 0x74, 0xcb, 0xca, 0xf7, 0x28, 0xb5, 0xc1, 0xbf,
+	0x0e, 0xcf, 0x92, 0x65, 0x88, 0x55, 0x55, 0x4c, 0x6b, 0xca, 0x96, 0xbe, 0x2b, 0x92, 0xb5, 0x8c,
+	0x55, 0x8d, 0x04, 0x64, 0x5d, 0x74, 0xe2, 0xfa, 0x3e, 0x7f, 0x4c, 0xcf, 0xf4, 0x6c, 0x33, 0x68,
+	0xa7, 0x07, 0x2d, 0xb6, 0x0d, 0x93, 0xeb, 0xbe, 0xc1, 0x84, 0x6e, 0x43, 0x56, 0x29, 0x60, 0x55,
+	0xd4, 0x25, 0x39, 0x97, 0xd6, 0xf6, 0x34, 0x1d, 0xef, 0xd8, 0x02, 0xbb, 0x6b, 0x08, 0x1c, 0xb0,
+	0xb9, 0x36, 0x28, 0x93, 0x25, 0xef, 0x1d, 0xd8, 0xae, 0x69, 0xdb, 0xe9, 0x07, 0x78, 0x8f, 0x16,
+	0x2e, 0x3a, 0xf8, 0x9e, 0x5f, 0x97, 0x41, 0x90, 0x3a, 0x82, 0x1a, 0x64, 0x7f, 0x74, 0x45, 0x68,
+	0xd3, 0xb4, 0xed, 0x9b, 0x78, 0x0f, 0xc5, 0x61, 0xbb, 0x98, 0xcd, 0x12, 0x57, 0xa6, 0x67, 0xc8,
+	0x1d, 0x7c, 0x0f, 0xf1, 0x1c, 0x9b, 0x30, 0x20, 0x58, 0xcd, 0xe8, 0x3a, 0xec, 0xcc, 0x28, 0x8a,
+	0x9a, 0x95, 0x08, 0xf4, 0x68, 0xe6, 0x59, 0xf1, 0x39, 0xcf, 0x80, 0x51, 0x5f, 0x5e, 0x39, 0x22,
+	0x33, 0x4a, 0x16, 0x82, 0x93, 0x13, 0xdd, 0x85, 0x83, 0x79, 0x25, 0xa7, 0xa5, 0x35, 0x5d, 0xc5,
+	0xe2, 0x0e, 0xe9, 0x70, 0x56, 0xd2, 0xc4, 0xcd, 0x3c, 0xce, 0xb2, 0xfd, 0x27, 0x28, 0x7e, 0xf4,
+	0x13, 0xe6, 0x0d, 0x8b, 0xf7, 0xaa, 0xc9, 0x8a, 0x3e, 0x86, 0x5d, 0x79, 0x25, 0x97, 0x56, 0x71,
+	0x06, 0x4b, 0x25, 0xac, 0x9a, 0x67, 0xcc, 0x27, 0xf1, 0xe8, 0x33, 0x9f, 0x3d, 0x76, 0xb1, 0x9a,
+	0x7a, 0x3a, 0xf3, 0x4a, 0x4e, 0x30, 0x5f, 0xa1, 0x15, 0x18, 0xd0, 0x76, 0xcd, 0x23, 0x66, 0xff,
+	0x6b, 0xd5, 0xf7, 0x3d, 0x33, 0x4b, 0x45, 0x87, 0x89, 0xac, 0xaf, 0xc9, 0x08, 0x04, 0xb4, 0x5d,
+	0xc4, 0xc3, 0x80, 0xa2, 0x99, 0x67, 0xc5, 0xfe, 0x30, 0x7d, 0xc7, 0x3d, 0x9b, 0x5e, 0x19, 0x8a,
+	0x86, 0x7e, 0x0a, 0x60, 0x48, 0x17, 0x73, 0x1a, 0x1b, 0xa7, 0xdf, 0x8a, 0x3d, 0x19, 0x98, 0xb8,
+	0x33, 0xf6, 0xc9, 0xbb, 0x62, 0x4e, 0xbb, 0x26, 0xeb, 0xea, 0x1e, 0x3f, 0x67, 0x4d, 0x76, 0xc7,
+	0xa7, 0xa0, 0x6d, 0x8c, 0x2c, 0xa9, 0x3f, 0xa1, 0x53, 0xff, 0x29, 0x08, 0x30, 0xad, 0xe4, 0x13,
+	0xfc, 0x14, 0xb4, 0x5f, 0x24, 0x2b, 0xe1, 0x37, 0xe0, 0xe0, 0x17, 0xff, 0x1c, 0x6c, 0xfb, 0x8b,
+	0xa7, 0x20, 0x10, 0x6e, 0x11, 0xa8, 0x09, 0xe8, 0x4f, 0x01, 0xec, 0x2d, 0x49, 0x85, 0x74, 0x41,
+	0x54, 0xc5, 0x1d, 0xdb, 0x77, 0xcf, 0x52, 0xc3, 0xc6, 0xfd, 0x16, 0xc6, 0x7a, 0x71, 0x33, 0x2f,
+	0x69, 0xdb, 0xf7, 0x6f, 0xac, 0xaf, 0x53, 0x16, 0xea, 0xc4, 0xfc, 0x25, 0x73, 0x65, 0x53, 0x7d,
+	0x4f, 0x88, 0xbe, 0x69, 0x2e, 0xc1, 0xa5, 0xa8, 0x21, 0x4f, 0x40, 0x80, 0x35, 0x34, 0x3f, 0x21,
+	0x9a, 0x81, 0xd0, 0x53, 0x92, 0x0a, 0x0e, 0x66, 0xf4, 0x1e, 0x1c, 0x30, 0x7e, 0x8d, 0x4e, 0x49,
+	0x1b, 0xff, 0x17, 0x65, 0x19, 0xe7, 0xd3, 0x52, 0x81, 0xbd, 0x40, 0x97, 0x73, 0x87, 0xe9, 0x2b,
+	0x05, 0x20, 0x20, 0x42, 0x70, 0x57, 0xd9, 0x20, 0xff, 0x52, 0xaa, 0x1b, 0x05, 0xf4, 0x87, 0xb0,
+	0x43, 0xdf, 0x32, 0x3b, 0xc0, 0xfe, 0xb2, 0xfd, 0x75, 0x8e, 0xf1, 0xfb, 0xe8, 0x74, 0x93, 0x8d,
+	0xcd, 0xe0, 0xc7, 0x3a, 0x56, 0x35, 0xd2, 0x0f, 0x21, 0xac, 0x6f, 0x19, 0x26, 0xa2, 0x3f, 0x82,
+	0xdd, 0xf4, 0x37, 0xf5, 0x24, 0x99, 0x86, 0x6c, 0x79, 0xf6, 0xab, 0xf6, 0xd7, 0x01, 0x1a, 0x37,
+	0x33, 0x95, 0xdd, 0x45, 0x5e, 0xdd, 0x30, 0xdf, 0x0c, 0x5d, 0x86, 0x1d, 0xf6, 0x64, 0x22, 0x06,
+	0x06, 0x89, 0xbf, 0xd3, 0xea, 0x8b, 0x40, 0x3e, 0xa2, 0x3e, 0xd8, 0x5a, 0x12, 0xf3, 0x45, 0xe3,
+	0xbb, 0x53, 0x1d, 0x82, 0xf1, 0xb0, 0x18, 0x98, 0x07, 0x8b, 0x9f, 0x3c, 0x2f, 0x83, 0x87, 0xf0,
+	0x3c, 0x3c, 0x43, 0x8b, 0x74, 0x44, 0x5f, 0x6c, 0x03, 0xe7, 0x8d, 0xb2, 0x25, 0x82, 0x09, 0x2e,
+	0x35, 0xcd, 0xa5, 0xb8, 0x19, 0xee, 0x32, 0x7c, 0x1b, 0xf6, 0x19, 0x75, 0x3c, 0x25, 0x8b, 0x63,
+	0xeb, 0x76, 0x3f, 0x51, 0x4f, 0x62, 0x9a, 0x4b, 0xcc, 0x71, 0x89, 0x19, 0x8e, 0x1e, 0x6d, 0xc3,
+	0x4b, 0x70, 0xc0, 0xae, 0xe8, 0xb9, 0xef, 0xfe, 0xf7, 0x26, 0xa7, 0x8d, 0x2b, 0x67, 0xdc, 0xcc,
+	0x34, 0x97, 0x5c, 0xe0, 0x52, 0xb3, 0xfc, 0xdb, 0xb0, 0xdb, 0xc8, 0x5e, 0x9d, 0x17, 0xd9, 0x03,
+	0x2f, 0xcb, 0x20, 0x4a, 0x0f, 0x33, 0xb8, 0x58, 0x2a, 0x41, 0x3a, 0xcb, 0x73, 0xb0, 0xc3, 0xfe,
+	0xa9, 0x41, 0x74, 0xee, 0x59, 0x19, 0xb4, 0xbe, 0x2c, 0x83, 0xd0, 0x41, 0x19, 0x44, 0x66, 0xb9,
+	0x39, 0x2e, 0x71, 0x99, 0x4b, 0x25, 0xb9, 0x54, 0x8a, 0x4b, 0xcd, 0x50, 0xea, 0x51, 0x08, 0xb3,
+	0xb8, 0x90, 0x57, 0xf6, 0x76, 0xb0, 0xac, 0xd3, 0x6f, 0x0d, 0x84, 0xcd, 0xfb, 0x06, 0xc1, 0x79,
+	0x6e, 0x81, 0x8f, 0xc3, 0x2e, 0xe7, 0x8e, 0x4f, 0xbf, 0x39, 0x3f, 0xe2, 0x28, 0x93, 0x85, 0x13,
+	0xb3, 0x9c, 0x7d, 0xdd, 0x9e, 0x6e, 0x50, 0xd6, 0x86, 0xe0, 0xb4, 0xb2, 0xdf, 0xe4, 0xe8, 0xa3,
+	0x96, 0x26, 0xb8, 0x64, 0x72, 0x2d, 0x14, 0x8e, 0x32, 0xe7, 0xd6, 0x42, 0xe1, 0x10, 0xd3, 0x6a,
+	0x9f, 0xba, 0x1b, 0x17, 0xed, 0x8d, 0xb3, 0xf7, 0x3e, 0xa6, 0x7f, 0xec, 0x27, 0x0c, 0xec, 0x59,
+	0x51, 0xb1, 0xa8, 0x63, 0xbb, 0x6e, 0xf6, 0x1d, 0xff, 0xba, 0x99, 0xb7, 0x4c, 0x76, 0xc1, 0xaf,
+	0x4a, 0xe6, 0xad, 0x0c, 0x5c, 0xaa, 0x56, 0x18, 0xf0, 0xcb, 0x17, 0xbe, 0x5b, 0x5f, 0xbe, 0x60,
+	0x66, 0x0a, 0x1f, 0x9f, 0x72, 0xa6, 0xe0, 0xce, 0x11, 0x94, 0x37, 0x99, 0x23, 0xf8, 0x65, 0x07,
+	0x7f, 0xfc, 0x46, 0xb3, 0x03, 0xdf, 0xbc, 0x20, 0xf3, 0x26, 0xf2, 0x02, 0x6f, 0x46, 0x50, 0x7a,
+	0xe3, 0x19, 0x81, 0x7f, 0x2e, 0xf0, 0xf0, 0xcd, 0xe7, 0x02, 0x55, 0xb2, 0x80, 0x6f, 0x59, 0x40,
+	0x7f, 0xde, 0x2f, 0x9e, 0x77, 0x47, 0xbd, 0xc3, 0x15, 0x79, 0x8b, 0x23, 0x3f, 0x19, 0xf4, 0x44,
+	0x70, 0x76, 0xc4, 0xc6, 0x7a, 0x22, 0xb6, 0xa3, 0x08, 0x6d, 0xb9, 0x9e, 0x08, 0xcd, 0x1d, 0x9b,
+	0xdd, 0xae, 0x2b, 0x36, 0x5b, 0x0d, 0x56, 0x8b, 0xca, 0x7e, 0xbf, 0xee, 0xa8, 0x2c, 0xe2, 0x89,
+	0xca, 0x56, 0x83, 0xee, 0x88, 0xec, 0xfd, 0xfa, 0x22, 0xb2, 0x90, 0x1d, 0x8d, 0x2d, 0xd5, 0x15,
+	0x8d, 0x85, 0xec, 0x48, 0xec, 0xc3, 0x3a, 0x02, 0x31, 0x37, 0x04, 0x1c, 0x05, 0x62, 0x66, 0x40,
+	0x35, 0xe6, 0x97, 0x06, 0xad, 0x86, 0x5c, 0x29, 0xcf, 0x79, 0x9f, 0x94, 0x87, 0x90, 0xd4, 0x9f,
+	0xde, 0x84, 0xbc, 0xe9, 0x4d, 0x63, 0x31, 0x55, 0xfd, 0x41, 0x49, 0xef, 0x8b, 0x25, 0xcf, 0xe1,
+	0x12, 0x3f, 0xe6, 0x8d, 0x14, 0x7a, 0xf7, 0x0f, 0x81, 0xfb, 0x15, 0x3f, 0xe4, 0x8c, 0x12, 0xba,
+	0xf7, 0x0f, 0xc1, 0xd1, 0x23, 0x3f, 0xe2, 0x8a, 0x09, 0x7a, 0xf6, 0x0f, 0x81, 0xe3, 0x99, 0x9f,
+	0xae, 0x02, 0xf4, 0xec, 0xfe, 0x21, 0xf0, 0x6d, 0xe1, 0x63, 0x9e, 0x20, 0x82, 0xd9, 0x3f, 0x04,
+	0xae, 0x37, 0x9e, 0x38, 0xc0, 0x38, 0x39, 0xeb, 0x66, 0x7a, 0xcc, 0x38, 0xe0, 0x6f, 0x3a, 0x61,
+	0xc4, 0xbc, 0x42, 0x61, 0x07, 0x02, 0x92, 0x0f, 0xa2, 0xf2, 0x75, 0x82, 0x81, 0xe3, 0x7a, 0x86,
+	0x59, 0x32, 0x69, 0x71, 0xc2, 0xeb, 0x27, 0xd5, 0xe1, 0x75, 0xb5, 0x21, 0x48, 0xf0, 0xd3, 0x5b,
+	0x81, 0xb5, 0x3f, 0xac, 0x8e, 0xb5, 0x37, 0x1a, 0x03, 0x06, 0x3f, 0xf5, 0x95, 0xc0, 0x5b, 0xf0,
+	0x07, 0xde, 0xab, 0x75, 0x03, 0xaf, 0x9f, 0x5a, 0x17, 0x0a, 0xff, 0x18, 0xd4, 0x84, 0xe1, 0xb5,
+	0x06, 0x61, 0xd8, 0x4f, 0xbf, 0x0f, 0x26, 0xff, 0x04, 0xd4, 0x04, 0xe5, 0x9b, 0x8d, 0x82, 0xb2,
+	0x9f, 0x19, 0x7e, 0x08, 0xfd, 0x6d, 0x44, 0x2e, 0xf0, 0x0d, 0x20, 0x17, 0x70, 0x23, 0x97, 0xff,
+	0x2e, 0x1f, 0x38, 0x7e, 0x97, 0x0f, 0x34, 0xb2, 0xcb, 0x07, 0x4e, 0x77, 0x97, 0x5f, 0xbc, 0x53,
+	0xb1, 0x59, 0x3f, 0x2f, 0x83, 0x45, 0x38, 0x00, 0x7b, 0xcd, 0x2b, 0x1f, 0x92, 0x9c, 0x33, 0x33,
+	0x41, 0x04, 0x66, 0x60, 0xac, 0x4a, 0x1e, 0x19, 0xa6, 0xe9, 0x23, 0x97, 0x5c, 0xa8, 0xb9, 0x8d,
+	0xbf, 0xc9, 0x8d, 0xda, 0xbb, 0x45, 0xff, 0x8a, 0x81, 0x9d, 0xd7, 0xb1, 0xde, 0xcc, 0xd3, 0x9a,
+	0x79, 0x5a, 0x33, 0x4f, 0x6b, 0xe6, 0x69, 0xc7, 0xe5, 0x69, 0x8b, 0xc7, 0x9e, 0x05, 0x54, 0xaf,
+	0xfa, 0xcf, 0x1f, 0x57, 0xf5, 0xaf, 0x5a, 0xdf, 0x6f, 0x66, 0x87, 0xb5, 0xb3, 0xc3, 0xdb, 0xae,
+	0xe4, 0x6c, 0xf1, 0x64, 0x55, 0xf2, 0xa3, 0x4d, 0xbf, 0x22, 0x33, 0xfb, 0x2e, 0x84, 0x14, 0x8d,
+	0x34, 0x5d, 0xd4, 0x31, 0xcd, 0x3a, 0x7b, 0x92, 0xa3, 0x7e, 0x63, 0x67, 0xdd, 0x5b, 0xc5, 0x02,
+	0x85, 0x2f, 0xfa, 0x11, 0xdd, 0x3d, 0x8d, 0x3a, 0x79, 0x45, 0xe9, 0xfb, 0x5b, 0x92, 0x2d, 0x26,
+	0x6b, 0xc7, 0x11, 0xa7, 0x9b, 0x22, 0xf6, 0x55, 0x44, 0x1d, 0x5f, 0x2d, 0x81, 0xdf, 0xf9, 0x2c,
+	0xb1, 0x8f, 0xe9, 0xe7, 0x7f, 0x06, 0x5e, 0x7e, 0x11, 0x6d, 0xf9, 0xfc, 0x8b, 0x68, 0xcb, 0xd7,
+	0x5f, 0x44, 0xc1, 0x8f, 0x0e, 0xa2, 0xe0, 0x6f, 0x0f, 0xa2, 0xe0, 0xe7, 0x07, 0x51, 0xf0, 0xf2,
+	0x20, 0x0a, 0x3e, 0x3f, 0x88, 0x82, 0x5f, 0x1c, 0x44, 0xc1, 0x57, 0x07, 0xd1, 0x96, 0xaf, 0x0f,
+	0xa2, 0xe0, 0x2f, 0xbf, 0x8c, 0xb6, 0x3c, 0xfb, 0x32, 0x0a, 0x5e, 0x7e, 0x19, 0x6d, 0xf9, 0xfc,
+	0xcb, 0x68, 0xcb, 0x1f, 0x7c, 0x94, 0x53, 0x0a, 0x0f, 0x72, 0x93, 0xd6, 0x4e, 0x33, 0x59, 0xd4,
+	0xa6, 0xec, 0xf3, 0x89, 0x89, 0x82, 0xaa, 0x94, 0xa4, 0x2c, 0x56, 0x27, 0xac, 0xe6, 0xa9, 0xc2,
+	0x66, 0x4e, 0x99, 0xc2, 0x0f, 0x75, 0xeb, 0x2f, 0x0a, 0xd5, 0xf8, 0x33, 0x49, 0x9b, 0x6d, 0xf4,
+	0x2f, 0xf3, 0xa4, 0xfe, 0x37, 0x00, 0x00, 0xff, 0xff, 0xe5, 0xa7, 0x4d, 0xf9, 0x54, 0x69, 0x00,
 	0x00,
 }
 
@@ -4780,6 +5258,15 @@ func (this *AzureVnetIngressEgressGwType) Equal(that interface{}) bool {
 	} else if this.GlobalNetworkChoice == nil {
 		return false
 	} else if !this.GlobalNetworkChoice.Equal(that1.GlobalNetworkChoice) {
+		return false
+	}
+	if that1.DcClusterGroupChoice == nil {
+		if this.DcClusterGroupChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupChoice == nil {
+		return false
+	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
 	return true
@@ -5048,6 +5535,78 @@ func (this *AzureVnetIngressEgressGwType_GlobalNetworkList) Equal(that interface
 	}
 	return true
 }
+func (this *AzureVnetIngressEgressGwType_NoDcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwType_NoDcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwType_NoDcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoDcClusterGroup.Equal(that1.NoDcClusterGroup) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroupOutsideVn.Equal(that1.DcClusterGroupOutsideVn) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwType_DcClusterGroupInsideVn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwType_DcClusterGroupInsideVn)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwType_DcClusterGroupInsideVn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroupInsideVn.Equal(that1.DcClusterGroupInsideVn) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetIngressEgressGwARType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5116,6 +5675,15 @@ func (this *AzureVnetIngressEgressGwARType) Equal(that interface{}) bool {
 	} else if this.GlobalNetworkChoice == nil {
 		return false
 	} else if !this.GlobalNetworkChoice.Equal(that1.GlobalNetworkChoice) {
+		return false
+	}
+	if that1.DcClusterGroupChoice == nil {
+		if this.DcClusterGroupChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupChoice == nil {
+		return false
+	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
 	return true
@@ -5384,6 +5952,78 @@ func (this *AzureVnetIngressEgressGwARType_GlobalNetworkList) Equal(that interfa
 	}
 	return true
 }
+func (this *AzureVnetIngressEgressGwARType_NoDcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARType_NoDcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARType_NoDcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoDcClusterGroup.Equal(that1.NoDcClusterGroup) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroupOutsideVn.Equal(that1.DcClusterGroupOutsideVn) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroupInsideVn.Equal(that1.DcClusterGroupInsideVn) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetVoltstackClusterType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5448,6 +6088,15 @@ func (this *AzureVnetVoltstackClusterType) Equal(that interface{}) bool {
 	} else if this.GlobalNetworkChoice == nil {
 		return false
 	} else if !this.GlobalNetworkChoice.Equal(that1.GlobalNetworkChoice) {
+		return false
+	}
+	if that1.DcClusterGroupChoice == nil {
+		if this.DcClusterGroupChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupChoice == nil {
+		return false
+	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
 	if that1.K8SClusterChoice == nil {
@@ -5686,6 +6335,54 @@ func (this *AzureVnetVoltstackClusterType_GlobalNetworkList) Equal(that interfac
 	}
 	return true
 }
+func (this *AzureVnetVoltstackClusterType_NoDcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterType_NoDcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterType_NoDcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoDcClusterGroup.Equal(that1.NoDcClusterGroup) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetVoltstackClusterType_DcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterType_DcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterType_DcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroup.Equal(that1.DcClusterGroup) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetVoltstackClusterType_NoK8SCluster) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5841,6 +6538,15 @@ func (this *AzureVnetVoltstackClusterARType) Equal(that interface{}) bool {
 	} else if this.GlobalNetworkChoice == nil {
 		return false
 	} else if !this.GlobalNetworkChoice.Equal(that1.GlobalNetworkChoice) {
+		return false
+	}
+	if that1.DcClusterGroupChoice == nil {
+		if this.DcClusterGroupChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupChoice == nil {
+		return false
+	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
 	if that1.K8SClusterChoice == nil {
@@ -6079,6 +6785,54 @@ func (this *AzureVnetVoltstackClusterARType_GlobalNetworkList) Equal(that interf
 	}
 	return true
 }
+func (this *AzureVnetVoltstackClusterARType_NoDcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterARType_NoDcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterARType_NoDcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoDcClusterGroup.Equal(that1.NoDcClusterGroup) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetVoltstackClusterARType_DcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterARType_DcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterARType_DcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroup.Equal(that1.DcClusterGroup) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetVoltstackClusterARType_NoK8SCluster) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6279,6 +7033,15 @@ func (this *AzureVnetIngressEgressGwReplaceType) Equal(that interface{}) bool {
 	} else if this.GlobalNetworkChoice == nil {
 		return false
 	} else if !this.GlobalNetworkChoice.Equal(that1.GlobalNetworkChoice) {
+		return false
+	}
+	if that1.DcClusterGroupChoice == nil {
+		if this.DcClusterGroupChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupChoice == nil {
+		return false
+	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
 	return true
@@ -6547,6 +7310,78 @@ func (this *AzureVnetIngressEgressGwReplaceType_GlobalNetworkList) Equal(that in
 	}
 	return true
 }
+func (this *AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoDcClusterGroup.Equal(that1.NoDcClusterGroup) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroupOutsideVn.Equal(that1.DcClusterGroupOutsideVn) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroupInsideVn.Equal(that1.DcClusterGroupInsideVn) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetIngressEgressGwARReplaceType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6609,6 +7444,15 @@ func (this *AzureVnetIngressEgressGwARReplaceType) Equal(that interface{}) bool 
 	} else if this.GlobalNetworkChoice == nil {
 		return false
 	} else if !this.GlobalNetworkChoice.Equal(that1.GlobalNetworkChoice) {
+		return false
+	}
+	if that1.DcClusterGroupChoice == nil {
+		if this.DcClusterGroupChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupChoice == nil {
+		return false
+	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
 	return true
@@ -6877,6 +7721,78 @@ func (this *AzureVnetIngressEgressGwARReplaceType_GlobalNetworkList) Equal(that 
 	}
 	return true
 }
+func (this *AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoDcClusterGroup.Equal(that1.NoDcClusterGroup) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroupOutsideVn.Equal(that1.DcClusterGroupOutsideVn) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroupInsideVn.Equal(that1.DcClusterGroupInsideVn) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetVoltstackClusterReplaceType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6930,6 +7846,15 @@ func (this *AzureVnetVoltstackClusterReplaceType) Equal(that interface{}) bool {
 	} else if this.GlobalNetworkChoice == nil {
 		return false
 	} else if !this.GlobalNetworkChoice.Equal(that1.GlobalNetworkChoice) {
+		return false
+	}
+	if that1.DcClusterGroupChoice == nil {
+		if this.DcClusterGroupChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupChoice == nil {
+		return false
+	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
 	return true
@@ -7150,6 +8075,54 @@ func (this *AzureVnetVoltstackClusterReplaceType_GlobalNetworkList) Equal(that i
 	}
 	return true
 }
+func (this *AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoDcClusterGroup.Equal(that1.NoDcClusterGroup) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterReplaceType_DcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterReplaceType_DcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroup.Equal(that1.DcClusterGroup) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetVoltstackClusterARReplaceType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7203,6 +8176,15 @@ func (this *AzureVnetVoltstackClusterARReplaceType) Equal(that interface{}) bool
 	} else if this.GlobalNetworkChoice == nil {
 		return false
 	} else if !this.GlobalNetworkChoice.Equal(that1.GlobalNetworkChoice) {
+		return false
+	}
+	if that1.DcClusterGroupChoice == nil {
+		if this.DcClusterGroupChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupChoice == nil {
+		return false
+	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
 	return true
@@ -7419,6 +8401,54 @@ func (this *AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList) Equal(that
 		return false
 	}
 	if !this.GlobalNetworkList.Equal(that1.GlobalNetworkList) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoDcClusterGroup.Equal(that1.NoDcClusterGroup) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterARReplaceType_DcClusterGroup)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterARReplaceType_DcClusterGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DcClusterGroup.Equal(that1.DcClusterGroup) {
 		return false
 	}
 	return true
@@ -9197,7 +10227,7 @@ func (this *AzureVnetIngressEgressGwType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 17)
+	s := make([]string, 0, 20)
 	s = append(s, "&azure_vnet_site.AzureVnetIngressEgressGwType{")
 	if this.AzNodes != nil {
 		s = append(s, "AzNodes: "+fmt.Sprintf("%#v", this.AzNodes)+",\n")
@@ -9217,6 +10247,9 @@ func (this *AzureVnetIngressEgressGwType) GoString() string {
 	}
 	if this.GlobalNetworkChoice != nil {
 		s = append(s, "GlobalNetworkChoice: "+fmt.Sprintf("%#v", this.GlobalNetworkChoice)+",\n")
+	}
+	if this.DcClusterGroupChoice != nil {
+		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -9309,11 +10342,35 @@ func (this *AzureVnetIngressEgressGwType_GlobalNetworkList) GoString() string {
 		`GlobalNetworkList:` + fmt.Sprintf("%#v", this.GlobalNetworkList) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetIngressEgressGwType_NoDcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwType_NoDcClusterGroup{` +
+		`NoDcClusterGroup:` + fmt.Sprintf("%#v", this.NoDcClusterGroup) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn{` +
+		`DcClusterGroupOutsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupOutsideVn) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwType_DcClusterGroupInsideVn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwType_DcClusterGroupInsideVn{` +
+		`DcClusterGroupInsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupInsideVn) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetIngressEgressGwARType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 17)
+	s := make([]string, 0, 20)
 	s = append(s, "&azure_vnet_site.AzureVnetIngressEgressGwARType{")
 	if this.Node != nil {
 		s = append(s, "Node: "+fmt.Sprintf("%#v", this.Node)+",\n")
@@ -9333,6 +10390,9 @@ func (this *AzureVnetIngressEgressGwARType) GoString() string {
 	}
 	if this.GlobalNetworkChoice != nil {
 		s = append(s, "GlobalNetworkChoice: "+fmt.Sprintf("%#v", this.GlobalNetworkChoice)+",\n")
+	}
+	if this.DcClusterGroupChoice != nil {
+		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -9425,11 +10485,35 @@ func (this *AzureVnetIngressEgressGwARType_GlobalNetworkList) GoString() string 
 		`GlobalNetworkList:` + fmt.Sprintf("%#v", this.GlobalNetworkList) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetIngressEgressGwARType_NoDcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARType_NoDcClusterGroup{` +
+		`NoDcClusterGroup:` + fmt.Sprintf("%#v", this.NoDcClusterGroup) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn{` +
+		`DcClusterGroupOutsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupOutsideVn) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn{` +
+		`DcClusterGroupInsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupInsideVn) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetVoltstackClusterType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 19)
+	s := make([]string, 0, 21)
 	s = append(s, "&azure_vnet_site.AzureVnetVoltstackClusterType{")
 	s = append(s, "AzureCertifiedHw: "+fmt.Sprintf("%#v", this.AzureCertifiedHw)+",\n")
 	if this.AzNodes != nil {
@@ -9446,6 +10530,9 @@ func (this *AzureVnetVoltstackClusterType) GoString() string {
 	}
 	if this.GlobalNetworkChoice != nil {
 		s = append(s, "GlobalNetworkChoice: "+fmt.Sprintf("%#v", this.GlobalNetworkChoice)+",\n")
+	}
+	if this.DcClusterGroupChoice != nil {
+		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
 	}
 	if this.K8SClusterChoice != nil {
 		s = append(s, "K8SClusterChoice: "+fmt.Sprintf("%#v", this.K8SClusterChoice)+",\n")
@@ -9528,6 +10615,22 @@ func (this *AzureVnetVoltstackClusterType_GlobalNetworkList) GoString() string {
 		`GlobalNetworkList:` + fmt.Sprintf("%#v", this.GlobalNetworkList) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetVoltstackClusterType_NoDcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterType_NoDcClusterGroup{` +
+		`NoDcClusterGroup:` + fmt.Sprintf("%#v", this.NoDcClusterGroup) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetVoltstackClusterType_DcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterType_DcClusterGroup{` +
+		`DcClusterGroup:` + fmt.Sprintf("%#v", this.DcClusterGroup) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetVoltstackClusterType_NoK8SCluster) GoString() string {
 	if this == nil {
 		return "nil"
@@ -9564,7 +10667,7 @@ func (this *AzureVnetVoltstackClusterARType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 19)
+	s := make([]string, 0, 21)
 	s = append(s, "&azure_vnet_site.AzureVnetVoltstackClusterARType{")
 	s = append(s, "AzureCertifiedHw: "+fmt.Sprintf("%#v", this.AzureCertifiedHw)+",\n")
 	if this.Node != nil {
@@ -9581,6 +10684,9 @@ func (this *AzureVnetVoltstackClusterARType) GoString() string {
 	}
 	if this.GlobalNetworkChoice != nil {
 		s = append(s, "GlobalNetworkChoice: "+fmt.Sprintf("%#v", this.GlobalNetworkChoice)+",\n")
+	}
+	if this.DcClusterGroupChoice != nil {
+		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
 	}
 	if this.K8SClusterChoice != nil {
 		s = append(s, "K8SClusterChoice: "+fmt.Sprintf("%#v", this.K8SClusterChoice)+",\n")
@@ -9663,6 +10769,22 @@ func (this *AzureVnetVoltstackClusterARType_GlobalNetworkList) GoString() string
 		`GlobalNetworkList:` + fmt.Sprintf("%#v", this.GlobalNetworkList) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetVoltstackClusterARType_NoDcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterARType_NoDcClusterGroup{` +
+		`NoDcClusterGroup:` + fmt.Sprintf("%#v", this.NoDcClusterGroup) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetVoltstackClusterARType_DcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterARType_DcClusterGroup{` +
+		`DcClusterGroup:` + fmt.Sprintf("%#v", this.DcClusterGroup) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetVoltstackClusterARType_NoK8SCluster) GoString() string {
 	if this == nil {
 		return "nil"
@@ -9717,7 +10839,7 @@ func (this *AzureVnetIngressEgressGwReplaceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 18)
 	s = append(s, "&azure_vnet_site.AzureVnetIngressEgressGwReplaceType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -9733,6 +10855,9 @@ func (this *AzureVnetIngressEgressGwReplaceType) GoString() string {
 	}
 	if this.GlobalNetworkChoice != nil {
 		s = append(s, "GlobalNetworkChoice: "+fmt.Sprintf("%#v", this.GlobalNetworkChoice)+",\n")
+	}
+	if this.DcClusterGroupChoice != nil {
+		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -9825,11 +10950,35 @@ func (this *AzureVnetIngressEgressGwReplaceType_GlobalNetworkList) GoString() st
 		`GlobalNetworkList:` + fmt.Sprintf("%#v", this.GlobalNetworkList) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup{` +
+		`NoDcClusterGroup:` + fmt.Sprintf("%#v", this.NoDcClusterGroup) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn{` +
+		`DcClusterGroupOutsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupOutsideVn) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn{` +
+		`DcClusterGroupInsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupInsideVn) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetIngressEgressGwARReplaceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 18)
 	s = append(s, "&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -9845,6 +10994,9 @@ func (this *AzureVnetIngressEgressGwARReplaceType) GoString() string {
 	}
 	if this.GlobalNetworkChoice != nil {
 		s = append(s, "GlobalNetworkChoice: "+fmt.Sprintf("%#v", this.GlobalNetworkChoice)+",\n")
+	}
+	if this.DcClusterGroupChoice != nil {
+		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -9937,11 +11089,35 @@ func (this *AzureVnetIngressEgressGwARReplaceType_GlobalNetworkList) GoString() 
 		`GlobalNetworkList:` + fmt.Sprintf("%#v", this.GlobalNetworkList) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup{` +
+		`NoDcClusterGroup:` + fmt.Sprintf("%#v", this.NoDcClusterGroup) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn{` +
+		`DcClusterGroupOutsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupOutsideVn) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn{` +
+		`DcClusterGroupInsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupInsideVn) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetVoltstackClusterReplaceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 15)
 	s = append(s, "&azure_vnet_site.AzureVnetVoltstackClusterReplaceType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -9954,6 +11130,9 @@ func (this *AzureVnetVoltstackClusterReplaceType) GoString() string {
 	}
 	if this.GlobalNetworkChoice != nil {
 		s = append(s, "GlobalNetworkChoice: "+fmt.Sprintf("%#v", this.GlobalNetworkChoice)+",\n")
+	}
+	if this.DcClusterGroupChoice != nil {
+		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -10030,11 +11209,27 @@ func (this *AzureVnetVoltstackClusterReplaceType_GlobalNetworkList) GoString() s
 		`GlobalNetworkList:` + fmt.Sprintf("%#v", this.GlobalNetworkList) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup{` +
+		`NoDcClusterGroup:` + fmt.Sprintf("%#v", this.NoDcClusterGroup) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterReplaceType_DcClusterGroup{` +
+		`DcClusterGroup:` + fmt.Sprintf("%#v", this.DcClusterGroup) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetVoltstackClusterARReplaceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 15)
 	s = append(s, "&azure_vnet_site.AzureVnetVoltstackClusterARReplaceType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -10047,6 +11242,9 @@ func (this *AzureVnetVoltstackClusterARReplaceType) GoString() string {
 	}
 	if this.GlobalNetworkChoice != nil {
 		s = append(s, "GlobalNetworkChoice: "+fmt.Sprintf("%#v", this.GlobalNetworkChoice)+",\n")
+	}
+	if this.DcClusterGroupChoice != nil {
+		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -10121,6 +11319,22 @@ func (this *AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList) GoString()
 	}
 	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList{` +
 		`GlobalNetworkList:` + fmt.Sprintf("%#v", this.GlobalNetworkList) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup{` +
+		`NoDcClusterGroup:` + fmt.Sprintf("%#v", this.NoDcClusterGroup) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_DcClusterGroup{` +
+		`DcClusterGroup:` + fmt.Sprintf("%#v", this.DcClusterGroup) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType) GoString() string {
@@ -10884,6 +12098,15 @@ func (m *AzureVnetIngressEgressGwType) MarshalToSizedBuffer(dAtA []byte) (int, e
 	_ = i
 	var l int
 	_ = l
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ForwardProxyChoice != nil {
 		{
 			size := m.ForwardProxyChoice.Size()
@@ -11192,6 +12415,75 @@ func (m *AzureVnetIngressEgressGwType_ForwardProxyAllowAll) MarshalToSizedBuffer
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetIngressEgressGwType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoDcClusterGroup != nil {
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroupOutsideVn != nil {
+		{
+			size, err := m.DcClusterGroupOutsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwType_DcClusterGroupInsideVn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwType_DcClusterGroupInsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroupInsideVn != nil {
+		{
+			size, err := m.DcClusterGroupInsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetIngressEgressGwARType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -11212,6 +12504,15 @@ func (m *AzureVnetIngressEgressGwARType) MarshalToSizedBuffer(dAtA []byte) (int,
 	_ = i
 	var l int
 	_ = l
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ForwardProxyChoice != nil {
 		{
 			size := m.ForwardProxyChoice.Size()
@@ -11518,6 +12819,75 @@ func (m *AzureVnetIngressEgressGwARType_ForwardProxyAllowAll) MarshalToSizedBuff
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetIngressEgressGwARType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoDcClusterGroup != nil {
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroupOutsideVn != nil {
+		{
+			size, err := m.DcClusterGroupOutsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroupInsideVn != nil {
+		{
+			size, err := m.DcClusterGroupInsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetVoltstackClusterType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -11538,6 +12908,15 @@ func (m *AzureVnetVoltstackClusterType) MarshalToSizedBuffer(dAtA []byte) (int, 
 	_ = i
 	var l int
 	_ = l
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.K8SClusterChoice != nil {
 		{
 			size := m.K8SClusterChoice.Size()
@@ -11897,6 +13276,52 @@ func (m *AzureVnetVoltstackClusterType_K8SCluster) MarshalToSizedBuffer(dAtA []b
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetVoltstackClusterType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoDcClusterGroup != nil {
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetVoltstackClusterType_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterType_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroup != nil {
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetVoltstackClusterARType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -11917,6 +13342,15 @@ func (m *AzureVnetVoltstackClusterARType) MarshalToSizedBuffer(dAtA []byte) (int
 	_ = i
 	var l int
 	_ = l
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.K8SClusterChoice != nil {
 		{
 			size := m.K8SClusterChoice.Size()
@@ -12274,6 +13708,52 @@ func (m *AzureVnetVoltstackClusterARType_K8SCluster) MarshalToSizedBuffer(dAtA [
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetVoltstackClusterARType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterARType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoDcClusterGroup != nil {
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetVoltstackClusterARType_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterARType_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroup != nil {
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetIngressGwReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -12340,6 +13820,15 @@ func (m *AzureVnetIngressEgressGwReplaceType) MarshalToSizedBuffer(dAtA []byte) 
 	_ = i
 	var l int
 	_ = l
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ForwardProxyChoice != nil {
 		{
 			size := m.ForwardProxyChoice.Size()
@@ -12627,6 +14116,75 @@ func (m *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll) MarshalToSize
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoDcClusterGroup != nil {
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroupOutsideVn != nil {
+		{
+			size, err := m.DcClusterGroupOutsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroupInsideVn != nil {
+		{
+			size, err := m.DcClusterGroupInsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetIngressEgressGwARReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -12647,6 +14205,15 @@ func (m *AzureVnetIngressEgressGwARReplaceType) MarshalToSizedBuffer(dAtA []byte
 	_ = i
 	var l int
 	_ = l
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ForwardProxyChoice != nil {
 		{
 			size := m.ForwardProxyChoice.Size()
@@ -12934,6 +14501,75 @@ func (m *AzureVnetIngressEgressGwARReplaceType_ForwardProxyAllowAll) MarshalToSi
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoDcClusterGroup != nil {
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroupOutsideVn != nil {
+		{
+			size, err := m.DcClusterGroupOutsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroupInsideVn != nil {
+		{
+			size, err := m.DcClusterGroupInsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetVoltstackClusterReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -12954,6 +14590,15 @@ func (m *AzureVnetVoltstackClusterReplaceType) MarshalToSizedBuffer(dAtA []byte)
 	_ = i
 	var l int
 	_ = l
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ForwardProxyChoice != nil {
 		{
 			size := m.ForwardProxyChoice.Size()
@@ -13182,6 +14827,52 @@ func (m *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll) MarshalToSiz
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoDcClusterGroup != nil {
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroup != nil {
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetVoltstackClusterARReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -13202,6 +14893,15 @@ func (m *AzureVnetVoltstackClusterARReplaceType) MarshalToSizedBuffer(dAtA []byt
 	_ = i
 	var l int
 	_ = l
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ForwardProxyChoice != nil {
 		{
 			size := m.ForwardProxyChoice.Size()
@@ -13427,6 +15127,52 @@ func (m *AzureVnetVoltstackClusterARReplaceType_ForwardProxyAllowAll) MarshalToS
 		}
 		i--
 		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoDcClusterGroup != nil {
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DcClusterGroup != nil {
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
 	return len(dAtA) - i, nil
 }
@@ -15371,6 +17117,9 @@ func (m *AzureVnetIngressEgressGwType) Size() (n int) {
 	if m.GlobalNetworkChoice != nil {
 		n += m.GlobalNetworkChoice.Size()
 	}
+	if m.DcClusterGroupChoice != nil {
+		n += m.DcClusterGroupChoice.Size()
+	}
 	return n
 }
 
@@ -15506,6 +17255,42 @@ func (m *AzureVnetIngressEgressGwType_ForwardProxyAllowAll) Size() (n int) {
 	}
 	return n
 }
+func (m *AzureVnetIngressEgressGwType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoDcClusterGroup != nil {
+		l = m.NoDcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupOutsideVn != nil {
+		l = m.DcClusterGroupOutsideVn.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwType_DcClusterGroupInsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupInsideVn != nil {
+		l = m.DcClusterGroupInsideVn.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetIngressEgressGwARType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -15534,6 +17319,9 @@ func (m *AzureVnetIngressEgressGwARType) Size() (n int) {
 	}
 	if m.GlobalNetworkChoice != nil {
 		n += m.GlobalNetworkChoice.Size()
+	}
+	if m.DcClusterGroupChoice != nil {
+		n += m.DcClusterGroupChoice.Size()
 	}
 	return n
 }
@@ -15670,6 +17458,42 @@ func (m *AzureVnetIngressEgressGwARType_ForwardProxyAllowAll) Size() (n int) {
 	}
 	return n
 }
+func (m *AzureVnetIngressEgressGwARType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoDcClusterGroup != nil {
+		l = m.NoDcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupOutsideVn != nil {
+		l = m.DcClusterGroupOutsideVn.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupInsideVn != nil {
+		l = m.DcClusterGroupInsideVn.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetVoltstackClusterType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -15703,6 +17527,9 @@ func (m *AzureVnetVoltstackClusterType) Size() (n int) {
 	}
 	if m.K8SClusterChoice != nil {
 		n += m.K8SClusterChoice.Size()
+	}
+	if m.DcClusterGroupChoice != nil {
+		n += m.DcClusterGroupChoice.Size()
 	}
 	return n
 }
@@ -15863,6 +17690,30 @@ func (m *AzureVnetVoltstackClusterType_K8SCluster) Size() (n int) {
 	}
 	return n
 }
+func (m *AzureVnetVoltstackClusterType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoDcClusterGroup != nil {
+		l = m.NoDcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetVoltstackClusterType_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroup != nil {
+		l = m.DcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetVoltstackClusterARType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -15894,6 +17745,9 @@ func (m *AzureVnetVoltstackClusterARType) Size() (n int) {
 	}
 	if m.K8SClusterChoice != nil {
 		n += m.K8SClusterChoice.Size()
+	}
+	if m.DcClusterGroupChoice != nil {
+		n += m.DcClusterGroupChoice.Size()
 	}
 	return n
 }
@@ -16054,6 +17908,30 @@ func (m *AzureVnetVoltstackClusterARType_K8SCluster) Size() (n int) {
 	}
 	return n
 }
+func (m *AzureVnetVoltstackClusterARType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoDcClusterGroup != nil {
+		l = m.NoDcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetVoltstackClusterARType_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroup != nil {
+		l = m.DcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetIngressGwReplaceType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16092,6 +17970,9 @@ func (m *AzureVnetIngressEgressGwReplaceType) Size() (n int) {
 	}
 	if m.GlobalNetworkChoice != nil {
 		n += m.GlobalNetworkChoice.Size()
+	}
+	if m.DcClusterGroupChoice != nil {
+		n += m.DcClusterGroupChoice.Size()
 	}
 	return n
 }
@@ -16228,6 +18109,42 @@ func (m *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll) Size() (n int
 	}
 	return n
 }
+func (m *AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoDcClusterGroup != nil {
+		l = m.NoDcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupOutsideVn != nil {
+		l = m.DcClusterGroupOutsideVn.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupInsideVn != nil {
+		l = m.DcClusterGroupInsideVn.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetIngressEgressGwARReplaceType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16248,6 +18165,9 @@ func (m *AzureVnetIngressEgressGwARReplaceType) Size() (n int) {
 	}
 	if m.GlobalNetworkChoice != nil {
 		n += m.GlobalNetworkChoice.Size()
+	}
+	if m.DcClusterGroupChoice != nil {
+		n += m.DcClusterGroupChoice.Size()
 	}
 	return n
 }
@@ -16384,6 +18304,42 @@ func (m *AzureVnetIngressEgressGwARReplaceType_ForwardProxyAllowAll) Size() (n i
 	}
 	return n
 }
+func (m *AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoDcClusterGroup != nil {
+		l = m.NoDcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupOutsideVn != nil {
+		l = m.DcClusterGroupOutsideVn.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupInsideVn != nil {
+		l = m.DcClusterGroupInsideVn.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetVoltstackClusterReplaceType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16401,6 +18357,9 @@ func (m *AzureVnetVoltstackClusterReplaceType) Size() (n int) {
 	}
 	if m.GlobalNetworkChoice != nil {
 		n += m.GlobalNetworkChoice.Size()
+	}
+	if m.DcClusterGroupChoice != nil {
+		n += m.DcClusterGroupChoice.Size()
 	}
 	return n
 }
@@ -16513,6 +18472,30 @@ func (m *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll) Size() (n in
 	}
 	return n
 }
+func (m *AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoDcClusterGroup != nil {
+		l = m.NoDcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroup != nil {
+		l = m.DcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetVoltstackClusterARReplaceType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16530,6 +18513,9 @@ func (m *AzureVnetVoltstackClusterARReplaceType) Size() (n int) {
 	}
 	if m.GlobalNetworkChoice != nil {
 		n += m.GlobalNetworkChoice.Size()
+	}
+	if m.DcClusterGroupChoice != nil {
+		n += m.DcClusterGroupChoice.Size()
 	}
 	return n
 }
@@ -16639,6 +18625,30 @@ func (m *AzureVnetVoltstackClusterARReplaceType_ForwardProxyAllowAll) Size() (n 
 	if m.ForwardProxyAllowAll != nil {
 		l = m.ForwardProxyAllowAll.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoDcClusterGroup != nil {
+		l = m.NoDcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroup != nil {
+		l = m.DcClusterGroup.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -17603,6 +19613,7 @@ func (this *AzureVnetIngressEgressGwType) String() string {
 		`InsideStaticRouteChoice:` + fmt.Sprintf("%v", this.InsideStaticRouteChoice) + `,`,
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
+		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -17717,6 +19728,36 @@ func (this *AzureVnetIngressEgressGwType_ForwardProxyAllowAll) String() string {
 	}, "")
 	return s
 }
+func (this *AzureVnetIngressEgressGwType_NoDcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwType_NoDcClusterGroup{`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn{`,
+		`DcClusterGroupOutsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupOutsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwType_DcClusterGroupInsideVn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwType_DcClusterGroupInsideVn{`,
+		`DcClusterGroupInsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetIngressEgressGwARType) String() string {
 	if this == nil {
 		return "nil"
@@ -17729,6 +19770,7 @@ func (this *AzureVnetIngressEgressGwARType) String() string {
 		`InsideStaticRouteChoice:` + fmt.Sprintf("%v", this.InsideStaticRouteChoice) + `,`,
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
+		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -17843,6 +19885,36 @@ func (this *AzureVnetIngressEgressGwARType_ForwardProxyAllowAll) String() string
 	}, "")
 	return s
 }
+func (this *AzureVnetIngressEgressGwARType_NoDcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARType_NoDcClusterGroup{`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn{`,
+		`DcClusterGroupOutsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupOutsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn{`,
+		`DcClusterGroupInsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetVoltstackClusterType) String() string {
 	if this == nil {
 		return "nil"
@@ -17861,6 +19933,7 @@ func (this *AzureVnetVoltstackClusterType) String() string {
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`StorageClassChoice:` + fmt.Sprintf("%v", this.StorageClassChoice) + `,`,
 		`K8SClusterChoice:` + fmt.Sprintf("%v", this.K8SClusterChoice) + `,`,
+		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -17995,6 +20068,26 @@ func (this *AzureVnetVoltstackClusterType_K8SCluster) String() string {
 	}, "")
 	return s
 }
+func (this *AzureVnetVoltstackClusterType_NoDcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterType_NoDcClusterGroup{`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetVoltstackClusterType_DcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterType_DcClusterGroup{`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetVoltstackClusterARType) String() string {
 	if this == nil {
 		return "nil"
@@ -18008,6 +20101,7 @@ func (this *AzureVnetVoltstackClusterARType) String() string {
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`StorageClassChoice:` + fmt.Sprintf("%v", this.StorageClassChoice) + `,`,
 		`K8SClusterChoice:` + fmt.Sprintf("%v", this.K8SClusterChoice) + `,`,
+		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -18142,6 +20236,26 @@ func (this *AzureVnetVoltstackClusterARType_K8SCluster) String() string {
 	}, "")
 	return s
 }
+func (this *AzureVnetVoltstackClusterARType_NoDcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterARType_NoDcClusterGroup{`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetVoltstackClusterARType_DcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterARType_DcClusterGroup{`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetIngressGwReplaceType) String() string {
 	if this == nil {
 		return "nil"
@@ -18170,6 +20284,7 @@ func (this *AzureVnetIngressEgressGwReplaceType) String() string {
 		`InsideStaticRouteChoice:` + fmt.Sprintf("%v", this.InsideStaticRouteChoice) + `,`,
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
+		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -18284,6 +20399,36 @@ func (this *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll) String() s
 	}, "")
 	return s
 }
+func (this *AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup{`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn{`,
+		`DcClusterGroupOutsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupOutsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn{`,
+		`DcClusterGroupInsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetIngressEgressGwARReplaceType) String() string {
 	if this == nil {
 		return "nil"
@@ -18294,6 +20439,7 @@ func (this *AzureVnetIngressEgressGwARReplaceType) String() string {
 		`InsideStaticRouteChoice:` + fmt.Sprintf("%v", this.InsideStaticRouteChoice) + `,`,
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
+		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -18408,6 +20554,36 @@ func (this *AzureVnetIngressEgressGwARReplaceType_ForwardProxyAllowAll) String()
 	}, "")
 	return s
 }
+func (this *AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup{`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn{`,
+		`DcClusterGroupOutsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupOutsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn{`,
+		`DcClusterGroupInsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetVoltstackClusterReplaceType) String() string {
 	if this == nil {
 		return "nil"
@@ -18417,6 +20593,7 @@ func (this *AzureVnetVoltstackClusterReplaceType) String() string {
 		`ForwardProxyChoice:` + fmt.Sprintf("%v", this.ForwardProxyChoice) + `,`,
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
+		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -18511,6 +20688,26 @@ func (this *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll) String() 
 	}, "")
 	return s
 }
+func (this *AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup{`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterReplaceType_DcClusterGroup{`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetVoltstackClusterARReplaceType) String() string {
 	if this == nil {
 		return "nil"
@@ -18520,6 +20717,7 @@ func (this *AzureVnetVoltstackClusterARReplaceType) String() string {
 		`ForwardProxyChoice:` + fmt.Sprintf("%v", this.ForwardProxyChoice) + `,`,
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
+		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -18610,6 +20808,26 @@ func (this *AzureVnetVoltstackClusterARReplaceType_ForwardProxyAllowAll) String(
 	}
 	s := strings.Join([]string{`&AzureVnetVoltstackClusterARReplaceType_ForwardProxyAllowAll{`,
 		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup{`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterARReplaceType_DcClusterGroup{`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -20039,6 +22257,111 @@ func (m *AzureVnetIngressEgressGwType) Unmarshal(dAtA []byte) error {
 			}
 			m.ForwardProxyChoice = &AzureVnetIngressEgressGwType_ForwardProxyAllowAll{v}
 			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoDcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwType_NoDcClusterGroup{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroupOutsideVn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroupInsideVn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwType_DcClusterGroupInsideVn{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -20544,6 +22867,111 @@ func (m *AzureVnetIngressEgressGwARType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ForwardProxyChoice = &AzureVnetIngressEgressGwARType_ForwardProxyAllowAll{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoDcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwARType_NoDcClusterGroup{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroupOutsideVn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroupInsideVn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -21118,6 +23546,76 @@ func (m *AzureVnetVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.K8SClusterChoice = &AzureVnetVoltstackClusterType_K8SCluster{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoDcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterType_NoDcClusterGroup{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterType_DcClusterGroup{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -21695,6 +24193,76 @@ func (m *AzureVnetVoltstackClusterARType) Unmarshal(dAtA []byte) error {
 			}
 			m.K8SClusterChoice = &AzureVnetVoltstackClusterARType_K8SCluster{v}
 			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoDcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterARType_NoDcClusterGroup{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterARType_DcClusterGroup{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -22239,6 +24807,111 @@ func (m *AzureVnetIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			m.ForwardProxyChoice = &AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll{v}
 			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoDcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroupOutsideVn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroupInsideVn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -22677,6 +25350,111 @@ func (m *AzureVnetIngressEgressGwARReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			m.ForwardProxyChoice = &AzureVnetIngressEgressGwARReplaceType_ForwardProxyAllowAll{v}
 			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoDcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroupOutsideVn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroupInsideVn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -23045,6 +25823,76 @@ func (m *AzureVnetVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			m.ForwardProxyChoice = &AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll{v}
 			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoDcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterReplaceType_DcClusterGroup{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -23412,6 +26260,76 @@ func (m *AzureVnetVoltstackClusterARReplaceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ForwardProxyChoice = &AzureVnetVoltstackClusterARReplaceType_ForwardProxyAllowAll{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoDcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DcClusterGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterARReplaceType_DcClusterGroup{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

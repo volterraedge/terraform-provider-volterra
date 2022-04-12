@@ -288,8 +288,18 @@ type GetSpecType struct {
 	Rules               []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
 	AllowVolterra       bool                          `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
 	DecryptCacheTimeout *types.Duration               `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout,proto3" json:"decrypt_cache_timeout,omitempty"`
-	MarkedForDelete     bool                          `protobuf:"varint,5,opt,name=marked_for_delete,json=markedForDelete,proto3" json:"marked_for_delete,omitempty"`
-	DeletionTime        *types.Timestamp              `protobuf:"bytes,6,opt,name=deletion_time,json=deletionTime,proto3" json:"deletion_time,omitempty"`
+	// Marked For Delete
+	//
+	// x-displayName: "Marked For Delete"
+	// marked_for_delete is set when the secret policy object is marked for delete, based on this value
+	// secret policy marked for delete will be automatically deleted after deletion_time
+	MarkedForDelete bool `protobuf:"varint,5,opt,name=marked_for_delete,json=markedForDelete,proto3" json:"marked_for_delete,omitempty"`
+	// Deletion Time
+	//
+	// x-displayName: "Deletion Time"
+	// deletion_time is set when the secret policy object is marked for delete,
+	// secret policy marked for delete will be automatically deleted after deletion_time
+	DeletionTime *types.Timestamp `protobuf:"bytes,6,opt,name=deletion_time,json=deletionTime,proto3" json:"deletion_time,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }

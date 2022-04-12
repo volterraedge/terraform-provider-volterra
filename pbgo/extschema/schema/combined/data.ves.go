@@ -244,6 +244,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.ServiceParameters"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "SuggestValuesResp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.SuggestValuesResp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SuggestedItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.SuggestedItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "SyncServerParamsType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -1203,6 +1217,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.RepeatedOptions"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "StoredObjectURL",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.StoredObjectURL"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SuggestedValues",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.SuggestedValues"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "Tile",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -1310,6 +1338,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/address_allocators"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -1323,6 +1352,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/address_allocators/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -1336,6 +1366,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/address_allocators/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -1349,6 +1380,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/address_allocators"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -1510,6 +1542,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.address_allocator/Objects", "/ves.io.schema.address_allocator/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -1523,6 +1556,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.address_allocator/Object/{object_uid}", "/ves.io.schema.address_allocator/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -1536,6 +1570,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.address_allocator/Object/{object_uid}", "/ves.io.schema.address_allocator/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -1549,6 +1584,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.address_allocator/Objects", "/ves.io.schema.address_allocator/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -1562,6 +1598,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.address_allocator/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -1575,6 +1612,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.address_allocator.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.address_allocator/Object/{object_uid}", "/ves.io.schema.address_allocator/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -1758,6 +1796,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/advertise_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -1771,6 +1810,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/advertise_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -1784,6 +1824,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/advertise_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -1797,6 +1838,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/advertise_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -1810,6 +1852,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/advertise_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -1971,6 +2014,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.advertise_policy/Objects", "/ves.io.schema.advertise_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -1984,6 +2028,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.advertise_policy/Object/{object_uid}", "/ves.io.schema.advertise_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -1997,6 +2042,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.advertise_policy/Object/{object_uid}", "/ves.io.schema.advertise_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -2010,6 +2056,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.advertise_policy/Objects", "/ves.io.schema.advertise_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -2023,6 +2070,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.advertise_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -2036,6 +2084,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.advertise_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.advertise_policy/Object/{object_uid}", "/ves.io.schema.advertise_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -2219,6 +2268,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/alert_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -2232,6 +2282,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/alert_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -2245,6 +2296,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/alert_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -2258,6 +2310,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/alert_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -2271,6 +2324,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/alert_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -2481,6 +2535,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.alert_policy/Objects", "/ves.io.schema.alert_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -2494,6 +2549,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.alert_policy/Object/{object_uid}", "/ves.io.schema.alert_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -2507,6 +2563,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy/Object/{object_uid}", "/ves.io.schema.alert_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -2520,6 +2577,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy/Objects", "/ves.io.schema.alert_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -2533,6 +2591,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -2546,6 +2605,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.alert_policy/Object/{object_uid}", "/ves.io.schema.alert_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -2733,6 +2793,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/alert_receivers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -2746,6 +2807,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/alert_receivers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -2759,6 +2821,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/alert_receivers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -2772,6 +2835,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/alert_receivers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -2785,6 +2849,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/alert_receivers/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -2896,6 +2961,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/alert_receivers/{name}/confirm"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ConfirmAlertReceiver")] = rpcInfo
@@ -2909,6 +2975,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.TestAlertReceiverResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/alert_receivers/{name}/test"}}
 	aInfo.RPCsInfo[svcfw.RPCName("TestAlertReceiver")] = rpcInfo
@@ -2922,6 +2989,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.VerifyAlertReceiverResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/alert_receivers/{name}/verify"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VerifyAlertReceiver")] = rpcInfo
@@ -3090,6 +3158,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.alert_receiver/Objects", "/ves.io.schema.alert_receiver/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -3103,6 +3172,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.alert_receiver/Object/{object_uid}", "/ves.io.schema.alert_receiver/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -3116,6 +3186,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_receiver/Object/{object_uid}", "/ves.io.schema.alert_receiver/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -3129,6 +3200,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_receiver/Objects", "/ves.io.schema.alert_receiver/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -3142,6 +3214,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_receiver/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -3155,6 +3228,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.alert_receiver.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.alert_receiver/Object/{object_uid}", "/ves.io.schema.alert_receiver/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -3346,6 +3420,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.ValidateTokenResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/custom/namespaces/{namespace}/validate/api_credentials", "/ves.io.schema/introspect/read/private/custom/namespaces/{namespace}/validate/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ValidateToken")] = rpcInfo
@@ -3401,6 +3476,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.StatusResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/activate/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Activate")] = rpcInfo
@@ -3414,6 +3490,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.StatusResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/activate/service_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ActivateServiceCredentials")] = rpcInfo
@@ -3427,6 +3504,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -3440,6 +3518,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/service_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CreateServiceCredentials")] = rpcInfo
@@ -3453,6 +3532,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_credentials/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -3466,6 +3546,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -3479,6 +3560,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/service_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListServiceCredentials")] = rpcInfo
@@ -3492,6 +3574,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.StatusResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/renew/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Renew")] = rpcInfo
@@ -3505,6 +3588,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.StatusResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/renew/service_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("RenewServiceCredentials")] = rpcInfo
@@ -3518,6 +3602,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.StatusResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/revoke/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Revoke")] = rpcInfo
@@ -3531,6 +3616,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.StatusResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/revoke/service_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("RevokeServiceCredentials")] = rpcInfo
@@ -3685,6 +3771,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.api_credential/Objects", "/ves.io.schema.api_credential/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -3698,6 +3785,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.api_credential/Object/{object_uid}", "/ves.io.schema.api_credential/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -3711,6 +3799,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_credential/Object/{object_uid}", "/ves.io.schema.api_credential/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -3724,6 +3813,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_credential/Objects", "/ves.io.schema.api_credential/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -3737,6 +3827,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_credential/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -3750,6 +3841,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.api_credential.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.api_credential/Object/{object_uid}", "/ves.io.schema.api_credential/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -3838,6 +3930,401 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.api_credential.crudapi.ObjectReplaceRsp"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.api_group_element"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.api_group_element"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/api_group_element/object.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/api_group_element/object.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/api_group_element/object.proto"] = fInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.api_group_element.Object"] = oInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.api_group_element.StatusObject"] = oInfo
+	}
+
+	keyInfo = &svcfw.KeyInfo{
+		Type: svcfw.KeyType(2),
+	}
+	oInfo.KeysInfo[svcfw.FldName("metadata.uid")] = keyInfo
+	if mdr.KeyIdx != nil {
+		mdr.KeyIdx["ves.io.schema.api_group_element.StatusObject.metadata.uid"] = keyInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.SpecType"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/api_group_element/public_crudapi.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/api_group_element/public_crudapi.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/api_group_element/public_crudapi.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.api_group_element.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.api_group_element.GetRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.api_group_element.GetResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_group_elements/{name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.api_group_element.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.api_group_element.ListRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.api_group_element.ListResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_group_elements"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.api_group_element.API.List"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.api_group_element.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.GetRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.GetResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.ListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.ListResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListResponseItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.ListResponseItem"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/api_group_element/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/api_group_element/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/api_group_element/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.GetSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GlobalSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.ReplaceSpecType"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.api_group_element.crudapi"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element/crudapi",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.api_group_element.crudapi"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/api_group_element/crudapi/api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/api_group_element/crudapi/api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/api_group_element/crudapi/api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD",
+		IsSDRO:      true,
+		ObjType:     "ves.io.schema.api_group_element.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.api_group_element.crudapi.ObjectCreateReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.api_group_element.crudapi.ObjectCreateRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.api_group_element/Objects", "/ves.io.schema.api_group_element/introspect/write/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.api_group_element.crudapi.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.api_group_element.crudapi.ObjectDeleteReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.api_group_element.crudapi.ObjectDeleteRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.api_group_element/Object/{object_uid}", "/ves.io.schema.api_group_element/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.api_group_element.crudapi.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.api_group_element.crudapi.ObjectGetReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.api_group_element.crudapi.ObjectGetRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_group_element/Object/{object_uid}", "/ves.io.schema.api_group_element/introspect/read/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.api_group_element.crudapi.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.api_group_element.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.api_group_element.crudapi.ObjectListRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_group_element/Objects", "/ves.io.schema.api_group_element/introspect/read/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.api_group_element.crudapi.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListStream",
+		InMsgType:    "ves.io.schema.api_group_element.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.api_group_element.crudapi.ObjectListRsp",
+		OutStreaming: true,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_group_element/Objects/stream"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.api_group_element.crudapi.API.ListStream"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.api_group_element.crudapi.ObjectReplaceReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.api_group_element.crudapi.ObjectReplaceRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.api_group_element/Object/{object_uid}", "/ves.io.schema.api_group_element/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.api_group_element.crudapi.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.api_group_element.crudapi.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectCreateReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectCreateRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectDeleteReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectDeleteRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectGetReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectGetRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectListReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectListRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRspItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectListRspItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectReplaceReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.api_group_element.crudapi.ObjectReplaceRsp"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -3933,6 +4420,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/app_firewalls"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -3946,6 +4434,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/app_firewalls/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -3959,6 +4448,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_firewalls/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -3972,6 +4462,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_firewalls"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -3985,6 +4476,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/app_firewalls/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -4096,6 +4588,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.MetricsResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_firewall/metrics"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Metrics")] = rpcInfo
@@ -4299,6 +4792,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.app_firewall/Objects", "/ves.io.schema.app_firewall/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -4312,6 +4806,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.app_firewall/Object/{object_uid}", "/ves.io.schema.app_firewall/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -4325,6 +4820,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_firewall/Object/{object_uid}", "/ves.io.schema.app_firewall/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -4338,6 +4834,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_firewall/Objects", "/ves.io.schema.app_firewall/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -4351,6 +4848,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_firewall/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -4364,6 +4862,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_firewall.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.app_firewall/Object/{object_uid}", "/ves.io.schema.app_firewall/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -4547,6 +5046,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/app_settings"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -4560,6 +5060,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/app_settings/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -4573,6 +5074,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_settings/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -4586,6 +5088,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_settings"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -4599,6 +5102,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/app_settings/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -4710,6 +5214,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.SuspiciousUserStatusRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_settings/{name}/suspicious_users"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SuspiciousUserStatus")] = rpcInfo
@@ -4878,6 +5383,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.app_setting/Objects", "/ves.io.schema.app_setting/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -4891,6 +5397,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.app_setting/Object/{object_uid}", "/ves.io.schema.app_setting/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -4904,6 +5411,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_setting/Object/{object_uid}", "/ves.io.schema.app_setting/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -4917,6 +5425,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_setting/Objects", "/ves.io.schema.app_setting/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -4930,6 +5439,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_setting/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -4943,6 +5453,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_setting.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.app_setting/Object/{object_uid}", "/ves.io.schema.app_setting/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -5069,6 +5580,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointPDFRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoint/pdf"}}
 	aInfo.RPCsInfo[svcfw.RPCName("APIEndpointPDF")] = rpcInfo
@@ -5082,6 +5594,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointsRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("APIEndpoints")] = rpcInfo
@@ -5095,6 +5608,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointLearntSchemaRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoint/learnt_schema"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpointLearntSchema")] = rpcInfo
@@ -5108,6 +5622,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointPDFRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/services/{service_name}/api_endpoint/pdf"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetServiceAPIEndpointPDF")] = rpcInfo
@@ -5121,6 +5636,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointsRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/services/{service_name}/api_endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetServiceAPIEndpoints")] = rpcInfo
@@ -5134,6 +5650,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.api.HttpBody",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoints/swagger_spec"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetSwaggerSpec")] = rpcInfo
@@ -5147,6 +5664,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.OverridePopRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/override/pop"}}
 	aInfo.RPCsInfo[svcfw.RPCName("OverridePop")] = rpcInfo
@@ -5160,6 +5678,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.OverridePushRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/override/push"}}
 	aInfo.RPCsInfo[svcfw.RPCName("OverridePush")] = rpcInfo
@@ -5173,6 +5692,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.OverridesRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/overrides"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Overrides")] = rpcInfo
@@ -5383,6 +5903,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/app_types"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -5396,6 +5917,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/app_types/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -5409,6 +5931,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -5422,6 +5945,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -5435,6 +5959,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/app_types/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -5652,6 +6177,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.app_type/Objects", "/ves.io.schema.app_type/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -5665,6 +6191,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.app_type/Object/{object_uid}", "/ves.io.schema.app_type/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -5678,6 +6205,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_type/Object/{object_uid}", "/ves.io.schema.app_type/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -5691,6 +6219,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_type/Objects", "/ves.io.schema.app_type/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -5704,6 +6233,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_type/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -5717,6 +6247,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.app_type.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.app_type/Object/{object_uid}", "/ves.io.schema.app_type/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -5900,6 +6431,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/authentications"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -5913,6 +6445,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/authentications/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -5926,6 +6459,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/authentications/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -5939,6 +6473,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/authentications"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -5952,6 +6487,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/authentications/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -6148,6 +6684,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.authentication/Objects", "/ves.io.schema.authentication/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -6161,6 +6698,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.authentication/Object/{object_uid}", "/ves.io.schema.authentication/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -6174,6 +6712,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.authentication/Object/{object_uid}", "/ves.io.schema.authentication/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -6187,6 +6726,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.authentication/Objects", "/ves.io.schema.authentication/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -6200,6 +6740,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.authentication/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -6213,6 +6754,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.authentication.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.authentication/Object/{object_uid}", "/ves.io.schema.authentication/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -6396,6 +6938,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/bgps"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -6409,6 +6952,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/bgps/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -6422,6 +6966,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bgps/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -6435,6 +6980,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bgps"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -6448,6 +6994,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bgps/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -6714,6 +7261,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.bgp/Objects", "/ves.io.schema.bgp/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -6727,6 +7275,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.bgp/Object/{object_uid}", "/ves.io.schema.bgp/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -6740,6 +7289,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp/Object/{object_uid}", "/ves.io.schema.bgp/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -6753,6 +7303,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp/Objects", "/ves.io.schema.bgp/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -6766,6 +7317,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -6779,6 +7331,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.bgp/Object/{object_uid}", "/ves.io.schema.bgp/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -6962,6 +7515,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/bgp_asn_sets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -6975,6 +7529,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/bgp_asn_sets/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -6988,6 +7543,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bgp_asn_sets/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -7001,6 +7557,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bgp_asn_sets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -7014,6 +7571,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bgp_asn_sets/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -7175,6 +7733,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.bgp_asn_set/Objects", "/ves.io.schema.bgp_asn_set/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -7188,6 +7747,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.bgp_asn_set/Object/{object_uid}", "/ves.io.schema.bgp_asn_set/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -7201,6 +7761,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp_asn_set/Object/{object_uid}", "/ves.io.schema.bgp_asn_set/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -7214,6 +7775,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp_asn_set/Objects", "/ves.io.schema.bgp_asn_set/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -7227,6 +7789,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp_asn_set/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -7240,6 +7803,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.bgp_asn_set.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.bgp_asn_set/Object/{object_uid}", "/ves.io.schema.bgp_asn_set/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -7423,6 +7987,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.certified_hardware.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/certified_hardwares/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -7436,6 +8001,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.certified_hardware.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/certified_hardwares"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -7632,6 +8198,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.certified_hardware.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.certified_hardware/Objects", "/ves.io.schema.certified_hardware/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -7645,6 +8212,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.certified_hardware.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.certified_hardware/Object/{object_uid}", "/ves.io.schema.certified_hardware/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -7658,6 +8226,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.certified_hardware.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.certified_hardware/Object/{object_uid}", "/ves.io.schema.certified_hardware/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -7671,6 +8240,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.certified_hardware.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.certified_hardware/Objects", "/ves.io.schema.certified_hardware/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -7684,6 +8254,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.certified_hardware.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.certified_hardware/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -7697,6 +8268,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.certified_hardware.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.certified_hardware/Object/{object_uid}", "/ves.io.schema.certified_hardware/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -7885,6 +8457,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/cloud_credentialss"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -7898,6 +8471,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/cloud_credentialss/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -7911,6 +8485,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/cloud_credentialss/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -7924,6 +8499,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/cloud_credentialss"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -7937,6 +8513,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/cloud_credentialss/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -8126,6 +8703,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.cloud_credentials/Objects", "/ves.io.schema.cloud_credentials/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -8139,6 +8717,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.cloud_credentials/Object/{object_uid}", "/ves.io.schema.cloud_credentials/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -8152,6 +8731,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_credentials/Object/{object_uid}", "/ves.io.schema.cloud_credentials/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -8165,6 +8745,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_credentials/Objects", "/ves.io.schema.cloud_credentials/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -8178,6 +8759,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_credentials/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -8191,6 +8773,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cloud_credentials.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.cloud_credentials/Object/{object_uid}", "/ves.io.schema.cloud_credentials/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -8374,6 +8957,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/clusters"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -8387,6 +8971,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/clusters/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -8400,6 +8985,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/clusters/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -8413,6 +8999,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/clusters"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -8426,6 +9013,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/clusters/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -8615,6 +9203,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.cluster/Objects", "/ves.io.schema.cluster/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -8628,6 +9217,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.cluster/Object/{object_uid}", "/ves.io.schema.cluster/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -8641,6 +9231,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cluster/Object/{object_uid}", "/ves.io.schema.cluster/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -8654,6 +9245,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cluster/Objects", "/ves.io.schema.cluster/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -8667,6 +9259,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cluster/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -8680,6 +9273,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.cluster.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.cluster/Object/{object_uid}", "/ves.io.schema.cluster/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -8865,6 +9459,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/container_registrys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -8878,6 +9473,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/container_registrys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -8891,6 +9487,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/container_registrys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -8904,6 +9501,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/container_registrys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -8917,6 +9515,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/container_registrys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -9078,6 +9677,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.container_registry/Objects", "/ves.io.schema.container_registry/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -9091,6 +9691,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.container_registry/Object/{object_uid}", "/ves.io.schema.container_registry/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -9104,6 +9705,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.container_registry/Object/{object_uid}", "/ves.io.schema.container_registry/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -9117,6 +9719,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.container_registry/Objects", "/ves.io.schema.container_registry/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -9130,6 +9733,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.container_registry/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -9143,6 +9747,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.container_registry.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.container_registry/Object/{object_uid}", "/ves.io.schema.container_registry/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -9326,6 +9931,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/dc_cluster_groups"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -9339,6 +9945,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/dc_cluster_groups/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -9352,6 +9959,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/dc_cluster_groups/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -9365,6 +9973,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/dc_cluster_groups"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -9378,6 +9987,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/dc_cluster_groups/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -9489,6 +10099,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.MetricsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/dc_cluster_groups/metrics"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Metrics")] = rpcInfo
@@ -9608,6 +10219,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.dc_cluster_group/Objects", "/ves.io.schema.dc_cluster_group/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -9621,6 +10233,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.dc_cluster_group/Object/{object_uid}", "/ves.io.schema.dc_cluster_group/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -9634,6 +10247,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dc_cluster_group/Object/{object_uid}", "/ves.io.schema.dc_cluster_group/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -9647,6 +10261,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dc_cluster_group/Objects", "/ves.io.schema.dc_cluster_group/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -9660,6 +10275,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dc_cluster_group/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -9673,6 +10289,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dc_cluster_group.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.dc_cluster_group/Object/{object_uid}", "/ves.io.schema.dc_cluster_group/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -9856,6 +10473,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/discoverys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -9869,6 +10487,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/discoverys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -9882,6 +10501,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/discoverys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -9895,6 +10515,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/discoverys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -9908,6 +10529,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/discoverys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -10181,6 +10803,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.discovery/Objects", "/ves.io.schema.discovery/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -10194,6 +10817,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.discovery/Object/{object_uid}", "/ves.io.schema.discovery/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -10207,6 +10831,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.discovery/Object/{object_uid}", "/ves.io.schema.discovery/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -10220,6 +10845,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.discovery/Objects", "/ves.io.schema.discovery/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -10233,6 +10859,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.discovery/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -10246,6 +10873,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.discovery.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.discovery/Object/{object_uid}", "/ves.io.schema.discovery/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -10443,6 +11071,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/dns_domains"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -10456,6 +11085,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/dns_domains/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -10469,6 +11099,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/dns_domains/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -10482,6 +11113,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/dns_domains"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -10495,6 +11127,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/dns_domains/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -10606,6 +11239,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.VerifyDnsDomainResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/dns_domain/{name}/verify"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VerifyDnsDomain")] = rpcInfo
@@ -10718,6 +11352,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.dns_domain/Objects", "/ves.io.schema.dns_domain/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -10731,6 +11366,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.dns_domain/Object/{object_uid}", "/ves.io.schema.dns_domain/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -10744,6 +11380,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dns_domain/Object/{object_uid}", "/ves.io.schema.dns_domain/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -10757,6 +11394,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dns_domain/Objects", "/ves.io.schema.dns_domain/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -10770,6 +11408,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dns_domain/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -10783,6 +11422,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.dns_domain.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.dns_domain/Object/{object_uid}", "/ves.io.schema.dns_domain/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -10966,6 +11606,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -10979,6 +11620,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/endpoints/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -10992,6 +11634,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/endpoints/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -11005,6 +11648,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -11018,6 +11662,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/endpoints/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -11228,6 +11873,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.endpoint/Objects", "/ves.io.schema.endpoint/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -11241,6 +11887,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.endpoint/Object/{object_uid}", "/ves.io.schema.endpoint/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -11254,6 +11901,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.endpoint/Object/{object_uid}", "/ves.io.schema.endpoint/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -11267,6 +11915,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.endpoint/Objects", "/ves.io.schema.endpoint/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -11280,6 +11929,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.endpoint/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -11293,6 +11943,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.endpoint.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.endpoint/Object/{object_uid}", "/ves.io.schema.endpoint/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -11476,6 +12127,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/fast_acls"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -11489,6 +12141,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/fast_acls/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -11502,6 +12155,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/fast_acls/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -11515,6 +12169,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/fast_acls"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -11528,6 +12183,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/fast_acls/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -11639,6 +12295,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.FastACLHitsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/fast_acl/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("FastACLHits")] = rpcInfo
@@ -11821,6 +12478,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fast_acl/Objects", "/ves.io.schema.fast_acl/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -11834,6 +12492,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fast_acl/Object/{object_uid}", "/ves.io.schema.fast_acl/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -11847,6 +12506,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl/Object/{object_uid}", "/ves.io.schema.fast_acl/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -11860,6 +12520,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl/Objects", "/ves.io.schema.fast_acl/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -11873,6 +12534,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -11886,6 +12548,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fast_acl/Object/{object_uid}", "/ves.io.schema.fast_acl/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -12069,6 +12732,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/fast_acl_rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -12082,6 +12746,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/fast_acl_rules/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -12095,6 +12760,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/fast_acl_rules/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -12108,6 +12774,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/fast_acl_rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -12121,6 +12788,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/fast_acl_rules/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -12289,6 +12957,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fast_acl_rule/Objects", "/ves.io.schema.fast_acl_rule/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -12302,6 +12971,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fast_acl_rule/Object/{object_uid}", "/ves.io.schema.fast_acl_rule/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -12315,6 +12985,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_rule/Object/{object_uid}", "/ves.io.schema.fast_acl_rule/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -12328,6 +12999,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_rule/Objects", "/ves.io.schema.fast_acl_rule/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -12341,6 +13013,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_rule/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -12354,6 +13027,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fast_acl_rule.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fast_acl_rule/Object/{object_uid}", "/ves.io.schema.fast_acl_rule/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -12537,6 +13211,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/fleets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -12550,6 +13225,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/fleets/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -12563,6 +13239,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/fleets/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -12576,6 +13253,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/fleets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -12589,6 +13267,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/fleets/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -12691,6 +13370,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.fleet.BGPConfiguration"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BlockedServices",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.fleet.BlockedServices"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "BondLacpType",
@@ -13030,6 +13716,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fleet/Objects", "/ves.io.schema.fleet/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -13043,6 +13730,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fleet/Object/{object_uid}", "/ves.io.schema.fleet/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -13056,6 +13744,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet/Object/{object_uid}", "/ves.io.schema.fleet/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -13069,6 +13758,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet/Objects", "/ves.io.schema.fleet/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -13082,6 +13772,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -13095,6 +13786,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.fleet.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fleet/Object/{object_uid}", "/ves.io.schema.fleet/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -13342,6 +14034,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.flow_exporter.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.flow_exporter/Objects", "/ves.io.schema.flow_exporter/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -13355,6 +14048,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.flow_exporter.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.flow_exporter/Object/{object_uid}", "/ves.io.schema.flow_exporter/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -13368,6 +14062,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.flow_exporter.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.flow_exporter/Object/{object_uid}", "/ves.io.schema.flow_exporter/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -13381,6 +14076,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.flow_exporter.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.flow_exporter/Objects", "/ves.io.schema.flow_exporter/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -13394,6 +14090,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.flow_exporter.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.flow_exporter/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -13407,6 +14104,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.flow_exporter.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.flow_exporter/Object/{object_uid}", "/ves.io.schema.flow_exporter/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -13590,6 +14288,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/healthchecks"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -13603,6 +14302,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/healthchecks/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -13616,6 +14316,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/healthchecks/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -13629,6 +14330,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/healthchecks"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -13642,6 +14344,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/healthchecks/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -13817,6 +14520,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.healthcheck/Objects", "/ves.io.schema.healthcheck/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -13830,6 +14534,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.healthcheck/Object/{object_uid}", "/ves.io.schema.healthcheck/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -13843,6 +14548,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.healthcheck/Object/{object_uid}", "/ves.io.schema.healthcheck/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -13856,6 +14562,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.healthcheck/Objects", "/ves.io.schema.healthcheck/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -13869,6 +14576,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.healthcheck/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -13882,6 +14590,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.healthcheck.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.healthcheck/Object/{object_uid}", "/ves.io.schema.healthcheck/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -14065,6 +14774,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/ip_prefix_sets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -14078,6 +14788,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/ip_prefix_sets/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -14091,6 +14802,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/ip_prefix_sets/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -14104,6 +14816,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/ip_prefix_sets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -14117,6 +14830,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/ip_prefix_sets/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -14278,6 +14992,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.ip_prefix_set/Objects", "/ves.io.schema.ip_prefix_set/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -14291,6 +15006,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.ip_prefix_set/Object/{object_uid}", "/ves.io.schema.ip_prefix_set/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -14304,6 +15020,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ip_prefix_set/Object/{object_uid}", "/ves.io.schema.ip_prefix_set/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -14317,6 +15034,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ip_prefix_set/Objects", "/ves.io.schema.ip_prefix_set/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -14330,6 +15048,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ip_prefix_set/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -14343,6 +15062,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.ip_prefix_set.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.ip_prefix_set/Object/{object_uid}", "/ves.io.schema.ip_prefix_set/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -14528,6 +15248,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/k8s_clusters"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -14541,6 +15262,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/k8s_clusters/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -14554,6 +15276,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_clusters/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -14567,6 +15290,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_clusters"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -14580,6 +15304,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/k8s_clusters/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -14825,6 +15550,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.k8s_cluster/Objects", "/ves.io.schema.k8s_cluster/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -14838,6 +15564,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.k8s_cluster/Object/{object_uid}", "/ves.io.schema.k8s_cluster/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -14851,6 +15578,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster/Object/{object_uid}", "/ves.io.schema.k8s_cluster/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -14864,6 +15592,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster/Objects", "/ves.io.schema.k8s_cluster/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -14877,6 +15606,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -14890,6 +15620,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.k8s_cluster/Object/{object_uid}", "/ves.io.schema.k8s_cluster/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -15073,6 +15804,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/k8s_cluster_roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -15086,6 +15818,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/k8s_cluster_roles/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -15099,6 +15832,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_cluster_roles/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -15112,6 +15846,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_cluster_roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -15125,6 +15860,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/k8s_cluster_roles/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -15314,6 +16050,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.k8s_cluster_role/Objects", "/ves.io.schema.k8s_cluster_role/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -15327,6 +16064,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.k8s_cluster_role/Object/{object_uid}", "/ves.io.schema.k8s_cluster_role/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -15340,6 +16078,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role/Object/{object_uid}", "/ves.io.schema.k8s_cluster_role/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -15353,6 +16092,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role/Objects", "/ves.io.schema.k8s_cluster_role/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -15366,6 +16106,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -15379,6 +16120,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.k8s_cluster_role/Object/{object_uid}", "/ves.io.schema.k8s_cluster_role/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -15562,6 +16304,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/k8s_cluster_role_bindings"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -15575,6 +16318,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/k8s_cluster_role_bindings/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -15588,6 +16332,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_cluster_role_bindings/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -15601,6 +16346,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_cluster_role_bindings"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -15614,6 +16360,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/k8s_cluster_role_bindings/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -15789,6 +16536,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.k8s_cluster_role_binding/Objects", "/ves.io.schema.k8s_cluster_role_binding/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -15802,6 +16550,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.k8s_cluster_role_binding/Object/{object_uid}", "/ves.io.schema.k8s_cluster_role_binding/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -15815,6 +16564,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role_binding/Object/{object_uid}", "/ves.io.schema.k8s_cluster_role_binding/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -15828,6 +16578,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role_binding/Objects", "/ves.io.schema.k8s_cluster_role_binding/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -15841,6 +16592,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role_binding/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -15854,6 +16606,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_cluster_role_binding.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.k8s_cluster_role_binding/Object/{object_uid}", "/ves.io.schema.k8s_cluster_role_binding/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -16037,6 +16790,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/k8s_pod_security_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -16050,6 +16804,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/k8s_pod_security_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -16063,6 +16818,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_pod_security_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -16076,6 +16832,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_pod_security_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -16089,6 +16846,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/k8s_pod_security_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -16299,6 +17057,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.k8s_pod_security_policy/Objects", "/ves.io.schema.k8s_pod_security_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -16312,6 +17071,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.k8s_pod_security_policy/Object/{object_uid}", "/ves.io.schema.k8s_pod_security_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -16325,6 +17085,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_pod_security_policy/Object/{object_uid}", "/ves.io.schema.k8s_pod_security_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -16338,6 +17099,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_pod_security_policy/Objects", "/ves.io.schema.k8s_pod_security_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -16351,6 +17113,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_pod_security_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -16364,6 +17127,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.k8s_pod_security_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.k8s_pod_security_policy/Object/{object_uid}", "/ves.io.schema.k8s_pod_security_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -16490,6 +17254,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/access_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AccessLogAggregationQuery")] = rpcInfo
@@ -16503,6 +17268,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/access_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AccessLogQueryV2")] = rpcInfo
@@ -16516,6 +17282,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/access_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AccessLogScrollQuery")] = rpcInfo
@@ -16529,6 +17296,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/audit_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AuditLogAggregationQuery")] = rpcInfo
@@ -16542,6 +17310,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/audit_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AuditLogQueryV2")] = rpcInfo
@@ -16555,6 +17324,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/audit_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AuditLogScrollQuery")] = rpcInfo
@@ -16568,6 +17338,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/firewall_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("FirewallLogAggregationQuery")] = rpcInfo
@@ -16581,6 +17352,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/firewall_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("FirewallLogQuery")] = rpcInfo
@@ -16594,6 +17366,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/firewall_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("FirewallLogScrollQuery")] = rpcInfo
@@ -16607,6 +17380,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/k8s_audit_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("K8SAuditLogAggregationQuery")] = rpcInfo
@@ -16620,6 +17394,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/k8s_audit_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("K8SAuditLogQuery")] = rpcInfo
@@ -16633,6 +17408,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_audit_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("K8SAuditLogScrollQuery")] = rpcInfo
@@ -16646,6 +17422,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/k8s_events/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("K8SEventsAggregationQuery")] = rpcInfo
@@ -16659,6 +17436,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/k8s_events"}}
 	aInfo.RPCsInfo[svcfw.RPCName("K8SEventsQuery")] = rpcInfo
@@ -16672,6 +17450,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_events/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("K8SEventsScrollQuery")] = rpcInfo
@@ -16685,6 +17464,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/vk8s_audit_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SAuditLogAggregationQuery")] = rpcInfo
@@ -16698,6 +17478,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/vk8s_audit_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SAuditLogQuery")] = rpcInfo
@@ -16711,6 +17492,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/vk8s_audit_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SAuditLogScrollQuery")] = rpcInfo
@@ -16724,6 +17506,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/vk8s_events/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SEventsAggregationQuery")] = rpcInfo
@@ -16737,6 +17520,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/vk8s_events"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SEventsQuery")] = rpcInfo
@@ -16750,6 +17534,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/vk8s_events/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SEventsScrollQuery")] = rpcInfo
@@ -17360,6 +18145,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/log_receivers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -17373,6 +18159,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/log_receivers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -17386,6 +18173,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/log_receivers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -17399,6 +18187,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/log_receivers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -17412,6 +18201,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/log_receivers/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -17523,6 +18313,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.TestLogReceiverResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/log_receivers/{name}/test"}}
 	aInfo.RPCsInfo[svcfw.RPCName("TestLogReceiver")] = rpcInfo
@@ -17698,6 +18489,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.log_receiver/Objects", "/ves.io.schema.log_receiver/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -17711,6 +18503,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.log_receiver/Object/{object_uid}", "/ves.io.schema.log_receiver/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -17724,6 +18517,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.log_receiver/Object/{object_uid}", "/ves.io.schema.log_receiver/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -17737,6 +18531,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.log_receiver/Objects", "/ves.io.schema.log_receiver/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -17750,6 +18545,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.log_receiver/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -17763,6 +18559,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.log_receiver.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.log_receiver/Object/{object_uid}", "/ves.io.schema.log_receiver/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -17946,6 +18743,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/malicious_user_mitigations"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -17959,6 +18757,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/malicious_user_mitigations/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -17972,6 +18771,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/malicious_user_mitigations/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -17985,6 +18785,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/malicious_user_mitigations"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -17998,6 +18799,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/malicious_user_mitigations/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -18187,6 +18989,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.malicious_user_mitigation/Objects", "/ves.io.schema.malicious_user_mitigation/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -18200,6 +19003,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.malicious_user_mitigation/Object/{object_uid}", "/ves.io.schema.malicious_user_mitigation/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -18213,6 +19017,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.malicious_user_mitigation/Object/{object_uid}", "/ves.io.schema.malicious_user_mitigation/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -18226,6 +19031,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.malicious_user_mitigation/Objects", "/ves.io.schema.malicious_user_mitigation/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -18239,6 +19045,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.malicious_user_mitigation/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -18252,6 +19059,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.malicious_user_mitigation.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.malicious_user_mitigation/Object/{object_uid}", "/ves.io.schema.malicious_user_mitigation/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -18435,6 +19243,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -18448,6 +19257,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -18461,6 +19271,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -18474,6 +19285,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -18578,6 +19390,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.CascadeDeleteResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{name}/cascade_delete"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CascadeDelete")] = rpcInfo
@@ -18591,6 +19404,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.EvaluateAPIAccessResp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/evaluate-api-access"}}
 	aInfo.RPCsInfo[svcfw.RPCName("EvaluateAPIAccess")] = rpcInfo
@@ -18604,6 +19418,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/update_allow_advertise_on_public"}}
 	aInfo.RPCsInfo[svcfw.RPCName("UpdateAllowAdvertiseOnPublic")] = rpcInfo
@@ -18708,6 +19523,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.GetActiveAlertPoliciesResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/active_alert_policies"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetActiveAlertPolicies")] = rpcInfo
@@ -18721,6 +19537,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.GetActiveNetworkPoliciesResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/active_network_policies"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetActiveNetworkPolicies")] = rpcInfo
@@ -18734,6 +19551,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.GetActiveServicePoliciesResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/active_service_policies"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetActiveServicePolicies")] = rpcInfo
@@ -18747,6 +19565,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/fast_acls_for_internet_vips"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetFastACLsForInternetVIPs")] = rpcInfo
@@ -18760,6 +19579,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.SetActiveAlertPoliciesResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/active_alert_policies"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetActiveAlertPolicies")] = rpcInfo
@@ -18773,6 +19593,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.SetActiveNetworkPoliciesResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/active_network_policies"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetActiveNetworkPolicies")] = rpcInfo
@@ -18786,6 +19607,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.SetActiveServicePoliciesResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/active_service_policies"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetActiveServicePolicies")] = rpcInfo
@@ -18799,11 +19621,26 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/fast_acls_for_internet_vips"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetFastACLsForInternetVIPs")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "SuggestValues",
+		InMsgType:    "ves.io.schema.namespace.SuggestValuesReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.namespace.SuggestValuesResp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/suggest-values"}}
+	aInfo.RPCsInfo[svcfw.RPCName("SuggestValues")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.namespace.NamespaceCustomAPI.SuggestValues"] = rpcInfo
 	}
 
 	fInfo.APIsInfo["NamespaceCustomAPI"] = aInfo
@@ -18923,6 +19760,27 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse"] = mInfo
 	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SuggestValuesReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.SuggestValuesReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SuggestValuesResp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.SuggestValuesResp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SuggestedItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.SuggestedItem"] = mInfo
+	}
 
 	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/namespace/types.proto",
@@ -19009,6 +19867,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.namespace/Objects", "/ves.io.schema.namespace/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -19022,6 +19881,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.namespace/Object/{object_uid}", "/ves.io.schema.namespace/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -19035,6 +19895,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.namespace/Object/{object_uid}", "/ves.io.schema.namespace/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -19048,6 +19909,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.namespace/Objects", "/ves.io.schema.namespace/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -19061,6 +19923,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.namespace/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -19074,6 +19937,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.namespace.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.namespace/Object/{object_uid}", "/ves.io.schema.namespace/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -19257,6 +20121,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/network_connectors"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -19270,6 +20135,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/network_connectors/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -19283,6 +20149,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_connectors/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -19296,6 +20163,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_connectors"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -19309,6 +20177,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/network_connectors/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -19498,6 +20367,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_connector/Objects", "/ves.io.schema.network_connector/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -19511,6 +20381,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_connector/Object/{object_uid}", "/ves.io.schema.network_connector/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -19524,6 +20395,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_connector/Object/{object_uid}", "/ves.io.schema.network_connector/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -19537,6 +20409,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_connector/Objects", "/ves.io.schema.network_connector/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -19550,6 +20423,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_connector/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -19563,6 +20437,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_connector.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_connector/Object/{object_uid}", "/ves.io.schema.network_connector/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -19746,6 +20621,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/network_firewalls"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -19759,6 +20635,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/network_firewalls/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -19772,6 +20649,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_firewalls/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -19785,6 +20663,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_firewalls"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -19798,6 +20677,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/network_firewalls/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -19987,6 +20867,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_firewall/Objects", "/ves.io.schema.network_firewall/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -20000,6 +20881,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_firewall/Object/{object_uid}", "/ves.io.schema.network_firewall/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -20013,6 +20895,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_firewall/Object/{object_uid}", "/ves.io.schema.network_firewall/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -20026,6 +20909,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_firewall/Objects", "/ves.io.schema.network_firewall/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -20039,6 +20923,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_firewall/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -20052,6 +20937,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_firewall.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_firewall/Object/{object_uid}", "/ves.io.schema.network_firewall/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -20235,6 +21121,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/network_interfaces"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -20248,6 +21135,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/network_interfaces/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -20261,6 +21149,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_interfaces/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -20274,6 +21163,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_interfaces"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -20287,6 +21177,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/network_interfaces/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -20574,6 +21465,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_interface/Objects", "/ves.io.schema.network_interface/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -20587,6 +21479,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_interface/Object/{object_uid}", "/ves.io.schema.network_interface/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -20600,6 +21493,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_interface/Object/{object_uid}", "/ves.io.schema.network_interface/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -20613,6 +21507,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_interface/Objects", "/ves.io.schema.network_interface/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -20626,6 +21521,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_interface/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -20639,6 +21535,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_interface.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_interface/Object/{object_uid}", "/ves.io.schema.network_interface/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -20822,6 +21719,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/network_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -20835,6 +21733,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/network_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -20848,6 +21747,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -20861,6 +21761,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -20874,6 +21775,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/network_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -20985,6 +21887,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.NetworkPolicyHitsResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/network_policy/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("NetworkPolicyHits")] = rpcInfo
@@ -21153,6 +22056,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_policy/Objects", "/ves.io.schema.network_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -21166,6 +22070,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_policy/Object/{object_uid}", "/ves.io.schema.network_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -21179,6 +22084,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy/Object/{object_uid}", "/ves.io.schema.network_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -21192,6 +22098,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy/Objects", "/ves.io.schema.network_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -21205,6 +22112,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -21218,6 +22126,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_policy/Object/{object_uid}", "/ves.io.schema.network_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -21401,6 +22310,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/network_policy_rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -21414,6 +22324,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/network_policy_rules/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -21427,6 +22338,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_policy_rules/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -21440,6 +22352,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_policy_rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -21453,6 +22366,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/network_policy_rules/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -21628,6 +22542,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_policy_rule/Objects", "/ves.io.schema.network_policy_rule/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -21641,6 +22556,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_policy_rule/Object/{object_uid}", "/ves.io.schema.network_policy_rule/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -21654,6 +22570,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_rule/Object/{object_uid}", "/ves.io.schema.network_policy_rule/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -21667,6 +22584,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_rule/Objects", "/ves.io.schema.network_policy_rule/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -21680,6 +22598,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_rule/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -21693,6 +22612,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.network_policy_rule.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_policy_rule/Object/{object_uid}", "/ves.io.schema.network_policy_rule/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -21876,6 +22796,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/policers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -21889,6 +22810,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/policers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -21902,6 +22824,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/policers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -21915,6 +22838,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/policers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -21928,6 +22852,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/policers/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -22096,6 +23021,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.policer/Objects", "/ves.io.schema.policer/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -22109,6 +23035,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.policer/Object/{object_uid}", "/ves.io.schema.policer/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -22122,6 +23049,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.policer/Object/{object_uid}", "/ves.io.schema.policer/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -22135,6 +23063,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.policer/Objects", "/ves.io.schema.policer/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -22148,6 +23077,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.policer/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -22161,6 +23091,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.policer.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.policer/Object/{object_uid}", "/ves.io.schema.policer/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -22448,6 +23379,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.policy.ShapeBotBlockMitigationActionType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "ShapeBotFlagMitigationActionChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.ShapeBotFlagMitigationActionChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ShapeBotFlagMitigationActionType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.ShapeBotFlagMitigationActionType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "ShapeBotMitigationAction",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -22625,6 +23570,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/protocol_policers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -22638,6 +23584,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/protocol_policers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -22651,6 +23598,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/protocol_policers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -22664,6 +23612,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/protocol_policers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -22677,6 +23626,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/protocol_policers/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -22880,6 +23830,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.protocol_policer/Objects", "/ves.io.schema.protocol_policer/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -22893,6 +23844,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.protocol_policer/Object/{object_uid}", "/ves.io.schema.protocol_policer/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -22906,6 +23858,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.protocol_policer/Object/{object_uid}", "/ves.io.schema.protocol_policer/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -22919,6 +23872,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.protocol_policer/Objects", "/ves.io.schema.protocol_policer/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -22932,6 +23886,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.protocol_policer/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -22945,6 +23900,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.protocol_policer.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.protocol_policer/Object/{object_uid}", "/ves.io.schema.protocol_policer/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -23136,6 +24092,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/public_ips/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -23149,6 +24106,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/public_ips"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -23162,6 +24120,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/public_ips/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -23295,6 +24254,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.public_ip/Objects", "/ves.io.schema.public_ip/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -23308,6 +24268,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.public_ip/Object/{object_uid}", "/ves.io.schema.public_ip/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -23321,6 +24282,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.public_ip/Object/{object_uid}", "/ves.io.schema.public_ip/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -23334,6 +24296,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.public_ip/Objects", "/ves.io.schema.public_ip/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -23347,6 +24310,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.public_ip/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -23360,6 +24324,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.public_ip.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.public_ip/Object/{object_uid}", "/ves.io.schema.public_ip/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -23543,6 +24508,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/rate_limiters"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -23556,6 +24522,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/rate_limiters/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -23569,6 +24536,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/rate_limiters/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -23582,6 +24550,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/rate_limiters"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -23595,6 +24564,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/rate_limiters/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -23763,6 +24733,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.rate_limiter/Objects", "/ves.io.schema.rate_limiter/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -23776,6 +24747,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.rate_limiter/Object/{object_uid}", "/ves.io.schema.rate_limiter/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -23789,6 +24761,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.rate_limiter/Object/{object_uid}", "/ves.io.schema.rate_limiter/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -23802,6 +24775,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.rate_limiter/Objects", "/ves.io.schema.rate_limiter/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -23815,6 +24789,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.rate_limiter/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -23828,6 +24803,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.rate_limiter.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.rate_limiter/Object/{object_uid}", "/ves.io.schema.rate_limiter/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -23996,6 +24972,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/registrations"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -24009,6 +24986,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/registrations/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -24022,6 +25000,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/registrations/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -24035,6 +25014,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/registrations"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -24048,6 +25028,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/registrations/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -24159,6 +25140,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/registrations_by_site/{site_name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListRegistrationsBySite")] = rpcInfo
@@ -24172,6 +25154,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/listregistrationsbystate"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListRegistrationsByState")] = rpcInfo
@@ -24185,6 +25168,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.ObjectChangeResp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/registration/{name}/approve"}}
 	aInfo.RPCsInfo[svcfw.RPCName("RegistrationApprove")] = rpcInfo
@@ -24198,6 +25182,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.ConfigResp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/requestConfig"}}
 	aInfo.RPCsInfo[svcfw.RPCName("RegistrationConfig")] = rpcInfo
@@ -24211,6 +25196,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.Object",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/registerBootstrap"}}
 	aInfo.RPCsInfo[svcfw.RPCName("RegistrationCreate")] = rpcInfo
@@ -24386,6 +25372,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.registration/Objects", "/ves.io.schema.registration/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -24399,6 +25386,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.registration/Object/{object_uid}", "/ves.io.schema.registration/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -24412,6 +25400,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.registration/Object/{object_uid}", "/ves.io.schema.registration/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -24425,6 +25414,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.registration/Objects", "/ves.io.schema.registration/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -24438,6 +25428,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.registration/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -24451,6 +25442,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.registration.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.registration/Object/{object_uid}", "/ves.io.schema.registration/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -24634,6 +25626,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -24647,6 +25640,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/roles/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -24660,6 +25654,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/roles/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -24673,6 +25668,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -24686,6 +25682,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/roles/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -24797,6 +25794,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.Object",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/{namespace}/roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CustomCreate")] = rpcInfo
@@ -24810,6 +25808,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.CustomGetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/roles/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CustomGet")] = rpcInfo
@@ -24823,6 +25822,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.CustomListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CustomList")] = rpcInfo
@@ -24836,6 +25836,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.Object",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/custom/namespaces/{namespace}/roles/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CustomReplace")] = rpcInfo
@@ -24976,6 +25977,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.role/Objects", "/ves.io.schema.role/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -24989,6 +25991,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.role/Object/{object_uid}", "/ves.io.schema.role/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -25002,6 +26005,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.role/Object/{object_uid}", "/ves.io.schema.role/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -25015,6 +26019,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.role/Objects", "/ves.io.schema.role/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -25028,6 +26033,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.role/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -25041,6 +26047,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.role.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.role/Object/{object_uid}", "/ves.io.schema.role/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -25224,6 +26231,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/routes"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -25237,6 +26245,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/routes/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -25250,6 +26259,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/routes/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -25263,6 +26273,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/routes"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -25276,6 +26287,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/routes/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -25521,6 +26533,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.route/Objects", "/ves.io.schema.route/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -25534,6 +26547,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.route/Object/{object_uid}", "/ves.io.schema.route/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -25547,6 +26561,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.route/Object/{object_uid}", "/ves.io.schema.route/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -25560,6 +26575,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.route/Objects", "/ves.io.schema.route/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -25573,6 +26589,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.route/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -25586,6 +26603,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.route.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.route/Object/{object_uid}", "/ves.io.schema.route/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -25769,6 +26787,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/secret_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -25782,6 +26801,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/secret_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -25795,6 +26815,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/secret_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -25808,6 +26829,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/secret_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -25821,6 +26843,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/secret_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -25932,11 +26955,26 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.SoftDeleteResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/secret_policys/{name}/softdelete"}}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/secret_policy/{name}/softdelete"}}
 	aInfo.RPCsInfo[svcfw.RPCName("DeletePolicy")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy.CustomAPI.DeletePolicy"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListPolicy",
+		InMsgType:    "ves.io.schema.secret_policy.ListPolicyRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.secret_policy.ListPolicyResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/secret_policy/list_policy/{policy_state}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListPolicy")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.secret_policy.CustomAPI.ListPolicy"] = rpcInfo
 	}
 	rpcInfo = &svcfw.RPCInfo{
 		Name:         "RecoverPolicy",
@@ -25945,8 +26983,9 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.RecoverResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/secret_policys/{name}/recover"}}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/secret_policy/{name}/recover"}}
 	aInfo.RPCsInfo[svcfw.RPCName("RecoverPolicy")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy.CustomAPI.RecoverPolicy"] = rpcInfo
@@ -25957,6 +26996,27 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.APIIdx["ves.io.schema.secret_policy.CustomAPI"] = aInfo
 	}
 
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListPolicyRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.secret_policy.ListPolicyRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListPolicyResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.secret_policy.ListPolicyResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListPolicyResponseItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.secret_policy.ListPolicyResponseItem"] = mInfo
+	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "RecoverRequest",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
@@ -26064,6 +27124,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.secret_policy/Objects", "/ves.io.schema.secret_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -26077,6 +27138,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.secret_policy/Object/{object_uid}", "/ves.io.schema.secret_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -26090,6 +27152,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy/Object/{object_uid}", "/ves.io.schema.secret_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -26103,6 +27166,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy/Objects", "/ves.io.schema.secret_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -26116,6 +27180,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -26129,6 +27194,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.secret_policy/Object/{object_uid}", "/ves.io.schema.secret_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -26312,6 +27378,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/secret_policy_rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -26325,6 +27392,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/secret_policy_rules/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -26338,6 +27406,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/secret_policy_rules/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -26351,6 +27420,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/secret_policy_rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -26364,6 +27434,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/secret_policy_rules/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -26525,6 +27596,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.secret_policy_rule/Objects", "/ves.io.schema.secret_policy_rule/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -26538,6 +27610,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.secret_policy_rule/Object/{object_uid}", "/ves.io.schema.secret_policy_rule/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -26551,6 +27624,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy_rule/Object/{object_uid}", "/ves.io.schema.secret_policy_rule/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -26564,6 +27638,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy_rule/Objects", "/ves.io.schema.secret_policy_rule/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -26577,6 +27652,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy_rule/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -26590,6 +27666,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.secret_policy_rule.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.secret_policy_rule/Object/{object_uid}", "/ves.io.schema.secret_policy_rule/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -26773,6 +27850,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/service_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -26786,6 +27864,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/service_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -26799,6 +27878,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/service_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -26812,6 +27892,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/service_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -26825,6 +27906,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/service_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -26936,6 +28018,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.ServicePolicyHitsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/service_policy/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ServicePolicyHits")] = rpcInfo
@@ -26949,6 +28032,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.ServicePolicyHitsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/service_policy/latency"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ServicePolicyHitsLatency")] = rpcInfo
@@ -27110,6 +28194,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.service_policy/Objects", "/ves.io.schema.service_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -27123,6 +28208,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.service_policy/Object/{object_uid}", "/ves.io.schema.service_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -27136,6 +28222,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy/Object/{object_uid}", "/ves.io.schema.service_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -27149,6 +28236,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy/Objects", "/ves.io.schema.service_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -27162,6 +28250,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -27175,6 +28264,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.service_policy/Object/{object_uid}", "/ves.io.schema.service_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -27358,6 +28448,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/service_policy_rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -27371,6 +28462,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/service_policy_rules/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -27384,6 +28476,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/service_policy_rules/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -27397,6 +28490,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/service_policy_rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -27410,6 +28504,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/service_policy_rules/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -27592,6 +28687,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.service_policy_rule/Objects", "/ves.io.schema.service_policy_rule/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -27605,6 +28701,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.service_policy_rule/Object/{object_uid}", "/ves.io.schema.service_policy_rule/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -27618,6 +28715,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_rule/Object/{object_uid}", "/ves.io.schema.service_policy_rule/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -27631,6 +28729,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_rule/Objects", "/ves.io.schema.service_policy_rule/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -27644,6 +28743,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_rule/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -27657,6 +28757,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.service_policy_rule.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.service_policy_rule/Object/{object_uid}", "/ves.io.schema.service_policy_rule/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -27840,8 +28941,9 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.GlobalAccessCheckResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/namespaces/{namespace}/sites/{name}/global_access_check", "/ves.io.schema/introspect/read/private/namespaces/{namespace}/sites/{name}/global_access_check"}}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema/introspect/read/private/namespaces/{namespace}/sites/{name}/global_access_check"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GlobalAccessEnabled")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.PrivateConfigKubeConfigAPI.GlobalAccessEnabled"] = rpcInfo
@@ -27880,6 +28982,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.api.HttpBody",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/sites/{name}/local-kubeconfig"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CreateLocalKubeConfig")] = rpcInfo
@@ -27893,6 +28996,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.ListKubeConfigRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/sites/{name}/local-kubeconfigs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListLocalKubeConfig")] = rpcInfo
@@ -27933,6 +29037,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -27946,6 +29051,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -27959,6 +29065,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/sites/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -28049,6 +29156,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.ConfigMapList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/configmaps", "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/configmaps"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ConfigMapList")] = rpcInfo
@@ -28062,6 +29170,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.batch.v1beta1.CronJobList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/batch/v1beta1/cronjobs", "/public/namespaces/system/site/{site}/apis/batch/v1beta1/namespaces/{namespace}/cronjobs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CronJobList")] = rpcInfo
@@ -28075,6 +29184,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.apps.v1.DaemonSetList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/apps/v1/daemonsets", "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/daemonsets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("DaemonSetList")] = rpcInfo
@@ -28088,6 +29198,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.apps.v1.DeploymentList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/apps/v1/deployments", "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/deployments"}}
 	aInfo.RPCsInfo[svcfw.RPCName("DeploymentList")] = rpcInfo
@@ -28101,6 +29212,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.EndpointsList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/endpoints", "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("EndpointsList")] = rpcInfo
@@ -28114,6 +29226,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.batch.v1.JobList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/batch/v1/jobs", "/public/namespaces/system/site/{site}/apis/batch/v1/namespaces/{namespace}/jobs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("JobList")] = rpcInfo
@@ -28127,6 +29240,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.NamespaceList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces"}}
 	aInfo.RPCsInfo[svcfw.RPCName("NamespaceList")] = rpcInfo
@@ -28140,6 +29254,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.NodeList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/nodes"}}
 	aInfo.RPCsInfo[svcfw.RPCName("NodeList")] = rpcInfo
@@ -28153,6 +29268,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.PersistentVolumeClaimList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/persistentvolumeclaims", "/public/namespaces/system/site/{site}/api/v1/persistentvolumeclaims"}}
 	aInfo.RPCsInfo[svcfw.RPCName("PersistentVolumeClaimList")] = rpcInfo
@@ -28166,6 +29282,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.PersistentVolumeList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/persistentvolumes"}}
 	aInfo.RPCsInfo[svcfw.RPCName("PersistentVolumeList")] = rpcInfo
@@ -28179,6 +29296,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.PodList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/pods", "/public/namespaces/system/site/{site}/api/v1/pods"}}
 	aInfo.RPCsInfo[svcfw.RPCName("PodList")] = rpcInfo
@@ -28192,6 +29310,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.apps.v1.ReplicaSetList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/replicasets", "/public/namespaces/system/site/{site}/apis/apps/v1/replicasets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ReplicaSetList")] = rpcInfo
@@ -28205,6 +29324,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.SecretList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/secrets", "/public/namespaces/system/site/{site}/api/v1/secrets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SecretList")] = rpcInfo
@@ -28218,6 +29338,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.core.v1.ServiceList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/services", "/public/namespaces/system/site/{site}/api/v1/services"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ServiceList")] = rpcInfo
@@ -28231,6 +29352,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "k8s.io.api.apps.v1.StatefulSetList",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/statefulsets", "/public/namespaces/system/site/{site}/apis/apps/v1/statefulsets"}}
 	aInfo.RPCsInfo[svcfw.RPCName("StatefulSetList")] = rpcInfo
@@ -28377,6 +29499,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.SetStateResp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{name}/state"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetState")] = rpcInfo
@@ -28432,6 +29555,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.api.HttpBody",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/sites/{site}/global-kubeconfigs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CreateGlobalKubeConfig")] = rpcInfo
@@ -28445,6 +29569,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.ListKubeConfigRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/sites/{site}/global-kubeconfigs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListGlobalKubeConfig")] = rpcInfo
@@ -28458,6 +29583,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.KubeConfigStatusRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/revoke/global-kubeconfigs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("RevokeGlobalKubeConfig")] = rpcInfo
@@ -28498,6 +29624,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.UpgradeOSResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/sites/{name}/upgrade_os"}}
 	aInfo.RPCsInfo[svcfw.RPCName("UpgradeOS")] = rpcInfo
@@ -28511,6 +29638,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.UpgradeSWResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/sites/{name}/upgrade_sw"}}
 	aInfo.RPCsInfo[svcfw.RPCName("UpgradeSW")] = rpcInfo
@@ -28580,6 +29708,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.SiteStatusMetricsResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/status/metrics"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SiteStatusMetrics")] = rpcInfo
@@ -29007,6 +30136,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.site/Objects", "/ves.io.schema.site/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -29020,6 +30150,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.site/Object/{object_uid}", "/ves.io.schema.site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -29033,6 +30164,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site/Object/{object_uid}", "/ves.io.schema.site/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -29046,6 +30178,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site/Objects", "/ves.io.schema.site/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -29059,6 +30192,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -29072,6 +30206,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.site/Object/{object_uid}", "/ves.io.schema.site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -29255,6 +30390,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/site_mesh_groups"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -29268,6 +30404,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/site_mesh_groups/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -29281,6 +30418,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/site_mesh_groups/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -29294,6 +30432,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/site_mesh_groups"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -29307,6 +30446,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/site_mesh_groups/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -29475,6 +30615,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.site_mesh_group/Objects", "/ves.io.schema.site_mesh_group/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -29488,6 +30629,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.site_mesh_group/Object/{object_uid}", "/ves.io.schema.site_mesh_group/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -29501,6 +30643,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_mesh_group/Object/{object_uid}", "/ves.io.schema.site_mesh_group/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -29514,6 +30657,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_mesh_group/Objects", "/ves.io.schema.site_mesh_group/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -29527,6 +30671,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_mesh_group/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -29540,6 +30685,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.site_mesh_group.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.site_mesh_group/Object/{object_uid}", "/ves.io.schema.site_mesh_group/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -29828,6 +30974,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.CreateObjectResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/private/namespaces/{namespace}/stored_objects/{object_type}/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CreateObject")] = rpcInfo
@@ -29841,6 +30988,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.DeleteObjectResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/private/namespaces/{namespace}/stored_objects/{object_type}/{name}", "/private/namespaces/{namespace}/stored_objects/{object_type}/{name}/{version}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("DeleteObject")] = rpcInfo
@@ -29854,6 +31002,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.GetObjectResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/namespaces/{namespace}/stored_objects/{object_type}/{name}/{version}", "/ves.io.schema/introspect/read/private/namespaces/{namespace}/stored_objects/{object_type}/{name}/{version}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetObject")] = rpcInfo
@@ -29867,6 +31016,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.ListObjectsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/namespaces/{namespace}/stored_objects/{object_type}", "/ves.io.schema/introspect/read/private/namespaces/{namespace}/stored_objects/{object_type}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListObjects")] = rpcInfo
@@ -29907,6 +31057,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.CreateObjectResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{namespace}/stored_objects/{object_type}/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CreateObject")] = rpcInfo
@@ -29920,6 +31071,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.DeleteObjectResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/stored_objects/{object_type}/{name}", "/public/namespaces/{namespace}/stored_objects/{object_type}/{name}/{version}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("DeleteObject")] = rpcInfo
@@ -29933,6 +31085,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.GetObjectResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/stored_objects/{object_type}/{name}/{version}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetObject")] = rpcInfo
@@ -29946,6 +31099,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.ListObjectsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/stored_objects/{object_type}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListObjects")] = rpcInfo
@@ -30015,6 +31169,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.stored_object/Objects", "/ves.io.schema.stored_object/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -30028,6 +31183,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.stored_object/Object/{object_uid}", "/ves.io.schema.stored_object/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -30041,6 +31197,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.stored_object/Object/{object_uid}", "/ves.io.schema.stored_object/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -30054,6 +31211,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.stored_object/Objects", "/ves.io.schema.stored_object/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -30067,6 +31225,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.stored_object/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -30080,6 +31239,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.stored_object.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.stored_object/Object/{object_uid}", "/ves.io.schema.stored_object/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -30321,6 +31481,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tenant.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.tenant/Objects", "/ves.io.schema.tenant/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -30334,6 +31495,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tenant.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.tenant/Object/{object_uid}", "/ves.io.schema.tenant/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -30347,6 +31509,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tenant.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tenant/Object/{object_uid}", "/ves.io.schema.tenant/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -30360,6 +31523,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tenant.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tenant/Objects", "/ves.io.schema.tenant/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -30373,6 +31537,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tenant.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tenant/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -30386,6 +31551,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tenant.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.tenant/Object/{object_uid}", "/ves.io.schema.tenant/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -30569,6 +31735,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/tokens"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -30582,6 +31749,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/tokens/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -30595,6 +31763,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tokens/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -30608,6 +31777,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tokens"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -30621,6 +31791,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/tokens/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -30732,6 +31903,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.ObjectChangeResp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/tokens/{name}/state"}}
 	aInfo.RPCsInfo[svcfw.RPCName("TokenState")] = rpcInfo
@@ -30837,6 +32009,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.token/Objects", "/ves.io.schema.token/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -30850,6 +32023,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.token/Object/{object_uid}", "/ves.io.schema.token/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -30863,6 +32037,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.token/Object/{object_uid}", "/ves.io.schema.token/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -30876,6 +32051,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.token/Objects", "/ves.io.schema.token/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -30889,6 +32065,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.token/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -30902,6 +32079,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.token.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.token/Object/{object_uid}", "/ves.io.schema.token/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -31085,6 +32263,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/tunnels"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -31098,6 +32277,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/tunnels/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -31111,6 +32291,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tunnels/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -31124,6 +32305,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tunnels"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -31137,6 +32319,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/tunnels/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -31354,6 +32537,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.tunnel/Objects", "/ves.io.schema.tunnel/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -31367,6 +32551,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.tunnel/Object/{object_uid}", "/ves.io.schema.tunnel/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -31380,6 +32565,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tunnel/Object/{object_uid}", "/ves.io.schema.tunnel/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -31393,6 +32579,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tunnel/Objects", "/ves.io.schema.tunnel/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -31406,6 +32593,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tunnel/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -31419,6 +32607,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.tunnel.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.tunnel/Object/{object_uid}", "/ves.io.schema.tunnel/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -31602,6 +32791,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/usb_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -31615,6 +32805,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/usb_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -31628,6 +32819,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/usb_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -31641,6 +32833,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/usb_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -31654,6 +32847,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/usb_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -31822,6 +33016,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.usb_policy/Objects", "/ves.io.schema.usb_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -31835,6 +33030,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.usb_policy/Object/{object_uid}", "/ves.io.schema.usb_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -31848,6 +33044,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usb_policy/Object/{object_uid}", "/ves.io.schema.usb_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -31861,6 +33058,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usb_policy/Objects", "/ves.io.schema.usb_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -31874,6 +33072,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usb_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -31887,6 +33086,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.usb_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.usb_policy/Object/{object_uid}", "/ves.io.schema.usb_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -32092,6 +33292,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.CascadeDeleteResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/write/namespaces/{namespace}/users/cascade_delete"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CascadeDelete")] = rpcInfo
@@ -32105,8 +33306,9 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.LastLoginUpdateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/custom/namespaces/system/users/update_last_login", "/ves.io.schema/introspect/write/private/custom/namespaces/system/users/update_last_login"}}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/write/private/custom/namespaces/system/users/update_last_login"}}
 	aInfo.RPCsInfo[svcfw.RPCName("UpdateLastLogin")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin"] = rpcInfo
@@ -32167,6 +33369,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.AcceptTOSResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/{namespace}/accept_tos"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AcceptTOS")] = rpcInfo
@@ -32180,6 +33383,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/system/users/group_add"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AddUserToGroup")] = rpcInfo
@@ -32193,6 +33397,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/{namespace}/role_users"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AssignRole")] = rpcInfo
@@ -32206,6 +33411,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.CascadeDeleteResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/{namespace}/users/cascade_delete"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CascadeDelete")] = rpcInfo
@@ -32219,6 +33425,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.Object",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/{namespace}/user_roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -32232,6 +33439,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.GetUserRoleResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/whoami"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -32245,6 +33453,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.GetTOSResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/tos"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetTOS")] = rpcInfo
@@ -32258,6 +33467,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.ListUserRoleResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/user_roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -32271,6 +33481,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/system/users/group_remove"}}
 	aInfo.RPCsInfo[svcfw.RPCName("RemoveUserFromGroup")] = rpcInfo
@@ -32284,6 +33495,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.Object",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/{namespace}/user_roles/{name}"}, "PUT": []string{"/public/custom/namespaces/{namespace}/user_roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -32297,6 +33509,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/password/reset"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ResetPassword")] = rpcInfo
@@ -32310,6 +33523,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/password/admin_reset"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ResetPasswordByAdmin")] = rpcInfo
@@ -32323,6 +33537,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.SendPasswordEmailResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/namespaces/{namespace}/send_password_email"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SendPasswordEmail")] = rpcInfo
@@ -32336,6 +33551,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/idm/user/sync"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SyncUser")] = rpcInfo
@@ -32602,6 +33818,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.user/Objects", "/ves.io.schema.user/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -32615,6 +33832,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.user/Object/{object_uid}", "/ves.io.schema.user/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -32628,6 +33846,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user/Object/{object_uid}", "/ves.io.schema.user/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -32641,6 +33860,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user/Objects", "/ves.io.schema.user/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -32654,6 +33874,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -32667,6 +33888,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.user/Object/{object_uid}", "/ves.io.schema.user/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -32850,6 +34072,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/user_identifications"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -32863,6 +34086,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/user_identifications/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -32876,6 +34100,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/user_identifications/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -32889,6 +34114,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/user_identifications"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -32902,6 +34128,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/user_identifications/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -33070,6 +34297,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.user_identification/Objects", "/ves.io.schema.user_identification/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -33083,6 +34311,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.user_identification/Object/{object_uid}", "/ves.io.schema.user_identification/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -33096,6 +34325,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user_identification/Object/{object_uid}", "/ves.io.schema.user_identification/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -33109,6 +34339,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user_identification/Objects", "/ves.io.schema.user_identification/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -33122,6 +34353,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user_identification/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -33135,6 +34367,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.user_identification.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.user_identification/Object/{object_uid}", "/ves.io.schema.user_identification/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -33661,6 +34894,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.GlobalNetworkConnectionType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "LocalControlPlaneType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.LocalControlPlaneType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "SiteStaticRoutesListType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -33859,6 +35099,97 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	mdr.PkgsInfo["ves.io.schema.views.api_definition"] = pInfo
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/api_definition/custom_api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/api_definition/custom_api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/api_definition/custom_api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "CustomAPI",
+		ServiceType: "CUSTOM_PRIVATE",
+		IsSDRO:      false,
+		ObjType:     "",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetApiEndpointPathsSuggestions",
+		InMsgType:    "ves.io.schema.views.api_definition.GetApiEndpointPathsSuggestionsRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.SuggestValuesResp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/namespaces/{namespace}/api_definitions/{name}/api_endpoint_path/suggestion"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetApiEndpointPathsSuggestions")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_definition.CustomAPI.GetApiEndpointPathsSuggestions"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetBasePathSuggestions",
+		InMsgType:    "ves.io.schema.views.api_definition.GetBasePathSuggestionsRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.SuggestValuesResp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/namespaces/{namespace}/api_definitions/{name}/base_path/suggestion"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetBasePathSuggestions")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_definition.CustomAPI.GetBasePathSuggestions"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetMethodsSuggestions",
+		InMsgType:    "ves.io.schema.views.api_definition.GetMethodsSuggestionsRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.SuggestValuesResp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/namespaces/{namespace}/api_definitions/{name}/api_endpoint_method/suggestion"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetMethodsSuggestions")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_definition.CustomAPI.GetMethodsSuggestions"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.api_definition.CustomAPI"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetApiEndpointPathsSuggestionsRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_definition.GetApiEndpointPathsSuggestionsRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetBasePathSuggestionsRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_definition.GetBasePathSuggestionsRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetMethodsSuggestionsRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_definition.GetMethodsSuggestionsRequest"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/views/api_definition/object.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -33943,6 +35274,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/api_definitions"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -33956,6 +35288,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/api_definitions/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -33969,6 +35302,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_definitions/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -33982,6 +35316,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_definitions"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -33995,6 +35330,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/api_definitions/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -34170,6 +35506,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.api_definition/Objects", "/ves.io.schema.views.api_definition/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -34183,6 +35520,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.api_definition/Object/{object_uid}", "/ves.io.schema.views.api_definition/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -34196,6 +35534,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.api_definition/Object/{object_uid}", "/ves.io.schema.views.api_definition/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -34209,6 +35548,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.api_definition/Objects", "/ves.io.schema.views.api_definition/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -34222,6 +35562,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.api_definition/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -34235,6 +35576,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.api_definition.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.api_definition/Object/{object_uid}", "/ves.io.schema.views.api_definition/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -34323,6 +35665,971 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.api_definition.crudapi.ObjectReplaceRsp"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.views.api_inventory"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_inventory",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.views.api_inventory"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/api_inventory/object.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/api_inventory/object.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/api_inventory/object.proto"] = fInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.views.api_inventory.Object"] = oInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.views.api_inventory.StatusObject"] = oInfo
+	}
+
+	keyInfo = &svcfw.KeyInfo{
+		Type: svcfw.KeyType(2),
+	}
+	oInfo.KeysInfo[svcfw.FldName("metadata.uid")] = keyInfo
+	if mdr.KeyIdx != nil {
+		mdr.KeyIdx["ves.io.schema.views.api_inventory.StatusObject.metadata.uid"] = keyInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.SpecType"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/api_inventory/public_config_customapi.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/api_inventory/public_config_customapi.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/api_inventory/public_config_customapi.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "ConfigCustomAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.views.api_inventory.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetApiGroup",
+		InMsgType:    "ves.io.schema.views.api_inventory.GetApiGroupReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.GetApiGroupRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_groups/{group_name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetApiGroup")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.ConfigCustomAPI.GetApiGroup"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListApiGroups",
+		InMsgType:    "ves.io.schema.views.api_inventory.ListApiGroupsReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.ListApiGroupsRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_groups"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListApiGroups")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.ConfigCustomAPI.ListApiGroups"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UpdateApiGroup",
+		InMsgType:    "ves.io.schema.views.api_inventory.UpdateApiGroupReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.UpdateApiGroupRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_groups/{group_name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateApiGroup")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.ConfigCustomAPI.UpdateApiGroup"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["ConfigCustomAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.api_inventory.ConfigCustomAPI"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetApiGroupReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.GetApiGroupReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetApiGroupRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.GetApiGroupRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListApiGroupsReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.ListApiGroupsReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListApiGroupsRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.ListApiGroupsRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UpdateApiGroupReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.UpdateApiGroupReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UpdateApiGroupRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.UpdateApiGroupRsp"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/api_inventory/public_customapi.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/api_inventory/public_customapi.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/api_inventory/public_customapi.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "CustomAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.views.api_inventory.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "EvaluateApiGroup",
+		InMsgType:    "ves.io.schema.views.api_inventory.EvaluateApiGroupReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.EvaluateApiGroupRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_groups/{group_name}/evaluate"}}
+	aInfo.RPCsInfo[svcfw.RPCName("EvaluateApiGroup")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.CustomAPI.EvaluateApiGroup"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetContent",
+		InMsgType:    "ves.io.schema.views.api_inventory.GetContentReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.GetContentRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetContent")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.CustomAPI.GetContent"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.api_inventory.CustomAPI"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "EvaluateApiGroupReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.EvaluateApiGroupReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "EvaluateApiGroupRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.EvaluateApiGroupRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetContentReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.GetContentReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetContentRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.GetContentRsp"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/api_inventory/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/api_inventory/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/api_inventory/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ApiEndpoint",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.ApiEndpoint"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CustomApiGroup",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.CustomApiGroup"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GlobalSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.GlobalSpecType"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.views.api_inventory.crudapi"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_inventory/crudapi",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.views.api_inventory.crudapi"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/api_inventory/crudapi/api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/api_inventory/crudapi/api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/api_inventory/crudapi/api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD",
+		IsSDRO:      true,
+		ObjType:     "ves.io.schema.views.api_inventory.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.views.api_inventory.crudapi.ObjectCreateReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.crudapi.ObjectCreateRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.api_inventory/Objects", "/ves.io.schema.views.api_inventory/introspect/write/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.crudapi.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.views.api_inventory.crudapi.ObjectDeleteReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.crudapi.ObjectDeleteRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.api_inventory/Object/{object_uid}", "/ves.io.schema.views.api_inventory/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.crudapi.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.views.api_inventory.crudapi.ObjectGetReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.crudapi.ObjectGetRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.api_inventory/Object/{object_uid}", "/ves.io.schema.views.api_inventory/introspect/read/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.crudapi.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.views.api_inventory.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.crudapi.ObjectListRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.api_inventory/Objects", "/ves.io.schema.views.api_inventory/introspect/read/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.crudapi.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListStream",
+		InMsgType:    "ves.io.schema.views.api_inventory.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.crudapi.ObjectListRsp",
+		OutStreaming: true,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.api_inventory/Objects/stream"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.crudapi.API.ListStream"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.views.api_inventory.crudapi.ObjectReplaceReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.api_inventory.crudapi.ObjectReplaceRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.api_inventory/Object/{object_uid}", "/ves.io.schema.views.api_inventory/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.crudapi.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.api_inventory.crudapi.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectCreateReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectCreateRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectDeleteReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectDeleteRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectGetReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectGetRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectListReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectListRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRspItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectListRspItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectReplaceReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.crudapi.ObjectReplaceRsp"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.views.app_api_group"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/app_api_group",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.views.app_api_group"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/app_api_group/object.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/app_api_group/object.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/app_api_group/object.proto"] = fInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.views.app_api_group.Object"] = oInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.views.app_api_group.StatusObject"] = oInfo
+	}
+
+	keyInfo = &svcfw.KeyInfo{
+		Type: svcfw.KeyType(2),
+	}
+	oInfo.KeysInfo[svcfw.FldName("metadata.uid")] = keyInfo
+	if mdr.KeyIdx != nil {
+		mdr.KeyIdx["ves.io.schema.views.app_api_group.StatusObject.metadata.uid"] = keyInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.SpecType"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/app_api_group/public_crudapi.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/app_api_group/public_crudapi.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/app_api_group/public_crudapi.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.views.app_api_group.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.views.app_api_group.CreateRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.CreateResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/app_api_groups"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.views.app_api_group.DeleteRequest",
+		InStreaming:  false,
+		OutMsgType:   "google.protobuf.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/app_api_groups/{name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.views.app_api_group.GetRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.GetResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_api_groups/{name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.views.app_api_group.ListRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.ListResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_api_groups"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.views.app_api_group.ReplaceRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.ReplaceResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/app_api_groups/{metadata.name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.app_api_group.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.CreateRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.CreateResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DeleteRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.DeleteRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.GetRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.GetResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.ListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.ListResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListResponseItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.ListResponseItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.ReplaceRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.ReplaceResponse"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/app_api_group/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/app_api_group/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/app_api_group/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.GetSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GlobalSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.ReplaceSpecType"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.views.app_api_group.crudapi"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/app_api_group/crudapi",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.views.app_api_group.crudapi"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/app_api_group/crudapi/api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/app_api_group/crudapi/api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/app_api_group/crudapi/api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD",
+		IsSDRO:      true,
+		ObjType:     "ves.io.schema.views.app_api_group.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.views.app_api_group.crudapi.ObjectCreateReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.crudapi.ObjectCreateRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.app_api_group/Objects", "/ves.io.schema.views.app_api_group/introspect/write/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.crudapi.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.views.app_api_group.crudapi.ObjectDeleteReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.crudapi.ObjectDeleteRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.app_api_group/Object/{object_uid}", "/ves.io.schema.views.app_api_group/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.crudapi.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.views.app_api_group.crudapi.ObjectGetReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.crudapi.ObjectGetRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.app_api_group/Object/{object_uid}", "/ves.io.schema.views.app_api_group/introspect/read/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.crudapi.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.views.app_api_group.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.crudapi.ObjectListRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.app_api_group/Objects", "/ves.io.schema.views.app_api_group/introspect/read/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.crudapi.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListStream",
+		InMsgType:    "ves.io.schema.views.app_api_group.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.crudapi.ObjectListRsp",
+		OutStreaming: true,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.app_api_group/Objects/stream"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.crudapi.API.ListStream"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.views.app_api_group.crudapi.ObjectReplaceReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.app_api_group.crudapi.ObjectReplaceRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.app_api_group/Object/{object_uid}", "/ves.io.schema.views.app_api_group/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.app_api_group.crudapi.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.app_api_group.crudapi.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectCreateReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectCreateRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectDeleteReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectDeleteRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectGetReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectGetRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectListReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectListRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRspItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectListRspItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectReplaceReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.app_api_group.crudapi.ObjectReplaceRsp"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -34418,6 +36725,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/aws_tgw_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -34431,6 +36739,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/aws_tgw_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -34444,6 +36753,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/aws_tgw_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -34457,6 +36767,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/aws_tgw_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -34470,6 +36781,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/aws_tgw_sites/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -34581,6 +36893,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/aws_tgw_site/{name}/set_tgw_info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetTGWInfo")] = rpcInfo
@@ -34594,6 +36907,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.SetVIPInfoResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/aws_tgw_site/{name}/set_vip_info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetVIPInfo")] = rpcInfo
@@ -34607,6 +36921,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/aws_tgw_site/{name}/set_vpc_ip_prefixes"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetVPCIpPrefixes")] = rpcInfo
@@ -34620,6 +36935,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/aws_tgw_site/{name}/set_vpn_tunnels"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetVPNTunnels")] = rpcInfo
@@ -34858,6 +37174,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.aws_tgw_site/Objects", "/ves.io.schema.views.aws_tgw_site/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -34871,6 +37188,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.aws_tgw_site/Object/{object_uid}", "/ves.io.schema.views.aws_tgw_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -34884,6 +37202,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_tgw_site/Object/{object_uid}", "/ves.io.schema.views.aws_tgw_site/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -34897,6 +37216,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_tgw_site/Objects", "/ves.io.schema.views.aws_tgw_site/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -34910,6 +37230,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_tgw_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -34923,6 +37244,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_tgw_site.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.aws_tgw_site/Object/{object_uid}", "/ves.io.schema.views.aws_tgw_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -35106,6 +37428,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/aws_vpc_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -35119,6 +37442,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/aws_vpc_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -35132,6 +37456,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/aws_vpc_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -35145,6 +37470,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/aws_vpc_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -35158,6 +37484,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/aws_vpc_sites/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -35269,6 +37596,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.SetVIPInfoResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/aws_vpc_site/{name}/set_vip_info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetVIPInfo")] = rpcInfo
@@ -35282,6 +37610,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.SetVPCK8SHostnamesResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/aws_vpc_site/{name}/storage/set_vpc_k8s_hostnames"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetVPCK8SHostnames")] = rpcInfo
@@ -35443,6 +37772,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.aws_vpc_site/Objects", "/ves.io.schema.views.aws_vpc_site/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -35456,6 +37786,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.aws_vpc_site/Object/{object_uid}", "/ves.io.schema.views.aws_vpc_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -35469,6 +37800,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_vpc_site/Object/{object_uid}", "/ves.io.schema.views.aws_vpc_site/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -35482,6 +37814,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_vpc_site/Objects", "/ves.io.schema.views.aws_vpc_site/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -35495,6 +37828,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_vpc_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -35508,6 +37842,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.aws_vpc_site/Object/{object_uid}", "/ves.io.schema.views.aws_vpc_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -35691,6 +38026,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/azure_vnet_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -35704,6 +38040,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/azure_vnet_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -35717,6 +38054,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/azure_vnet_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -35730,6 +38068,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/azure_vnet_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -35743,6 +38082,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/azure_vnet_sites/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -35854,6 +38194,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.SetVIPInfoResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/azure_vnet_site/{name}/set_vip_info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SetVIPInfo")] = rpcInfo
@@ -36043,6 +38384,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.azure_vnet_site/Objects", "/ves.io.schema.views.azure_vnet_site/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -36056,6 +38398,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.azure_vnet_site/Object/{object_uid}", "/ves.io.schema.views.azure_vnet_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -36069,6 +38412,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.azure_vnet_site/Object/{object_uid}", "/ves.io.schema.views.azure_vnet_site/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -36082,6 +38426,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.azure_vnet_site/Objects", "/ves.io.schema.views.azure_vnet_site/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -36095,6 +38440,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.azure_vnet_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -36108,6 +38454,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.azure_vnet_site/Object/{object_uid}", "/ves.io.schema.views.azure_vnet_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -36291,6 +38638,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/forward_proxy_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -36304,6 +38652,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/forward_proxy_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -36317,6 +38666,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/forward_proxy_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -36330,6 +38680,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/forward_proxy_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -36343,6 +38694,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/forward_proxy_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -36454,6 +38806,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.ForwardProxyPolicyHitsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/forward_proxy_policy/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ForwardProxyPolicyHits")] = rpcInfo
@@ -36629,6 +38982,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.forward_proxy_policy/Objects", "/ves.io.schema.views.forward_proxy_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -36642,6 +38996,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.forward_proxy_policy/Object/{object_uid}", "/ves.io.schema.views.forward_proxy_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -36655,6 +39010,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.forward_proxy_policy/Object/{object_uid}", "/ves.io.schema.views.forward_proxy_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -36668,6 +39024,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.forward_proxy_policy/Objects", "/ves.io.schema.views.forward_proxy_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -36681,6 +39038,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.forward_proxy_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -36694,6 +39052,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.forward_proxy_policy/Object/{object_uid}", "/ves.io.schema.views.forward_proxy_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -36877,6 +39236,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/gcp_vpc_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -36890,6 +39250,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/gcp_vpc_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -36903,6 +39264,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/gcp_vpc_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -36916,6 +39278,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/gcp_vpc_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -36929,6 +39292,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/gcp_vpc_sites/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -37132,6 +39496,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.gcp_vpc_site/Objects", "/ves.io.schema.views.gcp_vpc_site/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -37145,6 +39510,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.gcp_vpc_site/Object/{object_uid}", "/ves.io.schema.views.gcp_vpc_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -37158,6 +39524,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.gcp_vpc_site/Object/{object_uid}", "/ves.io.schema.views.gcp_vpc_site/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -37171,6 +39538,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.gcp_vpc_site/Objects", "/ves.io.schema.views.gcp_vpc_site/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -37184,6 +39552,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.gcp_vpc_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -37197,6 +39566,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.gcp_vpc_site/Object/{object_uid}", "/ves.io.schema.views.gcp_vpc_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -37380,6 +39750,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.api.HttpBody",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints/swagger_spec"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetSwaggerSpec")] = rpcInfo
@@ -37435,6 +39806,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/http_loadbalancers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -37448,6 +39820,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -37461,6 +39834,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -37474,6 +39848,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -37487,6 +39862,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/http_loadbalancers/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -37598,6 +39974,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/get-dns-info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetDnsInfo")] = rpcInfo
@@ -37639,6 +40016,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "APIRateLimit",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.APIRateLimit"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AdvancedOptionsType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -37658,6 +40042,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ApiDiscoverySetting"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ApiEndpointRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ApiEndpointRule"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AppEndpointType",
@@ -37742,6 +40133,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.HashPolicyListType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "IPThreatCategoryListType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.IPThreatCategoryListType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "InlineRateLimiter",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.InlineRateLimiter"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "MirrorPolicyType",
@@ -37840,6 +40245,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.RouteTypeSimpleWithDefaultOriginPool"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ServerUrlRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ServerUrlRule"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ServicePolicyList",
@@ -37955,6 +40367,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.http_loadbalancer/Objects", "/ves.io.schema.views.http_loadbalancer/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -37968,6 +40381,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.http_loadbalancer/Object/{object_uid}", "/ves.io.schema.views.http_loadbalancer/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -37981,6 +40395,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.http_loadbalancer/Object/{object_uid}", "/ves.io.schema.views.http_loadbalancer/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -37994,6 +40409,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.http_loadbalancer/Objects", "/ves.io.schema.views.http_loadbalancer/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -38007,6 +40423,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.http_loadbalancer/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -38020,6 +40437,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.http_loadbalancer/Object/{object_uid}", "/ves.io.schema.views.http_loadbalancer/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -38203,6 +40621,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/network_policy_views"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -38216,6 +40635,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/network_policy_views/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -38229,6 +40649,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_policy_views/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -38242,6 +40663,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/network_policy_views"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -38255,6 +40677,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/network_policy_views/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -38366,6 +40789,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.NetworkPolicyHitsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/network_policy_view/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("NetworkPolicyHits")] = rpcInfo
@@ -38492,6 +40916,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.network_policy_view/Objects", "/ves.io.schema.views.network_policy_view/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -38505,6 +40930,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.network_policy_view/Object/{object_uid}", "/ves.io.schema.views.network_policy_view/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -38518,6 +40944,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.network_policy_view/Object/{object_uid}", "/ves.io.schema.views.network_policy_view/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -38531,6 +40958,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.network_policy_view/Objects", "/ves.io.schema.views.network_policy_view/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -38544,6 +40972,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.network_policy_view/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -38557,6 +40986,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.network_policy_view.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.network_policy_view/Object/{object_uid}", "/ves.io.schema.views.network_policy_view/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -38718,6 +41148,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/origin_pools"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -38731,6 +41162,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/origin_pools/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -38744,6 +41176,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/origin_pools/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -38757,6 +41190,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/origin_pools"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -38770,6 +41204,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/origin_pools/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -39043,6 +41478,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.origin_pool/Objects", "/ves.io.schema.views.origin_pool/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -39056,6 +41492,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.origin_pool/Object/{object_uid}", "/ves.io.schema.views.origin_pool/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -39069,6 +41506,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.origin_pool/Object/{object_uid}", "/ves.io.schema.views.origin_pool/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -39082,6 +41520,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.origin_pool/Objects", "/ves.io.schema.views.origin_pool/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -39095,6 +41534,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.origin_pool/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -39108,6 +41548,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.origin_pool.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.origin_pool/Object/{object_uid}", "/ves.io.schema.views.origin_pool/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -39291,6 +41732,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/rate_limiter_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -39304,6 +41746,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/rate_limiter_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -39317,6 +41760,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/rate_limiter_policys/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -39330,6 +41774,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/rate_limiter_policys"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -39343,6 +41788,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/rate_limiter_policys/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -39518,6 +41964,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.rate_limiter_policy/Objects", "/ves.io.schema.views.rate_limiter_policy/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -39531,6 +41978,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.rate_limiter_policy/Object/{object_uid}", "/ves.io.schema.views.rate_limiter_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -39544,6 +41992,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.rate_limiter_policy/Object/{object_uid}", "/ves.io.schema.views.rate_limiter_policy/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -39557,6 +42006,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.rate_limiter_policy/Objects", "/ves.io.schema.views.rate_limiter_policy/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -39570,6 +42020,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.rate_limiter_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -39583,6 +42034,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.rate_limiter_policy.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.rate_limiter_policy/Object/{object_uid}", "/ves.io.schema.views.rate_limiter_policy/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -39766,6 +42218,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/tcp_loadbalancers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -39779,6 +42232,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/tcp_loadbalancers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -39792,6 +42246,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tcp_loadbalancers/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -39805,6 +42260,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tcp_loadbalancers"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -39818,6 +42274,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/tcp_loadbalancers/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -39929,6 +42386,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.GetDnsInfoResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tcp_loadbalancers/{name}/get-dns-info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetDnsInfo")] = rpcInfo
@@ -40034,6 +42492,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.tcp_loadbalancer/Objects", "/ves.io.schema.views.tcp_loadbalancer/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -40047,6 +42506,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.tcp_loadbalancer/Object/{object_uid}", "/ves.io.schema.views.tcp_loadbalancer/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -40060,6 +42520,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tcp_loadbalancer/Object/{object_uid}", "/ves.io.schema.views.tcp_loadbalancer/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -40073,6 +42534,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tcp_loadbalancer/Objects", "/ves.io.schema.views.tcp_loadbalancer/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -40086,6 +42548,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tcp_loadbalancer/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -40099,6 +42562,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.tcp_loadbalancer/Object/{object_uid}", "/ves.io.schema.views.tcp_loadbalancer/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -40506,6 +42970,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.ForceDeleteResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/terraform/{view_kind}/{view_name}/force-delete"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ForceDelete")] = rpcInfo
@@ -40519,6 +42984,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.RunResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/terraform/{view_kind}/{view_name}/run"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Run")] = rpcInfo
@@ -40588,6 +43054,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/terraform_parameters/{view_kind}/{view_name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -40601,6 +43068,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.GetStatusResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/terraform_parameters/{view_kind}/{view_name}/status"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetStatus")] = rpcInfo
@@ -40713,6 +43181,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.terraform_parameters/Objects", "/ves.io.schema.views.terraform_parameters/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -40726,6 +43195,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.terraform_parameters/Object/{object_uid}", "/ves.io.schema.views.terraform_parameters/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -40739,6 +43209,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.terraform_parameters/Object/{object_uid}", "/ves.io.schema.views.terraform_parameters/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -40752,6 +43223,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.terraform_parameters/Objects", "/ves.io.schema.views.terraform_parameters/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -40765,6 +43237,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.terraform_parameters/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -40778,6 +43251,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.terraform_parameters/Object/{object_uid}", "/ves.io.schema.views.terraform_parameters/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -40804,6 +43278,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.terraform_parameters/StatusObjects", "/ves.io.schema.views.terraform_parameters/introspect/read/StatusObjects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -40817,6 +43292,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.terraform_parameters/StatusObjects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -41021,6 +43497,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/voltstack_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -41034,6 +43511,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/voltstack_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -41047,6 +43525,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/voltstack_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -41060,6 +43539,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/voltstack_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -41073,6 +43553,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/voltstack_sites/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -41311,6 +43792,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.voltstack_site/Objects", "/ves.io.schema.views.voltstack_site/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -41324,6 +43806,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.voltstack_site/Object/{object_uid}", "/ves.io.schema.views.voltstack_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -41337,6 +43820,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.voltstack_site/Object/{object_uid}", "/ves.io.schema.views.voltstack_site/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -41350,6 +43834,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.voltstack_site/Objects", "/ves.io.schema.views.voltstack_site/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -41363,6 +43848,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.voltstack_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -41376,6 +43862,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.views.voltstack_site.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.voltstack_site/Object/{object_uid}", "/ves.io.schema.views.voltstack_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -41559,6 +44046,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/learnt_schema"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpointLearntSchema")] = rpcInfo
@@ -41572,6 +44060,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.APIEndpointPDFRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/pdf"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpointPDF")] = rpcInfo
@@ -41585,6 +44074,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.APIEndpointsRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpoints")] = rpcInfo
@@ -41598,6 +44088,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.api.HttpBody",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints/swagger_spec"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetSwaggerSpec")] = rpcInfo
@@ -41695,6 +44186,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/virtual_hosts"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -41708,6 +44200,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -41721,6 +44214,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -41734,6 +44228,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -41747,6 +44242,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/virtual_hosts/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -41858,6 +44354,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.GetDnsInfoResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/get-dns-info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetDnsInfo")] = rpcInfo
@@ -42010,6 +44507,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.virtual_host.TemporaryUserBlockingType"] = mInfo
 	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "VerStatusType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.VerStatusType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "VirtualHostID",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.VirtualHostID"] = mInfo
+	}
 
 	pInfo = &svcfw.PkgInfo{
 		Name:      svcfw.PkgName("ves.io.schema.virtual_host.crudapi"),
@@ -42047,6 +44558,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_host/Objects", "/ves.io.schema.virtual_host/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -42060,6 +44572,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_host/Object/{object_uid}", "/ves.io.schema.virtual_host/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -42073,6 +44586,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host/Object/{object_uid}", "/ves.io.schema.virtual_host/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -42086,6 +44600,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host/Objects", "/ves.io.schema.virtual_host/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -42099,6 +44614,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -42112,6 +44628,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_host/Object/{object_uid}", "/ves.io.schema.virtual_host/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -42295,6 +44812,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host_dns_info.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_host_dns_info/Objects", "/ves.io.schema.virtual_host_dns_info/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -42308,6 +44826,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host_dns_info.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_host_dns_info/Object/{object_uid}", "/ves.io.schema.virtual_host_dns_info/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -42321,6 +44840,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host_dns_info.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host_dns_info/Object/{object_uid}", "/ves.io.schema.virtual_host_dns_info/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -42334,6 +44854,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host_dns_info.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host_dns_info/Objects", "/ves.io.schema.virtual_host_dns_info/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -42347,6 +44868,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host_dns_info.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host_dns_info/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -42360,6 +44882,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_host_dns_info.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_host_dns_info/Object/{object_uid}", "/ves.io.schema.virtual_host_dns_info/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -42543,6 +45066,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/virtual_k8ss"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -42556,6 +45080,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/virtual_k8ss/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -42569,6 +45094,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_k8ss/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -42582,6 +45108,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_k8ss"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -42595,6 +45122,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/virtual_k8ss/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -42706,6 +45234,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.PVCMetricsResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/virtual_k8s/pvc/metrics"}}
 	aInfo.RPCsInfo[svcfw.RPCName("PVCMetrics")] = rpcInfo
@@ -42825,6 +45354,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_k8s/Objects", "/ves.io.schema.virtual_k8s/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -42838,6 +45368,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_k8s/Object/{object_uid}", "/ves.io.schema.virtual_k8s/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -42851,6 +45382,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s/Object/{object_uid}", "/ves.io.schema.virtual_k8s/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -42864,6 +45396,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s/Objects", "/ves.io.schema.virtual_k8s/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -42877,6 +45410,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -42890,6 +45424,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_k8s.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_k8s/Object/{object_uid}", "/ves.io.schema.virtual_k8s/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -43073,6 +45608,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/virtual_networks"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -43086,6 +45622,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/virtual_networks/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -43099,6 +45636,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_networks/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -43112,6 +45650,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_networks"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -43125,6 +45664,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/virtual_networks/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -43236,6 +45776,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.SIDCounterResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/virtual_network/sid_counters"}}
 	aInfo.RPCsInfo[svcfw.RPCName("SIDCounters")] = rpcInfo
@@ -43453,6 +45994,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_network/Objects", "/ves.io.schema.virtual_network/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -43466,6 +46008,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_network/Object/{object_uid}", "/ves.io.schema.virtual_network/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -43479,6 +46022,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_network/Object/{object_uid}", "/ves.io.schema.virtual_network/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -43492,6 +46036,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_network/Objects", "/ves.io.schema.virtual_network/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -43505,6 +46050,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_network/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -43518,6 +46064,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_network.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_network/Object/{object_uid}", "/ves.io.schema.virtual_network/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -43701,6 +46248,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.CreateResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/virtual_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -43714,6 +46262,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "google.protobuf.Empty",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/virtual_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -43727,6 +46276,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.GetResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_sites/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -43740,6 +46290,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.ListResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_sites"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -43753,6 +46304,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.ReplaceResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/virtual_sites/{metadata.name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -43864,6 +46416,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.SelecteeResponse",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_sites/{name}/selectees"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetSelectees")] = rpcInfo
@@ -43976,6 +46529,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_site/Objects", "/ves.io.schema.virtual_site/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -43989,6 +46543,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_site/Object/{object_uid}", "/ves.io.schema.virtual_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -44002,6 +46557,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_site/Object/{object_uid}", "/ves.io.schema.virtual_site/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -44015,6 +46571,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_site/Objects", "/ves.io.schema.virtual_site/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -44028,6 +46585,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -44041,6 +46599,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.virtual_site.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_site/Object/{object_uid}", "/ves.io.schema.virtual_site/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -44224,6 +46783,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.VirtualHostWafStatusRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/waf/virtual_host/status/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VirtualHostWafStatus")] = rpcInfo
@@ -44286,6 +46846,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.RuleHitsCountResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/wafs/metrics/client/rule_hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ClientRuleHitsMetrics")] = rpcInfo
@@ -44299,6 +46860,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.SecurityEventsCountResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/wafs/metrics/client/security_events"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ClientSecurityEventsMetrics")] = rpcInfo
@@ -44312,6 +46874,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.RuleHitsCountResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/wafs/metrics/server/rule_hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ServerRuleHitsMetrics")] = rpcInfo
@@ -44325,6 +46888,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.SecurityEventsCountResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/wafs/metrics/server/security_events"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ServerSecurityEventsMetrics")] = rpcInfo
@@ -44507,6 +47071,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.waf/Objects", "/ves.io.schema.waf/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -44520,6 +47085,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.waf/Object/{object_uid}", "/ves.io.schema.waf/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -44533,6 +47099,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf/Object/{object_uid}", "/ves.io.schema.waf/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -44546,6 +47113,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf/Objects", "/ves.io.schema.waf/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -44559,6 +47127,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -44572,6 +47141,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.waf/Object/{object_uid}", "/ves.io.schema.waf/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -44805,6 +47375,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rule_list.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.waf_rule_list/Objects", "/ves.io.schema.waf_rule_list/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -44818,6 +47389,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rule_list.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.waf_rule_list/Object/{object_uid}", "/ves.io.schema.waf_rule_list/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -44831,6 +47403,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rule_list.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rule_list/Object/{object_uid}", "/ves.io.schema.waf_rule_list/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -44844,6 +47417,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rule_list.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rule_list/Objects", "/ves.io.schema.waf_rule_list/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -44857,6 +47431,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rule_list.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rule_list/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -44870,6 +47445,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rule_list.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.waf_rule_list/Object/{object_uid}", "/ves.io.schema.waf_rule_list/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
@@ -45053,6 +47629,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.RulesRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/waf_rules/rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Rules")] = rpcInfo
@@ -45066,6 +47643,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.VirtualHostWafRulesStatusRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/waf_rules/virtual_host/status/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VirtualHostWafRulesStatus")] = rpcInfo
@@ -45079,6 +47657,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.WafRulesStatusRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/waf_rules/status/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("WafRulesStatus")] = rpcInfo
@@ -45226,6 +47805,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.crudapi.ObjectCreateRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.waf_rules/Objects", "/ves.io.schema.waf_rules/introspect/write/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
@@ -45239,6 +47819,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.crudapi.ObjectDeleteRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.waf_rules/Object/{object_uid}", "/ves.io.schema.waf_rules/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
@@ -45252,6 +47833,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.crudapi.ObjectGetRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rules/Object/{object_uid}", "/ves.io.schema.waf_rules/introspect/read/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -45265,6 +47847,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.crudapi.ObjectListRsp",
 		OutStreaming: false,
 		IsImmutable:  true,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rules/Objects", "/ves.io.schema.waf_rules/introspect/read/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -45278,6 +47861,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.crudapi.ObjectListRsp",
 		OutStreaming: true,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rules/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
@@ -45291,6 +47875,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutMsgType:   "ves.io.schema.waf_rules.crudapi.ObjectReplaceRsp",
 		OutStreaming: false,
 		IsImmutable:  false,
+		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.waf_rules/Object/{object_uid}", "/ves.io.schema.waf_rules/introspect/write/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo

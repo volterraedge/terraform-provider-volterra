@@ -4,8 +4,7 @@
 // Namespace API
 //
 // x-displayName: "Namespace"
-// This API can be used to delete all configuration objects within a namespace in a single API.
-// Note: this operation cannot be reversed so please use with caution.
+// APIs in this file are custom APIs on namespace object
 
 package namespace
 
@@ -1111,7 +1110,7 @@ type CustomAPIClient interface {
 	// EvaluateAPIAccess
 	//
 	// x-displayName: "Evaluate API Access"
-	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namesapce for a given user of a tenant.
+	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namespace for a given user of a tenant.
 	EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error)
 	// UpdateAllowAdvertiseOnPublic
 	//
@@ -1166,7 +1165,7 @@ type CustomAPIServer interface {
 	// EvaluateAPIAccess
 	//
 	// x-displayName: "Evaluate API Access"
-	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namesapce for a given user of a tenant.
+	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namespace for a given user of a tenant.
 	EvaluateAPIAccess(context.Context, *EvaluateAPIAccessReq) (*EvaluateAPIAccessResp, error)
 	// UpdateAllowAdvertiseOnPublic
 	//
