@@ -85,7 +85,7 @@ func testConfigDataSourceVHDNSInfo(name, ns string) string {
 			tenant = "ves-io"
 		}
 		domains = ["terraform.test.io"]
-		proxy = "http_proxy"
+		proxy = "UDP_PROXY"
 		no_challenge = true
 	}
 

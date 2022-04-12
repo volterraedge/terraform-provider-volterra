@@ -33,7 +33,7 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
+  // One of the arguments from this list "voltstack_cluster_ar ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar" must be set
 
   ingress_gw {
     az_nodes {
@@ -55,13 +55,15 @@ resource "volterra_azure_vnet_site" "example" {
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
 
-    existing_vnet {
-      resource_group = "resource_group"
-      vnet_name      = "vnet_name"
+    new_vnet {
+      // One of the arguments from this list "name autogenerate" must be set
+      name = "name"
+
+      primary_ipv4 = "10.1.0.0/16"
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  nodes_per_az = "2"
+  no_worker_nodes = true
 }
 
 ```
@@ -119,9 +121,9 @@ Argument Reference
 
 `ingress_gw_ar` - (Optional) One interface site is useful when site is only used as ingress gateway to the Vnet.. See [Ingress Gw Ar ](#ingress-gw-ar) below for details.
 
-`voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
+`voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
-`voltstack_cluster_ar` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster Ar ](#voltstack-cluster-ar) below for details.
+`voltstack_cluster_ar` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster Ar ](#voltstack-cluster-ar) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
@@ -145,9 +147,9 @@ Enable Forward Proxy for this site and manage policies.
 
 ### Active Network Policies
 
-Network Policies active for this site..
+Firewall Policies active for this site..
 
-`network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
 ### Autogenerate
 
@@ -331,6 +333,12 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
+`dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
+
+`dc_cluster_group_outside_vn` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
+
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
 `forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
@@ -345,9 +353,9 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
@@ -359,6 +367,12 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
+`dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
+
+`dc_cluster_group_outside_vn` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
+
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
 `forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
@@ -373,9 +387,9 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `node` - (Optional) Ingress/Egress Gateway (Two Interface) Node information.. See [Node ](#node) below for details.
 
@@ -463,6 +477,10 @@ Nexthop address when type is "Use-Configured".
 
 `ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
 
+### No Dc Cluster Group
+
+This site is not a member of dc cluster group.
+
 ### No Forward Proxy
 
 Disable Forward Proxy for this site.
@@ -485,7 +503,7 @@ Site Local K8s API access is disabled.
 
 ### No Network Policy
 
-Network Policy is disabled for this site..
+Firewall Policy is disabled for this site..
 
 ### No Outside Static Routes
 
@@ -693,11 +711,15 @@ Default volterra trusted CA list for validating upstream server certificate.
 
 ### Voltstack Cluster
 
-Voltstack Cluster using single interface, useful for deploying K8s cluster..
+App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
+
+`dc_cluster_group` - (Optional) This site is member of dc cluster group via Outside Network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
@@ -713,9 +735,9 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
@@ -727,9 +749,13 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 ### Voltstack Cluster Ar
 
-Voltstack Cluster using single interface, useful for deploying K8s cluster..
+App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
+
+`dc_cluster_group` - (Optional) This site is member of dc cluster group via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
@@ -745,9 +771,9 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `node` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Node ](#node) below for details.
 

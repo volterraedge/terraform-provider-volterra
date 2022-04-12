@@ -366,10 +366,10 @@ type NetworkPolicyRuleType struct {
 	// Other Endpoint
 	//
 	// x-displayName: "Select Other Endpoint"
-	// Other endpoint of ingress or egress session with policy endpoint of network policy.
-	// If network policy rule is a ingress rule in network policy then other
-	// endpoint indicates the source endpoint from which session is initiated. If network policy rule
-	// is a egress rule in network policy then other endpoint indicates the destination endpoint to which
+	// Other endpoint of ingress or egress session with endpoint of policy.
+	// If rule is an ingress rule then other
+	// endpoint indicates the source endpoint from which session is initiated. If rule
+	// is an egress rule then other endpoint indicates the destination endpoint to which
 	// session is initiated from policy endpoint.
 	//
 	// Types that are valid to be assigned to OtherEndpoint:
@@ -668,7 +668,7 @@ func (*NetworkPolicyRuleType) XXX_OneofWrappers() []interface{} {
 // Rule Choice
 //
 // x-displayName: "Rule Choice"
-// Shape of Network Policy Rule Choice
+// Shape of Rule Choice
 type NetworkPolicyRuleChoice struct {
 	// Ingress Rules
 	//
@@ -727,19 +727,19 @@ func (m *NetworkPolicyRuleChoice) GetEgressRules() []*NetworkPolicyRuleType {
 // Legacy Rule Choice
 //
 // x-displayName: "Legacy Rule Choice"
-// Shape of Legacy Network Policy Rule Choice
+// Shape of Legacy Rule Choice
 type LegacyNetworkPolicyRuleChoice struct {
 	// Ingress rules
 	//
 	// x-displayName: "Ingress Rules"
-	// List of network policy rules that apply to incoming session for local endpoint
+	// List of rules that apply to incoming session for local endpoint
 	// Sequence in which rule is configured (in repeated ingress rules) is the sequence in which ingress rules are applied
 	// If ingress rules are not specified or is empty list, then policy will assume default deny and from ANY destination to local endpoint
 	IngressRules []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=ingress_rules,json=ingressRules,proto3" json:"ingress_rules,omitempty"`
 	// Egress rules
 	//
 	// x-displayName: "Egress Rules"
-	// List of network policy rules that apply to outgoing session from local endpoint
+	// List of rules that apply to outgoing session from local endpoint
 	// Sequence in which rule is configured (in repeated egress rules) is the sequence in which egress rules are applied
 	// If egress rules are not specified or is empty list, then policy will assume default deny and to ANY destination from local endpoint
 	EgressRules []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=egress_rules,json=egressRules,proto3" json:"egress_rules,omitempty"`
@@ -807,14 +807,14 @@ type GlobalSpecType struct {
 	// ingress rules
 	//
 	// x-displayName: "Ingress Rules"
-	// List of network policy rules that apply to incoming session for local endpoint
+	// List of rules that apply to incoming session for local endpoint
 	// Sequence in which rule is configured (in repeated ingress rules) is the sequence in which ingress rules are applied
 	// If ingress rules are not specified or is empty list, then policy will assume default deny and from ANY destination to local endpoint
 	IngressRules []*schema.ObjectRefType `protobuf:"bytes,3,rep,name=ingress_rules,json=ingressRules,proto3" json:"ingress_rules,omitempty"`
 	// egress rules
 	//
 	// x-displayName: "Egress Rules"
-	// List of network policy rules that apply to outgoing session from local endpoint
+	// List of rules that apply to outgoing session from local endpoint
 	// Sequence in which rule is configured (in repeated egress rules) is the sequence in which egress rules are applied
 	// If egress rules are not specified or is empty list, then policy will assume default deny and to ANY destination from local endpoint
 	EgressRules []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=egress_rules,json=egressRules,proto3" json:"egress_rules,omitempty"`
@@ -832,7 +832,7 @@ type GlobalSpecType struct {
 	// Rule Choice
 	//
 	// x-displayName: "Rule Choice"
-	// Style of Network Policy Rules used when the policy was created. This cannot be modified.
+	// Style of rules used when the policy was created. This cannot be modified.
 	//
 	// Types that are valid to be assigned to RuleChoice:
 	//	*GlobalSpecType_Rules

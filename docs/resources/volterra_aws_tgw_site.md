@@ -27,7 +27,7 @@ resource "volterra_aws_tgw_site" "example" {
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
+      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
       reserved_inside_subnet = true
       disk_size              = "disk_size"
 
@@ -59,8 +59,17 @@ resource "volterra_aws_tgw_site" "example" {
     }
     disk_size     = "80"
     instance_type = "a1.xlarge"
+
     // One of the arguments from this list "new_vpc vpc_id" must be set
-    vpc_id = "vpc-12345678901234567"
+
+    new_vpc {
+      allocate_ipv6 = true
+
+      // One of the arguments from this list "name_tag autogenerate" must be set
+      name_tag = "name_tag"
+
+      primary_ipv4 = "10.1.0.0/16"
+    }
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
@@ -74,12 +83,7 @@ resource "volterra_aws_tgw_site" "example" {
   }
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
 }
 
 ```
@@ -141,9 +145,9 @@ Enable Forward Proxy for this site and manage policies.
 
 ### Active Network Policies
 
-Network Policies active for this site..
+Firewall Policies active for this site..
 
-`network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
 ### Allowed Vip Port
 
@@ -455,6 +459,10 @@ Nexthop address when type is "Use-Configured".
 
 `ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
 
+### No Dc Cluster Group
+
+This site is not a member of dc cluster group.
+
 ### No East West Policy
 
 Disable service policy so that east-west traffic does not go via proxy.
@@ -477,7 +485,7 @@ No TLS interception is enabled for this network connector.
 
 ### No Network Policy
 
-Network Policy is disabled for this site..
+Firewall Policy is disabled for this site..
 
 ### No Outside Static Routes
 
@@ -609,9 +617,9 @@ Security Configuration for transit gateway.
 
 `no_forward_proxy` - (Optional) Disable Forward Proxy for this site (bool).
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 ### Tls Intercept
 
@@ -672,6 +680,12 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 Virtual Network Configuration for transit gateway.
 
 `allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
+
+`dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
+
+`dc_cluster_group_outside_vn` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
 
 `global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
 

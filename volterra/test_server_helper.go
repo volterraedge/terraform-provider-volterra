@@ -352,6 +352,10 @@ func (t *namespaceCustomAPIServer) GetActiveAlertPolicies(ctx context.Context, r
 	return &ves_io_schema_ns.GetActiveAlertPoliciesResponse{}, nil
 }
 
+func (t *namespaceCustomAPIServer) SuggestValues(ctx context.Context, req *ves_io_schema_ns.SuggestValuesReq) (*ves_io_schema_ns.SuggestValuesResp, error) {
+	return &ves_io_schema_ns.SuggestValuesResp{}, nil
+}
+
 var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}
 
 // ves.io.schema.namespace.NamespaceCustomAPI handling - end

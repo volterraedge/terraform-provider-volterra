@@ -365,6 +365,29 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
+			"api_definition": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"api_definitions": {
 
 				Type:     schema.TypeSet,
@@ -396,6 +419,12 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"disable_api_definition": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
 			},
 
 			"blocked_clients": {
@@ -1023,8 +1052,38 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 															"flag": {
 
-																Type:     schema.TypeBool,
+																Type:     schema.TypeSet,
 																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"append_headers": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"auto_type_header_name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"inference_header_name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"no_headers": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
 															},
 
 															"none": {
@@ -2162,6 +2221,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"apply_data_guard": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"skip_data_guard": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"any_domain": {
 
 							Type:     schema.TypeBool,
@@ -2587,6 +2658,32 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"disable_ip_reputation": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_ip_reputation": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"ip_threat_categories": {
+
+							Type: schema.TypeList,
+
+							Required: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
 			},
 
 			"http": {
@@ -3744,6 +3841,303 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				},
 			},
 
+			"api_rate_limit": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"api_endpoint_rules": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"api_endpoint_method": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_matcher": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"methods": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"api_endpoint_path": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"base_path": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"any_domain": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"specific_domain": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"inline_rate_limiter": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ref_user_id": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"use_http_lb_user_id": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"threshold": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"unit": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"ref_rate_limiter": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"custom_ip_allowed_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"rate_limiter_allowed_prefixes": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"ip_allowed_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"prefixes": {
+
+										Type: schema.TypeList,
+
+										Required: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
+						"no_ip_allowed_list": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"server_url_rules": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"base_path": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"any_domain": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"specific_domain": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"inline_rate_limiter": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ref_user_id": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"use_http_lb_user_id": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"threshold": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"unit": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"ref_rate_limiter": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"disable_rate_limit": {
 
 				Type:     schema.TypeBool,
@@ -3930,6 +4324,44 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"headers": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_match": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"exact": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"presence": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"regex": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"http_method": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -3992,6 +4424,44 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"headers": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_match": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"exact": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"presence": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"regex": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
 
 									"http_method": {
 										Type:     schema.TypeString,
@@ -4914,6 +5384,44 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															},
 														},
 													},
+												},
+											},
+										},
+									},
+
+									"headers": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_match": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"exact": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"presence": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"regex": {
+
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 											},
 										},
@@ -5843,20 +6351,59 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	//api_definitions
-	if v, ok := d.GetOk("api_definitions"); ok && !isIntfNil(v) {
+	//api_definition_choice
+
+	apiDefinitionChoiceTypeFound := false
+
+	if v, ok := d.GetOk("api_definition"); ok && !apiDefinitionChoiceTypeFound {
+
+		apiDefinitionChoiceTypeFound = true
+		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_ApiDefinition{}
+		apiDefinitionChoiceInt.ApiDefinition = &ves_io_schema_views.ObjectRefType{}
+		createSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
 
 		sl := v.(*schema.Set).List()
-		apiDefinitions := &ves_io_schema_views_http_loadbalancer.ApiDefinitionList{}
-		createSpec.ApiDefinitions = apiDefinitions
 		for _, set := range sl {
-			apiDefinitionsMapStrToI := set.(map[string]interface{})
+			cs := set.(map[string]interface{})
 
-			if v, ok := apiDefinitionsMapStrToI["api_definitions"]; ok && !isIntfNil(v) {
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				apiDefinitionChoiceInt.ApiDefinition.Name = v.(string)
+
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				apiDefinitionChoiceInt.ApiDefinition.Namespace = v.(string)
+
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				apiDefinitionChoiceInt.ApiDefinition.Tenant = v.(string)
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("api_definitions"); ok && !apiDefinitionChoiceTypeFound {
+
+		apiDefinitionChoiceTypeFound = true
+		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_ApiDefinitions{}
+		apiDefinitionChoiceInt.ApiDefinitions = &ves_io_schema_views_http_loadbalancer.ApiDefinitionList{}
+		createSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_definitions"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
 				apiDefinitionsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				apiDefinitions.ApiDefinitions = apiDefinitionsInt
+				apiDefinitionChoiceInt.ApiDefinitions.ApiDefinitions = apiDefinitionsInt
 				for i, ps := range sl {
 
 					adMapToStrVal := ps.(map[string]interface{})
@@ -5878,6 +6425,18 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+		}
+
+	}
+
+	if v, ok := d.GetOk("disable_api_definition"); ok && !apiDefinitionChoiceTypeFound {
+
+		apiDefinitionChoiceTypeFound = true
+
+		if v.(bool) {
+			apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableApiDefinition{}
+			apiDefinitionChoiceInt.DisableApiDefinition = &ves_io_schema.Empty{}
+			createSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
 		}
 
 	}
@@ -6813,11 +7372,55 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 										actionTypeTypeFound = true
+										actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+										actionTypeInt.Flag = &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType{}
+										mitigation.ActionType = actionTypeInt
 
-										if v.(bool) {
-											actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
-											actionTypeInt.Flag = &ves_io_schema.Empty{}
-											mitigation.ActionType = actionTypeInt
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											sendHeadersChoiceTypeFound := false
+
+											if v, ok := cs["append_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
+
+												sendHeadersChoiceTypeFound = true
+												sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_AppendHeaders{}
+												sendHeadersChoiceInt.AppendHeaders = &ves_io_schema_policy.ShapeBotFlagMitigationActionType{}
+												actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["auto_type_header_name"]; ok && !isIntfNil(v) {
+
+														sendHeadersChoiceInt.AppendHeaders.AutoTypeHeaderName = v.(string)
+
+													}
+
+													if v, ok := cs["inference_header_name"]; ok && !isIntfNil(v) {
+
+														sendHeadersChoiceInt.AppendHeaders.InferenceHeaderName = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["no_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
+
+												sendHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_NoHeaders{}
+													sendHeadersChoiceInt.NoHeaders = &ves_io_schema.Empty{}
+													actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
+												}
+
+											}
+
 										}
 
 									}
@@ -8296,6 +8899,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			dataGuardRules[i] = &ves_io_schema_policy.SimpleDataGuardRule{}
 			dataGuardRulesMapStrToI := set.(map[string]interface{})
 
+			actionChoiceTypeFound := false
+
+			if v, ok := dataGuardRulesMapStrToI["apply_data_guard"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+
+				actionChoiceTypeFound = true
+
+				if v.(bool) {
+					actionChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_ApplyDataGuard{}
+					actionChoiceInt.ApplyDataGuard = &ves_io_schema.Empty{}
+					dataGuardRules[i].ActionChoice = actionChoiceInt
+				}
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["skip_data_guard"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+
+				actionChoiceTypeFound = true
+
+				if v.(bool) {
+					actionChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_SkipDataGuard{}
+					actionChoiceInt.SkipDataGuard = &ves_io_schema.Empty{}
+					dataGuardRules[i].ActionChoice = actionChoiceInt
+				}
+
+			}
+
 			domainChoiceTypeFound := false
 
 			if v, ok := dataGuardRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
@@ -8862,6 +9491,47 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			hashPolicyChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_SourceIpStickiness{}
 			hashPolicyChoiceInt.SourceIpStickiness = &ves_io_schema.Empty{}
 			createSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	//ip_reputation_choice
+
+	ipReputationChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_ip_reputation"); ok && !ipReputationChoiceTypeFound {
+
+		ipReputationChoiceTypeFound = true
+
+		if v.(bool) {
+			ipReputationChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableIpReputation{}
+			ipReputationChoiceInt.DisableIpReputation = &ves_io_schema.Empty{}
+			createSpec.IpReputationChoice = ipReputationChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_ip_reputation"); ok && !ipReputationChoiceTypeFound {
+
+		ipReputationChoiceTypeFound = true
+		ipReputationChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableIpReputation{}
+		ipReputationChoiceInt.EnableIpReputation = &ves_io_schema_views_http_loadbalancer.IPThreatCategoryListType{}
+		createSpec.IpReputationChoice = ipReputationChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+				ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+				for _, j := range v.([]interface{}) {
+					ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+				}
+				ipReputationChoiceInt.EnableIpReputation.IpThreatCategories = ip_threat_categoriesList
+
+			}
+
 		}
 
 	}
@@ -10481,6 +11151,433 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	rateLimitChoiceTypeFound := false
 
+	if v, ok := d.GetOk("api_rate_limit"); ok && !rateLimitChoiceTypeFound {
+
+		rateLimitChoiceTypeFound = true
+		rateLimitChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_ApiRateLimit{}
+		rateLimitChoiceInt.ApiRateLimit = &ves_io_schema_views_http_loadbalancer.APIRateLimit{}
+		createSpec.RateLimitChoice = rateLimitChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_endpoint_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				apiEndpointRules := make([]*ves_io_schema_views_http_loadbalancer.ApiEndpointRule, len(sl))
+				rateLimitChoiceInt.ApiRateLimit.ApiEndpointRules = apiEndpointRules
+				for i, set := range sl {
+					apiEndpointRules[i] = &ves_io_schema_views_http_loadbalancer.ApiEndpointRule{}
+					apiEndpointRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiEndpointRulesMapStrToI["api_endpoint_method"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						apiEndpointMethod := &ves_io_schema_policy.HttpMethodMatcherType{}
+						apiEndpointRules[i].ApiEndpointMethod = apiEndpointMethod
+						for _, set := range sl {
+							apiEndpointMethodMapStrToI := set.(map[string]interface{})
+
+							if w, ok := apiEndpointMethodMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+								apiEndpointMethod.InvertMatcher = w.(bool)
+							}
+
+							if v, ok := apiEndpointMethodMapStrToI["methods"]; ok && !isIntfNil(v) {
+
+								methodsList := []ves_io_schema.HttpMethod{}
+								for _, j := range v.([]interface{}) {
+									methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+								}
+								apiEndpointMethod.Methods = methodsList
+
+							}
+
+						}
+
+					}
+
+					if w, ok := apiEndpointRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(w) {
+						apiEndpointRules[i].ApiEndpointPath = w.(string)
+					}
+
+					if w, ok := apiEndpointRulesMapStrToI["base_path"]; ok && !isIntfNil(w) {
+						apiEndpointRules[i].BasePath = w.(string)
+					}
+
+					domainChoiceTypeFound := false
+
+					if v, ok := apiEndpointRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+
+						if v.(bool) {
+							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_AnyDomain{}
+							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+							apiEndpointRules[i].DomainChoice = domainChoiceInt
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_SpecificDomain{}
+
+						apiEndpointRules[i].DomainChoice = domainChoiceInt
+
+						domainChoiceInt.SpecificDomain = v.(string)
+
+					}
+
+					rateLimiterChoiceTypeFound := false
+
+					if v, ok := apiEndpointRulesMapStrToI["inline_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
+
+						rateLimiterChoiceTypeFound = true
+						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_InlineRateLimiter{}
+						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_http_loadbalancer.InlineRateLimiter{}
+						apiEndpointRules[i].RateLimiterChoice = rateLimiterChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							countByChoiceTypeFound := false
+
+							if v, ok := cs["ref_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
+
+								countByChoiceTypeFound = true
+								countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_RefUserId{}
+								countByChoiceInt.RefUserId = &ves_io_schema_views.ObjectRefType{}
+								rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["use_http_lb_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
+
+								countByChoiceTypeFound = true
+
+								if v.(bool) {
+									countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_UseHttpLbUserId{}
+									countByChoiceInt.UseHttpLbUserId = &ves_io_schema.Empty{}
+									rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["threshold"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.InlineRateLimiter.Threshold = uint32(v.(int))
+
+							}
+
+							if v, ok := cs["unit"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.InlineRateLimiter.Unit = ves_io_schema_rate_limiter.RateLimitPeriodUnit(ves_io_schema_rate_limiter.RateLimitPeriodUnit_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["ref_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
+
+						rateLimiterChoiceTypeFound = true
+						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_RefRateLimiter{}
+						rateLimiterChoiceInt.RefRateLimiter = &ves_io_schema_views.ObjectRefType{}
+						apiEndpointRules[i].RateLimiterChoice = rateLimiterChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			ipAllowedListChoiceTypeFound := false
+
+			if v, ok := cs["custom_ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
+
+				ipAllowedListChoiceTypeFound = true
+				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_CustomIpAllowedList{}
+				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_http_loadbalancer.CustomIpAllowedList{}
+				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["rate_limiter_allowed_prefixes"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						rateLimiterAllowedPrefixesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						ipAllowedListChoiceInt.CustomIpAllowedList.RateLimiterAllowedPrefixes = rateLimiterAllowedPrefixesInt
+						for i, ps := range sl {
+
+							rlapMapToStrVal := ps.(map[string]interface{})
+							rateLimiterAllowedPrefixesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := rlapMapToStrVal["name"]; ok && !isIntfNil(v) {
+								rateLimiterAllowedPrefixesInt[i].Name = v.(string)
+							}
+
+							if v, ok := rlapMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								rateLimiterAllowedPrefixesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := rlapMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								rateLimiterAllowedPrefixesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
+
+				ipAllowedListChoiceTypeFound = true
+				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_IpAllowedList{}
+				ipAllowedListChoiceInt.IpAllowedList = &ves_io_schema_views.PrefixStringListType{}
+				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipAllowedListChoiceInt.IpAllowedList.Prefixes = ls
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
+
+				ipAllowedListChoiceTypeFound = true
+
+				if v.(bool) {
+					ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_NoIpAllowedList{}
+					ipAllowedListChoiceInt.NoIpAllowedList = &ves_io_schema.Empty{}
+					rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["server_url_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				serverUrlRules := make([]*ves_io_schema_views_http_loadbalancer.ServerUrlRule, len(sl))
+				rateLimitChoiceInt.ApiRateLimit.ServerUrlRules = serverUrlRules
+				for i, set := range sl {
+					serverUrlRules[i] = &ves_io_schema_views_http_loadbalancer.ServerUrlRule{}
+					serverUrlRulesMapStrToI := set.(map[string]interface{})
+
+					if w, ok := serverUrlRulesMapStrToI["base_path"]; ok && !isIntfNil(w) {
+						serverUrlRules[i].BasePath = w.(string)
+					}
+
+					domainChoiceTypeFound := false
+
+					if v, ok := serverUrlRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+
+						if v.(bool) {
+							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_AnyDomain{}
+							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+							serverUrlRules[i].DomainChoice = domainChoiceInt
+						}
+
+					}
+
+					if v, ok := serverUrlRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_SpecificDomain{}
+
+						serverUrlRules[i].DomainChoice = domainChoiceInt
+
+						domainChoiceInt.SpecificDomain = v.(string)
+
+					}
+
+					rateLimiterChoiceTypeFound := false
+
+					if v, ok := serverUrlRulesMapStrToI["inline_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
+
+						rateLimiterChoiceTypeFound = true
+						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_InlineRateLimiter{}
+						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_http_loadbalancer.InlineRateLimiter{}
+						serverUrlRules[i].RateLimiterChoice = rateLimiterChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							countByChoiceTypeFound := false
+
+							if v, ok := cs["ref_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
+
+								countByChoiceTypeFound = true
+								countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_RefUserId{}
+								countByChoiceInt.RefUserId = &ves_io_schema_views.ObjectRefType{}
+								rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["use_http_lb_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
+
+								countByChoiceTypeFound = true
+
+								if v.(bool) {
+									countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_UseHttpLbUserId{}
+									countByChoiceInt.UseHttpLbUserId = &ves_io_schema.Empty{}
+									rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["threshold"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.InlineRateLimiter.Threshold = uint32(v.(int))
+
+							}
+
+							if v, ok := cs["unit"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.InlineRateLimiter.Unit = ves_io_schema_rate_limiter.RateLimitPeriodUnit(ves_io_schema_rate_limiter.RateLimitPeriodUnit_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := serverUrlRulesMapStrToI["ref_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
+
+						rateLimiterChoiceTypeFound = true
+						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_RefRateLimiter{}
+						rateLimiterChoiceInt.RefRateLimiter = &ves_io_schema_views.ObjectRefType{}
+						serverUrlRules[i].RateLimiterChoice = rateLimiterChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("disable_rate_limit"); ok && !rateLimitChoiceTypeFound {
 
 		rateLimitChoiceTypeFound = true
@@ -10729,6 +11826,62 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						choiceInt.DirectResponseRoute.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["http_method"]; ok && !isIntfNil(v) {
 
 						choiceInt.DirectResponseRoute.HttpMethod = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
@@ -10816,6 +11969,62 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						choiceInt.RedirectRoute.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["http_method"]; ok && !isIntfNil(v) {
 
@@ -12062,6 +13271,62 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						choiceInt.SimpleRoute.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
+
 					hostRewriteParamsTypeFound := false
 
 					if v, ok := cs["auto_host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
@@ -13239,19 +14504,57 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("api_definitions"); ok && !isIntfNil(v) {
+	apiDefinitionChoiceTypeFound := false
+
+	if v, ok := d.GetOk("api_definition"); ok && !apiDefinitionChoiceTypeFound {
+
+		apiDefinitionChoiceTypeFound = true
+		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ApiDefinition{}
+		apiDefinitionChoiceInt.ApiDefinition = &ves_io_schema_views.ObjectRefType{}
+		updateSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
 
 		sl := v.(*schema.Set).List()
-		apiDefinitions := &ves_io_schema_views_http_loadbalancer.ApiDefinitionList{}
-		updateSpec.ApiDefinitions = apiDefinitions
 		for _, set := range sl {
-			apiDefinitionsMapStrToI := set.(map[string]interface{})
+			cs := set.(map[string]interface{})
 
-			if v, ok := apiDefinitionsMapStrToI["api_definitions"]; ok && !isIntfNil(v) {
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				apiDefinitionChoiceInt.ApiDefinition.Name = v.(string)
+
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				apiDefinitionChoiceInt.ApiDefinition.Namespace = v.(string)
+
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				apiDefinitionChoiceInt.ApiDefinition.Tenant = v.(string)
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("api_definitions"); ok && !apiDefinitionChoiceTypeFound {
+
+		apiDefinitionChoiceTypeFound = true
+		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ApiDefinitions{}
+		apiDefinitionChoiceInt.ApiDefinitions = &ves_io_schema_views_http_loadbalancer.ApiDefinitionList{}
+		updateSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_definitions"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
 				apiDefinitionsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				apiDefinitions.ApiDefinitions = apiDefinitionsInt
+				apiDefinitionChoiceInt.ApiDefinitions.ApiDefinitions = apiDefinitionsInt
 				for i, ps := range sl {
 
 					adMapToStrVal := ps.(map[string]interface{})
@@ -13273,6 +14576,18 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+		}
+
+	}
+
+	if v, ok := d.GetOk("disable_api_definition"); ok && !apiDefinitionChoiceTypeFound {
+
+		apiDefinitionChoiceTypeFound = true
+
+		if v.(bool) {
+			apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableApiDefinition{}
+			apiDefinitionChoiceInt.DisableApiDefinition = &ves_io_schema.Empty{}
+			updateSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
 		}
 
 	}
@@ -14205,11 +15520,55 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 										actionTypeTypeFound = true
+										actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+										actionTypeInt.Flag = &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType{}
+										mitigation.ActionType = actionTypeInt
 
-										if v.(bool) {
-											actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
-											actionTypeInt.Flag = &ves_io_schema.Empty{}
-											mitigation.ActionType = actionTypeInt
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											sendHeadersChoiceTypeFound := false
+
+											if v, ok := cs["append_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
+
+												sendHeadersChoiceTypeFound = true
+												sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_AppendHeaders{}
+												sendHeadersChoiceInt.AppendHeaders = &ves_io_schema_policy.ShapeBotFlagMitigationActionType{}
+												actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["auto_type_header_name"]; ok && !isIntfNil(v) {
+
+														sendHeadersChoiceInt.AppendHeaders.AutoTypeHeaderName = v.(string)
+
+													}
+
+													if v, ok := cs["inference_header_name"]; ok && !isIntfNil(v) {
+
+														sendHeadersChoiceInt.AppendHeaders.InferenceHeaderName = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["no_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
+
+												sendHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_NoHeaders{}
+													sendHeadersChoiceInt.NoHeaders = &ves_io_schema.Empty{}
+													actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
+												}
+
+											}
+
 										}
 
 									}
@@ -15684,6 +17043,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			dataGuardRules[i] = &ves_io_schema_policy.SimpleDataGuardRule{}
 			dataGuardRulesMapStrToI := set.(map[string]interface{})
 
+			actionChoiceTypeFound := false
+
+			if v, ok := dataGuardRulesMapStrToI["apply_data_guard"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+
+				actionChoiceTypeFound = true
+
+				if v.(bool) {
+					actionChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_ApplyDataGuard{}
+					actionChoiceInt.ApplyDataGuard = &ves_io_schema.Empty{}
+					dataGuardRules[i].ActionChoice = actionChoiceInt
+				}
+
+			}
+
+			if v, ok := dataGuardRulesMapStrToI["skip_data_guard"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+
+				actionChoiceTypeFound = true
+
+				if v.(bool) {
+					actionChoiceInt := &ves_io_schema_policy.SimpleDataGuardRule_SkipDataGuard{}
+					actionChoiceInt.SkipDataGuard = &ves_io_schema.Empty{}
+					dataGuardRules[i].ActionChoice = actionChoiceInt
+				}
+
+			}
+
 			domainChoiceTypeFound := false
 
 			if v, ok := dataGuardRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
@@ -16245,6 +17630,45 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			hashPolicyChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_SourceIpStickiness{}
 			hashPolicyChoiceInt.SourceIpStickiness = &ves_io_schema.Empty{}
 			updateSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	ipReputationChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_ip_reputation"); ok && !ipReputationChoiceTypeFound {
+
+		ipReputationChoiceTypeFound = true
+
+		if v.(bool) {
+			ipReputationChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableIpReputation{}
+			ipReputationChoiceInt.DisableIpReputation = &ves_io_schema.Empty{}
+			updateSpec.IpReputationChoice = ipReputationChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_ip_reputation"); ok && !ipReputationChoiceTypeFound {
+
+		ipReputationChoiceTypeFound = true
+		ipReputationChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableIpReputation{}
+		ipReputationChoiceInt.EnableIpReputation = &ves_io_schema_views_http_loadbalancer.IPThreatCategoryListType{}
+		updateSpec.IpReputationChoice = ipReputationChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+				ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+				for _, j := range v.([]interface{}) {
+					ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+				}
+				ipReputationChoiceInt.EnableIpReputation.IpThreatCategories = ip_threat_categoriesList
+
+			}
+
 		}
 
 	}
@@ -17856,6 +19280,433 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	rateLimitChoiceTypeFound := false
 
+	if v, ok := d.GetOk("api_rate_limit"); ok && !rateLimitChoiceTypeFound {
+
+		rateLimitChoiceTypeFound = true
+		rateLimitChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ApiRateLimit{}
+		rateLimitChoiceInt.ApiRateLimit = &ves_io_schema_views_http_loadbalancer.APIRateLimit{}
+		updateSpec.RateLimitChoice = rateLimitChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_endpoint_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				apiEndpointRules := make([]*ves_io_schema_views_http_loadbalancer.ApiEndpointRule, len(sl))
+				rateLimitChoiceInt.ApiRateLimit.ApiEndpointRules = apiEndpointRules
+				for i, set := range sl {
+					apiEndpointRules[i] = &ves_io_schema_views_http_loadbalancer.ApiEndpointRule{}
+					apiEndpointRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiEndpointRulesMapStrToI["api_endpoint_method"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						apiEndpointMethod := &ves_io_schema_policy.HttpMethodMatcherType{}
+						apiEndpointRules[i].ApiEndpointMethod = apiEndpointMethod
+						for _, set := range sl {
+							apiEndpointMethodMapStrToI := set.(map[string]interface{})
+
+							if w, ok := apiEndpointMethodMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+								apiEndpointMethod.InvertMatcher = w.(bool)
+							}
+
+							if v, ok := apiEndpointMethodMapStrToI["methods"]; ok && !isIntfNil(v) {
+
+								methodsList := []ves_io_schema.HttpMethod{}
+								for _, j := range v.([]interface{}) {
+									methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+								}
+								apiEndpointMethod.Methods = methodsList
+
+							}
+
+						}
+
+					}
+
+					if w, ok := apiEndpointRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(w) {
+						apiEndpointRules[i].ApiEndpointPath = w.(string)
+					}
+
+					if w, ok := apiEndpointRulesMapStrToI["base_path"]; ok && !isIntfNil(w) {
+						apiEndpointRules[i].BasePath = w.(string)
+					}
+
+					domainChoiceTypeFound := false
+
+					if v, ok := apiEndpointRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+
+						if v.(bool) {
+							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_AnyDomain{}
+							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+							apiEndpointRules[i].DomainChoice = domainChoiceInt
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_SpecificDomain{}
+
+						apiEndpointRules[i].DomainChoice = domainChoiceInt
+
+						domainChoiceInt.SpecificDomain = v.(string)
+
+					}
+
+					rateLimiterChoiceTypeFound := false
+
+					if v, ok := apiEndpointRulesMapStrToI["inline_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
+
+						rateLimiterChoiceTypeFound = true
+						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_InlineRateLimiter{}
+						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_http_loadbalancer.InlineRateLimiter{}
+						apiEndpointRules[i].RateLimiterChoice = rateLimiterChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							countByChoiceTypeFound := false
+
+							if v, ok := cs["ref_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
+
+								countByChoiceTypeFound = true
+								countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_RefUserId{}
+								countByChoiceInt.RefUserId = &ves_io_schema_views.ObjectRefType{}
+								rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["use_http_lb_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
+
+								countByChoiceTypeFound = true
+
+								if v.(bool) {
+									countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_UseHttpLbUserId{}
+									countByChoiceInt.UseHttpLbUserId = &ves_io_schema.Empty{}
+									rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["threshold"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.InlineRateLimiter.Threshold = uint32(v.(int))
+
+							}
+
+							if v, ok := cs["unit"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.InlineRateLimiter.Unit = ves_io_schema_rate_limiter.RateLimitPeriodUnit(ves_io_schema_rate_limiter.RateLimitPeriodUnit_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["ref_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
+
+						rateLimiterChoiceTypeFound = true
+						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_RefRateLimiter{}
+						rateLimiterChoiceInt.RefRateLimiter = &ves_io_schema_views.ObjectRefType{}
+						apiEndpointRules[i].RateLimiterChoice = rateLimiterChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			ipAllowedListChoiceTypeFound := false
+
+			if v, ok := cs["custom_ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
+
+				ipAllowedListChoiceTypeFound = true
+				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_CustomIpAllowedList{}
+				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_http_loadbalancer.CustomIpAllowedList{}
+				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["rate_limiter_allowed_prefixes"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						rateLimiterAllowedPrefixesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						ipAllowedListChoiceInt.CustomIpAllowedList.RateLimiterAllowedPrefixes = rateLimiterAllowedPrefixesInt
+						for i, ps := range sl {
+
+							rlapMapToStrVal := ps.(map[string]interface{})
+							rateLimiterAllowedPrefixesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := rlapMapToStrVal["name"]; ok && !isIntfNil(v) {
+								rateLimiterAllowedPrefixesInt[i].Name = v.(string)
+							}
+
+							if v, ok := rlapMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								rateLimiterAllowedPrefixesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := rlapMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								rateLimiterAllowedPrefixesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
+
+				ipAllowedListChoiceTypeFound = true
+				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_IpAllowedList{}
+				ipAllowedListChoiceInt.IpAllowedList = &ves_io_schema_views.PrefixStringListType{}
+				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipAllowedListChoiceInt.IpAllowedList.Prefixes = ls
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
+
+				ipAllowedListChoiceTypeFound = true
+
+				if v.(bool) {
+					ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_NoIpAllowedList{}
+					ipAllowedListChoiceInt.NoIpAllowedList = &ves_io_schema.Empty{}
+					rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["server_url_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				serverUrlRules := make([]*ves_io_schema_views_http_loadbalancer.ServerUrlRule, len(sl))
+				rateLimitChoiceInt.ApiRateLimit.ServerUrlRules = serverUrlRules
+				for i, set := range sl {
+					serverUrlRules[i] = &ves_io_schema_views_http_loadbalancer.ServerUrlRule{}
+					serverUrlRulesMapStrToI := set.(map[string]interface{})
+
+					if w, ok := serverUrlRulesMapStrToI["base_path"]; ok && !isIntfNil(w) {
+						serverUrlRules[i].BasePath = w.(string)
+					}
+
+					domainChoiceTypeFound := false
+
+					if v, ok := serverUrlRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+
+						if v.(bool) {
+							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_AnyDomain{}
+							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+							serverUrlRules[i].DomainChoice = domainChoiceInt
+						}
+
+					}
+
+					if v, ok := serverUrlRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_SpecificDomain{}
+
+						serverUrlRules[i].DomainChoice = domainChoiceInt
+
+						domainChoiceInt.SpecificDomain = v.(string)
+
+					}
+
+					rateLimiterChoiceTypeFound := false
+
+					if v, ok := serverUrlRulesMapStrToI["inline_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
+
+						rateLimiterChoiceTypeFound = true
+						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_InlineRateLimiter{}
+						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_http_loadbalancer.InlineRateLimiter{}
+						serverUrlRules[i].RateLimiterChoice = rateLimiterChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							countByChoiceTypeFound := false
+
+							if v, ok := cs["ref_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
+
+								countByChoiceTypeFound = true
+								countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_RefUserId{}
+								countByChoiceInt.RefUserId = &ves_io_schema_views.ObjectRefType{}
+								rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										countByChoiceInt.RefUserId.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["use_http_lb_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
+
+								countByChoiceTypeFound = true
+
+								if v.(bool) {
+									countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_UseHttpLbUserId{}
+									countByChoiceInt.UseHttpLbUserId = &ves_io_schema.Empty{}
+									rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["threshold"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.InlineRateLimiter.Threshold = uint32(v.(int))
+
+							}
+
+							if v, ok := cs["unit"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.InlineRateLimiter.Unit = ves_io_schema_rate_limiter.RateLimitPeriodUnit(ves_io_schema_rate_limiter.RateLimitPeriodUnit_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := serverUrlRulesMapStrToI["ref_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
+
+						rateLimiterChoiceTypeFound = true
+						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_RefRateLimiter{}
+						rateLimiterChoiceInt.RefRateLimiter = &ves_io_schema_views.ObjectRefType{}
+						serverUrlRules[i].RateLimiterChoice = rateLimiterChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								rateLimiterChoiceInt.RefRateLimiter.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("disable_rate_limit"); ok && !rateLimitChoiceTypeFound {
 
 		rateLimitChoiceTypeFound = true
@@ -18103,6 +19954,62 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						choiceInt.DirectResponseRoute.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["http_method"]; ok && !isIntfNil(v) {
 
 						choiceInt.DirectResponseRoute.HttpMethod = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
@@ -18190,6 +20097,62 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						choiceInt.RedirectRoute.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["http_method"]; ok && !isIntfNil(v) {
 
@@ -19429,6 +21392,62 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									}
 
 								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						choiceInt.SimpleRoute.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
 
 							}
 

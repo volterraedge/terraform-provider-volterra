@@ -1207,8 +1207,38 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 									"flag": {
 
-										Type:     schema.TypeBool,
+										Type:     schema.TypeSet,
 										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"append_headers": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"auto_type_header_name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"inference_header_name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"no_headers": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
 									},
 
 									"none": {
@@ -3022,11 +3052,55 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 					if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 						actionTypeTypeFound = true
+						actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+						actionTypeInt.Flag = &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType{}
+						mitigation.ActionType = actionTypeInt
 
-						if v.(bool) {
-							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
-							actionTypeInt.Flag = &ves_io_schema.Empty{}
-							mitigation.ActionType = actionTypeInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							sendHeadersChoiceTypeFound := false
+
+							if v, ok := cs["append_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
+
+								sendHeadersChoiceTypeFound = true
+								sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_AppendHeaders{}
+								sendHeadersChoiceInt.AppendHeaders = &ves_io_schema_policy.ShapeBotFlagMitigationActionType{}
+								actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["auto_type_header_name"]; ok && !isIntfNil(v) {
+
+										sendHeadersChoiceInt.AppendHeaders.AutoTypeHeaderName = v.(string)
+
+									}
+
+									if v, ok := cs["inference_header_name"]; ok && !isIntfNil(v) {
+
+										sendHeadersChoiceInt.AppendHeaders.InferenceHeaderName = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["no_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
+
+								sendHeadersChoiceTypeFound = true
+
+								if v.(bool) {
+									sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_NoHeaders{}
+									sendHeadersChoiceInt.NoHeaders = &ves_io_schema.Empty{}
+									actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
+								}
+
+							}
+
 						}
 
 					}
@@ -4956,11 +5030,55 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 					if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 						actionTypeTypeFound = true
+						actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+						actionTypeInt.Flag = &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType{}
+						mitigation.ActionType = actionTypeInt
 
-						if v.(bool) {
-							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
-							actionTypeInt.Flag = &ves_io_schema.Empty{}
-							mitigation.ActionType = actionTypeInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							sendHeadersChoiceTypeFound := false
+
+							if v, ok := cs["append_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
+
+								sendHeadersChoiceTypeFound = true
+								sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_AppendHeaders{}
+								sendHeadersChoiceInt.AppendHeaders = &ves_io_schema_policy.ShapeBotFlagMitigationActionType{}
+								actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["auto_type_header_name"]; ok && !isIntfNil(v) {
+
+										sendHeadersChoiceInt.AppendHeaders.AutoTypeHeaderName = v.(string)
+
+									}
+
+									if v, ok := cs["inference_header_name"]; ok && !isIntfNil(v) {
+
+										sendHeadersChoiceInt.AppendHeaders.InferenceHeaderName = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["no_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
+
+								sendHeadersChoiceTypeFound = true
+
+								if v.(bool) {
+									sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_NoHeaders{}
+									sendHeadersChoiceInt.NoHeaders = &ves_io_schema.Empty{}
+									actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
+								}
+
+							}
+
 						}
 
 					}

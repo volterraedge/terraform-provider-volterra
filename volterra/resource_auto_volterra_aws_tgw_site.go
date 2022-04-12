@@ -675,6 +675,58 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 							},
 						},
 
+						"dc_cluster_group_inside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"dc_cluster_group_outside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"global_network_list": {
 
 							Type:     schema.TypeSet,
@@ -2505,6 +2557,86 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := vnConfigMapStrToI["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
+
 			globalNetworkChoiceTypeFound := false
 
 			if v, ok := vnConfigMapStrToI["global_network_list"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
@@ -4180,6 +4312,86 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := vnConfigMapStrToI["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
 				}
 
 			}

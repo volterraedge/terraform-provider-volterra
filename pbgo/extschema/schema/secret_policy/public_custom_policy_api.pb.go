@@ -24,12 +24,12 @@ import (
 	_ "github.com/gogo/googleapis/google/api"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/gogo/protobuf/types"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	golang_proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
@@ -272,6 +272,300 @@ func (m *RecoverResponse) GetStatus() int64 {
 	return 0
 }
 
+// ListPolicyRequest is used to list a secret_policy
+//
+// x-displayName: "List Policy Request"
+// This is the input message of the 'ListPolicy' RPC.
+type ListPolicyRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-required
+	// x-example: "system"
+	// Namespace of the secret policy
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// policy_state
+	//
+	// x-displayName: "policy_state"
+	// x-required
+	// x-example: "all"
+	// state of the policy to filter in results
+	PolicyState string `protobuf:"bytes,2,opt,name=policy_state,json=policyState,proto3" json:"policy_state,omitempty"`
+}
+
+func (m *ListPolicyRequest) Reset()      { *m = ListPolicyRequest{} }
+func (*ListPolicyRequest) ProtoMessage() {}
+func (*ListPolicyRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92490649efc01524, []int{4}
+}
+func (m *ListPolicyRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ListPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListPolicyRequest.Merge(m, src)
+}
+func (m *ListPolicyRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListPolicyRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListPolicyRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListPolicyRequest proto.InternalMessageInfo
+
+func (m *ListPolicyRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ListPolicyRequest) GetPolicyState() string {
+	if m != nil {
+		return m.PolicyState
+	}
+	return ""
+}
+
+// ListPolicyResponseItem is an individual item in a collection of secret_policy
+//
+// x-displayName: "List Polic Response  Item"
+type ListPolicyResponseItem struct {
+	// tenant
+	//
+	// x-displayName: "Tenant"
+	// x-example: "acmecorp"
+	// The tenant this item belongs to
+	Tenant string `protobuf:"bytes,6,opt,name=tenant,proto3" json:"tenant,omitempty"`
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "ns1"
+	// The namespace this item belongs to
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// name
+	//
+	// x-displayName: "Name"
+	// x-example: "name"
+	// The name of this secret_policy
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// uid
+	//
+	// x-displayName: "UID"
+	// x-example: "d27938ba-967e-40a7-9709-57b8627f9f75"
+	// The unique uid of this secret_policy
+	Uid string `protobuf:"bytes,3,opt,name=uid,proto3" json:"uid,omitempty"`
+	// description
+	//
+	// x-displayName: "Description"
+	// The description set for this secret_policy
+	Description string `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
+	// disabled
+	//
+	// x-displayName: "Disabled"
+	// A value of true indicates secret_policy is administratively disabled
+	Disabled bool `protobuf:"varint,12,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	// labels
+	//
+	// x-displayName: "Labels"
+	// The set of labels present on this secret_policy
+	Labels map[string]string `protobuf:"bytes,4,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// annotations
+	//
+	// x-displayName: "Annotations"
+	// The set of annotations present on this secret_policy
+	Annotations map[string]string `protobuf:"bytes,10,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// If list request has report_fields set then metadata will
+	// contain all the metadata associated with the object.
+	Metadata *schema.ObjectGetMetaType `protobuf:"bytes,13,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// system_metadata
+	//
+	// x-displayName: "System Metadata"
+	// If list request has report_fields set then system_metadata will
+	// contain all the system generated details of this object.
+	SystemMetadata *schema.SystemObjectGetMetaType `protobuf:"bytes,14,opt,name=system_metadata,json=systemMetadata,proto3" json:"system_metadata,omitempty"`
+	// get_spec
+	//
+	// x-displayName: "Get Specification"
+	// If ListRequest has any specified report_fields, it will appear in object
+	GetSpec *GetSpecType `protobuf:"bytes,7,opt,name=get_spec,json=getSpec,proto3" json:"get_spec,omitempty"`
+}
+
+func (m *ListPolicyResponseItem) Reset()      { *m = ListPolicyResponseItem{} }
+func (*ListPolicyResponseItem) ProtoMessage() {}
+func (*ListPolicyResponseItem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92490649efc01524, []int{5}
+}
+func (m *ListPolicyResponseItem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListPolicyResponseItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ListPolicyResponseItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListPolicyResponseItem.Merge(m, src)
+}
+func (m *ListPolicyResponseItem) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListPolicyResponseItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListPolicyResponseItem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListPolicyResponseItem proto.InternalMessageInfo
+
+func (m *ListPolicyResponseItem) GetTenant() string {
+	if m != nil {
+		return m.Tenant
+	}
+	return ""
+}
+
+func (m *ListPolicyResponseItem) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ListPolicyResponseItem) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *ListPolicyResponseItem) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
+}
+
+func (m *ListPolicyResponseItem) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *ListPolicyResponseItem) GetDisabled() bool {
+	if m != nil {
+		return m.Disabled
+	}
+	return false
+}
+
+func (m *ListPolicyResponseItem) GetLabels() map[string]string {
+	if m != nil {
+		return m.Labels
+	}
+	return nil
+}
+
+func (m *ListPolicyResponseItem) GetAnnotations() map[string]string {
+	if m != nil {
+		return m.Annotations
+	}
+	return nil
+}
+
+func (m *ListPolicyResponseItem) GetMetadata() *schema.ObjectGetMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *ListPolicyResponseItem) GetSystemMetadata() *schema.SystemObjectGetMetaType {
+	if m != nil {
+		return m.SystemMetadata
+	}
+	return nil
+}
+
+func (m *ListPolicyResponseItem) GetGetSpec() *GetSpecType {
+	if m != nil {
+		return m.GetSpec
+	}
+	return nil
+}
+
+// ListPolicyResponse is used to list a secret_policy
+//
+// x-displayName: "List Policy Response"
+// This is the response message of the 'ListPolicy' RPC.
+type ListPolicyResponse struct {
+	// items
+	//
+	// x-displayName: "Items"
+	// items represents the collection in response
+	Items []*ListPolicyResponseItem `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	// errors
+	//
+	// x-displayName: "Errors"
+	// Errors(if any) while listing items from collection
+	Errors []*schema.ErrorType `protobuf:"bytes,2,rep,name=errors,proto3" json:"errors,omitempty"`
+}
+
+func (m *ListPolicyResponse) Reset()      { *m = ListPolicyResponse{} }
+func (*ListPolicyResponse) ProtoMessage() {}
+func (*ListPolicyResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92490649efc01524, []int{6}
+}
+func (m *ListPolicyResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListPolicyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ListPolicyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListPolicyResponse.Merge(m, src)
+}
+func (m *ListPolicyResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListPolicyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListPolicyResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListPolicyResponse proto.InternalMessageInfo
+
+func (m *ListPolicyResponse) GetItems() []*ListPolicyResponseItem {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+func (m *ListPolicyResponse) GetErrors() []*schema.ErrorType {
+	if m != nil {
+		return m.Errors
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*SoftDeleteRequest)(nil), "ves.io.schema.secret_policy.SoftDeleteRequest")
 	golang_proto.RegisterType((*SoftDeleteRequest)(nil), "ves.io.schema.secret_policy.SoftDeleteRequest")
@@ -281,6 +575,16 @@ func init() {
 	golang_proto.RegisterType((*RecoverRequest)(nil), "ves.io.schema.secret_policy.RecoverRequest")
 	proto.RegisterType((*RecoverResponse)(nil), "ves.io.schema.secret_policy.RecoverResponse")
 	golang_proto.RegisterType((*RecoverResponse)(nil), "ves.io.schema.secret_policy.RecoverResponse")
+	proto.RegisterType((*ListPolicyRequest)(nil), "ves.io.schema.secret_policy.ListPolicyRequest")
+	golang_proto.RegisterType((*ListPolicyRequest)(nil), "ves.io.schema.secret_policy.ListPolicyRequest")
+	proto.RegisterType((*ListPolicyResponseItem)(nil), "ves.io.schema.secret_policy.ListPolicyResponseItem")
+	golang_proto.RegisterType((*ListPolicyResponseItem)(nil), "ves.io.schema.secret_policy.ListPolicyResponseItem")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.secret_policy.ListPolicyResponseItem.AnnotationsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.secret_policy.ListPolicyResponseItem.AnnotationsEntry")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.secret_policy.ListPolicyResponseItem.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.secret_policy.ListPolicyResponseItem.LabelsEntry")
+	proto.RegisterType((*ListPolicyResponse)(nil), "ves.io.schema.secret_policy.ListPolicyResponse")
+	golang_proto.RegisterType((*ListPolicyResponse)(nil), "ves.io.schema.secret_policy.ListPolicyResponse")
 }
 
 func init() {
@@ -291,41 +595,68 @@ func init() {
 }
 
 var fileDescriptor_92490649efc01524 = []byte{
-	// 540 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x4f, 0x6b, 0xd4, 0x40,
-	0x14, 0xcf, 0x74, 0xa5, 0xb0, 0x83, 0x7f, 0x30, 0x88, 0xac, 0xdb, 0x32, 0x48, 0x4e, 0x5a, 0x9b,
-	0x8c, 0xe8, 0x6d, 0x11, 0xa4, 0xb5, 0x82, 0x9e, 0xac, 0xeb, 0xcd, 0xcb, 0x92, 0x64, 0xdf, 0xa6,
-	0xd1, 0xdd, 0xbc, 0x71, 0x66, 0x12, 0x2d, 0x52, 0x90, 0x7e, 0x01, 0x05, 0xbf, 0x84, 0xdf, 0xa1,
-	0x97, 0xde, 0x14, 0x04, 0x59, 0xec, 0x65, 0x8f, 0x6e, 0xd6, 0x83, 0xc7, 0x7e, 0x04, 0x71, 0x92,
-	0x5d, 0x1b, 0x94, 0x50, 0x7a, 0x7b, 0x6f, 0x7e, 0xef, 0xf7, 0xde, 0xfb, 0xbd, 0x37, 0x33, 0xb4,
-	0x93, 0x81, 0xf2, 0x62, 0xe4, 0x2a, 0xdc, 0x81, 0x91, 0xcf, 0x15, 0x84, 0x12, 0x74, 0x4f, 0xe0,
-	0x30, 0x0e, 0x77, 0xb9, 0x48, 0x83, 0x61, 0x1c, 0xf6, 0xc2, 0x54, 0x69, 0x1c, 0x95, 0x87, 0x3d,
-	0x5f, 0xc4, 0x9e, 0x90, 0xa8, 0xd1, 0x5e, 0x29, 0xb8, 0x5e, 0xc1, 0xf5, 0x2a, 0xdc, 0xb6, 0x1b,
-	0xc5, 0x7a, 0x27, 0x0d, 0xbc, 0x10, 0x47, 0x3c, 0xc2, 0x08, 0xb9, 0xe1, 0x04, 0xe9, 0xc0, 0x78,
-	0xc6, 0x31, 0x56, 0x91, 0xab, 0xbd, 0x1a, 0x21, 0x46, 0x43, 0xe0, 0xbe, 0x88, 0xb9, 0x9f, 0x24,
-	0xa8, 0x7d, 0x1d, 0x63, 0xa2, 0x4a, 0x94, 0x95, 0xe8, 0x22, 0x47, 0x3f, 0x95, 0x26, 0xa0, 0xc4,
-	0x57, 0xaa, 0x2a, 0x50, 0x9c, 0x24, 0x5f, 0xab, 0x82, 0x7a, 0x57, 0xc0, 0x1c, 0x72, 0xaa, 0x50,
-	0x06, 0x0a, 0x92, 0xac, 0x4a, 0x77, 0x1e, 0xd2, 0xcb, 0xcf, 0x70, 0xa0, 0xb7, 0x60, 0x08, 0x1a,
-	0xba, 0xf0, 0x2a, 0x05, 0xa5, 0xed, 0x55, 0xda, 0x4c, 0xfc, 0x11, 0x28, 0xe1, 0x87, 0xd0, 0x22,
-	0xd7, 0xc9, 0x8d, 0x66, 0xf7, 0xef, 0x81, 0x6d, 0xd3, 0x73, 0x7f, 0x9c, 0xd6, 0x92, 0x01, 0x8c,
-	0xed, 0xac, 0x53, 0xfb, 0x64, 0x1a, 0x25, 0x30, 0x51, 0x60, 0x5f, 0xa5, 0xcb, 0x4a, 0xfb, 0x3a,
-	0x55, 0x26, 0x49, 0xa3, 0x5b, 0x7a, 0xce, 0x26, 0xbd, 0xd8, 0x85, 0x10, 0x33, 0x90, 0x67, 0xaf,
-	0x78, 0x93, 0x5e, 0x5a, 0xe4, 0xa8, 0x2f, 0x77, 0x67, 0xda, 0xa0, 0xcd, 0x07, 0x66, 0xcb, 0x1b,
-	0xdb, 0x8f, 0xed, 0x23, 0x42, 0xcf, 0x17, 0x7d, 0x6e, 0x9b, 0x5d, 0xda, 0x9e, 0x57, 0xb3, 0x69,
-	0xef, 0x9f, 0xe9, 0xb4, 0xf9, 0xa9, 0xe3, 0x8b, 0xbe, 0x9c, 0x20, 0xff, 0xdc, 0xba, 0x92, 0x81,
-	0x72, 0x63, 0x74, 0x8b, 0x60, 0xe5, 0xbe, 0x96, 0xb1, 0x86, 0xfd, 0xa3, 0x9f, 0x1f, 0x97, 0xb6,
-	0x9c, 0xfb, 0xe5, 0x55, 0xe4, 0x0b, 0xc5, 0x8a, 0xbf, 0x5d, 0xd8, 0x7b, 0xd5, 0x6b, 0x5b, 0x42,
-	0x7b, 0x5c, 0xe1, 0x40, 0xf7, 0x4d, 0xa1, 0x0e, 0x59, 0xb3, 0xbf, 0x12, 0x7a, 0xa1, 0x9c, 0x47,
-	0x29, 0xeb, 0x56, 0x6d, 0x9b, 0xd5, 0xf9, 0xb7, 0xd7, 0x4f, 0x17, 0x5c, 0x0a, 0xea, 0xd5, 0x0a,
-	0xda, 0x70, 0xee, 0x9d, 0x49, 0x90, 0x2c, 0xaa, 0x74, 0xc8, 0x5a, 0xfb, 0xf6, 0xe1, 0x01, 0x69,
-	0x7c, 0x3f, 0x20, 0x4e, 0x5d, 0x57, 0x4f, 0x82, 0x17, 0x10, 0xea, 0xfd, 0x6f, 0xad, 0xa5, 0x47,
-	0x64, 0xf3, 0x3d, 0x19, 0x4f, 0x99, 0x35, 0x99, 0x32, 0xeb, 0x78, 0xca, 0xc8, 0xbb, 0x9c, 0x91,
-	0x4f, 0x39, 0x23, 0x5f, 0x72, 0x46, 0xc6, 0x39, 0x23, 0x93, 0x9c, 0x91, 0x1f, 0x39, 0x23, 0xbf,
-	0x72, 0x66, 0x1d, 0xe7, 0x8c, 0x7c, 0x98, 0x31, 0xeb, 0x70, 0xc6, 0xc8, 0x78, 0xc6, 0xac, 0xc9,
-	0x8c, 0x59, 0xcf, 0x9f, 0x46, 0x28, 0x5e, 0x46, 0x5e, 0x86, 0x43, 0x0d, 0x52, 0xfa, 0x5e, 0xaa,
-	0xb8, 0x31, 0x06, 0x28, 0x47, 0xae, 0x90, 0x98, 0xc5, 0x7d, 0x90, 0xee, 0x1c, 0xe6, 0x22, 0x88,
-	0x90, 0xc3, 0x1b, 0x3d, 0xff, 0x57, 0xfe, 0xf3, 0xbd, 0x04, 0xcb, 0xe6, 0x81, 0xdd, 0xfd, 0x1d,
-	0x00, 0x00, 0xff, 0xff, 0x8d, 0xe2, 0x1d, 0x5d, 0x84, 0x04, 0x00, 0x00,
+	// 970 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0x4f, 0x6f, 0x1b, 0x45,
+	0x14, 0xf7, 0xd8, 0x8d, 0x93, 0x8c, 0xd3, 0xb4, 0x1d, 0xaa, 0x68, 0x71, 0xa3, 0x95, 0xb5, 0x07,
+	0x6a, 0xa0, 0xde, 0xad, 0xd2, 0x0b, 0x04, 0x54, 0x68, 0xd2, 0x28, 0x04, 0xb5, 0x6a, 0xd9, 0x20,
+	0x21, 0x71, 0xc0, 0x1a, 0xef, 0x3e, 0x6f, 0x87, 0xae, 0x3d, 0xcb, 0xce, 0xd8, 0xc5, 0x42, 0x91,
+	0x50, 0xbf, 0x00, 0x20, 0xbe, 0x04, 0xdf, 0x00, 0x89, 0x5c, 0x22, 0x2e, 0x45, 0x1c, 0x50, 0x54,
+	0x84, 0x14, 0x71, 0x22, 0x1b, 0x0e, 0x70, 0xeb, 0x47, 0xa8, 0x76, 0x66, 0xed, 0xf8, 0x4f, 0xe5,
+	0xfc, 0xb9, 0xbd, 0x37, 0xef, 0xbd, 0xdf, 0x7b, 0xbf, 0x79, 0x33, 0x6f, 0x06, 0xaf, 0x76, 0x41,
+	0xd8, 0x8c, 0x3b, 0xc2, 0x7b, 0x04, 0x2d, 0xea, 0x08, 0xf0, 0x62, 0x90, 0xf5, 0x88, 0x87, 0xcc,
+	0xeb, 0x39, 0x51, 0xa7, 0x11, 0x32, 0xaf, 0xee, 0x75, 0x84, 0xe4, 0xad, 0x6c, 0xb1, 0x4e, 0x23,
+	0x66, 0x47, 0x31, 0x97, 0x9c, 0x5c, 0xd3, 0xb1, 0xb6, 0x8e, 0xb5, 0x47, 0x62, 0xcb, 0xb5, 0x80,
+	0xc9, 0x47, 0x9d, 0x86, 0xed, 0xf1, 0x96, 0x13, 0xf0, 0x80, 0x3b, 0x2a, 0xa6, 0xd1, 0x69, 0x2a,
+	0x4d, 0x29, 0x4a, 0xd2, 0x58, 0xe5, 0xe5, 0x80, 0xf3, 0x20, 0x04, 0x87, 0x46, 0xcc, 0xa1, 0xed,
+	0x36, 0x97, 0x54, 0x32, 0xde, 0x16, 0x99, 0xb5, 0x3c, 0x5a, 0x25, 0xc4, 0x31, 0x8f, 0xfb, 0xb6,
+	0x6b, 0xa3, 0x36, 0x1e, 0x0d, 0x07, 0x56, 0xa7, 0xd1, 0xe3, 0x8d, 0x2f, 0xc1, 0x93, 0x99, 0xe7,
+	0xf5, 0x69, 0x9e, 0xb2, 0x17, 0x41, 0x1f, 0xf2, 0xf5, 0x51, 0xc7, 0x61, 0xd3, 0xf2, 0xa8, 0xa9,
+	0x4b, 0x43, 0xe6, 0x53, 0x09, 0x99, 0xd5, 0x1a, 0xb3, 0x82, 0x80, 0x76, 0x77, 0xac, 0xde, 0xca,
+	0x98, 0x0f, 0x83, 0x27, 0xf5, 0x11, 0x0f, 0x6b, 0x03, 0x5f, 0xd9, 0xe6, 0x4d, 0x79, 0x17, 0x42,
+	0x90, 0xe0, 0xc2, 0x57, 0x1d, 0x10, 0x92, 0x2c, 0xe3, 0xf9, 0x36, 0x6d, 0x81, 0x88, 0xa8, 0x07,
+	0x06, 0xaa, 0xa0, 0xea, 0xbc, 0x7b, 0xbc, 0x40, 0x08, 0xbe, 0x90, 0x2a, 0x46, 0x5e, 0x19, 0x94,
+	0x6c, 0xdd, 0xc0, 0x64, 0x18, 0x46, 0x44, 0xbc, 0x2d, 0x80, 0x2c, 0xe1, 0xa2, 0x90, 0x54, 0x76,
+	0x84, 0x02, 0x29, 0xb8, 0x99, 0x66, 0xad, 0xe1, 0x45, 0x17, 0x3c, 0xde, 0x85, 0xf8, 0xfc, 0x19,
+	0xdf, 0xc4, 0x97, 0x06, 0x18, 0x27, 0xa4, 0xdb, 0xc1, 0x57, 0xee, 0x31, 0x21, 0x1f, 0xaa, 0xcd,
+	0x3f, 0x5d, 0xc6, 0x8f, 0xf1, 0x42, 0x76, 0x3e, 0x53, 0x8c, 0x2c, 0xf3, 0xda, 0xf5, 0xbf, 0x77,
+	0x51, 0x91, 0x7a, 0x92, 0x75, 0xe1, 0x97, 0xff, 0xf7, 0x0a, 0x46, 0xbc, 0xe4, 0x66, 0xaa, 0x3b,
+	0xeb, 0x2b, 0xea, 0xbe, 0x5b, 0xa0, 0x61, 0xe8, 0x96, 0x74, 0xf0, 0x76, 0x1a, 0x6b, 0xfd, 0x3a,
+	0x83, 0x97, 0x86, 0xf3, 0xeb, 0x6a, 0xb7, 0x24, 0xb4, 0xd2, 0x8a, 0x25, 0xb4, 0x69, 0x5b, 0x1a,
+	0x45, 0x55, 0x41, 0xa6, 0x9d, 0x7d, 0x3b, 0xc8, 0x65, 0x5c, 0xe8, 0x30, 0xdf, 0x28, 0xa8, 0xa5,
+	0x54, 0x24, 0x15, 0x5c, 0xf2, 0x41, 0x78, 0x31, 0x53, 0xfd, 0x36, 0x4a, 0xca, 0x32, 0xbc, 0x44,
+	0xca, 0x78, 0xce, 0x67, 0x82, 0x36, 0x42, 0xf0, 0x8d, 0x85, 0x0a, 0xaa, 0xce, 0xb9, 0x03, 0x9d,
+	0x7c, 0x86, 0x8b, 0x21, 0x6d, 0x40, 0x28, 0x8c, 0x0b, 0x95, 0x42, 0xb5, 0xb4, 0xf2, 0x81, 0x3d,
+	0xe5, 0x76, 0xda, 0xaf, 0xa6, 0x67, 0xdf, 0x53, 0x08, 0x1b, 0x6d, 0x19, 0xf7, 0xdc, 0x0c, 0x8e,
+	0x34, 0x71, 0x69, 0xe8, 0x42, 0x1a, 0x58, 0xa1, 0xdf, 0x3d, 0x0f, 0xfa, 0x9d, 0x63, 0x18, 0x9d,
+	0x62, 0x18, 0x98, 0xbc, 0x8f, 0xe7, 0x5a, 0x20, 0xa9, 0x4f, 0x25, 0x35, 0x2e, 0x56, 0x50, 0xb5,
+	0xb4, 0x52, 0x19, 0x4b, 0xf2, 0x40, 0xdd, 0xd7, 0x4d, 0x90, 0xf7, 0x41, 0xd2, 0x4f, 0x7b, 0x11,
+	0xb8, 0x83, 0x08, 0xf2, 0x00, 0x5f, 0x12, 0x3d, 0x21, 0xa1, 0x55, 0x1f, 0x80, 0x2c, 0x2a, 0x90,
+	0x37, 0xc6, 0x40, 0xb6, 0x95, 0xd7, 0x24, 0xd4, 0xa2, 0x0e, 0xbf, 0xdf, 0x07, 0x5c, 0xc7, 0x73,
+	0x01, 0xc8, 0xba, 0x88, 0xc0, 0x33, 0x66, 0x15, 0x52, 0x75, 0x2a, 0xe7, 0x4d, 0x90, 0xdb, 0x11,
+	0x78, 0x0a, 0x6b, 0x36, 0xd0, 0x4a, 0xf9, 0x5d, 0x5c, 0x1a, 0xda, 0xd2, 0xb4, 0xe7, 0x8f, 0xa1,
+	0x97, 0x9d, 0x8f, 0x54, 0x24, 0x57, 0xf1, 0x4c, 0x97, 0x86, 0x9d, 0xfe, 0xd1, 0xd0, 0xca, 0x6a,
+	0xfe, 0x1d, 0x54, 0xbe, 0x8d, 0x2f, 0x8f, 0xef, 0xd7, 0x59, 0xe2, 0xad, 0x1f, 0x10, 0x26, 0x93,
+	0x7d, 0x20, 0x5b, 0x78, 0x86, 0x49, 0x68, 0xa5, 0x37, 0x2e, 0xed, 0xe3, 0xad, 0x73, 0xf4, 0xd1,
+	0xd5, 0x08, 0xe4, 0x26, 0x2e, 0xea, 0x41, 0x6c, 0xe4, 0x15, 0x96, 0x31, 0x86, 0xb5, 0x91, 0x1a,
+	0xd5, 0x7e, 0x64, 0x7e, 0x2b, 0x3f, 0xcf, 0xe0, 0xf9, 0x75, 0xf5, 0x98, 0xdc, 0x79, 0xb8, 0x45,
+	0x9e, 0x23, 0xbc, 0xa0, 0xe7, 0x8f, 0xce, 0x41, 0xec, 0xa9, 0xc5, 0x4c, 0x4c, 0xbd, 0xb2, 0x73,
+	0x6a, 0x7f, 0x5d, 0xbc, 0x45, 0x93, 0x67, 0xc6, 0xd5, 0x2e, 0x88, 0x1a, 0xe3, 0x35, 0xed, 0x2c,
+	0x6a, 0x4f, 0x62, 0x26, 0xe1, 0xe9, 0x9f, 0xff, 0xfe, 0x98, 0x5f, 0xb7, 0x6e, 0x67, 0x2f, 0x9e,
+	0x33, 0xb8, 0xba, 0xc2, 0xf9, 0x66, 0x20, 0xef, 0x8c, 0x3d, 0x0a, 0xca, 0xb2, 0xe3, 0x08, 0xde,
+	0x94, 0x7a, 0x96, 0xac, 0xa2, 0xb7, 0xc8, 0xef, 0x08, 0x5f, 0xcc, 0xc6, 0x5c, 0xc6, 0xea, 0xed,
+	0xa9, 0x55, 0x8e, 0x8e, 0xd5, 0xf2, 0x8d, 0xd3, 0x39, 0x67, 0x7c, 0xbe, 0x98, 0xca, 0xe7, 0x43,
+	0xeb, 0xbd, 0xf3, 0xf0, 0x89, 0x75, 0x92, 0x94, 0xcc, 0x5f, 0x08, 0xe3, 0xe3, 0x33, 0x70, 0x42,
+	0x7f, 0x26, 0x26, 0xf6, 0x09, 0xfd, 0x99, 0x3c, 0x5c, 0x56, 0x33, 0x79, 0x66, 0xbc, 0x36, 0xc6,
+	0x27, 0x06, 0xea, 0x2b, 0x3a, 0x5b, 0x64, 0xf3, 0x4c, 0x74, 0x42, 0x26, 0x8e, 0xa9, 0x0d, 0xbf,
+	0x0d, 0x3b, 0xe5, 0x9b, 0x7b, 0xbb, 0xa8, 0xf0, 0x7c, 0x17, 0x59, 0xd3, 0xea, 0xd3, 0x23, 0xe2,
+	0xe9, 0x1f, 0x46, 0xfe, 0x23, 0xb4, 0xf6, 0x1d, 0xda, 0x3f, 0x34, 0x73, 0x07, 0x87, 0x66, 0xee,
+	0xc5, 0xa1, 0x89, 0xbe, 0x4d, 0x4c, 0xf4, 0x53, 0x62, 0xa2, 0xdf, 0x12, 0x13, 0xed, 0x27, 0x26,
+	0x3a, 0x48, 0x4c, 0xf4, 0x4f, 0x62, 0xa2, 0xff, 0x12, 0x33, 0xf7, 0x22, 0x31, 0xd1, 0xf7, 0x47,
+	0x66, 0x6e, 0xef, 0xc8, 0x44, 0xfb, 0x47, 0x66, 0xee, 0xe0, 0xc8, 0xcc, 0x7d, 0xfe, 0x49, 0xc0,
+	0xa3, 0xc7, 0x81, 0xdd, 0xe5, 0xa1, 0x84, 0x38, 0xa6, 0x76, 0x47, 0x38, 0x4a, 0x68, 0xf2, 0xb8,
+	0x55, 0x8b, 0x62, 0xde, 0x65, 0x3e, 0xc4, 0xb5, 0xbe, 0xd9, 0x89, 0x1a, 0x01, 0x77, 0xe0, 0x6b,
+	0xd9, 0xff, 0x8b, 0xbc, 0xe2, 0x4b, 0xd2, 0x28, 0xaa, 0xef, 0xc0, 0xad, 0x97, 0x01, 0x00, 0x00,
+	0xff, 0xff, 0xd4, 0x55, 0xf1, 0xcf, 0xc1, 0x09, 0x00, 0x00,
 }
 
 func (this *SoftDeleteRequest) Equal(that interface{}) bool {
@@ -430,6 +761,134 @@ func (this *RecoverResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ListPolicyRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListPolicyRequest)
+	if !ok {
+		that2, ok := that.(ListPolicyRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.PolicyState != that1.PolicyState {
+		return false
+	}
+	return true
+}
+func (this *ListPolicyResponseItem) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListPolicyResponseItem)
+	if !ok {
+		that2, ok := that.(ListPolicyResponseItem)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Tenant != that1.Tenant {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Uid != that1.Uid {
+		return false
+	}
+	if this.Description != that1.Description {
+		return false
+	}
+	if this.Disabled != that1.Disabled {
+		return false
+	}
+	if len(this.Labels) != len(that1.Labels) {
+		return false
+	}
+	for i := range this.Labels {
+		if this.Labels[i] != that1.Labels[i] {
+			return false
+		}
+	}
+	if len(this.Annotations) != len(that1.Annotations) {
+		return false
+	}
+	for i := range this.Annotations {
+		if this.Annotations[i] != that1.Annotations[i] {
+			return false
+		}
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if !this.SystemMetadata.Equal(that1.SystemMetadata) {
+		return false
+	}
+	if !this.GetSpec.Equal(that1.GetSpec) {
+		return false
+	}
+	return true
+}
+func (this *ListPolicyResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListPolicyResponse)
+	if !ok {
+		that2, ok := that.(ListPolicyResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	if len(this.Errors) != len(that1.Errors) {
+		return false
+	}
+	for i := range this.Errors {
+		if !this.Errors[i].Equal(that1.Errors[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *SoftDeleteRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -472,6 +931,82 @@ func (this *RecoverResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ListPolicyRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&secret_policy.ListPolicyRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "PolicyState: "+fmt.Sprintf("%#v", this.PolicyState)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ListPolicyResponseItem) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 15)
+	s = append(s, "&secret_policy.ListPolicyResponseItem{")
+	s = append(s, "Tenant: "+fmt.Sprintf("%#v", this.Tenant)+",\n")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Uid: "+fmt.Sprintf("%#v", this.Uid)+",\n")
+	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	s = append(s, "Disabled: "+fmt.Sprintf("%#v", this.Disabled)+",\n")
+	keysForLabels := make([]string, 0, len(this.Labels))
+	for k, _ := range this.Labels {
+		keysForLabels = append(keysForLabels, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+	mapStringForLabels := "map[string]string{"
+	for _, k := range keysForLabels {
+		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
+	}
+	mapStringForLabels += "}"
+	if this.Labels != nil {
+		s = append(s, "Labels: "+mapStringForLabels+",\n")
+	}
+	keysForAnnotations := make([]string, 0, len(this.Annotations))
+	for k, _ := range this.Annotations {
+		keysForAnnotations = append(keysForAnnotations, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForAnnotations)
+	mapStringForAnnotations := "map[string]string{"
+	for _, k := range keysForAnnotations {
+		mapStringForAnnotations += fmt.Sprintf("%#v: %#v,", k, this.Annotations[k])
+	}
+	mapStringForAnnotations += "}"
+	if this.Annotations != nil {
+		s = append(s, "Annotations: "+mapStringForAnnotations+",\n")
+	}
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.SystemMetadata != nil {
+		s = append(s, "SystemMetadata: "+fmt.Sprintf("%#v", this.SystemMetadata)+",\n")
+	}
+	if this.GetSpec != nil {
+		s = append(s, "GetSpec: "+fmt.Sprintf("%#v", this.GetSpec)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ListPolicyResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&secret_policy.ListPolicyResponse{")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	if this.Errors != nil {
+		s = append(s, "Errors: "+fmt.Sprintf("%#v", this.Errors)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomPolicyApi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -501,6 +1036,10 @@ type CustomAPIClient interface {
 	//
 	// x-displayName: "Recover secret policy with given policy name"
 	RecoverPolicy(ctx context.Context, in *RecoverRequest, opts ...grpc.CallOption) (*RecoverResponse, error)
+	// ListPolicy
+	//
+	// x-displayName: "List secret policy"
+	ListPolicy(ctx context.Context, in *ListPolicyRequest, opts ...grpc.CallOption) (*ListPolicyResponse, error)
 }
 
 type customAPIClient struct {
@@ -529,6 +1068,15 @@ func (c *customAPIClient) RecoverPolicy(ctx context.Context, in *RecoverRequest,
 	return out, nil
 }
 
+func (c *customAPIClient) ListPolicy(ctx context.Context, in *ListPolicyRequest, opts ...grpc.CallOption) (*ListPolicyResponse, error) {
+	out := new(ListPolicyResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.secret_policy.CustomAPI/ListPolicy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// DeletePolicy
@@ -539,6 +1087,10 @@ type CustomAPIServer interface {
 	//
 	// x-displayName: "Recover secret policy with given policy name"
 	RecoverPolicy(context.Context, *RecoverRequest) (*RecoverResponse, error)
+	// ListPolicy
+	//
+	// x-displayName: "List secret policy"
+	ListPolicy(context.Context, *ListPolicyRequest) (*ListPolicyResponse, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -550,6 +1102,9 @@ func (*UnimplementedCustomAPIServer) DeletePolicy(ctx context.Context, req *Soft
 }
 func (*UnimplementedCustomAPIServer) RecoverPolicy(ctx context.Context, req *RecoverRequest) (*RecoverResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RecoverPolicy not implemented")
+}
+func (*UnimplementedCustomAPIServer) ListPolicy(ctx context.Context, req *ListPolicyRequest) (*ListPolicyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPolicy not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -592,6 +1147,24 @@ func _CustomAPI_RecoverPolicy_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_ListPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).ListPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.secret_policy.CustomAPI/ListPolicy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).ListPolicy(ctx, req.(*ListPolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.secret_policy.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -603,6 +1176,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RecoverPolicy",
 			Handler:    _CustomAPI_RecoverPolicy_Handler,
+		},
+		{
+			MethodName: "ListPolicy",
+			Handler:    _CustomAPI_ListPolicy_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -739,6 +1316,246 @@ func (m *RecoverResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ListPolicyRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListPolicyRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListPolicyRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PolicyState) > 0 {
+		i -= len(m.PolicyState)
+		copy(dAtA[i:], m.PolicyState)
+		i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(m.PolicyState)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ListPolicyResponseItem) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListPolicyResponseItem) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListPolicyResponseItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.SystemMetadata != nil {
+		{
+			size, err := m.SystemMetadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.Disabled {
+		i--
+		if m.Disabled {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x60
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if len(m.Annotations) > 0 {
+		keysForAnnotations := make([]string, 0, len(m.Annotations))
+		for k := range m.Annotations {
+			keysForAnnotations = append(keysForAnnotations, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForAnnotations)
+		for iNdEx := len(keysForAnnotations) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Annotations[string(keysForAnnotations[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForAnnotations[iNdEx])
+			copy(dAtA[i:], keysForAnnotations[iNdEx])
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(keysForAnnotations[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x52
+		}
+	}
+	if m.GetSpec != nil {
+		{
+			size, err := m.GetSpec.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.Tenant) > 0 {
+		i -= len(m.Tenant)
+		copy(dAtA[i:], m.Tenant)
+		i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(m.Tenant)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Labels) > 0 {
+		keysForLabels := make([]string, 0, len(m.Labels))
+		for k := range m.Labels {
+			keysForLabels = append(keysForLabels, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Uid) > 0 {
+		i -= len(m.Uid)
+		copy(dAtA[i:], m.Uid)
+		i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(m.Uid)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ListPolicyResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListPolicyResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListPolicyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Errors) > 0 {
+		for iNdEx := len(m.Errors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Errors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomPolicyApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomPolicyApi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomPolicyApi(v)
 	base := offset
@@ -808,6 +1625,104 @@ func (m *RecoverResponse) Size() (n int) {
 	return n
 }
 
+func (m *ListPolicyRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	l = len(m.PolicyState)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	return n
+}
+
+func (m *ListPolicyResponseItem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	l = len(m.Uid)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	if len(m.Labels) > 0 {
+		for k, v := range m.Labels {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovPublicCustomPolicyApi(uint64(len(k))) + 1 + len(v) + sovPublicCustomPolicyApi(uint64(len(v)))
+			n += mapEntrySize + 1 + sovPublicCustomPolicyApi(uint64(mapEntrySize))
+		}
+	}
+	l = len(m.Tenant)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	if m.GetSpec != nil {
+		l = m.GetSpec.Size()
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	if len(m.Annotations) > 0 {
+		for k, v := range m.Annotations {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovPublicCustomPolicyApi(uint64(len(k))) + 1 + len(v) + sovPublicCustomPolicyApi(uint64(len(v)))
+			n += mapEntrySize + 1 + sovPublicCustomPolicyApi(uint64(mapEntrySize))
+		}
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	if m.Disabled {
+		n += 2
+	}
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	if m.SystemMetadata != nil {
+		l = m.SystemMetadata.Size()
+		n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+	}
+	return n
+}
+
+func (m *ListPolicyResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+		}
+	}
+	if len(m.Errors) > 0 {
+		for _, e := range m.Errors {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomPolicyApi(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPublicCustomPolicyApi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -852,6 +1767,78 @@ func (this *RecoverResponse) String() string {
 	}
 	s := strings.Join([]string{`&RecoverResponse{`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListPolicyRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListPolicyRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`PolicyState:` + fmt.Sprintf("%v", this.PolicyState) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListPolicyResponseItem) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForLabels := make([]string, 0, len(this.Labels))
+	for k, _ := range this.Labels {
+		keysForLabels = append(keysForLabels, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+	mapStringForLabels := "map[string]string{"
+	for _, k := range keysForLabels {
+		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
+	}
+	mapStringForLabels += "}"
+	keysForAnnotations := make([]string, 0, len(this.Annotations))
+	for k, _ := range this.Annotations {
+		keysForAnnotations = append(keysForAnnotations, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForAnnotations)
+	mapStringForAnnotations := "map[string]string{"
+	for _, k := range keysForAnnotations {
+		mapStringForAnnotations += fmt.Sprintf("%v: %v,", k, this.Annotations[k])
+	}
+	mapStringForAnnotations += "}"
+	s := strings.Join([]string{`&ListPolicyResponseItem{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Uid:` + fmt.Sprintf("%v", this.Uid) + `,`,
+		`Labels:` + mapStringForLabels + `,`,
+		`Tenant:` + fmt.Sprintf("%v", this.Tenant) + `,`,
+		`GetSpec:` + strings.Replace(fmt.Sprintf("%v", this.GetSpec), "GetSpecType", "GetSpecType", 1) + `,`,
+		`Annotations:` + mapStringForAnnotations + `,`,
+		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`Disabled:` + fmt.Sprintf("%v", this.Disabled) + `,`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectGetMetaType", "schema.ObjectGetMetaType", 1) + `,`,
+		`SystemMetadata:` + strings.Replace(fmt.Sprintf("%v", this.SystemMetadata), "SystemObjectGetMetaType", "schema.SystemObjectGetMetaType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListPolicyResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]*ListPolicyResponseItem{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "ListPolicyResponseItem", "ListPolicyResponseItem", 1) + ","
+	}
+	repeatedStringForItems += "}"
+	repeatedStringForErrors := "[]*ErrorType{"
+	for _, f := range this.Errors {
+		repeatedStringForErrors += strings.Replace(fmt.Sprintf("%v", f), "ErrorType", "schema.ErrorType", 1) + ","
+	}
+	repeatedStringForErrors += "}"
+	s := strings.Join([]string{`&ListPolicyResponse{`,
+		`Items:` + repeatedStringForItems + `,`,
+		`Errors:` + repeatedStringForErrors + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1218,6 +2205,839 @@ func (m *RecoverResponse) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomPolicyApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListPolicyRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomPolicyApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListPolicyRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListPolicyRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PolicyState", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PolicyState = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomPolicyApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListPolicyResponseItem) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomPolicyApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListPolicyResponseItem: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListPolicyResponseItem: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Uid", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Uid = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Labels == nil {
+				m.Labels = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomPolicyApi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomPolicyApi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomPolicyApi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipPublicCustomPolicyApi(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Labels[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tenant", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tenant = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GetSpec", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.GetSpec == nil {
+				m.GetSpec = &GetSpecType{}
+			}
+			if err := m.GetSpec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Annotations", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Annotations == nil {
+				m.Annotations = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomPolicyApi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomPolicyApi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomPolicyApi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipPublicCustomPolicyApi(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthPublicCustomPolicyApi
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Annotations[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Disabled = bool(v != 0)
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.ObjectGetMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SystemMetadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SystemMetadata == nil {
+				m.SystemMetadata = &schema.SystemObjectGetMetaType{}
+			}
+			if err := m.SystemMetadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomPolicyApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListPolicyResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomPolicyApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListPolicyResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListPolicyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &ListPolicyResponseItem{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Errors", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomPolicyApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomPolicyApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Errors = append(m.Errors, &schema.ErrorType{})
+			if err := m.Errors[len(m.Errors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomPolicyApi(dAtA[iNdEx:])

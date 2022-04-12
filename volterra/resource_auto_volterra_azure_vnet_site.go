@@ -346,6 +346,58 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"dc_cluster_group_inside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"dc_cluster_group_outside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"active_forward_proxy_policies": {
 
 							Type:     schema.TypeSet,
@@ -1263,6 +1315,58 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"dc_cluster_group_inside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"dc_cluster_group_outside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 
@@ -2591,6 +2695,35 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"dc_cluster_group": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"active_forward_proxy_policies": {
 
 							Type:     schema.TypeSet,
@@ -3403,6 +3536,35 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"dc_cluster_group": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 
@@ -4893,6 +5055,86 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
+
 			forwardProxyChoiceTypeFound := false
 
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
@@ -6163,6 +6405,86 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.IngressEgressGwAr.AzureCertifiedHw = v.(string)
+
+			}
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGwAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGwAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGwAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
 
 			}
 
@@ -8006,6 +8328,53 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_DcClusterGroup{}
+				dcClusterGroupChoiceInt.DcClusterGroup = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
+
 			forwardProxyChoiceTypeFound := false
 
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
@@ -9138,6 +9507,53 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.VoltstackClusterAr.AzureCertifiedHw = v.(string)
+
+			}
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARType_DcClusterGroup{}
+				dcClusterGroupChoiceInt.DcClusterGroup = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackClusterAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackClusterAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
 
 			}
 
@@ -10744,6 +11160,86 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
+
 			forwardProxyChoiceTypeFound := false
 
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
@@ -12010,6 +12506,86 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGwAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGwAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGwAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
 
 			forwardProxyChoiceTypeFound := false
 
@@ -13290,6 +13866,53 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_DcClusterGroup{}
+				dcClusterGroupChoiceInt.DcClusterGroup = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
+
 			forwardProxyChoiceTypeFound := false
 
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
@@ -14292,6 +14915,53 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_DcClusterGroup{}
+				dcClusterGroupChoiceInt.DcClusterGroup = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackClusterAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackClusterAr.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
 
 			forwardProxyChoiceTypeFound := false
 

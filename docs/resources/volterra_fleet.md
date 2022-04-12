@@ -24,17 +24,13 @@ resource "volterra_fleet" "example" {
   no_bond_devices = true
 
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  no_dc_cluster_group = true
+  fleet_label         = ["sfo"]
 
-  dc_cluster_group_inside {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  fleet_label = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
-  enable_gpu = true
+  disable_gpu = true
 
-  // One of the arguments from this list "default_config device_list interface_list" must be set
+  // One of the arguments from this list "interface_list default_config device_list" must be set
 
   interface_list {
     interfaces {
@@ -49,16 +45,8 @@ resource "volterra_fleet" "example" {
   default_storage_class = true
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
-
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
-
-  storage_interface_list {
-    interfaces {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
@@ -85,6 +73,8 @@ Argument Reference
 `namespace` - (Optional) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
 
 ### Spec Argument Reference
+
+`blocked_services` - (Optional) Configuration to block the default services allowed by the platform. See [Blocked Services ](#blocked-services) below for details.
 
 `bond_device_list` - (Optional) Configure Bond Devices for this fleet. See [Bond Device List ](#bond-device-list) below for details.
 
@@ -158,6 +148,18 @@ Argument Reference
 
 Configure active/backup based bond device.
 
+### Blocked Services
+
+Configuration to block the default services allowed by the platform.
+
+`dns` - (Optional) Matches ssh port 53 (bool).
+
+`ssh` - (Optional) Matches ssh port 22 (bool).
+
+`web_user_interface` - (Optional) Matches the web user interface port (bool).
+
+`network_type` - (Optional) Network type in which these ports get blocked (`String`).
+
 ### Bond Device List
 
 Configure Bond Devices for this fleet.
@@ -201,6 +203,10 @@ device instance specific sections.
 `name` - (Optional) Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-os of node (`String`).
 
 `owner` - (Required) This option is not yet supported (`String`).
+
+### Dns
+
+Matches ssh port 53.
 
 ### Enable Vgpu
 
@@ -302,6 +308,10 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Ssh
+
+Matches ssh port 22.
+
 ### Storage Class List
 
 Add additional custom storage classes in kubernetes for this fleet.
@@ -387,6 +397,10 @@ List of route prefixes.
 `ipv4` - (Optional) IPv4 Subnet Address. See [Ipv4 ](#ipv4) below for details.
 
 `ipv6` - (Optional) IPv6 Subnet Address. See [Ipv6 ](#ipv6) below for details.
+
+### Web User Interface
+
+Matches the web user interface port.
 
 Attribute Reference
 -------------------

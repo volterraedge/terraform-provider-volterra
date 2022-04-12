@@ -205,6 +205,58 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"dc_cluster_group_inside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"dc_cluster_group_outside_vn": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"active_forward_proxy_policies": {
 
 							Type:     schema.TypeSet,
@@ -1470,6 +1522,35 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"dc_cluster_group": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_dc_cluster_group": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"active_forward_proxy_policies": {
 
 							Type:     schema.TypeSet,
@@ -2705,6 +2786,86 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwType_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwType_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
 
 			forwardProxyChoiceTypeFound := false
 
@@ -4449,6 +4610,53 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterType_DcClusterGroup{}
+				dcClusterGroupChoiceInt.DcClusterGroup = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
+
 			forwardProxyChoiceTypeFound := false
 
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
@@ -5966,6 +6174,86 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwReplaceType_DcClusterGroupInsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwReplaceType_DcClusterGroupOutsideVn{}
+				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwReplaceType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
+
 			forwardProxyChoiceTypeFound := false
 
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
@@ -7238,6 +7526,53 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			dcClusterGroupChoiceTypeFound := false
+
+			if v, ok := cs["dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+				dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterReplaceType_DcClusterGroup{}
+				dcClusterGroupChoiceInt.DcClusterGroup = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+				dcClusterGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					dcClusterGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterReplaceType_NoDcClusterGroup{}
+					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.DcClusterGroupChoice = dcClusterGroupChoiceInt
+				}
+
+			}
 
 			forwardProxyChoiceTypeFound := false
 

@@ -47,7 +47,7 @@ func testConfigVH(objType, name, namespace string) string {
 		  name = "%[1]s"
 		  namespace = "%[2]s"
 		  domains = ["terraform.test.io"]
-		  proxy = "http_proxy"
+		  proxy = "UDP_PROXY"
 		  no_challenge = true
 		}
 		`, name, namespace, tfResourceName)

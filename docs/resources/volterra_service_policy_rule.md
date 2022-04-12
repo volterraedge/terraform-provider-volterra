@@ -22,11 +22,21 @@ resource "volterra_service_policy_rule" "example" {
   action    = ["action"]
 
   // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
-  any_asn          = true
+
+  asn_matcher {
+    asn_sets {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "ip_threat_category_list client_selector client_name_matcher any_client client_name" must be set
-  any_client = true
+  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
+
+  client_selector {
+    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+  }
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
 
@@ -40,8 +50,17 @@ resource "volterra_service_policy_rule" "example" {
     }
   }
   waf_action {
-    // One of the arguments from this list "waf_in_monitoring_mode app_firewall_detection_control data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
-    none = true
+    // One of the arguments from this list "waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control data_guard_control none" must be set
+
+    waf_rule_control {
+      exclude_rule_ids {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+
+      monitoring_mode = true
+    }
   }
 }
 
@@ -173,6 +192,14 @@ App Firewall detection changes to be applied for this request.
 `exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
 
 `exclude_violation_contexts` - (Optional) App Firewall violation contexts to be excluded for this request. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
+
+### Append Headers
+
+Append mitigation headers..
+
+`auto_type_header_name` - (Required) A case-insensitive HTTP header name. (`String`).
+
+`inference_header_name` - (Required) A case-insensitive HTTP header name. (`String`).
 
 ### Arg Matchers
 
@@ -350,6 +377,10 @@ App Firewall violation contexts to be excluded for this request.
 
 Flag the request while not taking any invasive actions..
 
+`append_headers` - (Optional) Append mitigation headers.. See [Append Headers ](#append-headers) below for details.
+
+`no_headers` - (Optional) No mitigation headers. (bool).
+
 ### Headers
 
 Note that all specified header predicates must evaluate to true..
@@ -434,11 +465,15 @@ Mitigation action for protected endpoint.
 
 `block` - (Optional) Block bot request and send response with custom content.. See [Block ](#block) below for details.
 
-`flag` - (Optional) Flag the request while not taking any invasive actions. (bool).
+`flag` - (Optional) Flag the request while not taking any invasive actions.. See [Flag ](#flag) below for details.
 
 `none` - (Optional) No mitigation actions. (bool).
 
 `redirect` - (Optional) Redirect bot request to a custom URI.. See [Redirect ](#redirect) below for details.
+
+### No Headers
+
+No mitigation headers..
 
 ### None
 
