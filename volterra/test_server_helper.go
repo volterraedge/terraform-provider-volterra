@@ -104,6 +104,14 @@ func (s *apiCredentialCustomAPIServer) RevokeServiceCredentials(ctx context.Cont
 	return &ves_io_schema_api_credential.StatusResponse{}, nil
 }
 
+func (s *apiCredentialCustomAPIServer) RecreateScimToken(ctx context.Context, req *ves_io_schema_api_credential.RecreateScimTokenRequest) (*ves_io_schema_api_credential.CreateResponse, error) {
+	return &ves_io_schema_api_credential.CreateResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) RevokeScimToken(ctx context.Context, req *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
 var _ ves_io_schema_api_credential.CustomAPIServer = &apiCredentialCustomAPIServer{}
 
 // ves.io.schema.virtual_host.CustomAPI handling - start
@@ -193,6 +201,12 @@ func (t *vpcCustomAPIServer) SetVIPInfo(context.Context,
 
 }
 
+func (t *vpcCustomAPIServer) SetCloudSiteInfo(context.Context,
+	*ves_io_schema_aws_vpc_site.SetCloudSiteInfoRequest) (*ves_io_schema_aws_vpc_site.SetCloudSiteInfoResponse, error) {
+	return &ves_io_schema_aws_vpc_site.SetCloudSiteInfoResponse{}, nil
+
+}
+
 var _ ves_io_schema_aws_vpc_site.CustomAPIServer = &vpcCustomAPIServer{}
 
 // ves.io.schema.views.azure_vnet_site.CustomAPI handling - start
@@ -207,6 +221,12 @@ func newVnetCustomAPIServer(sf svcfw.Service) server.APIHandler {
 func (t *vnetCustomAPIServer) SetVIPInfo(context.Context,
 	*ves_io_schema_azure_vnet_site.SetVIPInfoRequest) (*ves_io_schema_azure_vnet_site.SetVIPInfoResponse, error) {
 	return &ves_io_schema_azure_vnet_site.SetVIPInfoResponse{}, nil
+
+}
+
+func (t *vnetCustomAPIServer) SetCloudSiteInfo(context.Context,
+	*ves_io_schema_azure_vnet_site.SetCloudSiteInfoRequest) (*ves_io_schema_azure_vnet_site.SetCloudSiteInfoResponse, error) {
+	return &ves_io_schema_azure_vnet_site.SetCloudSiteInfoResponse{}, nil
 
 }
 

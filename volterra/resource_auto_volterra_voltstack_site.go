@@ -5204,11 +5204,11 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 						peers := make([]*ves_io_schema_bgp.Peer, len(sl))
 						bgpConfig.Peers = peers
 						/*
-							for i, set := range sl {
-								peers[i] = &ves_io_schema_bgp.Peer{}
-								peersMapStrToI := set.(map[string]interface{})
+						for i, set := range sl {
+							peers[i] = &ves_io_schema_bgp.Peer{}
+							peersMapStrToI := set.(map[string]interface{})
 
-							}
+						}
 						*/
 
 					}
@@ -11919,11 +11919,11 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 						peers := make([]*ves_io_schema_bgp.Peer, len(sl))
 						bgpConfig.Peers = peers
 						/*
-							for i, set := range sl {
-								peers[i] = &ves_io_schema_bgp.Peer{}
-								peersMapStrToI := set.(map[string]interface{})
+						for i, set := range sl {
+							peers[i] = &ves_io_schema_bgp.Peer{}
+							peersMapStrToI := set.(map[string]interface{})
 
-							}
+						}
 						*/
 
 					}

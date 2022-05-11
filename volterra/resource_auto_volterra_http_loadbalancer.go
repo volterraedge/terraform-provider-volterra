@@ -458,6 +458,54 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"http_header": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"headers": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_match": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"exact": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"presence": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"regex": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"ip_prefix": {
 
 							Type:     schema.TypeString,
@@ -1038,6 +1086,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"body": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"body_hash": {
 																			Type:     schema.TypeString,
 																			Optional: true,
 																		},
@@ -2697,6 +2750,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
+
+						"port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -2727,6 +2785,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"enable_path_normalize": {
 
 							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"port": {
+							Type:     schema.TypeInt,
 							Optional: true,
 						},
 
@@ -3144,6 +3207,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"enable_path_normalize": {
 
 							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"port": {
+							Type:     schema.TypeInt,
 							Optional: true,
 						},
 
@@ -5641,6 +5709,54 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"http_header": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"headers": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_match": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"exact": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"presence": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"regex": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"ip_prefix": {
 
 							Type:     schema.TypeString,
@@ -6502,6 +6618,77 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := blockedClientsMapStrToI["http_header"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
+
+				clientSourceChoiceTypeFound = true
+				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_HttpHeader{}
+				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_http_loadbalancer.HttpHeaderMatcherList{}
+				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						clientSourceChoiceInt.HttpHeader.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := blockedClientsMapStrToI["ip_prefix"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
@@ -7356,6 +7543,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["body"]; ok && !isIntfNil(v) {
 
 												actionTypeInt.Block.Body = v.(string)
+
+											}
+
+											if v, ok := cs["body_hash"]; ok && !isIntfNil(v) {
+
+												actionTypeInt.Block.BodyHash = v.(string)
 
 											}
 
@@ -9557,6 +9750,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.Http.Port = uint32(v.(int))
+
+			}
+
 		}
 
 	}
@@ -9607,6 +9806,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					pathNormalizeChoiceInt.EnablePathNormalize = &ves_io_schema.Empty{}
 					loadbalancerTypeInt.Https.PathNormalizeChoice = pathNormalizeChoiceInt
 				}
+
+			}
+
+			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.Https.Port = uint32(v.(int))
 
 			}
 
@@ -10201,6 +10406,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					pathNormalizeChoiceInt.EnablePathNormalize = &ves_io_schema.Empty{}
 					loadbalancerTypeInt.HttpsAutoCert.PathNormalizeChoice = pathNormalizeChoiceInt
 				}
+
+			}
+
+			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.HttpsAutoCert.Port = uint32(v.(int))
 
 			}
 
@@ -13652,6 +13863,77 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := trustedClientsMapStrToI["http_header"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
+
+				clientSourceChoiceTypeFound = true
+				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_HttpHeader{}
+				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_http_loadbalancer.HttpHeaderMatcherList{}
+				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						clientSourceChoiceInt.HttpHeader.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := trustedClientsMapStrToI["ip_prefix"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
@@ -14652,6 +14934,77 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := blockedClientsMapStrToI["http_header"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
+
+				clientSourceChoiceTypeFound = true
+				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_HttpHeader{}
+				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_http_loadbalancer.HttpHeaderMatcherList{}
+				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						clientSourceChoiceInt.HttpHeader.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := blockedClientsMapStrToI["ip_prefix"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
@@ -15504,6 +15857,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["body"]; ok && !isIntfNil(v) {
 
 												actionTypeInt.Block.Body = v.(string)
+
+											}
+
+											if v, ok := cs["body_hash"]; ok && !isIntfNil(v) {
+
+												actionTypeInt.Block.BodyHash = v.(string)
 
 											}
 
@@ -17692,6 +18051,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.Http.Port = uint32(v.(int))
+
+			}
+
 		}
 
 	}
@@ -17742,6 +18107,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					pathNormalizeChoiceInt.EnablePathNormalize = &ves_io_schema.Empty{}
 					loadbalancerTypeInt.Https.PathNormalizeChoice = pathNormalizeChoiceInt
 				}
+
+			}
+
+			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.Https.Port = uint32(v.(int))
 
 			}
 
@@ -18336,6 +18707,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					pathNormalizeChoiceInt.EnablePathNormalize = &ves_io_schema.Empty{}
 					loadbalancerTypeInt.HttpsAutoCert.PathNormalizeChoice = pathNormalizeChoiceInt
 				}
+
+			}
+
+			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.HttpsAutoCert.Port = uint32(v.(int))
 
 			}
 
@@ -21774,6 +22151,77 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				clientSourceChoiceInt.AsNumber = uint32(v.(int))
+
+			}
+
+			if v, ok := trustedClientsMapStrToI["http_header"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
+
+				clientSourceChoiceTypeFound = true
+				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_HttpHeader{}
+				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_http_loadbalancer.HttpHeaderMatcherList{}
+				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+						clientSourceChoiceInt.HttpHeader.Headers = headers
+						for i, set := range sl {
+							headers[i] = &ves_io_schema.HeaderMatcherType{}
+							headersMapStrToI := set.(map[string]interface{})
+
+							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+								headers[i].InvertMatch = w.(bool)
+							}
+
+							if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+								headers[i].Name = w.(string)
+							}
+
+							valueMatchTypeFound := false
+
+							if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Exact = v.(string)
+
+							}
+
+							if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Presence = v.(bool)
+
+							}
+
+							if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+								valueMatchTypeFound = true
+								valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+								headers[i].ValueMatch = valueMatchInt
+
+								valueMatchInt.Regex = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
 
 			}
 

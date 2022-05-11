@@ -193,11 +193,6 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				},
 			},
 
-			"site_to_site_tunnel_ip": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -1048,6 +1043,28 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 							},
 						},
 
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -1381,6 +1398,18 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 								},
 							},
 						},
+
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -1404,6 +1433,28 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 							Required: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
+							},
+						},
+
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
 							},
 						},
 
@@ -2081,6 +2132,28 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -2413,6 +2486,18 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 
 						"default_storage": {
@@ -2761,14 +2846,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 			}
 
 		}
-
-	}
-
-	//site_to_site_tunnel_ip
-	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
-
-		createSpec.SiteToSiteTunnelIp =
-			v.(string)
 
 	}
 
@@ -3955,6 +4032,44 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.IngressEgressGw.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -4419,6 +4534,32 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -4447,6 +4588,44 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 					ls[i] = v.(string)
 				}
 				siteTypeInt.IngressGw.GcpZoneNames = ls
+
+			}
+
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.IngressGw.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
 
 			}
 
@@ -5389,6 +5568,44 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.VoltstackCluster.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -5853,6 +6070,32 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
 			storageClassChoiceTypeFound := false
 
 			if v, ok := cs["default_storage"]; ok && !isIntfNil(v) && !storageClassChoiceTypeFound {
@@ -6151,13 +6394,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
-
-	}
-
-	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
-
-		updateSpec.SiteToSiteTunnelIp =
-			v.(string)
 
 	}
 
