@@ -3063,12 +3063,29 @@ type ValidateHeaderMatcherType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateHeaderMatcherType) ValueMatchExactValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Exact, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exact")
+	}
+	return oValidatorFn_Exact, nil
+}
 func (v *ValidateHeaderMatcherType) ValueMatchRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Regex, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for regex")
 	}
 	return oValidatorFn_Regex, nil
+}
+
+func (v *ValidateHeaderMatcherType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateHeaderMatcherType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -3155,10 +3172,20 @@ var DefaultHeaderMatcherTypeValidator = func() *ValidateHeaderMatcherType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhValueMatchExact := v.ValueMatchExactValidationRuleHandler
+	rulesValueMatchExact := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFnMap["value_match.exact"], err = vrhValueMatchExact(rulesValueMatchExact)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field HeaderMatcherType.value_match_exact: %s", err)
+		panic(errMsg)
+	}
 	vrhValueMatchRegex := v.ValueMatchRegexValidationRuleHandler
 	rulesValueMatchRegex := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
-		"ves.io.schema.rules.string.min_bytes": "1",
+		"ves.io.schema.rules.string.not_empty": "true",
 		"ves.io.schema.rules.string.regex":     "true",
 	}
 	vFnMap["value_match.regex"], err = vrhValueMatchRegex(rulesValueMatchRegex)
@@ -3167,7 +3194,20 @@ var DefaultHeaderMatcherTypeValidator = func() *ValidateHeaderMatcherType {
 		panic(errMsg)
 	}
 
+	v.FldValidators["value_match.exact"] = vFnMap["value_match.exact"]
 	v.FldValidators["value_match.regex"] = vFnMap["value_match.regex"]
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.http_header_field": "true",
+		"ves.io.schema.rules.string.max_bytes":         "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HeaderMatcherType.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
 
 	return v
 }()
@@ -5047,6 +5087,147 @@ var DefaultMetricValueValidator = func() *ValidateMetricValue {
 
 func MetricValueValidator() db.Validator {
 	return DefaultMetricValueValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NamespaceRoleType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NamespaceRoleType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NamespaceRoleType) DeepCopy() *NamespaceRoleType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NamespaceRoleType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NamespaceRoleType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NamespaceRoleType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NamespaceRoleTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNamespaceRoleType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNamespaceRoleType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNamespaceRoleType) RoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for role")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNamespaceRoleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NamespaceRoleType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NamespaceRoleType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["role"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("role"))
+		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNamespaceRoleTypeValidator = func() *ValidateNamespaceRoleType {
+	v := &ValidateNamespaceRoleType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "256",
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NamespaceRoleType.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhRole := v.RoleValidationRuleHandler
+	rulesRole := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "256",
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhRole(rulesRole)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NamespaceRoleType.role: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["role"] = vFn
+
+	return v
+}()
+
+func NamespaceRoleTypeValidator() db.Validator {
+	return DefaultNamespaceRoleTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

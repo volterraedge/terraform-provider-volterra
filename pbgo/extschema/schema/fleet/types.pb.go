@@ -332,6 +332,7 @@ type DeviceInstanceType struct {
 	// Name
 	//
 	// x-displayName: "Device Name"
+	// x-example: "eth0"
 	// Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-os of node
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Owner
@@ -1451,7 +1452,7 @@ type FlashArrayType struct {
 	//
 	// x-displayName: "iSCSI Login Timeout"
 	// x-required
-	// x-exmple: "20"
+	// x-example: "20"
 	// iSCSI login timeout in seconds. Not recommended to change!
 	IscsiLoginTimeout int32 `protobuf:"varint,6,opt,name=iscsi_login_timeout,json=iscsiLoginTimeout,proto3" json:"iscsi_login_timeout,omitempty"`
 	// Flash Arrays
@@ -1810,6 +1811,7 @@ type StorageDeviceNetappBackendOntapSanType struct {
 	// iGroup Name
 	//
 	// x-displayName: "iGroup Name"
+	// x-example: "value"
 	// Name of the igroup for SAN volumes to use
 	IgroupName string `protobuf:"bytes,17,opt,name=igroup_name,json=igroupName,proto3" json:"igroup_name,omitempty"`
 	// Storage Prefix
@@ -1855,6 +1857,7 @@ type StorageDeviceNetappBackendOntapSanType struct {
 	// Client Certificate
 	//
 	// x-displayName: "Client Certificate"
+	// x-example: "value"
 	// Please Enter Base64-encoded value of client certificate. Used for certificate-based auth.
 	ClientCertificate string `protobuf:"bytes,25,opt,name=client_certificate,json=clientCertificate,proto3" json:"client_certificate,omitempty"`
 	// Client Private Key
@@ -1865,6 +1868,7 @@ type StorageDeviceNetappBackendOntapSanType struct {
 	// Trusted CA Certificate
 	//
 	// x-displayName: "Trusted CA Certificate"
+	// x-example: "value"
 	// Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth..
 	TrustedCaCertificate string `protobuf:"bytes,27,opt,name=trusted_ca_certificate,json=trustedCaCertificate,proto3" json:"trusted_ca_certificate,omitempty"`
 }
@@ -2136,11 +2140,13 @@ type DeviceNetappBackendOntapSanChapType struct {
 	// CHAP Username
 	//
 	// x-displayName: "CHAP Username"
+	// x-example: "alice"
 	// Inbound username. Required if useCHAP=true
 	ChapUsername string `protobuf:"bytes,1,opt,name=chap_username,json=chapUsername,proto3" json:"chap_username,omitempty"`
 	// CHAP Target Username
 	//
 	// x-displayName: "CHAP Target Username"
+	// x-example: "bob"
 	// Target username. Required if useCHAP=true
 	ChapTargetUsername string `protobuf:"bytes,2,opt,name=chap_target_username,json=chapTargetUsername,proto3" json:"chap_target_username,omitempty"`
 	// CHAP Intiator Secret
@@ -2226,6 +2232,7 @@ type StorageDeviceNetappBackendOntapNasType struct {
 	// Storage Backend Name
 	//
 	// x-displayName: "Storage Backend Name"
+	// x-example: "value"
 	// Configuration of Backend Name. Driver is name + "_" + dataLIF
 	BackendName string `protobuf:"bytes,2,opt,name=backend_name,json=backendName,proto3" json:"backend_name,omitempty"`
 	// Backend Management LIF
@@ -2326,6 +2333,7 @@ type StorageDeviceNetappBackendOntapNasType struct {
 	// Client Certificate
 	//
 	// x-displayName: "Client Certificate"
+	// x-example: "value"
 	// Please Enter Base64-encoded value of client certificate. Used for certificate-based auth.
 	ClientCertificate string `protobuf:"bytes,22,opt,name=client_certificate,json=clientCertificate,proto3" json:"client_certificate,omitempty"`
 	// Client Private Key
@@ -2336,6 +2344,7 @@ type StorageDeviceNetappBackendOntapNasType struct {
 	// Trusted CA Certificate
 	//
 	// x-displayName: "Trusted CA Certificate"
+	// x-example: "value"
 	// Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth..
 	TrustedCaCertificate string `protobuf:"bytes,24,opt,name=trusted_ca_certificate,json=trustedCaCertificate,proto3" json:"trusted_ca_certificate,omitempty"`
 }
@@ -2897,7 +2906,7 @@ type FleetStorageDeviceType struct {
 	//
 	// x-displayName: "Storage Device"
 	// x-required
-	// x-example "DellEMC-isilon-F800-0"
+	// x-example: "DellEMC-isilon-F800-0"
 	// Storage device and device unit
 	StorageDevice string `protobuf:"bytes,1,opt,name=storage_device,json=storageDevice,proto3" json:"storage_device,omitempty"`
 	// Select Storage Device Configuration
@@ -2915,6 +2924,7 @@ type FleetStorageDeviceType struct {
 	// Advanced Parameters
 	//
 	// x-displayName: "Advanced Parameters"
+	// x-example: "value"
 	// Map of parameter name and string value
 	AdvancedAdvancedParameters map[string]string `protobuf:"bytes,5,rep,name=advanced_advanced_parameters,json=advancedAdvancedParameters,proto3" json:"advanced_advanced_parameters,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
@@ -3492,6 +3502,7 @@ type StorageClassCustomType struct {
 	// Storage Class YAML
 	//
 	// x-displayName: "Storage Class YAML"
+	// x-example: "value"
 	// K8s YAML for StorageClass
 	Yaml string `protobuf:"bytes,1,opt,name=yaml,proto3" json:"yaml,omitempty"`
 }
@@ -3539,14 +3550,14 @@ type FleetStorageClassType struct {
 	// Storage Device
 	//
 	// x-displayName: "Storage Device"
-	// x-example "DellEMC-isilon_F800-0"
+	// x-example: "DellEMC-isilon_F800-0"
 	// x-required
 	// Storage device that this class will use. The Device name defined at previous step.
 	StorageDevice string `protobuf:"bytes,1,opt,name=storage_device,json=storageDevice,proto3" json:"storage_device,omitempty"`
 	// Storage Class Description
 	//
 	// x-displayName: "Storage Class Description"
-	// x-example "Volume from my fast storage"
+	// x-example: "Volume from my fast storage"
 	// Description for this storage class
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	// Default Storage Class
@@ -3580,6 +3591,7 @@ type FleetStorageClassType struct {
 	// Advanced Parameters
 	//
 	// x-displayName: "Advanced Parameters"
+	// x-example: "value"
 	// Map of parameter name and string value
 	AdvancedStorageParameters map[string]string `protobuf:"bytes,7,rep,name=advanced_storage_parameters,json=advancedStorageParameters,proto3" json:"advanced_storage_parameters,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Storage Class Name
@@ -3787,7 +3799,7 @@ func (m *FleetStorageClassListType) GetStorageClasses() []*FleetStorageClassType
 
 // LACP parameters
 //
-// x-displayName: "LACP parameters
+// x-displayName: "LACP parameters"
 // LACP parameters for the bond device
 type BondLacpType struct {
 	// Interval
@@ -3848,6 +3860,7 @@ type FleetBondDeviceType struct {
 	// Member Ethernet Devices
 	//
 	// x-displayName: "Member Ethernet Devices"
+	// x-example: "eth0"
 	// x-required
 	// Ethernet devices that will make up this bond
 	Devices []string `protobuf:"bytes,2,rep,name=devices,proto3" json:"devices,omitempty"`
@@ -4089,6 +4102,7 @@ type VGPUConfiguration struct {
 	// License Server Port Number
 	//
 	// x-displayName: "License Server Port Number"
+	// x-example: "7070"
 	// Set License Server port number
 	ServerPort uint32 `protobuf:"varint,3,opt,name=server_port,json=serverPort,proto3" json:"server_port,omitempty"`
 	// Feature Type
@@ -4191,7 +4205,7 @@ type BGPConfiguration struct {
 	// ASN
 	//
 	// x-displayName: "ASN"
-	// x-example: 64512
+	// x-example: "64512"
 	// x-required
 	// Autonomous System Number
 	Asn uint32 `protobuf:"varint,3,opt,name=asn,proto3" json:"asn,omitempty"`

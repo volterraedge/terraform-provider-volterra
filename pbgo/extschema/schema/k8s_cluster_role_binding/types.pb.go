@@ -29,6 +29,9 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// ServiceAccountType
+//
+// x-displayName: "ServiceAccountType"
 type ServiceAccountType struct {
 	// Namespace
 	//

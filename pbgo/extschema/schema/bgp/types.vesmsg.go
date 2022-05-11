@@ -2742,6 +2742,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["target_service"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("target_service"))
+		if err := fv(ctx, m.GetTargetService(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["view_internal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))

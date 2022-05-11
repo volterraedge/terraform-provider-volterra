@@ -4272,6 +4272,16 @@ func (v *ValidateShapeBotBlockMitigationActionType) BodyValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateShapeBotBlockMitigationActionType) BodyHashValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for body_hash")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateShapeBotBlockMitigationActionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ShapeBotBlockMitigationActionType)
 	if !ok {
@@ -4290,6 +4300,15 @@ func (v *ValidateShapeBotBlockMitigationActionType) Validate(ctx context.Context
 
 		vOpts := append(opts, db.WithValidateField("body"))
 		if err := fv(ctx, m.GetBody(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["body_hash"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("body_hash"))
+		if err := fv(ctx, m.GetBodyHash(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4342,6 +4361,18 @@ var DefaultShapeBotBlockMitigationActionTypeValidator = func() *ValidateShapeBot
 		panic(errMsg)
 	}
 	v.FldValidators["body"] = vFn
+
+	vrhBodyHash := v.BodyHashValidationRuleHandler
+	rulesBodyHash := map[string]string{
+		"ves.io.schema.rules.string.max_len": "32",
+		"ves.io.schema.rules.string.min_len": "32",
+	}
+	vFn, err = vrhBodyHash(rulesBodyHash)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotBlockMitigationActionType.body_hash: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["body_hash"] = vFn
 
 	return v
 }()

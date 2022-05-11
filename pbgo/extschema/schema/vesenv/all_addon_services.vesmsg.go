@@ -90,6 +90,28 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_VesIoTenantManagement:
+		if fv, exists := v.FldValidators["choice.ves_io_tenant_management"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_VesIoTenantManagement).VesIoTenantManagement
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_tenant_management"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_VesIoScim:
+		if fv, exists := v.FldValidators["choice.ves_io_scim"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_VesIoScim).VesIoScim
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_scim"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *AddonServiceChoice_ShapeBot:
 		if fv, exists := v.FldValidators["choice.shape_bot"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_ShapeBot).ShapeBot
@@ -107,6 +129,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("shape_recognize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_AidataBfdp:
+		if fv, exists := v.FldValidators["choice.aidata_bfdp"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_AidataBfdp).AidataBfdp
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("aidata_bfdp"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

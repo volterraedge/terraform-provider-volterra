@@ -4501,6 +4501,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = IPThreatCategoryListTypeValidator().Validate
 
+	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
@@ -7730,6 +7731,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = IPThreatCategoryListTypeValidator().Validate
 
+	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
@@ -9954,6 +9956,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = IPThreatCategoryListTypeValidator().Validate
 
+	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
@@ -10123,6 +10126,143 @@ var DefaultHashPolicyListTypeValidator = func() *ValidateHashPolicyListType {
 
 func HashPolicyListTypeValidator() db.Validator {
 	return DefaultHashPolicyListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HttpHeaderMatcherList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HttpHeaderMatcherList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HttpHeaderMatcherList) DeepCopy() *HttpHeaderMatcherList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HttpHeaderMatcherList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HttpHeaderMatcherList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HttpHeaderMatcherList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HttpHeaderMatcherListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttpHeaderMatcherList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttpHeaderMatcherList) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHttpHeaderMatcherList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HttpHeaderMatcherList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HttpHeaderMatcherList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["headers"]; exists {
+		vOpts := append(opts, db.WithValidateField("headers"))
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttpHeaderMatcherListValidator = func() *ValidateHttpHeaderMatcherList {
+	v := &ValidateHttpHeaderMatcherList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHeaders := v.HeadersValidationRuleHandler
+	rulesHeaders := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhHeaders(rulesHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpHeaderMatcherList.headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["headers"] = vFn
+
+	return v
+}()
+
+func HttpHeaderMatcherListValidator() db.Validator {
+	return DefaultHttpHeaderMatcherListValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -10518,7 +10658,7 @@ var DefaultInlineRateLimiterValidator = func() *ValidateInlineRateLimiter {
 	rulesThreshold := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.uint32.gt":        "0",
-		"ves.io.schema.rules.uint32.lte":       "10000",
+		"ves.io.schema.rules.uint32.lte":       "8192",
 	}
 	vFn, err = vrhThreshold(rulesThreshold)
 	if err != nil {
@@ -11176,6 +11316,16 @@ type ValidateProxyTypeHttp struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateProxyTypeHttp) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateProxyTypeHttp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ProxyTypeHttp)
 	if !ok {
@@ -11199,12 +11349,40 @@ func (v *ValidateProxyTypeHttp) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
 	v := &ValidateProxyTypeHttp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttp.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
 
 	return v
 }()
@@ -11318,6 +11496,16 @@ func (v *ValidateProxyTypeHttps) ServerHeaderChoiceAppendServerNameValidationRul
 	return oValidatorFn_AppendServerName, nil
 }
 
+func (v *ValidateProxyTypeHttps) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ProxyTypeHttps)
 	if !ok {
@@ -11382,6 +11570,15 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -11490,6 +11687,17 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 
 	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
 	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttps.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
 
 	v.FldValidators["tls_parameters"] = DownstreamTlsParamsTypeValidator().Validate
 
@@ -11608,6 +11816,16 @@ func (v *ValidateProxyTypeHttpsAutoCerts) ServerHeaderChoiceAppendServerNameVali
 	return oValidatorFn_AppendServerName, nil
 }
 
+func (v *ValidateProxyTypeHttpsAutoCerts) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ProxyTypeHttpsAutoCerts)
 	if !ok {
@@ -11708,6 +11926,15 @@ func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm inter
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -11827,6 +12054,17 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 
 	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
 	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttpsAutoCerts.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
 
 	v.FldValidators["mtls_choice.use_mtls"] = DownstreamTlsValidationContextValidator().Validate
 
@@ -14145,6 +14383,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = IPThreatCategoryListTypeValidator().Validate
 
+	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
@@ -18479,6 +18718,10 @@ func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceHttpHeaderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return HttpHeaderMatcherListValidator().Validate, nil
+}
+
 func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceIpPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_IpPrefix, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -18619,6 +18862,17 @@ func (v *ValidateSimpleClientSrcRule) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
+	case *SimpleClientSrcRule_HttpHeader:
+		if fv, exists := v.FldValidators["client_source_choice.http_header"]; exists {
+			val := m.GetClientSourceChoice().(*SimpleClientSrcRule_HttpHeader).HttpHeader
+			vOpts := append(opts,
+				db.WithValidateField("client_source_choice"),
+				db.WithValidateField("http_header"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -18687,9 +18941,19 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_as_number: %s", err)
 		panic(errMsg)
 	}
+	vrhClientSourceChoiceHttpHeader := v.ClientSourceChoiceHttpHeaderValidationRuleHandler
+	rulesClientSourceChoiceHttpHeader := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["client_source_choice.http_header"], err = vrhClientSourceChoiceHttpHeader(rulesClientSourceChoiceHttpHeader)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_http_header: %s", err)
+		panic(errMsg)
+	}
 
 	v.FldValidators["client_source_choice.ip_prefix"] = vFnMap["client_source_choice.ip_prefix"]
 	v.FldValidators["client_source_choice.as_number"] = vFnMap["client_source_choice.as_number"]
+	v.FldValidators["client_source_choice.http_header"] = vFnMap["client_source_choice.http_header"]
 
 	vrhExpirationTimestamp := v.ExpirationTimestampValidationRuleHandler
 	rulesExpirationTimestamp := map[string]string{

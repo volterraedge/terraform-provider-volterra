@@ -2933,9 +2933,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -2951,9 +2952,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3162,10 +3164,11 @@ var APISwaggerJSON string = `{
                 },
                 "max_connect_attempts": {
                     "type": "integer",
-                    "description": " Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1.\n\nExample: - 3-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
+                    "description": " Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1.\n\nExample: - \"3\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
                     "title": "max_connect_attempts",
                     "format": "int64",
                     "x-displayname": "Number of connect attempts",
+                    "x-ves-example": "3",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "8"
                     }
@@ -3184,7 +3187,7 @@ var APISwaggerJSON string = `{
                 },
                 "white_listed_ports": {
                     "type": "array",
-                    "description": " Traffic to these destination TCP ports is not subjected to protocol parsing\n Example \"tmate\" server port\n\nExample: - [22, 9400]-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.uint32.lte: 65535\n  ves.io.schema.rules.repeated.max_items: 64\n",
+                    "description": " Traffic to these destination TCP ports is not subjected to protocol parsing\n Example \"tmate\" server port\n\nExample: - \"[22, 9400]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.uint32.lte: 65535\n  ves.io.schema.rules.repeated.max_items: 64\n",
                     "title": "Port list",
                     "maxItems": 64,
                     "items": {
@@ -3192,6 +3195,7 @@ var APISwaggerJSON string = `{
                         "format": "int64"
                     },
                     "x-displayname": "TCP Ports to Skip Protocol Parsing",
+                    "x-ves-example": "[22, 9400]",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.uint32.lte": "65535",
                         "ves.io.schema.rules.repeated.max_items": "64"
@@ -3301,7 +3305,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": "x-displayName: \"Prefix Length\"\nx-example: 24\nPrefix-length of the IPv4 subnet. Must be \u003c= 32",
+                    "description": "x-displayName: \"Prefix Length\"\nx-example: \"24\"\nPrefix-length of the IPv4 subnet. Must be \u003c= 32",
                     "title": "Prefix Length",
                     "format": "int64"
                 },
@@ -3514,6 +3518,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3539,7 +3544,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -3945,11 +3951,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate_url": {
                     "type": "string",
-                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "certificate_url",
                     "minLength": 1,
                     "maxLength": 131072,
                     "x-displayname": "Certificate URL",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3966,9 +3973,10 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Description for the certificate",
+                    "description": " Description for the certificate\n\nExample: - \"Certificate used in production environment\"-",
                     "title": "description",
-                    "x-displayname": "Description"
+                    "x-displayname": "Description",
+                    "x-ves-example": "Certificate used in production environment"
                 },
                 "disable_ocsp_stapling": {
                     "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",

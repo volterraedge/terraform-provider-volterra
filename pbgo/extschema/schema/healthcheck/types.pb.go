@@ -55,6 +55,7 @@ type HttpHealthCheck struct {
 	// Headers to add in health check request
 	//
 	// x-displayName: "Request Headers to Add"
+	// x-example: "value"
 	// Specifies a list of HTTP headers that should be added to each request that is sent to the
 	// health checked cluster. This is a list of key-value pairs.
 	Headers map[string]string `protobuf:"bytes,3,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`

@@ -379,6 +379,102 @@ func APIGroupNameMapItemValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AddonServiceInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AddonServiceInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AddonServiceInfo) DeepCopy() *AddonServiceInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AddonServiceInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AddonServiceInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AddonServiceInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AddonServiceInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAddonServiceInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAddonServiceInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AddonServiceInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AddonServiceInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_group_name_prefix"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group_name_prefix"))
+		if err := fv(ctx, m.GetApiGroupNamePrefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["daemon"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("daemon"))
+		if err := fv(ctx, m.GetDaemon(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["display_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("display_name"))
+		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAddonServiceInfoValidator = func() *ValidateAddonServiceInfo {
+	v := &ValidateAddonServiceInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AddonServiceInfoValidator() db.Validator {
+	return DefaultAddonServiceInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BFSecretChoice) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1489,6 +1585,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("synthetic_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Scim:
+		if fv, exists := v.FldValidators["choice.scim"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Scim).Scim
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("scim"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

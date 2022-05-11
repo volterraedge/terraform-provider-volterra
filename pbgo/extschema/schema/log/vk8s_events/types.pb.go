@@ -72,7 +72,7 @@ func (KeyField) EnumDescriptor() ([]byte, []int) {
 
 // Date Aggregation
 //
-// x-displayName: Date Aggregation
+// x-displayName: "Date Aggregation"
 // Aggregate vK8s events based on timestamp in the event
 type DateAggregation struct {
 	// step
@@ -137,6 +137,7 @@ type FieldAggregation struct {
 	// topk
 	//
 	// x-displayName: "TopK"
+	// x-example: "5"
 	//
 	// Number of top field values to be returned in the response.
 	// Optional: If not specified, top 5 values will be returned in the response.

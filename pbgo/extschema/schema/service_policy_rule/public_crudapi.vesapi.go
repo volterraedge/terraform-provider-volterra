@@ -2156,7 +2156,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2183,7 +2183,8 @@ var APISwaggerJSON string = `{
                 "VIOL_EVASION_DIRECTORY_TRAVERSALS",
                 "VIOL_MALFORMED_REQUEST",
                 "VIOL_EVASION_MULTIPLE_DECODING",
-                "VIOL_DATA_GUARD"
+                "VIOL_DATA_GUARD",
+                "VIOL_EVASION_APACHE_WHITESPACE"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2521,12 +2522,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "element_selector": {
                     "type": "string",
-                    "description": "x-displayName: \"Element selector to rewrite\"\nx-required\nElement selector to insert into.",
+                    "description": "x-displayName: \"Element selector to rewrite\"\nx-example: \"value\"\nx-required\nElement selector to insert into.",
                     "title": "Element selector"
                 },
                 "insert_content": {
                     "type": "string",
-                    "description": "x-displayName: \"HTML Content to insert\"\nHTML content to insert.",
+                    "description": "x-displayName: \"HTML Content to insert\"\nx-example: \"value\"\nHTML content to insert.",
                     "title": "Insert Content"
                 },
                 "position": {
@@ -2592,7 +2593,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "policy_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Policy Name\"\nSets the BD Policy to use",
+                    "description": "x-displayName: \"Policy Name\"\nx-example: \"value\"\nSets the BD Policy to use",
                     "title": "Set BD Policy name"
                 }
             }
@@ -2847,21 +2848,34 @@ var APISwaggerJSON string = `{
         },
         "policyPortMatcherType": {
             "type": "object",
-            "description": "x-displayName: \"Port Matcher\"\nA port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
+            "description": "A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
             "title": "port matcher type",
+            "x-displayname": "Port Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.PortMatcherType",
             "properties": {
                 "invert_matcher": {
                     "type": "boolean",
-                    "description": "x-displayName: \"Invert Port Matcher\"\nInvert the match result.",
+                    "description": " Invert the match result.",
                     "title": "invert_matcher",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Invert Port Matcher"
                 },
                 "ports": {
                     "type": "array",
-                    "description": "x-displayName: \"Port Ranges\"\nx-required\nx-example: \"8000-8191\"\nA list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\nto be part of the range.",
+                    "description": " A list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\n to be part of the range.\n\nExample: - \"8000-8191\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.port_range: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "port ranges",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
+                    },
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "8000-8191",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.port_range": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -2940,6 +2954,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Body\"\nx-example: \"string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"\nCustom body message is of type uri_ref. Currently supported URL schemes is string:///.\nFor string:/// scheme, message needs to be encoded in Base64 format.\nYou can specify this message as base64 encoded plain text message e.g. \"Your request was blocked\"\nor it can be HTML paragraph or a body string encoded as base64 string\nE.g. \"\u003cp\u003e Your request was blocked \u003c/p\u003e\". Base64 encoded string for this html is \"LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"",
                     "title": "body"
                 },
+                "body_hash": {
+                    "type": "string",
+                    "description": "x-displayName: \"Body Hash\"\nx-example: \"92959a96fd69146c5fe7cbde6e5720f2\"\nRepresents the corresponding MD5 Hash for the body message.",
+                    "title": "body_hash"
+                },
                 "status": {
                     "description": "x-displayName: \"Status\"\nHTTP Status code to respond with",
                     "title": "Status",
@@ -3015,7 +3034,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": "x-displayName: \"URI\"\nx-example: Enter URI\nURI location for redirect may be relative or absolute.",
+                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nURI location for redirect may be relative or absolute.",
                     "title": "URI"
                 }
             }
@@ -3525,7 +3544,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefixes": {
                     "type": "array",
-                    "description": "x-displayName: \"IPv4 Prefixes\"\nx-required\nDestination IPv4 prefixes.",
+                    "description": "x-displayName: \"IPv4 Prefixes\"\nx-example: \"10.0.0./24\"\nx-required\nDestination IPv4 prefixes.",
                     "title": "prefixes",
                     "items": {
                         "type": "string"
@@ -3789,6 +3808,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3814,7 +3834,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -4584,6 +4605,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemapolicyPathMatcherType",
                     "x-displayname": "HTTP Path"
                 },
+                "port_matcher": {
+                    "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
+                    "$ref": "#/definitions/policyPortMatcherType",
+                    "x-displayname": "Port Matcher"
+                },
                 "query_params": {
                     "type": "array",
                     "description": " A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\n of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\n Note that all specified query parameter predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
@@ -4766,6 +4792,11 @@ var APISwaggerJSON string = `{
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
                     "$ref": "#/definitions/schemapolicyPathMatcherType",
                     "x-displayname": "HTTP Path"
+                },
+                "port_matcher": {
+                    "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
+                    "$ref": "#/definitions/policyPortMatcherType",
+                    "x-displayname": "Port Matcher"
                 },
                 "query_params": {
                     "type": "array",
@@ -4972,6 +5003,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemapolicyPathMatcherType",
                     "x-displayname": "HTTP Path"
                 },
+                "port_matcher": {
+                    "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
+                    "title": "port matcher",
+                    "$ref": "#/definitions/policyPortMatcherType",
+                    "x-displayname": "Port Matcher"
+                },
                 "query_params": {
                     "type": "array",
                     "description": " A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\n of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\n Note that all specified query parameter predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
@@ -5157,6 +5194,11 @@ var APISwaggerJSON string = `{
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
                     "$ref": "#/definitions/schemapolicyPathMatcherType",
                     "x-displayname": "HTTP Path"
+                },
+                "port_matcher": {
+                    "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
+                    "$ref": "#/definitions/policyPortMatcherType",
+                    "x-displayname": "Port Matcher"
                 },
                 "query_params": {
                     "type": "array",

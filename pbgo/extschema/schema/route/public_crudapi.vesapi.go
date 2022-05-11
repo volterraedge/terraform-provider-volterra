@@ -2207,10 +2207,11 @@ var APISwaggerJSON string = `{
                 },
                 "ttl": {
                     "type": "integer",
-                    "description": " If specified, a cookie with the TTL will be generated if the cookie is\n not present. If the TTL is present and zero, the generated cookie will\n be a session cookie. TTL value is in milliseconds\n\nExample: - 5000-",
+                    "description": " If specified, a cookie with the TTL will be generated if the cookie is\n not present. If the TTL is present and zero, the generated cookie will\n be a session cookie. TTL value is in milliseconds\n\nExample: - \"5000\"-",
                     "title": "ttl",
                     "format": "int64",
-                    "x-displayname": "TTL"
+                    "x-displayname": "TTL",
+                    "x-ves-example": "5000"
                 }
             }
         },
@@ -2736,29 +2737,32 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint_subsets": {
                     "type": "object",
-                    "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoints which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
+                    "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoints which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
                     "title": "endpoint_subsets",
                     "x-displayname": "Endpoint Subsets",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "16"
                     }
                 },
                 "priority": {
                     "type": "integer",
-                    "description": " Priority of this cluster, valid only with multiple destinations are configured.\n Value of 0 will make the cluster as lowest priority upstream cluster\n Priority of 1 means highest priority and is considered active.\n When active cluster is not available, lower priority clusters are\n made active as per the increasing priority.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Priority of this cluster, valid only with multiple destinations are configured.\n Value of 0 will make the cluster as lowest priority upstream cluster\n Priority of 1 means highest priority and is considered active.\n When active cluster is not available, lower priority clusters are\n made active as per the increasing priority.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Priority",
                     "format": "int64",
                     "x-displayname": "Priority",
+                    "x-ves-example": "1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
                 },
                 "weight": {
                     "type": "integer",
-                    "description": " When requests have to distributed among multiple upstream clusters,\n multiple destinations are configured, each having its own cluster and weight.\n Traffic is distributed among clusters based on the weight configured.\n\n Example:\n    destinations:\n    - cluster:\n      - kind: ves.io.vega.cfg.adc.cluster.Object\n        uid: cluster-1\n     weight: 20\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-2\n     weight: 30\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-3\n     weight: 10\n\n This indicates that out of every 60 requests, 10 goes to cluster-3, 30 to\n cluster-2 and 20 to cluster-1\n\n When single destination is configured, weight is ignored. All the requests are\n sent to the cluster specified in the destination\n\nExample: - 10-",
+                    "description": " When requests have to distributed among multiple upstream clusters,\n multiple destinations are configured, each having its own cluster and weight.\n Traffic is distributed among clusters based on the weight configured.\n\n Example:\n    destinations:\n    - cluster:\n      - kind: ves.io.vega.cfg.adc.cluster.Object\n        uid: cluster-1\n     weight: 20\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-2\n     weight: 30\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-3\n     weight: 10\n\n This indicates that out of every 60 requests, 10 goes to cluster-3, 30 to\n cluster-2 and 20 to cluster-1\n\n When single destination is configured, weight is ignored. All the requests are\n sent to the cluster specified in the destination\n\nExample: - \"10\"-",
                     "title": "weight",
                     "format": "int64",
-                    "x-displayname": "Weight"
+                    "x-displayname": "Weight",
+                    "x-ves-example": "10"
                 }
             }
         },
@@ -2814,9 +2818,10 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint_subsets": {
                     "type": "object",
-                    "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoint's which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
+                    "description": " Upstream cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n Labels field of endpoint object's metadata is used for subset matching.\n For endpoint's which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those endpoints of\n upstream cluster which match this metadata will be selected for load balancing\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
                     "title": "endpoint_subsets",
                     "x-displayname": "Endpoint Subsets",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "16"
                     }
@@ -2885,10 +2890,11 @@ var APISwaggerJSON string = `{
                 },
                 "timeout": {
                     "type": "integer",
-                    "description": " Specifies the timeout for the route in milliseconds.\n This timeout includes all retries.\n For server side streaming, configure this field with higher value or leave it un-configured\n for infinite timeout\n\nExample: - 2000-",
+                    "description": " Specifies the timeout for the route in milliseconds.\n This timeout includes all retries.\n For server side streaming, configure this field with higher value or leave it un-configured\n for infinite timeout\n\nExample: - \"2000\"-",
                     "title": "timeout",
                     "format": "int64",
-                    "x-displayname": "Timeout"
+                    "x-displayname": "Timeout",
+                    "x-ves-example": "2000"
                 },
                 "web_socket_config": {
                     "description": " Websocket configuration for each route",
@@ -2920,10 +2926,11 @@ var APISwaggerJSON string = `{
                 },
                 "response_code": {
                     "type": "integer",
-                    "description": " response code to send\n\nExample: - 200-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 100\n  ves.io.schema.rules.uint32.lte: 599\n",
+                    "description": " response code to send\n\nExample: - \"200\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 100\n  ves.io.schema.rules.uint32.lte: 599\n",
                     "title": "response_code",
                     "format": "int64",
                     "x-displayname": "Response Code",
+                    "x-ves-example": "200",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "100",
                         "ves.io.schema.rules.uint32.lte": "599"
@@ -3005,10 +3012,11 @@ var APISwaggerJSON string = `{
                 },
                 "response_code": {
                     "type": "integer",
-                    "description": " The HTTP status code to use in the redirect response. The default response\n code is MOVED_PERMANENTLY (301).\n\nExample: - 303-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
+                    "description": " The HTTP status code to use in the redirect response. The default response\n code is MOVED_PERMANENTLY (301).\n\nExample: - \"303\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
                     "title": "response_code",
                     "format": "int64",
                     "x-displayname": "Response Code",
+                    "x-ves-example": "303",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "599"
                     }
@@ -3162,8 +3170,8 @@ var APISwaggerJSON string = `{
         },
         "routeSpdyConfigType": {
             "type": "object",
-            "description": "Request headers of such upgrade looks like below\n  'connection', 'Upgrade'\n  'upgrade', 'SPDY/3.1'\n\nWith configuration to allow SPDY upgrade, ADC will produce following response\n  'HTTP/1.1 101 Switching Protocols\n  'Upgrade': 'SPDY/3.1'\n  'Connection': 'Upgrade'",
-            "title": "SpdyConfigType\nConfiguration to allow UPGRADE of connection to SPDY and any additional tuning",
+            "description": "Request headers of such upgrade looks like below\n  'connection', 'Upgrade'\n  'upgrade', 'SPDY/3.1'\n\nConfiguration to allow UPGRADE of connection to SPDY and any additional tuning\nWith configuration to allow SPDY upgrade, ADC will produce following response\n  'HTTP/1.1 101 Switching Protocols\n  'Upgrade': 'SPDY/3.1'\n  'Connection': 'Upgrade'",
+            "title": "SpdyConfigType",
             "x-displayname": "SPDY Configuration",
             "x-ves-proto-message": "ves.io.schema.route.SpdyConfigType",
             "properties": {
@@ -3271,9 +3279,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -3289,9 +3298,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3426,19 +3436,21 @@ var APISwaggerJSON string = `{
                 },
                 "allow_headers": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-allow-headers header",
+                    "description": " Specifies the content for the access-control-allow-headers header\n\nExample: - \"value\"-",
                     "title": "allow_headers",
-                    "x-displayname": "Allow Headers"
+                    "x-displayname": "Allow Headers",
+                    "x-ves-example": "value"
                 },
                 "allow_methods": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-allow-methods header",
+                    "description": " Specifies the content for the access-control-allow-methods header\n\nExample: - \"GET\"-",
                     "title": "allow_methods",
-                    "x-displayname": "Allow Methods"
+                    "x-displayname": "Allow Methods",
+                    "x-ves-example": "GET"
                 },
                 "allow_origin": {
                     "type": "array",
-                    "description": " Specifies the origins that will be allowed to do CORS requests.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the origins that will be allowed to do CORS requests.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "allow_origin",
                     "maxItems": 128,
                     "items": {
@@ -3447,6 +3459,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 256
                     },
                     "x-displayname": "Allow Origin",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_len": "256",
                         "ves.io.schema.rules.repeated.items.string.min_len": "1",
@@ -3456,7 +3469,7 @@ var APISwaggerJSON string = `{
                 },
                 "allow_origin_regex": {
                     "type": "array",
-                    "description": " Specifies regex patterns that match allowed origins.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies regex patterns that match allowed origins.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "allow_origin_regex",
                     "maxItems": 16,
                     "items": {
@@ -3465,6 +3478,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 256
                     },
                     "x-displayname": "Allow Origin Regex",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
                         "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
@@ -3482,16 +3496,18 @@ var APISwaggerJSON string = `{
                 },
                 "expose_headers": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-expose-headers header",
+                    "description": " Specifies the content for the access-control-expose-headers header\n\nExample: - \"value\"-",
                     "title": "expose_headers",
-                    "x-displayname": "Expose Headers"
+                    "x-displayname": "Expose Headers",
+                    "x-ves-example": "value"
                 },
                 "maximum_age": {
                     "type": "integer",
-                    "description": " Specifies the content for the access-control-max-age header in seconds.\n This indicates the maximum number of seconds the results can be cached\n A value of -1 will disable caching.\n Maximum permitted value is 86400 seconds (24 hours)\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 86400\n",
+                    "description": " Specifies the content for the access-control-max-age header in seconds.\n This indicates the maximum number of seconds the results can be cached\n A value of -1 will disable caching.\n Maximum permitted value is 86400 seconds (24 hours)\n\nExample: - \"-1\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 86400\n",
                     "title": "maximum_age",
                     "format": "int32",
                     "x-displayname": "Maximum Age",
+                    "x-ves-example": "-1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.int32.gte": "-1",
                         "ves.io.schema.rules.int32.lte": "86400"
@@ -3607,10 +3623,11 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the HTTP header.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Name of the HTTP header.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "name",
                     "maxLength": 256,
                     "x-displayname": "Name",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3645,10 +3662,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact": {
                     "type": "string",
-                    "description": "Exclusive with [presence regex]\n Header value to match exactly\n\nExample: - \"application/json\"-",
+                    "description": "Exclusive with [presence regex]\n Header value to match exactly\n\nExample: - \"application/json\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "exact",
+                    "maxLength": 256,
                     "x-displayname": "Exact",
-                    "x-ves-example": "application/json"
+                    "x-ves-example": "application/json",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
                 },
                 "invert_match": {
                     "type": "boolean",
@@ -3659,10 +3681,15 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the header\n\nExample: - \"Content-Type\"-",
+                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "name",
+                    "maxLength": 256,
                     "x-displayname": "Name",
-                    "x-ves-example": "Content-Type"
+                    "x-ves-example": "Content-Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "presence": {
                     "type": "boolean",
@@ -3673,14 +3700,13 @@ var APISwaggerJSON string = `{
                 },
                 "regex": {
                     "type": "string",
-                    "description": "Exclusive with [exact presence]\n Regex match of the header value in re2 format\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "description": "Exclusive with [exact presence]\n Regex match of the header value in re2 format\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n  ves.io.schema.rules.string.regex: true\n",
                     "title": "regex",
-                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Regex",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.not_empty": "true",
                         "ves.io.schema.rules.string.regex": "true"
                     }
                 }
@@ -3991,6 +4017,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -4016,7 +4043,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -4131,20 +4159,22 @@ var APISwaggerJSON string = `{
             "properties": {
                 "base_interval": {
                     "type": "integer",
-                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - 5-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n",
+                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - \"5\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "base_interval",
                     "format": "int64",
                     "x-displayname": "Base Retry Interval",
+                    "x-ves-example": "5",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gt": "0"
                     }
                 },
                 "max_interval": {
                     "type": "integer",
-                    "description": " Specifies the maximum interval between retries in milliseconds.\n This parameter is optional, but must be greater than or equal\n to the base_interval if set. The default is 10 times the base_interval.\n\nExample: - 60-",
+                    "description": " Specifies the maximum interval between retries in milliseconds.\n This parameter is optional, but must be greater than or equal\n to the base_interval if set. The default is 10 times the base_interval.\n\nExample: - \"60\"-",
                     "title": "max_interval",
                     "format": "int64",
-                    "x-displayname": "Maximum Retry Interval"
+                    "x-displayname": "Maximum Retry Interval",
+                    "x-ves-example": "60"
                 }
             }
         },
@@ -4164,27 +4194,29 @@ var APISwaggerJSON string = `{
                 },
                 "num_retries": {
                     "type": "integer",
-                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - 3-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
+                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - \"3\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
                     "title": "num_retries",
                     "format": "int64",
                     "x-displayname": "Number of Retries",
+                    "x-ves-example": "3",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "8"
                     }
                 },
                 "per_try_timeout": {
                     "type": "integer",
-                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
+                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
                     "title": "per_try_timeout",
                     "format": "int64",
                     "x-displayname": "Per Try Timeout",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "600000"
                     }
                 },
                 "retriable_status_codes": {
                     "type": "array",
-                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - 403-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - \"403\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Retriable status Code",
                     "maxItems": 16,
                     "items": {
@@ -4192,6 +4224,7 @@ var APISwaggerJSON string = `{
                         "format": "int64"
                     },
                     "x-displayname": "Status Code to Retry",
+                    "x-ves-example": "403",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"

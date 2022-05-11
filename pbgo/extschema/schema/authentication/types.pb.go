@@ -30,22 +30,28 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// OIDCAuthParams
+//
+// x-displayName: "OIDCAuthParams"
 type OIDCAuthParams struct {
 	// Authorization Endpoint
 	//
 	// x-displayName: "Authorization Endpoint"
+	// x-example: "value"
 	// x-required
 	// URL of the authorization server's authorization endpoint.
 	AuthEndpointUrl string `protobuf:"bytes,1,opt,name=auth_endpoint_url,json=authEndpointUrl,proto3" json:"auth_endpoint_url,omitempty"`
 	// Token Endpoint
 	//
 	// x-displayName: "Token Endpoint"
+	// x-example: "value"
 	// x-required
 	// URL of the authorization server's Token endpoint.
 	TokenEndpointUrl string `protobuf:"bytes,2,opt,name=token_endpoint_url,json=tokenEndpointUrl,proto3" json:"token_endpoint_url,omitempty"`
 	// Logout Endpoint
 	//
 	// x-displayName: "Logout Endpoint"
+	// x-example: "value"
 	// x-required
 	// URL of the authorization server's Logout endpoint.
 	EndSessionEndpointUrl string `protobuf:"bytes,3,opt,name=end_session_endpoint_url,json=endSessionEndpointUrl,proto3" json:"end_session_endpoint_url,omitempty"`
@@ -100,6 +106,9 @@ func (m *OIDCAuthParams) GetEndSessionEndpointUrl() string {
 	return ""
 }
 
+// OIDCAuthType
+//
+// x-displayName: "OIDCAuthType"
 type OIDCAuthType struct {
 	// OIDC Endpoint Configuration
 	//
@@ -114,6 +123,7 @@ type OIDCAuthType struct {
 	// OIDC Client ID
 	//
 	// x-displayName: "OIDC Client ID"
+	// x-example: "value"
 	// x-required
 	// Client ID used while sending the Authorization Request to OIDC server
 	OidcClientId string `protobuf:"bytes,4,opt,name=oidc_client_id,json=oidcClientId,proto3" json:"oidc_client_id,omitempty"`
@@ -356,7 +366,7 @@ type CookieParams struct {
 	// cookie refresh interval
 	//
 	// x-displayName: "Cookie Refresh Interval"
-	// x-example: 3600
+	// x-example: "3600"
 	// Specifies in seconds refresh interval for session cookie.
 	// This is used to keep the active user active and reduce re-login.
 	// When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,
@@ -366,7 +376,7 @@ type CookieParams struct {
 	// cookie expiry
 	//
 	// x-displayName: "Cookie Expiry duration"
-	// x-example: 5000
+	// x-example: "5000"
 	// specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.
 	// This will act as an expiry duration on the client side after which client will not  be setting the
 	// cookie as part of the request.
@@ -375,7 +385,7 @@ type CookieParams struct {
 	// session expiry
 	//
 	// x-displayName: "Session Expiry duration"
-	// x-example: 36000
+	// x-example: "36000"
 	// specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.
 	// Default session expiry is 86400 seconds(24 hours).
 	SessionExpiry uint32 `protobuf:"varint,3,opt,name=session_expiry,json=sessionExpiry,proto3" json:"session_expiry,omitempty"`

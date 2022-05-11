@@ -1803,10 +1803,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "allocation_unit": {
                     "type": "integer",
-                    "description": " Prefix length indicating the size of each allocated subnet. For example, if this is\n specified as 30, subnets of /30 will be allocated from the given address pool.\n\nExample: - 30-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Prefix length indicating the size of each allocated subnet. For example, if this is\n specified as 30, subnets of /30 will be allocated from the given address pool.\n\nExample: - \"30\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Allocation Unit",
                     "format": "int64",
                     "x-displayname": "Allocation Unit",
+                    "x-ves-example": "30",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -1816,10 +1817,11 @@ var APISwaggerJSON string = `{
                 },
                 "local_interface_address_offset": {
                     "type": "integer",
-                    "description": "\n This is used to derive address for the local interface from the allocated subnet.\n\n If Local Interface Address Type is set to \"Offset from beginning of Subnet\", this offset value is added\n to the allocated subnet and used as the local interface address. For example, if the allocated subnet is\n 169.254.0.0/30 and offset is set to 2 with Local Interface Address Type set to \"Offset from beginning\n of Subnet\", local interface address of 169.254.0.2 is used.\n\n If Local Interface Address Type is set to \"Offset from end of Subnet\", this offset value is subtracted\n from the end of the allocated subnet and used as the local interface address. For example, if the allocated\n subnet is 169.254.0.0/30 and offset is set to 1 with Local Interface Address Type set to \"Offset from\n end of Subnet\", local interface address of 169.254.0.2 is used.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "\n This is used to derive address for the local interface from the allocated subnet.\n\n If Local Interface Address Type is set to \"Offset from beginning of Subnet\", this offset value is added\n to the allocated subnet and used as the local interface address. For example, if the allocated subnet is\n 169.254.0.0/30 and offset is set to 2 with Local Interface Address Type set to \"Offset from beginning\n of Subnet\", local interface address of 169.254.0.2 is used.\n\n If Local Interface Address Type is set to \"Offset from end of Subnet\", this offset value is subtracted\n from the end of the allocated subnet and used as the local interface address. For example, if the allocated\n subnet is 169.254.0.0/30 and offset is set to 1 with Local Interface Address Type set to \"Offset from\n end of Subnet\", local interface address of 169.254.0.2 is used.\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Local Interface Address Offset",
                     "format": "int64",
                     "x-displayname": "Local Interface Address Offset",
+                    "x-ves-example": "2",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "32"

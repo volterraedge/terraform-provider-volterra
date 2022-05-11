@@ -2768,8 +2768,9 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_ruleFastAclRuleAction": {
             "type": "object",
-            "description": " FastAclRuleAction specifies possible action to be applied on traffic,\n possible action include dropping, forwarding or ratelimiting the traffic",
+            "description": "FastAclRuleAction specifies possible action to be applied on traffic,\npossible action include dropping, forwarding or ratelimiting the traffic",
             "title": "FastAclRuleAction",
+            "x-displayname": "Action",
             "x-ves-oneof-field-action": "[\"policer_action\",\"protocol_policer_action\",\"simple_action\"]",
             "x-ves-proto-message": "ves.io.schema.fast_acl_rule.FastAclRuleAction",
             "properties": {

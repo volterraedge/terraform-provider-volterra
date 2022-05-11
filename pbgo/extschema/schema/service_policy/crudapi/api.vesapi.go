@@ -2581,7 +2581,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2608,7 +2608,8 @@ var APISwaggerJSON string = `{
                 "VIOL_EVASION_DIRECTORY_TRAVERSALS",
                 "VIOL_MALFORMED_REQUEST",
                 "VIOL_EVASION_MULTIPLE_DECODING",
-                "VIOL_DATA_GUARD"
+                "VIOL_DATA_GUARD",
+                "VIOL_EVASION_APACHE_WHITESPACE"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -3126,12 +3127,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "element_selector": {
                     "type": "string",
-                    "description": "x-displayName: \"Element selector to rewrite\"\nx-required\nElement selector to insert into.",
+                    "description": "x-displayName: \"Element selector to rewrite\"\nx-example: \"value\"\nx-required\nElement selector to insert into.",
                     "title": "Element selector"
                 },
                 "insert_content": {
                     "type": "string",
-                    "description": "x-displayName: \"HTML Content to insert\"\nHTML content to insert.",
+                    "description": "x-displayName: \"HTML Content to insert\"\nx-example: \"value\"\nHTML content to insert.",
                     "title": "Insert Content"
                 },
                 "position": {
@@ -3461,7 +3462,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "policy_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Policy Name\"\nSets the BD Policy to use",
+                    "description": "x-displayName: \"Policy Name\"\nx-example: \"value\"\nSets the BD Policy to use",
                     "title": "Set BD Policy name"
                 }
             }
@@ -3734,21 +3735,34 @@ var APISwaggerJSON string = `{
         },
         "policyPortMatcherType": {
             "type": "object",
-            "description": "x-displayName: \"Port Matcher\"\nA port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
+            "description": "A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
             "title": "port matcher type",
+            "x-displayname": "Port Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.PortMatcherType",
             "properties": {
                 "invert_matcher": {
                     "type": "boolean",
-                    "description": "x-displayName: \"Invert Port Matcher\"\nInvert the match result.",
+                    "description": " Invert the match result.",
                     "title": "invert_matcher",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Invert Port Matcher"
                 },
                 "ports": {
                     "type": "array",
-                    "description": "x-displayName: \"Port Ranges\"\nx-required\nx-example: \"8000-8191\"\nA list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\nto be part of the range.",
+                    "description": " A list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\n to be part of the range.\n\nExample: - \"8000-8191\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.port_range: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "port ranges",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
+                    },
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "8000-8191",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.port_range": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -3838,6 +3852,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Body\"\nx-example: \"string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"\nCustom body message is of type uri_ref. Currently supported URL schemes is string:///.\nFor string:/// scheme, message needs to be encoded in Base64 format.\nYou can specify this message as base64 encoded plain text message e.g. \"Your request was blocked\"\nor it can be HTML paragraph or a body string encoded as base64 string\nE.g. \"\u003cp\u003e Your request was blocked \u003c/p\u003e\". Base64 encoded string for this html is \"LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"",
                     "title": "body"
                 },
+                "body_hash": {
+                    "type": "string",
+                    "description": "x-displayName: \"Body Hash\"\nx-example: \"92959a96fd69146c5fe7cbde6e5720f2\"\nRepresents the corresponding MD5 Hash for the body message.",
+                    "title": "body_hash"
+                },
                 "status": {
                     "description": "x-displayName: \"Status\"\nHTTP Status code to respond with",
                     "title": "Status",
@@ -3913,7 +3932,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": "x-displayName: \"URI\"\nx-example: Enter URI\nURI location for redirect may be relative or absolute.",
+                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nURI location for redirect may be relative or absolute.",
                     "title": "URI"
                 }
             }
@@ -4186,6 +4205,52 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiterRateLimitPeriodUnit": {
+            "type": "string",
+            "description": "x-displayName: \"Rate Limit Period Unit\"\nUnit for the period per which the rate limit is applied.\n\n - SECOND: Second\n\nx-displayName: \"Second\"\nRate limit period is 1 second\n - MINUTE: Minute\n\nx-displayName: \"Minute\"\nRate limit period is 1 minute\n - HOUR: Hour\n\nx-displayName: \"Hour\"\nRate limit period is 1 hour\n - DAY: Day\n\nx-displayName: \"Day\"\nRate limit period is 1 day",
+            "title": "RateLimitPeriodUnit",
+            "enum": [
+                "SECOND",
+                "MINUTE",
+                "HOUR",
+                "DAY"
+            ],
+            "default": "SECOND"
+        },
+        "rate_limiterRateLimitValue": {
+            "type": "object",
+            "description": "x-displayName: \"Rate Limit Value\"\nA tuple consisting of a rate limit period unit and the total number of allowed requests for that period.",
+            "title": "RateLimitValue",
+            "properties": {
+                "burst_multiplier": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Burst Multiplier\"\nx-example: \"1\"\nThe maximum burst of requests to accommodate, expressed as a multiple of the rate.",
+                    "title": "burst_multiplier",
+                    "format": "int64"
+                },
+                "total_number": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Number\"\nx-example: \"1\"\nx-required\nThe total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.",
+                    "title": "total_number",
+                    "format": "int64"
+                },
+                "unit": {
+                    "description": "x-displayName: \"Per Period\"\nx-required\nUnit for the period per which the rate limit is applied.",
+                    "title": "unit",
+                    "$ref": "#/definitions/rate_limiterRateLimitPeriodUnit"
+                }
+            }
+        },
+        "rate_limiterRateLimiterMode": {
+            "type": "string",
+            "description": "x-displayName: \"Rate Limiter Mode\"\n\n - RATE_LIMITER_MODE_NOT_SHARED: Not Shared\n\nx-displayName: \"Not Shared\"\nAllot unique pool of request limits for each reference to a rate_limiter object.\n - RATE_LIMITER_MODE_SHARED: Shared\n\nx-displayName: \"Shared\"\nUse a common pool of request limits for all references to a rate_limiter object.",
+            "title": "RateLimiterMode",
+            "enum": [
+                "RATE_LIMITER_MODE_NOT_SHARED",
+                "RATE_LIMITER_MODE_SHARED"
+            ],
+            "default": "RATE_LIMITER_MODE_NOT_SHARED"
+        },
         "runtimeStreamError": {
             "type": "object",
             "properties": {
@@ -4409,7 +4474,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefixes": {
                     "type": "array",
-                    "description": "x-displayName: \"IPv4 Prefixes\"\nx-required\nDestination IPv4 prefixes.",
+                    "description": "x-displayName: \"IPv4 Prefixes\"\nx-example: \"10.0.0./24\"\nx-required\nDestination IPv4 prefixes.",
                     "title": "prefixes",
                     "items": {
                         "type": "string"
@@ -5080,6 +5145,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemarate_limiterGlobalSpecType": {
+            "type": "object",
+            "description": "x-displayName: \"Specification\"\nShape of rate_limiter in the storage backend.",
+            "title": "GlobalSpecType",
+            "properties": {
+                "limits": {
+                    "type": "array",
+                    "description": "x-displayName: \"Rate Limit Values\"\nx-required\nA list of RateLimitValues that specifies the total number of allowed requests for each specified period.",
+                    "title": "limits",
+                    "items": {
+                        "$ref": "#/definitions/rate_limiterRateLimitValue"
+                    }
+                },
+                "mode": {
+                    "description": "x-displayName: \"Rate Limiter Mode\"\nSpecifies if the request limits are shared across all references to this rate limiter or unique rate limits are allotted for each reference.",
+                    "title": "mode",
+                    "$ref": "#/definitions/rate_limiterRateLimiterMode"
+                },
+                "user_identification": {
+                    "type": "array",
+                    "description": "x-displayName: \"User Identification Policy\"\nA reference to user_identification object.\nThe rules in the user_identification object are evaluated to determine the user identifier to be rate limited.",
+                    "title": "user_identification",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                }
+            }
+        },
         "schemaservice_policyGlobalSpecType": {
             "type": "object",
             "description": "Shape of service_policy in the storage backend.",
@@ -5332,6 +5425,12 @@ var APISwaggerJSON string = `{
                     "title": "path",
                     "$ref": "#/definitions/schemapolicyPathMatcherType",
                     "x-displayname": "HTTP Path"
+                },
+                "port_matcher": {
+                    "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
+                    "title": "port matcher",
+                    "$ref": "#/definitions/policyPortMatcherType",
+                    "x-displayname": "Port Matcher"
                 },
                 "query_params": {
                     "type": "array",
@@ -5593,6 +5692,22 @@ var APISwaggerJSON string = `{
                     "title": "port matcher",
                     "$ref": "#/definitions/policyPortMatcherType"
                 },
+                "rate_limiter_specs": {
+                    "type": "array",
+                    "description": "x-displayName: \"Rate Limiter Specs\"\nSpecs for rate_limiter objects.\nApply the specified rate_limiters.\nMutually exclusive with rate_limiters.",
+                    "title": "rate limiter specs",
+                    "items": {
+                        "$ref": "#/definitions/schemarate_limiterGlobalSpecType"
+                    }
+                },
+                "rate_limiters": {
+                    "type": "array",
+                    "description": "x-displayName: \"Rate Limiters\"\nReferences to rate_limiter objects.\nApply the specified rate_limiters.\nMutually exclusive with rate_limiter_specs.",
+                    "title": "rate limiters",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
                 "scheme": {
                     "type": "array",
                     "description": "x-displayName: \"Scheme\"\nx-example: \"HTTPS\"\nThe scheme in the request.",
@@ -5727,13 +5842,14 @@ var APISwaggerJSON string = `{
                 },
                 "tls_fingerprint_values": {
                     "type": "array",
-                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 32\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"1aa7bf8b97e540ca5edd75f7b8384bfa\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 32\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "tls_fingerprint_classes",
                     "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "TLS Fingerprint Values",
+                    "x-ves-example": "1aa7bf8b97e540ca5edd75f7b8384bfa",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.len": "32",
                         "ves.io.schema.rules.repeated.max_items": "16",

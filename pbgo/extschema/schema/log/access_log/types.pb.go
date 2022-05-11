@@ -161,7 +161,7 @@ func (KeyField) EnumDescriptor() ([]byte, []int) {
 
 // Date SubAggregation
 //
-// x-displayName: Date SubAggregation
+// x-displayName: "Date SubAggregation"
 // Aggregate access logs in each date bucket based on one of the sub aggregation types
 type DateSubAggregation struct {
 	// aggregation type
@@ -238,7 +238,7 @@ func (*DateSubAggregation) XXX_OneofWrappers() []interface{} {
 
 // Date Aggregation
 //
-// x-displayName: Date Aggregation
+// x-displayName: "Date Aggregation"
 // Aggregate access logs based on timestamp in the log
 type DateAggregation struct {
 	// step
@@ -315,7 +315,7 @@ type FieldAggregation struct {
 	// topk
 	//
 	// x-displayName: "TopK"
-	//
+	// x-example: "5"
 	// Number of top field values to be returned in the response.
 	// Optional: If not specified, top 5 values will be returned in the response.
 	Topk uint32 `protobuf:"varint,2,opt,name=topk,proto3" json:"topk,omitempty"`

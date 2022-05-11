@@ -501,6 +501,7 @@ type TLSClientConfigType struct {
 	// The TLS certificate URL.
 	//
 	// x-displayName: "Client Certificate"
+	// x-example: "value"
 	// Client  certificate is PEM-encoded certificate or certificate-chain.
 	Certificate string `protobuf:"bytes,5,opt,name=certificate,proto3" json:"certificate,omitempty"`
 	// Private Key
@@ -518,6 +519,7 @@ type TLSClientConfigType struct {
 	// Server CA certificates
 	//
 	// x-displayName: "Server CA Certificates"
+	// x-example: "value"
 	// The URL or value for trusted Server CA certificate or certificate chain
 	// Certificates in PEM format including the PEM headers.
 	TrustedCaUrl string `protobuf:"bytes,6,opt,name=trusted_ca_url,json=trustedCaUrl,proto3" json:"trusted_ca_url,omitempty"`
@@ -1043,11 +1045,15 @@ func (m *VipDiscoveryInfoType) GetNamespace() string {
 	return ""
 }
 
+// K8SPublishType
+//
+// x-displayName: "K8SPublishType"
 type K8SPublishType struct {
 	// namespace
 	//
 	// x-displayName: "Default Namespace"
 	// x-required
+	// x-example: "default"
 	// The namespace where the service/endpoints need to be created if it's not included in the domain.
 	// The external K8S administrator needs to ensure that the namespace exists.
 	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
@@ -1088,10 +1094,14 @@ func (m *K8SPublishType) GetNamespace() string {
 	return ""
 }
 
+// K8SDelegationType
+//
+// x-displayName: "K8SDelegationType"
 type K8SDelegationType struct {
 	// subdomain
 	//
 	// x-displayName: "Subdomain"
+	// x-example: "value"
 	// x-required
 	// The DNS subdomain for which Volterra will respond to DNS queries.
 	Subdomain string `protobuf:"bytes,1,opt,name=subdomain,proto3" json:"subdomain,omitempty"`
@@ -1147,7 +1157,7 @@ func (m *K8SDelegationType) GetDnsMode() K8SDNSMode {
 
 // K8S VIP Discovery Info Type
 //
-// x-displayName: "VIP Publish Configurations
+// x-displayName: "VIP Publish Configurations"
 // K8S Configuration to publish VIPs
 type K8SVipDiscoveryInfoType struct {
 	// publish choice

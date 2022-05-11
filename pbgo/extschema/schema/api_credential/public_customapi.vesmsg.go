@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -24,6 +24,144 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiCertificateType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiCertificateType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiCertificateType) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Password = ""
+
+	return copy.string()
+}
+
+func (m *ApiCertificateType) GoString() string {
+	copy := m.DeepCopy()
+	copy.Password = ""
+
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ApiCertificateType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Password = ""
+
+	return nil
+}
+
+func (m *ApiCertificateType) DeepCopy() *ApiCertificateType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiCertificateType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiCertificateType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiCertificateType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiCertificateTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiCertificateType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiCertificateType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for password")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiCertificateType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiCertificateType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiCertificateType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("password"))
+		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiCertificateTypeValidator = func() *ValidateApiCertificateType {
+	v := &ValidateApiCertificateType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPassword := v.PasswordValidationRuleHandler
+	rulesPassword := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "50",
+		"ves.io.schema.rules.string.min_bytes": "6",
+	}
+	vFn, err = vrhPassword(rulesPassword)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiCertificateType.password: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["password"] = vFn
+
+	return v
+}()
+
+func ApiCertificateTypeValidator() db.Validator {
+	return DefaultApiCertificateTypeValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -290,6 +428,10 @@ func (m *CreateServiceCredentialsRequest) Redact(ctx context.Context) error {
 
 	m.Password = ""
 
+	if err := m.GetApiCertificate().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateServiceCredentialsRequest.api_certificate")
+	}
+
 	return nil
 }
 
@@ -412,6 +554,54 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 
 	}
 
+	switch m.GetServiceCredentialChoice().(type) {
+	case *CreateServiceCredentialsRequest_ApiToken:
+		if fv, exists := v.FldValidators["service_credential_choice.api_token"]; exists {
+			val := m.GetServiceCredentialChoice().(*CreateServiceCredentialsRequest_ApiToken).ApiToken
+			vOpts := append(opts,
+				db.WithValidateField("service_credential_choice"),
+				db.WithValidateField("api_token"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateServiceCredentialsRequest_ApiCertificate:
+		if fv, exists := v.FldValidators["service_credential_choice.api_certificate"]; exists {
+			val := m.GetServiceCredentialChoice().(*CreateServiceCredentialsRequest_ApiCertificate).ApiCertificate
+			vOpts := append(opts,
+				db.WithValidateField("service_credential_choice"),
+				db.WithValidateField("api_certificate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateServiceCredentialsRequest_Vk8SKubeconfig:
+		if fv, exists := v.FldValidators["service_credential_choice.vk8s_kubeconfig"]; exists {
+			val := m.GetServiceCredentialChoice().(*CreateServiceCredentialsRequest_Vk8SKubeconfig).Vk8SKubeconfig
+			vOpts := append(opts,
+				db.WithValidateField("service_credential_choice"),
+				db.WithValidateField("vk8s_kubeconfig"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateServiceCredentialsRequest_SiteKubeconfig:
+		if fv, exists := v.FldValidators["service_credential_choice.site_kubeconfig"]; exists {
+			val := m.GetServiceCredentialChoice().(*CreateServiceCredentialsRequest_SiteKubeconfig).SiteKubeconfig
+			vOpts := append(opts,
+				db.WithValidateField("service_credential_choice"),
+				db.WithValidateField("site_kubeconfig"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("type"))
@@ -476,7 +666,11 @@ var DefaultCreateServiceCredentialsRequestValidator = func() *ValidateCreateServ
 	}
 	v.FldValidators["password"] = vFn
 
-	v.FldValidators["namespace_roles"] = ves_io_schema_user.NamespaceRoleTypeValidator().Validate
+	v.FldValidators["service_credential_choice.api_certificate"] = ApiCertificateTypeValidator().Validate
+	v.FldValidators["service_credential_choice.vk8s_kubeconfig"] = Vk8SKubeconfigTypeValidator().Validate
+	v.FldValidators["service_credential_choice.site_kubeconfig"] = SiteKubeconfigTypeValidator().Validate
+
+	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
 	return v
 }()
@@ -1340,6 +1534,102 @@ func ListResponseItemValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *RecreateScimTokenRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RecreateScimTokenRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RecreateScimTokenRequest) DeepCopy() *RecreateScimTokenRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RecreateScimTokenRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RecreateScimTokenRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RecreateScimTokenRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RecreateScimTokenRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRecreateScimTokenRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRecreateScimTokenRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RecreateScimTokenRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RecreateScimTokenRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["expiration_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_days"))
+		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRecreateScimTokenRequestValidator = func() *ValidateRecreateScimTokenRequest {
+	v := &ValidateRecreateScimTokenRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RecreateScimTokenRequestValidator() db.Validator {
+	return DefaultRecreateScimTokenRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RenewRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1486,6 +1776,115 @@ func RenewRequestValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SiteKubeconfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteKubeconfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteKubeconfigType) DeepCopy() *SiteKubeconfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteKubeconfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteKubeconfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteKubeconfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteKubeconfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSiteKubeconfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteKubeconfigType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSiteKubeconfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteKubeconfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteKubeconfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteKubeconfigTypeValidator = func() *ValidateSiteKubeconfigType {
+	v := &ValidateSiteKubeconfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteKubeconfigType.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+
+	return v
+}()
+
+func SiteKubeconfigTypeValidator() db.Validator {
+	return DefaultSiteKubeconfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *StatusResponse) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1560,6 +1959,143 @@ var DefaultStatusResponseValidator = func() *ValidateStatusResponse {
 
 func StatusResponseValidator() db.Validator {
 	return DefaultStatusResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Vk8SKubeconfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Vk8SKubeconfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Vk8SKubeconfigType) DeepCopy() *Vk8SKubeconfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Vk8SKubeconfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Vk8SKubeconfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Vk8SKubeconfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return Vk8SKubeconfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVk8SKubeconfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVk8SKubeconfigType) Vk8SNamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVk8SKubeconfigType) Vk8SClusterNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_cluster_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVk8SKubeconfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Vk8SKubeconfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Vk8SKubeconfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["vk8s_cluster_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vk8s_cluster_name"))
+		if err := fv(ctx, m.GetVk8SClusterName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vk8s_namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vk8s_namespace"))
+		if err := fv(ctx, m.GetVk8SNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVk8SKubeconfigTypeValidator = func() *ValidateVk8SKubeconfigType {
+	v := &ValidateVk8SKubeconfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVk8SNamespace := v.Vk8SNamespaceValidationRuleHandler
+	rulesVk8SNamespace := map[string]string{
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhVk8SNamespace(rulesVk8SNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Vk8SKubeconfigType.vk8s_namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vk8s_namespace"] = vFn
+
+	vrhVk8SClusterName := v.Vk8SClusterNameValidationRuleHandler
+	rulesVk8SClusterName := map[string]string{
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhVk8SClusterName(rulesVk8SClusterName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Vk8SKubeconfigType.vk8s_cluster_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vk8s_cluster_name"] = vFn
+
+	return v
+}()
+
+func Vk8SKubeconfigTypeValidator() db.Validator {
+	return DefaultVk8SKubeconfigTypeValidator
 }
 
 func (m *CreateRequest) FromObject(e db.Entry) {

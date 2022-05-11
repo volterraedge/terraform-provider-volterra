@@ -3025,10 +3025,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - \"24\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Prefix Length",
                     "format": "int64",
                     "x-displayname": "Prefix Length",
+                    "x-ves-example": "24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
@@ -3278,13 +3279,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_number": {
                     "type": "integer",
-                    "description": "x-displayName: \"AS Number\"\nx-required\nTwo-Octet AS Number.",
+                    "description": "x-displayName: \"AS Number\"\nx-example: \"100\"\nx-required\nTwo-Octet AS Number.",
                     "title": "as_number",
                     "format": "int64"
                 },
                 "value": {
                     "type": "integer",
-                    "description": "x-displayName: \"Local Administrator Field\"\nx-required\nA 4-byte value that is unique in the scope of the ASN.",
+                    "description": "x-displayName: \"Local Administrator Field\"\nx-example: \"100\"\nx-required\nA 4-byte value that is unique in the scope of the ASN.",
                     "title": "value",
                     "format": "int64"
                 }
@@ -3297,13 +3298,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_number": {
                     "type": "integer",
-                    "description": "x-displayName: \"AS Number\"\nx-required\nFour-Octet AS Number.",
+                    "description": "x-displayName: \"AS Number\"\nx-example: \"100000\"\nx-required\nFour-Octet AS Number.",
                     "title": "as_number",
                     "format": "int64"
                 },
                 "value": {
                     "type": "integer",
-                    "description": "x-displayName: \"Local Administrator Field\"\nx-required\nA 2-byte value that is unique in the scope of the ASN.",
+                    "description": "x-displayName: \"Local Administrator Field\"\nx-example: \"100\"\nx-required\nA 2-byte value that is unique in the scope of the ASN.",
                     "title": "value",
                     "format": "int64"
                 }
@@ -3316,12 +3317,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "x-displayName: \"IPv4 Address\"\nx-required\nIPv4 Address",
+                    "description": "x-displayName: \"IPv4 Address\"\nx-example: \"1.1.1.1\"\nx-required\nIPv4 Address",
                     "title": "address"
                 },
                 "value": {
                     "type": "integer",
-                    "description": "x-displayName: \"Local Administrator Field\"\nx-required\nA 2-byte value that is unique in the scope of the IPv4 address.",
+                    "description": "x-displayName: \"Local Administrator Field\"\nx-example: \"100\"\nx-required\nA 2-byte value that is unique in the scope of the IPv4 address.",
                     "title": "value",
                     "format": "int64"
                 }
@@ -3350,9 +3351,10 @@ var APISwaggerJSON string = `{
                 },
                 "labels": {
                     "type": "object",
-                    "description": " Add Labels for this Static Route, these labels can be used in network policy",
+                    "description": " Add Labels for this Static Route, these labels can be used in network policy\n\nExample: - \"value\"-",
                     "title": "Static Route labels",
-                    "x-displayname": "Static Route Labels"
+                    "x-displayname": "Static Route Labels",
+                    "x-ves-example": "value"
                 },
                 "nexthop": {
                     "description": " Nexthop for the route",
@@ -3971,7 +3973,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ipv4_prefixes": {
                     "type": "array",
-                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-required\nList of IPv4 prefixes used as SNAT pool",
+                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-example: \"10.0.0.0/24\"\nx-required\nList of IPv4 prefixes used as SNAT pool",
                     "title": "List of IPv4 Prefixes",
                     "items": {
                         "type": "string"

@@ -811,6 +811,7 @@ type DHCPInterfaceIPType struct {
 	// Site:Node to IP mapping
 	//
 	// x-displayName: "Site:Node to IP Mapping"
+	// x-example: "value"
 	// Map of Site:Node to IP address.
 	InterfaceIpMap map[string]string `protobuf:"bytes,1,rep,name=interface_ip_map,json=interfaceIpMap,proto3" json:"interface_ip_map,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
@@ -850,6 +851,9 @@ func (m *DHCPInterfaceIPType) GetInterfaceIpMap() map[string]string {
 	return nil
 }
 
+// DHCPServerParametersType
+//
+// x-displayName: "DHCPServerParametersType"
 type DHCPServerParametersType struct {
 	// DHCP Networks
 	//
@@ -871,6 +875,7 @@ type DHCPServerParametersType struct {
 	// Fixed IP Assignments
 	//
 	// x-displayName: "Fixed MAC address to IP Assignments"
+	// x-example: "value"
 	// Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address
 	FixedIpMap map[string]string `protobuf:"bytes,6,rep,name=fixed_ip_map,json=fixedIpMap,proto3" json:"fixed_ip_map,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Option 82 Tag

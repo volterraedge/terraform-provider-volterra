@@ -277,6 +277,7 @@ type ProtocolPortType struct {
 	// protocol
 	//
 	// x-displayName: "Protocol"
+	// x-example: "ALL"
 	// Protocol in IP packet to be used as match criteria
 	// Values are tcp, udp, and icmp
 	Protocol string `protobuf:"bytes,1,opt,name=protocol,proto3" json:"protocol,omitempty"`

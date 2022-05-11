@@ -27,6 +27,173 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *SetCloudSiteInfoRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetCloudSiteInfoRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetCloudSiteInfoRequest) DeepCopy() *SetCloudSiteInfoRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetCloudSiteInfoRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetCloudSiteInfoRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetCloudSiteInfoRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetCloudSiteInfoRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetCloudSiteInfoRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetCloudSiteInfoRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetCloudSiteInfoRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetCloudSiteInfoRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aws_vpc_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_vpc_info"))
+		if err := fv(ctx, m.GetAwsVpcInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetCloudSiteInfoRequestValidator = func() *ValidateSetCloudSiteInfoRequest {
+	v := &ValidateSetCloudSiteInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["aws_vpc_info"] = AWSVPCSiteInfoTypeValidator().Validate
+
+	return v
+}()
+
+func SetCloudSiteInfoRequestValidator() db.Validator {
+	return DefaultSetCloudSiteInfoRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SetCloudSiteInfoResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetCloudSiteInfoResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetCloudSiteInfoResponse) DeepCopy() *SetCloudSiteInfoResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetCloudSiteInfoResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetCloudSiteInfoResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetCloudSiteInfoResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetCloudSiteInfoResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetCloudSiteInfoResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetCloudSiteInfoResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetCloudSiteInfoResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetCloudSiteInfoResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetCloudSiteInfoResponseValidator = func() *ValidateSetCloudSiteInfoResponse {
+	v := &ValidateSetCloudSiteInfoResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SetCloudSiteInfoResponseValidator() db.Validator {
+	return DefaultSetCloudSiteInfoResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SetVIPInfoRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

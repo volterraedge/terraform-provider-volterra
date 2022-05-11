@@ -1780,10 +1780,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - \"24\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Prefix Length",
                     "format": "int64",
                     "x-displayname": "Prefix Length",
+                    "x-ves-example": "24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
@@ -2017,6 +2018,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -2042,7 +2044,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -2592,21 +2595,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "date": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/bios_date",
+                    "description": " information from /sys/class/dmi/id/bios_date\n\nExample: - \"value\"-",
                     "title": "date",
-                    "x-displayname": "Date"
+                    "x-displayname": "Date",
+                    "x-ves-example": "value"
                 },
                 "vendor": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/bios_vendor",
+                    "description": " information from /sys/class/dmi/id/bios_vendor\n\nExample: - \"value\"-",
                     "title": "vendor",
-                    "x-displayname": "Vendor"
+                    "x-displayname": "Vendor",
+                    "x-ves-example": "value"
                 },
                 "version": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/bios_version",
+                    "description": " information from /sys/class/dmi/id/bios_version\n\nExample: - \"value\"-",
                     "title": "version",
-                    "x-displayname": "Version"
+                    "x-displayname": "Version",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -2619,33 +2625,38 @@ var APISwaggerJSON string = `{
             "properties": {
                 "asset_tag": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/board_asset_tag",
+                    "description": " information from /sys/class/dmi/id/board_asset_tag\n\nExample: - \"value\"-",
                     "title": "asset_tag",
-                    "x-displayname": "Asset Tag"
+                    "x-displayname": "Asset Tag",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/board_name",
+                    "description": " information from /sys/class/dmi/id/board_name\n\nExample: - \"value\"-",
                     "title": "name",
-                    "x-displayname": "Name"
+                    "x-displayname": "Name",
+                    "x-ves-example": "value"
                 },
                 "serial": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/board_serial",
+                    "description": " information from /sys/class/dmi/id/board_serial\n\nExample: - \"value\"-",
                     "title": "serial",
-                    "x-displayname": "Serial Number"
+                    "x-displayname": "Serial Number",
+                    "x-ves-example": "value"
                 },
                 "vendor": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/board_vendor",
+                    "description": " information from /sys/class/dmi/id/board_vendor\n\nExample: - \"value\"-",
                     "title": "vendor",
-                    "x-displayname": "Vendor"
+                    "x-displayname": "Vendor",
+                    "x-ves-example": "value"
                 },
                 "version": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/board_version",
+                    "description": " information from /sys/class/dmi/id/board_version\n\nExample: - \"value\"-",
                     "title": "version",
-                    "x-displayname": "Version"
+                    "x-displayname": "Version",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -2702,34 +2713,39 @@ var APISwaggerJSON string = `{
             "properties": {
                 "asset_tag": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/chassis_asset_tag",
+                    "description": " information from /sys/class/dmi/id/chassis_asset_tag\n\nExample: - \"value\"-",
                     "title": "asset_tag",
-                    "x-displayname": "Asset Tag"
+                    "x-displayname": "Asset Tag",
+                    "x-ves-example": "value"
                 },
                 "serial": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/chassis_serial",
+                    "description": " information from /sys/class/dmi/id/chassis_serial\n\nExample: - \"value\"-",
                     "title": "serial",
-                    "x-displayname": "Serial Number"
+                    "x-displayname": "Serial Number",
+                    "x-ves-example": "value"
                 },
                 "type": {
                     "type": "integer",
-                    "description": " information from /sys/class/dmi/id/chassis_type",
+                    "description": " information from /sys/class/dmi/id/chassis_type\n\nExample: - \"0\"-",
                     "title": "type",
                     "format": "int64",
-                    "x-displayname": "Type"
+                    "x-displayname": "Type",
+                    "x-ves-example": "0"
                 },
                 "vendor": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/chassis_vendor",
+                    "description": " information from /sys/class/dmi/id/chassis_vendor\n\nExample: - \"value\"-",
                     "title": "vendor",
-                    "x-displayname": "Vendor"
+                    "x-displayname": "Vendor",
+                    "x-ves-example": "value"
                 },
                 "version": {
                     "type": "string",
-                    "description": " information from /sys/class/dmi/id/chassis_version",
+                    "description": " information from /sys/class/dmi/id/chassis_version\n\nExample: - \"value\"-",
                     "title": "version",
-                    "x-displayname": "Version"
+                    "x-displayname": "Version",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -2742,10 +2758,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "latitude": {
                     "type": "number",
-                    "description": " Latitude of the site location\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
+                    "description": " Latitude of the site location\n\nExample: - \"10.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
                     "title": "latitude",
                     "format": "float",
                     "x-displayname": "Latitude",
+                    "x-ves-example": "10.0",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-90.0",
                         "ves.io.schema.rules.float.lte": "90.0"
@@ -2753,10 +2770,11 @@ var APISwaggerJSON string = `{
                 },
                 "longitude": {
                     "type": "number",
-                    "description": " longitude of site location\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
+                    "description": " longitude of site location\n\nExample: - \"20.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
                     "title": "longitude",
                     "format": "float",
                     "x-displayname": "Longitude",
+                    "x-ves-example": "20.0",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-180.0",
                         "ves.io.schema.rules.float.lte": "180.0"
@@ -2773,56 +2791,64 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cache": {
                     "type": "integer",
-                    "description": " CPU cache size in KB",
+                    "description": " CPU cache size in KB\n\nExample: - \"8192\"-",
                     "title": "cache",
                     "format": "int64",
-                    "x-displayname": "Cache"
+                    "x-displayname": "Cache",
+                    "x-ves-example": "8192"
                 },
                 "cores": {
                     "type": "integer",
-                    "description": " number of physical CPU cores",
+                    "description": " number of physical CPU cores\n\nExample: - \"4\"-",
                     "title": "cores",
                     "format": "int64",
-                    "x-displayname": "Cores"
+                    "x-displayname": "Cores",
+                    "x-ves-example": "4"
                 },
                 "cpus": {
                     "type": "integer",
-                    "description": " number of physical CPUs",
+                    "description": " number of physical CPUs\n\nExample: - \"4\"-",
                     "title": "cpus",
                     "format": "int64",
-                    "x-displayname": "CPUs"
+                    "x-displayname": "CPUs",
+                    "x-ves-example": "4"
                 },
                 "flags": {
                     "type": "string",
-                    "description": " CPU flags",
+                    "description": " CPU flags\n\nExample: - \"value\"-",
                     "title": "flags",
-                    "x-displayname": "Cpu Flags"
+                    "x-displayname": "Cpu Flags",
+                    "x-ves-example": "value"
                 },
                 "model": {
                     "type": "string",
-                    "description": " CPU model",
+                    "description": " CPU model\n\nExample: - \"value\"-",
                     "title": "model",
-                    "x-displayname": "Model"
+                    "x-displayname": "Model",
+                    "x-ves-example": "value"
                 },
                 "speed": {
                     "type": "integer",
-                    "description": " CPU clock rate in MHz",
+                    "description": " CPU clock rate in MHz\n\nExample: - \"4200\"-",
                     "title": "speed",
                     "format": "int64",
-                    "x-displayname": "Speed"
+                    "x-displayname": "Speed",
+                    "x-ves-example": "4200"
                 },
                 "threads": {
                     "type": "integer",
-                    "description": " number of logical (HT) CPU cores",
+                    "description": " number of logical (HT) CPU cores\n\nExample: - \"4\"-",
                     "title": "threads",
                     "format": "int64",
-                    "x-displayname": "Threads"
+                    "x-displayname": "Threads",
+                    "x-ves-example": "4"
                 },
                 "vendor": {
                     "type": "string",
-                    "description": " CPU vendor",
+                    "description": " CPU vendor\n\nExample: - \"value\"-",
                     "title": "vendor",
-                    "x-displayname": "Vendor"
+                    "x-displayname": "Vendor",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3004,6 +3030,8 @@ var APISwaggerJSON string = `{
         },
         "siteGPUDevice": {
             "type": "object",
+            "title": "GPUDevice",
+            "x-displayname": "GPUDevice",
             "x-ves-proto-message": "ves.io.schema.site.GPUDevice",
             "properties": {
                 "id": {
@@ -3015,9 +3043,10 @@ var APISwaggerJSON string = `{
                 },
                 "processes": {
                     "type": "string",
-                    "description": " GPU Processes",
+                    "description": " GPU Processes\n\nExample: - \"value\"-",
                     "title": "processes",
-                    "x-displayname": "Processes"
+                    "x-displayname": "Processes",
+                    "x-ves-example": "value"
                 },
                 "product_name": {
                     "type": "string",
@@ -3830,21 +3859,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "architecture": {
                     "type": "string",
-                    "description": " kernel architecture",
+                    "description": " kernel architecture\n\nExample: - \"value\"-",
                     "title": "architecture",
-                    "x-displayname": "Architecture"
+                    "x-displayname": "Architecture",
+                    "x-ves-example": "value"
                 },
                 "release": {
                     "type": "string",
-                    "description": " kernel release",
+                    "description": " kernel release\n\nExample: - \"value\"-",
                     "title": "release",
-                    "x-displayname": "Release"
+                    "x-displayname": "Release",
+                    "x-ves-example": "value"
                 },
                 "version": {
                     "type": "string",
-                    "description": " kernel version",
+                    "description": " kernel version\n\nExample: - \"value\"-",
                     "title": "version",
-                    "x-displayname": "Version"
+                    "x-displayname": "Version",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -4016,23 +4048,26 @@ var APISwaggerJSON string = `{
             "properties": {
                 "size_mb": {
                     "type": "integer",
-                    "description": " RAM size in MB",
+                    "description": " RAM size in MB\n\nExample: - \"value\"-",
                     "title": "size_mb",
                     "format": "int64",
-                    "x-displayname": "RAM"
+                    "x-displayname": "RAM",
+                    "x-ves-example": "value"
                 },
                 "speed": {
                     "type": "integer",
-                    "description": " RAM data rate in MT/s",
+                    "description": " RAM data rate in MT/s\n\nExample: - \"value\"-",
                     "title": "speed",
                     "format": "int64",
-                    "x-displayname": "Speed"
+                    "x-displayname": "Speed",
+                    "x-ves-example": "value"
                 },
                 "type": {
                     "type": "string",
-                    "description": " type of memory, eg. DDR4",
+                    "description": " type of memory, eg. DDR4\n\nExample: - \"DDR4\"-",
                     "title": "type",
-                    "x-displayname": "Type"
+                    "x-displayname": "Type",
+                    "x-ves-example": "DDR4"
                 }
             }
         },
@@ -4045,18 +4080,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "driver": {
                     "type": "string",
-                    "description": " driver of device, eg. e1000e",
+                    "description": " driver of device, eg. e1000e\n\nExample: - \"e1000e\"-",
                     "title": "driver",
-                    "x-displayname": "Driver"
+                    "x-displayname": "Driver",
+                    "x-ves-example": "e1000e"
                 },
                 "ip_address": {
                     "type": "array",
-                    "description": " ip address on interface",
+                    "description": " ip address on interface\n\nExample: - \"1.1.1.1\"-",
                     "title": "ip_address",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "IP Address"
+                    "x-displayname": "IP Address",
+                    "x-ves-example": "1.1.1.1"
                 },
                 "link_quality": {
                     "description": " Link quality for the interface",
@@ -4072,28 +4109,32 @@ var APISwaggerJSON string = `{
                 },
                 "mac_address": {
                     "type": "string",
-                    "description": " mac address on interface",
+                    "description": " mac address on interface\n\nExample: - \"value\"-",
                     "title": "mac_address",
-                    "x-displayname": "MAC Address"
+                    "x-displayname": "MAC Address",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
-                    "description": " name of device, eg. eth0",
+                    "description": " name of device, eg. eth0\n\nExample: - \"eth0\"-",
                     "title": "name",
-                    "x-displayname": "Name"
+                    "x-displayname": "Name",
+                    "x-ves-example": "eth0"
                 },
                 "port": {
                     "type": "string",
-                    "description": " used port, eg. tp",
+                    "description": " used port, eg. tp\n\nExample: - \"value\"-",
                     "title": "port",
-                    "x-displayname": "Port"
+                    "x-displayname": "Port",
+                    "x-ves-example": "value"
                 },
                 "speed": {
                     "type": "integer",
-                    "description": " device max supported speed in Mbps",
+                    "description": " device max supported speed in Mbps\n\nExample: - \"1000\"-",
                     "title": "speed",
                     "format": "int64",
-                    "x-displayname": "Speed"
+                    "x-displayname": "Speed",
+                    "x-ves-example": "1000"
                 }
             }
         },
@@ -4320,27 +4361,31 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " product name, eg. for aws m5a.xlarge. Info taken from /sys/class/dmi/id/product_name",
+                    "description": " product name, eg. for aws m5a.xlarge. Info taken from /sys/class/dmi/id/product_name\n\nExample: - \"m5a.xlarge\"-",
                     "title": "name",
-                    "x-displayname": "Name"
+                    "x-displayname": "Name",
+                    "x-ves-example": "m5a.xlarge"
                 },
                 "serial": {
                     "type": "string",
-                    "description": " serial number, eg. for aws ec254b6d-9676-1a51-8b10-21370dbdc3e5. Info taken from /sys/class/dmi/id/product_serial",
+                    "description": " serial number, eg. for aws ec254b6d-9676-1a51-8b10-21370dbdc3e5. Info taken from /sys/class/dmi/id/product_serial\n\nExample: - \"ec254b6d-9676-1a51-8b10-21370dbdc3e5\"-",
                     "title": "serial",
-                    "x-displayname": "Serial Number"
+                    "x-displayname": "Serial Number",
+                    "x-ves-example": "ec254b6d-9676-1a51-8b10-21370dbdc3e5"
                 },
                 "vendor": {
                     "type": "string",
-                    "description": " vendor name, eg. for aws Amazon EC2. Info taken from /sys/class/dmi/id/product_vendor",
+                    "description": " vendor name, eg. for aws Amazon EC2. Info taken from /sys/class/dmi/id/product_vendor\n\nExample: - \"value\"-",
                     "title": "vendor",
-                    "x-displayname": "Vendor"
+                    "x-displayname": "Vendor",
+                    "x-ves-example": "value"
                 },
                 "version": {
                     "type": "string",
-                    "description": " version name. Info taken from /sys/class/dmi/id/product_version",
+                    "description": " version name. Info taken from /sys/class/dmi/id/product_version\n\nExample: - \"value\"-",
                     "title": "version",
-                    "x-displayname": "Version"
+                    "x-displayname": "Version",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -4716,6 +4761,27 @@ var APISwaggerJSON string = `{
             "x-displayname": "Site Subtype",
             "x-ves-proto-enum": "ves.io.schema.site.SiteSubtype"
         },
+        "siteSiteToSiteTunnelConnectivity": {
+            "type": "object",
+            "description": "x-displayName: \"Site To Sute Tunnel Connectivity\"\nSiteToSiteTunnelConnectivity is for connecting to a site in site mesh group",
+            "title": "Site To Site Tunnel Connectivity",
+            "properties": {
+                "destination": {
+                    "type": "array",
+                    "description": "x-displayName: \"Destination\"\nx-example: \"192.168.0.156\"\nIP Address or FQDN of the destination. If NodePort service endpoints are tunnel destinations,\nthis field is going to be list of Node IPs. If destination is Loadbalancer service, this field\ncan be either IP or Fqdn",
+                    "title": "Destination",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Port\"\nx-example: 1000\nDestination port to connect to. If tunnel destination is NodePort service, this field is\nPort in the NodePort service. If it is not NodePort service, this can be left blank, in which\ncase default ports are assumed",
+                    "title": "Port",
+                    "format": "int64"
+                }
+            }
+        },
         "siteSiteType": {
             "type": "string",
             "description": "Site Type which can either RE or CE\n\nInvalid type of site\nRegional Edge site\nCustomer Edge site",
@@ -4862,40 +4928,46 @@ var APISwaggerJSON string = `{
             "properties": {
                 "driver": {
                     "type": "string",
-                    "description": " driver of device",
+                    "description": " driver of device\n\nExample: - \"value\"-",
                     "title": "driver",
-                    "x-displayname": "Driver"
+                    "x-displayname": "Driver",
+                    "x-ves-example": "value"
                 },
                 "model": {
                     "type": "string",
-                    "description": " model of device",
+                    "description": " model of device\n\nExample: - \"value\"-",
                     "title": "model",
-                    "x-displayname": "Model"
+                    "x-displayname": "Model",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
-                    "description": " name of device, eg. nvme0n1",
+                    "description": " name of device, eg. nvme0n1\n\nExample: - \"nvme0n1\"-",
                     "title": "name",
-                    "x-displayname": "Name"
+                    "x-displayname": "Name",
+                    "x-ves-example": "nvme0n1"
                 },
                 "serial": {
                     "type": "string",
-                    "description": " serial of device",
+                    "description": " serial of device\n\nExample: - \"value\"-",
                     "title": "serial",
-                    "x-displayname": "Serial Number"
+                    "x-displayname": "Serial Number",
+                    "x-ves-example": "value"
                 },
                 "size_gb": {
                     "type": "integer",
-                    "description": " device size in GB",
+                    "description": " device size in GB\n\nExample: - \"value\"-",
                     "title": "size_gb",
                     "format": "int64",
-                    "x-displayname": "Size(GB)"
+                    "x-displayname": "Size(GB)",
+                    "x-ves-example": "value"
                 },
                 "vendor": {
                     "type": "string",
-                    "description": " vendor of device",
+                    "description": " vendor of device\n\nExample: - \"value\"-",
                     "title": "vendor",
-                    "x-displayname": "Vendor"
+                    "x-displayname": "Vendor",
+                    "x-ves-example": "value"
                 }
             }
         },

@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_api_group_element "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -304,6 +305,172 @@ var DefaultApiGroupBuilderValidator = func() *ValidateApiGroupBuilder {
 
 func ApiGroupBuilderValidator() db.Validator {
 	return DefaultApiGroupBuilderValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiGroupSummary) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiGroupSummary) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiGroupSummary) DeepCopy() *ApiGroupSummary {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiGroupSummary{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiGroupSummary) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiGroupSummary) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiGroupSummaryValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiGroupSummary struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiGroupSummary) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiGroupSummary) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_api_group_element.GlobalSpecType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_api_group_element.GlobalSpecTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for elements")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_api_group_element.GlobalSpecType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_api_group_element.GlobalSpecType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated elements")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items elements")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiGroupSummary) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiGroupSummary)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiGroupSummary got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["elements"]; exists {
+		vOpts := append(opts, db.WithValidateField("elements"))
+		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiGroupSummaryValidator = func() *ValidateApiGroupSummary {
+	v := &ValidateApiGroupSummary{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiGroupSummary.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhElements := v.ElementsValidationRuleHandler
+	rulesElements := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhElements(rulesElements)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiGroupSummary.elements: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["elements"] = vFn
+
+	return v
+}()
+
+func ApiGroupSummaryValidator() db.Validator {
+	return DefaultApiGroupSummaryValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -692,6 +859,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_groups"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_groups"))
+		for idx, item := range m.GetApiGroups() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["default_api_groups_builders"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("default_api_groups_builders"))
@@ -744,6 +923,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["swagger_specs"] = vFn
 
 	v.FldValidators["default_api_groups_builders"] = ApiGroupBuilderValidator().Validate
+
+	v.FldValidators["api_groups"] = ApiGroupSummaryValidator().Validate
 
 	return v
 }()
@@ -907,6 +1088,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_groups"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_groups"))
+		for idx, item := range m.GetApiGroups() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["default_api_groups_builders"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("default_api_groups_builders"))
@@ -970,6 +1163,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["default_api_groups_builders"] = ApiGroupBuilderValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["api_groups"] = ApiGroupSummaryValidator().Validate
 
 	return v
 }()
@@ -1141,6 +1336,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.ApiGroups = f.GetApiGroups()
 	m.DefaultApiGroupsBuilders = f.GetDefaultApiGroupsBuilders()
 	m.SwaggerSpecs = f.GetSwaggerSpecs()
 }
@@ -1151,6 +1347,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.ApiGroups = m1.ApiGroups
 	f.DefaultApiGroupsBuilders = m1.DefaultApiGroupsBuilders
 	f.SwaggerSpecs = m1.SwaggerSpecs
 }

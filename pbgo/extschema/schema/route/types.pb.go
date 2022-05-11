@@ -44,7 +44,7 @@ type RouteDestination struct {
 	// weight
 	//
 	// x-displayName: "Weight"
-	// x-example: 10
+	// x-example: "10"
 	// When requests have to distributed among multiple upstream clusters,
 	// multiple destinations are configured, each having its own cluster and weight.
 	// Traffic is distributed among clusters based on the weight configured.
@@ -73,6 +73,7 @@ type RouteDestination struct {
 	// Priority
 	//
 	// x-displayName: "Priority"
+	// x-example: "1"
 	// Priority of this cluster, valid only with multiple destinations are configured.
 	// Value of 0 will make the cluster as lowest priority upstream cluster
 	// Priority of 1 means highest priority and is considered active.
@@ -82,6 +83,7 @@ type RouteDestination struct {
 	// endpoint_subsets
 	//
 	// x-displayName: "Endpoint Subsets"
+	// x-example: "value"
 	// Upstream cluster may be configured to divide its endpoints into subsets based on metadata
 	// attached to the endpoints. Routes may then specify the metadata that a endpoint must match in
 	// order to be selected by the load balancer
@@ -218,13 +220,13 @@ func (m *MirrorPolicyType) GetPercent() *schema.FractionalPercent {
 }
 
 // SpdyConfigType
-// Configuration to allow UPGRADE of connection to SPDY and any additional tuning
 //
 // x-displayName: "SPDY Configuration"
 // Request headers of such upgrade looks like below
 //   'connection', 'Upgrade'
 //   'upgrade', 'SPDY/3.1'
 //
+// Configuration to allow UPGRADE of connection to SPDY and any additional tuning
 // With configuration to allow SPDY upgrade, ADC will produce following response
 //   'HTTP/1.1 101 Switching Protocols
 //   'Upgrade': 'SPDY/3.1'
@@ -298,13 +300,13 @@ type WebsocketConfigType struct {
 	// idle_timeout
 	//
 	// x-displayName: "Idle Timeout"
-	// x-example: 2000
+	// x-example: "2000"
 	// Idle Timeout for Websocket in milli seconds. After timeout, connection will be closed
 	IdleTimeout uint32 `protobuf:"varint,2,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"` // Deprecated: Do not use.
 	// max_connect_attempts
 	//
 	// x-displayName: "Maximum Connection Attempts"
-	// x-example: 5
+	// x-example: "5"
 	// The maximum number of unsuccessful connection attempts that will be made before
 	// giving up. Default is 1
 	MaxConnectAttempts uint32 `protobuf:"varint,3,opt,name=max_connect_attempts,json=maxConnectAttempts,proto3" json:"max_connect_attempts,omitempty"` // Deprecated: Do not use.
@@ -391,7 +393,7 @@ type CookieForHashing struct {
 	// ttl
 	//
 	// x-displayName: "TTL"
-	// x-example: 5000
+	// x-example: "5000"
 	// If specified, a cookie with the TTL will be generated if the cookie is
 	// not present. If the TTL is present and zero, the generated cookie will
 	// be a session cookie. TTL value is in milliseconds
@@ -651,7 +653,7 @@ type RouteDestinationList struct {
 	// timeout
 	//
 	// x-displayName: "Timeout"
-	// x-example: 2000
+	// x-example: "2000"
 	// Specifies the timeout for the route in milliseconds.
 	// This timeout includes all retries.
 	// For server side streaming, configure this field with higher value or leave it un-configured
@@ -665,6 +667,7 @@ type RouteDestinationList struct {
 	// endpoint_subsets
 	//
 	// x-displayName: "Endpoint Subsets"
+	// x-example: "value"
 	// Upstream cluster may be configured to divide its endpoints into subsets based on metadata
 	// attached to the endpoints. Routes may then specify the metadata that a endpoint must match in
 	// order to be selected by the load balancer
@@ -1026,7 +1029,7 @@ type RouteRedirect struct {
 	// response_code
 	//
 	// x-displayName: "Response Code"
-	// x-example: 303
+	// x-example: "303"
 	// The HTTP status code to use in the redirect response. The default response
 	// code is MOVED_PERMANENTLY (301).
 	ResponseCode uint32 `protobuf:"varint,6,opt,name=response_code,json=responseCode,proto3" json:"response_code,omitempty"`
@@ -1195,7 +1198,7 @@ type RouteDirectResponse struct {
 	// response_code
 	//
 	// x-displayName: "Response Code"
-	// x-example: 200
+	// x-example: "200"
 	// response code to send
 	ResponseCode uint32 `protobuf:"varint,1,opt,name=response_code,json=responseCode,proto3" json:"response_code,omitempty"`
 	// response_body

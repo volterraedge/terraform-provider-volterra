@@ -38,6 +38,7 @@ type ApplicationArgoCDType struct {
 	// Generated YAML
 	//
 	// x-displayName: "Generated YAML"
+	// x-example: "value"
 	// Generated YAML
 	GeneratedYaml string `protobuf:"bytes,1001,opt,name=generated_yaml,json=generatedYaml,proto3" json:"generated_yaml,omitempty"`
 	// ArgoCD Local Domain
@@ -98,6 +99,7 @@ type ApplicationDashboardType struct {
 	// Generated YAML
 	//
 	// x-displayName: "Generated YAML"
+	// x-example: "value"
 	// Generated YAML
 	GeneratedYaml string `protobuf:"bytes,1001,opt,name=generated_yaml,json=generatedYaml,proto3" json:"generated_yaml,omitempty"`
 }
@@ -146,6 +148,7 @@ type ApplicationMetricsServerType struct {
 	// Generated YAML
 	//
 	// x-displayName: "Generated YAML"
+	// x-example: "value"
 	// Generated YAML
 	GeneratedYaml string `protobuf:"bytes,1001,opt,name=generated_yaml,json=generatedYaml,proto3" json:"generated_yaml,omitempty"`
 }
@@ -194,6 +197,7 @@ type ApplicationPrometheusType struct {
 	// Generated YAML
 	//
 	// x-displayName: "Generated YAML"
+	// x-example: "value"
 	// Generated YAML
 	GeneratedYaml string `protobuf:"bytes,1001,opt,name=generated_yaml,json=generatedYaml,proto3" json:"generated_yaml,omitempty"`
 }

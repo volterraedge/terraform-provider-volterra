@@ -398,6 +398,17 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *QuotaResourceKeyChoice_DnsZoneRecordSets:
+		if fv, exists := v.FldValidators["choice.dns_zone_record_sets"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_DnsZoneRecordSets).DnsZoneRecordSets
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("dns_zone_record_sets"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

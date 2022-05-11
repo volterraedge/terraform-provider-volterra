@@ -41,6 +41,7 @@ type SlackConfig struct {
 	// Channel
 	//
 	// x-displayName: "Channel"
+	// x-example: "value"
 	// x-required
 	// Channel or user to send notifications to
 	Channel string `protobuf:"bytes,2,opt,name=channel,proto3" json:"channel,omitempty"`
@@ -102,6 +103,7 @@ type PagerDutyConfig struct {
 	// URL
 	//
 	// x-displayName: "Pager Duty URL"
+	// x-example: "value"
 	// x-required
 	// URL to send API requests to
 	Url string `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
@@ -163,6 +165,7 @@ type OpsGenieConfig struct {
 	// URL
 	//
 	// x-displayName: "API URL"
+	// x-example: "value"
 	// x-required
 	// URL to send API requests to
 	Url string `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
@@ -210,6 +213,9 @@ func (m *OpsGenieConfig) GetUrl() string {
 	return ""
 }
 
+// EmailConfig
+//
+// x-displayName: "Email Configuration"
 type EmailConfig struct {
 	// Email
 	//
@@ -254,6 +260,9 @@ func (m *EmailConfig) GetEmail() string {
 	return ""
 }
 
+// SMSConfig
+//
+// x-displayName: "SMS Configuration"
 type SMSConfig struct {
 	// Contact Number
 	//

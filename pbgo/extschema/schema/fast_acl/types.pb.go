@@ -302,7 +302,7 @@ func (m *DestinationIPAddressType) GetProtocol() string {
 
 // Specific Tenant VIP
 //
-// x-displayName: "Specific Tenant VIP
+// x-displayName: "Specific Tenant VIP"
 // Select various tenant public VIP(s)
 type SelectedTenantVIPsType struct {
 	// Include Default Tenant VIP
@@ -374,6 +374,7 @@ type FastACLRuleType struct {
 	// Rule Name
 	//
 	// x-displayName: "Rule Name"
+	// x-example: "value"
 	// Name for this rule, will be used to generate metrics
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// action

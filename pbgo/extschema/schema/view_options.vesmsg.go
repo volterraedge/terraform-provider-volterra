@@ -2565,6 +2565,15 @@ func (v *ValidateSuggestedValues) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["prefetch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("prefetch"))
+		if err := fv(ctx, m.GetPrefetch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["root_object_in"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("root_object_in"))

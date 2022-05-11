@@ -1142,6 +1142,40 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "AWS TGW Information Config",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType",
             "properties": {
+                "private_ips": {
+                    "type": "array",
+                    "description": " AWS Private IPs used by the nodes\n\nExample: - \"10.0.0.1, 10.0.0.2, 10.0.0.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AWS Node Private IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "AWS Node Private IPs",
+                    "x-ves-example": "10.0.0.1, 10.0.0.2, 10.0.0.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "public_ips": {
+                    "type": "array",
+                    "description": " AWS Elastic IPs used by the nodes\n\nExample: - \"1.1.1.1, 2.2.2.2, 3.3.3.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AWS Node Elastic IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "AWS Node Elastic IPs",
+                    "x-ves-example": "1.1.1.1, 2.2.2.2, 3.3.3.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "subnet_ids": {
                     "type": "array",
                     "description": " AWS Subnet Ids used by volterra site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 0, 1,3\n",

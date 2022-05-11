@@ -37,8 +37,8 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
@@ -149,6 +149,84 @@ func (m *CreateRequest) GetExpirationDays() uint32 {
 	return 0
 }
 
+// Recreate SCIM Token Request
+//
+// x-displayName: "Recreate SCIM Token Request"
+// RecreateScimTokenRequest is the request format for generating SCIM api credential.
+type RecreateScimTokenRequest struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// Value of namespace is always "system".
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "value"
+	// Name of API credential record. It will be saved in metadata.
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Expiry in days
+	//
+	// x-displayName: "Expiry in days"
+	// x-example: "value"
+	// Qty of days of service credential expiration.
+	ExpirationDays uint32 `protobuf:"varint,5,opt,name=expiration_days,json=expirationDays,proto3" json:"expiration_days,omitempty"`
+}
+
+func (m *RecreateScimTokenRequest) Reset()      { *m = RecreateScimTokenRequest{} }
+func (*RecreateScimTokenRequest) ProtoMessage() {}
+func (*RecreateScimTokenRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6dd860345148a1a2, []int{1}
+}
+func (m *RecreateScimTokenRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RecreateScimTokenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RecreateScimTokenRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RecreateScimTokenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RecreateScimTokenRequest.Merge(m, src)
+}
+func (m *RecreateScimTokenRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *RecreateScimTokenRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_RecreateScimTokenRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RecreateScimTokenRequest proto.InternalMessageInfo
+
+func (m *RecreateScimTokenRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *RecreateScimTokenRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *RecreateScimTokenRequest) GetExpirationDays() uint32 {
+	if m != nil {
+		return m.ExpirationDays
+	}
+	return 0
+}
+
 // Create response
 //
 // x-displayName: "Create Response"
@@ -170,7 +248,7 @@ type CreateResponse struct {
 func (m *CreateResponse) Reset()      { *m = CreateResponse{} }
 func (*CreateResponse) ProtoMessage() {}
 func (*CreateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{1}
+	return fileDescriptor_6dd860345148a1a2, []int{2}
 }
 func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -223,7 +301,8 @@ type CreateServiceCredentialsRequest struct {
 	// x-displayName: "Credential Type"
 	// x-required
 	// Type of API credential, API credentials, kubeconfig or token.
-	Type APICredentialType `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.api_credential.APICredentialType" json:"type,omitempty"`
+	// Please move to the oneof 'service_credential_choice' field for providing the details.
+	Type APICredentialType `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.api_credential.APICredentialType" json:"type,omitempty"` // Deprecated: Do not use.
 	// Namespace
 	//
 	// x-displayName: "Namespace"
@@ -241,19 +320,19 @@ type CreateServiceCredentialsRequest struct {
 	// x-displayName: "List of roles"
 	// x-example: "value"
 	// list of roles per namespace to be assigned to service credentials.
-	NamespaceRoles []*user.NamespaceRoleType `protobuf:"bytes,4,rep,name=namespace_roles,json=namespaceRoles,proto3" json:"namespace_roles,omitempty"`
+	NamespaceRoles []*schema.NamespaceRoleType `protobuf:"bytes,4,rep,name=namespace_roles,json=namespaceRoles,proto3" json:"namespace_roles,omitempty"`
 	// Virtual k8s namespace
 	//
 	// x-displayName: "vK8s Namespace"
 	// x-example: "app-ns1"
 	// Namespace of virtual_k8s cluster. Applicable for KUBE_CONFIG.
-	VirtualK8SNamespace string `protobuf:"bytes,6,opt,name=virtual_k8s_namespace,json=virtualK8sNamespace,proto3" json:"virtual_k8s_namespace,omitempty"`
+	VirtualK8SNamespace string `protobuf:"bytes,6,opt,name=virtual_k8s_namespace,json=virtualK8sNamespace,proto3" json:"virtual_k8s_namespace,omitempty"` // Deprecated: Do not use.
 	// virtual k8s cluster name
 	//
 	// x-displayName: "vK8s Cluster"
 	// x-example: "vk8s-product-app1"
 	// Name of virtual_k8s cluster. Applicable for KUBE_CONFIG.
-	VirtualK8SName string `protobuf:"bytes,7,opt,name=virtual_k8s_name,json=virtualK8sName,proto3" json:"virtual_k8s_name,omitempty"`
+	VirtualK8SName string `protobuf:"bytes,7,opt,name=virtual_k8s_name,json=virtualK8sName,proto3" json:"virtual_k8s_name,omitempty"` // Deprecated: Do not use.
 	// Password for API certificate
 	//
 	// x-displayName: "Password"
@@ -262,19 +341,34 @@ type CreateServiceCredentialsRequest struct {
 	// Password is used for generating an API certificate P12 bundle user can use to protect access to it.
 	// this password will not be saved/persisted anywhere in the system. Applicable for credential type API_CERTIFICATE
 	// Users have to use this password when they use the certificate, e.g. in curl or while adding to key chain.
-	Password string `protobuf:"bytes,8,opt,name=password,proto3" json:"password,omitempty"`
+	Password string `protobuf:"bytes,8,opt,name=password,proto3" json:"password,omitempty"` // Deprecated: Do not use.
 	// Expiry in days
 	//
 	// x-displayName: "Expiry in days"
 	// x-example: "value"
 	// Qty of days of service credential expiration.
 	ExpirationDays uint32 `protobuf:"varint,9,opt,name=expiration_days,json=expirationDays,proto3" json:"expiration_days,omitempty"`
+	// Service Credential Spec
+	//
+	// x-displayName: "Service Credential Spec"
+	// Credential specification can be one of the following types -
+	// * service api token
+	// * service api certificate
+	// * service kube config
+	// * site global kube config
+	//
+	// Types that are valid to be assigned to ServiceCredentialChoice:
+	//	*CreateServiceCredentialsRequest_ApiToken
+	//	*CreateServiceCredentialsRequest_ApiCertificate
+	//	*CreateServiceCredentialsRequest_Vk8SKubeconfig
+	//	*CreateServiceCredentialsRequest_SiteKubeconfig
+	ServiceCredentialChoice isCreateServiceCredentialsRequest_ServiceCredentialChoice `protobuf_oneof:"service_credential_choice"`
 }
 
 func (m *CreateServiceCredentialsRequest) Reset()      { *m = CreateServiceCredentialsRequest{} }
 func (*CreateServiceCredentialsRequest) ProtoMessage() {}
 func (*CreateServiceCredentialsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{2}
+	return fileDescriptor_6dd860345148a1a2, []int{3}
 }
 func (m *CreateServiceCredentialsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -303,6 +397,43 @@ func (m *CreateServiceCredentialsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateServiceCredentialsRequest proto.InternalMessageInfo
 
+type isCreateServiceCredentialsRequest_ServiceCredentialChoice interface {
+	isCreateServiceCredentialsRequest_ServiceCredentialChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateServiceCredentialsRequest_ApiToken struct {
+	ApiToken *schema.Empty `protobuf:"bytes,11,opt,name=api_token,json=apiToken,proto3,oneof" json:"api_token,omitempty"`
+}
+type CreateServiceCredentialsRequest_ApiCertificate struct {
+	ApiCertificate *ApiCertificateType `protobuf:"bytes,12,opt,name=api_certificate,json=apiCertificate,proto3,oneof" json:"api_certificate,omitempty"`
+}
+type CreateServiceCredentialsRequest_Vk8SKubeconfig struct {
+	Vk8SKubeconfig *Vk8SKubeconfigType `protobuf:"bytes,13,opt,name=vk8s_kubeconfig,json=vk8sKubeconfig,proto3,oneof" json:"vk8s_kubeconfig,omitempty"`
+}
+type CreateServiceCredentialsRequest_SiteKubeconfig struct {
+	SiteKubeconfig *SiteKubeconfigType `protobuf:"bytes,14,opt,name=site_kubeconfig,json=siteKubeconfig,proto3,oneof" json:"site_kubeconfig,omitempty"`
+}
+
+func (*CreateServiceCredentialsRequest_ApiToken) isCreateServiceCredentialsRequest_ServiceCredentialChoice() {
+}
+func (*CreateServiceCredentialsRequest_ApiCertificate) isCreateServiceCredentialsRequest_ServiceCredentialChoice() {
+}
+func (*CreateServiceCredentialsRequest_Vk8SKubeconfig) isCreateServiceCredentialsRequest_ServiceCredentialChoice() {
+}
+func (*CreateServiceCredentialsRequest_SiteKubeconfig) isCreateServiceCredentialsRequest_ServiceCredentialChoice() {
+}
+
+func (m *CreateServiceCredentialsRequest) GetServiceCredentialChoice() isCreateServiceCredentialsRequest_ServiceCredentialChoice {
+	if m != nil {
+		return m.ServiceCredentialChoice
+	}
+	return nil
+}
+
+// Deprecated: Do not use.
 func (m *CreateServiceCredentialsRequest) GetType() APICredentialType {
 	if m != nil {
 		return m.Type
@@ -324,13 +455,14 @@ func (m *CreateServiceCredentialsRequest) GetName() string {
 	return ""
 }
 
-func (m *CreateServiceCredentialsRequest) GetNamespaceRoles() []*user.NamespaceRoleType {
+func (m *CreateServiceCredentialsRequest) GetNamespaceRoles() []*schema.NamespaceRoleType {
 	if m != nil {
 		return m.NamespaceRoles
 	}
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *CreateServiceCredentialsRequest) GetVirtualK8SNamespace() string {
 	if m != nil {
 		return m.VirtualK8SNamespace
@@ -338,6 +470,7 @@ func (m *CreateServiceCredentialsRequest) GetVirtualK8SNamespace() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CreateServiceCredentialsRequest) GetVirtualK8SName() string {
 	if m != nil {
 		return m.VirtualK8SName
@@ -345,6 +478,7 @@ func (m *CreateServiceCredentialsRequest) GetVirtualK8SName() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CreateServiceCredentialsRequest) GetPassword() string {
 	if m != nil {
 		return m.Password
@@ -357,6 +491,217 @@ func (m *CreateServiceCredentialsRequest) GetExpirationDays() uint32 {
 		return m.ExpirationDays
 	}
 	return 0
+}
+
+func (m *CreateServiceCredentialsRequest) GetApiToken() *schema.Empty {
+	if x, ok := m.GetServiceCredentialChoice().(*CreateServiceCredentialsRequest_ApiToken); ok {
+		return x.ApiToken
+	}
+	return nil
+}
+
+func (m *CreateServiceCredentialsRequest) GetApiCertificate() *ApiCertificateType {
+	if x, ok := m.GetServiceCredentialChoice().(*CreateServiceCredentialsRequest_ApiCertificate); ok {
+		return x.ApiCertificate
+	}
+	return nil
+}
+
+func (m *CreateServiceCredentialsRequest) GetVk8SKubeconfig() *Vk8SKubeconfigType {
+	if x, ok := m.GetServiceCredentialChoice().(*CreateServiceCredentialsRequest_Vk8SKubeconfig); ok {
+		return x.Vk8SKubeconfig
+	}
+	return nil
+}
+
+func (m *CreateServiceCredentialsRequest) GetSiteKubeconfig() *SiteKubeconfigType {
+	if x, ok := m.GetServiceCredentialChoice().(*CreateServiceCredentialsRequest_SiteKubeconfig); ok {
+		return x.SiteKubeconfig
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateServiceCredentialsRequest) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateServiceCredentialsRequest_ApiToken)(nil),
+		(*CreateServiceCredentialsRequest_ApiCertificate)(nil),
+		(*CreateServiceCredentialsRequest_Vk8SKubeconfig)(nil),
+		(*CreateServiceCredentialsRequest_SiteKubeconfig)(nil),
+	}
+}
+
+// api_certificate
+//
+// x-displayName: "Service API Certificate Specification"
+// Service API Certificate parameters
+type ApiCertificateType struct {
+	// Password for API certificate
+	//
+	// x-displayName: "Password"
+	// x-required
+	// x-example: "myPassw0rd123"
+	// Password is used for generating an API certificate P12 bundle user can use to protect access to it.
+	// this password will not be saved/persisted anywhere in the system. Applicable for credential type API_CERTIFICATE
+	// Users have to use this password when they use the certificate, e.g. in curl or while adding to key chain.
+	Password string `protobuf:"bytes,1,opt,name=password,proto3" json:"password,omitempty"`
+}
+
+func (m *ApiCertificateType) Reset()      { *m = ApiCertificateType{} }
+func (*ApiCertificateType) ProtoMessage() {}
+func (*ApiCertificateType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6dd860345148a1a2, []int{4}
+}
+func (m *ApiCertificateType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiCertificateType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ApiCertificateType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ApiCertificateType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiCertificateType.Merge(m, src)
+}
+func (m *ApiCertificateType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiCertificateType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiCertificateType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiCertificateType proto.InternalMessageInfo
+
+func (m *ApiCertificateType) GetPassword() string {
+	if m != nil {
+		return m.Password
+	}
+	return ""
+}
+
+// vk8s_kubeconfig
+//
+// x-displayName: "Service Kube Config Specification"
+// Service Kube Config parameters
+type Vk8SKubeconfigType struct {
+	// Virtual k8s namespace
+	//
+	// x-displayName: "vK8s Namespace"
+	// x-example: "app-ns1"
+	// Namespace of virtual k8s cluster. Applicable for KUBE_CONFIG.
+	Vk8SNamespace string `protobuf:"bytes,1,opt,name=vk8s_namespace,json=vk8sNamespace,proto3" json:"vk8s_namespace,omitempty"`
+	// virtual k8s cluster name
+	//
+	// x-displayName: "vK8s Cluster"
+	// x-example: "vk8s-product-app1"
+	// Name of virtual k8s cluster.
+	Vk8SClusterName string `protobuf:"bytes,2,opt,name=vk8s_cluster_name,json=vk8sClusterName,proto3" json:"vk8s_cluster_name,omitempty"`
+}
+
+func (m *Vk8SKubeconfigType) Reset()      { *m = Vk8SKubeconfigType{} }
+func (*Vk8SKubeconfigType) ProtoMessage() {}
+func (*Vk8SKubeconfigType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6dd860345148a1a2, []int{5}
+}
+func (m *Vk8SKubeconfigType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Vk8SKubeconfigType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Vk8SKubeconfigType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Vk8SKubeconfigType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Vk8SKubeconfigType.Merge(m, src)
+}
+func (m *Vk8SKubeconfigType) XXX_Size() int {
+	return m.Size()
+}
+func (m *Vk8SKubeconfigType) XXX_DiscardUnknown() {
+	xxx_messageInfo_Vk8SKubeconfigType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Vk8SKubeconfigType proto.InternalMessageInfo
+
+func (m *Vk8SKubeconfigType) GetVk8SNamespace() string {
+	if m != nil {
+		return m.Vk8SNamespace
+	}
+	return ""
+}
+
+func (m *Vk8SKubeconfigType) GetVk8SClusterName() string {
+	if m != nil {
+		return m.Vk8SClusterName
+	}
+	return ""
+}
+
+// site_kubeconfig
+//
+// x-displayName: "Site Global Kube Config Specification"
+// Site Global Kube Config parameters
+type SiteKubeconfigType struct {
+	// Site
+	//
+	// x-displayName: "Site"
+	// x-required
+	// x-example: "ce398"
+	// Name of the site for which kubeconfig is being requested.
+	Site string `protobuf:"bytes,1,opt,name=site,proto3" json:"site,omitempty"`
+}
+
+func (m *SiteKubeconfigType) Reset()      { *m = SiteKubeconfigType{} }
+func (*SiteKubeconfigType) ProtoMessage() {}
+func (*SiteKubeconfigType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6dd860345148a1a2, []int{6}
+}
+func (m *SiteKubeconfigType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SiteKubeconfigType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SiteKubeconfigType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SiteKubeconfigType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SiteKubeconfigType.Merge(m, src)
+}
+func (m *SiteKubeconfigType) XXX_Size() int {
+	return m.Size()
+}
+func (m *SiteKubeconfigType) XXX_DiscardUnknown() {
+	xxx_messageInfo_SiteKubeconfigType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SiteKubeconfigType proto.InternalMessageInfo
+
+func (m *SiteKubeconfigType) GetSite() string {
+	if m != nil {
+		return m.Site
+	}
+	return ""
 }
 
 // Create Spec Type
@@ -396,7 +741,7 @@ type CustomCreateSpecType struct {
 func (m *CustomCreateSpecType) Reset()      { *m = CustomCreateSpecType{} }
 func (*CustomCreateSpecType) ProtoMessage() {}
 func (*CustomCreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{3}
+	return fileDescriptor_6dd860345148a1a2, []int{7}
 }
 func (m *CustomCreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -477,7 +822,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{4}
+	return fileDescriptor_6dd860345148a1a2, []int{8}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -535,7 +880,7 @@ type GetResponse struct {
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{5}
+	return fileDescriptor_6dd860345148a1a2, []int{9}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -587,7 +932,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{6}
+	return fileDescriptor_6dd860345148a1a2, []int{10}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -638,7 +983,7 @@ type ListResponse struct {
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{7}
+	return fileDescriptor_6dd860345148a1a2, []int{11}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -729,7 +1074,7 @@ type ListResponseItem struct {
 func (m *ListResponseItem) Reset()      { *m = ListResponseItem{} }
 func (*ListResponseItem) ProtoMessage() {}
 func (*ListResponseItem) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{8}
+	return fileDescriptor_6dd860345148a1a2, []int{12}
 }
 func (m *ListResponseItem) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -844,7 +1189,7 @@ type RenewRequest struct {
 func (m *RenewRequest) Reset()      { *m = RenewRequest{} }
 func (*RenewRequest) ProtoMessage() {}
 func (*RenewRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{9}
+	return fileDescriptor_6dd860345148a1a2, []int{13}
 }
 func (m *RenewRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -910,7 +1255,7 @@ type StatusResponse struct {
 func (m *StatusResponse) Reset()      { *m = StatusResponse{} }
 func (*StatusResponse) ProtoMessage() {}
 func (*StatusResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{10}
+	return fileDescriptor_6dd860345148a1a2, []int{14}
 }
 func (m *StatusResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -969,7 +1314,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6dd860345148a1a2, []int{11}
+	return fileDescriptor_6dd860345148a1a2, []int{15}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1015,10 +1360,18 @@ func (m *DeleteRequest) GetName() string {
 func init() {
 	proto.RegisterType((*CreateRequest)(nil), "ves.io.schema.api_credential.CreateRequest")
 	golang_proto.RegisterType((*CreateRequest)(nil), "ves.io.schema.api_credential.CreateRequest")
+	proto.RegisterType((*RecreateScimTokenRequest)(nil), "ves.io.schema.api_credential.RecreateScimTokenRequest")
+	golang_proto.RegisterType((*RecreateScimTokenRequest)(nil), "ves.io.schema.api_credential.RecreateScimTokenRequest")
 	proto.RegisterType((*CreateResponse)(nil), "ves.io.schema.api_credential.CreateResponse")
 	golang_proto.RegisterType((*CreateResponse)(nil), "ves.io.schema.api_credential.CreateResponse")
 	proto.RegisterType((*CreateServiceCredentialsRequest)(nil), "ves.io.schema.api_credential.CreateServiceCredentialsRequest")
 	golang_proto.RegisterType((*CreateServiceCredentialsRequest)(nil), "ves.io.schema.api_credential.CreateServiceCredentialsRequest")
+	proto.RegisterType((*ApiCertificateType)(nil), "ves.io.schema.api_credential.ApiCertificateType")
+	golang_proto.RegisterType((*ApiCertificateType)(nil), "ves.io.schema.api_credential.ApiCertificateType")
+	proto.RegisterType((*Vk8SKubeconfigType)(nil), "ves.io.schema.api_credential.Vk8sKubeconfigType")
+	golang_proto.RegisterType((*Vk8SKubeconfigType)(nil), "ves.io.schema.api_credential.Vk8sKubeconfigType")
+	proto.RegisterType((*SiteKubeconfigType)(nil), "ves.io.schema.api_credential.SiteKubeconfigType")
+	golang_proto.RegisterType((*SiteKubeconfigType)(nil), "ves.io.schema.api_credential.SiteKubeconfigType")
 	proto.RegisterType((*CustomCreateSpecType)(nil), "ves.io.schema.api_credential.CustomCreateSpecType")
 	golang_proto.RegisterType((*CustomCreateSpecType)(nil), "ves.io.schema.api_credential.CustomCreateSpecType")
 	proto.RegisterType((*GetRequest)(nil), "ves.io.schema.api_credential.GetRequest")
@@ -1047,92 +1400,115 @@ func init() {
 }
 
 var fileDescriptor_6dd860345148a1a2 = []byte{
-	// 1354 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0xd1, 0x8f, 0x13, 0xd5,
-	0x17, 0xee, 0x6d, 0xbb, 0xa5, 0x7b, 0x77, 0xd9, 0xed, 0x6f, 0x96, 0xdf, 0x32, 0x56, 0x9c, 0xdd,
-	0x8c, 0x1a, 0x0b, 0x6c, 0xa7, 0xd2, 0x85, 0x00, 0xab, 0x34, 0xee, 0x2e, 0x84, 0x80, 0x8a, 0x64,
-	0x58, 0x62, 0x02, 0xc1, 0x7a, 0x3b, 0x3d, 0x94, 0x91, 0xb6, 0x77, 0x9c, 0x7b, 0xdb, 0x65, 0x63,
-	0x36, 0x21, 0x3c, 0xfb, 0x60, 0x62, 0x62, 0x8c, 0x4f, 0x3c, 0xfa, 0x68, 0xe2, 0x83, 0x1a, 0x42,
-	0x82, 0x2f, 0x42, 0x7c, 0x30, 0x04, 0x13, 0x43, 0xa2, 0x21, 0xd0, 0xf5, 0xc1, 0x27, 0x43, 0xf8,
-	0x0b, 0xcc, 0xdc, 0x99, 0xce, 0xb6, 0xa5, 0xed, 0xb4, 0xe0, 0xfa, 0xd4, 0x3b, 0xf7, 0x9e, 0x73,
-	0xef, 0xf7, 0x9d, 0xef, 0x9c, 0x7b, 0x66, 0x8a, 0xe7, 0xeb, 0xc0, 0x34, 0x93, 0x66, 0x98, 0x71,
-	0x09, 0x2a, 0x24, 0x43, 0x2c, 0x33, 0x6f, 0xd8, 0x50, 0x84, 0x2a, 0x37, 0x49, 0x39, 0x63, 0xd5,
-	0x0a, 0x65, 0xd3, 0xc8, 0x1b, 0x35, 0xc6, 0x69, 0x85, 0x58, 0xa6, 0x66, 0xd9, 0x94, 0x53, 0x69,
-	0x97, 0xeb, 0xa4, 0xb9, 0x4e, 0x5a, 0xbb, 0x53, 0x32, 0x5d, 0x32, 0xf9, 0xa5, 0x5a, 0x41, 0x33,
-	0x68, 0x25, 0x53, 0xa2, 0x25, 0x9a, 0x11, 0x4e, 0x85, 0xda, 0x45, 0xf1, 0x24, 0x1e, 0xc4, 0xc8,
-	0xdd, 0x2c, 0xb9, 0xab, 0x44, 0x69, 0xa9, 0x0c, 0xce, 0xd1, 0x19, 0x52, 0xad, 0x52, 0x4e, 0xb8,
-	0x49, 0xab, 0xcc, 0x5b, 0x9d, 0xf1, 0x56, 0xfd, 0x3d, 0xb8, 0x59, 0x01, 0xc6, 0x49, 0xc5, 0xf2,
-	0x0c, 0x76, 0xf7, 0x25, 0x40, 0x0b, 0x1f, 0x81, 0xc1, 0x3d, 0xd3, 0x54, 0x5f, 0x53, 0xbe, 0x66,
-	0x41, 0xf3, 0xd4, 0x17, 0xdb, 0x2d, 0xa9, 0xd5, 0x0a, 0xe9, 0x85, 0xf6, 0xc5, 0x56, 0xbf, 0x0e,
-	0x30, 0x35, 0x06, 0x76, 0x8f, 0x18, 0x26, 0xd5, 0x76, 0xd3, 0x3a, 0x30, 0xa8, 0xd6, 0xdb, 0x4f,
-	0x52, 0x1f, 0x20, 0xbc, 0x7d, 0xd9, 0x06, 0xc2, 0x41, 0x87, 0x8f, 0x6b, 0xc0, 0xb8, 0xb4, 0x0b,
-	0x8f, 0x56, 0x49, 0x05, 0x98, 0x45, 0x0c, 0x90, 0xd1, 0x2c, 0x4a, 0x8d, 0xea, 0x9b, 0x13, 0x92,
-	0x84, 0xa3, 0xce, 0x83, 0x1c, 0x16, 0x0b, 0x62, 0x2c, 0xbd, 0x8f, 0xa3, 0xcc, 0x02, 0x43, 0x8e,
-	0xcc, 0xa2, 0xd4, 0x58, 0x36, 0xab, 0xf5, 0x93, 0x4e, 0x5b, 0x16, 0x20, 0xdd, 0x23, 0xcf, 0x58,
-	0x60, 0xac, 0xac, 0x59, 0xb0, 0x34, 0xf9, 0xd5, 0xfa, 0xb8, 0xb3, 0x85, 0x56, 0x32, 0xf2, 0xce,
-	0xaf, 0x2e, 0x36, 0x94, 0x5e, 0xc3, 0x93, 0x70, 0xc5, 0x32, 0x6d, 0x21, 0x57, 0xbe, 0x48, 0xd6,
-	0x98, 0x3c, 0x32, 0x8b, 0x52, 0xdb, 0xf5, 0x89, 0xcd, 0xe9, 0xa3, 0x64, 0x8d, 0x2d, 0x4c, 0xfd,
-	0x9c, 0x8b, 0xbd, 0x27, 0x74, 0x78, 0x92, 0xdb, 0xb6, 0x6f, 0x2e, 0x3b, 0x37, 0x3f, 0x77, 0xe0,
-	0x64, 0x34, 0x1e, 0x4d, 0x8c, 0xa8, 0xef, 0xe2, 0x89, 0x26, 0x3f, 0x66, 0xd1, 0x2a, 0x13, 0x14,
-	0x8a, 0x84, 0x13, 0x8f, 0x9b, 0x18, 0x77, 0xa3, 0xb5, 0x30, 0xf5, 0x30, 0x87, 0x9e, 0xe4, 0xd0,
-	0xbe, 0x2f, 0xaf, 0xcf, 0x84, 0xbe, 0xb9, 0x3e, 0x13, 0xba, 0xfa, 0xc7, 0x6c, 0x48, 0xfd, 0x22,
-	0x82, 0x67, 0x3c, 0xf0, 0x60, 0xd7, 0x4d, 0x03, 0x96, 0x7d, 0x6a, 0xac, 0x19, 0xc1, 0x65, 0x1c,
-	0x75, 0x14, 0x13, 0x07, 0x4c, 0x64, 0x33, 0xfd, 0xe3, 0xb1, 0x78, 0xfa, 0xc4, 0xe6, 0x16, 0x4e,
-	0x30, 0x74, 0xe1, 0xdc, 0x2e, 0x43, 0xb8, 0x97, 0x0c, 0x91, 0x16, 0x19, 0x4e, 0xe1, 0x49, 0xdf,
-	0x20, 0x6f, 0xd3, 0x32, 0x30, 0x39, 0x3a, 0x1b, 0x49, 0x8d, 0x65, 0x5f, 0xed, 0x40, 0xe0, 0xe4,
-	0x8c, 0x76, 0xaa, 0x69, 0xaa, 0xd3, 0x32, 0x88, 0x73, 0x27, 0xaa, 0xad, 0x53, 0x4c, 0xca, 0xe2,
-	0xff, 0xd7, 0x4d, 0x9b, 0xd7, 0x48, 0x39, 0x7f, 0xf9, 0x10, 0xcb, 0x6f, 0xa2, 0x89, 0x89, 0x43,
-	0xa7, 0xbc, 0xc5, 0xb7, 0x0f, 0x31, 0x7f, 0x2f, 0x29, 0x85, 0x13, 0x9d, 0x3e, 0xf2, 0x36, 0x61,
-	0x3e, 0xd1, 0x6e, 0x2e, 0xcd, 0xe0, 0xb8, 0x45, 0x18, 0x5b, 0xa5, 0x76, 0x51, 0x8e, 0x3b, 0x16,
-	0x4b, 0x91, 0x3b, 0xeb, 0x48, 0xf7, 0x27, 0xbb, 0x89, 0x3f, 0xda, 0x4d, 0xfc, 0x93, 0xd1, 0xf8,
-	0x48, 0x22, 0xa6, 0xfe, 0x8d, 0xf0, 0x8e, 0x6e, 0xb9, 0xf5, 0xef, 0xa8, 0xd1, 0x33, 0x16, 0x91,
-	0xe1, 0x62, 0x11, 0x0d, 0x8c, 0xc5, 0x48, 0x97, 0x58, 0x2c, 0x8c, 0x3f, 0xc9, 0x8d, 0x3a, 0x69,
-	0x7d, 0x60, 0x6e, 0x7e, 0x6e, 0xff, 0xc9, 0x68, 0x3c, 0x9c, 0x88, 0xa8, 0x39, 0x8c, 0x8f, 0x03,
-	0x7f, 0xe6, 0xaa, 0x55, 0x4f, 0xe3, 0x31, 0xe1, 0xef, 0x55, 0xc5, 0x22, 0x8e, 0xb9, 0x37, 0x99,
-	0xf0, 0x1e, 0xcb, 0xbe, 0xd2, 0x3f, 0x50, 0x6e, 0xb5, 0x2d, 0x45, 0x6e, 0xad, 0x23, 0xdd, 0x73,
-	0x54, 0xf7, 0xe2, 0xb1, 0x77, 0x4c, 0x36, 0x18, 0x24, 0x75, 0x05, 0x8f, 0xbb, 0xc6, 0xde, 0xf9,
-	0x47, 0xf1, 0x88, 0xc9, 0xa1, 0xc2, 0x64, 0x24, 0x72, 0x56, 0xeb, 0x7f, 0x7c, 0xab, 0xeb, 0x09,
-	0x0e, 0x15, 0xdd, 0x75, 0x56, 0x1f, 0x86, 0x71, 0xa2, 0x73, 0xcd, 0x67, 0x8f, 0x5a, 0x8a, 0xa5,
-	0x7f, 0x79, 0x25, 0x70, 0xa4, 0x66, 0x16, 0x3d, 0x71, 0x9d, 0xa1, 0x9f, 0x45, 0xd1, 0xe7, 0xc9,
-	0xa2, 0x63, 0x38, 0x61, 0x88, 0xe4, 0xcc, 0xfb, 0x2d, 0x46, 0xe8, 0x3d, 0x96, 0x4d, 0x6a, 0x6e,
-	0x13, 0xd2, 0x9a, 0x4d, 0x48, 0x5b, 0x69, 0x5a, 0xe8, 0x93, 0xae, 0x8f, 0x3f, 0xe1, 0x6c, 0x23,
-	0x4a, 0x60, 0xad, 0x65, 0x9b, 0x58, 0xf0, 0x36, 0xae, 0xcf, 0xe6, 0x36, 0x2f, 0x61, 0xec, 0xdc,
-	0x04, 0x79, 0xa8, 0x10, 0xb3, 0xec, 0x55, 0xe9, 0xa8, 0x33, 0x73, 0xcc, 0x99, 0x90, 0xa6, 0x71,
-	0x8c, 0x18, 0xdc, 0xac, 0x83, 0x28, 0xcf, 0xb8, 0xee, 0x3d, 0xa9, 0x14, 0x8f, 0xeb, 0x50, 0x85,
-	0xd5, 0x67, 0xef, 0x17, 0x83, 0x5e, 0xeb, 0xde, 0x0d, 0x9e, 0xc2, 0x13, 0x67, 0x38, 0xe1, 0x35,
-	0xe6, 0xe7, 0xca, 0x34, 0x8e, 0x31, 0x31, 0x23, 0xce, 0x8b, 0xeb, 0xde, 0x93, 0xba, 0x88, 0xb7,
-	0x1f, 0x85, 0x32, 0x3c, 0x47, 0x2f, 0xcb, 0xfe, 0xfe, 0x3f, 0x3c, 0xea, 0x5e, 0x23, 0x8b, 0xa7,
-	0x4f, 0x48, 0x3f, 0x20, 0x1c, 0x73, 0xaf, 0x13, 0x69, 0x6f, 0x40, 0x5b, 0x6b, 0xed, 0xa1, 0xc9,
-	0xb9, 0xc1, 0x8c, 0x5d, 0x3a, 0xea, 0x4a, 0xe3, 0xb6, 0xbc, 0xb3, 0x0e, 0x2c, 0x6d, 0xd2, 0xf4,
-	0x2a, 0x14, 0xd2, 0xc4, 0x30, 0x80, 0xb1, 0xf4, 0xaa, 0x6d, 0x72, 0xb8, 0xf6, 0xeb, 0x9f, 0x9f,
-	0x87, 0xe7, 0x55, 0xcd, 0xeb, 0xf1, 0x19, 0x1f, 0x3d, 0xcb, 0x7c, 0xe2, 0x8f, 0xd7, 0x3b, 0x5e,
-	0x34, 0xd8, 0x02, 0xda, 0x23, 0x7d, 0x87, 0x70, 0xe4, 0x38, 0x70, 0x29, 0xd5, 0x1f, 0xcb, 0xe6,
-	0x1d, 0x92, 0xdc, 0x3d, 0x80, 0xa5, 0x07, 0xf9, 0xfc, 0x9d, 0xef, 0xc3, 0xa8, 0x71, 0x5b, 0x9e,
-	0x7e, 0x1a, 0xb6, 0x0d, 0xa4, 0x28, 0x50, 0x1f, 0x94, 0x0e, 0x0c, 0x87, 0xda, 0x5d, 0x5b, 0x97,
-	0xbe, 0x45, 0x38, 0xea, 0x14, 0xb1, 0xb4, 0x7b, 0x90, 0x4b, 0xc0, 0xc5, 0xbe, 0x67, 0xf0, 0xfb,
-	0x42, 0x5d, 0x19, 0x00, 0xfc, 0xeb, 0xd2, 0x90, 0x21, 0x97, 0x6e, 0x22, 0x1c, 0xd3, 0xa1, 0x4e,
-	0x2f, 0xc3, 0x10, 0x21, 0x0f, 0x48, 0x94, 0xf6, 0xbc, 0x57, 0xcf, 0x07, 0x25, 0xca, 0x82, 0x1a,
-	0x14, 0x72, 0x5b, 0x20, 0xec, 0x96, 0x2f, 0xf7, 0x10, 0x96, 0x5d, 0xfc, 0x4f, 0xbf, 0xd9, 0x6c,
-	0x19, 0xa3, 0x0f, 0x5a, 0x64, 0xa8, 0x91, 0x4a, 0x9a, 0x14, 0x2b, 0x66, 0xb5, 0x85, 0x50, 0x4e,
-	0x3d, 0x3c, 0x18, 0x21, 0xe6, 0x62, 0xee, 0x24, 0xf5, 0x23, 0xc2, 0xf1, 0x45, 0xe7, 0xde, 0x72,
-	0x4a, 0x78, 0xab, 0x48, 0x5c, 0x08, 0x92, 0xe5, 0x4d, 0xf5, 0x60, 0x50, 0x32, 0x79, 0x18, 0xbb,
-	0x09, 0xf3, 0x1b, 0xc2, 0xc9, 0x26, 0x87, 0xff, 0x50, 0x9a, 0x0f, 0x03, 0xa4, 0x79, 0x4b, 0x7d,
-	0x63, 0x50, 0x52, 0x3d, 0xc4, 0xb9, 0x89, 0xf0, 0x88, 0x68, 0x25, 0x52, 0x40, 0xf5, 0xb6, 0xf6,
-	0x9b, 0x21, 0x59, 0x9c, 0x0b, 0xd2, 0xe6, 0xb0, 0xba, 0x3f, 0x30, 0xc3, 0xaa, 0xb0, 0xda, 0xa3,
-	0x62, 0x76, 0x0a, 0x68, 0x5d, 0x54, 0xd9, 0x3a, 0x46, 0x17, 0x02, 0x74, 0x39, 0xa2, 0x1e, 0x1a,
-	0x88, 0x50, 0x0f, 0x51, 0x1e, 0x20, 0x2c, 0xf7, 0xfa, 0xc0, 0x91, 0x8e, 0x0c, 0xd2, 0xd7, 0x7a,
-	0x7e, 0x18, 0x0d, 0xd9, 0x16, 0xcf, 0x36, 0x6e, 0xcb, 0x3b, 0x3c, 0xa2, 0x25, 0xa8, 0x82, 0x4d,
-	0xca, 0x2d, 0x34, 0x0f, 0xaa, 0xd9, 0x00, 0x9a, 0x3d, 0x08, 0xfe, 0x84, 0xf0, 0xb4, 0xd3, 0x0e,
-	0xba, 0xd0, 0xdb, 0xa2, 0x7e, 0x73, 0xd6, 0xeb, 0x37, 0x53, 0x1d, 0x64, 0xfc, 0x66, 0xb3, 0x5f,
-	0x7a, 0x06, 0x2e, 0xc9, 0x7d, 0xb7, 0x6e, 0xa0, 0xc8, 0xbd, 0x1b, 0xe8, 0xe5, 0x01, 0x5e, 0xd4,
-	0xaf, 0xfd, 0x22, 0x87, 0x2f, 0xa1, 0xa5, 0x4f, 0xd1, 0xdd, 0x47, 0x4a, 0xe8, 0xfe, 0x23, 0x25,
-	0xf4, 0xf8, 0x91, 0x82, 0xae, 0x36, 0x14, 0xf4, 0x75, 0x43, 0x41, 0x77, 0x1a, 0x0a, 0xba, 0xdb,
-	0x50, 0xd0, 0xc3, 0x86, 0x82, 0xfe, 0x6a, 0x28, 0xa1, 0xc7, 0x0d, 0x05, 0x7d, 0xb6, 0xa1, 0x84,
-	0x6e, 0x6d, 0x28, 0xe8, 0xee, 0x86, 0x12, 0xba, 0xbf, 0xa1, 0x84, 0xce, 0xe9, 0x25, 0x6a, 0x5d,
-	0x2e, 0x69, 0x75, 0x5a, 0xe6, 0x60, 0xdb, 0xce, 0x47, 0x64, 0x46, 0x0c, 0x2e, 0x52, 0xbb, 0x92,
-	0xb6, 0x6c, 0x5a, 0x37, 0x8b, 0x60, 0xa7, 0x9b, 0xcb, 0x19, 0xab, 0x50, 0xa2, 0x19, 0xb8, 0xc2,
-	0xbd, 0xff, 0x1e, 0xba, 0xfe, 0x1f, 0x52, 0x88, 0x89, 0xd7, 0xd4, 0xf9, 0x7f, 0x02, 0x00, 0x00,
-	0xff, 0xff, 0x30, 0x35, 0x05, 0x88, 0x22, 0x12, 0x00, 0x00,
+	// 1723 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0xcb, 0x6f, 0x1b, 0x5b,
+	0x19, 0xf7, 0xf1, 0xeb, 0x3a, 0xc7, 0x89, 0xe3, 0x7b, 0x12, 0x72, 0xe7, 0x9a, 0xe0, 0x98, 0x01,
+	0x84, 0x93, 0x1b, 0x8f, 0x1b, 0xa7, 0x69, 0x73, 0x03, 0x37, 0x6a, 0x92, 0x56, 0xbd, 0xc9, 0x85,
+	0x4b, 0x35, 0xcd, 0x05, 0xe9, 0x56, 0xc5, 0x8c, 0xc7, 0x27, 0xce, 0x21, 0xb6, 0x67, 0x98, 0x73,
+	0xec, 0x34, 0x42, 0x11, 0x55, 0xd7, 0x2c, 0x90, 0xd8, 0x54, 0xac, 0xba, 0x64, 0x89, 0xc4, 0x82,
+	0x47, 0x54, 0x29, 0x6c, 0x68, 0x60, 0x81, 0xa2, 0x22, 0xa1, 0x2e, 0x50, 0xd5, 0x3a, 0x2c, 0x80,
+	0x05, 0xaa, 0xfa, 0x17, 0xa0, 0x73, 0x66, 0xfc, 0x7e, 0x8c, 0xd3, 0x2a, 0x77, 0xe5, 0x99, 0xf3,
+	0x3d, 0x7f, 0xdf, 0xeb, 0x7c, 0x1e, 0xb8, 0x58, 0xc5, 0x54, 0x21, 0x46, 0x9a, 0xea, 0xbb, 0xb8,
+	0xa4, 0xa5, 0x35, 0x93, 0x64, 0x75, 0x0b, 0xe7, 0x71, 0x99, 0x11, 0xad, 0x98, 0x36, 0x2b, 0xb9,
+	0x22, 0xd1, 0xb3, 0x7a, 0x85, 0x32, 0xa3, 0xa4, 0x99, 0x44, 0x31, 0x2d, 0x83, 0x19, 0x68, 0xda,
+	0x16, 0x52, 0x6c, 0x21, 0xa5, 0x5d, 0x28, 0x96, 0x2a, 0x10, 0xb6, 0x5b, 0xc9, 0x29, 0xba, 0x51,
+	0x4a, 0x17, 0x8c, 0x82, 0x91, 0x16, 0x42, 0xb9, 0xca, 0x8e, 0x78, 0x13, 0x2f, 0xe2, 0xc9, 0x56,
+	0x16, 0x9b, 0x2e, 0x18, 0x46, 0xa1, 0x88, 0xb9, 0xe9, 0xb4, 0x56, 0x2e, 0x1b, 0x4c, 0x63, 0xc4,
+	0x28, 0x53, 0x87, 0x3a, 0xe3, 0x50, 0x1b, 0x3a, 0x18, 0x29, 0x61, 0xca, 0xb4, 0x92, 0xe9, 0x30,
+	0xcc, 0x0e, 0x04, 0x60, 0xe4, 0x7e, 0x8c, 0x75, 0xe6, 0xb0, 0x26, 0x07, 0xb2, 0xb2, 0x03, 0x13,
+	0xd7, 0xad, 0x7e, 0xb9, 0x9d, 0xd3, 0x30, 0x5b, 0x5d, 0x7a, 0xbf, 0x9d, 0xd8, 0x2a, 0xd7, 0xe1,
+	0x4c, 0x85, 0x62, 0xab, 0x4f, 0x0c, 0x63, 0xd3, 0xed, 0xac, 0x55, 0xad, 0x48, 0xf2, 0x1a, 0xc3,
+	0x0e, 0x55, 0xee, 0xa0, 0x62, 0x8a, 0xcb, 0xd5, 0x0e, 0x3f, 0x12, 0x1d, 0x3c, 0x04, 0xef, 0x67,
+	0xdb, 0x38, 0xe4, 0xe7, 0x00, 0x8e, 0x6d, 0x58, 0x58, 0x63, 0x58, 0xc5, 0x3f, 0xa9, 0x60, 0xca,
+	0xd0, 0x34, 0x1c, 0x29, 0x6b, 0x25, 0x4c, 0x4d, 0x4d, 0xc7, 0x12, 0x48, 0x80, 0xe4, 0x88, 0xda,
+	0x3c, 0x40, 0x08, 0xfa, 0xf9, 0x8b, 0xe4, 0x15, 0x04, 0xf1, 0x8c, 0x7e, 0x00, 0xfd, 0xd4, 0xc4,
+	0xba, 0xe4, 0x4b, 0x80, 0x64, 0x38, 0x93, 0x51, 0x06, 0xa5, 0x5e, 0xd9, 0x10, 0x20, 0x6d, 0x93,
+	0xb7, 0x4d, 0xac, 0x6f, 0x1f, 0x98, 0x78, 0x7d, 0xfc, 0x57, 0x87, 0xa3, 0x5c, 0x85, 0x52, 0xd0,
+	0xb3, 0xfc, 0x57, 0x15, 0x0a, 0xd1, 0x37, 0xe1, 0x38, 0xbe, 0x67, 0x12, 0x4b, 0xa4, 0x3b, 0x9b,
+	0xd7, 0x0e, 0xa8, 0x14, 0x48, 0x80, 0xe4, 0x98, 0x1a, 0x69, 0x1e, 0x5f, 0xd7, 0x0e, 0xe8, 0xca,
+	0xc4, 0x5f, 0x57, 0x83, 0xdf, 0x13, 0x79, 0x7c, 0xbd, 0xfa, 0xce, 0xc2, 0x7c, 0x66, 0x7e, 0x71,
+	0x7e, 0x69, 0xcb, 0x1f, 0xf2, 0x47, 0x03, 0x72, 0x05, 0x4a, 0x2a, 0xd6, 0x6d, 0x73, 0x3a, 0x29,
+	0x6d, 0x1b, 0x7b, 0xb8, 0xfc, 0xe6, 0x50, 0x87, 0xf5, 0x48, 0xfe, 0x2e, 0x8c, 0xd4, 0xc3, 0x4a,
+	0x4d, 0xa3, 0x4c, 0x85, 0xba, 0xbc, 0xc6, 0x34, 0xc7, 0x8e, 0x78, 0xee, 0x65, 0x62, 0x65, 0xe2,
+	0xc5, 0x2a, 0x78, 0xbd, 0x0a, 0x16, 0x1e, 0x3e, 0x9a, 0xf1, 0xfc, 0xe6, 0xd1, 0x8c, 0xe7, 0xfe,
+	0x3f, 0x13, 0x1e, 0xf9, 0x61, 0x10, 0xce, 0x38, 0x31, 0xc3, 0x56, 0x95, 0xe8, 0x78, 0xa3, 0x11,
+	0x51, 0x5a, 0x47, 0x73, 0x13, 0xfa, 0x79, 0xa1, 0x09, 0x03, 0x91, 0x4c, 0x7a, 0x70, 0x1a, 0xd6,
+	0x6e, 0x6d, 0x36, 0x55, 0x88, 0x1c, 0x78, 0x25, 0xa0, 0x0a, 0x05, 0xed, 0x61, 0xf1, 0xf6, 0x0b,
+	0x8b, 0xaf, 0x25, 0x2c, 0x9b, 0x70, 0xbc, 0xc1, 0x90, 0xb5, 0x8c, 0x22, 0xa6, 0x92, 0x3f, 0xe1,
+	0x4b, 0x86, 0x33, 0x89, 0x0e, 0x2f, 0x3e, 0xad, 0x73, 0xa9, 0x46, 0x11, 0x73, 0xb3, 0x6a, 0xa4,
+	0xdc, 0x7a, 0x44, 0xd1, 0x15, 0xf8, 0xa5, 0x2a, 0xb1, 0x58, 0x45, 0x2b, 0x66, 0xf7, 0x96, 0x69,
+	0xb6, 0xe9, 0x48, 0x90, 0xdb, 0x13, 0x5e, 0x4e, 0x38, 0x0c, 0x9f, 0x2c, 0xd3, 0x86, 0x3e, 0x34,
+	0x0f, 0xa3, 0x9d, 0x72, 0xd2, 0x3b, 0x0d, 0x91, 0x48, 0xbb, 0x08, 0xfa, 0x2a, 0x0c, 0x99, 0x1a,
+	0xa5, 0xfb, 0x86, 0x95, 0x97, 0x42, 0x82, 0x2b, 0x70, 0x72, 0x08, 0x24, 0xa0, 0x36, 0x8e, 0x7b,
+	0xa5, 0x7a, 0xa4, 0x57, 0xaa, 0xd1, 0x22, 0x1c, 0xe1, 0xc1, 0x65, 0xbc, 0xb2, 0xa4, 0xb0, 0xe8,
+	0x81, 0xc9, 0x0e, 0xd8, 0x37, 0x4a, 0x26, 0x3b, 0xf8, 0xd8, 0xa3, 0x86, 0x34, 0x93, 0x88, 0x0a,
+	0x44, 0x77, 0xe0, 0xb8, 0xc8, 0x08, 0xb6, 0x18, 0xd9, 0x21, 0xba, 0xc6, 0xb0, 0x34, 0x2a, 0x44,
+	0x2f, 0xb9, 0xe4, 0xcd, 0x24, 0x1b, 0x4d, 0x19, 0x1e, 0xc1, 0x8f, 0x3d, 0x6a, 0x44, 0x6b, 0x3b,
+	0xe5, 0xca, 0xab, 0x3c, 0x08, 0x7b, 0x95, 0x1c, 0xd6, 0x8d, 0xf2, 0x0e, 0x29, 0x48, 0x63, 0xc3,
+	0x28, 0xff, 0xfe, 0xde, 0x32, 0xfd, 0xa4, 0x21, 0x53, 0x57, 0x5e, 0x6d, 0x3b, 0xe5, 0xca, 0x29,
+	0x61, 0xb8, 0x55, 0x79, 0x64, 0x18, 0xe5, 0xb7, 0x09, 0xc3, 0xdd, 0xca, 0x69, 0xdb, 0xe9, 0xfa,
+	0x37, 0xe0, 0xfb, 0xd4, 0x2e, 0xf0, 0x16, 0xd1, 0xac, 0xbe, 0x6b, 0x10, 0x1d, 0xa3, 0xd0, 0xf1,
+	0x11, 0x08, 0x9f, 0x1e, 0x01, 0xb8, 0xe5, 0x0f, 0x05, 0xa2, 0xc1, 0x2d, 0x7f, 0x08, 0x46, 0xc3,
+	0xf2, 0x35, 0x88, 0xba, 0x83, 0x82, 0xe6, 0x5a, 0x12, 0x2c, 0x3a, 0x6e, 0x3d, 0x72, 0x72, 0x08,
+	0xfe, 0xf8, 0x9f, 0x63, 0x5f, 0xd0, 0xf2, 0x27, 0x82, 0xc9, 0x4c, 0x33, 0xd3, 0xf2, 0xcf, 0x20,
+	0xea, 0x46, 0x8e, 0x16, 0xa0, 0x40, 0x9e, 0xed, 0x98, 0x10, 0xeb, 0x90, 0x2b, 0x09, 0x58, 0xbe,
+	0x47, 0x5e, 0xa0, 0x8e, 0x71, 0x8e, 0x66, 0x0d, 0x5e, 0x81, 0xef, 0x0a, 0x11, 0xbd, 0x58, 0xa1,
+	0x0c, 0x5b, 0xd9, 0x66, 0x6f, 0xb7, 0x49, 0x89, 0xe4, 0x6c, 0xd8, 0x3c, 0x5c, 0x58, 0x5e, 0x82,
+	0xa8, 0x3b, 0x3a, 0x68, 0x06, 0xfa, 0x79, 0x74, 0x1c, 0xb3, 0xe1, 0xba, 0xef, 0x20, 0x79, 0x4d,
+	0x15, 0x04, 0xf9, 0x7f, 0x00, 0x4e, 0xf6, 0x1a, 0xa7, 0x68, 0xe3, 0xad, 0x26, 0x81, 0x33, 0x05,
+	0x32, 0xfd, 0x1a, 0xd1, 0x6e, 0xfc, 0x9e, 0x4d, 0x98, 0xec, 0xd1, 0x84, 0x7e, 0xc1, 0xde, 0xd9,
+	0x80, 0x33, 0x2d, 0xf9, 0x09, 0x08, 0x80, 0xbe, 0x93, 0xc3, 0x96, 0xf6, 0x5b, 0x19, 0x7d, 0xbd,
+	0x3a, 0xc2, 0x27, 0xf9, 0xd2, 0xfc, 0xe2, 0xfc, 0xe5, 0x2d, 0x7f, 0xc8, 0x1b, 0xf5, 0xc9, 0xab,
+	0x10, 0xde, 0xc4, 0xec, 0x8d, 0xa7, 0xb7, 0x7c, 0x0b, 0x86, 0x85, 0xbc, 0x33, 0x91, 0xd7, 0x60,
+	0xd0, 0xbe, 0xfc, 0x85, 0x74, 0x38, 0xf3, 0xf5, 0xc1, 0x81, 0xb2, 0x2f, 0x98, 0x75, 0xdf, 0xf1,
+	0x21, 0x50, 0x1d, 0x41, 0xf9, 0x03, 0x18, 0xfe, 0x0e, 0xa1, 0xc3, 0xb9, 0x24, 0x6f, 0xc3, 0x51,
+	0x9b, 0xd9, 0xb1, 0x7f, 0x1d, 0x06, 0x08, 0xc3, 0x25, 0x2a, 0x01, 0x31, 0x2b, 0x95, 0xc1, 0xe6,
+	0x5b, 0x45, 0x37, 0x19, 0x2e, 0xa9, 0xb6, 0xb0, 0xfc, 0xc2, 0x0b, 0xa3, 0x9d, 0xb4, 0x06, 0x7a,
+	0xd0, 0x32, 0xa4, 0x07, 0x8f, 0xf5, 0x28, 0xf4, 0x55, 0x48, 0xde, 0x49, 0x2e, 0x7f, 0x6c, 0x54,
+	0x91, 0xff, 0x6d, 0xaa, 0xe8, 0x06, 0x8c, 0xda, 0x97, 0x6f, 0xb6, 0xb1, 0x95, 0x89, 0x7c, 0x87,
+	0x33, 0x31, 0xc5, 0xde, 0xdb, 0x94, 0xfa, 0xde, 0xa6, 0x6c, 0xd7, 0x39, 0xd4, 0x71, 0x5b, 0xa6,
+	0x71, 0xc0, 0xd5, 0x88, 0xa9, 0x7b, 0xd0, 0xa2, 0x26, 0xe8, 0xae, 0xc6, 0x96, 0x69, 0xaa, 0xf9,
+	0x0a, 0x84, 0x7c, 0xe1, 0xca, 0xe2, 0x92, 0x46, 0x8a, 0xf6, 0xf5, 0xa0, 0x8e, 0xf0, 0x93, 0x1b,
+	0xfc, 0x00, 0x4d, 0xc1, 0xa0, 0xa6, 0x33, 0x52, 0xc5, 0xe2, 0x4e, 0x08, 0xa9, 0xce, 0x9b, 0x6c,
+	0xc0, 0x51, 0x15, 0x97, 0xf1, 0xfe, 0xc5, 0xef, 0x0d, 0xce, 0xd2, 0x92, 0x84, 0x91, 0xdb, 0x4c,
+	0x63, 0x15, 0xda, 0xa8, 0x95, 0x29, 0x18, 0xa4, 0xe2, 0x44, 0xd8, 0x0b, 0xa9, 0xce, 0x9b, 0xbc,
+	0x06, 0xc7, 0xae, 0xe3, 0x22, 0x7e, 0x8b, 0xf5, 0x2d, 0xf3, 0xdf, 0x49, 0x38, 0x62, 0x8f, 0x91,
+	0xb5, 0x5b, 0x9b, 0xe8, 0x0f, 0x00, 0x06, 0xed, 0x71, 0x82, 0x3e, 0x70, 0xd9, 0xe4, 0x5a, 0xd7,
+	0xc6, 0xd8, 0xfc, 0x70, 0xcc, 0x36, 0x1c, 0x79, 0xbb, 0xf6, 0x44, 0x7a, 0xaf, 0x8a, 0x69, 0x8a,
+	0x18, 0xa9, 0x7d, 0x9c, 0x4b, 0x69, 0xba, 0x8e, 0x29, 0x4d, 0xed, 0x5b, 0x84, 0xe1, 0x07, 0x7f,
+	0xff, 0xd7, 0x2f, 0xbd, 0x8b, 0xb2, 0xe2, 0xac, 0xc5, 0xe9, 0x86, 0xf7, 0x34, 0xfd, 0xd3, 0xc6,
+	0xf3, 0x61, 0xc7, 0x6e, 0x4e, 0x57, 0xc0, 0x1c, 0xfa, 0x0b, 0x80, 0xef, 0x76, 0x2d, 0x7b, 0xe8,
+	0xca, 0x60, 0xcf, 0xfa, 0x6d, 0x87, 0xe7, 0x44, 0xf4, 0x69, 0xed, 0x89, 0x34, 0x55, 0x35, 0x8a,
+	0x4c, 0x37, 0xca, 0xd4, 0x28, 0xe2, 0x14, 0xd5, 0x49, 0x29, 0xa5, 0xe5, 0x4b, 0xa4, 0x2c, 0x00,
+	0x29, 0xf2, 0xac, 0x0b, 0x20, 0x2e, 0x60, 0x6f, 0x11, 0x1c, 0xcb, 0xef, 0x00, 0xf4, 0xdd, 0xc4,
+	0x0c, 0x25, 0x07, 0x7b, 0xd1, 0x9c, 0x87, 0xb1, 0xd9, 0x21, 0x38, 0x1d, 0x67, 0xef, 0x9c, 0xfc,
+	0xde, 0x0b, 0x84, 0xc3, 0x5d, 0x29, 0xb0, 0xb0, 0x96, 0x17, 0x0e, 0x5f, 0x45, 0x4b, 0xe7, 0xcb,
+	0x80, 0x4d, 0x3b, 0x44, 0xbf, 0x05, 0xd0, 0xcf, 0x07, 0x12, 0x9a, 0x1d, 0x66, 0xa0, 0xd9, 0xbe,
+	0xcf, 0x0d, 0x3f, 0xfb, 0xe4, 0xed, 0x21, 0x9c, 0xbf, 0x84, 0xce, 0x59, 0x3e, 0xe8, 0xcf, 0x00,
+	0x4e, 0x71, 0x33, 0xdd, 0xfb, 0xf5, 0x45, 0xe1, 0xf8, 0xcc, 0xc1, 0x31, 0xe1, 0xe0, 0x28, 0xe0,
+	0x32, 0xb6, 0xb4, 0x62, 0x13, 0xc4, 0x65, 0x94, 0x71, 0x2b, 0x99, 0xae, 0x5d, 0x89, 0xa2, 0xc7,
+	0x00, 0x06, 0x55, 0x5c, 0x35, 0xf6, 0xf0, 0x39, 0x6a, 0xc7, 0xa5, 0xd6, 0xdb, 0x87, 0x91, 0x7c,
+	0xc7, 0xad, 0x7b, 0x57, 0x64, 0xb7, 0xda, 0xb1, 0x84, 0x87, 0xbd, 0x9a, 0xf8, 0x29, 0xe0, 0xff,
+	0xd8, 0x38, 0xb5, 0x47, 0x2a, 0x2e, 0x0a, 0xd1, 0x0f, 0x5b, 0xea, 0xa9, 0xa2, 0x39, 0x7d, 0xdb,
+	0x02, 0x68, 0x55, 0xfe, 0x70, 0x38, 0x40, 0x3d, 0x32, 0xc2, 0x41, 0x1d, 0x03, 0x38, 0xee, 0x80,
+	0x6a, 0xcc, 0xa5, 0x8b, 0xc2, 0xf2, 0x99, 0xcb, 0x24, 0x5a, 0x92, 0x2f, 0x0d, 0x89, 0xa5, 0x6d,
+	0x20, 0xfd, 0x09, 0xc0, 0xd0, 0x1a, 0xbf, 0x0f, 0xf9, 0xd5, 0x70, 0x51, 0xbe, 0xdf, 0x75, 0xab,
+	0xac, 0x6f, 0xcb, 0x57, 0xdd, 0x1a, 0xdb, 0xf1, 0xb1, 0x57, 0x6d, 0xfd, 0x03, 0xc0, 0x58, 0x1d,
+	0xc3, 0x17, 0x58, 0x5d, 0x3f, 0x72, 0xa9, 0xae, 0x6b, 0xf2, 0xb7, 0x86, 0x05, 0xd5, 0xa7, 0xbe,
+	0x1e, 0x03, 0x18, 0x10, 0x2b, 0x0a, 0x9a, 0x73, 0xbb, 0xed, 0x9a, 0x7b, 0xcc, 0x39, 0x51, 0x7c,
+	0xee, 0x96, 0x9b, 0x0f, 0xe5, 0xcb, 0xae, 0x85, 0x55, 0xc6, 0xfb, 0x7d, 0x9a, 0xfe, 0x3d, 0xe1,
+	0x5a, 0x8f, 0xac, 0x5c, 0x1c, 0xa2, 0xbb, 0x2e, 0x79, 0xf9, 0x48, 0x5e, 0x1e, 0x0a, 0x50, 0x9f,
+	0xa4, 0x3c, 0x07, 0x50, 0xea, 0xf7, 0xd1, 0x06, 0x7d, 0x34, 0xcc, 0x76, 0xd1, 0xf7, 0x63, 0xcf,
+	0x39, 0x97, 0x13, 0x3e, 0x12, 0x26, 0x3b, 0xae, 0x99, 0x26, 0xcc, 0xab, 0xf2, 0x1b, 0xdc, 0x33,
+	0x2b, 0x60, 0x2e, 0xb6, 0x70, 0x7c, 0x04, 0x7c, 0x4f, 0x8f, 0xc0, 0xd7, 0x86, 0xf8, 0xdf, 0xf4,
+	0xe0, 0x6f, 0x92, 0x77, 0x17, 0xac, 0xff, 0x1c, 0x9c, 0xbe, 0x8c, 0x7b, 0x9e, 0xbd, 0x8c, 0x7b,
+	0x5e, 0xbd, 0x8c, 0x83, 0xfb, 0xb5, 0x38, 0xf8, 0x75, 0x2d, 0x0e, 0x4e, 0x6a, 0x71, 0x70, 0x5a,
+	0x8b, 0x83, 0x17, 0xb5, 0x38, 0xf8, 0x77, 0x2d, 0xee, 0x79, 0x55, 0x8b, 0x83, 0x5f, 0x9c, 0xc5,
+	0x3d, 0xc7, 0x67, 0x71, 0x70, 0x7a, 0x16, 0xf7, 0x3c, 0x3b, 0x8b, 0x7b, 0x3e, 0x57, 0x0b, 0x86,
+	0xb9, 0x57, 0x50, 0xf8, 0x64, 0xc3, 0x96, 0xa5, 0x29, 0x15, 0x9a, 0x16, 0x0f, 0x3b, 0x86, 0x55,
+	0x4a, 0x99, 0x96, 0x51, 0x25, 0x79, 0x6c, 0xa5, 0xea, 0xe4, 0xb4, 0x99, 0x2b, 0x18, 0x69, 0x7c,
+	0x8f, 0x39, 0xdf, 0x3e, 0x7b, 0x7e, 0xd1, 0xcd, 0x05, 0xc5, 0xbf, 0x86, 0xc5, 0xff, 0x07, 0x00,
+	0x00, 0xff, 0xff, 0xd3, 0xb3, 0x28, 0xf5, 0xe4, 0x16, 0x00, 0x00,
 }
 
 func (this *CreateRequest) Equal(that interface{}) bool {
@@ -1161,6 +1537,36 @@ func (this *CreateRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Spec.Equal(that1.Spec) {
+		return false
+	}
+	if this.ExpirationDays != that1.ExpirationDays {
+		return false
+	}
+	return true
+}
+func (this *RecreateScimTokenRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RecreateScimTokenRequest)
+	if !ok {
+		that2, ok := that.(RecreateScimTokenRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
 		return false
 	}
 	if this.ExpirationDays != that1.ExpirationDays {
@@ -1241,6 +1647,186 @@ func (this *CreateServiceCredentialsRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if this.ExpirationDays != that1.ExpirationDays {
+		return false
+	}
+	if that1.ServiceCredentialChoice == nil {
+		if this.ServiceCredentialChoice != nil {
+			return false
+		}
+	} else if this.ServiceCredentialChoice == nil {
+		return false
+	} else if !this.ServiceCredentialChoice.Equal(that1.ServiceCredentialChoice) {
+		return false
+	}
+	return true
+}
+func (this *CreateServiceCredentialsRequest_ApiToken) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateServiceCredentialsRequest_ApiToken)
+	if !ok {
+		that2, ok := that.(CreateServiceCredentialsRequest_ApiToken)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiToken.Equal(that1.ApiToken) {
+		return false
+	}
+	return true
+}
+func (this *CreateServiceCredentialsRequest_ApiCertificate) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateServiceCredentialsRequest_ApiCertificate)
+	if !ok {
+		that2, ok := that.(CreateServiceCredentialsRequest_ApiCertificate)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiCertificate.Equal(that1.ApiCertificate) {
+		return false
+	}
+	return true
+}
+func (this *CreateServiceCredentialsRequest_Vk8SKubeconfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateServiceCredentialsRequest_Vk8SKubeconfig)
+	if !ok {
+		that2, ok := that.(CreateServiceCredentialsRequest_Vk8SKubeconfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Vk8SKubeconfig.Equal(that1.Vk8SKubeconfig) {
+		return false
+	}
+	return true
+}
+func (this *CreateServiceCredentialsRequest_SiteKubeconfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateServiceCredentialsRequest_SiteKubeconfig)
+	if !ok {
+		that2, ok := that.(CreateServiceCredentialsRequest_SiteKubeconfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SiteKubeconfig.Equal(that1.SiteKubeconfig) {
+		return false
+	}
+	return true
+}
+func (this *ApiCertificateType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiCertificateType)
+	if !ok {
+		that2, ok := that.(ApiCertificateType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Password != that1.Password {
+		return false
+	}
+	return true
+}
+func (this *Vk8SKubeconfigType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Vk8SKubeconfigType)
+	if !ok {
+		that2, ok := that.(Vk8SKubeconfigType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Vk8SNamespace != that1.Vk8SNamespace {
+		return false
+	}
+	if this.Vk8SClusterName != that1.Vk8SClusterName {
+		return false
+	}
+	return true
+}
+func (this *SiteKubeconfigType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SiteKubeconfigType)
+	if !ok {
+		that2, ok := that.(SiteKubeconfigType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Site != that1.Site {
 		return false
 	}
 	return true
@@ -1523,11 +2109,23 @@ func (this *CreateRequest) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *RecreateScimTokenRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&api_credential.RecreateScimTokenRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "ExpirationDays: "+fmt.Sprintf("%#v", this.ExpirationDays)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *CreateServiceCredentialsRequest) goString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 16)
 	s = append(s, "&api_credential.CreateServiceCredentialsRequest{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
@@ -1539,6 +2137,72 @@ func (this *CreateServiceCredentialsRequest) goString() string {
 	s = append(s, "VirtualK8SName: "+fmt.Sprintf("%#v", this.VirtualK8SName)+",\n")
 	s = append(s, "Password: "+fmt.Sprintf("%#v", this.Password)+",\n")
 	s = append(s, "ExpirationDays: "+fmt.Sprintf("%#v", this.ExpirationDays)+",\n")
+	if this.ServiceCredentialChoice != nil {
+		s = append(s, "ServiceCredentialChoice: "+fmt.Sprintf("%#v", this.ServiceCredentialChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CreateServiceCredentialsRequest_ApiToken) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_credential.CreateServiceCredentialsRequest_ApiToken{` +
+		`ApiToken:` + fmt.Sprintf("%#v", this.ApiToken) + `}`}, ", ")
+	return s
+}
+func (this *CreateServiceCredentialsRequest_ApiCertificate) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_credential.CreateServiceCredentialsRequest_ApiCertificate{` +
+		`ApiCertificate:` + fmt.Sprintf("%#v", this.ApiCertificate) + `}`}, ", ")
+	return s
+}
+func (this *CreateServiceCredentialsRequest_Vk8SKubeconfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_credential.CreateServiceCredentialsRequest_Vk8SKubeconfig{` +
+		`Vk8SKubeconfig:` + fmt.Sprintf("%#v", this.Vk8SKubeconfig) + `}`}, ", ")
+	return s
+}
+func (this *CreateServiceCredentialsRequest_SiteKubeconfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_credential.CreateServiceCredentialsRequest_SiteKubeconfig{` +
+		`SiteKubeconfig:` + fmt.Sprintf("%#v", this.SiteKubeconfig) + `}`}, ", ")
+	return s
+}
+func (this *ApiCertificateType) goString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&api_credential.ApiCertificateType{")
+	s = append(s, "Password: "+fmt.Sprintf("%#v", this.Password)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Vk8SKubeconfigType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&api_credential.Vk8SKubeconfigType{")
+	s = append(s, "Vk8SNamespace: "+fmt.Sprintf("%#v", this.Vk8SNamespace)+",\n")
+	s = append(s, "Vk8SClusterName: "+fmt.Sprintf("%#v", this.Vk8SClusterName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SiteKubeconfigType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&api_credential.SiteKubeconfigType{")
+	s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1692,6 +2356,13 @@ type CustomAPIClient interface {
 	// request can specify name, expiry and type of credential required. since this credential inherits the creator's RBAC
 	// service will determine the user from request context.
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
+	// Create/Re-create SCIM API token
+	//
+	// x-displayName: "Create/Re-create SCIM API token"
+	// request to create/re-create new SCIM API credential.
+	// Note: Only one valid (non-expired) SCIM token could exist for a tenant, and only if SCIM is enabled for the tenant.
+	// If a valid SCIM token is already minted, we would revoke the current one and generate a new one.
+	RecreateScimToken(ctx context.Context, in *RecreateScimTokenRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get API credential
 	//
 	// x-displayName: "Get API Credentials"
@@ -1704,6 +2375,11 @@ type CustomAPIClient interface {
 	// Returns list of api credential of all types created by the user.
 	// Query will look into tenants system namespace.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
+	// List Service credentials
+	//
+	// x-displayName: "List service credentials"
+	// request to list service credentials created by user.
+	ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Revoke API credential
 	//
 	// x-displayName: "Revoke API credential"
@@ -1714,6 +2390,11 @@ type CustomAPIClient interface {
 	// x-displayName: "Revoke Service credential"
 	// For Service credential revoke/deletion.
 	RevokeServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error)
+	// Revoke SCIM API credential
+	//
+	// x-displayName: "Revoke SCIM API credential"
+	// For SCIM API credential revoke/deletion.
+	RevokeScimToken(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error)
 	// Activate API credential
 	//
 	// x-displayName: "Activate API credential"
@@ -1740,11 +2421,6 @@ type CustomAPIClient interface {
 	// request to create new service credentials.
 	// user can specify name, expiry and list of namespce and allowed role of the service user.
 	CreateServiceCredentials(ctx context.Context, in *CreateServiceCredentialsRequest, opts ...grpc.CallOption) (*CreateResponse, error)
-	// List Service credentials
-	//
-	// x-displayName: "List service credentials"
-	// request to list service credentials created by user.
-	ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 }
 
 type customAPIClient struct {
@@ -1758,6 +2434,15 @@ func NewCustomAPIClient(cc *grpc.ClientConn) CustomAPIClient {
 func (c *customAPIClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
 	out := new(CreateResponse)
 	err := c.cc.Invoke(ctx, "/ves.io.schema.api_credential.CustomAPI/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) RecreateScimToken(ctx context.Context, in *RecreateScimTokenRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.api_credential.CustomAPI/RecreateScimToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1782,6 +2467,15 @@ func (c *customAPIClient) List(ctx context.Context, in *ListRequest, opts ...grp
 	return out, nil
 }
 
+func (c *customAPIClient) ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+	out := new(ListResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.api_credential.CustomAPI/ListServiceCredentials", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *customAPIClient) Revoke(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	out := new(StatusResponse)
 	err := c.cc.Invoke(ctx, "/ves.io.schema.api_credential.CustomAPI/Revoke", in, out, opts...)
@@ -1794,6 +2488,15 @@ func (c *customAPIClient) Revoke(ctx context.Context, in *GetRequest, opts ...gr
 func (c *customAPIClient) RevokeServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	out := new(StatusResponse)
 	err := c.cc.Invoke(ctx, "/ves.io.schema.api_credential.CustomAPI/RevokeServiceCredentials", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) RevokeScimToken(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	out := new(StatusResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.api_credential.CustomAPI/RevokeScimToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1845,15 +2548,6 @@ func (c *customAPIClient) CreateServiceCredentials(ctx context.Context, in *Crea
 	return out, nil
 }
 
-func (c *customAPIClient) ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/ves.io.schema.api_credential.CustomAPI/ListServiceCredentials", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// Create API credential
@@ -1873,6 +2567,13 @@ type CustomAPIServer interface {
 	// request can specify name, expiry and type of credential required. since this credential inherits the creator's RBAC
 	// service will determine the user from request context.
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
+	// Create/Re-create SCIM API token
+	//
+	// x-displayName: "Create/Re-create SCIM API token"
+	// request to create/re-create new SCIM API credential.
+	// Note: Only one valid (non-expired) SCIM token could exist for a tenant, and only if SCIM is enabled for the tenant.
+	// If a valid SCIM token is already minted, we would revoke the current one and generate a new one.
+	RecreateScimToken(context.Context, *RecreateScimTokenRequest) (*CreateResponse, error)
 	// Get API credential
 	//
 	// x-displayName: "Get API Credentials"
@@ -1885,6 +2586,11 @@ type CustomAPIServer interface {
 	// Returns list of api credential of all types created by the user.
 	// Query will look into tenants system namespace.
 	List(context.Context, *ListRequest) (*ListResponse, error)
+	// List Service credentials
+	//
+	// x-displayName: "List service credentials"
+	// request to list service credentials created by user.
+	ListServiceCredentials(context.Context, *ListRequest) (*ListResponse, error)
 	// Revoke API credential
 	//
 	// x-displayName: "Revoke API credential"
@@ -1895,6 +2601,11 @@ type CustomAPIServer interface {
 	// x-displayName: "Revoke Service credential"
 	// For Service credential revoke/deletion.
 	RevokeServiceCredentials(context.Context, *GetRequest) (*StatusResponse, error)
+	// Revoke SCIM API credential
+	//
+	// x-displayName: "Revoke SCIM API credential"
+	// For SCIM API credential revoke/deletion.
+	RevokeScimToken(context.Context, *GetRequest) (*StatusResponse, error)
 	// Activate API credential
 	//
 	// x-displayName: "Activate API credential"
@@ -1921,11 +2632,6 @@ type CustomAPIServer interface {
 	// request to create new service credentials.
 	// user can specify name, expiry and list of namespce and allowed role of the service user.
 	CreateServiceCredentials(context.Context, *CreateServiceCredentialsRequest) (*CreateResponse, error)
-	// List Service credentials
-	//
-	// x-displayName: "List service credentials"
-	// request to list service credentials created by user.
-	ListServiceCredentials(context.Context, *ListRequest) (*ListResponse, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -1935,17 +2641,26 @@ type UnimplementedCustomAPIServer struct {
 func (*UnimplementedCustomAPIServer) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
+func (*UnimplementedCustomAPIServer) RecreateScimToken(ctx context.Context, req *RecreateScimTokenRequest) (*CreateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RecreateScimToken not implemented")
+}
 func (*UnimplementedCustomAPIServer) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 func (*UnimplementedCustomAPIServer) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
+func (*UnimplementedCustomAPIServer) ListServiceCredentials(ctx context.Context, req *ListRequest) (*ListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListServiceCredentials not implemented")
+}
 func (*UnimplementedCustomAPIServer) Revoke(ctx context.Context, req *GetRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Revoke not implemented")
 }
 func (*UnimplementedCustomAPIServer) RevokeServiceCredentials(ctx context.Context, req *GetRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevokeServiceCredentials not implemented")
+}
+func (*UnimplementedCustomAPIServer) RevokeScimToken(ctx context.Context, req *GetRequest) (*StatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeScimToken not implemented")
 }
 func (*UnimplementedCustomAPIServer) Activate(ctx context.Context, req *GetRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Activate not implemented")
@@ -1961,9 +2676,6 @@ func (*UnimplementedCustomAPIServer) RenewServiceCredentials(ctx context.Context
 }
 func (*UnimplementedCustomAPIServer) CreateServiceCredentials(ctx context.Context, req *CreateServiceCredentialsRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateServiceCredentials not implemented")
-}
-func (*UnimplementedCustomAPIServer) ListServiceCredentials(ctx context.Context, req *ListRequest) (*ListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListServiceCredentials not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -1984,6 +2696,24 @@ func _CustomAPI_Create_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CustomAPIServer).Create(ctx, req.(*CreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_RecreateScimToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RecreateScimTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).RecreateScimToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.api_credential.CustomAPI/RecreateScimToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).RecreateScimToken(ctx, req.(*RecreateScimTokenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2024,6 +2754,24 @@ func _CustomAPI_List_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_ListServiceCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).ListServiceCredentials(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.api_credential.CustomAPI/ListServiceCredentials",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).ListServiceCredentials(ctx, req.(*ListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CustomAPI_Revoke_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRequest)
 	if err := dec(in); err != nil {
@@ -2056,6 +2804,24 @@ func _CustomAPI_RevokeServiceCredentials_Handler(srv interface{}, ctx context.Co
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CustomAPIServer).RevokeServiceCredentials(ctx, req.(*GetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_RevokeScimToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).RevokeScimToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.api_credential.CustomAPI/RevokeScimToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).RevokeScimToken(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2150,24 +2916,6 @@ func _CustomAPI_CreateServiceCredentials_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CustomAPI_ListServiceCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CustomAPIServer).ListServiceCredentials(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ves.io.schema.api_credential.CustomAPI/ListServiceCredentials",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CustomAPIServer).ListServiceCredentials(ctx, req.(*ListRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.api_credential.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -2175,6 +2923,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _CustomAPI_Create_Handler,
+		},
+		{
+			MethodName: "RecreateScimToken",
+			Handler:    _CustomAPI_RecreateScimToken_Handler,
 		},
 		{
 			MethodName: "Get",
@@ -2185,12 +2937,20 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 			Handler:    _CustomAPI_List_Handler,
 		},
 		{
+			MethodName: "ListServiceCredentials",
+			Handler:    _CustomAPI_ListServiceCredentials_Handler,
+		},
+		{
 			MethodName: "Revoke",
 			Handler:    _CustomAPI_Revoke_Handler,
 		},
 		{
 			MethodName: "RevokeServiceCredentials",
 			Handler:    _CustomAPI_RevokeServiceCredentials_Handler,
+		},
+		{
+			MethodName: "RevokeScimToken",
+			Handler:    _CustomAPI_RevokeScimToken_Handler,
 		},
 		{
 			MethodName: "Activate",
@@ -2211,10 +2971,6 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateServiceCredentials",
 			Handler:    _CustomAPI_CreateServiceCredentials_Handler,
-		},
-		{
-			MethodName: "ListServiceCredentials",
-			Handler:    _CustomAPI_ListServiceCredentials_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -2257,6 +3013,48 @@ func (m *CreateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RecreateScimTokenRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RecreateScimTokenRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RecreateScimTokenRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ExpirationDays != 0 {
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.ExpirationDays))
+		i--
+		dAtA[i] = 0x28
 	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
@@ -2332,6 +3130,15 @@ func (m *CreateServiceCredentialsRequest) MarshalToSizedBuffer(dAtA []byte) (int
 	_ = i
 	var l int
 	_ = l
+	if m.ServiceCredentialChoice != nil {
+		{
+			size := m.ServiceCredentialChoice.Size()
+			i -= size
+			if _, err := m.ServiceCredentialChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ExpirationDays != 0 {
 		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.ExpirationDays))
 		i--
@@ -2390,6 +3197,187 @@ func (m *CreateServiceCredentialsRequest) MarshalToSizedBuffer(dAtA []byte) (int
 		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.Type))
 		i--
 		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CreateServiceCredentialsRequest_ApiToken) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateServiceCredentialsRequest_ApiToken) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiToken != nil {
+		{
+			size, err := m.ApiToken.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateServiceCredentialsRequest_ApiCertificate) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateServiceCredentialsRequest_ApiCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiCertificate != nil {
+		{
+			size, err := m.ApiCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateServiceCredentialsRequest_Vk8SKubeconfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateServiceCredentialsRequest_Vk8SKubeconfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Vk8SKubeconfig != nil {
+		{
+			size, err := m.Vk8SKubeconfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateServiceCredentialsRequest_SiteKubeconfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateServiceCredentialsRequest_SiteKubeconfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SiteKubeconfig != nil {
+		{
+			size, err := m.SiteKubeconfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiCertificateType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiCertificateType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiCertificateType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Password) > 0 {
+		i -= len(m.Password)
+		copy(dAtA[i:], m.Password)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Password)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Vk8SKubeconfigType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Vk8SKubeconfigType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Vk8SKubeconfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Vk8SClusterName) > 0 {
+		i -= len(m.Vk8SClusterName)
+		copy(dAtA[i:], m.Vk8SClusterName)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Vk8SClusterName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Vk8SNamespace) > 0 {
+		i -= len(m.Vk8SNamespace)
+		copy(dAtA[i:], m.Vk8SNamespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Vk8SNamespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SiteKubeconfigType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SiteKubeconfigType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SiteKubeconfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Site) > 0 {
+		i -= len(m.Site)
+		copy(dAtA[i:], m.Site)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Site)))
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -2819,6 +3807,26 @@ func (m *CreateRequest) Size() (n int) {
 	return n
 }
 
+func (m *RecreateScimTokenRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.ExpirationDays != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.ExpirationDays))
+	}
+	return n
+}
+
 func (m *CreateResponse) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2873,6 +3881,100 @@ func (m *CreateServiceCredentialsRequest) Size() (n int) {
 	}
 	if m.ExpirationDays != 0 {
 		n += 1 + sovPublicCustomapi(uint64(m.ExpirationDays))
+	}
+	if m.ServiceCredentialChoice != nil {
+		n += m.ServiceCredentialChoice.Size()
+	}
+	return n
+}
+
+func (m *CreateServiceCredentialsRequest_ApiToken) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiToken != nil {
+		l = m.ApiToken.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *CreateServiceCredentialsRequest_ApiCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiCertificate != nil {
+		l = m.ApiCertificate.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *CreateServiceCredentialsRequest_Vk8SKubeconfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Vk8SKubeconfig != nil {
+		l = m.Vk8SKubeconfig.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *CreateServiceCredentialsRequest_SiteKubeconfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SiteKubeconfig != nil {
+		l = m.SiteKubeconfig.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *ApiCertificateType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Password)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *Vk8SKubeconfigType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Vk8SNamespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Vk8SClusterName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *SiteKubeconfigType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Site)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
 	}
 	return n
 }
@@ -3066,13 +4168,25 @@ func (this *CreateRequest) String() string {
 	}, "")
 	return s
 }
+func (this *RecreateScimTokenRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RecreateScimTokenRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`ExpirationDays:` + fmt.Sprintf("%v", this.ExpirationDays) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateServiceCredentialsRequest) string() string {
 	if this == nil {
 		return "nil"
 	}
 	repeatedStringForNamespaceRoles := "[]*NamespaceRoleType{"
 	for _, f := range this.NamespaceRoles {
-		repeatedStringForNamespaceRoles += strings.Replace(fmt.Sprintf("%v", f), "NamespaceRoleType", "user.NamespaceRoleType", 1) + ","
+		repeatedStringForNamespaceRoles += strings.Replace(fmt.Sprintf("%v", f), "NamespaceRoleType", "schema.NamespaceRoleType", 1) + ","
 	}
 	repeatedStringForNamespaceRoles += "}"
 	s := strings.Join([]string{`&CreateServiceCredentialsRequest{`,
@@ -3084,6 +4198,78 @@ func (this *CreateServiceCredentialsRequest) string() string {
 		`VirtualK8SName:` + fmt.Sprintf("%v", this.VirtualK8SName) + `,`,
 		`Password:` + fmt.Sprintf("%v", this.Password) + `,`,
 		`ExpirationDays:` + fmt.Sprintf("%v", this.ExpirationDays) + `,`,
+		`ServiceCredentialChoice:` + fmt.Sprintf("%v", this.ServiceCredentialChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateServiceCredentialsRequest_ApiToken) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateServiceCredentialsRequest_ApiToken{`,
+		`ApiToken:` + strings.Replace(fmt.Sprintf("%v", this.ApiToken), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateServiceCredentialsRequest_ApiCertificate) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateServiceCredentialsRequest_ApiCertificate{`,
+		`ApiCertificate:` + strings.Replace(fmt.Sprintf("%v", this.ApiCertificate), "ApiCertificateType", "ApiCertificateType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateServiceCredentialsRequest_Vk8SKubeconfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateServiceCredentialsRequest_Vk8SKubeconfig{`,
+		`Vk8SKubeconfig:` + strings.Replace(fmt.Sprintf("%v", this.Vk8SKubeconfig), "Vk8SKubeconfigType", "Vk8SKubeconfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateServiceCredentialsRequest_SiteKubeconfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateServiceCredentialsRequest_SiteKubeconfig{`,
+		`SiteKubeconfig:` + strings.Replace(fmt.Sprintf("%v", this.SiteKubeconfig), "SiteKubeconfigType", "SiteKubeconfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiCertificateType) string() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiCertificateType{`,
+		`Password:` + fmt.Sprintf("%v", this.Password) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Vk8SKubeconfigType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Vk8SKubeconfigType{`,
+		`Vk8SNamespace:` + fmt.Sprintf("%v", this.Vk8SNamespace) + `,`,
+		`Vk8SClusterName:` + fmt.Sprintf("%v", this.Vk8SClusterName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SiteKubeconfigType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SiteKubeconfigType{`,
+		`Site:` + fmt.Sprintf("%v", this.Site) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3333,6 +4519,142 @@ func (m *CreateRequest) Unmarshal(dAtA []byte) error {
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpirationDays", wireType)
+			}
+			m.ExpirationDays = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ExpirationDays |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RecreateScimTokenRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RecreateScimTokenRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RecreateScimTokenRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 0 {
@@ -3635,7 +4957,7 @@ func (m *CreateServiceCredentialsRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NamespaceRoles = append(m.NamespaceRoles, &user.NamespaceRoleType{})
+			m.NamespaceRoles = append(m.NamespaceRoles, &schema.NamespaceRoleType{})
 			if err := m.NamespaceRoles[len(m.NamespaceRoles)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3755,6 +5077,433 @@ func (m *CreateServiceCredentialsRequest) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiToken", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceCredentialChoice = &CreateServiceCredentialsRequest_ApiToken{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiCertificate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiCertificateType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceCredentialChoice = &CreateServiceCredentialsRequest_ApiCertificate{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vk8SKubeconfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Vk8SKubeconfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceCredentialChoice = &CreateServiceCredentialsRequest_Vk8SKubeconfig{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteKubeconfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SiteKubeconfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceCredentialChoice = &CreateServiceCredentialsRequest_SiteKubeconfig{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiCertificateType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiCertificateType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiCertificateType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Password", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Password = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Vk8SKubeconfigType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Vk8sKubeconfigType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Vk8sKubeconfigType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vk8SNamespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Vk8SNamespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vk8SClusterName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Vk8SClusterName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SiteKubeconfigType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SiteKubeconfigType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SiteKubeconfigType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Site = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])

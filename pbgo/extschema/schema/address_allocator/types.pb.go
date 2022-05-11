@@ -105,7 +105,7 @@ type AllocationScheme struct {
 	//
 	// x-displayName: "Allocation Unit"
 	// x-required
-	// x-example: 30
+	// x-example: "30"
 	// Prefix length indicating the size of each allocated subnet. For example, if this is
 	// specified as 30, subnets of /30 will be allocated from the given address pool.
 	AllocationUnit uint32 `protobuf:"varint,1,opt,name=allocation_unit,json=allocationUnit,proto3" json:"allocation_unit,omitempty"`
@@ -118,6 +118,7 @@ type AllocationScheme struct {
 	// Local Interface Address Offset
 	//
 	// x-displayName: "Local Interface Address Offset"
+	// x-example: "2"
 	//
 	// This is used to derive address for the local interface from the allocated subnet.
 	//

@@ -287,6 +287,7 @@ type TLSClientConfigType struct {
 	// The TLS certificate URL.
 	//
 	// x-displayName: "Client Certificate"
+	// x-example: "value"
 	// Client  certificate is PEM-encoded certificate or certificate-chain.
 	Certificate string `protobuf:"bytes,1,opt,name=certificate,proto3" json:"certificate,omitempty"`
 	// Private Key

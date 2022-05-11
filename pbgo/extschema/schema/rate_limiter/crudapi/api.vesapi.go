@@ -2842,10 +2842,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "burst_multiplier": {
                     "type": "integer",
-                    "description": " The maximum burst of requests to accommodate, expressed as a multiple of the rate.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "description": " The maximum burst of requests to accommodate, expressed as a multiple of the rate.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "burst_multiplier",
                     "format": "int64",
                     "x-displayname": "Burst Multiplier",
+                    "x-ves-example": "1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gt": "0",
                         "ves.io.schema.rules.uint32.lte": "100"
@@ -2853,10 +2854,11 @@ var APISwaggerJSON string = `{
                 },
                 "total_number": {
                     "type": "integer",
-                    "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
+                    "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
                     "title": "total_number",
                     "format": "int64",
                     "x-displayname": "Number",
+                    "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

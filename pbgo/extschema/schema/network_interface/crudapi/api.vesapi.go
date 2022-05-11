@@ -2819,9 +2819,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Site:Node to IP address.\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
+                    "description": " Map of Site:Node to IP address.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Site:Node to IP mapping",
                     "x-displayname": "Site:Node to IP Mapping",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "128",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -2959,6 +2960,8 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceDHCPServerParametersType": {
             "type": "object",
+            "title": "DHCPServerParametersType",
+            "x-displayname": "DHCPServerParametersType",
             "x-ves-oneof-field-interfaces_addressing_choice": "[\"automatic_from_end\",\"automatic_from_start\",\"interface_ip_map\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPServerParametersType",
             "properties": {
@@ -2994,9 +2997,10 @@ var APISwaggerJSON string = `{
                 },
                 "fixed_ip_map": {
                     "type": "object",
-                    "description": " Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
+                    "description": " Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Fixed IP Assignments",
                     "x-displayname": "Fixed MAC address to IP Assignments",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.mac": "true",
                         "ves.io.schema.rules.map.max_pairs": "128",
@@ -3960,10 +3964,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - \"24\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Prefix Length",
                     "format": "int64",
                     "x-displayname": "Prefix Length",
+                    "x-ves-example": "24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }

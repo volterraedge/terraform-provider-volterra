@@ -2581,6 +2581,8 @@ var APISwaggerJSON string = `{
     "definitions": {
         "alert_receiverEmailConfig": {
             "type": "object",
+            "title": "EmailConfig",
+            "x-displayname": "Email Configuration",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.EmailConfig",
             "properties": {
                 "email": {
@@ -2654,9 +2656,10 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL to send API requests to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " URL to send API requests to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
                     "x-displayname": "API URL",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2684,9 +2687,10 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL to send API requests to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " URL to send API requests to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
                     "x-displayname": "Pager Duty URL",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2697,6 +2701,8 @@ var APISwaggerJSON string = `{
         },
         "alert_receiverSMSConfig": {
             "type": "object",
+            "title": "SMSConfig",
+            "x-displayname": "SMS Configuration",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.SMSConfig",
             "properties": {
                 "contact_number": {
@@ -2720,9 +2726,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "channel": {
                     "type": "string",
-                    "description": " Channel or user to send notifications to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^[a-z0-9-_]{1,80}$\n",
+                    "description": " Channel or user to send notifications to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^[a-z0-9-_]{1,80}$\n",
                     "title": "Channel",
                     "x-displayname": "Channel",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3025,9 +3032,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -3043,9 +3051,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },

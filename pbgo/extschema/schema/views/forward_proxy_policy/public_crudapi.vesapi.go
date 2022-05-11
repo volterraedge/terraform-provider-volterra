@@ -2211,6 +2211,8 @@ var APISwaggerJSON string = `{
         },
         "forward_proxy_policyDomainListType": {
             "type": "object",
+            "title": "DomainListType",
+            "x-displayname": "DomainListType",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.DomainListType",
             "properties": {
                 "tls_list": {
@@ -2781,6 +2783,8 @@ var APISwaggerJSON string = `{
         },
         "forward_proxy_policyURLListType": {
             "type": "object",
+            "title": "URLListType",
+            "x-displayname": "URLListType",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.URLListType",
             "properties": {
                 "http_list": {
@@ -3355,7 +3359,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefixes": {
                     "type": "array",
-                    "description": " Destination IPv4 prefixes.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Destination IPv4 prefixes.\n\nExample: - \"10.0.0./24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "prefixes",
                     "minItems": 1,
                     "maxItems": 32,
@@ -3363,6 +3367,7 @@ var APISwaggerJSON string = `{
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefixes",
+                    "x-ves-example": "10.0.0./24",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3640,6 +3645,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3665,7 +3671,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",

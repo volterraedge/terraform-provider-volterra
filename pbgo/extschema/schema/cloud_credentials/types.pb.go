@@ -36,6 +36,7 @@ type AWSSecretType struct {
 	// AWS Access Key ID
 	//
 	// x-displayName: "Access Key ID"
+	// x-example: "value"
 	// x-required
 	// Access key ID for your AWS account
 	AccessKey string `protobuf:"bytes,1,opt,name=access_key,json=accessKey,proto3" json:"access_key,omitempty"`
@@ -97,24 +98,28 @@ type AzurePfxType struct {
 	// Azure Client ID
 	//
 	// x-displayName: "Client ID"
+	// x-example: "value"
 	// x-required
 	// Client ID for your Azure service principal
 	ClientId string `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
 	// Azure Subscription ID
 	//
 	// x-displayName: "Subscription ID"
+	// x-example: "value"
 	// x-required
 	// Subscription ID for your Azure service principal
 	SubscriptionId string `protobuf:"bytes,2,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
 	// Azure Tenant ID
 	//
 	// x-displayName: "Tenant ID"
+	// x-example: "value"
 	// x-required
 	// Tenant ID for your Azure service principal
 	TenantId string `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	// Azure client certificate
 	//
 	// x-displayName: "URL for Client Certificate"
+	// x-example: "value"
 	// x-required
 	// URL for Client Certificate in '.pfx' or '.p12' whose certificate is linked to service principal object
 	// Certificate URL can contain client certificate in string:///<Base64 of certificate> format.
@@ -199,18 +204,21 @@ type AzureSecretType struct {
 	// Azure Client ID
 	//
 	// x-displayName: "Client ID"
+	// x-example: "value"
 	// x-required
 	// Client ID for your Azure service principal
 	ClientId string `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
 	// Azure Subscription ID
 	//
 	// x-displayName: "Subscription ID"
+	// x-example: "value"
 	// x-required
 	// Subscription ID for your Azure service principal
 	SubscriptionId string `protobuf:"bytes,2,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
 	// Azure Tenant ID
 	//
 	// x-displayName: "Tenant ID"
+	// x-example: "value"
 	// x-required
 	// Tenant ID for your Azure service principal
 	TenantId string `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`

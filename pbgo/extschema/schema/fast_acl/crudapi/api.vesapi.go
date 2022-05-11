@@ -2879,7 +2879,7 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Rule Name\"\nName for this rule, will be used to generate metrics",
+                    "description": "x-displayName: \"Rule Name\"\nx-example: \"value\"\nName for this rule, will be used to generate metrics",
                     "title": "Rule Name"
                 },
                 "port": {
@@ -2929,7 +2929,7 @@ var APISwaggerJSON string = `{
         },
         "fast_aclSelectedTenantVIPsType": {
             "type": "object",
-            "description": "x-displayName: \"Specific Tenant VIP \nSelect various tenant public VIP(s)",
+            "description": "x-displayName: \"Specific Tenant VIP\"\nSelect various tenant public VIP(s)",
             "title": "Specific Tenant VIP",
             "properties": {
                 "default_tenant_vip": {
@@ -3061,7 +3061,7 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_ruleFastAclRuleAction": {
             "type": "object",
-            "description": "x-displayName: \"Action\"\n FastAclRuleAction specifies possible action to be applied on traffic,\n possible action include dropping, forwarding or ratelimiting the traffic",
+            "description": "x-displayName: \"Action\"\nFastAclRuleAction specifies possible action to be applied on traffic,\npossible action include dropping, forwarding or ratelimiting the traffic",
             "title": "FastAclRuleAction",
             "properties": {
                 "policer_action": {

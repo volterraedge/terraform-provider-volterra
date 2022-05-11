@@ -2266,6 +2266,8 @@ var APISwaggerJSON string = `{
         },
         "alert_receiverEmailConfig": {
             "type": "object",
+            "title": "EmailConfig",
+            "x-displayname": "Email Configuration",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.EmailConfig",
             "properties": {
                 "email": {
@@ -2606,9 +2608,10 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL to send API requests to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " URL to send API requests to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
                     "x-displayname": "API URL",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2636,9 +2639,10 @@ var APISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL to send API requests to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " URL to send API requests to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
                     "x-displayname": "Pager Duty URL",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2709,6 +2713,8 @@ var APISwaggerJSON string = `{
         },
         "alert_receiverSMSConfig": {
             "type": "object",
+            "title": "SMSConfig",
+            "x-displayname": "SMS Configuration",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.SMSConfig",
             "properties": {
                 "contact_number": {
@@ -2732,9 +2738,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "channel": {
                     "type": "string",
-                    "description": " Channel or user to send notifications to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^[a-z0-9-_]{1,80}$\n",
+                    "description": " Channel or user to send notifications to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^[a-z0-9-_]{1,80}$\n",
                     "title": "Channel",
                     "x-displayname": "Channel",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2825,9 +2832,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -2843,9 +2851,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3266,6 +3275,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3291,7 +3301,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",

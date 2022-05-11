@@ -193,7 +193,7 @@ type StorageClassOpenebsEnterpriseType struct {
 	// Storage Size
 	//
 	// x-displayName: "Storage Size"
-	// x-example "10"
+	// x-example: "10"
 	// Size of each node of storage class. e.g If "Storage Class Replicas" will be set to 3 and "Storage Class Size" to 10GB.
 	// Three 10GB disk will be created and assigned to nodes.
 	StorageClassSize uint32 `protobuf:"varint,4,opt,name=storage_class_size,json=storageClassSize,proto3" json:"storage_class_size,omitempty"`

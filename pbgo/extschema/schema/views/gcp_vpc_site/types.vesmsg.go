@@ -367,16 +367,6 @@ func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) GcpLabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -579,15 +569,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -769,17 +750,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
-
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
 
 	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
 	rulesGcpLabels := map[string]string{
@@ -1958,6 +1928,14 @@ func (v *ValidateGCPVPCIngressEgressGwType) OutsideStaticRouteChoiceValidationRu
 	return validatorFn, nil
 }
 
+func (v *ValidateGCPVPCIngressEgressGwType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGCPVPCIngressEgressGwType) GcpCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -2235,6 +2213,15 @@ func (v *ValidateGCPVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -2334,6 +2321,42 @@ func (v *ValidateGCPVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *GCPVPCIngressEgressGwType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*GCPVPCIngressEgressGwType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCIngressEgressGwType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*GCPVPCIngressEgressGwType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -2415,6 +2438,17 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressEgressGwType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	vrhGcpCertifiedHw := v.GcpCertifiedHwValidationRuleHandler
 	rulesGcpCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2441,10 +2475,10 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 
 	vrhGcpZoneNames := v.GcpZoneNamesValidationRuleHandler
 	rulesGcpZoneNames := map[string]string{
-		"ves.io.schema.rules.message.required":         "true",
-		"ves.io.schema.rules.repeated.items.string.in": "[\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
-		"ves.io.schema.rules.repeated.max_items":       "3",
-		"ves.io.schema.rules.repeated.unique":          "true",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.max_len":     "64",
 	}
 	vFn, err = vrhGcpZoneNames(rulesGcpZoneNames)
 	if err != nil {
@@ -2473,6 +2507,8 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 	v.FldValidators["inside_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
 
 	v.FldValidators["outside_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
+
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -2684,6 +2720,15 @@ func (v *ValidateGCPVPCIngressGwType) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_network"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("local_network"))
@@ -2741,10 +2786,10 @@ var DefaultGCPVPCIngressGwTypeValidator = func() *ValidateGCPVPCIngressGwType {
 
 	vrhGcpZoneNames := v.GcpZoneNamesValidationRuleHandler
 	rulesGcpZoneNames := map[string]string{
-		"ves.io.schema.rules.message.required":         "true",
-		"ves.io.schema.rules.repeated.items.string.in": "[\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
-		"ves.io.schema.rules.repeated.max_items":       "3",
-		"ves.io.schema.rules.repeated.unique":          "true",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.max_len":     "64",
 	}
 	vFn, err = vrhGcpZoneNames(rulesGcpZoneNames)
 	if err != nil {
@@ -2768,11 +2813,218 @@ var DefaultGCPVPCIngressGwTypeValidator = func() *ValidateGCPVPCIngressGwType {
 
 	v.FldValidators["local_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
 
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
 	return v
 }()
 
 func GCPVPCIngressGwTypeValidator() db.Validator {
 	return DefaultGCPVPCIngressGwTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GCPVPCSiteInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPVPCSiteInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPVPCSiteInfoType) DeepCopy() *GCPVPCSiteInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPVPCSiteInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPVPCSiteInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPVPCSiteInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPVPCSiteInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGCPVPCSiteInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPVPCSiteInfoType) PublicIpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for public_ips")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for public_ips")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated public_ips")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items public_ips")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPVPCSiteInfoType) PrivateIpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for private_ips")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for private_ips")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated private_ips")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items private_ips")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPVPCSiteInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPVPCSiteInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPVPCSiteInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["private_ips"]; exists {
+		vOpts := append(opts, db.WithValidateField("private_ips"))
+		if err := fv(ctx, m.GetPrivateIps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["public_ips"]; exists {
+		vOpts := append(opts, db.WithValidateField("public_ips"))
+		if err := fv(ctx, m.GetPublicIps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPVPCSiteInfoTypeValidator = func() *ValidateGCPVPCSiteInfoType {
+	v := &ValidateGCPVPCSiteInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPublicIps := v.PublicIpsValidationRuleHandler
+	rulesPublicIps := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
+		"ves.io.schema.rules.repeated.items.string.ip": "true",
+		"ves.io.schema.rules.repeated.num_items":       "0,1,3",
+		"ves.io.schema.rules.repeated.unique":          "true",
+	}
+	vFn, err = vrhPublicIps(rulesPublicIps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCSiteInfoType.public_ips: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["public_ips"] = vFn
+
+	vrhPrivateIps := v.PrivateIpsValidationRuleHandler
+	rulesPrivateIps := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
+		"ves.io.schema.rules.repeated.items.string.ip": "true",
+		"ves.io.schema.rules.repeated.num_items":       "0,1,3",
+		"ves.io.schema.rules.repeated.unique":          "true",
+	}
+	vFn, err = vrhPrivateIps(rulesPrivateIps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCSiteInfoType.private_ips: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_ips"] = vFn
+
+	return v
+}()
+
+func GCPVPCSiteInfoTypeValidator() db.Validator {
+	return DefaultGCPVPCSiteInfoTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3770,6 +4022,14 @@ func (v *ValidateGCPVPCVoltstackClusterType) OutsideStaticRouteChoiceValidationR
 	return validatorFn, nil
 }
 
+func (v *ValidateGCPVPCVoltstackClusterType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGCPVPCVoltstackClusterType) StorageClassChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4026,6 +4286,15 @@ func (v *ValidateGCPVPCVoltstackClusterType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -4121,6 +4390,42 @@ func (v *ValidateGCPVPCVoltstackClusterType) Validate(ctx context.Context, pm in
 		vOpts := append(opts, db.WithValidateField("site_local_subnet"))
 		if err := fv(ctx, m.GetSiteLocalSubnet(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *GCPVPCVoltstackClusterType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*GCPVPCVoltstackClusterType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCVoltstackClusterType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*GCPVPCVoltstackClusterType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4242,6 +4547,17 @@ var DefaultGCPVPCVoltstackClusterTypeValidator = func() *ValidateGCPVPCVoltstack
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCVoltstackClusterType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4279,10 +4595,10 @@ var DefaultGCPVPCVoltstackClusterTypeValidator = func() *ValidateGCPVPCVoltstack
 
 	vrhGcpZoneNames := v.GcpZoneNamesValidationRuleHandler
 	rulesGcpZoneNames := map[string]string{
-		"ves.io.schema.rules.message.required":         "true",
-		"ves.io.schema.rules.repeated.items.string.in": "[\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
-		"ves.io.schema.rules.repeated.max_items":       "3",
-		"ves.io.schema.rules.repeated.unique":          "true",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.max_len":     "64",
 	}
 	vFn, err = vrhGcpZoneNames(rulesGcpZoneNames)
 	if err != nil {
@@ -4308,6 +4624,8 @@ var DefaultGCPVPCVoltstackClusterTypeValidator = func() *ValidateGCPVPCVoltstack
 	v.FldValidators["site_local_network"] = ves_io_schema_views.GCPVPCNetworkChoiceTypeValidator().Validate
 
 	v.FldValidators["site_local_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
+
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -4675,16 +4993,6 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) GcpLabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -4896,15 +5204,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -5108,17 +5407,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
-
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
 
 	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
 	rulesGcpLabels := map[string]string{
@@ -5619,16 +5907,6 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) GcpLabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -5692,6 +5970,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cloud_site_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_site_info"))
+		if err := fv(ctx, m.GetCloudSiteInfo(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5835,15 +6122,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6080,17 +6358,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
-
 	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
 	rulesGcpLabels := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
@@ -6121,6 +6388,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["cloud_site_info"] = GCPVPCSiteInfoTypeValidator().Validate
 
 	return v
 }()
@@ -6339,16 +6608,6 @@ func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -6413,15 +6672,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
-			return err
 		}
 
 	}
@@ -6520,17 +6770,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
-
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -6671,7 +6910,6 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.NodesPerAz = f.GetNodesPerAz()
 	m.Os = f.GetOs()
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.Sw = f.GetSw()
@@ -6693,7 +6931,6 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.NodesPerAz = m1.NodesPerAz
 	f.Os = m1.Os
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.Sw = m1.Sw
@@ -7292,7 +7529,6 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.NodesPerAz = f.GetNodesPerAz()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
@@ -7315,7 +7551,6 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.NodesPerAz = m1.NodesPerAz
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
@@ -7431,7 +7666,6 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 }
 
@@ -7444,6 +7678,5 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 }

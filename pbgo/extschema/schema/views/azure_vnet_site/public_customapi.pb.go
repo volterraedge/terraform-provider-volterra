@@ -60,7 +60,7 @@ type SetVIPInfoRequest struct {
 	// Name
 	//
 	// x-displayName: "Name"
-	// x-example: "aws-vpc-site-1"
+	// x-example: "vnet-site-1"
 	// Name of the object to be configured
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	// VIP Params Per AZ
@@ -162,11 +162,131 @@ func (m *SetVIPInfoResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetVIPInfoResponse proto.InternalMessageInfo
 
+// Request to configure Cloud Site Information
+//
+// x-displayName: "Request to configure Cloud Site Information"
+// Request to configure Cloud Site Information
+type SetCloudSiteInfoRequest struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "default"
+	// Namespace for the object to be configured
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "vnet-site-1"
+	// Name of the object to be configured
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Azure Vnet Site Info Config
+	//
+	// x-displayName: "Azure Vnet Site Info Config"
+	// Azure Vnet Site Info Config
+	AzureVnetInfo *AzureVnetSiteInfoType `protobuf:"bytes,3,opt,name=azure_vnet_info,json=azureVnetInfo,proto3" json:"azure_vnet_info,omitempty"`
+}
+
+func (m *SetCloudSiteInfoRequest) Reset()      { *m = SetCloudSiteInfoRequest{} }
+func (*SetCloudSiteInfoRequest) ProtoMessage() {}
+func (*SetCloudSiteInfoRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9248f4176755194d, []int{2}
+}
+func (m *SetCloudSiteInfoRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SetCloudSiteInfoRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SetCloudSiteInfoRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SetCloudSiteInfoRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetCloudSiteInfoRequest.Merge(m, src)
+}
+func (m *SetCloudSiteInfoRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *SetCloudSiteInfoRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetCloudSiteInfoRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetCloudSiteInfoRequest proto.InternalMessageInfo
+
+func (m *SetCloudSiteInfoRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *SetCloudSiteInfoRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *SetCloudSiteInfoRequest) GetAzureVnetInfo() *AzureVnetSiteInfoType {
+	if m != nil {
+		return m.AzureVnetInfo
+	}
+	return nil
+}
+
+// Response to configure Cloud Site Information
+//
+// x-displayName: "Response to configure Cloud Site Information"
+// Response to configure configure Cloud Site Information
+type SetCloudSiteInfoResponse struct {
+}
+
+func (m *SetCloudSiteInfoResponse) Reset()      { *m = SetCloudSiteInfoResponse{} }
+func (*SetCloudSiteInfoResponse) ProtoMessage() {}
+func (*SetCloudSiteInfoResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9248f4176755194d, []int{3}
+}
+func (m *SetCloudSiteInfoResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SetCloudSiteInfoResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SetCloudSiteInfoResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SetCloudSiteInfoResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetCloudSiteInfoResponse.Merge(m, src)
+}
+func (m *SetCloudSiteInfoResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *SetCloudSiteInfoResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetCloudSiteInfoResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetCloudSiteInfoResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*SetVIPInfoRequest)(nil), "ves.io.schema.views.azure_vnet_site.SetVIPInfoRequest")
 	golang_proto.RegisterType((*SetVIPInfoRequest)(nil), "ves.io.schema.views.azure_vnet_site.SetVIPInfoRequest")
 	proto.RegisterType((*SetVIPInfoResponse)(nil), "ves.io.schema.views.azure_vnet_site.SetVIPInfoResponse")
 	golang_proto.RegisterType((*SetVIPInfoResponse)(nil), "ves.io.schema.views.azure_vnet_site.SetVIPInfoResponse")
+	proto.RegisterType((*SetCloudSiteInfoRequest)(nil), "ves.io.schema.views.azure_vnet_site.SetCloudSiteInfoRequest")
+	golang_proto.RegisterType((*SetCloudSiteInfoRequest)(nil), "ves.io.schema.views.azure_vnet_site.SetCloudSiteInfoRequest")
+	proto.RegisterType((*SetCloudSiteInfoResponse)(nil), "ves.io.schema.views.azure_vnet_site.SetCloudSiteInfoResponse")
+	golang_proto.RegisterType((*SetCloudSiteInfoResponse)(nil), "ves.io.schema.views.azure_vnet_site.SetCloudSiteInfoResponse")
 }
 
 func init() {
@@ -177,44 +297,50 @@ func init() {
 }
 
 var fileDescriptor_9248f4176755194d = []byte{
-	// 586 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0x3f, 0x6b, 0x14, 0x4f,
-	0x18, 0xbe, 0xb9, 0xfb, 0xfd, 0x42, 0xb2, 0x82, 0x98, 0xc5, 0xe2, 0x38, 0xc3, 0x10, 0xce, 0x26,
-	0x06, 0x77, 0x46, 0x13, 0x50, 0x49, 0x97, 0x58, 0xc8, 0x55, 0x2e, 0x11, 0x02, 0xda, 0x2c, 0xb3,
-	0x9b, 0xf7, 0x36, 0xa3, 0xb7, 0x3b, 0xe3, 0xcc, 0xec, 0x46, 0x23, 0x01, 0xc9, 0x27, 0x90, 0xe4,
-	0x4b, 0xd8, 0x8b, 0x8d, 0xb1, 0x48, 0x23, 0x5a, 0x49, 0xd0, 0x26, 0x65, 0xb2, 0x67, 0xa1, 0xd8,
-	0xe4, 0x23, 0xc8, 0xcd, 0x5d, 0x92, 0xfb, 0x03, 0x72, 0x76, 0xef, 0xbb, 0xcf, 0xfb, 0xec, 0x3c,
-	0xf3, 0xcc, 0xf3, 0x3a, 0x4b, 0x39, 0x68, 0xc2, 0x05, 0xd5, 0xd1, 0x06, 0x24, 0x8c, 0xe6, 0x1c,
-	0x36, 0x35, 0x65, 0x5b, 0x99, 0x82, 0x20, 0x4f, 0xc1, 0x04, 0x9a, 0x1b, 0xa0, 0x32, 0x0b, 0x5b,
-	0x3c, 0x0a, 0xa2, 0x4c, 0x1b, 0x91, 0x30, 0xc9, 0x89, 0x54, 0xc2, 0x08, 0xf7, 0x7a, 0x97, 0x4b,
-	0xba, 0x5c, 0x62, 0xb9, 0x64, 0x88, 0x5b, 0xf3, 0x62, 0x6e, 0x36, 0xb2, 0x90, 0x44, 0x22, 0xa1,
-	0xb1, 0x88, 0x05, 0xb5, 0xdc, 0x30, 0x6b, 0xda, 0xce, 0x36, 0xb6, 0xea, 0xfe, 0xb3, 0x36, 0x13,
-	0x0b, 0x11, 0xb7, 0x80, 0x32, 0xc9, 0x29, 0x4b, 0x53, 0x61, 0x98, 0xe1, 0x22, 0xd5, 0x3d, 0xf4,
-	0xda, 0xa0, 0x5a, 0x21, 0xfb, 0x41, 0x3c, 0x08, 0x5a, 0xe5, 0xe6, 0xa5, 0x84, 0x33, 0x7c, 0x66,
-	0xe8, 0xaa, 0xac, 0xc5, 0xd7, 0x99, 0x81, 0x1e, 0x5a, 0x1f, 0x42, 0x41, 0x43, 0x9a, 0x0f, 0x9d,
-	0x30, 0x3b, 0x6a, 0x56, 0x30, 0x38, 0x71, 0x6b, 0x1c, 0x3b, 0x45, 0xf8, 0x14, 0x22, 0xd3, 0x63,
-	0xd0, 0x71, 0x18, 0x7d, 0xd7, 0xa8, 0xbf, 0x47, 0xce, 0xf4, 0x23, 0x30, 0x6b, 0x0d, 0xbf, 0x91,
-	0x36, 0xc5, 0x2a, 0x3c, 0xcf, 0x40, 0x1b, 0x77, 0xc6, 0x99, 0x4a, 0x59, 0x02, 0x5a, 0xb2, 0x08,
-	0xaa, 0x68, 0x16, 0xcd, 0x4d, 0xad, 0x5e, 0x7c, 0x70, 0x5d, 0xe7, 0xbf, 0x4e, 0x53, 0x2d, 0x5b,
-	0xc0, 0xd6, 0x6e, 0xea, 0x4c, 0xe7, 0x5c, 0x06, 0x92, 0x29, 0x96, 0xe8, 0x40, 0x82, 0x0a, 0xd8,
-	0x56, 0xb5, 0x32, 0x5b, 0x99, 0xbb, 0xb4, 0x70, 0x83, 0x0c, 0xbe, 0x6c, 0x47, 0x03, 0xf1, 0x3b,
-	0x21, 0xd0, 0x1b, 0x6b, 0x0d, 0xdf, 0xb7, 0x14, 0x1f, 0xd4, 0xf2, 0xd6, 0x4a, 0xf5, 0xc3, 0xaf,
-	0x83, 0xca, 0xe4, 0x2e, 0xfa, 0x7f, 0xbe, 0x72, 0xfb, 0xe6, 0x62, 0x71, 0xfc, 0xa9, 0x32, 0xb1,
-	0xfb, 0x11, 0x95, 0x27, 0xd1, 0xea, 0xe5, 0x9c, 0xcb, 0xbe, 0xc9, 0xfa, 0x55, 0xc7, 0xed, 0x97,
-	0xad, 0xa5, 0x48, 0x35, 0x2c, 0xbc, 0x2b, 0x3b, 0x53, 0xf7, 0x6d, 0xae, 0x96, 0xfd, 0x86, 0xfb,
-	0x1b, 0x39, 0xce, 0xc5, 0x90, 0x7b, 0x87, 0x8c, 0x91, 0x30, 0x32, 0x62, 0x46, 0xed, 0xee, 0x3f,
-	0xf3, 0xba, 0x6a, 0xea, 0xad, 0xe2, 0x73, 0xb5, 0x93, 0x31, 0x8f, 0x0b, 0x8f, 0xa7, 0x4d, 0xc5,
-	0xb4, 0x51, 0x59, 0x64, 0x32, 0x05, 0xde, 0xa6, 0xe2, 0x06, 0x76, 0xbe, 0xff, 0xd8, 0x2b, 0x3f,
-	0xa8, 0xaf, 0xf4, 0x36, 0x82, 0x9e, 0x3b, 0xac, 0xe9, 0xab, 0xf3, 0x7a, 0x7b, 0xe4, 0xf9, 0x2c,
-	0xb6, 0x4d, 0x35, 0x98, 0xa0, 0x63, 0x39, 0x4f, 0x9b, 0x62, 0x09, 0xcd, 0xd7, 0xee, 0x1d, 0xec,
-	0xa3, 0xca, 0xb7, 0x7d, 0x34, 0x3f, 0x8e, 0xda, 0x87, 0x36, 0x34, 0x3b, 0x5f, 0xab, 0xe5, 0x2b,
-	0x68, 0x65, 0x0f, 0x1d, 0x9e, 0xe0, 0xd2, 0xd1, 0x09, 0x2e, 0x9d, 0x9e, 0x60, 0xf4, 0xba, 0xc0,
-	0xe8, 0x6d, 0x81, 0xd1, 0x97, 0x02, 0xa3, 0xc3, 0x02, 0xa3, 0xe3, 0x02, 0xa3, 0x9f, 0x05, 0x2e,
-	0x9d, 0x16, 0x18, 0xbd, 0x69, 0xe3, 0xd2, 0x41, 0x1b, 0xa3, 0xc3, 0x36, 0x2e, 0x1d, 0xb5, 0x71,
-	0xe9, 0xc9, 0xe3, 0x58, 0xc8, 0x67, 0x31, 0xc9, 0x45, 0xcb, 0x80, 0x52, 0x8c, 0x64, 0x9a, 0xda,
-	0xa2, 0x29, 0x54, 0xe2, 0x49, 0x25, 0x72, 0xbe, 0x0e, 0xca, 0x3b, 0x83, 0xa9, 0x0c, 0x63, 0x41,
-	0xe1, 0x85, 0x39, 0x5b, 0xaa, 0xbf, 0xa4, 0x34, 0x9c, 0xb0, 0x01, 0x5d, 0xfc, 0x13, 0x00, 0x00,
-	0xff, 0xff, 0x66, 0x76, 0x64, 0xc6, 0x54, 0x04, 0x00, 0x00,
+	// 688 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0xcf, 0x4f, 0x13, 0x4d,
+	0x18, 0xee, 0xb4, 0x7c, 0x04, 0x96, 0x7c, 0xdf, 0x07, 0x1b, 0x13, 0x37, 0x95, 0x4c, 0x9a, 0x7a,
+	0x41, 0x62, 0x77, 0x14, 0x12, 0x35, 0x44, 0x0f, 0xc0, 0xc1, 0xf4, 0xa2, 0x4d, 0x31, 0x24, 0x7a,
+	0xd9, 0x4c, 0x97, 0xb7, 0xcb, 0x68, 0xbb, 0x33, 0xee, 0xcc, 0x2e, 0x82, 0x21, 0x31, 0xc4, 0x3f,
+	0xc0, 0xc0, 0x3f, 0xe1, 0xcd, 0x93, 0x17, 0xf0, 0xc0, 0xc5, 0xe8, 0xc9, 0x10, 0xbd, 0x70, 0x84,
+	0xad, 0x07, 0x8d, 0x17, 0xfe, 0x04, 0xb3, 0xd3, 0x16, 0xfa, 0xc3, 0x98, 0x8a, 0xb7, 0x79, 0xdf,
+	0x67, 0x9f, 0xdd, 0xe7, 0x79, 0xf6, 0x9d, 0xd7, 0x98, 0x8b, 0x40, 0xda, 0x8c, 0x13, 0xe9, 0xae,
+	0x42, 0x9d, 0x92, 0x88, 0xc1, 0x9a, 0x24, 0x74, 0x23, 0x0c, 0xc0, 0x89, 0x7c, 0x50, 0x8e, 0x64,
+	0x0a, 0x88, 0x08, 0x2b, 0x35, 0xe6, 0x3a, 0x6e, 0x28, 0x15, 0xaf, 0x53, 0xc1, 0x6c, 0x11, 0x70,
+	0xc5, 0xcd, 0xcb, 0x4d, 0xae, 0xdd, 0xe4, 0xda, 0x9a, 0x6b, 0xf7, 0x70, 0xb3, 0x05, 0x8f, 0xa9,
+	0xd5, 0xb0, 0x62, 0xbb, 0xbc, 0x4e, 0x3c, 0xee, 0x71, 0xa2, 0xb9, 0x95, 0xb0, 0xaa, 0x2b, 0x5d,
+	0xe8, 0x53, 0xf3, 0x9d, 0xd9, 0x49, 0x8f, 0x73, 0xaf, 0x06, 0x84, 0x0a, 0x46, 0xa8, 0xef, 0x73,
+	0x45, 0x15, 0xe3, 0xbe, 0x6c, 0xa1, 0x97, 0xba, 0xd5, 0x72, 0xd1, 0x09, 0xe2, 0x6e, 0x50, 0x2b,
+	0x57, 0xeb, 0x02, 0xda, 0xf8, 0x64, 0x8f, 0x55, 0x5a, 0x63, 0x2b, 0x54, 0x41, 0x0b, 0xcd, 0xf7,
+	0xa0, 0x20, 0xc1, 0x8f, 0x7a, 0xbe, 0x90, 0xeb, 0x0f, 0xcb, 0xe9, 0x7e, 0xe2, 0xda, 0x20, 0x71,
+	0xf2, 0xca, 0x63, 0x70, 0x55, 0x8b, 0x41, 0x06, 0x61, 0x74, 0xd8, 0xc8, 0xbf, 0x45, 0xc6, 0xc4,
+	0x12, 0xa8, 0xe5, 0x62, 0xa9, 0xe8, 0x57, 0x79, 0x19, 0x9e, 0x86, 0x20, 0x95, 0x39, 0x69, 0x8c,
+	0xfa, 0xb4, 0x0e, 0x52, 0x50, 0x17, 0x2c, 0x94, 0x43, 0x53, 0xa3, 0xe5, 0xb3, 0x86, 0x69, 0x1a,
+	0x43, 0x49, 0x61, 0xa5, 0x35, 0xa0, 0xcf, 0xa6, 0x6f, 0x4c, 0x44, 0x4c, 0x38, 0x82, 0x06, 0xb4,
+	0x2e, 0x1d, 0x01, 0x81, 0x43, 0x37, 0xac, 0x4c, 0x2e, 0x33, 0x35, 0x36, 0x73, 0xc5, 0xee, 0xfe,
+	0xb3, 0x89, 0x06, 0xbb, 0x94, 0x0c, 0x81, 0x5c, 0x5d, 0x2e, 0x96, 0x4a, 0x9a, 0x52, 0x82, 0x60,
+	0x7e, 0x63, 0xc1, 0xda, 0xfd, 0xbe, 0x9f, 0x19, 0xd9, 0x46, 0xff, 0x4c, 0x67, 0xae, 0x5f, 0x9d,
+	0x8d, 0x8f, 0xde, 0x67, 0x86, 0xb7, 0xdf, 0xa1, 0xf4, 0x08, 0x2a, 0xff, 0x17, 0x31, 0xd1, 0xf1,
+	0x64, 0xfe, 0x82, 0x61, 0x76, 0xca, 0x96, 0x82, 0xfb, 0x12, 0xf2, 0x6f, 0x90, 0x71, 0x71, 0x09,
+	0xd4, 0x62, 0x8d, 0x87, 0x2b, 0x4b, 0x4c, 0xc1, 0xdf, 0x79, 0xaa, 0x18, 0xff, 0x77, 0x44, 0xc7,
+	0xfc, 0x2a, 0xb7, 0x32, 0x39, 0x34, 0x35, 0x36, 0x33, 0x67, 0x0f, 0x30, 0xab, 0xf6, 0x7c, 0x52,
+	0x2f, 0xfb, 0xa0, 0xda, 0x4a, 0x1e, 0xac, 0x0b, 0x28, 0xff, 0x4b, 0xdb, 0xed, 0xa4, 0x95, 0xcf,
+	0x1a, 0x56, 0xbf, 0xe0, 0xa6, 0x9b, 0x99, 0xdd, 0x21, 0x63, 0x74, 0x51, 0xdf, 0x92, 0xf9, 0x52,
+	0xd1, 0xfc, 0x81, 0x0c, 0xe3, 0xcc, 0xb2, 0x79, 0x63, 0x20, 0x0d, 0x7d, 0xbf, 0x36, 0x7b, 0xf3,
+	0x8f, 0x79, 0xad, 0x6c, 0x6b, 0xf1, 0x07, 0x2b, 0xb9, 0x31, 0x05, 0xc6, 0x0b, 0xcc, 0xaf, 0x06,
+	0x54, 0xaa, 0x20, 0x74, 0x55, 0x18, 0x40, 0x61, 0x2d, 0x60, 0x0a, 0xb6, 0xbe, 0x7c, 0xdd, 0x49,
+	0xdf, 0xcd, 0x2f, 0xb4, 0xee, 0x37, 0x39, 0xcd, 0x56, 0x92, 0xe7, 0xa7, 0xe7, 0xcd, 0xbe, 0x61,
+	0xd4, 0xd8, 0x26, 0x91, 0xa0, 0x9c, 0x64, 0x80, 0x92, 0x94, 0xe7, 0xd0, 0xb4, 0xf9, 0x32, 0x6d,
+	0x8c, 0xf7, 0x06, 0x63, 0xde, 0x1e, 0x54, 0xfb, 0xaf, 0x06, 0x20, 0x7b, 0xe7, 0x9c, 0xec, 0x96,
+	0x7f, 0x39, 0x88, 0xff, 0x7b, 0xf9, 0xe2, 0xf9, 0xfd, 0xbb, 0xc9, 0x77, 0x75, 0xb7, 0x1d, 0x43,
+	0xf6, 0xd6, 0xfe, 0x1e, 0xca, 0x7c, 0xde, 0x43, 0xd3, 0x83, 0x48, 0xbf, 0xaf, 0x37, 0xc1, 0xd6,
+	0x27, 0x2b, 0x3d, 0x8e, 0x16, 0x76, 0xd0, 0xc1, 0x31, 0x4e, 0x1d, 0x1e, 0xe3, 0xd4, 0xc9, 0x31,
+	0x46, 0x2f, 0x62, 0x8c, 0x5e, 0xc7, 0x18, 0x7d, 0x8c, 0x31, 0x3a, 0x88, 0x31, 0x3a, 0x8a, 0x31,
+	0xfa, 0x16, 0xe3, 0xd4, 0x49, 0x8c, 0xd1, 0xab, 0x06, 0x4e, 0xed, 0x37, 0x30, 0x3a, 0x68, 0xe0,
+	0xd4, 0x61, 0x03, 0xa7, 0x1e, 0x3d, 0xf4, 0xb8, 0x78, 0xe2, 0xd9, 0x11, 0xaf, 0x29, 0x08, 0x02,
+	0x6a, 0x87, 0x92, 0xe8, 0x43, 0x95, 0x07, 0xf5, 0x82, 0x08, 0x78, 0xc4, 0x56, 0x20, 0x28, 0xb4,
+	0x61, 0x22, 0x2a, 0x1e, 0x27, 0xf0, 0x4c, 0xb5, 0x37, 0xe5, 0x6f, 0x56, 0x4f, 0x65, 0x58, 0x6f,
+	0x9d, 0xd9, 0x9f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x69, 0xdf, 0xb4, 0xf0, 0x29, 0x06, 0x00, 0x00,
 }
 
 func (this *SetVIPInfoRequest) Equal(that interface{}) bool {
@@ -273,6 +399,57 @@ func (this *SetVIPInfoResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *SetCloudSiteInfoRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SetCloudSiteInfoRequest)
+	if !ok {
+		that2, ok := that.(SetCloudSiteInfoRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if !this.AzureVnetInfo.Equal(that1.AzureVnetInfo) {
+		return false
+	}
+	return true
+}
+func (this *SetCloudSiteInfoResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SetCloudSiteInfoResponse)
+	if !ok {
+		that2, ok := that.(SetCloudSiteInfoResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
 func (this *SetVIPInfoRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -293,6 +470,29 @@ func (this *SetVIPInfoResponse) GoString() string {
 	}
 	s := make([]string, 0, 4)
 	s = append(s, "&azure_vnet_site.SetVIPInfoResponse{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SetCloudSiteInfoRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&azure_vnet_site.SetCloudSiteInfoRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.AzureVnetInfo != nil {
+		s = append(s, "AzureVnetInfo: "+fmt.Sprintf("%#v", this.AzureVnetInfo)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SetCloudSiteInfoResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&azure_vnet_site.SetCloudSiteInfoResponse{")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -322,6 +522,11 @@ type CustomAPIClient interface {
 	// x-displayName: "Configure Azure Vnet Site VIP Information"
 	// Configure Azure Vnet Site VIP Information
 	SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest, opts ...grpc.CallOption) (*SetVIPInfoResponse, error)
+	// Configure Azure Vnet Site Information
+	//
+	// x-displayName: "Configure Azure Vnet Site Information"
+	// Configure Azure Vnet Site Information like public, private ips, subnet ids and others
+	SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInfoRequest, opts ...grpc.CallOption) (*SetCloudSiteInfoResponse, error)
 }
 
 type customAPIClient struct {
@@ -341,6 +546,15 @@ func (c *customAPIClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest,
 	return out, nil
 }
 
+func (c *customAPIClient) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInfoRequest, opts ...grpc.CallOption) (*SetCloudSiteInfoResponse, error) {
+	out := new(SetCloudSiteInfoResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.azure_vnet_site.CustomAPI/SetCloudSiteInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// Configure Azure Vnet Site VIP Information
@@ -348,6 +562,11 @@ type CustomAPIServer interface {
 	// x-displayName: "Configure Azure Vnet Site VIP Information"
 	// Configure Azure Vnet Site VIP Information
 	SetVIPInfo(context.Context, *SetVIPInfoRequest) (*SetVIPInfoResponse, error)
+	// Configure Azure Vnet Site Information
+	//
+	// x-displayName: "Configure Azure Vnet Site Information"
+	// Configure Azure Vnet Site Information like public, private ips, subnet ids and others
+	SetCloudSiteInfo(context.Context, *SetCloudSiteInfoRequest) (*SetCloudSiteInfoResponse, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -356,6 +575,9 @@ type UnimplementedCustomAPIServer struct {
 
 func (*UnimplementedCustomAPIServer) SetVIPInfo(ctx context.Context, req *SetVIPInfoRequest) (*SetVIPInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetVIPInfo not implemented")
+}
+func (*UnimplementedCustomAPIServer) SetCloudSiteInfo(ctx context.Context, req *SetCloudSiteInfoRequest) (*SetCloudSiteInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetCloudSiteInfo not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -380,6 +602,24 @@ func _CustomAPI_SetVIPInfo_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_SetCloudSiteInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetCloudSiteInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).SetCloudSiteInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.azure_vnet_site.CustomAPI/SetCloudSiteInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).SetCloudSiteInfo(ctx, req.(*SetCloudSiteInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.views.azure_vnet_site.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -387,6 +627,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetVIPInfo",
 			Handler:    _CustomAPI_SetVIPInfo_Handler,
+		},
+		{
+			MethodName: "SetCloudSiteInfo",
+			Handler:    _CustomAPI_SetCloudSiteInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -467,6 +711,78 @@ func (m *SetVIPInfoResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *SetCloudSiteInfoRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SetCloudSiteInfoRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SetCloudSiteInfoRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AzureVnetInfo != nil {
+		{
+			size, err := m.AzureVnetInfo.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SetCloudSiteInfoResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SetCloudSiteInfoResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SetCloudSiteInfoResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -510,6 +826,36 @@ func (m *SetVIPInfoResponse) Size() (n int) {
 	return n
 }
 
+func (m *SetCloudSiteInfoRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.AzureVnetInfo != nil {
+		l = m.AzureVnetInfo.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *SetCloudSiteInfoResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -538,6 +884,27 @@ func (this *SetVIPInfoResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&SetVIPInfoResponse{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SetCloudSiteInfoRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SetCloudSiteInfoRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`AzureVnetInfo:` + strings.Replace(fmt.Sprintf("%v", this.AzureVnetInfo), "AzureVnetSiteInfoType", "AzureVnetSiteInfoType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SetCloudSiteInfoResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SetCloudSiteInfoResponse{`,
 		`}`,
 	}, "")
 	return s
@@ -728,6 +1095,212 @@ func (m *SetVIPInfoResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: SetVIPInfoResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SetCloudSiteInfoRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SetCloudSiteInfoRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SetCloudSiteInfoRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureVnetInfo", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AzureVnetInfo == nil {
+				m.AzureVnetInfo = &AzureVnetSiteInfoType{}
+			}
+			if err := m.AzureVnetInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SetCloudSiteInfoResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SetCloudSiteInfoResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SetCloudSiteInfoResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

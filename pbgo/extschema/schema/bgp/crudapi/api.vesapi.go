@@ -2590,10 +2590,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "asn": {
                     "type": "integer",
-                    "description": " Autonomous System Number\n\nExample: - 64512-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "description": " Autonomous System Number\n\nExample: - \"64512\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n",
                     "title": "ASN",
                     "format": "int64",
                     "x-displayname": "ASN",
+                    "x-ves-example": "64512",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2841,6 +2842,17 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bgpBgpTargetService": {
+            "type": "string",
+            "description": "x-displayName: \"BGP Target Service\"\nIndicates the service which is the target for the BGP configuration\n\n - BGP_TARGET_SERVICE_UNSET: x-displayName: \"Unset\"\ntarget type is not set\n - BGP_TARGET_SERVICE_FRR: x-displayName: \"FRR\"\ntarget type is FRR (used by aws_tgw_site)\n - BGP_TARGET_SERVICE_PHOBOS: x-displayName: \"Phobos\"\ntarget type is Phobos",
+            "title": "BGP Target Service",
+            "enum": [
+                "BGP_TARGET_SERVICE_UNSET",
+                "BGP_TARGET_SERVICE_FRR",
+                "BGP_TARGET_SERVICE_PHOBOS"
+            ],
+            "default": "BGP_TARGET_SERVICE_UNSET"
+        },
         "bgpFamilyInet": {
             "type": "object",
             "description": "x-displayName: \"BGP Family Inet\"\nParameters for inet family.",
@@ -3063,10 +3075,11 @@ var APISwaggerJSON string = `{
                 },
                 "asn": {
                     "type": "integer",
-                    "description": " Autonomous System Number for BGP peer\n\nExample: - 64512-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "description": " Autonomous System Number for BGP peer\n\nExample: - \"64512\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n",
                     "title": "ASN",
                     "format": "int64",
                     "x-displayname": "ASN",
+                    "x-ves-example": "64512",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3099,10 +3112,11 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Peer TCP port number.\n\nExample: - 179-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Peer TCP port number.\n\nExample: - \"179\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Peer Port",
                     "format": "int64",
                     "x-displayname": "Peer Port",
+                    "x-ves-example": "179",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
@@ -3202,7 +3216,7 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "x-displayName: \"Peer Port\"\nx-example: 179\nPeer TCP port number.",
+                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nPeer TCP port number.",
                     "title": "port",
                     "format": "int64"
                 }

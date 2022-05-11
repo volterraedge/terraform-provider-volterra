@@ -2664,10 +2664,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "login_failures_threshold": {
                     "type": "integer",
-                    "description": " The number of failed logins beyond which the system will flag this user as malicious\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n",
+                    "description": " The number of failed logins beyond which the system will flag this user as malicious\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "Login failures threshold",
                     "format": "int64",
                     "x-displayname": "Login Failures Threshold",
+                    "x-ves-example": "10",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2685,10 +2686,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "forbidden_requests_threshold": {
                     "type": "integer",
-                    "description": " The number of forbidden requests beyond which the system will flag this user as malicious\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n",
+                    "description": " The number of forbidden requests beyond which the system will flag this user as malicious\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "forbidden requests threshold",
                     "format": "int64",
                     "x-displayname": "Forbidden Requests Threshold",
+                    "x-ves-example": "10",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

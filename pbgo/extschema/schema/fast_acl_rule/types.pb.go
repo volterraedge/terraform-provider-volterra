@@ -58,11 +58,11 @@ func (FastAclRuleSimpleAction) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_6d96eb17b9eb27ae, []int{0}
 }
 
-//  FastAclRuleAction
+// FastAclRuleAction
 //
-//  x-displayName: "Action"
-//  FastAclRuleAction specifies possible action to be applied on traffic,
-//  possible action include dropping, forwarding or ratelimiting the traffic
+// x-displayName: "Action"
+// FastAclRuleAction specifies possible action to be applied on traffic,
+// possible action include dropping, forwarding or ratelimiting the traffic
 type FastAclRuleAction struct {
 	// action
 	//
