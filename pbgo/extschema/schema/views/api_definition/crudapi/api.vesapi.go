@@ -2617,6 +2617,39 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "api_definitionApiGroupSummary": {
+            "type": "object",
+            "description": "ApiGroupSummary",
+            "title": "ApiGroupSummary",
+            "x-displayname": "API Group Summary",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.ApiGroupSummary",
+            "properties": {
+                "elements": {
+                    "type": "array",
+                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "elements",
+                    "items": {
+                        "$ref": "#/definitions/schemaapi_group_elementGlobalSpecType"
+                    },
+                    "x-displayname": "API Group Elements",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of Api Group.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "api_definitionApiOperation": {
             "type": "object",
             "description": "x-displayName: \"API Operation\"\nAPI operation according to OpenAPI specification.",
@@ -2634,37 +2667,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "api_definitionGlobalSpecType": {
-            "type": "object",
-            "description": "x-required\nShape of api_definition in the storage backend.",
-            "title": "GlobalSpecType",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.views.api_definition.GlobalSpecType",
-            "properties": {
-                "swagger_specs": {
-                    "type": "array",
-                    "description": " Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files. Copy Version's URL of the file, from its Action menu.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "swagger_specs",
-                    "minItems": 1,
-                    "maxItems": 10,
-                    "items": {
-                        "type": "string",
-                        "maxLength": 512
-                    },
-                    "x-displayname": "Swagger Specs",
-                    "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_bytes": "512",
-                        "ves.io.schema.rules.repeated.items.string.pattern": "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
-                        "ves.io.schema.rules.repeated.max_items": "10",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
         "api_definitionSpecType": {
             "type": "object",
             "title": "Shape of the api definition specification",
@@ -2673,7 +2675,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/api_definitionGlobalSpecType",
+                    "$ref": "#/definitions/viewsapi_definitionGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -3038,7 +3040,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpMethod": {
             "type": "string",
-            "description": "x-displayName: \"HTTP Method\"\nSpecifies the HTTP method used to access a resource.\n\n - ANY: x-displayName: \"ANY\"\nAny HTTP Method\n - GET: x-displayName: \"GET\"\nGET method\n - HEAD: x-displayName: \"HEAD\"\nHEAD method\n - POST: x-displayName: \"POST\"\nPOST method\n - PUT: x-displayName: \"PUT\"\nPUT method\n - DELETE: x-displayName: \"DELETE\"\nDELETE method\n - CONNECT: x-displayName: \"CONNECT\"\nCONNECT method\n - OPTIONS: x-displayName: \"OPTIONS\"\nOPTIONS method\n - TRACE: x-displayName: \"TRACE\"\nTRACE method\n - PATCH: x-displayName: \"PATCH\"\nPATCH method",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
             "title": "HttpMethod",
             "enum": [
                 "ANY",
@@ -3052,7 +3054,9 @@ var APISwaggerJSON string = `{
                 "TRACE",
                 "PATCH"
             ],
-            "default": "ANY"
+            "default": "ANY",
+            "x-displayname": "HTTP Method",
+            "x-ves-proto-enum": "ves.io.schema.HttpMethod"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -3492,6 +3496,50 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaapi_group_elementGlobalSpecType": {
+            "type": "object",
+            "description": "Shape of api_group_element in the storage backend.",
+            "title": "GlobalSpecType",
+            "x-displayname": "Specification",
+            "x-ves-proto-message": "ves.io.schema.api_group_element.GlobalSpecType",
+            "properties": {
+                "methods": {
+                    "type": "array",
+                    "description": " List of method values to match the input request API method against.\n The match is considered to succeed if the input request API method is a member of the list.\n\nExample: - \"['PUT', 'POST', 'DELETE']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.not_in: 0\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "methods",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaHttpMethod"
+                    },
+                    "x-displayname": "HTTP Methods",
+                    "x-ves-example": "['PUT', 'POST', 'DELETE']",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.not_in": "0",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "path_regex": {
+                    "type": "string",
+                    "description": " Regular expression to match the input request API path against.\n The match is considered to succeed if the input request API path matches the specified path regex.\n\nExample: - \"/api/config/.*/path[123]/$\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "path regex",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "x-displayname": "Path Regex",
+                    "x-ves-example": "/api/config/.*/path[123]/$",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
@@ -3511,6 +3559,46 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
                     "title": "tenant"
+                }
+            }
+        },
+        "viewsapi_definitionGlobalSpecType": {
+            "type": "object",
+            "description": "x-required\nShape of api_definition in the storage backend.",
+            "title": "GlobalSpecType",
+            "x-displayname": "Specification",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.GlobalSpecType",
+            "properties": {
+                "api_groups": {
+                    "type": "array",
+                    "description": " List of api_groups belonging to this api_definition.",
+                    "title": "api_groups",
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiGroupSummary"
+                    },
+                    "x-displayname": "Api Groups"
+                },
+                "swagger_specs": {
+                    "type": "array",
+                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "swagger_specs",
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 512
+                    },
+                    "x-displayname": "Swagger Specs",
+                    "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "512",
+                        "ves.io.schema.rules.repeated.items.string.pattern": "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
+                        "ves.io.schema.rules.repeated.max_items": "10",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         }

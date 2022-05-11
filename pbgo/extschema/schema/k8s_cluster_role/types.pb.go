@@ -36,6 +36,7 @@ type NonResourceURLListType struct {
 	// Non Resource URL(s)
 	//
 	// x-displayName: "Non Resource URL(s)"
+	// x-example: "value"
 	// x-required
 	// allowed URL(s) that do not represent any K8s resource. URL can be suffix or regex.
 	Urls []string `protobuf:"bytes,1,rep,name=urls,proto3" json:"urls,omitempty"`

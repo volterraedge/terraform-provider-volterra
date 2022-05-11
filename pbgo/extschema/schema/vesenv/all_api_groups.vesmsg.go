@@ -739,6 +739,94 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_VoltconsoleTenantMgmtRead:
+		if fv, exists := v.FldValidators["choice.voltconsole_tenant_mgmt_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleTenantMgmtRead).VoltconsoleTenantMgmtRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_tenant_mgmt_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleTenantMgmtWrite:
+		if fv, exists := v.FldValidators["choice.voltconsole_tenant_mgmt_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleTenantMgmtWrite).VoltconsoleTenantMgmtWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_tenant_mgmt_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleTenantMgmtAdmin:
+		if fv, exists := v.FldValidators["choice.voltconsole_tenant_mgmt_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleTenantMgmtAdmin).VoltconsoleTenantMgmtAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_tenant_mgmt_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleTenantMgmtSubscriptionMgmt:
+		if fv, exists := v.FldValidators["choice.voltconsole_tenant_mgmt_subscription_mgmt"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleTenantMgmtSubscriptionMgmt).VoltconsoleTenantMgmtSubscriptionMgmt
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_tenant_mgmt_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleScimClientWrite:
+		if fv, exists := v.FldValidators["choice.voltconsole_scim_client_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleScimClientWrite).VoltconsoleScimClientWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_scim_client_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleScimClientRead:
+		if fv, exists := v.FldValidators["choice.voltconsole_scim_client_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleScimClientRead).VoltconsoleScimClientRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_scim_client_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleScimAdmin:
+		if fv, exists := v.FldValidators["choice.voltconsole_scim_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleScimAdmin).VoltconsoleScimAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_scim_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleScimSubscriptionMgmt:
+		if fv, exists := v.FldValidators["choice.voltconsole_scim_subscription_mgmt"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleScimSubscriptionMgmt).VoltconsoleScimSubscriptionMgmt
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_scim_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

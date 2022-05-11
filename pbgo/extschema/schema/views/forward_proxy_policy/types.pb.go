@@ -349,6 +349,9 @@ func (*ForwardProxySimpleRuleType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// DomainListType
+//
+// x-displayName: "DomainListType"
 type DomainListType struct {
 	// TLS Domains
 	//
@@ -392,6 +395,9 @@ func (m *DomainListType) GetTlsList() []*schema.DomainType {
 	return nil
 }
 
+// URLListType
+//
+// x-displayName: "URLListType"
 type URLListType struct {
 	// HTTP URLs
 	//

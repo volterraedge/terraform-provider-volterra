@@ -195,11 +195,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Required: true,
 			},
 
-			"site_to_site_tunnel_ip": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -1074,6 +1069,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -1301,6 +1318,18 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},
@@ -2046,6 +2075,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -2413,6 +2464,18 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 								},
 							},
 						},
+
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -2505,6 +2568,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -2519,6 +2604,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
 							Optional: true,
+						},
+
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
 						},
 
 						"node": {
@@ -3239,6 +3346,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -3466,6 +3595,18 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 
 						"default_storage": {
@@ -4083,6 +4224,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"local_control_plane": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"no_local_control_plane": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -4392,6 +4555,18 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 
 						"default_storage": {
@@ -4827,14 +5002,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("resource_group"); ok && !isIntfNil(v) {
 
 		createSpec.ResourceGroup =
-			v.(string)
-
-	}
-
-	//site_to_site_tunnel_ip
-	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
-
-		createSpec.SiteToSiteTunnelIp =
 			v.(string)
 
 	}
@@ -6068,6 +6235,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.IngressEgressGw.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -6383,6 +6588,32 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 					}
 
+				}
+
+			}
+
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 				}
 
 			}
@@ -7421,6 +7652,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.IngressEgressGwAr.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -7938,6 +8207,32 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGwAr.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGwAr.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -8067,6 +8362,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.IngressGw.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -8085,6 +8418,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.IngressGwAr.AzureCertifiedHw = v.(string)
+
+			}
+
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.IngressGwAr.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
 
 			}
 
@@ -9091,6 +9462,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.VoltstackCluster.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -9406,6 +9815,32 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 					}
 
+				}
+
+			}
+
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 				}
 
 			}
@@ -10273,6 +10708,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["local_control_plane"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+				siteTypeInt.VoltstackClusterAr.LocalControlPlane = localControlPlane
+				for _, set := range sl {
+					localControlPlaneMapStrToI := set.(map[string]interface{})
+
+					localControlPlaneChoiceTypeFound := false
+
+					if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+							localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+					if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+						localControlPlaneChoiceTypeFound = true
+
+						if v.(bool) {
+							localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+							localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+							localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -10699,6 +11172,32 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 					}
 
+				}
+
+			}
+
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackClusterAr.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackClusterAr.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 				}
 
 			}
@@ -11137,13 +11636,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
-
-	}
-
-	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
-
-		updateSpec.SiteToSiteTunnelIp =
-			v.(string)
 
 	}
 

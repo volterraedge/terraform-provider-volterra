@@ -2167,20 +2167,22 @@ var APISwaggerJSON string = `{
                 },
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.\n This will act as an expiry duration on the client side after which client will not  be setting the\n cookie as part of the request.\n Default cookie expiry is 3600 seconds\n\nExample: - 5000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.\n This will act as an expiry duration on the client side after which client will not  be setting the\n cookie as part of the request.\n Default cookie expiry is 3600 seconds\n\nExample: - \"5000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "cookie expiry",
                     "format": "int64",
                     "x-displayname": "Cookie Expiry duration",
+                    "x-ves-example": "5000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "86400"
                     }
                 },
                 "cookie_refresh_interval": {
                     "type": "integer",
-                    "description": " Specifies in seconds refresh interval for session cookie.\n This is used to keep the active user active and reduce re-login.\n When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,\n re-issue a cookie with new expiry and with the same original session expiry.\n Default refresh interval is 3000 seconds\n\nExample: - 3600-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " Specifies in seconds refresh interval for session cookie.\n This is used to keep the active user active and reduce re-login.\n When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,\n re-issue a cookie with new expiry and with the same original session expiry.\n Default refresh interval is 3000 seconds\n\nExample: - \"3600\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "cookie refresh interval",
                     "format": "int64",
                     "x-displayname": "Cookie Refresh Interval",
+                    "x-ves-example": "3600",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "86400"
                     }
@@ -2193,10 +2195,11 @@ var APISwaggerJSON string = `{
                 },
                 "session_expiry": {
                     "type": "integer",
-                    "description": " specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.\n Default session expiry is 86400 seconds(24 hours).\n\nExample: - 36000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1296000\n",
+                    "description": " specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.\n Default session expiry is 86400 seconds(24 hours).\n\nExample: - \"36000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1296000\n",
                     "title": "session expiry",
                     "format": "int64",
                     "x-displayname": "Session Expiry duration",
+                    "x-ves-example": "36000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "1296000"
                     }
@@ -2615,15 +2618,18 @@ var APISwaggerJSON string = `{
         },
         "authenticationOIDCAuthParams": {
             "type": "object",
+            "title": "OIDCAuthParams",
+            "x-displayname": "OIDCAuthParams",
             "x-ves-proto-message": "ves.io.schema.authentication.OIDCAuthParams",
             "properties": {
                 "auth_endpoint_url": {
                     "type": "string",
-                    "description": " URL of the authorization server's authorization endpoint.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " URL of the authorization server's authorization endpoint.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Authorization Endpoint",
                     "minLength": 1,
                     "maxLength": 128,
                     "x-displayname": "Authorization Endpoint",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2634,11 +2640,12 @@ var APISwaggerJSON string = `{
                 },
                 "end_session_endpoint_url": {
                     "type": "string",
-                    "description": " URL of the authorization server's Logout endpoint.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " URL of the authorization server's Logout endpoint.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Logout Endpoint",
                     "minLength": 1,
                     "maxLength": 128,
                     "x-displayname": "Logout Endpoint",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2649,11 +2656,12 @@ var APISwaggerJSON string = `{
                 },
                 "token_endpoint_url": {
                     "type": "string",
-                    "description": " URL of the authorization server's Token endpoint.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " URL of the authorization server's Token endpoint.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Token Endpoint",
                     "minLength": 1,
                     "maxLength": 128,
                     "x-displayname": "Token Endpoint",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2666,6 +2674,8 @@ var APISwaggerJSON string = `{
         },
         "authenticationOIDCAuthType": {
             "type": "object",
+            "title": "OIDCAuthType",
+            "x-displayname": "OIDCAuthType",
             "x-ves-oneof-field-auth_params_choice": "[\"oidc_auth_params\",\"oidc_well_known_config_url\"]",
             "x-ves-proto-message": "ves.io.schema.authentication.OIDCAuthType",
             "properties": {
@@ -2687,11 +2697,12 @@ var APISwaggerJSON string = `{
                 },
                 "oidc_client_id": {
                     "type": "string",
-                    "description": " Client ID used while sending the Authorization Request to OIDC server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " Client ID used while sending the Authorization Request to OIDC server\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "OIDC Client ID",
                     "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "OIDC Client ID",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2906,9 +2917,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -2924,9 +2936,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3303,6 +3316,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3328,7 +3342,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",

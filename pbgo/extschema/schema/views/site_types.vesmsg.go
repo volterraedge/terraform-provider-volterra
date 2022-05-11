@@ -2955,6 +2955,348 @@ func CustomPortsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DCGWBGPPeerType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DCGWBGPPeerType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *DCGWBGPPeerType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAuthKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting DCGWBGPPeerType.auth_key")
+	}
+
+	return nil
+}
+
+func (m *DCGWBGPPeerType) DeepCopy() *DCGWBGPPeerType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DCGWBGPPeerType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DCGWBGPPeerType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DCGWBGPPeerType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DCGWBGPPeerTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDCGWBGPPeerType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDCGWBGPPeerType) AmazonAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for amazon_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDCGWBGPPeerType) CustomerAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for customer_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDCGWBGPPeerType) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDCGWBGPPeerType) AuthKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for auth_key")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDCGWBGPPeerType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DCGWBGPPeerType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DCGWBGPPeerType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["amazon_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("amazon_address"))
+		if err := fv(ctx, m.GetAmazonAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn"))
+		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["auth_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("auth_key"))
+		if err := fv(ctx, m.GetAuthKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["customer_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("customer_address"))
+		if err := fv(ctx, m.GetCustomerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDCGWBGPPeerTypeValidator = func() *ValidateDCGWBGPPeerType {
+	v := &ValidateDCGWBGPPeerType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAmazonAddress := v.AmazonAddressValidationRuleHandler
+	rulesAmazonAddress := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
+	}
+	vFn, err = vrhAmazonAddress(rulesAmazonAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DCGWBGPPeerType.amazon_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["amazon_address"] = vFn
+
+	vrhCustomerAddress := v.CustomerAddressValidationRuleHandler
+	rulesCustomerAddress := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
+	}
+	vFn, err = vrhCustomerAddress(rulesCustomerAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DCGWBGPPeerType.customer_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["customer_address"] = vFn
+
+	vrhAsn := v.AsnValidationRuleHandler
+	rulesAsn := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "2147483647",
+	}
+	vFn, err = vrhAsn(rulesAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DCGWBGPPeerType.asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["asn"] = vFn
+
+	vrhAuthKey := v.AuthKeyValidationRuleHandler
+	rulesAuthKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAuthKey(rulesAuthKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DCGWBGPPeerType.auth_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_key"] = vFn
+
+	return v
+}()
+
+func DCGWBGPPeerTypeValidator() db.Validator {
+	return DefaultDCGWBGPPeerTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DirectConnectInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectInfo) DeepCopy() *DirectConnectInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectInfo) VgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vgw_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDirectConnectInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_gateway_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_id"))
+		if err := fv(ctx, m.GetDirectConnectGatewayId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vgw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vgw_id"))
+		if err := fv(ctx, m.GetVgwId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectInfoValidator = func() *ValidateDirectConnectInfo {
+	v := &ValidateDirectConnectInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVgwId := v.VgwIdValidationRuleHandler
+	rulesVgwId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhVgwId(rulesVgwId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DirectConnectInfo.vgw_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vgw_id"] = vFn
+
+	return v
+}()
+
+func DirectConnectInfoValidator() db.Validator {
+	return DefaultDirectConnectInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GCPSubnetParamsType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4186,6 +4528,146 @@ func GlobalNetworkConnectionTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *HostedVIFConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HostedVIFConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HostedVIFConfigType) DeepCopy() *HostedVIFConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HostedVIFConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HostedVIFConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HostedVIFConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HostedVIFConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHostedVIFConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHostedVIFConfigType) VifsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for vifs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vifs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vifs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vifs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHostedVIFConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HostedVIFConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HostedVIFConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["vifs"]; exists {
+		vOpts := append(opts, db.WithValidateField("vifs"))
+		if err := fv(ctx, m.GetVifs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHostedVIFConfigTypeValidator = func() *ValidateHostedVIFConfigType {
+	v := &ValidateHostedVIFConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVifs := v.VifsValidationRuleHandler
+	rulesVifs := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "30",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.pattern":     "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhVifs(rulesVifs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HostedVIFConfigType.vifs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vifs"] = vFn
+
+	return v
+}()
+
+func HostedVIFConfigTypeValidator() db.Validator {
+	return DefaultHostedVIFConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *LocalControlPlaneType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4225,6 +4707,14 @@ type ValidateLocalControlPlaneType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateLocalControlPlaneType) LocalControlPlaneChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for local_control_plane_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateLocalControlPlaneType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*LocalControlPlaneType)
 	if !ok {
@@ -4237,6 +4727,16 @@ func (v *ValidateLocalControlPlaneType) Validate(ctx context.Context, pm interfa
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["local_control_plane_choice"]; exists {
+		val := m.GetLocalControlPlaneChoice()
+		vOpts := append(opts,
+			db.WithValidateField("local_control_plane_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetLocalControlPlaneChoice().(type) {
@@ -4271,6 +4771,25 @@ func (v *ValidateLocalControlPlaneType) Validate(ctx context.Context, pm interfa
 // Well-known symbol for default validator implementation
 var DefaultLocalControlPlaneTypeValidator = func() *ValidateLocalControlPlaneType {
 	v := &ValidateLocalControlPlaneType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLocalControlPlaneChoice := v.LocalControlPlaneChoiceValidationRuleHandler
+	rulesLocalControlPlaneChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLocalControlPlaneChoice(rulesLocalControlPlaneChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LocalControlPlaneType.local_control_plane_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["local_control_plane_choice"] = vFn
 
 	return v
 }()

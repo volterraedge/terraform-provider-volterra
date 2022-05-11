@@ -146,5 +146,11 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 			}
 			ignore_on_delete = true
 		}
-		`, resourceName, name)
+		resource "volterra_set_cloud_site_info" "%[1]s" {
+			name = volterra_azure_vnet_site.%[1]s.name
+			site_type = "azure_vnet_site"
+			public_ips = ["10.0.0.1"]
+			private_ips = ["192.168.0.1"]
+
+		}`, resourceName, name)
 }

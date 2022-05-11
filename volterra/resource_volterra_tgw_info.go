@@ -69,6 +69,20 @@ func resourceVolterraSetTGWInfo() *schema.Resource {
 					},
 				},
 			},
+			"public_ips": {
+				Type:     schema.TypeList,
+				Required: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"private_ips": {
+				Type:     schema.TypeList,
+				Required: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 		},
 	}
 }
@@ -88,14 +102,30 @@ func resourceVolterraSetTGWInfoCreate(d *schema.ResourceData, meta interface{}) 
 		vpcID = v.(string)
 	}
 
+	var publicIps []string
+	if v, ok := d.GetOk("public_ips"); ok {
+		for _, v := range v.([]interface{}) {
+			publicIps = append(publicIps, v.(string))
+		}
+	}
+
+	var privateIps []string
+	if v, ok := d.GetOk("private_ips"); ok {
+		for _, v := range v.([]interface{}) {
+			privateIps = append(privateIps, v.(string))
+		}
+	}
+
 	subnetIDs := getSubnetIDs(d)
 	req := &ves_io_schema_tgw_site.SetTGWInfoRequest{
 		Name:      name,
 		Namespace: systemNS,
 		TgwInfo: &ves_io_schema_tgw_site.AWSTGWInfoConfigType{
-			TgwId:     tgwID,
-			VpcId:     vpcID,
-			SubnetIds: subnetIDs,
+			TgwId:      tgwID,
+			VpcId:      vpcID,
+			SubnetIds:  subnetIDs,
+			PublicIps:  publicIps,
+			PrivateIps: privateIps,
 		},
 	}
 	log.Printf("[INFO] Foo Setting Id %s, %s\n", tgwID, vpcID)

@@ -1171,6 +1171,14 @@ func (v *ValidateAzureVnetIngressEgressGwARType) OutsideStaticRouteChoiceValidat
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetIngressEgressGwARType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressEgressGwARType) AzureCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -1370,6 +1378,15 @@ func (v *ValidateAzureVnetIngressEgressGwARType) Validate(ctx context.Context, p
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -1443,6 +1460,42 @@ func (v *ValidateAzureVnetIngressEgressGwARType) Validate(ctx context.Context, p
 			vOpts := append(opts,
 				db.WithValidateField("outside_static_route_choice"),
 				db.WithValidateField("outside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwARType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwARType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1532,6 +1585,17 @@ var DefaultAzureVnetIngressEgressGwARTypeValidator = func() *ValidateAzureVnetIn
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	vrhAzureCertifiedHw := v.AzureCertifiedHwValidationRuleHandler
 	rulesAzureCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1559,6 +1623,8 @@ var DefaultAzureVnetIngressEgressGwARTypeValidator = func() *ValidateAzureVnetIn
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["node"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeARTypeValidator().Validate
+
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -2710,6 +2776,14 @@ func (v *ValidateAzureVnetIngressEgressGwType) OutsideStaticRouteChoiceValidatio
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetIngressEgressGwType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressEgressGwType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AzureVnetTwoInterfaceNodeType, opts ...db.ValidateOpt) error {
@@ -2957,6 +3031,15 @@ func (v *ValidateAzureVnetIngressEgressGwType) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -3021,6 +3104,42 @@ func (v *ValidateAzureVnetIngressEgressGwType) Validate(ctx context.Context, pm 
 			vOpts := append(opts,
 				db.WithValidateField("outside_static_route_choice"),
 				db.WithValidateField("outside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AzureVnetIngressEgressGwType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3110,6 +3229,17 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	vrhAzNodes := v.AzNodesValidationRuleHandler
 	rulesAzNodes := map[string]string{
 		"ves.io.schema.rules.repeated.num_items": "1,3",
@@ -3146,6 +3276,8 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -3297,6 +3429,15 @@ func (v *ValidateAzureVnetIngressGwARType) Validate(ctx context.Context, pm inte
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["node"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("node"))
@@ -3335,6 +3476,8 @@ var DefaultAzureVnetIngressGwARTypeValidator = func() *ValidateAzureVnetIngressG
 	v.FldValidators["azure_certified_hw"] = vFn
 
 	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
+
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -3534,6 +3677,15 @@ func (v *ValidateAzureVnetIngressGwType) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -3573,11 +3725,218 @@ var DefaultAzureVnetIngressGwTypeValidator = func() *ValidateAzureVnetIngressGwT
 	}
 	v.FldValidators["azure_certified_hw"] = vFn
 
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
 	return v
 }()
 
 func AzureVnetIngressGwTypeValidator() db.Validator {
 	return DefaultAzureVnetIngressGwTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureVnetSiteInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureVnetSiteInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureVnetSiteInfoType) DeepCopy() *AzureVnetSiteInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureVnetSiteInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureVnetSiteInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureVnetSiteInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureVnetSiteInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureVnetSiteInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureVnetSiteInfoType) PublicIpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for public_ips")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for public_ips")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated public_ips")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items public_ips")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetSiteInfoType) PrivateIpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for private_ips")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for private_ips")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated private_ips")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items private_ips")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetSiteInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureVnetSiteInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureVnetSiteInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["private_ips"]; exists {
+		vOpts := append(opts, db.WithValidateField("private_ips"))
+		if err := fv(ctx, m.GetPrivateIps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["public_ips"]; exists {
+		vOpts := append(opts, db.WithValidateField("public_ips"))
+		if err := fv(ctx, m.GetPublicIps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureVnetSiteInfoTypeValidator = func() *ValidateAzureVnetSiteInfoType {
+	v := &ValidateAzureVnetSiteInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPublicIps := v.PublicIpsValidationRuleHandler
+	rulesPublicIps := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
+		"ves.io.schema.rules.repeated.items.string.ip": "true",
+		"ves.io.schema.rules.repeated.num_items":       "0,1,3",
+		"ves.io.schema.rules.repeated.unique":          "true",
+	}
+	vFn, err = vrhPublicIps(rulesPublicIps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetSiteInfoType.public_ips: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["public_ips"] = vFn
+
+	vrhPrivateIps := v.PrivateIpsValidationRuleHandler
+	rulesPrivateIps := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
+		"ves.io.schema.rules.repeated.items.string.ip": "true",
+		"ves.io.schema.rules.repeated.num_items":       "0,1,3",
+		"ves.io.schema.rules.repeated.unique":          "true",
+	}
+	vFn, err = vrhPrivateIps(rulesPrivateIps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetSiteInfoType.private_ips: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_ips"] = vFn
+
+	return v
+}()
+
+func AzureVnetSiteInfoTypeValidator() db.Validator {
+	return DefaultAzureVnetSiteInfoTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4575,6 +4934,14 @@ func (v *ValidateAzureVnetVoltstackClusterARType) OutsideStaticRouteChoiceValida
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetVoltstackClusterARType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetVoltstackClusterARType) StorageClassChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4771,6 +5138,15 @@ func (v *ValidateAzureVnetVoltstackClusterARType) Validate(ctx context.Context, 
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -4844,6 +5220,42 @@ func (v *ValidateAzureVnetVoltstackClusterARType) Validate(ctx context.Context, 
 			vOpts := append(opts,
 				db.WithValidateField("outside_static_route_choice"),
 				db.WithValidateField("outside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterARType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterARType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterARType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4969,6 +5381,17 @@ var DefaultAzureVnetVoltstackClusterARTypeValidator = func() *ValidateAzureVnetV
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterARType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5008,6 +5431,8 @@ var DefaultAzureVnetVoltstackClusterARTypeValidator = func() *ValidateAzureVnetV
 	v.FldValidators["storage_class_choice.storage_class_list"] = ves_io_schema_views.StorageClassListTypeValidator().Validate
 
 	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
+
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -6011,6 +6436,14 @@ func (v *ValidateAzureVnetVoltstackClusterType) OutsideStaticRouteChoiceValidati
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetVoltstackClusterType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetVoltstackClusterType) StorageClassChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6255,6 +6688,15 @@ func (v *ValidateAzureVnetVoltstackClusterType) Validate(ctx context.Context, pm
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -6319,6 +6761,42 @@ func (v *ValidateAzureVnetVoltstackClusterType) Validate(ctx context.Context, pm
 			vOpts := append(opts,
 				db.WithValidateField("outside_static_route_choice"),
 				db.WithValidateField("outside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AzureVnetVoltstackClusterType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -6444,6 +6922,17 @@ var DefaultAzureVnetVoltstackClusterTypeValidator = func() *ValidateAzureVnetVol
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6492,6 +6981,8 @@ var DefaultAzureVnetVoltstackClusterTypeValidator = func() *ValidateAzureVnetVol
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["storage_class_choice.storage_class_list"] = ves_io_schema_views.StorageClassListTypeValidator().Validate
+
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -6930,16 +7421,6 @@ func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -7156,15 +7637,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("resource_group"))
 		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7515,17 +7987,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
-
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
 
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
@@ -8054,16 +8515,6 @@ func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -8289,15 +8740,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
 		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8690,17 +9132,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vip_params_per_az"] = vFn
-
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
 
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
@@ -9335,16 +9766,6 @@ func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -9408,6 +9829,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cloud_site_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_site_info"))
+		if err := fv(ctx, m.GetCloudSiteInfo(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9570,15 +10000,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("resource_group"))
 		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9999,17 +10420,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["vip_params_per_az"] = vFn
 
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
-
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
@@ -10043,6 +10453,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["cloud_site_info"] = AzureVnetSiteInfoTypeValidator().Validate
 
 	return v
 }()
@@ -10318,16 +10730,6 @@ func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -10392,15 +10794,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
-			return err
 		}
 
 	}
@@ -10614,17 +11007,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
-
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -11794,7 +12176,6 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Os = f.GetOs()
 	m.GetRegionChoiceFromGlobalSpecType(f)
 	m.ResourceGroup = f.GetResourceGroup()
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.Sw = f.GetSw()
@@ -11818,7 +12199,6 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Os = m1.Os
 	m1.SetRegionChoiceToGlobalSpecType(f)
 	f.ResourceGroup = m1.ResourceGroup
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.Sw = m1.Sw
@@ -12046,7 +12426,6 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetRegionChoiceFromGlobalSpecType(f)
 	m.ResourceGroup = f.GetResourceGroup()
 
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.Tags = f.GetTags()
@@ -12072,7 +12451,6 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetRegionChoiceToGlobalSpecType(f)
 	f.ResourceGroup = m1.ResourceGroup
 
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.Tags = m1.Tags
@@ -12278,7 +12656,6 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
@@ -12292,7 +12669,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	m1.SetSiteTypeToGlobalSpecType(f)
 	m1.SetWorkerNodesToGlobalSpecType(f)
 }

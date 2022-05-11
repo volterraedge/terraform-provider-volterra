@@ -164,7 +164,7 @@ type FieldAggregation struct {
 	// topk
 	//
 	// x-displayName: "TopK"
-	//
+	// x-example: "5"
 	// Number of top field values to be returned in the response.
 	// Optional: If not specified, top 5 values will be returned in the response.
 	Topk uint32 `protobuf:"varint,2,opt,name=topk,proto3" json:"topk,omitempty"`

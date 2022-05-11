@@ -40,6 +40,7 @@ const (
 	networkIntf               = "volterra_network_interface"
 	servicePolicy             = "volterra_service_policy"
 	cloudSiteLabels           = "volterra_cloud_site_labels"
+	setCloudSiteInfo          = "volterra_set_cloud_site_info"
 )
 
 // Provider returns a terraform.ResourceProvider.
@@ -200,5 +201,6 @@ func getResourceMap() map[string]*schema.Resource {
 	resourceMap[networkIntf] = resourceVolterraNetworkInterface()
 	resourceMap[servicePolicy] = resourceVolterraServicePolicy()
 	resourceMap[cloudSiteLabels] = resourceVolterraCloudSiteLabels()
+	resourceMap[setCloudSiteInfo] = resourceVolterraSetCloudSiteInfo()
 	return resourceMap
 }

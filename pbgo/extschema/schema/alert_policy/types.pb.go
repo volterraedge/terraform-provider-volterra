@@ -465,6 +465,7 @@ type CustomGroupBy struct {
 	// labels
 	//
 	// x-displayName: "Labels"
+	// x-example: "value"
 	// Name of labels to group/aggregate the alerts
 	Labels []string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty"`
 }

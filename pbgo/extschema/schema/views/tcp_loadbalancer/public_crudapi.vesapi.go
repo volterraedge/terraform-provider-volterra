@@ -2562,6 +2562,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -2587,7 +2588,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -3821,9 +3823,10 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint_subsets": {
                     "type": "object",
-                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
+                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
                     "title": "Origin Servers Subset",
                     "x-displayname": "Origin Servers Subsets",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "16"
                     }
@@ -3840,20 +3843,22 @@ var APISwaggerJSON string = `{
                 },
                 "priority": {
                     "type": "integer",
-                    "description": " Priority of this origin pool, valid only with multiple origin pools.\n Value of 0 will make the pool as lowest priority origin pool\n Priority of 1 means highest priority and is considered active.\n When active origin pool is not available, lower priority origin pools are\n made active as per the increasing priority.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Priority of this origin pool, valid only with multiple origin pools.\n Value of 0 will make the pool as lowest priority origin pool\n Priority of 1 means highest priority and is considered active.\n When active origin pool is not available, lower priority origin pools are\n made active as per the increasing priority.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Priority",
                     "format": "int64",
                     "x-displayname": "Priority",
+                    "x-ves-example": "1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
                 },
                 "weight": {
                     "type": "integer",
-                    "description": " Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool",
+                    "description": " Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool\n\nExample: - \"1\"-",
                     "title": "Weight",
                     "format": "int64",
-                    "x-displayname": "Weight"
+                    "x-displayname": "Weight",
+                    "x-ves-example": "1"
                 }
             }
         },
@@ -3881,9 +3886,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " Use given IP address as VIP on the site\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": " Use given IP address as VIP on the site\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP address on the site",
                     "x-displayname": "IP Address",
+                    "x-ves-example": "8.8.8.8",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
                     }

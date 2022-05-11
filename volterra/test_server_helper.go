@@ -28,6 +28,7 @@ import (
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	ves_io_schema_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
+	ves_io_schema_gcp_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
 	ves_io_schema_tf_params "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
 	ves_io_schema_vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
@@ -101,6 +102,14 @@ func (s *apiCredentialCustomAPIServer) RenewServiceCredentials(ctx context.Conte
 }
 
 func (s *apiCredentialCustomAPIServer) RevokeServiceCredentials(ctx context.Context, req *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) RecreateScimToken(ctx context.Context, req *ves_io_schema_api_credential.RecreateScimTokenRequest) (*ves_io_schema_api_credential.CreateResponse, error) {
+	return &ves_io_schema_api_credential.CreateResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) RevokeScimToken(ctx context.Context, req *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
 	return &ves_io_schema_api_credential.StatusResponse{}, nil
 }
 
@@ -193,6 +202,12 @@ func (t *vpcCustomAPIServer) SetVIPInfo(context.Context,
 
 }
 
+func (t *vpcCustomAPIServer) SetCloudSiteInfo(context.Context,
+	*ves_io_schema_aws_vpc_site.SetCloudSiteInfoRequest) (*ves_io_schema_aws_vpc_site.SetCloudSiteInfoResponse, error) {
+	return &ves_io_schema_aws_vpc_site.SetCloudSiteInfoResponse{}, nil
+
+}
+
 var _ ves_io_schema_aws_vpc_site.CustomAPIServer = &vpcCustomAPIServer{}
 
 // ves.io.schema.views.azure_vnet_site.CustomAPI handling - start
@@ -207,6 +222,12 @@ func newVnetCustomAPIServer(sf svcfw.Service) server.APIHandler {
 func (t *vnetCustomAPIServer) SetVIPInfo(context.Context,
 	*ves_io_schema_azure_vnet_site.SetVIPInfoRequest) (*ves_io_schema_azure_vnet_site.SetVIPInfoResponse, error) {
 	return &ves_io_schema_azure_vnet_site.SetVIPInfoResponse{}, nil
+
+}
+
+func (t *vnetCustomAPIServer) SetCloudSiteInfo(context.Context,
+	*ves_io_schema_azure_vnet_site.SetCloudSiteInfoRequest) (*ves_io_schema_azure_vnet_site.SetCloudSiteInfoResponse, error) {
+	return &ves_io_schema_azure_vnet_site.SetCloudSiteInfoResponse{}, nil
 
 }
 
@@ -358,6 +379,23 @@ func (t *namespaceCustomAPIServer) SuggestValues(ctx context.Context, req *ves_i
 
 var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}
 
+// ves.io.schema.views.gcp_vpc_site.CustomAPI handling - start
+type gcpVpcCustomAPIServer struct {
+	sf svcfw.Service
+}
+
+func newGcpVpcCustomAPIServer(sf svcfw.Service) server.APIHandler {
+	return &gcpVpcCustomAPIServer{sf: sf}
+}
+
+func (t *gcpVpcCustomAPIServer) SetCloudSiteInfo(context.Context,
+	*ves_io_schema_gcp_vpc_site.SetCloudSiteInfoRequest) (*ves_io_schema_gcp_vpc_site.SetCloudSiteInfoResponse, error) {
+	return &ves_io_schema_gcp_vpc_site.SetCloudSiteInfoResponse{}, nil
+
+}
+
+var _ ves_io_schema_gcp_vpc_site.CustomAPIServer = &gcpVpcCustomAPIServer{}
+
 // ves.io.schema.namespace.NamespaceCustomAPI handling - end
 
 func getFixtureOpts(noTLS bool) []generic.ConfigOpt {
@@ -418,6 +456,7 @@ func makeCustomTestServer(t *testing.T, objectTypes []string) (*generic.Fixture,
 		"ves.io.schema.site.CustomStateAPI":                        newSiteCustomAPIServer,
 		"ves.io.schema.views.aws_tgw_site.CustomAPI":               newTGWCustomAPIServer,
 		"ves.io.schema.views.aws_vpc_site.CustomAPI":               newVPCCustomAPIServer,
+		"ves.io.schema.views.gcp_vpc_site.CustomAPI":               newGcpVpcCustomAPIServer,
 		"ves.io.schema.views.azure_vnet_site.CustomAPI":            newVnetCustomAPIServer,
 		"ves.io.schema.views.terraform_parameters.CustomAPI":       newTFCustomAPIServer,
 		"ves.io.schema.views.terraform_parameters.CustomActionAPI": newTFCustomActionAPIServer,

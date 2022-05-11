@@ -14,6 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -1461,7 +1463,7 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 var DefaultGetUserRoleResponseValidator = func() *ValidateGetUserRoleResponse {
 	v := &ValidateGetUserRoleResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["namespace_roles"] = NamespaceRoleTypeValidator().Validate
+	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
 	return v
 }()
@@ -1831,150 +1833,13 @@ func (v *ValidateListUserRoleResponseItem) Validate(ctx context.Context, pm inte
 var DefaultListUserRoleResponseItemValidator = func() *ValidateListUserRoleResponseItem {
 	v := &ValidateListUserRoleResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["namespace_roles"] = NamespaceRoleTypeValidator().Validate
+	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
 	return v
 }()
 
 func ListUserRoleResponseItemValidator() db.Validator {
 	return DefaultListUserRoleResponseItemValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *NamespaceRoleType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *NamespaceRoleType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *NamespaceRoleType) DeepCopy() *NamespaceRoleType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &NamespaceRoleType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *NamespaceRoleType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *NamespaceRoleType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return NamespaceRoleTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateNamespaceRoleType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateNamespaceRoleType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateNamespaceRoleType) RoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for role")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateNamespaceRoleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*NamespaceRoleType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *NamespaceRoleType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["namespace"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("namespace"))
-		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["role"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("role"))
-		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultNamespaceRoleTypeValidator = func() *ValidateNamespaceRoleType {
-	v := &ValidateNamespaceRoleType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhNamespace := v.NamespaceValidationRuleHandler
-	rulesNamespace := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhNamespace(rulesNamespace)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for NamespaceRoleType.namespace: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["namespace"] = vFn
-
-	vrhRole := v.RoleValidationRuleHandler
-	rulesRole := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhRole(rulesRole)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for NamespaceRoleType.role: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["role"] = vFn
-
-	return v
-}()
-
-func NamespaceRoleTypeValidator() db.Validator {
-	return DefaultNamespaceRoleTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2717,7 +2582,7 @@ var DefaultUserRoleRequestValidator = func() *ValidateUserRoleRequest {
 	}
 	v.FldValidators["email"] = vFn
 
-	v.FldValidators["namespace_roles"] = NamespaceRoleTypeValidator().Validate
+	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
 	return v
 }()

@@ -6246,7 +6246,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logaccess_logDateAggregation": {
             "type": "object",
-            "description": "x-displayName: Date Aggregation\nAggregate access logs based on timestamp in the log",
+            "description": "x-displayName: \"Date Aggregation\"\nAggregate access logs based on timestamp in the log",
             "title": "Date Aggregation",
             "properties": {
                 "step": {
@@ -6263,7 +6263,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logaccess_logDateSubAggregation": {
             "type": "object",
-            "description": "x-displayName: Date SubAggregation\nAggregate access logs in each date bucket based on one of the sub aggregation types",
+            "description": "x-displayName: \"Date SubAggregation\"\nAggregate access logs in each date bucket based on one of the sub aggregation types",
             "title": "Date SubAggregation",
             "properties": {
                 "field_aggregation": {
@@ -6285,7 +6285,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\nx-example: \"5\"\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }
@@ -6368,7 +6368,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\nx-example: \"5\"\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }
@@ -6431,7 +6431,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logfirewall_logDateAggregation": {
             "type": "object",
-            "description": "x-displayName: Date Aggregation\nAggregate firewall logs based on timestamp in the log",
+            "description": "x-displayName: \"Date Aggregation\"\nAggregate firewall logs based on timestamp in the log",
             "title": "Date Aggregation",
             "properties": {
                 "step": {
@@ -6448,7 +6448,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logfirewall_logDateSubAggregation": {
             "type": "object",
-            "description": "x-displayName: Date SubAggregation\nAggregate firewall logs in each date bucket based on one of the sub aggregation types",
+            "description": "x-displayName: \"Date SubAggregation\"\nAggregate firewall logs in each date bucket based on one of the sub aggregation types",
             "title": "Date SubAggregation",
             "properties": {
                 "field_aggregation": {
@@ -6470,7 +6470,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\nx-example: \"5\"\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }
@@ -6504,7 +6504,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logk8s_audit_logDateAggregation": {
             "type": "object",
-            "description": "x-displayName: Date Aggregation\nAggregate K8s audit logs based on timestamp in the log",
+            "description": "x-displayName: \"Date Aggregation\"\nAggregate K8s audit logs based on timestamp in the log",
             "title": "Date Aggregation",
             "properties": {
                 "step": {
@@ -6533,7 +6533,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logk8s_eventsDateAggregation": {
             "type": "object",
-            "description": "x-displayName: Date Aggregation\nAggregate K8s events based on timestamp in the event",
+            "description": "x-displayName: \"Date Aggregation\"\nAggregate K8s events based on timestamp in the event",
             "title": "Date Aggregation",
             "properties": {
                 "step": {
@@ -6555,7 +6555,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\nx-example: \"5\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }
@@ -6588,7 +6588,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logvk8s_audit_logDateAggregation": {
             "type": "object",
-            "description": "x-displayName: Date Aggregation\nAggregate vK8s audit logs based on timestamp in the log",
+            "description": "x-displayName: \"Date Aggregation\"\nAggregate vK8s audit logs based on timestamp in the log",
             "title": "Date Aggregation",
             "properties": {
                 "step": {
@@ -6617,7 +6617,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logvk8s_eventsDateAggregation": {
             "type": "object",
-            "description": "x-displayName: Date Aggregation\nAggregate vK8s events based on timestamp in the event",
+            "description": "x-displayName: \"Date Aggregation\"\nAggregate vK8s events based on timestamp in the event",
             "title": "Date Aggregation",
             "properties": {
                 "step": {
@@ -6639,7 +6639,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\nx-example: \"5\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }

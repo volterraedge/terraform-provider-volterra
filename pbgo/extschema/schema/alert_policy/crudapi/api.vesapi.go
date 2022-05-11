@@ -2608,12 +2608,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "labels": {
                     "type": "array",
-                    "description": " Name of labels to group/aggregate the alerts",
+                    "description": " Name of labels to group/aggregate the alerts\n\nExample: - \"value\"-",
                     "title": "labels",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 }
             }
         },

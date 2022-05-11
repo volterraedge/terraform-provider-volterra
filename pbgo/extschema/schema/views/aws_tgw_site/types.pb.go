@@ -198,6 +198,9 @@ func (m *ExistingTGWType) GetVolterraSiteAsn() uint32 {
 	return 0
 }
 
+// TGWParamsType
+//
+// x-displayName: "TGWParamsType"
 type TGWParamsType struct {
 	// BGP ASN config
 	//
@@ -653,6 +656,16 @@ type VnConfiguration struct {
 	//	*VnConfiguration_DcClusterGroupOutsideVn
 	//	*VnConfiguration_DcClusterGroupInsideVn
 	DcClusterGroupChoice isVnConfiguration_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
+	// Site Mesh Group Connection Type
+	//
+	// x-displayName: "Site Mesh Group Connection Type"
+	// x-required
+	// Select how the site mesh group needs to be connected
+	//
+	// Types that are valid to be assigned to SiteMeshGroupChoice:
+	//	*VnConfiguration_SmConnectionPublicIp
+	//	*VnConfiguration_SmConnectionPvtIp
+	SiteMeshGroupChoice isVnConfiguration_SiteMeshGroupChoice `protobuf_oneof:"site_mesh_group_choice"`
 	// Allowed VIP Port Configuration
 	//
 	// x-displayName: "Allowed VIP Port Configuration"
@@ -712,6 +725,12 @@ type isVnConfiguration_DcClusterGroupChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isVnConfiguration_SiteMeshGroupChoice interface {
+	isVnConfiguration_SiteMeshGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type VnConfiguration_NoInsideStaticRoutes struct {
 	NoInsideStaticRoutes *schema.Empty `protobuf:"bytes,2,opt,name=no_inside_static_routes,json=noInsideStaticRoutes,proto3,oneof" json:"no_inside_static_routes,omitempty"`
@@ -740,6 +759,12 @@ type VnConfiguration_DcClusterGroupOutsideVn struct {
 type VnConfiguration_DcClusterGroupInsideVn struct {
 	DcClusterGroupInsideVn *views.ObjectRefType `protobuf:"bytes,14,opt,name=dc_cluster_group_inside_vn,json=dcClusterGroupInsideVn,proto3,oneof" json:"dc_cluster_group_inside_vn,omitempty"`
 }
+type VnConfiguration_SmConnectionPublicIp struct {
+	SmConnectionPublicIp *schema.Empty `protobuf:"bytes,16,opt,name=sm_connection_public_ip,json=smConnectionPublicIp,proto3,oneof" json:"sm_connection_public_ip,omitempty"`
+}
+type VnConfiguration_SmConnectionPvtIp struct {
+	SmConnectionPvtIp *schema.Empty `protobuf:"bytes,17,opt,name=sm_connection_pvt_ip,json=smConnectionPvtIp,proto3,oneof" json:"sm_connection_pvt_ip,omitempty"`
+}
 
 func (*VnConfiguration_NoInsideStaticRoutes) isVnConfiguration_InsideStaticRouteChoice()   {}
 func (*VnConfiguration_InsideStaticRoutes) isVnConfiguration_InsideStaticRouteChoice()     {}
@@ -750,6 +775,8 @@ func (*VnConfiguration_GlobalNetworkList) isVnConfiguration_GlobalNetworkChoice(
 func (*VnConfiguration_NoDcClusterGroup) isVnConfiguration_DcClusterGroupChoice()          {}
 func (*VnConfiguration_DcClusterGroupOutsideVn) isVnConfiguration_DcClusterGroupChoice()   {}
 func (*VnConfiguration_DcClusterGroupInsideVn) isVnConfiguration_DcClusterGroupChoice()    {}
+func (*VnConfiguration_SmConnectionPublicIp) isVnConfiguration_SiteMeshGroupChoice()       {}
+func (*VnConfiguration_SmConnectionPvtIp) isVnConfiguration_SiteMeshGroupChoice()          {}
 
 func (m *VnConfiguration) GetInsideStaticRouteChoice() isVnConfiguration_InsideStaticRouteChoice {
 	if m != nil {
@@ -772,6 +799,12 @@ func (m *VnConfiguration) GetGlobalNetworkChoice() isVnConfiguration_GlobalNetwo
 func (m *VnConfiguration) GetDcClusterGroupChoice() isVnConfiguration_DcClusterGroupChoice {
 	if m != nil {
 		return m.DcClusterGroupChoice
+	}
+	return nil
+}
+func (m *VnConfiguration) GetSiteMeshGroupChoice() isVnConfiguration_SiteMeshGroupChoice {
+	if m != nil {
+		return m.SiteMeshGroupChoice
 	}
 	return nil
 }
@@ -839,6 +872,20 @@ func (m *VnConfiguration) GetDcClusterGroupInsideVn() *views.ObjectRefType {
 	return nil
 }
 
+func (m *VnConfiguration) GetSmConnectionPublicIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*VnConfiguration_SmConnectionPublicIp); ok {
+		return x.SmConnectionPublicIp
+	}
+	return nil
+}
+
+func (m *VnConfiguration) GetSmConnectionPvtIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*VnConfiguration_SmConnectionPvtIp); ok {
+		return x.SmConnectionPvtIp
+	}
+	return nil
+}
+
 func (m *VnConfiguration) GetAllowedVipPort() *views.AllowedVIPPorts {
 	if m != nil {
 		return m.AllowedVipPort
@@ -858,6 +905,8 @@ func (*VnConfiguration) XXX_OneofWrappers() []interface{} {
 		(*VnConfiguration_NoDcClusterGroup)(nil),
 		(*VnConfiguration_DcClusterGroupOutsideVn)(nil),
 		(*VnConfiguration_DcClusterGroupInsideVn)(nil),
+		(*VnConfiguration_SmConnectionPublicIp)(nil),
+		(*VnConfiguration_SmConnectionPvtIp)(nil),
 	}
 }
 
@@ -979,6 +1028,7 @@ type VPCAttachmentType struct {
 	// Labels For VPC ID
 	//
 	// x-displayName: "Labels For VPC ID"
+	// x-example: "value"
 	// Add Labels for each of the VPC ID, these labels can be used in firewall policy
 	// These labels used must be from known key and label defined in shared namespace
 	Labels map[string]string `protobuf:"bytes,2,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
@@ -1495,6 +1545,20 @@ type AWSTGWInfoConfigType struct {
 	// x-required
 	// AWS Subnet Ids used by volterra site
 	SubnetIds []*views.AWSSubnetIdsType `protobuf:"bytes,3,rep,name=subnet_ids,json=subnetIds,proto3" json:"subnet_ids,omitempty"`
+	// AWS Node Elastic IPs
+	//
+	// x-displayName: "AWS Node Elastic IPs"
+	// x-required
+	// x-example: "1.1.1.1, 2.2.2.2, 3.3.3.3"
+	// AWS Elastic IPs used by the nodes
+	PublicIps []string `protobuf:"bytes,4,rep,name=public_ips,json=publicIps,proto3" json:"public_ips,omitempty"`
+	// AWS Node Private IPs
+	//
+	// x-displayName: "AWS Node Private IPs"
+	// x-required
+	// x-example: "10.0.0.1, 10.0.0.2, 10.0.0.3"
+	// AWS Private IPs used by the nodes
+	PrivateIps []string `protobuf:"bytes,6,rep,name=private_ips,json=privateIps,proto3" json:"private_ips,omitempty"`
 }
 
 func (m *AWSTGWInfoConfigType) Reset()      { *m = AWSTGWInfoConfigType{} }
@@ -1542,6 +1606,20 @@ func (m *AWSTGWInfoConfigType) GetVpcId() string {
 func (m *AWSTGWInfoConfigType) GetSubnetIds() []*views.AWSSubnetIdsType {
 	if m != nil {
 		return m.SubnetIds
+	}
+	return nil
+}
+
+func (m *AWSTGWInfoConfigType) GetPublicIps() []string {
+	if m != nil {
+		return m.PublicIps
+	}
+	return nil
+}
+
+func (m *AWSTGWInfoConfigType) GetPrivateIps() []string {
+	if m != nil {
+		return m.PrivateIps
 	}
 	return nil
 }
@@ -1606,12 +1684,6 @@ type GlobalSpecType struct {
 	// ModificationTimestamp is a timestamp representing time when the user
 	// last modified the object.
 	UserModificationTimestamp *types.Timestamp `protobuf:"bytes,10,opt,name=user_modification_timestamp,json=userModificationTimestamp,proto3" json:"user_modification_timestamp,omitempty"`
-	// site_to_site_tunnel_ip
-	//
-	// x-displayName: "Site To Site Tunnel IP"
-	// x-example: "10.1.1.1"
-	// Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.
-	SiteToSiteTunnelIp string `protobuf:"bytes,29,opt,name=site_to_site_tunnel_ip,json=siteToSiteTunnelIp,proto3" json:"site_to_site_tunnel_ip,omitempty"`
 	// TGW information
 	//
 	// x-displayName: "TGW Site Information"
@@ -1649,11 +1721,33 @@ type GlobalSpecType struct {
 	// x-displayName: "VIP Params Per AZ"
 	// VIP Parameters Per AZ.
 	VipParamsPerAz []*site.PublishVIPParamsPerAz `protobuf:"bytes,17,rep,name=vip_params_per_az,json=vipParamsPerAz,proto3" json:"vip_params_per_az,omitempty"`
+	// Site Local Control Plane
+	//
+	// x-displayName: "Site Local Control Plane"
+	// Enable/Disable site local control plane
+	LocalControlPlane *views.LocalControlPlaneType `protobuf:"bytes,18,opt,name=local_control_plane,json=localControlPlane,proto3" json:"local_control_plane,omitempty"`
+	// Direct Connect Choice
+	//
+	// x-displayName: "Direct Connect Choice"
+	// x-required
+	// Direct connect configuration
+	//
+	// Types that are valid to be assigned to DirectConnectChoice:
+	//	*GlobalSpecType_DirectConnectDisabled
+	//	*GlobalSpecType_DirectConnectWithHostedVifs
+	//	*GlobalSpecType_DirectConnectWithStandardVifs
+	//	*GlobalSpecType_DirectConnectWithManualGw
+	DirectConnectChoice isGlobalSpecType_DirectConnectChoice `protobuf_oneof:"direct_connect_choice"`
 	// AWS VPN tunnel config
 	//
 	// x-displayName: "AWS VPN Tunnel Config"
 	// AWS VPN Tunner Config
 	Tunnels []*AWSVPNTunnelConfigType `protobuf:"bytes,998,rep,name=tunnels,proto3" json:"tunnels,omitempty"`
+	// Direct Connect information
+	//
+	// x-displayName: "Direct Connect Information"
+	// Direct Connect information obtained after creating the site and TGW
+	DirectConnectInfo *views.DirectConnectInfo `protobuf:"bytes,1001,opt,name=direct_connect_info,json=directConnectInfo,proto3" json:"direct_connect_info,omitempty"`
 	// Reference to terraform parameters
 	//
 	// x-displayName: "Terraform Parameters"
@@ -1700,6 +1794,12 @@ type isGlobalSpecType_LogsReceiverChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_DirectConnectChoice interface {
+	isGlobalSpecType_DirectConnectChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_LogsStreamingDisabled struct {
 	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,13,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
@@ -1707,13 +1807,35 @@ type GlobalSpecType_LogsStreamingDisabled struct {
 type GlobalSpecType_LogReceiver struct {
 	LogReceiver *views.ObjectRefType `protobuf:"bytes,14,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
+type GlobalSpecType_DirectConnectDisabled struct {
+	DirectConnectDisabled *schema.Empty `protobuf:"bytes,20,opt,name=direct_connect_disabled,json=directConnectDisabled,proto3,oneof" json:"direct_connect_disabled,omitempty"`
+}
+type GlobalSpecType_DirectConnectWithHostedVifs struct {
+	DirectConnectWithHostedVifs *views.HostedVIFConfigType `protobuf:"bytes,21,opt,name=direct_connect_with_hosted_vifs,json=directConnectWithHostedVifs,proto3,oneof" json:"direct_connect_with_hosted_vifs,omitempty"`
+}
+type GlobalSpecType_DirectConnectWithStandardVifs struct {
+	DirectConnectWithStandardVifs *schema.Empty `protobuf:"bytes,22,opt,name=direct_connect_with_standard_vifs,json=directConnectWithStandardVifs,proto3,oneof" json:"direct_connect_with_standard_vifs,omitempty"`
+}
+type GlobalSpecType_DirectConnectWithManualGw struct {
+	DirectConnectWithManualGw *schema.Empty `protobuf:"bytes,23,opt,name=direct_connect_with_manual_gw,json=directConnectWithManualGw,proto3,oneof" json:"direct_connect_with_manual_gw,omitempty"`
+}
 
-func (*GlobalSpecType_LogsStreamingDisabled) isGlobalSpecType_LogsReceiverChoice() {}
-func (*GlobalSpecType_LogReceiver) isGlobalSpecType_LogsReceiverChoice()           {}
+func (*GlobalSpecType_LogsStreamingDisabled) isGlobalSpecType_LogsReceiverChoice()          {}
+func (*GlobalSpecType_LogReceiver) isGlobalSpecType_LogsReceiverChoice()                    {}
+func (*GlobalSpecType_DirectConnectDisabled) isGlobalSpecType_DirectConnectChoice()         {}
+func (*GlobalSpecType_DirectConnectWithHostedVifs) isGlobalSpecType_DirectConnectChoice()   {}
+func (*GlobalSpecType_DirectConnectWithStandardVifs) isGlobalSpecType_DirectConnectChoice() {}
+func (*GlobalSpecType_DirectConnectWithManualGw) isGlobalSpecType_DirectConnectChoice()     {}
 
 func (m *GlobalSpecType) GetLogsReceiverChoice() isGlobalSpecType_LogsReceiverChoice {
 	if m != nil {
 		return m.LogsReceiverChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetDirectConnectChoice() isGlobalSpecType_DirectConnectChoice {
+	if m != nil {
+		return m.DirectConnectChoice
 	}
 	return nil
 }
@@ -1788,13 +1910,6 @@ func (m *GlobalSpecType) GetUserModificationTimestamp() *types.Timestamp {
 	return nil
 }
 
-func (m *GlobalSpecType) GetSiteToSiteTunnelIp() string {
-	if m != nil {
-		return m.SiteToSiteTunnelIp
-	}
-	return ""
-}
-
 func (m *GlobalSpecType) GetTgwInfo() *AWSTGWInfoConfigType {
 	if m != nil {
 		return m.TgwInfo
@@ -1844,9 +1959,51 @@ func (m *GlobalSpecType) GetVipParamsPerAz() []*site.PublishVIPParamsPerAz {
 	return nil
 }
 
+func (m *GlobalSpecType) GetLocalControlPlane() *views.LocalControlPlaneType {
+	if m != nil {
+		return m.LocalControlPlane
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDirectConnectDisabled() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectDisabled); ok {
+		return x.DirectConnectDisabled
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDirectConnectWithHostedVifs() *views.HostedVIFConfigType {
+	if x, ok := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithHostedVifs); ok {
+		return x.DirectConnectWithHostedVifs
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDirectConnectWithStandardVifs() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithStandardVifs); ok {
+		return x.DirectConnectWithStandardVifs
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDirectConnectWithManualGw() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithManualGw); ok {
+		return x.DirectConnectWithManualGw
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetTunnels() []*AWSVPNTunnelConfigType {
 	if m != nil {
 		return m.Tunnels
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDirectConnectInfo() *views.DirectConnectInfo {
+	if m != nil {
+		return m.DirectConnectInfo
 	}
 	return nil
 }
@@ -1870,6 +2027,10 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_LogsStreamingDisabled)(nil),
 		(*GlobalSpecType_LogReceiver)(nil),
+		(*GlobalSpecType_DirectConnectDisabled)(nil),
+		(*GlobalSpecType_DirectConnectWithHostedVifs)(nil),
+		(*GlobalSpecType_DirectConnectWithStandardVifs)(nil),
+		(*GlobalSpecType_DirectConnectWithManualGw)(nil),
 	}
 }
 
@@ -1897,14 +2058,19 @@ type CreateSpecType struct {
 	//
 	// x-displayName: "Operating System"
 	// Operating System Details
-	Os *views.OperatingSystemType `protobuf:"bytes,16,opt,name=os,proto3" json:"os,omitempty"`
-	// site_to_site_tunnel_ip
+	Os   *views.OperatingSystemType `protobuf:"bytes,16,opt,name=os,proto3" json:"os,omitempty"`
+	Tags map[string]string          `protobuf:"bytes,30,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Site Local Control Plane
 	//
-	// x-displayName: "Site To Site Tunnel IP"
-	// x-example: "10.1.1.1"
-	// Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.
-	SiteToSiteTunnelIp string            `protobuf:"bytes,29,opt,name=site_to_site_tunnel_ip,json=siteToSiteTunnelIp,proto3" json:"site_to_site_tunnel_ip,omitempty"`
-	Tags               map[string]string `protobuf:"bytes,30,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// x-displayName: "Site Local Control Plane"
+	// Enable/Disable site local control plane
+	LocalControlPlane *views.LocalControlPlaneType `protobuf:"bytes,31,opt,name=local_control_plane,json=localControlPlane,proto3" json:"local_control_plane,omitempty"`
+	// Types that are valid to be assigned to DirectConnectChoice:
+	//	*CreateSpecType_DirectConnectDisabled
+	//	*CreateSpecType_DirectConnectWithHostedVifs
+	//	*CreateSpecType_DirectConnectWithStandardVifs
+	//	*CreateSpecType_DirectConnectWithManualGw
+	DirectConnectChoice isCreateSpecType_DirectConnectChoice `protobuf_oneof:"direct_connect_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -1941,6 +2107,12 @@ type isCreateSpecType_LogsReceiverChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_DirectConnectChoice interface {
+	isCreateSpecType_DirectConnectChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_LogsStreamingDisabled struct {
 	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,13,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
@@ -1948,13 +2120,35 @@ type CreateSpecType_LogsStreamingDisabled struct {
 type CreateSpecType_LogReceiver struct {
 	LogReceiver *views.ObjectRefType `protobuf:"bytes,14,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
+type CreateSpecType_DirectConnectDisabled struct {
+	DirectConnectDisabled *schema.Empty `protobuf:"bytes,20,opt,name=direct_connect_disabled,json=directConnectDisabled,proto3,oneof" json:"direct_connect_disabled,omitempty"`
+}
+type CreateSpecType_DirectConnectWithHostedVifs struct {
+	DirectConnectWithHostedVifs *views.HostedVIFConfigType `protobuf:"bytes,21,opt,name=direct_connect_with_hosted_vifs,json=directConnectWithHostedVifs,proto3,oneof" json:"direct_connect_with_hosted_vifs,omitempty"`
+}
+type CreateSpecType_DirectConnectWithStandardVifs struct {
+	DirectConnectWithStandardVifs *schema.Empty `protobuf:"bytes,22,opt,name=direct_connect_with_standard_vifs,json=directConnectWithStandardVifs,proto3,oneof" json:"direct_connect_with_standard_vifs,omitempty"`
+}
+type CreateSpecType_DirectConnectWithManualGw struct {
+	DirectConnectWithManualGw *schema.Empty `protobuf:"bytes,23,opt,name=direct_connect_with_manual_gw,json=directConnectWithManualGw,proto3,oneof" json:"direct_connect_with_manual_gw,omitempty"`
+}
 
-func (*CreateSpecType_LogsStreamingDisabled) isCreateSpecType_LogsReceiverChoice() {}
-func (*CreateSpecType_LogReceiver) isCreateSpecType_LogsReceiverChoice()           {}
+func (*CreateSpecType_LogsStreamingDisabled) isCreateSpecType_LogsReceiverChoice()          {}
+func (*CreateSpecType_LogReceiver) isCreateSpecType_LogsReceiverChoice()                    {}
+func (*CreateSpecType_DirectConnectDisabled) isCreateSpecType_DirectConnectChoice()         {}
+func (*CreateSpecType_DirectConnectWithHostedVifs) isCreateSpecType_DirectConnectChoice()   {}
+func (*CreateSpecType_DirectConnectWithStandardVifs) isCreateSpecType_DirectConnectChoice() {}
+func (*CreateSpecType_DirectConnectWithManualGw) isCreateSpecType_DirectConnectChoice()     {}
 
 func (m *CreateSpecType) GetLogsReceiverChoice() isCreateSpecType_LogsReceiverChoice {
 	if m != nil {
 		return m.LogsReceiverChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetDirectConnectChoice() isCreateSpecType_DirectConnectChoice {
+	if m != nil {
+		return m.DirectConnectChoice
 	}
 	return nil
 }
@@ -2029,16 +2223,44 @@ func (m *CreateSpecType) GetOs() *views.OperatingSystemType {
 	return nil
 }
 
-func (m *CreateSpecType) GetSiteToSiteTunnelIp() string {
-	if m != nil {
-		return m.SiteToSiteTunnelIp
-	}
-	return ""
-}
-
 func (m *CreateSpecType) GetTags() map[string]string {
 	if m != nil {
 		return m.Tags
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetLocalControlPlane() *views.LocalControlPlaneType {
+	if m != nil {
+		return m.LocalControlPlane
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDirectConnectDisabled() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectDisabled); ok {
+		return x.DirectConnectDisabled
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDirectConnectWithHostedVifs() *views.HostedVIFConfigType {
+	if x, ok := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithHostedVifs); ok {
+		return x.DirectConnectWithHostedVifs
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDirectConnectWithStandardVifs() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithStandardVifs); ok {
+		return x.DirectConnectWithStandardVifs
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDirectConnectWithManualGw() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithManualGw); ok {
+		return x.DirectConnectWithManualGw
 	}
 	return nil
 }
@@ -2048,6 +2270,10 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_LogsStreamingDisabled)(nil),
 		(*CreateSpecType_LogReceiver)(nil),
+		(*CreateSpecType_DirectConnectDisabled)(nil),
+		(*CreateSpecType_DirectConnectWithHostedVifs)(nil),
+		(*CreateSpecType_DirectConnectWithStandardVifs)(nil),
+		(*CreateSpecType_DirectConnectWithManualGw)(nil),
 	}
 }
 
@@ -2066,7 +2292,12 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_LogsStreamingDisabled
 	//	*ReplaceSpecType_LogReceiver
 	LogsReceiverChoice isReplaceSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
-	SiteToSiteTunnelIp string                               `protobuf:"bytes,29,opt,name=site_to_site_tunnel_ip,json=siteToSiteTunnelIp,proto3" json:"site_to_site_tunnel_ip,omitempty"`
+	// Types that are valid to be assigned to DirectConnectChoice:
+	//	*ReplaceSpecType_DirectConnectDisabled
+	//	*ReplaceSpecType_DirectConnectWithHostedVifs
+	//	*ReplaceSpecType_DirectConnectWithStandardVifs
+	//	*ReplaceSpecType_DirectConnectWithManualGw
+	DirectConnectChoice isReplaceSpecType_DirectConnectChoice `protobuf_oneof:"direct_connect_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -2103,6 +2334,12 @@ type isReplaceSpecType_LogsReceiverChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_DirectConnectChoice interface {
+	isReplaceSpecType_DirectConnectChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_LogsStreamingDisabled struct {
 	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,13,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
@@ -2110,13 +2347,35 @@ type ReplaceSpecType_LogsStreamingDisabled struct {
 type ReplaceSpecType_LogReceiver struct {
 	LogReceiver *views.ObjectRefType `protobuf:"bytes,14,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
+type ReplaceSpecType_DirectConnectDisabled struct {
+	DirectConnectDisabled *schema.Empty `protobuf:"bytes,20,opt,name=direct_connect_disabled,json=directConnectDisabled,proto3,oneof" json:"direct_connect_disabled,omitempty"`
+}
+type ReplaceSpecType_DirectConnectWithHostedVifs struct {
+	DirectConnectWithHostedVifs *views.HostedVIFConfigType `protobuf:"bytes,21,opt,name=direct_connect_with_hosted_vifs,json=directConnectWithHostedVifs,proto3,oneof" json:"direct_connect_with_hosted_vifs,omitempty"`
+}
+type ReplaceSpecType_DirectConnectWithStandardVifs struct {
+	DirectConnectWithStandardVifs *schema.Empty `protobuf:"bytes,22,opt,name=direct_connect_with_standard_vifs,json=directConnectWithStandardVifs,proto3,oneof" json:"direct_connect_with_standard_vifs,omitempty"`
+}
+type ReplaceSpecType_DirectConnectWithManualGw struct {
+	DirectConnectWithManualGw *schema.Empty `protobuf:"bytes,23,opt,name=direct_connect_with_manual_gw,json=directConnectWithManualGw,proto3,oneof" json:"direct_connect_with_manual_gw,omitempty"`
+}
 
-func (*ReplaceSpecType_LogsStreamingDisabled) isReplaceSpecType_LogsReceiverChoice() {}
-func (*ReplaceSpecType_LogReceiver) isReplaceSpecType_LogsReceiverChoice()           {}
+func (*ReplaceSpecType_LogsStreamingDisabled) isReplaceSpecType_LogsReceiverChoice()          {}
+func (*ReplaceSpecType_LogReceiver) isReplaceSpecType_LogsReceiverChoice()                    {}
+func (*ReplaceSpecType_DirectConnectDisabled) isReplaceSpecType_DirectConnectChoice()         {}
+func (*ReplaceSpecType_DirectConnectWithHostedVifs) isReplaceSpecType_DirectConnectChoice()   {}
+func (*ReplaceSpecType_DirectConnectWithStandardVifs) isReplaceSpecType_DirectConnectChoice() {}
+func (*ReplaceSpecType_DirectConnectWithManualGw) isReplaceSpecType_DirectConnectChoice()     {}
 
 func (m *ReplaceSpecType) GetLogsReceiverChoice() isReplaceSpecType_LogsReceiverChoice {
 	if m != nil {
 		return m.LogsReceiverChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetDirectConnectChoice() isReplaceSpecType_DirectConnectChoice {
+	if m != nil {
+		return m.DirectConnectChoice
 	}
 	return nil
 }
@@ -2177,11 +2436,32 @@ func (m *ReplaceSpecType) GetLogReceiver() *views.ObjectRefType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetSiteToSiteTunnelIp() string {
-	if m != nil {
-		return m.SiteToSiteTunnelIp
+func (m *ReplaceSpecType) GetDirectConnectDisabled() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectDisabled); ok {
+		return x.DirectConnectDisabled
 	}
-	return ""
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDirectConnectWithHostedVifs() *views.HostedVIFConfigType {
+	if x, ok := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithHostedVifs); ok {
+		return x.DirectConnectWithHostedVifs
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDirectConnectWithStandardVifs() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithStandardVifs); ok {
+		return x.DirectConnectWithStandardVifs
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDirectConnectWithManualGw() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithManualGw); ok {
+		return x.DirectConnectWithManualGw
+	}
+	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
@@ -2189,6 +2469,10 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_LogsStreamingDisabled)(nil),
 		(*ReplaceSpecType_LogReceiver)(nil),
+		(*ReplaceSpecType_DirectConnectDisabled)(nil),
+		(*ReplaceSpecType_DirectConnectWithHostedVifs)(nil),
+		(*ReplaceSpecType_DirectConnectWithStandardVifs)(nil),
+		(*ReplaceSpecType_DirectConnectWithManualGw)(nil),
 	}
 }
 
@@ -2208,7 +2492,6 @@ type GetSpecType struct {
 	Address                   string                        `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty"`
 	Coordinates               *site.Coordinates             `protobuf:"bytes,9,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	UserModificationTimestamp *types.Timestamp              `protobuf:"bytes,10,opt,name=user_modification_timestamp,json=userModificationTimestamp,proto3" json:"user_modification_timestamp,omitempty"`
-	SiteToSiteTunnelIp        string                        `protobuf:"bytes,29,opt,name=site_to_site_tunnel_ip,json=siteToSiteTunnelIp,proto3" json:"site_to_site_tunnel_ip,omitempty"`
 	TgwInfo                   *AWSTGWInfoConfigType         `protobuf:"bytes,11,opt,name=tgw_info,json=tgwInfo,proto3" json:"tgw_info,omitempty"`
 	// Types that are valid to be assigned to LogsReceiverChoice:
 	//	*GetSpecType_LogsStreamingDisabled
@@ -2221,6 +2504,13 @@ type GetSpecType struct {
 	// The operational phase of the site state machine.
 	SiteState      site.SiteState                `protobuf:"varint,15,opt,name=site_state,json=siteState,proto3,enum=ves.io.schema.site.SiteState" json:"site_state,omitempty"`
 	VipParamsPerAz []*site.PublishVIPParamsPerAz `protobuf:"bytes,17,rep,name=vip_params_per_az,json=vipParamsPerAz,proto3" json:"vip_params_per_az,omitempty"`
+	// Types that are valid to be assigned to DirectConnectChoice:
+	//	*GetSpecType_DirectConnectDisabled
+	//	*GetSpecType_DirectConnectWithHostedVifs
+	//	*GetSpecType_DirectConnectWithStandardVifs
+	//	*GetSpecType_DirectConnectWithManualGw
+	DirectConnectChoice isGetSpecType_DirectConnectChoice `protobuf_oneof:"direct_connect_choice"`
+	DirectConnectInfo   *views.DirectConnectInfo          `protobuf:"bytes,1001,opt,name=direct_connect_info,json=directConnectInfo,proto3" json:"direct_connect_info,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -2257,6 +2547,12 @@ type isGetSpecType_LogsReceiverChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_DirectConnectChoice interface {
+	isGetSpecType_DirectConnectChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_LogsStreamingDisabled struct {
 	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,13,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
@@ -2264,13 +2560,35 @@ type GetSpecType_LogsStreamingDisabled struct {
 type GetSpecType_LogReceiver struct {
 	LogReceiver *views.ObjectRefType `protobuf:"bytes,14,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
+type GetSpecType_DirectConnectDisabled struct {
+	DirectConnectDisabled *schema.Empty `protobuf:"bytes,20,opt,name=direct_connect_disabled,json=directConnectDisabled,proto3,oneof" json:"direct_connect_disabled,omitempty"`
+}
+type GetSpecType_DirectConnectWithHostedVifs struct {
+	DirectConnectWithHostedVifs *views.HostedVIFConfigType `protobuf:"bytes,21,opt,name=direct_connect_with_hosted_vifs,json=directConnectWithHostedVifs,proto3,oneof" json:"direct_connect_with_hosted_vifs,omitempty"`
+}
+type GetSpecType_DirectConnectWithStandardVifs struct {
+	DirectConnectWithStandardVifs *schema.Empty `protobuf:"bytes,22,opt,name=direct_connect_with_standard_vifs,json=directConnectWithStandardVifs,proto3,oneof" json:"direct_connect_with_standard_vifs,omitempty"`
+}
+type GetSpecType_DirectConnectWithManualGw struct {
+	DirectConnectWithManualGw *schema.Empty `protobuf:"bytes,23,opt,name=direct_connect_with_manual_gw,json=directConnectWithManualGw,proto3,oneof" json:"direct_connect_with_manual_gw,omitempty"`
+}
 
-func (*GetSpecType_LogsStreamingDisabled) isGetSpecType_LogsReceiverChoice() {}
-func (*GetSpecType_LogReceiver) isGetSpecType_LogsReceiverChoice()           {}
+func (*GetSpecType_LogsStreamingDisabled) isGetSpecType_LogsReceiverChoice()          {}
+func (*GetSpecType_LogReceiver) isGetSpecType_LogsReceiverChoice()                    {}
+func (*GetSpecType_DirectConnectDisabled) isGetSpecType_DirectConnectChoice()         {}
+func (*GetSpecType_DirectConnectWithHostedVifs) isGetSpecType_DirectConnectChoice()   {}
+func (*GetSpecType_DirectConnectWithStandardVifs) isGetSpecType_DirectConnectChoice() {}
+func (*GetSpecType_DirectConnectWithManualGw) isGetSpecType_DirectConnectChoice()     {}
 
 func (m *GetSpecType) GetLogsReceiverChoice() isGetSpecType_LogsReceiverChoice {
 	if m != nil {
 		return m.LogsReceiverChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetDirectConnectChoice() isGetSpecType_DirectConnectChoice {
+	if m != nil {
+		return m.DirectConnectChoice
 	}
 	return nil
 }
@@ -2352,13 +2670,6 @@ func (m *GetSpecType) GetUserModificationTimestamp() *types.Timestamp {
 	return nil
 }
 
-func (m *GetSpecType) GetSiteToSiteTunnelIp() string {
-	if m != nil {
-		return m.SiteToSiteTunnelIp
-	}
-	return ""
-}
-
 func (m *GetSpecType) GetTgwInfo() *AWSTGWInfoConfigType {
 	if m != nil {
 		return m.TgwInfo
@@ -2401,11 +2712,50 @@ func (m *GetSpecType) GetVipParamsPerAz() []*site.PublishVIPParamsPerAz {
 	return nil
 }
 
+func (m *GetSpecType) GetDirectConnectDisabled() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectDisabled); ok {
+		return x.DirectConnectDisabled
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDirectConnectWithHostedVifs() *views.HostedVIFConfigType {
+	if x, ok := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithHostedVifs); ok {
+		return x.DirectConnectWithHostedVifs
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDirectConnectWithStandardVifs() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithStandardVifs); ok {
+		return x.DirectConnectWithStandardVifs
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDirectConnectWithManualGw() *schema.Empty {
+	if x, ok := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithManualGw); ok {
+		return x.DirectConnectWithManualGw
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDirectConnectInfo() *views.DirectConnectInfo {
+	if m != nil {
+		return m.DirectConnectInfo
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_LogsStreamingDisabled)(nil),
 		(*GetSpecType_LogReceiver)(nil),
+		(*GetSpecType_DirectConnectDisabled)(nil),
+		(*GetSpecType_DirectConnectWithHostedVifs)(nil),
+		(*GetSpecType_DirectConnectWithStandardVifs)(nil),
+		(*GetSpecType_DirectConnectWithManualGw)(nil),
 	}
 }
 
@@ -2468,266 +2818,289 @@ func init() {
 }
 
 var fileDescriptor_69fc9b3c28dbc20f = []byte{
-	// 4136 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5b, 0xdd, 0x6f, 0x1b, 0xd9,
-	0x75, 0xd7, 0x25, 0x29, 0x72, 0x78, 0x24, 0x51, 0xa3, 0x11, 0x25, 0x73, 0xe5, 0x35, 0xcd, 0x08,
-	0xde, 0xae, 0xac, 0xa5, 0x28, 0x93, 0xb2, 0xf5, 0x95, 0xae, 0x63, 0x51, 0x76, 0xf4, 0xb1, 0x59,
-	0xaf, 0x32, 0xd2, 0x52, 0x41, 0xb6, 0xd9, 0xd9, 0x11, 0x79, 0x49, 0x4d, 0x4c, 0xce, 0x0c, 0xe6,
-	0x0e, 0x49, 0xcb, 0xa9, 0x51, 0x37, 0x01, 0xda, 0xc2, 0x40, 0x81, 0xc6, 0xc8, 0xd3, 0xfe, 0x01,
-	0xc5, 0xc2, 0x4f, 0x2d, 0xda, 0xbe, 0x94, 0x46, 0xea, 0xba, 0x48, 0xb1, 0xd8, 0x27, 0x3f, 0xf4,
-	0x61, 0xb1, 0x4f, 0x59, 0x2d, 0xd0, 0xba, 0x29, 0x50, 0xec, 0x43, 0x51, 0x2c, 0x52, 0x20, 0x5b,
-	0xdc, 0x3b, 0x77, 0xc8, 0x21, 0x45, 0x7d, 0x58, 0x71, 0x02, 0x24, 0xd8, 0x17, 0x61, 0x66, 0xee,
-	0xf9, 0xba, 0xe7, 0x9e, 0x7b, 0x7e, 0xe7, 0x9e, 0x2b, 0x42, 0xb2, 0x86, 0x49, 0x4a, 0x33, 0xa6,
-	0x49, 0x7e, 0x17, 0x57, 0xd4, 0xe9, 0x9a, 0x86, 0xeb, 0x64, 0x5a, 0xad, 0x13, 0xc5, 0x2e, 0xd5,
-	0x15, 0xa2, 0xd9, 0x78, 0xda, 0xde, 0x33, 0x31, 0x49, 0x99, 0x96, 0x61, 0x1b, 0x52, 0xc2, 0xa1,
-	0x4e, 0x39, 0xd4, 0x29, 0x46, 0x9d, 0xf2, 0x52, 0x8f, 0x4d, 0x95, 0x34, 0x7b, 0xb7, 0xba, 0x93,
-	0xca, 0x1b, 0x95, 0xe9, 0x92, 0x51, 0x32, 0xa6, 0x19, 0xe3, 0x4e, 0xb5, 0xc8, 0xde, 0xd8, 0x0b,
-	0x7b, 0x72, 0x04, 0x8e, 0x9d, 0x2f, 0x19, 0x46, 0xa9, 0x8c, 0x5b, 0x54, 0xb6, 0x56, 0xc1, 0xc4,
-	0x56, 0x2b, 0x26, 0x27, 0x98, 0x6c, 0xb7, 0x4f, 0xc7, 0x76, 0xdd, 0xb0, 0x6e, 0x29, 0x45, 0xcd,
-	0xc2, 0x75, 0xb5, 0x5c, 0xf6, 0x5a, 0x37, 0x76, 0xb6, 0x9d, 0xd6, 0x30, 0x6d, 0xcd, 0xd0, 0xdd,
-	0xc1, 0x78, 0xfb, 0x60, 0xe7, 0xd4, 0xc6, 0x5e, 0x6a, 0x1f, 0xf7, 0x0e, 0xbd, 0xdc, 0xe1, 0x23,
-	0xb5, 0xac, 0x15, 0x54, 0x1b, 0xf3, 0xd1, 0xc4, 0x41, 0x0f, 0x2a, 0xed, 0xaa, 0x2f, 0x74, 0xf3,
-	0x31, 0x35, 0x40, 0xf1, 0x6a, 0x39, 0xdf, 0x8d, 0xca, 0x43, 0x30, 0x5e, 0x07, 0x69, 0x6b, 0x65,
-	0x7b, 0x89, 0x10, 0xad, 0xa4, 0xe3, 0xc2, 0xd2, 0xe6, 0xcd, 0xad, 0x3d, 0x13, 0x4b, 0x13, 0x10,
-	0xa2, 0xce, 0x57, 0x89, 0x1e, 0x43, 0x09, 0x34, 0x31, 0x90, 0x1d, 0xfc, 0xc7, 0xff, 0x7c, 0xec,
-	0x87, 0x49, 0x21, 0xf6, 0xab, 0x2f, 0xfd, 0x89, 0x7b, 0x5f, 0xf8, 0xe5, 0xa0, 0x5d, 0xaa, 0x2f,
-	0x11, 0x5d, 0x9a, 0x83, 0xa1, 0x9a, 0x51, 0xb6, 0xb1, 0x65, 0xa9, 0x6c, 0xad, 0x18, 0x8f, 0x8f,
-	0xf1, 0xf4, 0x51, 0x9e, 0xe0, 0x64, 0x20, 0xf6, 0xe5, 0x97, 0x7e, 0x79, 0xd0, 0xa5, 0xda, 0xd4,
-	0x6c, 0xbc, 0x44, 0xf4, 0xf1, 0x7f, 0x46, 0x30, 0x78, 0xe3, 0xb6, 0x46, 0x6c, 0x4d, 0x2f, 0x6d,
-	0xad, 0x6c, 0x33, 0xb5, 0x6f, 0x01, 0x15, 0xab, 0x68, 0x05, 0xa6, 0x35, 0x9c, 0x9d, 0xff, 0xa2,
-	0x81, 0x7a, 0xa8, 0x94, 0x80, 0xe5, 0x8b, 0x5d, 0xa3, 0x0f, 0x7f, 0x60, 0x5d, 0xc8, 0x8c, 0xbf,
-	0x3b, 0x61, 0x97, 0xea, 0x53, 0x17, 0x27, 0xde, 0x51, 0xa7, 0xee, 0x5c, 0x9a, 0x5a, 0xf8, 0xde,
-	0x0f, 0xe6, 0xef, 0xfe, 0x71, 0xf3, 0x39, 0x3d, 0x77, 0xf7, 0xe2, 0x05, 0xb9, 0xd7, 0x2e, 0xd5,
-	0xd7, 0x0a, 0xd2, 0x85, 0xd6, 0x3c, 0xba, 0xd8, 0x74, 0xe4, 0x1c, 0xfc, 0x27, 0x98, 0xc3, 0xbf,
-	0x21, 0x18, 0xd8, 0x5a, 0xd9, 0xde, 0x50, 0x2d, 0xb5, 0x42, 0xd8, 0x0c, 0x96, 0x40, 0x24, 0x7b,
-	0xc4, 0xc6, 0x15, 0xa5, 0x84, 0x75, 0x6c, 0xa9, 0x36, 0x2e, 0x30, 0xcd, 0x7d, 0x99, 0x68, 0xaa,
-	0x3d, 0xcc, 0x6f, 0x54, 0x4c, 0x7b, 0x6f, 0xb5, 0x47, 0x1e, 0x74, 0xe8, 0x57, 0x5c, 0x72, 0xe9,
-	0x1d, 0x18, 0xa8, 0x12, 0x6c, 0x29, 0x2a, 0x5f, 0x13, 0x66, 0x49, 0x5f, 0xe6, 0x72, 0xea, 0xb8,
-	0x6d, 0x92, 0x3a, 0xb8, 0x90, 0xab, 0x3d, 0x72, 0x3f, 0x15, 0xe6, 0x7e, 0xce, 0x9e, 0x03, 0x50,
-	0x89, 0xae, 0xe4, 0x77, 0x0d, 0x2d, 0x8f, 0xa5, 0xc1, 0xc7, 0x0d, 0xe4, 0x7b, 0xda, 0x40, 0x68,
-	0xbf, 0x81, 0xfc, 0x99, 0xe4, 0xcc, 0x7a, 0x40, 0x40, 0xa2, 0x6f, 0xfc, 0x47, 0x11, 0x18, 0xdc,
-	0xc4, 0x56, 0x4d, 0xcb, 0x63, 0x92, 0xdb, 0x58, 0x66, 0x13, 0xfb, 0xc0, 0x07, 0x40, 0x95, 0x59,
-	0xb8, 0xa4, 0x19, 0x3a, 0x5f, 0x9f, 0xbf, 0xf0, 0xb9, 0x0b, 0xf4, 0x2b, 0x64, 0xfd, 0x1f, 0x92,
-	0x23, 0xaa, 0x39, 0xa5, 0x1b, 0x96, 0xbd, 0x8b, 0x55, 0x62, 0x4f, 0xa5, 0xd9, 0x3b, 0x31, 0xaa,
-	0xcd, 0xf7, 0x7e, 0x5c, 0x9d, 0xca, 0x63, 0xdd, 0xb6, 0xd4, 0xf2, 0x54, 0x5a, 0x0e, 0xe3, 0xea,
-	0x54, 0x1d, 0xb3, 0x81, 0xe6, 0xe3, 0x8c, 0x1c, 0x26, 0xea, 0x14, 0x27, 0x0f, 0x57, 0xc9, 0x81,
-	0xc7, 0x0c, 0x7b, 0x64, 0xb4, 0x19, 0xb9, 0x3f, 0xaf, 0x7a, 0xe4, 0x81, 0x5a, 0x74, 0xb4, 0x51,
-	0x7a, 0xd5, 0x74, 0x59, 0xc1, 0x35, 0x82, 0x1b, 0xd4, 0x32, 0x30, 0xd3, 0x61, 0x60, 0x46, 0x06,
-	0x5c, 0x6d, 0xd2, 0xd2, 0x67, 0x46, 0xeb, 0xb5, 0x2f, 0x23, 0x43, 0x05, 0xb7, 0xb4, 0xb8, 0xa6,
-	0x50, 0x85, 0x75, 0x22, 0x33, 0xdf, 0x48, 0xd7, 0x20, 0xa4, 0xe3, 0xba, 0x52, 0x33, 0xf3, 0x7c,
-	0xe9, 0x5e, 0xe9, 0xba, 0x74, 0x4b, 0xdb, 0x9b, 0xb9, 0x8d, 0xe5, 0x56, 0xec, 0xac, 0xf6, 0xc8,
-	0x41, 0x1d, 0xd7, 0x73, 0x66, 0x5e, 0xfa, 0x36, 0x04, 0x6b, 0x66, 0x9e, 0xee, 0x83, 0xc0, 0xd1,
-	0xfb, 0xa0, 0x66, 0xe6, 0x8f, 0xdc, 0x07, 0xab, 0x3d, 0x72, 0x6f, 0xcd, 0xcc, 0xaf, 0x15, 0xa4,
-	0x75, 0xc7, 0x28, 0xbb, 0x54, 0x8f, 0x05, 0x99, 0x51, 0xd3, 0x27, 0x8a, 0x27, 0x8f, 0x79, 0x88,
-	0x99, 0xb7, 0x55, 0xaa, 0x4b, 0x39, 0xe8, 0xc7, 0x7c, 0xe7, 0x32, 0x81, 0x21, 0x26, 0x30, 0x7d,
-	0xbc, 0xc0, 0x8e, 0xfd, 0xbe, 0x8a, 0xe4, 0x3e, 0x57, 0x10, 0x95, 0x4b, 0x40, 0xa4, 0xe4, 0x79,
-	0x6c, 0xd9, 0x5a, 0x51, 0xc3, 0x05, 0x65, 0xb7, 0x1e, 0x13, 0x98, 0x03, 0xd6, 0x3e, 0x69, 0xa0,
-	0xb3, 0x6a, 0x9d, 0x4c, 0xed, 0xec, 0x19, 0xe5, 0xa9, 0x4a, 0xb5, 0x6c, 0x6b, 0x53, 0xba, 0x96,
-	0x9f, 0xa2, 0x1b, 0xb2, 0x82, 0xc9, 0xae, 0xeb, 0x9f, 0xaf, 0x59, 0xe7, 0x63, 0xd7, 0xe4, 0xa3,
-	0x28, 0xe5, 0x88, 0x5a, 0x27, 0xcb, 0xae, 0x86, 0xd5, 0xba, 0xf4, 0x5f, 0x08, 0x06, 0x34, 0x9d,
-	0xd8, 0xaa, 0x9e, 0x77, 0x52, 0x67, 0x2c, 0xcc, 0x54, 0xfe, 0x0c, 0x7d, 0xd2, 0x40, 0x61, 0x7b,
-	0x26, 0x75, 0xbb, 0xac, 0x5a, 0x25, 0x4c, 0x35, 0x3c, 0x78, 0x84, 0xfe, 0x1a, 0xc1, 0x65, 0x68,
-	0x7d, 0x95, 0x5e, 0x9d, 0xb8, 0x9c, 0xb8, 0x9d, 0xa8, 0x2d, 0x6f, 0xbc, 0x9d, 0x4c, 0xa4, 0x67,
-	0x57, 0xb2, 0x09, 0x79, 0xe9, 0xcd, 0x8b, 0x89, 0x0a, 0x2e, 0x68, 0xd5, 0x4a, 0xc2, 0xc4, 0x56,
-	0xd1, 0xb0, 0x2a, 0x54, 0x32, 0xcc, 0x00, 0xd8, 0x33, 0xa9, 0x0c, 0x67, 0x7b, 0x65, 0x62, 0xbe,
-	0xc9, 0x36, 0x93, 0x71, 0xd9, 0x76, 0xb5, 0xd2, 0x6e, 0x1b, 0xd3, 0x02, 0x40, 0xe5, 0x4a, 0xea,
-	0x32, 0x67, 0x7a, 0x6d, 0x22, 0x3d, 0xdb, 0xe4, 0x9a, 0xbd, 0xec, 0x72, 0xd5, 0xb0, 0xb5, 0x77,
-	0x80, 0xb5, 0x19, 0x2c, 0x72, 0xbf, 0x3b, 0x39, 0xb6, 0x8d, 0x5f, 0x85, 0x10, 0x21, 0xbb, 0xca,
-	0x2d, 0xbc, 0x17, 0x03, 0x36, 0xcd, 0xc8, 0x17, 0x0d, 0xe4, 0xa7, 0xd4, 0xbd, 0x96, 0x3f, 0x76,
-	0xef, 0x9a, 0x1c, 0x24, 0x64, 0xf7, 0x0d, 0xbc, 0x27, 0xbd, 0x03, 0x82, 0x7a, 0x47, 0xd1, 0x8d,
-	0x02, 0x26, 0xb1, 0xbe, 0x84, 0xff, 0xd0, 0x80, 0x71, 0xa2, 0x78, 0xab, 0x6e, 0xac, 0xe9, 0x36,
-	0xb6, 0x8a, 0x6a, 0x1e, 0xdf, 0x34, 0x0a, 0x4c, 0x17, 0xc7, 0x8c, 0x07, 0x28, 0x34, 0xd9, 0x7b,
-	0x29, 0x99, 0x4e, 0xce, 0xc8, 0x21, 0xf5, 0x0e, 0x1d, 0x24, 0xd2, 0x2c, 0xf4, 0x33, 0xc9, 0x8a,
-	0x49, 0xf3, 0xdc, 0x9d, 0x58, 0x3f, 0xcb, 0xb5, 0xd2, 0x27, 0x0d, 0x84, 0x2e, 0x35, 0x43, 0x7d,
-	0xd2, 0x17, 0x1b, 0x59, 0xf5, 0xc9, 0xc0, 0x28, 0x37, 0xb0, 0xb5, 0x74, 0x47, 0xba, 0x02, 0x7d,
-	0xb6, 0x61, 0xab, 0x65, 0x6e, 0xd7, 0xd9, 0x43, 0xd8, 0x5e, 0xa7, 0x6c, 0x8c, 0xd0, 0x51, 0x77,
-	0x15, 0x06, 0x75, 0x43, 0xa1, 0x10, 0x8f, 0x2d, 0xce, 0xfa, 0xf2, 0x11, 0x39, 0xd9, 0x27, 0x0f,
-	0xe8, 0xc6, 0x36, 0xa3, 0x76, 0xf8, 0x2f, 0x41, 0xb8, 0xa0, 0x91, 0x5b, 0x0a, 0xd1, 0xee, 0xe0,
-	0xd8, 0x28, 0x53, 0x3a, 0xfc, 0xb8, 0x81, 0x90, 0xab, 0x93, 0xe2, 0xc3, 0xbd, 0xff, 0xf1, 0xcb,
-	0x02, 0xa5, 0xda, 0xd4, 0xee, 0x60, 0xe9, 0x6d, 0x10, 0x58, 0x24, 0x5b, 0xb8, 0x10, 0x8b, 0x30,
-	0x55, 0xe3, 0x5d, 0xbd, 0xf7, 0xd6, 0xce, 0xf7, 0x71, 0xde, 0x96, 0x71, 0x91, 0x39, 0x2c, 0xfa,
-	0xf0, 0xee, 0x50, 0xbe, 0x6c, 0x54, 0x0b, 0x8c, 0x11, 0xeb, 0xb6, 0xa6, 0x96, 0xc9, 0xaa, 0x5f,
-	0x0e, 0xd1, 0x90, 0xb5, 0x70, 0x41, 0xca, 0x80, 0x40, 0x51, 0x81, 0x50, 0x54, 0x19, 0x3c, 0x62,
-	0x06, 0x7e, 0xb9, 0x49, 0xb7, 0xf8, 0xfd, 0x27, 0x0d, 0x54, 0x84, 0x61, 0xe8, 0x77, 0x33, 0x7a,
-	0x22, 0xb7, 0xb1, 0x2c, 0xf9, 0xd3, 0xc9, 0x0c, 0x44, 0x61, 0x70, 0xcb, 0x52, 0x75, 0xa2, 0xd9,
-	0x89, 0x15, 0xd5, 0xc6, 0x75, 0x75, 0x4f, 0x42, 0x57, 0xe0, 0x55, 0x88, 0x52, 0x7c, 0x4b, 0xd0,
-	0xb9, 0x27, 0xd8, 0xfe, 0xc7, 0x36, 0xb6, 0x88, 0x34, 0x38, 0x9f, 0x5c, 0x48, 0xa6, 0x2f, 0x25,
-	0xd3, 0xe9, 0x64, 0x26, 0x93, 0xcc, 0x2c, 0x80, 0x08, 0x70, 0x1d, 0x9b, 0x65, 0x63, 0xaf, 0x82,
-	0x75, 0x5b, 0xf2, 0xa5, 0x67, 0xb2, 0xaf, 0x80, 0x44, 0x1c, 0x2d, 0x34, 0xfb, 0x79, 0x51, 0xc6,
-	0xff, 0xb4, 0x81, 0x7c, 0x14, 0x65, 0x66, 0x92, 0x97, 0x29, 0x08, 0xd1, 0x94, 0xe0, 0x19, 0x0e,
-	0x3e, 0x6d, 0xa0, 0x5e, 0x3a, 0x3c, 0x9b, 0x9c, 0xcb, 0x4e, 0x40, 0xbf, 0x77, 0xad, 0xa4, 0xd8,
-	0xe3, 0x06, 0x7a, 0xf9, 0xc3, 0x06, 0x42, 0x4f, 0x1b, 0xe8, 0xdc, 0x7e, 0x03, 0x09, 0xe9, 0x4c,
-	0x32, 0x33, 0x97, 0xcc, 0xcc, 0x67, 0xcf, 0x03, 0x14, 0x5a, 0x16, 0x0c, 0x3d, 0x6e, 0xa0, 0xc8,
-	0xd3, 0x06, 0x1a, 0xd8, 0x6f, 0xa0, 0xde, 0xf4, 0xe5, 0x64, 0xfa, 0xca, 0x7a, 0x40, 0xf0, 0x89,
-	0xfe, 0xf5, 0x80, 0xd0, 0x2b, 0x06, 0xd7, 0x03, 0xc2, 0x39, 0x31, 0xbe, 0x1e, 0x10, 0x06, 0xc4,
-	0xc8, 0x7a, 0x40, 0x10, 0xc5, 0xa1, 0xf5, 0x80, 0x30, 0x24, 0x4a, 0xeb, 0x01, 0x41, 0x12, 0x87,
-	0xd7, 0x03, 0xc2, 0xb0, 0x18, 0x5d, 0x0f, 0x08, 0x51, 0x71, 0x64, 0x3d, 0x20, 0x8c, 0x88, 0xa3,
-	0xe3, 0x3f, 0x0d, 0xc3, 0x60, 0x4e, 0x5f, 0x36, 0xf4, 0xa2, 0x56, 0xaa, 0x5a, 0x2a, 0xad, 0xbd,
-	0xa4, 0x4d, 0x38, 0xa3, 0x1b, 0x8a, 0xa6, 0x13, 0xad, 0x80, 0x15, 0x62, 0xab, 0xb6, 0x96, 0x57,
-	0x2c, 0xa3, 0x6a, 0x63, 0x72, 0x14, 0xca, 0x67, 0x03, 0x34, 0x5a, 0x56, 0x7b, 0xe4, 0xa8, 0x6e,
-	0xac, 0x31, 0xde, 0x4d, 0xc6, 0x2a, 0x33, 0x4e, 0xa9, 0x04, 0xd1, 0xae, 0x12, 0x1d, 0xf0, 0x98,
-	0xea, 0x1a, 0x38, 0x74, 0x85, 0xbc, 0x42, 0xbe, 0xa5, 0x11, 0x9b, 0xc5, 0x90, 0xab, 0x4a, 0xd2,
-	0x0e, 0x2a, 0x7a, 0x1b, 0x62, 0xba, 0xa1, 0x18, 0x55, 0xbb, 0x8b, 0xb2, 0xde, 0x63, 0xcd, 0x47,
-	0xf2, 0x88, 0x6e, 0xbc, 0xe5, 0x30, 0xb7, 0x89, 0xd5, 0x60, 0xa4, 0xbb, 0xcc, 0xe0, 0xe9, 0x27,
-	0x80, 0xe4, 0x61, 0xa3, 0x8b, 0xaa, 0x2c, 0x0c, 0xe9, 0x86, 0x52, 0x2a, 0x1b, 0x3b, 0x34, 0x09,
-	0x38, 0x65, 0x3b, 0x83, 0x88, 0xc3, 0xf7, 0xf2, 0xa0, 0x6e, 0xac, 0x30, 0xfa, 0x9b, 0x0e, 0xb9,
-	0x54, 0x84, 0xe1, 0x76, 0x01, 0x4a, 0x59, 0x23, 0x36, 0xcb, 0xfa, 0x87, 0x55, 0x59, 0x6d, 0x02,
-	0x96, 0x0d, 0x5d, 0xc7, 0x79, 0x1a, 0x0e, 0xae, 0xcd, 0xab, 0x3e, 0x79, 0xa8, 0xe4, 0x25, 0xa1,
-	0x03, 0xd2, 0x1b, 0x30, 0xac, 0x1b, 0x4a, 0x21, 0xaf, 0xe4, 0xcb, 0x55, 0x62, 0x63, 0x4b, 0x29,
-	0x59, 0x46, 0xd5, 0x64, 0xb9, 0xee, 0x68, 0x47, 0xfb, 0x65, 0x51, 0x37, 0xae, 0xe7, 0x97, 0x1d,
-	0xb6, 0x15, 0xca, 0x25, 0xfd, 0x00, 0xce, 0x76, 0x4a, 0x6a, 0x2e, 0x64, 0x4d, 0x8f, 0x0d, 0x9c,
-	0x38, 0xc7, 0x9c, 0x79, 0x78, 0x57, 0xec, 0x94, 0xc4, 0xb5, 0x9e, 0x29, 0xb4, 0xe9, 0xe4, 0x4b,
-	0x9d, 0xd3, 0xa5, 0xbb, 0x30, 0x76, 0x40, 0x39, 0x8f, 0xd8, 0x9a, 0xfe, 0x1c, 0xf9, 0xed, 0xec,
-	0x21, 0xba, 0x9f, 0x39, 0xfa, 0x47, 0xdb, 0xf5, 0x3b, 0x3b, 0x25, 0xa7, 0x4b, 0x5b, 0x20, 0xaa,
-	0xe5, 0xb2, 0x51, 0xc7, 0x05, 0xa5, 0xa6, 0x99, 0x8a, 0x69, 0x58, 0x36, 0x03, 0xaf, 0xbe, 0xcc,
-	0x85, 0xee, 0x90, 0xe4, 0x10, 0xe7, 0xd6, 0x36, 0x36, 0x0c, 0xcb, 0x26, 0xd9, 0x00, 0x95, 0x2f,
-	0x47, 0xb8, 0x8c, 0x9c, 0x66, 0xd2, 0xcf, 0xd9, 0x34, 0x8c, 0x75, 0xd9, 0x75, 0x6e, 0x52, 0xa2,
-	0xf9, 0xdd, 0xc7, 0x73, 0x8e, 0x5b, 0x1d, 0x67, 0x33, 0x70, 0xb6, 0x5b, 0xa0, 0x7b, 0x79, 0x7a,
-	0x39, 0x4f, 0x80, 0xf2, 0x5c, 0x49, 0xce, 0x66, 0x93, 0x30, 0xd2, 0x11, 0x6d, 0x1e, 0x6a, 0x81,
-	0x53, 0x87, 0x28, 0xf5, 0x7c, 0x72, 0x21, 0x3b, 0x03, 0x67, 0x0e, 0x78, 0x9a, 0xd3, 0xd3, 0x2c,
-	0xd8, 0xcf, 0xe9, 0xfb, 0x78, 0x16, 0x4c, 0xcf, 0x24, 0xd3, 0x97, 0x9d, 0xa2, 0x7d, 0x3d, 0x20,
-	0x04, 0xc4, 0xde, 0xf5, 0x80, 0x10, 0x12, 0x85, 0xf5, 0x80, 0xd0, 0x27, 0xf6, 0x8f, 0xff, 0xad,
-	0x0f, 0x46, 0x3d, 0x65, 0xbc, 0x8c, 0xcd, 0xb2, 0xca, 0xcb, 0x80, 0xf9, 0xae, 0x00, 0x1c, 0xa5,
-	0x48, 0x9a, 0xf6, 0xa2, 0xda, 0xc8, 0x04, 0xcd, 0x25, 0x5e, 0x08, 0x9e, 0xeb, 0x06, 0xc1, 0x07,
-	0x19, 0x5f, 0x77, 0x18, 0x4f, 0x0f, 0xc2, 0x3d, 0x1d, 0x20, 0xbc, 0x38, 0xf9, 0xd1, 0xd5, 0xce,
-	0x43, 0xc9, 0x93, 0x06, 0x8a, 0x82, 0x04, 0xfd, 0x0e, 0x59, 0xc2, 0xd1, 0xe3, 0xcb, 0x2c, 0x64,
-	0xe7, 0x3b, 0x10, 0x64, 0xe2, 0x30, 0x04, 0xf9, 0xe1, 0x2f, 0x51, 0x1b, 0xe5, 0xf8, 0x23, 0x1f,
-	0x0c, 0xe5, 0x36, 0x96, 0x97, 0x6c, 0x5b, 0xcd, 0xef, 0x52, 0x54, 0x71, 0xcf, 0xa5, 0xbc, 0x1e,
-	0x47, 0xbf, 0x5e, 0x3d, 0xee, 0x56, 0xe3, 0xb7, 0x20, 0x58, 0x56, 0x77, 0x70, 0x99, 0xc2, 0x06,
-	0xad, 0xad, 0xbe, 0x71, 0x7c, 0xed, 0x7c, 0xc0, 0xaa, 0xd4, 0xb7, 0x98, 0x84, 0x1b, 0xba, 0x6d,
-	0xed, 0x65, 0xa5, 0xf7, 0x1f, 0x21, 0x3f, 0x20, 0xb4, 0xff, 0xf3, 0x9f, 0xf9, 0x83, 0xf7, 0x1f,
-	0x21, 0x9f, 0xd0, 0x23, 0x73, 0x15, 0x63, 0x0b, 0xd0, 0xe7, 0x21, 0x95, 0x44, 0xf0, 0xd3, 0xf2,
-	0x8f, 0xcd, 0x44, 0xa6, 0x8f, 0x52, 0x14, 0x7a, 0x6b, 0x6a, 0xb9, 0x8a, 0x19, 0x86, 0x85, 0x65,
-	0xe7, 0x65, 0xd1, 0x37, 0x8f, 0x16, 0x53, 0x1f, 0x35, 0xd0, 0x24, 0x48, 0x10, 0xcc, 0x6d, 0x2c,
-	0x27, 0xd6, 0xae, 0x8f, 0x09, 0xae, 0x23, 0x20, 0x0a, 0x41, 0x47, 0xe8, 0x3a, 0xb8, 0x73, 0x11,
-	0x7b, 0xc7, 0x4b, 0xcc, 0x7b, 0x6b, 0xe6, 0x86, 0x85, 0x8b, 0xda, 0x6d, 0xec, 0x9c, 0x89, 0xd7,
-	0x41, 0x30, 0xf9, 0x7b, 0x0c, 0x25, 0xfc, 0x13, 0xe1, 0x6c, 0xca, 0xad, 0x0c, 0xc7, 0x7b, 0x2d,
-	0xff, 0x17, 0x08, 0xb1, 0xa8, 0x79, 0x80, 0xfc, 0xe2, 0x3d, 0x81, 0x95, 0xa2, 0x0f, 0x90, 0x4f,
-	0x40, 0xee, 0x53, 0x0c, 0xc9, 0x4d, 0xfe, 0xc5, 0xe0, 0x47, 0x0d, 0xe4, 0x13, 0xd1, 0xf8, 0x4f,
-	0x10, 0x8c, 0xb4, 0x79, 0xc4, 0xcd, 0xc5, 0xb4, 0x70, 0xa5, 0x26, 0xb2, 0x9c, 0x8e, 0x98, 0x73,
-	0x67, 0x4e, 0xe1, 0x5c, 0x7e, 0xf0, 0x67, 0x36, 0x21, 0x39, 0x54, 0x33, 0xf3, 0x54, 0xc1, 0x62,
-	0xfc, 0x49, 0x03, 0x8d, 0x41, 0x0c, 0x86, 0x97, 0xb6, 0x37, 0x69, 0x1d, 0x95, 0x50, 0x9b, 0x5c,
-	0x44, 0x42, 0xe9, 0xf1, 0x1f, 0x23, 0x78, 0x69, 0x29, 0x6f, 0x6b, 0x35, 0xcc, 0x43, 0x75, 0xc3,
-	0x28, 0x6b, 0x79, 0x8d, 0x3b, 0xc2, 0x06, 0xd1, 0x2d, 0x8f, 0x4c, 0xfe, 0x9d, 0x9b, 0x78, 0x92,
-	0xec, 0xf9, 0xca, 0xc3, 0xbb, 0x91, 0x36, 0xf6, 0x3d, 0xd7, 0x43, 0x62, 0xc2, 0xe3, 0xab, 0x41,
-	0xd2, 0xae, 0x79, 0xfc, 0xbf, 0x43, 0x20, 0x6d, 0xe2, 0x7c, 0xd5, 0xd2, 0xec, 0x3d, 0xa7, 0x9a,
-	0x61, 0xc6, 0x5c, 0x03, 0x51, 0x37, 0x94, 0xa2, 0x61, 0xd5, 0x55, 0xab, 0xa0, 0x98, 0x96, 0x71,
-	0x7b, 0xef, 0x98, 0x4e, 0x45, 0x44, 0x37, 0xbe, 0xe9, 0x90, 0x6f, 0x50, 0x6a, 0xe9, 0x47, 0x08,
-	0xce, 0xa9, 0x6c, 0xb2, 0xed, 0x62, 0x5a, 0x93, 0x73, 0x2a, 0x98, 0xab, 0x1d, 0xf2, 0x3a, 0xdb,
-	0x6d, 0x29, 0xc7, 0x63, 0x5e, 0xd9, 0x5e, 0xb7, 0xad, 0xf6, 0xc8, 0x63, 0xea, 0xa1, 0x14, 0xd2,
-	0x9b, 0x70, 0xa6, 0x5d, 0x3b, 0xcb, 0xf3, 0xf4, 0x2f, 0x3f, 0x97, 0x1e, 0x36, 0x9d, 0x68, 0xd1,
-	0x23, 0x8e, 0x61, 0xc6, 0x52, 0xb9, 0x2c, 0xdd, 0x60, 0xa8, 0x8d, 0x55, 0x62, 0x2b, 0xf4, 0x64,
-	0xcf, 0x3d, 0xcd, 0xab, 0x83, 0xee, 0xa2, 0x10, 0xc5, 0xeb, 0x1b, 0x2a, 0xb1, 0xb7, 0x31, 0xb1,
-	0x99, 0x5d, 0x7b, 0xd2, 0x9f, 0x23, 0xf8, 0x1a, 0xf7, 0x4d, 0x4b, 0xd6, 0x81, 0xc5, 0x77, 0x50,
-	0xec, 0xeb, 0xc7, 0xc7, 0xe7, 0xa1, 0x31, 0xb5, 0x8a, 0x64, 0xbe, 0x06, 0xae, 0x01, 0x1d, 0x44,
-	0x92, 0x0a, 0xe3, 0x87, 0x58, 0xe0, 0x75, 0x55, 0xdf, 0x91, 0xf3, 0x3b, 0x87, 0xbb, 0x08, 0x6f,
-	0xf9, 0xcc, 0xa9, 0xca, 0xdc, 0x65, 0xe5, 0x1e, 0xeb, 0x3d, 0xae, 0x2a, 0xe3, 0xb5, 0x12, 0x77,
-	0x18, 0x81, 0x33, 0xdc, 0x5f, 0x6d, 0x72, 0xb4, 0x66, 0x19, 0xb9, 0x70, 0xb2, 0x28, 0xf2, 0x4a,
-	0x75, 0x7d, 0xe4, 0x93, 0x47, 0xd4, 0x6e, 0x83, 0x8b, 0x57, 0x9e, 0x34, 0x50, 0x1a, 0x5e, 0x82,
-	0x28, 0x8f, 0xac, 0x04, 0x8b, 0x85, 0x04, 0x37, 0x09, 0xa5, 0xe9, 0x09, 0xe9, 0x9b, 0x5c, 0x7e,
-	0xf3, 0xeb, 0xe5, 0xec, 0x45, 0x88, 0xb6, 0x87, 0x1c, 0x87, 0xe8, 0x21, 0x4f, 0x3b, 0xad, 0x37,
-	0x93, 0x9c, 0x4b, 0xce, 0x64, 0x67, 0xe1, 0xfc, 0xa1, 0xde, 0xf7, 0x14, 0x02, 0xe1, 0xa7, 0x0d,
-	0x24, 0xec, 0x37, 0x50, 0x88, 0x9f, 0xb0, 0xb2, 0x13, 0x30, 0xd2, 0xee, 0x4f, 0xef, 0x69, 0xa9,
-	0xd7, 0x53, 0x60, 0x34, 0xd1, 0x5f, 0x10, 0xc3, 0x4e, 0x0d, 0x30, 0xfe, 0x97, 0x3e, 0x18, 0x65,
-	0xc7, 0xf2, 0x9b, 0x5b, 0x55, 0x5d, 0xc7, 0x65, 0xcf, 0xa6, 0x9f, 0x80, 0x30, 0xc5, 0x39, 0x45,
-	0x57, 0x2b, 0x98, 0x63, 0x99, 0x93, 0xe8, 0xac, 0x80, 0x88, 0x62, 0xd7, 0x64, 0x81, 0x8e, 0xde,
-	0x54, 0x2b, 0x58, 0xca, 0x81, 0x68, 0x33, 0x6e, 0xc5, 0xc2, 0x15, 0xc3, 0xc6, 0x8a, 0x66, 0x32,
-	0xac, 0x0a, 0x67, 0x93, 0x94, 0x21, 0xfc, 0x00, 0x05, 0xc7, 0x03, 0x96, 0xef, 0x76, 0x33, 0x4d,
-	0x8b, 0xbe, 0xae, 0xa9, 0x3b, 0xe2, 0x48, 0x91, 0x99, 0x90, 0x35, 0x53, 0xba, 0x00, 0x21, 0x66,
-	0x81, 0xe6, 0xf4, 0x35, 0x3b, 0xf4, 0x07, 0xe9, 0xd8, 0x5a, 0x41, 0x5a, 0x86, 0x00, 0x6b, 0xc5,
-	0x04, 0x12, 0x68, 0x22, 0x72, 0x92, 0x56, 0x55, 0x73, 0xb2, 0x74, 0x9a, 0x32, 0x63, 0x6e, 0x62,
-	0xc5, 0xff, 0x22, 0x88, 0x2e, 0x6d, 0x6f, 0x6e, 0xad, 0x6c, 0xaf, 0xe9, 0x45, 0xc3, 0xe3, 0x8d,
-	0x6c, 0x47, 0xbb, 0xf9, 0xb5, 0x53, 0x74, 0x98, 0xb3, 0xcd, 0xd2, 0xc0, 0x77, 0x40, 0xc6, 0x49,
-	0xab, 0x81, 0x1c, 0x00, 0xa9, 0xee, 0xe8, 0xd8, 0x56, 0xb4, 0x02, 0x4d, 0x9a, 0xfe, 0xa3, 0x7a,
-	0x86, 0x9b, 0x8c, 0x72, 0xad, 0xc0, 0x42, 0x3b, 0x2b, 0x52, 0x75, 0x7d, 0x0f, 0x90, 0x30, 0x19,
-	0xbc, 0x94, 0x4c, 0xa4, 0x93, 0x33, 0x72, 0x98, 0xb8, 0x04, 0xe3, 0xcf, 0x86, 0x21, 0xe2, 0x1c,
-	0x5d, 0x36, 0x4d, 0x9c, 0x67, 0x53, 0x7e, 0x17, 0x22, 0xd4, 0x6f, 0x66, 0xf3, 0x58, 0xcf, 0xa6,
-	0x7e, 0xa2, 0xe6, 0x5d, 0x47, 0xf1, 0x95, 0x0d, 0xd0, 0x48, 0x97, 0x07, 0xd4, 0x3a, 0xf1, 0x34,
-	0x09, 0x8a, 0x30, 0x48, 0xdd, 0xe1, 0x81, 0x45, 0x0e, 0x2a, 0x73, 0xcf, 0x09, 0xc2, 0xad, 0xf3,
-	0x20, 0x53, 0x13, 0xa9, 0x99, 0xf9, 0x25, 0x0f, 0xd6, 0x7e, 0x0f, 0xfa, 0x19, 0x1f, 0xc7, 0xb5,
-	0x93, 0xf7, 0xc8, 0x0f, 0x22, 0x21, 0xd7, 0xd0, 0x67, 0x97, 0xea, 0xee, 0xa0, 0xb4, 0x01, 0x2f,
-	0xb5, 0x6e, 0x04, 0x8c, 0xa2, 0x5d, 0x57, 0x2d, 0xac, 0xd4, 0xb0, 0x45, 0x34, 0x43, 0xe7, 0x3d,
-	0xd9, 0xe8, 0xc7, 0x77, 0xd9, 0xc1, 0xa5, 0xad, 0x14, 0x94, 0xcf, 0x34, 0xaf, 0x08, 0x38, 0x57,
-	0xce, 0x61, 0x92, 0x6e, 0x42, 0xcc, 0x30, 0xb1, 0xa5, 0xb2, 0xa6, 0x29, 0xbf, 0x22, 0x70, 0x05,
-	0xf6, 0x1e, 0x21, 0x70, 0xb4, 0xc9, 0xb5, 0xc9, 0x98, 0x5c, 0x79, 0x7f, 0xef, 0x73, 0x3c, 0x4d,
-	0x0f, 0x44, 0x6e, 0x71, 0x15, 0x64, 0x91, 0xb3, 0x7c, 0xbc, 0x13, 0xda, 0x83, 0x22, 0x95, 0x33,
-	0xf3, 0xad, 0x92, 0xcd, 0xa9, 0x27, 0xff, 0x15, 0x71, 0x6b, 0x68, 0x41, 0x19, 0xbd, 0xff, 0x08,
-	0x89, 0x52, 0xe4, 0x17, 0x0d, 0x04, 0x6e, 0xdd, 0xb3, 0x76, 0xdd, 0x33, 0xb0, 0x7f, 0x60, 0x00,
-	0xee, 0x3f, 0x42, 0x41, 0x29, 0xf0, 0x61, 0x03, 0xf5, 0xb4, 0x2a, 0x52, 0x26, 0x6b, 0xe9, 0xfe,
-	0x23, 0xf4, 0xfa, 0xd8, 0xd7, 0x7f, 0xd1, 0x40, 0x73, 0x9b, 0xb6, 0xa5, 0xe9, 0xa5, 0x84, 0x85,
-	0x4d, 0x0b, 0x13, 0xac, 0xd3, 0x39, 0x26, 0xb0, 0x65, 0x19, 0x56, 0xc2, 0xc2, 0xc4, 0x34, 0x74,
-	0x82, 0x93, 0x89, 0x2a, 0xa9, 0xaa, 0xe5, 0xf2, 0x5e, 0x42, 0x4d, 0xec, 0xda, 0x95, 0x72, 0x22,
-	0x6f, 0x14, 0x30, 0x95, 0x32, 0x71, 0xff, 0x11, 0xba, 0x30, 0x36, 0xbe, 0xdf, 0x40, 0x71, 0x1a,
-	0x28, 0x09, 0xa3, 0x98, 0x70, 0xc2, 0x9e, 0x24, 0x34, 0x3d, 0xa1, 0x26, 0x4a, 0x5a, 0x0d, 0xeb,
-	0xd4, 0x1e, 0x79, 0xa0, 0xe6, 0x9d, 0x9c, 0xb4, 0x05, 0xe1, 0x9a, 0xae, 0xe4, 0xd9, 0xe2, 0x9f,
-	0xbc, 0x6f, 0xdd, 0xd1, 0x06, 0xe2, 0x11, 0x23, 0xd4, 0xf8, 0x67, 0x69, 0x02, 0x42, 0x6a, 0xa1,
-	0x60, 0x61, 0x42, 0x78, 0xbf, 0x3a, 0x42, 0x8f, 0xb5, 0xcd, 0xae, 0xaa, 0x4f, 0x76, 0x87, 0xa5,
-	0x15, 0xe8, 0xcb, 0x1b, 0x86, 0x55, 0xd0, 0x74, 0xd5, 0xc6, 0x84, 0x97, 0x15, 0xe7, 0x3b, 0x2c,
-	0x60, 0x3a, 0x97, 0x5b, 0x64, 0x4e, 0x5f, 0x40, 0xf6, 0x72, 0x4a, 0xef, 0xc1, 0x59, 0x76, 0x4b,
-	0x54, 0x31, 0x0a, 0x5a, 0x51, 0xcb, 0x33, 0xbb, 0x94, 0xe6, 0x3d, 0x27, 0xaf, 0x2c, 0xc6, 0x52,
-	0xce, 0x4d, 0x68, 0xca, 0xbd, 0x09, 0x4d, 0x6d, 0xb9, 0x14, 0xfc, 0x54, 0xfc, 0x12, 0x15, 0xf2,
-	0xa6, 0x47, 0x46, 0x93, 0x40, 0x7a, 0x1d, 0x46, 0x9d, 0xeb, 0x44, 0xc3, 0xb9, 0x14, 0xe3, 0x70,
-	0xa0, 0x99, 0xb1, 0x73, 0x6c, 0x8e, 0x61, 0x1e, 0xa4, 0x26, 0x92, 0x25, 0x4a, 0xb0, 0x65, 0x6c,
-	0xd2, 0xbf, 0x8c, 0x6a, 0xcd, 0x94, 0xbe, 0x0d, 0x02, 0x4b, 0xae, 0x7a, 0xd1, 0xe0, 0xd5, 0xc5,
-	0xec, 0x09, 0xea, 0x9c, 0x2e, 0x69, 0x5a, 0x0e, 0xd1, 0x4c, 0xab, 0x17, 0x0d, 0x69, 0x0b, 0xce,
-	0x94, 0x8d, 0x12, 0x51, 0x88, 0x6d, 0x61, 0xb5, 0x42, 0x37, 0x52, 0x41, 0x23, 0xea, 0x4e, 0x19,
-	0x17, 0x78, 0x03, 0xe4, 0xe8, 0xee, 0xdb, 0x08, 0x65, 0xde, 0x74, 0x79, 0xaf, 0x73, 0x56, 0xe9,
-	0x8f, 0xa0, 0xbf, 0x6c, 0x94, 0x14, 0x0b, 0xe7, 0xb1, 0x56, 0xc3, 0xd6, 0x73, 0xf4, 0x33, 0x86,
-	0x1f, 0xde, 0x6d, 0x63, 0xe5, 0x7a, 0xfa, 0xca, 0x46, 0x49, 0xe6, 0x9f, 0xa4, 0x65, 0xf0, 0x91,
-	0x3a, 0x6f, 0xd6, 0x5e, 0xec, 0x2a, 0x33, 0xd7, 0x91, 0x31, 0x98, 0x68, 0x81, 0xca, 0xfa, 0x9c,
-	0xae, 0x90, 0x8f, 0xd4, 0xa5, 0x2c, 0xf8, 0x0c, 0x12, 0x13, 0x99, 0x90, 0x89, 0xee, 0x86, 0xb5,
-	0x67, 0x89, 0x4e, 0x19, 0x06, 0x91, 0xfe, 0x0c, 0x41, 0xc0, 0x56, 0x4b, 0x24, 0x16, 0x67, 0x59,
-	0x62, 0xf1, 0xb9, 0xb3, 0xc4, 0x96, 0x5a, 0xe2, 0xc9, 0x61, 0xd6, 0x8d, 0xee, 0xf0, 0xfb, 0x4e,
-	0x15, 0x10, 0xfb, 0x13, 0x16, 0xeb, 0xef, 0x23, 0x9f, 0xd8, 0xcb, 0x8e, 0x76, 0xef, 0xa3, 0xd0,
-	0x24, 0x0d, 0xfd, 0x2f, 0xdb, 0x0e, 0xa4, 0x4c, 0xbf, 0xf4, 0xa7, 0x08, 0x86, 0x58, 0x1f, 0x87,
-	0x5d, 0x2d, 0xb9, 0x1d, 0x88, 0x21, 0x66, 0xd5, 0xc5, 0x6e, 0x3b, 0x61, 0xa3, 0xba, 0x53, 0xd6,
-	0xc8, 0x6e, 0x6e, 0x6d, 0xc3, 0xb9, 0x8d, 0x62, 0x8d, 0x88, 0xec, 0x6b, 0x3c, 0x41, 0x75, 0x5c,
-	0x32, 0xb4, 0x4a, 0x0f, 0xa6, 0xf9, 0x01, 0x4b, 0x3c, 0x72, 0xa4, 0xa6, 0x99, 0x1e, 0x66, 0xc9,
-	0x84, 0x90, 0x13, 0xce, 0x24, 0xf6, 0xef, 0x21, 0xa6, 0x79, 0xfe, 0x44, 0xc1, 0xd9, 0xa5, 0xa6,
-	0xca, 0x9e, 0xf5, 0x18, 0xc2, 0x0a, 0xa1, 0x6b, 0x9e, 0xf2, 0xc7, 0x55, 0x23, 0xbd, 0x07, 0x61,
-	0xbb, 0xc8, 0xe7, 0x1c, 0xfb, 0x8f, 0xd0, 0x89, 0x63, 0x2c, 0xfe, 0xf0, 0x6e, 0x94, 0x85, 0x47,
-	0xd1, 0xb0, 0x2a, 0x1e, 0xdc, 0xe6, 0x4a, 0x65, 0xc1, 0x2e, 0x3a, 0x13, 0x93, 0xde, 0x85, 0x01,
-	0xf6, 0x6f, 0x02, 0x9a, 0x6e, 0x63, 0x4b, 0x57, 0xcb, 0xb1, 0x67, 0xa1, 0xe7, 0xb9, 0x79, 0x68,
-	0x67, 0x66, 0xb2, 0xfb, 0xe9, 0xa7, 0x35, 0xfe, 0x65, 0xac, 0x0a, 0xd2, 0x41, 0xa0, 0xe8, 0xd2,
-	0x4d, 0x58, 0xf3, 0x76, 0x13, 0x4e, 0x7a, 0xfa, 0x6e, 0x6f, 0x19, 0x78, 0x5a, 0x10, 0x63, 0x73,
-	0x10, 0x6e, 0x46, 0xde, 0x73, 0xf5, 0x2e, 0xfe, 0x01, 0x3d, 0x69, 0xa0, 0xbf, 0x41, 0x30, 0x0a,
-	0x43, 0x14, 0x9c, 0xda, 0x1b, 0xf9, 0x4e, 0x6d, 0x7f, 0xe0, 0x04, 0x9f, 0x81, 0x31, 0x18, 0xe1,
-	0xa7, 0x84, 0x4e, 0x8e, 0x39, 0x38, 0x0b, 0xa3, 0x6e, 0x85, 0xd0, 0x39, 0x38, 0x03, 0xe7, 0x60,
-	0xd4, 0xdd, 0xc1, 0x1d, 0x83, 0xfe, 0xf9, 0xe4, 0x02, 0x4c, 0xc0, 0xe8, 0x52, 0xa1, 0xa6, 0xea,
-	0x79, 0x5c, 0xe8, 0x18, 0x8e, 0xa4, 0x33, 0xc9, 0xf4, 0x95, 0x64, 0x7a, 0x36, 0x99, 0x59, 0x48,
-	0xce, 0x5c, 0xca, 0x4e, 0x41, 0x94, 0x65, 0x39, 0x37, 0xab, 0xb8, 0x95, 0xff, 0xc8, 0xe3, 0x06,
-	0x1a, 0xe0, 0x4d, 0xac, 0x7e, 0x76, 0xc5, 0xc1, 0xbb, 0x7f, 0xfd, 0xe2, 0xc0, 0xf8, 0x8f, 0x05,
-	0x88, 0x2c, 0x5b, 0x58, 0xb5, 0x71, 0xb3, 0xd4, 0xfb, 0xce, 0x0b, 0x2b, 0xf5, 0x3a, 0x8b, 0xbc,
-	0xf7, 0x5e, 0x74, 0x91, 0x77, 0xa0, 0xbc, 0xbb, 0xf9, 0x22, 0x60, 0xda, 0x03, 0xd0, 0xdb, 0x2f,
-	0xae, 0x5c, 0x6c, 0x2f, 0x14, 0x63, 0x1d, 0xc8, 0xdf, 0x42, 0xfa, 0xa5, 0xd3, 0x20, 0x7d, 0x3b,
-	0xc6, 0xdf, 0x3c, 0x15, 0xde, 0x1d, 0x8e, 0x74, 0xdf, 0x39, 0x35, 0xd2, 0x0d, 0x76, 0x20, 0x5d,
-	0x27, 0xca, 0x7d, 0xe3, 0x74, 0x28, 0x17, 0x68, 0x22, 0xdc, 0xd5, 0x53, 0x21, 0x5c, 0xa0, 0x89,
-	0x6e, 0x99, 0xa3, 0x8b, 0x95, 0xae, 0x15, 0xca, 0xcd, 0xe7, 0x05, 0xc4, 0xf6, 0x0d, 0xd6, 0x02,
-	0x44, 0x07, 0xd8, 0x4e, 0x9f, 0xa9, 0x86, 0x3e, 0xba, 0xda, 0x71, 0x4e, 0xcb, 0x5e, 0x3a, 0x24,
-	0x09, 0xc4, 0x7e, 0xf8, 0x4b, 0xd4, 0x75, 0xa4, 0xd9, 0xff, 0x77, 0xae, 0x3a, 0x69, 0x4e, 0xf8,
-	0x97, 0x10, 0x0c, 0xf2, 0xa6, 0x7f, 0x33, 0x29, 0x28, 0x07, 0x92, 0x82, 0xe3, 0xf3, 0xf9, 0xe7,
-	0x4a, 0x0a, 0x9e, 0xab, 0x84, 0xaf, 0x72, 0xc3, 0x57, 0xb9, 0xe1, 0xe8, 0xdc, 0x70, 0x8a, 0xad,
-	0xb9, 0xf8, 0x53, 0x74, 0x60, 0x4b, 0x3c, 0x69, 0xa0, 0x0f, 0x10, 0x9c, 0xe9, 0x06, 0xe6, 0xbe,
-	0xf4, 0xec, 0x6f, 0x19, 0xcd, 0xcf, 0x1f, 0x8a, 0xe6, 0xbd, 0x99, 0x85, 0x64, 0x3a, 0x73, 0xaa,
-	0xfd, 0xeb, 0xbd, 0xc5, 0x6b, 0xed, 0xe2, 0xbf, 0x8b, 0x40, 0xdf, 0x0a, 0xb6, 0xbf, 0x82, 0xf5,
-	0xdf, 0xe6, 0xd6, 0x5d, 0x3c, 0xb6, 0xff, 0x73, 0x78, 0xa7, 0x67, 0xfe, 0xb8, 0x4e, 0xcf, 0xa1,
-	0x3d, 0x9d, 0x87, 0x87, 0xf6, 0x74, 0xae, 0x9d, 0xe0, 0xb4, 0xd6, 0x8a, 0x91, 0x6e, 0x0d, 0x9d,
-	0x7f, 0xfa, 0x7d, 0xeb, 0xe4, 0x6c, 0xbe, 0xb8, 0x23, 0x5c, 0xeb, 0x94, 0xf6, 0x1b, 0x4d, 0xd9,
-	0xdf, 0xfd, 0x35, 0x5b, 0x36, 0x47, 0x35, 0x6b, 0x4e, 0x53, 0xff, 0xfc, 0x06, 0x3a, 0x34, 0xbf,
-	0x3b, 0xa8, 0xf4, 0x46, 0x5b, 0xf1, 0x37, 0xf7, 0x7c, 0xfb, 0xab, 0xa3, 0xf2, 0x93, 0xfe, 0x10,
-	0x80, 0x79, 0x9d, 0xd8, 0xaa, 0x8d, 0x59, 0x19, 0x1c, 0xc9, 0x9c, 0xeb, 0x16, 0x1b, 0xee, 0x7f,
-	0x3d, 0x61, 0x39, 0x4c, 0xdc, 0x47, 0x69, 0xeb, 0x45, 0xf4, 0x43, 0x3a, 0x5b, 0x1c, 0xbf, 0x73,
-	0xc7, 0xf5, 0xe8, 0x01, 0xc4, 0x7f, 0x76, 0x15, 0x9d, 0x0a, 0x47, 0xfb, 0xc5, 0x81, 0xc9, 0x24,
-	0x0c, 0xb4, 0x5d, 0x09, 0x49, 0x21, 0xf0, 0xaf, 0xbe, 0x9d, 0x15, 0x7b, 0xa4, 0x7e, 0x10, 0x36,
-	0x6f, 0xc8, 0xb9, 0xb5, 0xe5, 0x1b, 0x9b, 0x22, 0x1a, 0x0b, 0x3c, 0x6e, 0xa0, 0x9e, 0xec, 0x4f,
-	0xd0, 0xd3, 0x4f, 0xe3, 0x3d, 0x1f, 0x7f, 0x1a, 0xef, 0xf9, 0xfc, 0xd3, 0x38, 0xba, 0xb7, 0x1f,
-	0x47, 0x1f, 0xec, 0xc7, 0xd1, 0x87, 0xfb, 0x71, 0xf4, 0x74, 0x3f, 0x8e, 0x3e, 0xde, 0x8f, 0xa3,
-	0x9f, 0xef, 0xc7, 0xd1, 0xb3, 0xfd, 0x78, 0xcf, 0xe7, 0xfb, 0x71, 0xf4, 0x57, 0x9f, 0xc5, 0x7b,
-	0x1e, 0x7f, 0x16, 0x47, 0x4f, 0x3f, 0x8b, 0xf7, 0x7c, 0xfc, 0x59, 0xbc, 0xe7, 0xbb, 0xb9, 0x92,
-	0x61, 0xde, 0x2a, 0xa5, 0x5c, 0x40, 0x48, 0x55, 0xc9, 0x74, 0xb3, 0x65, 0x33, 0x65, 0x5a, 0x46,
-	0x4d, 0x2b, 0x60, 0x6b, 0xca, 0x1d, 0x9e, 0x36, 0x77, 0x4a, 0xc6, 0x34, 0xbe, 0x6d, 0xbb, 0x3f,
-	0x1a, 0x39, 0xec, 0x47, 0x32, 0x3b, 0x41, 0x96, 0x03, 0x66, 0xfe, 0x3f, 0x00, 0x00, 0xff, 0xff,
-	0x91, 0x7c, 0x93, 0xa6, 0x4f, 0x33, 0x00, 0x00,
+	// 4503 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7b, 0x5d, 0x6c, 0x1b, 0x57,
+	0x76, 0xbf, 0x2e, 0x49, 0x49, 0xd4, 0xd1, 0xd7, 0x68, 0x44, 0xc9, 0xb4, 0x14, 0xd3, 0x8c, 0xe0,
+	0x6c, 0x64, 0x87, 0xa2, 0x4c, 0xca, 0x96, 0x64, 0xef, 0x3f, 0x5e, 0x8b, 0xb2, 0x23, 0x51, 0x49,
+	0x1c, 0xed, 0x48, 0x91, 0x82, 0xe4, 0xbf, 0x99, 0x8c, 0xc8, 0x4b, 0x6a, 0x36, 0xe4, 0xcc, 0x60,
+	0xee, 0x25, 0x69, 0x79, 0x6b, 0x34, 0xcd, 0x02, 0xed, 0x22, 0x40, 0x81, 0xd6, 0x58, 0xf4, 0x21,
+	0x40, 0x1f, 0x5b, 0x2c, 0x0c, 0x14, 0x68, 0x8b, 0x3e, 0x95, 0x06, 0xea, 0x1a, 0x48, 0x11, 0xe4,
+	0xc9, 0x0f, 0x7d, 0x08, 0xf2, 0xb4, 0x51, 0x80, 0x36, 0xbb, 0x05, 0x8a, 0x3c, 0x14, 0x68, 0x90,
+	0x02, 0x9b, 0xe2, 0xde, 0xb9, 0x43, 0x0e, 0xbf, 0xf4, 0x15, 0x6f, 0x16, 0x5b, 0xe4, 0xc5, 0xa0,
+	0x78, 0xcf, 0xd7, 0x3d, 0xf7, 0xdc, 0x73, 0x7e, 0xe7, 0x5c, 0x1a, 0x62, 0x65, 0x4c, 0xe2, 0xba,
+	0x39, 0x4b, 0x32, 0xbb, 0xb8, 0xa8, 0xcd, 0x96, 0x75, 0x5c, 0x21, 0xb3, 0x5a, 0x85, 0xa8, 0x34,
+	0x5f, 0x51, 0x89, 0x4e, 0xf1, 0x2c, 0xdd, 0xb3, 0x30, 0x89, 0x5b, 0xb6, 0x49, 0x4d, 0x39, 0xea,
+	0x50, 0xc7, 0x1d, 0xea, 0x38, 0xa7, 0x8e, 0x7b, 0xa9, 0x27, 0x66, 0xf2, 0x3a, 0xdd, 0x2d, 0xed,
+	0xc4, 0x33, 0x66, 0x71, 0x36, 0x6f, 0xe6, 0xcd, 0x59, 0xce, 0xb8, 0x53, 0xca, 0xf1, 0xbf, 0xf8,
+	0x1f, 0xfc, 0x93, 0x23, 0x70, 0xe2, 0x6c, 0xde, 0x34, 0xf3, 0x05, 0x5c, 0xa7, 0xa2, 0x7a, 0x11,
+	0x13, 0xaa, 0x15, 0x2d, 0x41, 0x70, 0xa1, 0xd1, 0x3e, 0x03, 0xd3, 0x8a, 0x69, 0xbf, 0xad, 0xe6,
+	0x74, 0x1b, 0x57, 0xb4, 0x42, 0xc1, 0x6b, 0xdd, 0xc4, 0x64, 0x23, 0xad, 0x69, 0x51, 0xdd, 0x34,
+	0xdc, 0xc5, 0x48, 0xe3, 0x62, 0xf3, 0xd6, 0x26, 0x4e, 0x37, 0xae, 0x7b, 0x97, 0x9e, 0x6a, 0xf2,
+	0x91, 0x56, 0xd0, 0xb3, 0x1a, 0xc5, 0x62, 0x35, 0xda, 0xea, 0x41, 0xb5, 0x51, 0xf5, 0xb9, 0x76,
+	0x3e, 0x66, 0x06, 0xa8, 0x5e, 0x2d, 0x67, 0xdb, 0x51, 0x79, 0x08, 0xa6, 0x2a, 0x20, 0x6f, 0xae,
+	0x6c, 0x2f, 0x11, 0xa2, 0xe7, 0x0d, 0x9c, 0x5d, 0xda, 0xb8, 0xb5, 0xb9, 0x67, 0x61, 0x79, 0x1a,
+	0x7a, 0x99, 0xf3, 0x35, 0x62, 0x84, 0x51, 0x14, 0x4d, 0x0f, 0xa6, 0x86, 0xff, 0xf1, 0x57, 0x0f,
+	0xfd, 0x70, 0x21, 0x18, 0xfe, 0xcd, 0xd7, 0xfe, 0xe8, 0x3b, 0x5f, 0xfa, 0x95, 0x1e, 0x9a, 0xaf,
+	0x2c, 0x11, 0x43, 0x5e, 0x80, 0x91, 0xb2, 0x59, 0xa0, 0xd8, 0xb6, 0x35, 0x7e, 0x56, 0x9c, 0xc7,
+	0xc7, 0x79, 0xfa, 0x19, 0x4f, 0xcf, 0x85, 0x40, 0xf8, 0xeb, 0xaf, 0xfd, 0xca, 0xb0, 0x4b, 0xb5,
+	0xa1, 0x53, 0xbc, 0x44, 0x8c, 0xa9, 0x7f, 0x46, 0x30, 0x7c, 0xf3, 0xb6, 0x4e, 0xa8, 0x6e, 0xe4,
+	0x37, 0x57, 0xb6, 0xb9, 0xda, 0x57, 0x80, 0x89, 0x55, 0xf5, 0x2c, 0xd7, 0xda, 0x97, 0x5a, 0xfc,
+	0xb2, 0x8a, 0xba, 0x98, 0x94, 0x80, 0xed, 0x0b, 0x5f, 0x67, 0x1f, 0xbe, 0x67, 0x9f, 0x4b, 0x4e,
+	0xbd, 0x39, 0x4d, 0xf3, 0x95, 0x99, 0xf3, 0xd3, 0x6f, 0x68, 0x33, 0x77, 0x2e, 0xce, 0x5c, 0xf9,
+	0xd1, 0x4f, 0x16, 0xef, 0xfe, 0x41, 0xed, 0x73, 0x62, 0xe1, 0xee, 0xf9, 0x73, 0x4a, 0x37, 0xcd,
+	0x57, 0xd2, 0x59, 0xf9, 0x5c, 0x7d, 0x1f, 0x6d, 0x6c, 0x3a, 0x70, 0x0f, 0xfe, 0x23, 0xec, 0xe1,
+	0x5f, 0x11, 0x0c, 0x6e, 0xae, 0x6c, 0xaf, 0x6b, 0xb6, 0x56, 0x24, 0x7c, 0x07, 0x4b, 0x20, 0x91,
+	0x3d, 0x42, 0x71, 0x51, 0xcd, 0x63, 0x03, 0xdb, 0x1a, 0xc5, 0x59, 0xae, 0xb9, 0x3f, 0x19, 0x8a,
+	0x37, 0x86, 0xf9, 0xcd, 0xa2, 0x45, 0xf7, 0x56, 0xbb, 0x94, 0x61, 0x87, 0x7e, 0xc5, 0x25, 0x97,
+	0xdf, 0x80, 0xc1, 0x12, 0xc1, 0xb6, 0xaa, 0x89, 0x33, 0xe1, 0x96, 0xf4, 0x27, 0x2f, 0xc5, 0x0f,
+	0xbb, 0x26, 0xf1, 0xd6, 0x83, 0x5c, 0xed, 0x52, 0x06, 0x98, 0x30, 0xf7, 0xeb, 0xd4, 0x19, 0x00,
+	0x8d, 0x18, 0x6a, 0x66, 0xd7, 0xd4, 0x33, 0x58, 0x1e, 0x7e, 0x58, 0x45, 0xbe, 0xc7, 0x55, 0x84,
+	0xf6, 0xab, 0xc8, 0x9f, 0x8c, 0xcd, 0xad, 0x05, 0x82, 0x48, 0xf2, 0x4d, 0xfd, 0x74, 0x08, 0x86,
+	0x37, 0xb0, 0x5d, 0xd6, 0x33, 0x98, 0x6c, 0xad, 0x2f, 0xf3, 0x8d, 0xfd, 0xc2, 0x07, 0xc0, 0x94,
+	0xd9, 0x38, 0xaf, 0x9b, 0x86, 0x38, 0x9f, 0x9f, 0xf9, 0xdc, 0x03, 0xfa, 0x0d, 0xb2, 0xff, 0x07,
+	0x29, 0x43, 0x9a, 0x35, 0x63, 0x98, 0x36, 0xdd, 0xc5, 0x1a, 0xa1, 0x33, 0x09, 0xfe, 0x37, 0x31,
+	0x4b, 0xb5, 0xbf, 0x07, 0x70, 0x69, 0x26, 0x83, 0x0d, 0x6a, 0x6b, 0x85, 0x99, 0x84, 0xd2, 0x87,
+	0x4b, 0x33, 0x15, 0xcc, 0x17, 0x6a, 0x1f, 0xe7, 0x94, 0x3e, 0xa2, 0xcd, 0x08, 0xf2, 0xbe, 0x12,
+	0x69, 0xf9, 0x98, 0xe4, 0x1f, 0x39, 0x6d, 0x52, 0x19, 0xc8, 0x68, 0x1e, 0x79, 0xa0, 0xe5, 0x1c,
+	0x6d, 0x8c, 0x5e, 0xb3, 0x5c, 0x56, 0x70, 0x8d, 0x10, 0x06, 0xd5, 0x0d, 0x4c, 0x36, 0x19, 0x98,
+	0x54, 0x00, 0x97, 0x6a, 0xb4, 0xec, 0x33, 0xa7, 0xf5, 0xda, 0x97, 0x54, 0xa0, 0x88, 0xeb, 0x5a,
+	0x5c, 0x53, 0x98, 0xc2, 0x0a, 0x51, 0xb8, 0x6f, 0xe4, 0xeb, 0xd0, 0x6b, 0xe0, 0x8a, 0x5a, 0xb6,
+	0x32, 0xe2, 0xe8, 0x9e, 0x69, 0x7b, 0x74, 0x4b, 0xdb, 0x1b, 0x5b, 0xeb, 0xcb, 0xf5, 0xd8, 0x59,
+	0xed, 0x52, 0x7a, 0x0c, 0x5c, 0xd9, 0xb2, 0x32, 0xf2, 0x0f, 0xa1, 0xa7, 0x6c, 0x65, 0xd8, 0x3d,
+	0x08, 0x1c, 0x7c, 0x0f, 0xca, 0x56, 0xe6, 0xc0, 0x7b, 0xb0, 0xda, 0xa5, 0x74, 0x97, 0xad, 0x4c,
+	0x3a, 0x2b, 0xaf, 0x39, 0x46, 0xd1, 0x7c, 0x25, 0xdc, 0xc3, 0x8d, 0x9a, 0x3d, 0x52, 0x3c, 0x79,
+	0xcc, 0x43, 0xdc, 0xbc, 0xcd, 0x7c, 0x45, 0xde, 0x82, 0x01, 0x2c, 0x6e, 0x2e, 0x17, 0xd8, 0xcb,
+	0x05, 0x26, 0x0e, 0x17, 0xd8, 0x74, 0xdf, 0x57, 0x91, 0xd2, 0xef, 0x0a, 0x62, 0x72, 0x09, 0x48,
+	0x8c, 0x3c, 0x83, 0x6d, 0xaa, 0xe7, 0x74, 0x9c, 0x55, 0x77, 0x2b, 0xe1, 0x20, 0x77, 0x40, 0xfa,
+	0x93, 0x2a, 0x9a, 0xd4, 0x2a, 0x64, 0x66, 0x67, 0xcf, 0x2c, 0xcc, 0x14, 0x4b, 0x05, 0xaa, 0xcf,
+	0x18, 0x7a, 0x66, 0x86, 0x5d, 0xc8, 0x22, 0x26, 0xbb, 0xae, 0x7f, 0x9e, 0xb6, 0xcf, 0x86, 0xaf,
+	0x2b, 0x07, 0x51, 0x2a, 0x43, 0x5a, 0x85, 0x2c, 0xbb, 0x1a, 0x56, 0x2b, 0xf2, 0x7f, 0x20, 0x18,
+	0xd4, 0x0d, 0x42, 0x35, 0x23, 0xe3, 0xa4, 0xce, 0x70, 0x1f, 0x57, 0xf9, 0x01, 0xfa, 0xa4, 0x8a,
+	0xfa, 0xe8, 0x5c, 0xfc, 0x76, 0x41, 0xb3, 0xf3, 0x98, 0x69, 0xb8, 0xf7, 0x00, 0xfd, 0x35, 0x82,
+	0x4b, 0x50, 0xff, 0x56, 0x7e, 0x76, 0xfa, 0x52, 0xf4, 0x76, 0xb4, 0xbc, 0xbc, 0xfe, 0x6a, 0x2c,
+	0x9a, 0x98, 0x5f, 0x49, 0x45, 0x95, 0xa5, 0x97, 0xcf, 0x47, 0x8b, 0x38, 0xab, 0x97, 0x8a, 0x51,
+	0x0b, 0xdb, 0x39, 0xd3, 0x2e, 0x32, 0xc9, 0x30, 0x07, 0x40, 0xe7, 0xe2, 0x49, 0xc1, 0xf6, 0xcc,
+	0xf4, 0x62, 0x8d, 0x6d, 0x2e, 0xe9, 0xb2, 0xed, 0xea, 0xf9, 0xdd, 0x06, 0xa6, 0x2b, 0x00, 0xc5,
+	0xcb, 0xf1, 0x4b, 0x82, 0xe9, 0xb9, 0xe9, 0xc4, 0x7c, 0x8d, 0x6b, 0xfe, 0x92, 0xcb, 0x55, 0xc6,
+	0xf6, 0x5e, 0x0b, 0x6b, 0x2d, 0x58, 0x94, 0x01, 0x77, 0x73, 0xfc, 0x1a, 0x3f, 0x0b, 0xbd, 0x84,
+	0xec, 0xaa, 0x6f, 0xe3, 0xbd, 0x30, 0xf0, 0x6d, 0x0e, 0x7d, 0x59, 0x45, 0x7e, 0x46, 0xdd, 0x6d,
+	0xfb, 0xc3, 0xef, 0x5c, 0x57, 0x7a, 0x08, 0xd9, 0x7d, 0x11, 0xef, 0xc9, 0x6f, 0x40, 0x50, 0xbb,
+	0xa3, 0x1a, 0x66, 0x16, 0x93, 0x70, 0x7f, 0xd4, 0xdf, 0x31, 0x60, 0x9c, 0x28, 0xde, 0xac, 0x98,
+	0x69, 0x83, 0x62, 0x3b, 0xa7, 0x65, 0xf0, 0x2d, 0x33, 0xcb, 0x75, 0x89, 0x9a, 0x71, 0x0f, 0xf5,
+	0x5e, 0xe8, 0xbe, 0x18, 0x4b, 0xc4, 0xe6, 0x94, 0x5e, 0xed, 0x0e, 0x5b, 0x24, 0xf2, 0x3c, 0x0c,
+	0x70, 0xc9, 0xaa, 0xc5, 0xf2, 0xdc, 0x9d, 0xf0, 0x00, 0xcf, 0xb5, 0xf2, 0x27, 0x55, 0x84, 0x2e,
+	0xd6, 0x42, 0xfd, 0x82, 0x2f, 0x3c, 0xb6, 0xea, 0x53, 0x80, 0x53, 0xae, 0x63, 0x7b, 0xe9, 0x8e,
+	0x7c, 0x19, 0xfa, 0xa9, 0x49, 0xb5, 0x82, 0xb0, 0x6b, 0xb2, 0x03, 0xdb, 0xf3, 0x8c, 0x8d, 0x13,
+	0x3a, 0xea, 0xae, 0xc1, 0xb0, 0x61, 0xaa, 0xac, 0xc4, 0x63, 0x5b, 0xb0, 0x3e, 0x75, 0x40, 0x4e,
+	0xf6, 0x29, 0x83, 0x86, 0xb9, 0xcd, 0xa9, 0x1d, 0xfe, 0x8b, 0xd0, 0x97, 0xd5, 0xc9, 0xdb, 0x2a,
+	0xd1, 0xef, 0xe0, 0xf0, 0x38, 0x57, 0x3a, 0xfa, 0xb0, 0x8a, 0x90, 0xab, 0x93, 0xd5, 0x87, 0x77,
+	0xfe, 0xcb, 0xaf, 0x04, 0x19, 0xd5, 0x86, 0x7e, 0x07, 0xcb, 0xaf, 0x42, 0x90, 0x47, 0xb2, 0x8d,
+	0xb3, 0xe1, 0x21, 0xae, 0x6a, 0xaa, 0xad, 0xf7, 0x5e, 0xd9, 0xf9, 0x31, 0xce, 0x50, 0x05, 0xe7,
+	0xb8, 0xc3, 0x42, 0xf7, 0xef, 0x8e, 0x64, 0x0a, 0x66, 0x29, 0xcb, 0x19, 0xb1, 0x41, 0x75, 0xad,
+	0x40, 0x56, 0xfd, 0x4a, 0x2f, 0x0b, 0x59, 0x1b, 0x67, 0xe5, 0x24, 0x04, 0x59, 0x55, 0x20, 0xac,
+	0xaa, 0x0c, 0x1f, 0xb0, 0x03, 0xbf, 0x52, 0xa3, 0xbb, 0xfa, 0xe3, 0x47, 0x55, 0x94, 0x83, 0x51,
+	0x18, 0x70, 0x33, 0x7a, 0x74, 0x6b, 0x7d, 0x59, 0xf6, 0x27, 0x62, 0x49, 0x08, 0xc1, 0xf0, 0xa6,
+	0xad, 0x19, 0x44, 0xa7, 0xd1, 0x15, 0x8d, 0xe2, 0x8a, 0xb6, 0x27, 0xa3, 0xcb, 0xf0, 0x2c, 0x84,
+	0x58, 0x7d, 0x8b, 0xb2, 0xbd, 0x47, 0xf9, 0xfd, 0xc7, 0x14, 0xdb, 0x44, 0x1e, 0x5e, 0x8c, 0x5d,
+	0x89, 0x25, 0x2e, 0xc6, 0x12, 0x89, 0x58, 0x32, 0x19, 0x4b, 0x5e, 0x01, 0x09, 0xe0, 0x06, 0xb6,
+	0x0a, 0xe6, 0x5e, 0x11, 0x1b, 0x54, 0xf6, 0x25, 0xe6, 0x52, 0xcf, 0x80, 0x4c, 0x1c, 0x2d, 0x2c,
+	0xfb, 0x79, 0xab, 0x8c, 0xff, 0x71, 0x15, 0xf9, 0x58, 0x95, 0x99, 0x8b, 0x5d, 0x62, 0x45, 0x88,
+	0xa5, 0x04, 0xcf, 0x72, 0xcf, 0xe3, 0x2a, 0xea, 0x66, 0xcb, 0xf3, 0xb1, 0x85, 0xd4, 0x34, 0x0c,
+	0x78, 0xcf, 0x4a, 0x0e, 0x3f, 0xac, 0xa2, 0xa7, 0x3e, 0xac, 0x22, 0xf4, 0xb8, 0x8a, 0xce, 0xec,
+	0x57, 0x51, 0x30, 0x91, 0x8c, 0x25, 0x17, 0x62, 0xc9, 0xc5, 0xd4, 0x59, 0x80, 0x6c, 0xdd, 0x82,
+	0x91, 0x87, 0x55, 0x34, 0xf4, 0xb8, 0x8a, 0x06, 0xf7, 0xab, 0xa8, 0x3b, 0x71, 0x29, 0x96, 0xb8,
+	0xbc, 0x16, 0x08, 0xfa, 0x24, 0xff, 0x5a, 0x20, 0xd8, 0x2d, 0xf5, 0xac, 0x05, 0x82, 0x67, 0xa4,
+	0xc8, 0x5a, 0x20, 0x38, 0x28, 0x0d, 0xad, 0x05, 0x82, 0x92, 0x34, 0xb2, 0x16, 0x08, 0x8e, 0x48,
+	0xf2, 0x5a, 0x20, 0x28, 0x4b, 0xa3, 0x6b, 0x81, 0xe0, 0xa8, 0x14, 0x5a, 0x0b, 0x04, 0x43, 0xd2,
+	0xd8, 0x5a, 0x20, 0x38, 0x26, 0x8d, 0x4f, 0xfd, 0x65, 0x3f, 0x0c, 0x6f, 0x19, 0xcb, 0xa6, 0x91,
+	0xd3, 0xf3, 0x25, 0x5b, 0x63, 0xd8, 0x4b, 0xde, 0x80, 0x53, 0x86, 0xa9, 0xea, 0x06, 0xd1, 0xb3,
+	0x58, 0x25, 0x54, 0xa3, 0x7a, 0x46, 0xb5, 0xcd, 0x12, 0xc5, 0xe4, 0xa0, 0x2a, 0x9f, 0x0a, 0xb0,
+	0x68, 0x59, 0xed, 0x52, 0x42, 0x86, 0x99, 0xe6, 0xbc, 0x1b, 0x9c, 0x55, 0xe1, 0x9c, 0x72, 0x1e,
+	0x42, 0x6d, 0x25, 0x3a, 0xc5, 0x63, 0xa6, 0x6d, 0xe0, 0xb0, 0x13, 0xf2, 0x0a, 0x79, 0x49, 0x27,
+	0x94, 0xc7, 0x90, 0xab, 0x4a, 0xd6, 0x5b, 0x15, 0xbd, 0x0a, 0x61, 0xc3, 0x54, 0xcd, 0x12, 0x6d,
+	0xa3, 0xac, 0xfb, 0x50, 0xf3, 0x91, 0x32, 0x66, 0x98, 0xaf, 0x38, 0xcc, 0x0d, 0x62, 0x75, 0x18,
+	0x6b, 0x2f, 0xb3, 0xe7, 0xe4, 0x1b, 0x40, 0xca, 0xa8, 0xd9, 0x46, 0x55, 0x0a, 0x46, 0x0c, 0x53,
+	0xcd, 0x17, 0xcc, 0x1d, 0x96, 0x04, 0x1c, 0xd8, 0xce, 0x4b, 0x44, 0xe7, 0xbb, 0x3c, 0x6c, 0x98,
+	0x2b, 0x9c, 0xfe, 0x96, 0x43, 0x2e, 0xe7, 0x60, 0xb4, 0x51, 0x80, 0x5a, 0xd0, 0x09, 0xe5, 0x59,
+	0xbf, 0x13, 0xca, 0x6a, 0x10, 0xb0, 0x6c, 0x1a, 0x06, 0xce, 0xb0, 0x70, 0x70, 0x6d, 0x5e, 0xf5,
+	0x29, 0x23, 0x79, 0x2f, 0x09, 0x5b, 0x90, 0x5f, 0x84, 0x51, 0xc3, 0x54, 0xb3, 0x19, 0x35, 0x53,
+	0x28, 0x11, 0x8a, 0x6d, 0x35, 0x6f, 0x9b, 0x25, 0x8b, 0xe7, 0xba, 0x83, 0x1d, 0xed, 0x57, 0x24,
+	0xc3, 0xbc, 0x91, 0x59, 0x76, 0xd8, 0x56, 0x18, 0x97, 0xfc, 0x13, 0x98, 0x6c, 0x96, 0x54, 0x3b,
+	0xc8, 0xb2, 0x11, 0x1e, 0x3c, 0x72, 0x8e, 0x39, 0x75, 0xff, 0xae, 0xd4, 0x2c, 0x49, 0x68, 0x3d,
+	0x95, 0x6d, 0xd0, 0x29, 0x8e, 0x7a, 0xcb, 0x90, 0xef, 0xc2, 0x44, 0x8b, 0x72, 0x11, 0xb1, 0x65,
+	0xe3, 0x18, 0xf9, 0x6d, 0xb2, 0x83, 0xee, 0xcf, 0x1d, 0xfd, 0xe3, 0x8d, 0xfa, 0x9d, 0x9b, 0xb2,
+	0xc5, 0x2f, 0x1d, 0x29, 0xaa, 0x99, 0x9a, 0xdb, 0x55, 0xab, 0xb4, 0x53, 0xd0, 0x33, 0xaa, 0x6e,
+	0x85, 0xa5, 0x43, 0x9d, 0x19, 0x50, 0x42, 0xa4, 0x58, 0x3f, 0xb2, 0x75, 0xce, 0x9a, 0xb6, 0xe4,
+	0x97, 0x21, 0xd4, 0x24, 0xb4, 0x4c, 0x99, 0xc4, 0x91, 0x23, 0x48, 0x1c, 0x69, 0x90, 0x58, 0xa6,
+	0x69, 0x4b, 0x7e, 0x0d, 0x24, 0xad, 0x50, 0x30, 0x2b, 0x38, 0xab, 0x96, 0x75, 0x4b, 0xb5, 0x4c,
+	0x9b, 0xf2, 0x02, 0xdb, 0x9f, 0x3c, 0xd7, 0xbe, 0x6c, 0x3a, 0xc4, 0x5b, 0xe9, 0xf5, 0x75, 0xd3,
+	0xa6, 0x24, 0x15, 0x64, 0x3e, 0xf8, 0xdb, 0x07, 0x88, 0x61, 0x68, 0xb1, 0xa4, 0x5b, 0x6c, 0x29,
+	0x95, 0x80, 0x89, 0x36, 0xd9, 0xc1, 0x4d, 0x9e, 0xac, 0x0e, 0xf9, 0x44, 0x6e, 0x74, 0x51, 0x7c,
+	0x2a, 0x09, 0x93, 0xed, 0x2e, 0xa4, 0x97, 0xa7, 0x5b, 0xf0, 0x04, 0x18, 0xcf, 0xe5, 0xd8, 0x7c,
+	0x2a, 0x06, 0x63, 0x4d, 0xb7, 0xc2, 0x43, 0x1d, 0x14, 0xd4, 0xbd, 0x8c, 0x7a, 0x31, 0x76, 0x25,
+	0x35, 0x07, 0xa7, 0x5a, 0x22, 0x42, 0xd0, 0xb3, 0x6c, 0x3d, 0x20, 0xe8, 0xfb, 0x45, 0xb6, 0x4e,
+	0xcc, 0xc5, 0x12, 0x97, 0x52, 0xb3, 0x30, 0xce, 0xbb, 0x2b, 0x06, 0xc3, 0x1a, 0x79, 0xc6, 0x1e,
+	0x56, 0x91, 0x24, 0x78, 0x86, 0x79, 0xf6, 0x9e, 0x8f, 0x25, 0x16, 0x9c, 0x6e, 0x64, 0x2d, 0x10,
+	0x0c, 0x48, 0xdd, 0x6b, 0x81, 0x60, 0xaf, 0x14, 0x5c, 0x0b, 0x04, 0xfb, 0xa5, 0x81, 0xb5, 0x40,
+	0x70, 0x58, 0x92, 0xa6, 0xfe, 0xce, 0x07, 0xe3, 0x9e, 0x2e, 0x45, 0xc1, 0x56, 0x41, 0x13, 0x28,
+	0x67, 0xb1, 0x2d, 0xbe, 0x08, 0x31, 0xa0, 0x90, 0xf0, 0x16, 0xed, 0xb1, 0x69, 0x96, 0x2a, 0xbd,
+	0x08, 0x63, 0xa1, 0x1d, 0xc2, 0x68, 0x65, 0x7c, 0xde, 0x61, 0x3c, 0x39, 0xc6, 0xe8, 0x6a, 0xc2,
+	0x18, 0x57, 0x2f, 0x7c, 0x74, 0xad, 0xb9, 0xe7, 0x7a, 0x54, 0x45, 0x21, 0x90, 0x61, 0xc0, 0x21,
+	0x8b, 0x3a, 0x7a, 0x7c, 0xc9, 0x2b, 0xa9, 0xc5, 0xa6, 0x02, 0x39, 0xdd, 0xa9, 0x40, 0xbe, 0xfb,
+	0x15, 0x6a, 0xa0, 0x9c, 0x7a, 0xe0, 0x83, 0x91, 0xad, 0xf5, 0xe5, 0x25, 0x4a, 0xb5, 0xcc, 0x2e,
+	0x2b, 0x9a, 0x6e, 0xdb, 0x2d, 0xda, 0x0d, 0xf4, 0xcd, 0xda, 0x0d, 0xb7, 0xd9, 0x78, 0x1b, 0x7a,
+	0x0a, 0xda, 0x0e, 0x2e, 0xb0, 0xaa, 0xc8, 0xa0, 0xe3, 0x0f, 0x0e, 0x6f, 0x0d, 0x5a, 0xac, 0x8a,
+	0xbf, 0xc4, 0x25, 0xdc, 0x34, 0xa8, 0xbd, 0x97, 0x92, 0xdf, 0x7f, 0x80, 0xfc, 0x80, 0xd0, 0xfe,
+	0x2f, 0x3f, 0xf0, 0xf7, 0xbc, 0xf7, 0x00, 0xf9, 0x82, 0x5d, 0x8a, 0x50, 0x31, 0x71, 0x05, 0xfa,
+	0x3d, 0xa4, 0xb2, 0x04, 0x7e, 0x86, 0x6e, 0xf9, 0x4e, 0x14, 0xf6, 0x51, 0x0e, 0x41, 0x77, 0x59,
+	0x2b, 0x94, 0x30, 0x2f, 0xd1, 0x7d, 0x8a, 0xf3, 0xc7, 0x55, 0xdf, 0x22, 0xba, 0x1a, 0xff, 0xa8,
+	0x8a, 0x2e, 0x80, 0x0c, 0x3d, 0x5b, 0xeb, 0xcb, 0xd1, 0xf4, 0x8d, 0x89, 0xa0, 0xeb, 0x08, 0x08,
+	0x41, 0x8f, 0x23, 0x74, 0x0d, 0xdc, 0xbd, 0x48, 0xdd, 0x53, 0x79, 0xee, 0xbd, 0xb4, 0xb5, 0x6e,
+	0xe3, 0x9c, 0x7e, 0x1b, 0x3b, 0x2d, 0xff, 0x1a, 0x04, 0x2d, 0xf1, 0x77, 0x18, 0x45, 0xfd, 0xd3,
+	0x7d, 0xa9, 0xb8, 0x0b, 0x7c, 0xa7, 0xba, 0x6d, 0xff, 0x97, 0x08, 0xf1, 0xa8, 0xb9, 0x87, 0xfc,
+	0xd2, 0x3b, 0x41, 0x8e, 0xb4, 0xef, 0x21, 0x5f, 0x10, 0xb9, 0x9f, 0xc2, 0x48, 0xa9, 0xf1, 0x5f,
+	0xed, 0xf9, 0xa8, 0x8a, 0x7c, 0x12, 0x9a, 0xfa, 0x39, 0x82, 0xb1, 0x06, 0x8f, 0xb8, 0xa5, 0x86,
+	0xe1, 0x72, 0x66, 0x22, 0x2f, 0x59, 0x88, 0x3b, 0x77, 0xee, 0x04, 0xce, 0x15, 0x73, 0x0d, 0x6e,
+	0x13, 0x52, 0x7a, 0xcb, 0x56, 0x86, 0x29, 0xb8, 0x1a, 0x79, 0x54, 0x45, 0x13, 0x10, 0x86, 0xd1,
+	0xa5, 0xed, 0x0d, 0x06, 0x13, 0xa3, 0x5a, 0x8d, 0x8b, 0xc8, 0x28, 0x31, 0xf5, 0xe7, 0x08, 0x4e,
+	0x2f, 0x65, 0xa8, 0x5e, 0xc6, 0x22, 0x54, 0xd7, 0xcd, 0x82, 0x9e, 0xd1, 0x85, 0x23, 0x28, 0x48,
+	0x2e, 0xfa, 0xb3, 0xc4, 0xf7, 0xc2, 0xc4, 0xa3, 0x14, 0x87, 0x67, 0xee, 0xdf, 0x1d, 0x6a, 0x60,
+	0xdf, 0x73, 0x3d, 0x24, 0x45, 0x3d, 0xbe, 0x1a, 0x26, 0x8d, 0x9a, 0xa7, 0xfe, 0xb3, 0x17, 0xe4,
+	0x0d, 0x9c, 0x29, 0xd9, 0x3a, 0xdd, 0x73, 0xc0, 0x1a, 0x37, 0xe6, 0x3a, 0x48, 0x86, 0xa9, 0xe6,
+	0x4c, 0xbb, 0xa2, 0xd9, 0x59, 0xd5, 0xb2, 0xcd, 0xdb, 0x7b, 0x87, 0x0c, 0x62, 0x86, 0x0c, 0xf3,
+	0x05, 0x87, 0x7c, 0x9d, 0x51, 0xcb, 0x3f, 0x45, 0x70, 0x46, 0xe3, 0x9b, 0x6d, 0x14, 0x53, 0xdf,
+	0x9c, 0x03, 0xd0, 0xae, 0x35, 0xc9, 0x6b, 0x9e, 0x26, 0xc6, 0x1d, 0x8f, 0x79, 0x65, 0x7b, 0xdd,
+	0xb6, 0xda, 0xa5, 0x4c, 0x68, 0x1d, 0x29, 0xe4, 0x97, 0xe1, 0x54, 0xa3, 0x76, 0x5e, 0x1e, 0xd8,
+	0xbf, 0xa2, 0xed, 0xee, 0xb4, 0x9d, 0x50, 0xce, 0x23, 0x8e, 0x97, 0x9b, 0xa5, 0x42, 0x41, 0xbe,
+	0xc9, 0x41, 0x09, 0xd6, 0x08, 0x55, 0x2b, 0x98, 0x50, 0xe1, 0x69, 0x01, 0x7e, 0xda, 0x8b, 0x42,
+	0x0c, 0x8e, 0xdc, 0xd4, 0x08, 0xdd, 0xc6, 0x84, 0x72, 0xbb, 0xf6, 0xe4, 0x3f, 0x41, 0xf0, 0xb4,
+	0xf0, 0x4d, 0x5d, 0x56, 0xcb, 0xe1, 0x3b, 0x05, 0xf0, 0xfb, 0x87, 0xc7, 0x67, 0xc7, 0x98, 0x5a,
+	0x45, 0x8a, 0x38, 0x03, 0xd7, 0x80, 0x26, 0x22, 0x59, 0x83, 0xa9, 0x0e, 0x16, 0x78, 0x5d, 0xd5,
+	0x7f, 0xe0, 0xfe, 0xce, 0xe0, 0x36, 0xc2, 0xeb, 0x3e, 0x73, 0x40, 0xa7, 0x7b, 0xac, 0xc2, 0x63,
+	0xdd, 0x87, 0x81, 0x4e, 0x01, 0x05, 0x85, 0xc3, 0x08, 0x9c, 0x12, 0xfe, 0x6a, 0x90, 0xa3, 0xd7,
+	0x50, 0xf2, 0x95, 0xa3, 0x45, 0x91, 0x57, 0xaa, 0xeb, 0x23, 0x9f, 0x32, 0xa6, 0xb5, 0x5b, 0xbc,
+	0x7a, 0xf9, 0x51, 0x15, 0x25, 0xe0, 0x34, 0x84, 0x44, 0x64, 0x45, 0x79, 0x2c, 0x44, 0x85, 0x49,
+	0x28, 0xc1, 0x1a, 0xc0, 0x17, 0x84, 0xfc, 0xda, 0xb7, 0x97, 0x52, 0xe7, 0x21, 0xd4, 0x18, 0x72,
+	0xa2, 0x4a, 0x8f, 0x78, 0xa6, 0x85, 0xdd, 0xc9, 0xd8, 0x42, 0x6c, 0x2e, 0x35, 0x0f, 0x67, 0x3b,
+	0x7a, 0xdf, 0x83, 0x1f, 0xfa, 0x1e, 0x57, 0x51, 0x70, 0xbf, 0x8a, 0x7a, 0x45, 0x03, 0x99, 0x9a,
+	0x86, 0xb1, 0x46, 0x7f, 0x7a, 0x9b, 0xc1, 0x6e, 0x0f, 0x2e, 0xa9, 0x61, 0x80, 0xa0, 0xd4, 0xe7,
+	0x20, 0x81, 0xa9, 0x3f, 0xf5, 0xc1, 0x38, 0x9f, 0x3a, 0xdc, 0xda, 0x2c, 0x19, 0x06, 0x2e, 0x78,
+	0x2e, 0xfd, 0x34, 0xf4, 0xb1, 0x3a, 0xa7, 0x1a, 0x5a, 0x11, 0x8b, 0x5a, 0xe6, 0x24, 0x3a, 0x3b,
+	0x20, 0xa1, 0xf0, 0x75, 0x25, 0xc8, 0x56, 0x6f, 0x69, 0x45, 0x2c, 0x6f, 0x81, 0x44, 0x39, 0xb7,
+	0x6a, 0xe3, 0xa2, 0x49, 0x31, 0x83, 0x7e, 0x3e, 0x9e, 0xbc, 0x63, 0x8c, 0xa1, 0xef, 0x1e, 0xea,
+	0x99, 0x0a, 0xd8, 0xbe, 0xdb, 0xb5, 0x34, 0x2d, 0xf9, 0xda, 0xa6, 0xee, 0x21, 0x47, 0x8a, 0xc2,
+	0x85, 0xa4, 0x2d, 0xf9, 0x1c, 0xf4, 0x72, 0x0b, 0x74, 0x67, 0x6c, 0xdb, 0xa4, 0xbf, 0x87, 0xad,
+	0xa5, 0xb3, 0xf2, 0x32, 0x04, 0xf8, 0xa4, 0x29, 0x10, 0x45, 0xd3, 0x43, 0x47, 0x99, 0xc4, 0xd5,
+	0x36, 0xcb, 0xb6, 0xa9, 0x70, 0xe6, 0x5a, 0xad, 0xf8, 0x99, 0x1f, 0x42, 0x4b, 0xdb, 0x1b, 0x9b,
+	0x2b, 0xdb, 0x69, 0x23, 0x67, 0x7a, 0xbc, 0x91, 0x6a, 0x9a, 0xa6, 0x3f, 0x77, 0x82, 0x01, 0x7a,
+	0xaa, 0x06, 0x0d, 0x7c, 0x2d, 0x32, 0x8e, 0x8a, 0x06, 0xb6, 0x00, 0x48, 0x69, 0xc7, 0xc0, 0x54,
+	0xd5, 0xb3, 0x2c, 0x69, 0xfa, 0x0f, 0x1a, 0x89, 0x6e, 0x70, 0xca, 0x74, 0x96, 0x87, 0x76, 0x4a,
+	0x62, 0xea, 0xfa, 0xef, 0xa1, 0xe0, 0x85, 0x9e, 0x8b, 0xb1, 0x68, 0x22, 0x36, 0xa7, 0xf4, 0x11,
+	0x97, 0x40, 0x7e, 0x01, 0xa0, 0xd6, 0x09, 0x90, 0x70, 0x80, 0x9f, 0xde, 0xb3, 0xde, 0xd3, 0xb3,
+	0x50, 0xd3, 0x04, 0xca, 0x73, 0x70, 0x7d, 0x96, 0xe8, 0x04, 0x88, 0xbc, 0x0a, 0xfd, 0x96, 0xad,
+	0x97, 0x35, 0x1e, 0x05, 0xec, 0x3e, 0x1e, 0x4b, 0x10, 0x08, 0xde, 0xb4, 0x45, 0xa6, 0x3e, 0x08,
+	0xc3, 0x90, 0xd3, 0x2b, 0x6e, 0x58, 0x38, 0xc3, 0x0f, 0xe1, 0x4d, 0x18, 0x62, 0x27, 0x69, 0xd5,
+	0xe6, 0x28, 0xfc, 0x30, 0x8e, 0x34, 0x2d, 0x6d, 0x82, 0x83, 0xa9, 0x00, 0xbb, 0x7b, 0xca, 0xa0,
+	0x56, 0x21, 0x9e, 0xa9, 0x4c, 0x0e, 0x86, 0xd9, 0x01, 0x79, 0x0a, 0xb5, 0x28, 0x73, 0x0b, 0xc7,
+	0x84, 0x05, 0xf5, 0x06, 0x9c, 0xab, 0x19, 0x2a, 0x5b, 0x99, 0x25, 0x4f, 0xf5, 0xff, 0x11, 0x0c,
+	0x70, 0x3e, 0x51, 0x69, 0x8f, 0xfe, 0x28, 0xd1, 0x5a, 0x9b, 0x85, 0x86, 0x7e, 0x9a, 0xaf, 0xb8,
+	0x8b, 0xf2, 0x3a, 0x9c, 0xae, 0x3f, 0xc1, 0x98, 0x39, 0x5a, 0xd1, 0x6c, 0xac, 0x96, 0xb1, 0x4d,
+	0x74, 0xd3, 0x10, 0x43, 0xf0, 0xd0, 0xc7, 0x77, 0x79, 0xa7, 0xd8, 0x00, 0x4e, 0x95, 0x53, 0xb5,
+	0x37, 0x19, 0xc1, 0xb5, 0xe5, 0x30, 0xc9, 0xb7, 0x20, 0x6c, 0x5a, 0xd8, 0xd6, 0xf8, 0x94, 0x5a,
+	0xbc, 0xc9, 0xb8, 0x02, 0xbb, 0x0f, 0x10, 0x38, 0x5e, 0xe3, 0xda, 0xe0, 0x4c, 0xae, 0xbc, 0x7f,
+	0xf0, 0x39, 0x9e, 0x66, 0xdd, 0x9d, 0x0b, 0xf7, 0x7a, 0x78, 0x2c, 0x2f, 0x1f, 0xee, 0x84, 0xc6,
+	0xa0, 0x88, 0x6f, 0x59, 0x99, 0x3a, 0x88, 0x74, 0x10, 0xee, 0xbf, 0x20, 0x61, 0x0d, 0x83, 0xb8,
+	0xa1, 0xf7, 0x1e, 0x20, 0x49, 0x1e, 0xfa, 0x75, 0x15, 0x81, 0x8b, 0xc4, 0xd2, 0x37, 0x3c, 0x0b,
+	0xfb, 0x2d, 0x0b, 0xf0, 0xde, 0x03, 0xd4, 0x23, 0x07, 0x3e, 0xac, 0xa2, 0xae, 0x3a, 0x46, 0xe6,
+	0xb2, 0x96, 0xde, 0x7b, 0x80, 0x9e, 0x9f, 0xf8, 0xfe, 0xaf, 0xab, 0x68, 0x61, 0x83, 0xda, 0xba,
+	0x91, 0x8f, 0xda, 0xd8, 0xb2, 0x31, 0xc1, 0x06, 0xdb, 0x63, 0x14, 0xdb, 0xb6, 0x69, 0x47, 0x6d,
+	0x4c, 0x2c, 0xd3, 0x20, 0x38, 0x16, 0x2d, 0x91, 0x92, 0x56, 0x28, 0xec, 0x45, 0xb5, 0xe8, 0x2e,
+	0x2d, 0x16, 0xa2, 0x19, 0x33, 0x8b, 0x99, 0x94, 0xe9, 0xf7, 0x1e, 0xa0, 0x73, 0x13, 0x53, 0xfb,
+	0x55, 0x14, 0x61, 0x81, 0x12, 0x35, 0x73, 0x51, 0xe7, 0x22, 0x92, 0xa8, 0x6e, 0x44, 0xb5, 0x68,
+	0x5e, 0x2f, 0x63, 0x83, 0xd9, 0xa3, 0x0c, 0x96, 0xbd, 0x9b, 0x93, 0x37, 0xa1, 0xaf, 0x6c, 0xb0,
+	0x3e, 0x3b, 0xa7, 0xe7, 0x8f, 0xfe, 0x50, 0xd0, 0x34, 0x77, 0x13, 0x11, 0x13, 0x2c, 0x8b, 0xaf,
+	0xe5, 0x69, 0xe8, 0xd5, 0xb2, 0x59, 0x1b, 0x13, 0x22, 0x1e, 0x08, 0x86, 0x58, 0x6b, 0x5e, 0x1b,
+	0x63, 0xfb, 0x14, 0x77, 0x59, 0x5e, 0x81, 0xfe, 0x8c, 0x69, 0xda, 0x59, 0xdd, 0xd0, 0x28, 0x26,
+	0x02, 0xe8, 0x9c, 0x6d, 0xb2, 0x80, 0xeb, 0x5c, 0xae, 0x93, 0x39, 0x9d, 0xbe, 0xe2, 0xe5, 0x94,
+	0xdf, 0x82, 0x49, 0xfe, 0x2c, 0x57, 0x34, 0xb3, 0x7a, 0x4e, 0xcf, 0x70, 0xbb, 0xd4, 0xda, 0xc3,
+	0xb2, 0xc0, 0x3a, 0x13, 0x71, 0xe7, 0xe9, 0x39, 0xee, 0x3e, 0x3d, 0xc7, 0x37, 0x5d, 0x8a, 0x54,
+	0x80, 0x9d, 0xae, 0x72, 0x9a, 0x09, 0x79, 0xd9, 0x23, 0xa3, 0x46, 0x20, 0xff, 0x10, 0x82, 0x3c,
+	0x5f, 0x1b, 0x39, 0x53, 0x00, 0x96, 0xf9, 0x23, 0x40, 0xa7, 0x36, 0x99, 0x5f, 0xe9, 0x65, 0xc9,
+	0xdb, 0xc8, 0x99, 0xf2, 0x26, 0x9c, 0x2a, 0x98, 0x79, 0xa2, 0x12, 0x6a, 0x63, 0xad, 0xc8, 0x6e,
+	0x42, 0x56, 0x27, 0xda, 0x4e, 0x01, 0x67, 0xc5, 0xc8, 0xe8, 0xe0, 0x79, 0xe5, 0x18, 0x63, 0xde,
+	0x70, 0x79, 0x6f, 0x08, 0x56, 0xf9, 0xff, 0xc3, 0x40, 0xc1, 0xcc, 0xab, 0x36, 0xce, 0x60, 0xbd,
+	0x8c, 0xed, 0x63, 0x4c, 0x80, 0x46, 0xef, 0xdf, 0x6d, 0x60, 0x15, 0x7a, 0xfa, 0x0b, 0x66, 0x5e,
+	0x11, 0x5f, 0xc9, 0xcb, 0xe0, 0x23, 0x15, 0x31, 0xde, 0x3e, 0xdf, 0x56, 0xe6, 0x56, 0xd3, 0x95,
+	0xe7, 0xa2, 0x83, 0x4c, 0xd6, 0x17, 0xcc, 0xc5, 0x3e, 0x52, 0x91, 0x53, 0xe0, 0x33, 0x89, 0x18,
+	0x0f, 0x4d, 0xb7, 0x37, 0xac, 0xf1, 0x9a, 0x37, 0xcb, 0x30, 0x89, 0xfc, 0xc7, 0x08, 0x02, 0x54,
+	0xcb, 0x93, 0x70, 0x84, 0x5f, 0xf3, 0xab, 0xc7, 0xbe, 0xe6, 0x9b, 0x5a, 0x5e, 0xdc, 0xee, 0x79,
+	0x37, 0x3c, 0xfb, 0xde, 0x77, 0x2a, 0x4a, 0xf8, 0x0f, 0x79, 0xb0, 0xbe, 0x8f, 0x7c, 0x52, 0x37,
+	0xaf, 0x2d, 0xef, 0xb3, 0xda, 0x62, 0xfb, 0xc3, 0x5f, 0x37, 0xf4, 0xb8, 0x5c, 0xbf, 0xfc, 0x47,
+	0x08, 0x46, 0xf8, 0x54, 0x89, 0x3f, 0xc6, 0xb9, 0x43, 0x8d, 0x11, 0x6e, 0xd5, 0xf9, 0x76, 0xa1,
+	0xcc, 0xa7, 0x5c, 0x64, 0x77, 0x2b, 0xbd, 0xee, 0xbc, 0xdf, 0xf1, 0xd9, 0x46, 0xea, 0x39, 0x91,
+	0x61, 0x3a, 0xd6, 0x32, 0xae, 0xf9, 0x1e, 0xcf, 0x1c, 0xca, 0x50, 0x59, 0xb7, 0x3c, 0xcc, 0xf2,
+	0x2e, 0x8c, 0x16, 0xcc, 0x8c, 0x56, 0x60, 0x57, 0x99, 0xda, 0x66, 0x41, 0xb5, 0x0a, 0x9a, 0x81,
+	0xc3, 0x32, 0xf7, 0xf0, 0x85, 0xb6, 0xae, 0x79, 0x89, 0xd1, 0x2f, 0x3b, 0xe4, 0xeb, 0x8c, 0x9a,
+	0xfb, 0x78, 0xc0, 0x9d, 0xf8, 0x71, 0x3f, 0x8f, 0x14, 0x9a, 0x89, 0x58, 0xcc, 0x66, 0x75, 0x1b,
+	0x67, 0xa8, 0x3b, 0x9d, 0xab, 0xc7, 0x6c, 0xe8, 0x28, 0x43, 0x6a, 0x87, 0x59, 0x0c, 0xe8, 0x6a,
+	0x31, 0x5b, 0x86, 0xb3, 0x4d, 0x52, 0x2b, 0x3a, 0xdd, 0x55, 0x77, 0x4d, 0x42, 0xf9, 0xcc, 0x2e,
+	0x47, 0xc2, 0x63, 0x07, 0x44, 0xcb, 0x2a, 0xa7, 0xdb, 0x4a, 0xbf, 0xe0, 0x2d, 0x63, 0x42, 0xe3,
+	0x64, 0x83, 0xc6, 0x6d, 0x9d, 0xee, 0x0a, 0x6a, 0x3d, 0xc7, 0xea, 0xf3, 0xd3, 0xed, 0xf4, 0x12,
+	0xaa, 0x19, 0x59, 0x86, 0xb0, 0xb9, 0xe6, 0xf1, 0x23, 0xec, 0xeb, 0x4c, 0x8b, 0x96, 0x0d, 0x21,
+	0x83, 0xeb, 0xd9, 0x81, 0x33, 0xed, 0xf4, 0x14, 0x35, 0xa3, 0xa4, 0x15, 0xd4, 0x7c, 0x25, 0x7c,
+	0xea, 0x00, 0x1d, 0xc1, 0xda, 0x14, 0x16, 0x29, 0xa7, 0x5b, 0xf4, 0xbc, 0xcc, 0x65, 0xac, 0x54,
+	0x64, 0x0b, 0x7a, 0x1d, 0xb8, 0x4b, 0xc2, 0xff, 0xd6, 0xcb, 0xa3, 0x6f, 0xf1, 0x48, 0x09, 0xaa,
+	0x0d, 0x54, 0x4f, 0x4d, 0x7a, 0x82, 0x91, 0xe3, 0xeb, 0xeb, 0x1e, 0x4c, 0xe5, 0xaa, 0x91, 0xb7,
+	0x61, 0xb4, 0x69, 0x57, 0x3c, 0x3b, 0xfe, 0xca, 0x29, 0x24, 0xdf, 0x6b, 0xab, 0xfd, 0x86, 0xd7,
+	0x7e, 0x96, 0x05, 0x95, 0x91, 0x6c, 0xf3, 0x57, 0xf2, 0x5b, 0xd0, 0x47, 0x73, 0xe2, 0x42, 0x85,
+	0xff, 0xbd, 0xf7, 0xc8, 0x09, 0x2c, 0x72, 0xff, 0x6e, 0x88, 0xe7, 0x9e, 0x9c, 0x69, 0x17, 0x3d,
+	0xa8, 0x4e, 0xec, 0x46, 0x09, 0xd2, 0x9c, 0x73, 0x6b, 0xe4, 0x37, 0x61, 0x90, 0xff, 0x6a, 0x47,
+	0x37, 0x28, 0xb6, 0x0d, 0xad, 0x10, 0xfe, 0xbc, 0xf7, 0x38, 0x0f, 0x81, 0x8d, 0xcc, 0x5c, 0xf6,
+	0x00, 0xfb, 0x2a, 0x2d, 0xbe, 0x99, 0x28, 0x81, 0xdc, 0x0a, 0x23, 0xda, 0x4c, 0xbf, 0xd2, 0xde,
+	0xe9, 0xd7, 0x51, 0xa7, 0x45, 0x8d, 0x23, 0x2e, 0xcf, 0xc8, 0x6c, 0x62, 0x01, 0xfa, 0x6a, 0x69,
+	0xed, 0x58, 0xb3, 0xb6, 0xbf, 0x47, 0x8f, 0xaa, 0xe8, 0x6f, 0x10, 0x8c, 0xc3, 0x08, 0x83, 0x2e,
+	0x8d, 0xef, 0x6a, 0x4e, 0x2f, 0xda, 0x32, 0x71, 0x4a, 0xc2, 0x04, 0x8c, 0x89, 0xae, 0xb6, 0x99,
+	0x63, 0x01, 0x26, 0x61, 0xdc, 0xc5, 0x8f, 0xcd, 0x8b, 0x73, 0x70, 0x06, 0xc6, 0xdd, 0xf2, 0xd0,
+	0xb4, 0xe8, 0x5f, 0x8c, 0x5d, 0x81, 0x67, 0x60, 0x7c, 0x29, 0x5b, 0xd6, 0x8c, 0x0c, 0xce, 0x36,
+	0x2d, 0xf7, 0x27, 0x92, 0xb1, 0xc4, 0xe5, 0x58, 0x62, 0x3e, 0x36, 0x77, 0x31, 0x35, 0x03, 0x21,
+	0x5e, 0x3f, 0xdd, 0x7a, 0xe5, 0x1d, 0x58, 0x0f, 0x8a, 0x89, 0xeb, 0x00, 0x1f, 0x58, 0xf3, 0x09,
+	0xf7, 0x25, 0x18, 0x6b, 0x0a, 0x57, 0x41, 0x3f, 0xf9, 0xb0, 0x8a, 0x42, 0x82, 0x7e, 0x74, 0xbf,
+	0x8a, 0xfa, 0x93, 0x17, 0x63, 0x49, 0xe7, 0x1d, 0x75, 0xae, 0xf6, 0x30, 0x39, 0x20, 0x0d, 0x3a,
+	0xcf, 0x90, 0x53, 0xff, 0xdd, 0x0f, 0x43, 0xcb, 0x36, 0xd6, 0x28, 0xae, 0xf5, 0x11, 0xaf, 0x3d,
+	0xb1, 0x3e, 0xa2, 0xb9, 0x83, 0x78, 0xeb, 0x49, 0x77, 0x10, 0x2d, 0xbd, 0xc3, 0xad, 0x27, 0x81,
+	0x01, 0x3d, 0xe8, 0x6f, 0xfb, 0xc9, 0xf5, 0x22, 0x8d, 0x5d, 0x48, 0xb8, 0x09, 0x56, 0xd6, 0x61,
+	0xe4, 0xd2, 0x49, 0x60, 0x64, 0x23, 0x80, 0xbc, 0x75, 0x22, 0x2c, 0xd6, 0x19, 0x85, 0xbd, 0x76,
+	0x62, 0x14, 0x36, 0xdc, 0x84, 0xc2, 0x9a, 0x11, 0xd8, 0x0f, 0x4e, 0x86, 0xc0, 0x02, 0x35, 0xf4,
+	0x75, 0xed, 0x44, 0xe8, 0x2b, 0x50, 0x43, 0x5e, 0xb7, 0x8e, 0x0b, 0xbc, 0x1a, 0x2f, 0x4b, 0x1d,
+	0x78, 0x09, 0x00, 0xf5, 0x7a, 0x7b, 0xf0, 0x72, 0xf6, 0xb8, 0xe0, 0xa5, 0x1d, 0x5c, 0xb9, 0x75,
+	0x22, 0xb8, 0xd2, 0x19, 0xa8, 0x58, 0x4f, 0x1c, 0xa8, 0x1c, 0x06, 0x51, 0xde, 0xfa, 0x86, 0x10,
+	0xe5, 0x70, 0x70, 0xf2, 0xda, 0x37, 0x00, 0x27, 0x07, 0x42, 0x92, 0x93, 0x97, 0xa3, 0x91, 0x8f,
+	0xae, 0x35, 0x8d, 0x6a, 0x52, 0x17, 0x3b, 0x24, 0xfb, 0xf0, 0xbb, 0x5f, 0xa1, 0xb6, 0x2b, 0xa9,
+	0x64, 0xa7, 0x7c, 0x7f, 0xfa, 0xdd, 0xaf, 0x50, 0xfb, 0xa5, 0xda, 0x73, 0xa6, 0xf3, 0x93, 0x14,
+	0x27, 0xe7, 0x3b, 0xf9, 0x9f, 0x65, 0xfe, 0x8f, 0x00, 0x86, 0xc5, 0x4b, 0x66, 0x2d, 0xf5, 0xab,
+	0x2d, 0xa9, 0xdf, 0xb9, 0x59, 0x8b, 0xc7, 0x4a, 0xfd, 0x9e, 0xf7, 0xd1, 0xef, 0x2a, 0xc0, 0x77,
+	0x15, 0xe0, 0xe0, 0x0a, 0xf0, 0x5d, 0x52, 0xfb, 0x1d, 0x26, 0xb5, 0xab, 0x55, 0xd4, 0x92, 0x9c,
+	0x1e, 0x55, 0xd1, 0x5f, 0x21, 0x38, 0xd5, 0x0e, 0x3b, 0xfb, 0x12, 0xf3, 0xdf, 0x32, 0x78, 0x7e,
+	0xaa, 0x23, 0x78, 0xf6, 0x25, 0x92, 0xdf, 0x5a, 0x1a, 0xf5, 0xfe, 0x36, 0xa4, 0x7d, 0x32, 0xfd,
+	0x0b, 0x19, 0xfa, 0x57, 0x30, 0xfd, 0x0e, 0x43, 0x7f, 0x9b, 0x19, 0xf4, 0xea, 0xa1, 0x93, 0xfc,
+	0xce, 0x33, 0xfb, 0xc5, 0xc3, 0x66, 0xf6, 0x1d, 0xa7, 0xf3, 0xf7, 0x3b, 0x4e, 0xe7, 0xaf, 0x1f,
+	0x61, 0x6c, 0x57, 0x8f, 0x91, 0x76, 0xa3, 0xf9, 0x7f, 0xfa, 0xbf, 0x36, 0x93, 0xdf, 0x78, 0x72,
+	0x73, 0x9c, 0xfa, 0xa8, 0xe6, 0xb7, 0x5a, 0x39, 0x5f, 0xff, 0x86, 0xc3, 0xf7, 0x6f, 0x79, 0xec,
+	0xfe, 0xfb, 0x53, 0xe8, 0x5f, 0x6c, 0xe8, 0xb4, 0x16, 0x8e, 0x77, 0x57, 0x9a, 0xdb, 0xac, 0xff,
+	0x07, 0xc0, 0x7f, 0xe0, 0x47, 0xa8, 0x46, 0x31, 0xef, 0x1f, 0x87, 0x92, 0x67, 0xda, 0x9d, 0xb3,
+	0xfb, 0xe3, 0x5f, 0xac, 0xf4, 0x11, 0xf7, 0xa3, 0xbc, 0xf9, 0x24, 0x86, 0xdc, 0x2d, 0x73, 0xeb,
+	0xef, 0x90, 0xcc, 0xef, 0x10, 0xc9, 0xfc, 0xd6, 0xe6, 0xb7, 0xbf, 0x77, 0xd3, 0xcf, 0x50, 0x0b,
+	0xa2, 0xfb, 0xfc, 0x1a, 0xfa, 0xd6, 0xa0, 0x52, 0xd3, 0x7c, 0xf1, 0x42, 0x0c, 0x06, 0x1b, 0x7e,
+	0x51, 0x22, 0xf7, 0x82, 0x7f, 0xf5, 0xd5, 0x94, 0xd4, 0x25, 0x0f, 0x40, 0x70, 0xe3, 0xa6, 0xb2,
+	0x95, 0x5e, 0xbe, 0xb9, 0x21, 0xa1, 0x89, 0xc0, 0xc3, 0x2a, 0xea, 0x4a, 0xfd, 0x1c, 0x3d, 0xfe,
+	0x34, 0xd2, 0xf5, 0xf1, 0xa7, 0x91, 0xae, 0x2f, 0x3e, 0x8d, 0xa0, 0x77, 0xf6, 0x23, 0xe8, 0x17,
+	0xfb, 0x11, 0xf4, 0xe1, 0x7e, 0x04, 0x3d, 0xde, 0x8f, 0xa0, 0x8f, 0xf7, 0x23, 0xe8, 0x97, 0xfb,
+	0x11, 0xf4, 0xf9, 0x7e, 0xa4, 0xeb, 0x8b, 0xfd, 0x08, 0xfa, 0xb3, 0xcf, 0x22, 0x5d, 0x0f, 0x3f,
+	0x8b, 0xa0, 0xc7, 0x9f, 0x45, 0xba, 0x3e, 0xfe, 0x2c, 0xd2, 0xf5, 0xfa, 0x56, 0xde, 0xb4, 0xde,
+	0xce, 0xc7, 0xdd, 0x9a, 0x1f, 0x2f, 0x91, 0xd9, 0xda, 0x04, 0x7d, 0xc6, 0xb2, 0xcd, 0xb2, 0x9e,
+	0xc5, 0xf6, 0x8c, 0xbb, 0x3c, 0x6b, 0xed, 0xe4, 0xcd, 0x59, 0x7c, 0x9b, 0xba, 0xff, 0xa5, 0xb6,
+	0xd3, 0x7f, 0x21, 0xde, 0xe9, 0xe1, 0x69, 0x7e, 0xee, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x8f,
+	0x73, 0x4d, 0x41, 0x6d, 0x3c, 0x00, 0x00,
 }
 
 func (x VPNTunnelType) String() string {
@@ -3223,6 +3596,15 @@ func (this *VnConfiguration) Equal(that interface{}) bool {
 	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
+	if that1.SiteMeshGroupChoice == nil {
+		if this.SiteMeshGroupChoice != nil {
+			return false
+		}
+	} else if this.SiteMeshGroupChoice == nil {
+		return false
+	} else if !this.SiteMeshGroupChoice.Equal(that1.SiteMeshGroupChoice) {
+		return false
+	}
 	if !this.AllowedVipPort.Equal(that1.AllowedVipPort) {
 		return false
 	}
@@ -3440,6 +3822,54 @@ func (this *VnConfiguration_DcClusterGroupInsideVn) Equal(that interface{}) bool
 		return false
 	}
 	if !this.DcClusterGroupInsideVn.Equal(that1.DcClusterGroupInsideVn) {
+		return false
+	}
+	return true
+}
+func (this *VnConfiguration_SmConnectionPublicIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VnConfiguration_SmConnectionPublicIp)
+	if !ok {
+		that2, ok := that.(VnConfiguration_SmConnectionPublicIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPublicIp.Equal(that1.SmConnectionPublicIp) {
+		return false
+	}
+	return true
+}
+func (this *VnConfiguration_SmConnectionPvtIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VnConfiguration_SmConnectionPvtIp)
+	if !ok {
+		that2, ok := that.(VnConfiguration_SmConnectionPvtIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPvtIp.Equal(that1.SmConnectionPvtIp) {
 		return false
 	}
 	return true
@@ -3976,6 +4406,22 @@ func (this *AWSTGWInfoConfigType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.PublicIps) != len(that1.PublicIps) {
+		return false
+	}
+	for i := range this.PublicIps {
+		if this.PublicIps[i] != that1.PublicIps[i] {
+			return false
+		}
+	}
+	if len(this.PrivateIps) != len(that1.PrivateIps) {
+		return false
+	}
+	for i := range this.PrivateIps {
+		if this.PrivateIps[i] != that1.PrivateIps[i] {
+			return false
+		}
+	}
 	return true
 }
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -4032,9 +4478,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.UserModificationTimestamp.Equal(that1.UserModificationTimestamp) {
 		return false
 	}
-	if this.SiteToSiteTunnelIp != that1.SiteToSiteTunnelIp {
-		return false
-	}
 	if !this.TgwInfo.Equal(that1.TgwInfo) {
 		return false
 	}
@@ -4069,6 +4512,18 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if !this.LocalControlPlane.Equal(that1.LocalControlPlane) {
+		return false
+	}
+	if that1.DirectConnectChoice == nil {
+		if this.DirectConnectChoice != nil {
+			return false
+		}
+	} else if this.DirectConnectChoice == nil {
+		return false
+	} else if !this.DirectConnectChoice.Equal(that1.DirectConnectChoice) {
+		return false
+	}
 	if len(this.Tunnels) != len(that1.Tunnels) {
 		return false
 	}
@@ -4076,6 +4531,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		if !this.Tunnels[i].Equal(that1.Tunnels[i]) {
 			return false
 		}
+	}
+	if !this.DirectConnectInfo.Equal(that1.DirectConnectInfo) {
+		return false
 	}
 	if !this.TfParams.Equal(that1.TfParams) {
 		return false
@@ -4133,6 +4591,102 @@ func (this *GlobalSpecType_LogReceiver) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_DirectConnectDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DirectConnectDisabled)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DirectConnectDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectDisabled.Equal(that1.DirectConnectDisabled) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DirectConnectWithHostedVifs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DirectConnectWithHostedVifs)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DirectConnectWithHostedVifs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithHostedVifs.Equal(that1.DirectConnectWithHostedVifs) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DirectConnectWithStandardVifs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DirectConnectWithStandardVifs)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DirectConnectWithStandardVifs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithStandardVifs.Equal(that1.DirectConnectWithStandardVifs) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DirectConnectWithManualGw) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DirectConnectWithManualGw)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DirectConnectWithManualGw)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithManualGw.Equal(that1.DirectConnectWithManualGw) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4185,9 +4739,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.Os.Equal(that1.Os) {
 		return false
 	}
-	if this.SiteToSiteTunnelIp != that1.SiteToSiteTunnelIp {
-		return false
-	}
 	if len(this.Tags) != len(that1.Tags) {
 		return false
 	}
@@ -4195,6 +4746,18 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		if this.Tags[i] != that1.Tags[i] {
 			return false
 		}
+	}
+	if !this.LocalControlPlane.Equal(that1.LocalControlPlane) {
+		return false
+	}
+	if that1.DirectConnectChoice == nil {
+		if this.DirectConnectChoice != nil {
+			return false
+		}
+	} else if this.DirectConnectChoice == nil {
+		return false
+	} else if !this.DirectConnectChoice.Equal(that1.DirectConnectChoice) {
+		return false
 	}
 	return true
 }
@@ -4246,6 +4809,102 @@ func (this *CreateSpecType_LogReceiver) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_DirectConnectDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DirectConnectDisabled)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DirectConnectDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectDisabled.Equal(that1.DirectConnectDisabled) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DirectConnectWithHostedVifs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DirectConnectWithHostedVifs)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DirectConnectWithHostedVifs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithHostedVifs.Equal(that1.DirectConnectWithHostedVifs) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DirectConnectWithStandardVifs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DirectConnectWithStandardVifs)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DirectConnectWithStandardVifs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithStandardVifs.Equal(that1.DirectConnectWithStandardVifs) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DirectConnectWithManualGw) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DirectConnectWithManualGw)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DirectConnectWithManualGw)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithManualGw.Equal(that1.DirectConnectWithManualGw) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4292,7 +4951,13 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if !this.LogsReceiverChoice.Equal(that1.LogsReceiverChoice) {
 		return false
 	}
-	if this.SiteToSiteTunnelIp != that1.SiteToSiteTunnelIp {
+	if that1.DirectConnectChoice == nil {
+		if this.DirectConnectChoice != nil {
+			return false
+		}
+	} else if this.DirectConnectChoice == nil {
+		return false
+	} else if !this.DirectConnectChoice.Equal(that1.DirectConnectChoice) {
 		return false
 	}
 	return true
@@ -4341,6 +5006,102 @@ func (this *ReplaceSpecType_LogReceiver) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.LogReceiver.Equal(that1.LogReceiver) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DirectConnectDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DirectConnectDisabled)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DirectConnectDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectDisabled.Equal(that1.DirectConnectDisabled) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DirectConnectWithHostedVifs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DirectConnectWithHostedVifs)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DirectConnectWithHostedVifs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithHostedVifs.Equal(that1.DirectConnectWithHostedVifs) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DirectConnectWithStandardVifs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DirectConnectWithStandardVifs)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DirectConnectWithStandardVifs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithStandardVifs.Equal(that1.DirectConnectWithStandardVifs) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DirectConnectWithManualGw) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DirectConnectWithManualGw)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DirectConnectWithManualGw)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithManualGw.Equal(that1.DirectConnectWithManualGw) {
 		return false
 	}
 	return true
@@ -4407,9 +5168,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.UserModificationTimestamp.Equal(that1.UserModificationTimestamp) {
 		return false
 	}
-	if this.SiteToSiteTunnelIp != that1.SiteToSiteTunnelIp {
-		return false
-	}
 	if !this.TgwInfo.Equal(that1.TgwInfo) {
 		return false
 	}
@@ -4440,6 +5198,18 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		if !this.VipParamsPerAz[i].Equal(that1.VipParamsPerAz[i]) {
 			return false
 		}
+	}
+	if that1.DirectConnectChoice == nil {
+		if this.DirectConnectChoice != nil {
+			return false
+		}
+	} else if this.DirectConnectChoice == nil {
+		return false
+	} else if !this.DirectConnectChoice.Equal(that1.DirectConnectChoice) {
+		return false
+	}
+	if !this.DirectConnectInfo.Equal(that1.DirectConnectInfo) {
+		return false
 	}
 	return true
 }
@@ -4487,6 +5257,102 @@ func (this *GetSpecType_LogReceiver) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.LogReceiver.Equal(that1.LogReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DirectConnectDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DirectConnectDisabled)
+	if !ok {
+		that2, ok := that.(GetSpecType_DirectConnectDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectDisabled.Equal(that1.DirectConnectDisabled) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DirectConnectWithHostedVifs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DirectConnectWithHostedVifs)
+	if !ok {
+		that2, ok := that.(GetSpecType_DirectConnectWithHostedVifs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithHostedVifs.Equal(that1.DirectConnectWithHostedVifs) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DirectConnectWithStandardVifs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DirectConnectWithStandardVifs)
+	if !ok {
+		that2, ok := that.(GetSpecType_DirectConnectWithStandardVifs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithStandardVifs.Equal(that1.DirectConnectWithStandardVifs) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DirectConnectWithManualGw) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DirectConnectWithManualGw)
+	if !ok {
+		that2, ok := that.(GetSpecType_DirectConnectWithManualGw)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DirectConnectWithManualGw.Equal(that1.DirectConnectWithManualGw) {
 		return false
 	}
 	return true
@@ -4647,7 +5513,7 @@ func (this *VnConfiguration) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 16)
 	s = append(s, "&aws_tgw_site.VnConfiguration{")
 	if this.InsideStaticRouteChoice != nil {
 		s = append(s, "InsideStaticRouteChoice: "+fmt.Sprintf("%#v", this.InsideStaticRouteChoice)+",\n")
@@ -4660,6 +5526,9 @@ func (this *VnConfiguration) GoString() string {
 	}
 	if this.DcClusterGroupChoice != nil {
 		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
+	}
+	if this.SiteMeshGroupChoice != nil {
+		s = append(s, "SiteMeshGroupChoice: "+fmt.Sprintf("%#v", this.SiteMeshGroupChoice)+",\n")
 	}
 	if this.AllowedVipPort != nil {
 		s = append(s, "AllowedVipPort: "+fmt.Sprintf("%#v", this.AllowedVipPort)+",\n")
@@ -4737,6 +5606,22 @@ func (this *VnConfiguration_DcClusterGroupInsideVn) GoString() string {
 	}
 	s := strings.Join([]string{`&aws_tgw_site.VnConfiguration_DcClusterGroupInsideVn{` +
 		`DcClusterGroupInsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupInsideVn) + `}`}, ", ")
+	return s
+}
+func (this *VnConfiguration_SmConnectionPublicIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.VnConfiguration_SmConnectionPublicIp{` +
+		`SmConnectionPublicIp:` + fmt.Sprintf("%#v", this.SmConnectionPublicIp) + `}`}, ", ")
+	return s
+}
+func (this *VnConfiguration_SmConnectionPvtIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.VnConfiguration_SmConnectionPvtIp{` +
+		`SmConnectionPvtIp:` + fmt.Sprintf("%#v", this.SmConnectionPvtIp) + `}`}, ", ")
 	return s
 }
 func (this *ServicesVPCReplaceType) GoString() string {
@@ -4931,13 +5816,15 @@ func (this *AWSTGWInfoConfigType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&aws_tgw_site.AWSTGWInfoConfigType{")
 	s = append(s, "TgwId: "+fmt.Sprintf("%#v", this.TgwId)+",\n")
 	s = append(s, "VpcId: "+fmt.Sprintf("%#v", this.VpcId)+",\n")
 	if this.SubnetIds != nil {
 		s = append(s, "SubnetIds: "+fmt.Sprintf("%#v", this.SubnetIds)+",\n")
 	}
+	s = append(s, "PublicIps: "+fmt.Sprintf("%#v", this.PublicIps)+",\n")
+	s = append(s, "PrivateIps: "+fmt.Sprintf("%#v", this.PrivateIps)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -4945,7 +5832,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 25)
+	s := make([]string, 0, 30)
 	s = append(s, "&aws_tgw_site.GlobalSpecType{")
 	if this.AwsParameters != nil {
 		s = append(s, "AwsParameters: "+fmt.Sprintf("%#v", this.AwsParameters)+",\n")
@@ -4981,7 +5868,6 @@ func (this *GlobalSpecType) GoString() string {
 	if this.UserModificationTimestamp != nil {
 		s = append(s, "UserModificationTimestamp: "+fmt.Sprintf("%#v", this.UserModificationTimestamp)+",\n")
 	}
-	s = append(s, "SiteToSiteTunnelIp: "+fmt.Sprintf("%#v", this.SiteToSiteTunnelIp)+",\n")
 	if this.TgwInfo != nil {
 		s = append(s, "TgwInfo: "+fmt.Sprintf("%#v", this.TgwInfo)+",\n")
 	}
@@ -5010,8 +5896,17 @@ func (this *GlobalSpecType) GoString() string {
 	if this.VipParamsPerAz != nil {
 		s = append(s, "VipParamsPerAz: "+fmt.Sprintf("%#v", this.VipParamsPerAz)+",\n")
 	}
+	if this.LocalControlPlane != nil {
+		s = append(s, "LocalControlPlane: "+fmt.Sprintf("%#v", this.LocalControlPlane)+",\n")
+	}
+	if this.DirectConnectChoice != nil {
+		s = append(s, "DirectConnectChoice: "+fmt.Sprintf("%#v", this.DirectConnectChoice)+",\n")
+	}
 	if this.Tunnels != nil {
 		s = append(s, "Tunnels: "+fmt.Sprintf("%#v", this.Tunnels)+",\n")
+	}
+	if this.DirectConnectInfo != nil {
+		s = append(s, "DirectConnectInfo: "+fmt.Sprintf("%#v", this.DirectConnectInfo)+",\n")
 	}
 	if this.TfParams != nil {
 		s = append(s, "TfParams: "+fmt.Sprintf("%#v", this.TfParams)+",\n")
@@ -5038,11 +5933,43 @@ func (this *GlobalSpecType_LogReceiver) GoString() string {
 		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_DirectConnectDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GlobalSpecType_DirectConnectDisabled{` +
+		`DirectConnectDisabled:` + fmt.Sprintf("%#v", this.DirectConnectDisabled) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DirectConnectWithHostedVifs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GlobalSpecType_DirectConnectWithHostedVifs{` +
+		`DirectConnectWithHostedVifs:` + fmt.Sprintf("%#v", this.DirectConnectWithHostedVifs) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DirectConnectWithStandardVifs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GlobalSpecType_DirectConnectWithStandardVifs{` +
+		`DirectConnectWithStandardVifs:` + fmt.Sprintf("%#v", this.DirectConnectWithStandardVifs) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DirectConnectWithManualGw) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GlobalSpecType_DirectConnectWithManualGw{` +
+		`DirectConnectWithManualGw:` + fmt.Sprintf("%#v", this.DirectConnectWithManualGw) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 20)
 	s = append(s, "&aws_tgw_site.CreateSpecType{")
 	if this.AwsParameters != nil {
 		s = append(s, "AwsParameters: "+fmt.Sprintf("%#v", this.AwsParameters)+",\n")
@@ -5069,7 +5996,6 @@ func (this *CreateSpecType) GoString() string {
 	if this.Os != nil {
 		s = append(s, "Os: "+fmt.Sprintf("%#v", this.Os)+",\n")
 	}
-	s = append(s, "SiteToSiteTunnelIp: "+fmt.Sprintf("%#v", this.SiteToSiteTunnelIp)+",\n")
 	keysForTags := make([]string, 0, len(this.Tags))
 	for k, _ := range this.Tags {
 		keysForTags = append(keysForTags, k)
@@ -5082,6 +6008,12 @@ func (this *CreateSpecType) GoString() string {
 	mapStringForTags += "}"
 	if this.Tags != nil {
 		s = append(s, "Tags: "+mapStringForTags+",\n")
+	}
+	if this.LocalControlPlane != nil {
+		s = append(s, "LocalControlPlane: "+fmt.Sprintf("%#v", this.LocalControlPlane)+",\n")
+	}
+	if this.DirectConnectChoice != nil {
+		s = append(s, "DirectConnectChoice: "+fmt.Sprintf("%#v", this.DirectConnectChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -5102,11 +6034,43 @@ func (this *CreateSpecType_LogReceiver) GoString() string {
 		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_DirectConnectDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.CreateSpecType_DirectConnectDisabled{` +
+		`DirectConnectDisabled:` + fmt.Sprintf("%#v", this.DirectConnectDisabled) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DirectConnectWithHostedVifs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.CreateSpecType_DirectConnectWithHostedVifs{` +
+		`DirectConnectWithHostedVifs:` + fmt.Sprintf("%#v", this.DirectConnectWithHostedVifs) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DirectConnectWithStandardVifs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.CreateSpecType_DirectConnectWithStandardVifs{` +
+		`DirectConnectWithStandardVifs:` + fmt.Sprintf("%#v", this.DirectConnectWithStandardVifs) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DirectConnectWithManualGw) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.CreateSpecType_DirectConnectWithManualGw{` +
+		`DirectConnectWithManualGw:` + fmt.Sprintf("%#v", this.DirectConnectWithManualGw) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 16)
 	s = append(s, "&aws_tgw_site.ReplaceSpecType{")
 	if this.AwsParameters != nil {
 		s = append(s, "AwsParameters: "+fmt.Sprintf("%#v", this.AwsParameters)+",\n")
@@ -5127,7 +6091,9 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.LogsReceiverChoice != nil {
 		s = append(s, "LogsReceiverChoice: "+fmt.Sprintf("%#v", this.LogsReceiverChoice)+",\n")
 	}
-	s = append(s, "SiteToSiteTunnelIp: "+fmt.Sprintf("%#v", this.SiteToSiteTunnelIp)+",\n")
+	if this.DirectConnectChoice != nil {
+		s = append(s, "DirectConnectChoice: "+fmt.Sprintf("%#v", this.DirectConnectChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -5147,11 +6113,43 @@ func (this *ReplaceSpecType_LogReceiver) GoString() string {
 		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_DirectConnectDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.ReplaceSpecType_DirectConnectDisabled{` +
+		`DirectConnectDisabled:` + fmt.Sprintf("%#v", this.DirectConnectDisabled) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DirectConnectWithHostedVifs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.ReplaceSpecType_DirectConnectWithHostedVifs{` +
+		`DirectConnectWithHostedVifs:` + fmt.Sprintf("%#v", this.DirectConnectWithHostedVifs) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DirectConnectWithStandardVifs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.ReplaceSpecType_DirectConnectWithStandardVifs{` +
+		`DirectConnectWithStandardVifs:` + fmt.Sprintf("%#v", this.DirectConnectWithStandardVifs) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DirectConnectWithManualGw) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.ReplaceSpecType_DirectConnectWithManualGw{` +
+		`DirectConnectWithManualGw:` + fmt.Sprintf("%#v", this.DirectConnectWithManualGw) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 22)
+	s := make([]string, 0, 26)
 	s = append(s, "&aws_tgw_site.GetSpecType{")
 	if this.AwsParameters != nil {
 		s = append(s, "AwsParameters: "+fmt.Sprintf("%#v", this.AwsParameters)+",\n")
@@ -5190,7 +6188,6 @@ func (this *GetSpecType) GoString() string {
 	if this.UserModificationTimestamp != nil {
 		s = append(s, "UserModificationTimestamp: "+fmt.Sprintf("%#v", this.UserModificationTimestamp)+",\n")
 	}
-	s = append(s, "SiteToSiteTunnelIp: "+fmt.Sprintf("%#v", this.SiteToSiteTunnelIp)+",\n")
 	if this.TgwInfo != nil {
 		s = append(s, "TgwInfo: "+fmt.Sprintf("%#v", this.TgwInfo)+",\n")
 	}
@@ -5214,6 +6211,12 @@ func (this *GetSpecType) GoString() string {
 	if this.VipParamsPerAz != nil {
 		s = append(s, "VipParamsPerAz: "+fmt.Sprintf("%#v", this.VipParamsPerAz)+",\n")
 	}
+	if this.DirectConnectChoice != nil {
+		s = append(s, "DirectConnectChoice: "+fmt.Sprintf("%#v", this.DirectConnectChoice)+",\n")
+	}
+	if this.DirectConnectInfo != nil {
+		s = append(s, "DirectConnectInfo: "+fmt.Sprintf("%#v", this.DirectConnectInfo)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -5231,6 +6234,38 @@ func (this *GetSpecType_LogReceiver) GoString() string {
 	}
 	s := strings.Join([]string{`&aws_tgw_site.GetSpecType_LogReceiver{` +
 		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DirectConnectDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GetSpecType_DirectConnectDisabled{` +
+		`DirectConnectDisabled:` + fmt.Sprintf("%#v", this.DirectConnectDisabled) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DirectConnectWithHostedVifs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GetSpecType_DirectConnectWithHostedVifs{` +
+		`DirectConnectWithHostedVifs:` + fmt.Sprintf("%#v", this.DirectConnectWithHostedVifs) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DirectConnectWithStandardVifs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GetSpecType_DirectConnectWithStandardVifs{` +
+		`DirectConnectWithStandardVifs:` + fmt.Sprintf("%#v", this.DirectConnectWithStandardVifs) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DirectConnectWithManualGw) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GetSpecType_DirectConnectWithManualGw{` +
+		`DirectConnectWithManualGw:` + fmt.Sprintf("%#v", this.DirectConnectWithManualGw) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -5684,6 +6719,15 @@ func (m *VnConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.SiteMeshGroupChoice != nil {
+		{
+			size := m.SiteMeshGroupChoice.Size()
+			i -= size
+			if _, err := m.SiteMeshGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DcClusterGroupChoice != nil {
 		{
 			size := m.DcClusterGroupChoice.Size()
@@ -5921,6 +6965,52 @@ func (m *VnConfiguration_DcClusterGroupInsideVn) MarshalToSizedBuffer(dAtA []byt
 		}
 		i--
 		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
+func (m *VnConfiguration_SmConnectionPublicIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnConfiguration_SmConnectionPublicIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPublicIp != nil {
+		{
+			size, err := m.SmConnectionPublicIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *VnConfiguration_SmConnectionPvtIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnConfiguration_SmConnectionPvtIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPvtIp != nil {
+		{
+			size, err := m.SmConnectionPvtIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
 	return len(dAtA) - i, nil
 }
@@ -6454,6 +7544,24 @@ func (m *AWSTGWInfoConfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.PrivateIps) > 0 {
+		for iNdEx := len(m.PrivateIps) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.PrivateIps[iNdEx])
+			copy(dAtA[i:], m.PrivateIps[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.PrivateIps[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.PublicIps) > 0 {
+		for iNdEx := len(m.PublicIps) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.PublicIps[iNdEx])
+			copy(dAtA[i:], m.PublicIps[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.PublicIps[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.SubnetIds) > 0 {
 		for iNdEx := len(m.SubnetIds) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -6505,6 +7613,20 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.DirectConnectInfo != nil {
+		{
+			size, err := m.DirectConnectInfo.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xca
+	}
 	if m.ViewInternal != nil {
 		{
 			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
@@ -6575,14 +7697,28 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0xf2
 		}
 	}
-	if len(m.SiteToSiteTunnelIp) > 0 {
-		i -= len(m.SiteToSiteTunnelIp)
-		copy(dAtA[i:], m.SiteToSiteTunnelIp)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteToSiteTunnelIp)))
+	if m.DirectConnectChoice != nil {
+		{
+			size := m.DirectConnectChoice.Size()
+			i -= size
+			if _, err := m.DirectConnectChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LocalControlPlane != nil {
+		{
+			size, err := m.LocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
 		i--
 		dAtA[i] = 0x1
 		i--
-		dAtA[i] = 0xea
+		dAtA[i] = 0x92
 	}
 	if len(m.VipParamsPerAz) > 0 {
 		for iNdEx := len(m.VipParamsPerAz) - 1; iNdEx >= 0; iNdEx-- {
@@ -6816,6 +7952,98 @@ func (m *GlobalSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_DirectConnectDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DirectConnectDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectDisabled != nil {
+		{
+			size, err := m.DirectConnectDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DirectConnectWithHostedVifs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DirectConnectWithHostedVifs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithHostedVifs != nil {
+		{
+			size, err := m.DirectConnectWithHostedVifs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DirectConnectWithStandardVifs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DirectConnectWithStandardVifs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithStandardVifs != nil {
+		{
+			size, err := m.DirectConnectWithStandardVifs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DirectConnectWithManualGw) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DirectConnectWithManualGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithManualGw != nil {
+		{
+			size, err := m.DirectConnectWithManualGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -6836,6 +8064,20 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.LocalControlPlane != nil {
+		{
+			size, err := m.LocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
 	if len(m.Tags) > 0 {
 		keysForTags := make([]string, 0, len(m.Tags))
 		for k := range m.Tags {
@@ -6862,14 +8104,14 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0xf2
 		}
 	}
-	if len(m.SiteToSiteTunnelIp) > 0 {
-		i -= len(m.SiteToSiteTunnelIp)
-		copy(dAtA[i:], m.SiteToSiteTunnelIp)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteToSiteTunnelIp)))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xea
+	if m.DirectConnectChoice != nil {
+		{
+			size := m.DirectConnectChoice.Size()
+			i -= size
+			if _, err := m.DirectConnectChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.Os != nil {
 		{
@@ -7018,6 +8260,98 @@ func (m *CreateSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_DirectConnectDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DirectConnectDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectDisabled != nil {
+		{
+			size, err := m.DirectConnectDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DirectConnectWithHostedVifs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DirectConnectWithHostedVifs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithHostedVifs != nil {
+		{
+			size, err := m.DirectConnectWithHostedVifs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DirectConnectWithStandardVifs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DirectConnectWithStandardVifs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithStandardVifs != nil {
+		{
+			size, err := m.DirectConnectWithStandardVifs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DirectConnectWithManualGw) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DirectConnectWithManualGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithManualGw != nil {
+		{
+			size, err := m.DirectConnectWithManualGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7038,14 +8372,14 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.SiteToSiteTunnelIp) > 0 {
-		i -= len(m.SiteToSiteTunnelIp)
-		copy(dAtA[i:], m.SiteToSiteTunnelIp)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteToSiteTunnelIp)))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xea
+	if m.DirectConnectChoice != nil {
+		{
+			size := m.DirectConnectChoice.Size()
+			i -= size
+			if _, err := m.DirectConnectChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.AwsParameters != nil {
 		{
@@ -7170,6 +8504,98 @@ func (m *ReplaceSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_DirectConnectDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DirectConnectDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectDisabled != nil {
+		{
+			size, err := m.DirectConnectDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DirectConnectWithHostedVifs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DirectConnectWithHostedVifs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithHostedVifs != nil {
+		{
+			size, err := m.DirectConnectWithHostedVifs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DirectConnectWithStandardVifs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DirectConnectWithStandardVifs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithStandardVifs != nil {
+		{
+			size, err := m.DirectConnectWithStandardVifs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DirectConnectWithManualGw) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DirectConnectWithManualGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithManualGw != nil {
+		{
+			size, err := m.DirectConnectWithManualGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7190,6 +8616,20 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.DirectConnectInfo != nil {
+		{
+			size, err := m.DirectConnectInfo.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xca
+	}
 	if len(m.Tunnels) > 0 {
 		for iNdEx := len(m.Tunnels) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -7232,14 +8672,14 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0xf2
 		}
 	}
-	if len(m.SiteToSiteTunnelIp) > 0 {
-		i -= len(m.SiteToSiteTunnelIp)
-		copy(dAtA[i:], m.SiteToSiteTunnelIp)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteToSiteTunnelIp)))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xea
+	if m.DirectConnectChoice != nil {
+		{
+			size := m.DirectConnectChoice.Size()
+			i -= size
+			if _, err := m.DirectConnectChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if len(m.VipParamsPerAz) > 0 {
 		for iNdEx := len(m.VipParamsPerAz) - 1; iNdEx >= 0; iNdEx-- {
@@ -7449,6 +8889,98 @@ func (m *GetSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error)
 		}
 		i--
 		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DirectConnectDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DirectConnectDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectDisabled != nil {
+		{
+			size, err := m.DirectConnectDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DirectConnectWithHostedVifs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DirectConnectWithHostedVifs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithHostedVifs != nil {
+		{
+			size, err := m.DirectConnectWithHostedVifs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DirectConnectWithStandardVifs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DirectConnectWithStandardVifs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithStandardVifs != nil {
+		{
+			size, err := m.DirectConnectWithStandardVifs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DirectConnectWithManualGw) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DirectConnectWithManualGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DirectConnectWithManualGw != nil {
+		{
+			size, err := m.DirectConnectWithManualGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
 	return len(dAtA) - i, nil
 }
@@ -7701,6 +9233,9 @@ func (m *VnConfiguration) Size() (n int) {
 	if m.DcClusterGroupChoice != nil {
 		n += m.DcClusterGroupChoice.Size()
 	}
+	if m.SiteMeshGroupChoice != nil {
+		n += m.SiteMeshGroupChoice.Size()
+	}
 	return n
 }
 
@@ -7809,6 +9344,30 @@ func (m *VnConfiguration_DcClusterGroupInsideVn) Size() (n int) {
 	if m.DcClusterGroupInsideVn != nil {
 		l = m.DcClusterGroupInsideVn.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *VnConfiguration_SmConnectionPublicIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPublicIp != nil {
+		l = m.SmConnectionPublicIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *VnConfiguration_SmConnectionPvtIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPvtIp != nil {
+		l = m.SmConnectionPvtIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -8080,6 +9639,18 @@ func (m *AWSTGWInfoConfigType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.PublicIps) > 0 {
+		for _, s := range m.PublicIps {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.PrivateIps) > 0 {
+		for _, s := range m.PrivateIps {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -8159,9 +9730,12 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 2 + l + sovTypes(uint64(l))
 		}
 	}
-	l = len(m.SiteToSiteTunnelIp)
-	if l > 0 {
+	if m.LocalControlPlane != nil {
+		l = m.LocalControlPlane.Size()
 		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.DirectConnectChoice != nil {
+		n += m.DirectConnectChoice.Size()
 	}
 	if len(m.Tags) > 0 {
 		for k, v := range m.Tags {
@@ -8183,6 +9757,10 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.DirectConnectInfo != nil {
+		l = m.DirectConnectInfo.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -8209,6 +9787,54 @@ func (m *GlobalSpecType_LogReceiver) Size() (n int) {
 	if m.LogReceiver != nil {
 		l = m.LogReceiver.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DirectConnectDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectDisabled != nil {
+		l = m.DirectConnectDisabled.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DirectConnectWithHostedVifs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithHostedVifs != nil {
+		l = m.DirectConnectWithHostedVifs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DirectConnectWithStandardVifs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithStandardVifs != nil {
+		l = m.DirectConnectWithStandardVifs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DirectConnectWithManualGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithManualGw != nil {
+		l = m.DirectConnectWithManualGw.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -8253,9 +9879,8 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.Os.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	l = len(m.SiteToSiteTunnelIp)
-	if l > 0 {
-		n += 2 + l + sovTypes(uint64(l))
+	if m.DirectConnectChoice != nil {
+		n += m.DirectConnectChoice.Size()
 	}
 	if len(m.Tags) > 0 {
 		for k, v := range m.Tags {
@@ -8264,6 +9889,10 @@ func (m *CreateSpecType) Size() (n int) {
 			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
 			n += mapEntrySize + 2 + sovTypes(uint64(mapEntrySize))
 		}
+	}
+	if m.LocalControlPlane != nil {
+		l = m.LocalControlPlane.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -8289,6 +9918,54 @@ func (m *CreateSpecType_LogReceiver) Size() (n int) {
 	if m.LogReceiver != nil {
 		l = m.LogReceiver.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DirectConnectDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectDisabled != nil {
+		l = m.DirectConnectDisabled.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DirectConnectWithHostedVifs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithHostedVifs != nil {
+		l = m.DirectConnectWithHostedVifs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DirectConnectWithStandardVifs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithStandardVifs != nil {
+		l = m.DirectConnectWithStandardVifs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DirectConnectWithManualGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithManualGw != nil {
+		l = m.DirectConnectWithManualGw.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -8325,9 +10002,8 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.AwsParameters.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	l = len(m.SiteToSiteTunnelIp)
-	if l > 0 {
-		n += 2 + l + sovTypes(uint64(l))
+	if m.DirectConnectChoice != nil {
+		n += m.DirectConnectChoice.Size()
 	}
 	return n
 }
@@ -8353,6 +10029,54 @@ func (m *ReplaceSpecType_LogReceiver) Size() (n int) {
 	if m.LogReceiver != nil {
 		l = m.LogReceiver.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DirectConnectDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectDisabled != nil {
+		l = m.DirectConnectDisabled.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DirectConnectWithHostedVifs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithHostedVifs != nil {
+		l = m.DirectConnectWithHostedVifs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DirectConnectWithStandardVifs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithStandardVifs != nil {
+		l = m.DirectConnectWithStandardVifs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DirectConnectWithManualGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithManualGw != nil {
+		l = m.DirectConnectWithManualGw.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -8427,9 +10151,8 @@ func (m *GetSpecType) Size() (n int) {
 			n += 2 + l + sovTypes(uint64(l))
 		}
 	}
-	l = len(m.SiteToSiteTunnelIp)
-	if l > 0 {
-		n += 2 + l + sovTypes(uint64(l))
+	if m.DirectConnectChoice != nil {
+		n += m.DirectConnectChoice.Size()
 	}
 	if len(m.Tags) > 0 {
 		for k, v := range m.Tags {
@@ -8444,6 +10167,10 @@ func (m *GetSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.DirectConnectInfo != nil {
+		l = m.DirectConnectInfo.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -8469,6 +10196,54 @@ func (m *GetSpecType_LogReceiver) Size() (n int) {
 	if m.LogReceiver != nil {
 		l = m.LogReceiver.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DirectConnectDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectDisabled != nil {
+		l = m.DirectConnectDisabled.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DirectConnectWithHostedVifs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithHostedVifs != nil {
+		l = m.DirectConnectWithHostedVifs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DirectConnectWithStandardVifs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithStandardVifs != nil {
+		l = m.DirectConnectWithStandardVifs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DirectConnectWithManualGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DirectConnectWithManualGw != nil {
+		l = m.DirectConnectWithManualGw.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -8656,6 +10431,7 @@ func (this *VnConfiguration) String() string {
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`AllowedVipPort:` + strings.Replace(fmt.Sprintf("%v", this.AllowedVipPort), "AllowedVIPPorts", "views.AllowedVIPPorts", 1) + `,`,
 		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
+		`SiteMeshGroupChoice:` + fmt.Sprintf("%v", this.SiteMeshGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -8746,6 +10522,26 @@ func (this *VnConfiguration_DcClusterGroupInsideVn) String() string {
 	}
 	s := strings.Join([]string{`&VnConfiguration_DcClusterGroupInsideVn{`,
 		`DcClusterGroupInsideVn:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInsideVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VnConfiguration_SmConnectionPublicIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VnConfiguration_SmConnectionPublicIp{`,
+		`SmConnectionPublicIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPublicIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VnConfiguration_SmConnectionPvtIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VnConfiguration_SmConnectionPvtIp{`,
+		`SmConnectionPvtIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPvtIp), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -8969,6 +10765,8 @@ func (this *AWSTGWInfoConfigType) String() string {
 		`TgwId:` + fmt.Sprintf("%v", this.TgwId) + `,`,
 		`VpcId:` + fmt.Sprintf("%v", this.VpcId) + `,`,
 		`SubnetIds:` + repeatedStringForSubnetIds + `,`,
+		`PublicIps:` + fmt.Sprintf("%v", this.PublicIps) + `,`,
+		`PrivateIps:` + fmt.Sprintf("%v", this.PrivateIps) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9023,11 +10821,13 @@ func (this *GlobalSpecType) String() string {
 		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "views.VolterraSoftwareType", 1) + `,`,
 		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "views.OperatingSystemType", 1) + `,`,
 		`VipParamsPerAz:` + repeatedStringForVipParamsPerAz + `,`,
-		`SiteToSiteTunnelIp:` + fmt.Sprintf("%v", this.SiteToSiteTunnelIp) + `,`,
+		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "views.LocalControlPlaneType", 1) + `,`,
+		`DirectConnectChoice:` + fmt.Sprintf("%v", this.DirectConnectChoice) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`Tunnels:` + repeatedStringForTunnels + `,`,
 		`TfParams:` + strings.Replace(fmt.Sprintf("%v", this.TfParams), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`DirectConnectInfo:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectInfo), "DirectConnectInfo", "views.DirectConnectInfo", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9048,6 +10848,46 @@ func (this *GlobalSpecType_LogReceiver) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LogReceiver{`,
 		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DirectConnectDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DirectConnectDisabled{`,
+		`DirectConnectDisabled:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DirectConnectWithHostedVifs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DirectConnectWithHostedVifs{`,
+		`DirectConnectWithHostedVifs:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithHostedVifs), "HostedVIFConfigType", "views.HostedVIFConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DirectConnectWithStandardVifs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DirectConnectWithStandardVifs{`,
+		`DirectConnectWithStandardVifs:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithStandardVifs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DirectConnectWithManualGw) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DirectConnectWithManualGw{`,
+		`DirectConnectWithManualGw:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithManualGw), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9076,8 +10916,9 @@ func (this *CreateSpecType) String() string {
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "views.VolterraSoftwareType", 1) + `,`,
 		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "views.OperatingSystemType", 1) + `,`,
-		`SiteToSiteTunnelIp:` + fmt.Sprintf("%v", this.SiteToSiteTunnelIp) + `,`,
+		`DirectConnectChoice:` + fmt.Sprintf("%v", this.DirectConnectChoice) + `,`,
 		`Tags:` + mapStringForTags + `,`,
+		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "views.LocalControlPlaneType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9102,6 +10943,46 @@ func (this *CreateSpecType_LogReceiver) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_DirectConnectDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DirectConnectDisabled{`,
+		`DirectConnectDisabled:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DirectConnectWithHostedVifs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DirectConnectWithHostedVifs{`,
+		`DirectConnectWithHostedVifs:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithHostedVifs), "HostedVIFConfigType", "views.HostedVIFConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DirectConnectWithStandardVifs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DirectConnectWithStandardVifs{`,
+		`DirectConnectWithStandardVifs:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithStandardVifs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DirectConnectWithManualGw) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DirectConnectWithManualGw{`,
+		`DirectConnectWithManualGw:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithManualGw), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -9114,7 +10995,7 @@ func (this *ReplaceSpecType) String() string {
 		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`AwsParameters:` + strings.Replace(this.AwsParameters.String(), "ServicesVPCReplaceType", "ServicesVPCReplaceType", 1) + `,`,
-		`SiteToSiteTunnelIp:` + fmt.Sprintf("%v", this.SiteToSiteTunnelIp) + `,`,
+		`DirectConnectChoice:` + fmt.Sprintf("%v", this.DirectConnectChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9135,6 +11016,46 @@ func (this *ReplaceSpecType_LogReceiver) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_LogReceiver{`,
 		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DirectConnectDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DirectConnectDisabled{`,
+		`DirectConnectDisabled:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DirectConnectWithHostedVifs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DirectConnectWithHostedVifs{`,
+		`DirectConnectWithHostedVifs:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithHostedVifs), "HostedVIFConfigType", "views.HostedVIFConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DirectConnectWithStandardVifs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DirectConnectWithStandardVifs{`,
+		`DirectConnectWithStandardVifs:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithStandardVifs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DirectConnectWithManualGw) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DirectConnectWithManualGw{`,
+		`DirectConnectWithManualGw:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithManualGw), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9188,9 +11109,10 @@ func (this *GetSpecType) String() string {
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`SiteState:` + fmt.Sprintf("%v", this.SiteState) + `,`,
 		`VipParamsPerAz:` + repeatedStringForVipParamsPerAz + `,`,
-		`SiteToSiteTunnelIp:` + fmt.Sprintf("%v", this.SiteToSiteTunnelIp) + `,`,
+		`DirectConnectChoice:` + fmt.Sprintf("%v", this.DirectConnectChoice) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`Tunnels:` + repeatedStringForTunnels + `,`,
+		`DirectConnectInfo:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectInfo), "DirectConnectInfo", "views.DirectConnectInfo", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9211,6 +11133,46 @@ func (this *GetSpecType_LogReceiver) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_LogReceiver{`,
 		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DirectConnectDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DirectConnectDisabled{`,
+		`DirectConnectDisabled:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DirectConnectWithHostedVifs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DirectConnectWithHostedVifs{`,
+		`DirectConnectWithHostedVifs:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithHostedVifs), "HostedVIFConfigType", "views.HostedVIFConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DirectConnectWithStandardVifs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DirectConnectWithStandardVifs{`,
+		`DirectConnectWithStandardVifs:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithStandardVifs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DirectConnectWithManualGw) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DirectConnectWithManualGw{`,
+		`DirectConnectWithManualGw:` + strings.Replace(fmt.Sprintf("%v", this.DirectConnectWithManualGw), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10455,6 +12417,76 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.DcClusterGroupChoice = &VnConfiguration_DcClusterGroupInsideVn{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPublicIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &VnConfiguration_SmConnectionPublicIp{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPvtIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &VnConfiguration_SmConnectionPvtIp{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -11707,6 +13739,70 @@ func (m *AWSTGWInfoConfigType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicIps", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PublicIps = append(m.PublicIps, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateIps", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PrivateIps = append(m.PrivateIps, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -12413,11 +14509,11 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 29:
+		case 18:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SiteToSiteTunnelIp", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field LocalControlPlane", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -12427,23 +14523,167 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SiteToSiteTunnelIp = string(dAtA[iNdEx:postIndex])
+			if m.LocalControlPlane == nil {
+				m.LocalControlPlane = &views.LocalControlPlaneType{}
+			}
+			if err := m.LocalControlPlane.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithHostedVifs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.HostedVIFConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &GlobalSpecType_DirectConnectWithHostedVifs{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithStandardVifs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &GlobalSpecType_DirectConnectWithStandardVifs{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithManualGw", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &GlobalSpecType_DirectConnectWithManualGw{v}
 			iNdEx = postIndex
 		case 30:
 			if wireType != 2 {
@@ -12675,6 +14915,42 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				m.ViewInternal = &views.ObjectRefType{}
 			}
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 1001:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectInfo", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DirectConnectInfo == nil {
+				m.DirectConnectInfo = &views.DirectConnectInfo{}
+			}
+			if err := m.DirectConnectInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -13085,11 +15361,11 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 29:
+		case 20:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SiteToSiteTunnelIp", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectDisabled", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -13099,23 +15375,131 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SiteToSiteTunnelIp = string(dAtA[iNdEx:postIndex])
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &CreateSpecType_DirectConnectDisabled{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithHostedVifs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.HostedVIFConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &CreateSpecType_DirectConnectWithHostedVifs{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithStandardVifs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &CreateSpecType_DirectConnectWithStandardVifs{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithManualGw", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &CreateSpecType_DirectConnectWithManualGw{v}
 			iNdEx = postIndex
 		case 30:
 			if wireType != 2 {
@@ -13243,6 +15627,42 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LocalControlPlane", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LocalControlPlane == nil {
+				m.LocalControlPlane = &views.LocalControlPlaneType{}
+			}
+			if err := m.LocalControlPlane.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -13579,11 +15999,11 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 29:
+		case 20:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SiteToSiteTunnelIp", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectDisabled", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -13593,23 +16013,131 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SiteToSiteTunnelIp = string(dAtA[iNdEx:postIndex])
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &ReplaceSpecType_DirectConnectDisabled{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithHostedVifs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.HostedVIFConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithHostedVifs{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithStandardVifs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithStandardVifs{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithManualGw", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithManualGw{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -14264,11 +16792,11 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 29:
+		case 20:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SiteToSiteTunnelIp", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectDisabled", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -14278,23 +16806,131 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SiteToSiteTunnelIp = string(dAtA[iNdEx:postIndex])
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &GetSpecType_DirectConnectDisabled{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithHostedVifs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.HostedVIFConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &GetSpecType_DirectConnectWithHostedVifs{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithStandardVifs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &GetSpecType_DirectConnectWithStandardVifs{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectWithManualGw", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DirectConnectChoice = &GetSpecType_DirectConnectWithManualGw{v}
 			iNdEx = postIndex
 		case 30:
 			if wireType != 2 {
@@ -14454,6 +17090,42 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Tunnels = append(m.Tunnels, &AWSVPNTunnelConfigType{})
 			if err := m.Tunnels[len(m.Tunnels)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 1001:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectConnectInfo", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DirectConnectInfo == nil {
+				m.DirectConnectInfo = &views.DirectConnectInfo{}
+			}
+			if err := m.DirectConnectInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

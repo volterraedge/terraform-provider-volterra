@@ -1197,6 +1197,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 													Optional: true,
 												},
 
+												"body_hash": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
 												"status": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -3036,6 +3041,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 							if v, ok := cs["body"]; ok && !isIntfNil(v) {
 
 								actionTypeInt.Block.Body = v.(string)
+
+							}
+
+							if v, ok := cs["body_hash"]; ok && !isIntfNil(v) {
+
+								actionTypeInt.Block.BodyHash = v.(string)
 
 							}
 
@@ -5014,6 +5025,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 							if v, ok := cs["body"]; ok && !isIntfNil(v) {
 
 								actionTypeInt.Block.Body = v.(string)
+
+							}
+
+							if v, ok := cs["body_hash"]; ok && !isIntfNil(v) {
+
+								actionTypeInt.Block.BodyHash = v.(string)
 
 							}
 

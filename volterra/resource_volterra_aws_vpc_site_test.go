@@ -159,6 +159,13 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 				key2 = "value2"
 			}
 			ignore_on_delete = true
+		}
+		resource "volterra_set_cloud_site_info" "%[1]s" {
+			name = volterra_aws_vpc_site.%[1]s.name
+			site_type = "aws_vpc_site"
+			public_ips = ["10.0.0.1"]
+			private_ips = ["192.168.0.1"]
+
 		}`, resourceName, name, cloudCred)
 }
 
@@ -197,6 +204,13 @@ func testAWSVPCSiteIConfig(resourceName, cloudCred, name string) string {
 			latitude = 37.404989
 			longitude = -121.942300
 		}
+	  }
+	  resource "volterra_set_cloud_site_info" "%[1]s" {
+		name = volterra_aws_vpc_site.%[1]s.name
+		site_type = "aws_vpc_site"
+		public_ips = ["10.0.0.1"]
+		private_ips = ["192.168.0.1"]
+
 	  }`, resourceName, name, cloudCred)
 }
 

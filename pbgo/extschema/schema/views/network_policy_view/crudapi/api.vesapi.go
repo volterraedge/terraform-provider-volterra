@@ -3019,9 +3019,10 @@ var APISwaggerJSON string = `{
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Protocol in IP packet to be used as match criteria\n Values are tcp, udp, and icmp\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ALL\\\",\\\"TCP\\\",\\\"UDP\\\",\\\"ICMP\\\"]\n",
+                    "description": " Protocol in IP packet to be used as match criteria\n Values are tcp, udp, and icmp\n\nExample: - \"ALL\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ALL\\\",\\\"TCP\\\",\\\"UDP\\\",\\\"ICMP\\\"]\n",
                     "title": "protocol",
                     "x-displayname": "Protocol",
+                    "x-ves-example": "ALL",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.in": "[\\\"ALL\\\",\\\"TCP\\\",\\\"UDP\\\",\\\"ICMP\\\"]"
                     }

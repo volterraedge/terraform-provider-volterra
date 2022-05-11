@@ -2581,7 +2581,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2608,7 +2608,8 @@ var APISwaggerJSON string = `{
                 "VIOL_EVASION_DIRECTORY_TRAVERSALS",
                 "VIOL_MALFORMED_REQUEST",
                 "VIOL_EVASION_MULTIPLE_DECODING",
-                "VIOL_DATA_GUARD"
+                "VIOL_DATA_GUARD",
+                "VIOL_EVASION_APACHE_WHITESPACE"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2837,6 +2838,8 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerAPIRateLimit": {
             "type": "object",
+            "title": "APIRateLimit",
+            "x-displayname": "APIRateLimit",
             "x-ves-oneof-field-ip_allowed_list_choice": "[\"custom_ip_allowed_list\",\"ip_allowed_list\",\"no_ip_allowed_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.APIRateLimit",
             "properties": {
@@ -2909,9 +2912,10 @@ var APISwaggerJSON string = `{
                 },
                 "custom_errors": {
                     "type": "object",
-                    "description": "\n Map of integer error codes as keys and string values that can be used to provide custom\n http pages for each error code.\n Key of the map can be either response code class or HTTP Error code. Response code classes\n for key is configured as follows\n 3 -- for 3xx response code class\n 4 -- for 4xx response code class\n 5 -- for 5xx response code class\n Value of the map is string which represents custom HTTP responses.\n Specific response code takes preference when both response code and response code class\n matches for a request.\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.uint32.ranges: 3,4,5,300-599\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 65536\n  ves.io.schema.rules.map.values.string.uri_ref: true\n",
+                    "description": " Map of integer error codes as keys and string values that can be used to provide custom\n http pages for each error code.\n Key of the map can be either response code class or HTTP Error code. Response code classes\n for key is configured as follows\n 3 -- for 3xx response code class\n 4 -- for 4xx response code class\n 5 -- for 5xx response code class\n Value of the map is string which represents custom HTTP responses.\n Specific response code takes preference when both response code and response code class\n matches for a request.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.uint32.ranges: 3,4,5,300-599\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 65536\n  ves.io.schema.rules.map.values.string.uri_ref: true\n",
                     "title": "Custom Errors",
                     "x-displayname": "Custom Error Responses",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.uint32.ranges": "3,4,5,300-599",
                         "ves.io.schema.rules.map.max_pairs": "16",
@@ -2951,10 +2955,11 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": " The maximum request header size for downstream connections, in KiB.\n A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size.\n\n If multiple loadbalancers share the same advertise_policy, the highest value configured across all\n such loadbalancers is used for all the loadbalancers in question.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 96\n",
+                    "description": " The maximum request header size for downstream connections, in KiB.\n A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size.\n\n If multiple loadbalancers share the same advertise_policy, the highest value configured across all\n such loadbalancers is used for all the loadbalancers in question.\n\nExample: - \"60\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 96\n",
                     "title": "Maximum request header size",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size",
+                    "x-ves-example": "60",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "96"
                     }
@@ -3066,6 +3071,8 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerApiEndpointRule": {
             "type": "object",
+            "title": "ApiEndpointRule",
+            "x-displayname": "ApiEndpointRule",
             "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
             "x-ves-oneof-field-rate_limiter_choice": "[\"inline_rate_limiter\",\"ref_rate_limiter\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ApiEndpointRule",
@@ -3088,10 +3095,11 @@ var APISwaggerJSON string = `{
                 },
                 "api_endpoint_path": {
                     "type": "string",
-                    "description": " The endpoint (path) of the request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 1024\n  ves.io.schema.rules.string.templated_http_path: true\n",
+                    "description": " The endpoint (path) of the request.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 1024\n  ves.io.schema.rules.string.templated_http_path: true\n",
                     "title": "api endpoint path",
                     "maxLength": 1024,
                     "x-displayname": "API Endpoint",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3101,10 +3109,11 @@ var APISwaggerJSON string = `{
                 },
                 "base_path": {
                     "type": "string",
-                    "description": " The request base path.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "description": " The request base path.\n\nExample: - \"/\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "base path",
                     "maxLength": 128,
                     "x-displayname": "Base Path",
+                    "x-ves-example": "/",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3397,11 +3406,12 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL for a trust store\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
                     "x-displayname": "Trusted CA",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3437,8 +3447,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerHttpHeaderMatcherList": {
+            "type": "object",
+            "description": "Request header name and value pairs",
+            "title": "HTTP Header",
+            "x-displayname": "HTTP Header",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.HttpHeaderMatcherList",
+            "properties": {
+                "headers": {
+                    "type": "array",
+                    "description": " List of HTTP header name and value pairs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
+                    "title": "headers",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaHeaderMatcherType"
+                    },
+                    "x-displayname": "HTTP Headers",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
+                }
+            }
+        },
         "http_loadbalancerInlineRateLimiter": {
             "type": "object",
+            "title": "InlineRateLimiter",
+            "x-displayname": "InlineRateLimiter",
             "x-ves-oneof-field-count_by_choice": "[\"ref_user_id\",\"use_http_lb_user_id\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.InlineRateLimiter",
             "properties": {
@@ -3450,15 +3486,16 @@ var APISwaggerJSON string = `{
                 },
                 "threshold": {
                     "type": "integer",
-                    "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 10000\n",
+                    "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
                     "title": "threshold",
                     "format": "int64",
                     "x-displayname": "Threshold",
+                    "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gt": "0",
-                        "ves.io.schema.rules.uint32.lte": "10000"
+                        "ves.io.schema.rules.uint32.lte": "8192"
                     }
                 },
                 "unit": {
@@ -3504,6 +3541,17 @@ var APISwaggerJSON string = `{
                     "title": "Manage DNS Domain",
                     "format": "boolean",
                     "x-displayname": "Automatically Manage DNS Records"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Http Port\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "HTTP Port",
+                    "x-ves-example": "80",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 }
             }
         },
@@ -3564,6 +3612,17 @@ var APISwaggerJSON string = `{
                     "title": "pass_through",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Pass existing Server header"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Https Port\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "HTTPs Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 },
                 "server_name": {
                     "type": "string",
@@ -3647,6 +3706,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Pass existing Server header"
                 },
+                "port": {
+                    "type": "integer",
+                    "description": " Https Port\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "HTTPs Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
                 "server_name": {
                     "type": "string",
                     "description": "Exclusive with [append_server_name default_header pass_through]\n Specifies the value to be used for Server header inserted in responses.\n This will overwrite existing values if any for Server Header\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
@@ -3673,6 +3743,8 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerRateLimitConfigType": {
             "type": "object",
+            "title": "RateLimitConfigType",
+            "x-displayname": "RateLimitConfigType",
             "x-ves-oneof-field-ip_allowed_list_choice": "[\"custom_ip_allowed_list\",\"ip_allowed_list\",\"no_ip_allowed_list\"]",
             "x-ves-oneof-field-policy_choice": "[\"no_policies\",\"policies\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RateLimitConfigType",
@@ -3818,9 +3890,10 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint_subsets": {
                     "type": "object",
-                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
+                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
                     "title": "Origin Servers Subset",
                     "x-displayname": "Origin Servers Subsets",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "16"
                     }
@@ -3934,10 +4007,11 @@ var APISwaggerJSON string = `{
                 },
                 "timeout": {
                     "type": "integer",
-                    "description": " The timeout for the route including all retries, in milliseconds.\n Should be set to a high value or 0 (infinite timeout) for server-side streaming.\n\nExample: - 2000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 600000\n",
+                    "description": " The timeout for the route including all retries, in milliseconds.\n Should be set to a high value or 0 (infinite timeout) for server-side streaming.\n\nExample: - \"2000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 600000\n",
                     "title": "timeout",
                     "format": "int64",
                     "x-displayname": "Timeout",
+                    "x-ves-example": "2000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "600000"
@@ -3955,6 +4029,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "A custom route uses a route object created outside of this view.",
             "title": "RouteTypeCustomRoute",
+            "x-displayname": "Custom Route Object",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeCustomRoute",
             "properties": {
                 "route_ref": {
@@ -3969,6 +4044,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "A direct response route matches on patch and/or HTTP method and responds directly to the matching traffic",
             "title": "RouteTypeDirectResponse",
+            "x-displayname": "Direct Response Route",
             "x-ves-displayorder": "2,1,4,3",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeDirectResponse",
             "properties": {
@@ -4010,6 +4086,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "A redirect route matches on patch and/or HTTP method and redirects the matching traffic to a different URL",
             "title": "RouteTypeRedirect",
+            "x-displayname": "Redirect Route",
             "x-ves-displayorder": "2,1,4,3",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeRedirect",
             "properties": {
@@ -4128,6 +4205,8 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerServerUrlRule": {
             "type": "object",
+            "title": "ServerUrlRule",
+            "x-displayname": "ServerUrlRule",
             "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
             "x-ves-oneof-field-rate_limiter_choice": "[\"inline_rate_limiter\",\"ref_rate_limiter\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ServerUrlRule",
@@ -4144,10 +4223,11 @@ var APISwaggerJSON string = `{
                 },
                 "base_path": {
                     "type": "string",
-                    "description": " Prefix of the request path.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "description": " Prefix of the request path.\n\nExample: - \"/\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "base path",
                     "maxLength": 128,
                     "x-displayname": "Base Path",
+                    "x-ves-example": "/",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -4221,7 +4301,7 @@ var APISwaggerJSON string = `{
                 },
                 "js_download_path": {
                     "type": "string",
-                    "description": "x-displayName: \"JavaScript Download Path\"\n\nCustomize Bot Defense Client JavaScript path. If not specified, default -/common.js-",
+                    "description": "x-displayName: \"JavaScript Download Path\"\nx-example: \"value\"\nCustomize Bot Defense Client JavaScript path. If not specified, default -/common.js-",
                     "title": "js_download_path"
                 },
                 "js_insert_all_pages": {
@@ -4278,7 +4358,7 @@ var APISwaggerJSON string = `{
                 },
                 "timeout": {
                     "type": "integer",
-                    "description": "x-displayName: \"Timeout\"\nx-example: 300\nThe timeout for the inference check, in milliseconds.",
+                    "description": "x-displayName: \"Timeout\"\nx-example: \"300\"\nThe timeout for the inference check, in milliseconds.",
                     "title": "timeout",
                     "format": "int64"
                 }
@@ -4405,12 +4485,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Simple Client Src Rule",
             "x-ves-displayorder": "10,3,11,9",
             "x-ves-oneof-field-action_choice": "[\"bot_skip_processing\",\"skip_processing\",\"waf_skip_processing\"]",
-            "x-ves-oneof-field-client_source_choice": "[\"as_number\",\"ip_prefix\"]",
+            "x-ves-oneof-field-client_source_choice": "[\"as_number\",\"http_header\",\"ip_prefix\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule",
             "properties": {
                 "as_number": {
                     "type": "integer",
-                    "description": "Exclusive with [ip_prefix]\n RFC 6793 defined 4-byte AS number\n\nExample: - \"4683\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 401308\n",
+                    "description": "Exclusive with [http_header ip_prefix]\n RFC 6793 defined 4-byte AS number\n\nExample: - \"4683\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 401308\n",
                     "title": "as number",
                     "format": "int64",
                     "x-displayname": "AS Number",
@@ -4423,10 +4503,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "bot_skip_processing": {
-                    "description": "Exclusive with [skip_processing waf_skip_processing]\n Skip Bot processing for clients matching this rule.",
+                    "description": "Exclusive with [skip_processing waf_skip_processing]\n Skip Bot Defense processing for clients matching this rule.",
                     "title": "Skip Bot Processing",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Skip Bot Processing"
+                    "x-displayname": "Skip Bot Defense Processing"
                 },
                 "expiration_timestamp": {
                     "type": "string",
@@ -4439,9 +4519,19 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.timestamp.within.seconds": "31536000"
                     }
                 },
+                "http_header": {
+                    "description": "Exclusive with [as_number ip_prefix]\n Request header name and value pairs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "HTTP Header",
+                    "$ref": "#/definitions/http_loadbalancerHttpHeaderMatcherList",
+                    "x-displayname": "HTTP Headers",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "ip_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [as_number]\n IPv4 prefix string.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "description": "Exclusive with [as_number http_header]\n IPv4 prefix string.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
                     "title": "ip prefix",
                     "x-displayname": "IP Prefix",
                     "x-ves-example": "192.168.20.0/24",
@@ -4462,7 +4552,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "skip_processing": {
-                    "description": "Exclusive with [bot_skip_processing waf_skip_processing]\n Skip both WAF and Bot processing for clients matching this rule.",
+                    "description": "Exclusive with [bot_skip_processing waf_skip_processing]\n Skip both WAF and Bot Defense processing for clients matching this rule.",
                     "title": "Skip Both",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Skip Both"
@@ -4589,10 +4679,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact": {
                     "type": "string",
-                    "description": "Exclusive with [presence regex]\n Header value to match exactly\n\nExample: - \"application/json\"-",
+                    "description": "Exclusive with [presence regex]\n Header value to match exactly\n\nExample: - \"application/json\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "exact",
+                    "maxLength": 256,
                     "x-displayname": "Exact",
-                    "x-ves-example": "application/json"
+                    "x-ves-example": "application/json",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
                 },
                 "invert_match": {
                     "type": "boolean",
@@ -4603,10 +4698,15 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the header\n\nExample: - \"Content-Type\"-",
+                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "name",
+                    "maxLength": 256,
                     "x-displayname": "Name",
-                    "x-ves-example": "Content-Type"
+                    "x-ves-example": "Content-Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
                 },
                 "presence": {
                     "type": "boolean",
@@ -4617,14 +4717,13 @@ var APISwaggerJSON string = `{
                 },
                 "regex": {
                     "type": "string",
-                    "description": "Exclusive with [exact presence]\n Regex match of the header value in re2 format\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "description": "Exclusive with [exact presence]\n Regex match of the header value in re2 format\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n  ves.io.schema.rules.string.regex: true\n",
                     "title": "regex",
-                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Regex",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.not_empty": "true",
                         "ves.io.schema.rules.string.regex": "true"
                     }
                 }
@@ -5540,6 +5639,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Body\"\nx-example: \"string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"\nCustom body message is of type uri_ref. Currently supported URL schemes is string:///.\nFor string:/// scheme, message needs to be encoded in Base64 format.\nYou can specify this message as base64 encoded plain text message e.g. \"Your request was blocked\"\nor it can be HTML paragraph or a body string encoded as base64 string\nE.g. \"\u003cp\u003e Your request was blocked \u003c/p\u003e\". Base64 encoded string for this html is \"LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"",
                     "title": "body"
                 },
+                "body_hash": {
+                    "type": "string",
+                    "description": "x-displayName: \"Body Hash\"\nx-example: \"92959a96fd69146c5fe7cbde6e5720f2\"\nRepresents the corresponding MD5 Hash for the body message.",
+                    "title": "body_hash"
+                },
                 "status": {
                     "description": "x-displayName: \"Status\"\nHTTP Status code to respond with",
                     "title": "Status",
@@ -5615,7 +5719,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": "x-displayName: \"URI\"\nx-example: Enter URI\nURI location for redirect may be relative or absolute.",
+                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nURI location for redirect may be relative or absolute.",
                     "title": "URI"
                 }
             }
@@ -5922,10 +6026,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "burst_multiplier": {
                     "type": "integer",
-                    "description": " The maximum burst of requests to accommodate, expressed as a multiple of the rate.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "description": " The maximum burst of requests to accommodate, expressed as a multiple of the rate.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "burst_multiplier",
                     "format": "int64",
                     "x-displayname": "Burst Multiplier",
+                    "x-ves-example": "1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gt": "0",
                         "ves.io.schema.rules.uint32.lte": "100"
@@ -5933,10 +6038,11 @@ var APISwaggerJSON string = `{
                 },
                 "total_number": {
                     "type": "integer",
-                    "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
+                    "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
                     "title": "total_number",
                     "format": "int64",
                     "x-displayname": "Number",
+                    "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -6011,10 +6117,11 @@ var APISwaggerJSON string = `{
                 },
                 "ttl": {
                     "type": "integer",
-                    "description": " If specified, a cookie with the TTL will be generated if the cookie is\n not present. If the TTL is present and zero, the generated cookie will\n be a session cookie. TTL value is in milliseconds\n\nExample: - 5000-",
+                    "description": " If specified, a cookie with the TTL will be generated if the cookie is\n not present. If the TTL is present and zero, the generated cookie will\n be a session cookie. TTL value is in milliseconds\n\nExample: - \"5000\"-",
                     "title": "ttl",
                     "format": "int64",
-                    "x-displayname": "TTL"
+                    "x-displayname": "TTL",
+                    "x-ves-example": "5000"
                 }
             }
         },
@@ -6083,10 +6190,11 @@ var APISwaggerJSON string = `{
                 },
                 "response_code": {
                     "type": "integer",
-                    "description": " response code to send\n\nExample: - 200-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 100\n  ves.io.schema.rules.uint32.lte: 599\n",
+                    "description": " response code to send\n\nExample: - \"200\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 100\n  ves.io.schema.rules.uint32.lte: 599\n",
                     "title": "response_code",
                     "format": "int64",
                     "x-displayname": "Response Code",
+                    "x-ves-example": "200",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "100",
                         "ves.io.schema.rules.uint32.lte": "599"
@@ -6168,10 +6276,11 @@ var APISwaggerJSON string = `{
                 },
                 "response_code": {
                     "type": "integer",
-                    "description": " The HTTP status code to use in the redirect response. The default response\n code is MOVED_PERMANENTLY (301).\n\nExample: - 303-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
+                    "description": " The HTTP status code to use in the redirect response. The default response\n code is MOVED_PERMANENTLY (301).\n\nExample: - \"303\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
                     "title": "response_code",
                     "format": "int64",
                     "x-displayname": "Response Code",
+                    "x-ves-example": "303",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "599"
                     }
@@ -6235,9 +6344,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -6253,9 +6363,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -6390,19 +6501,21 @@ var APISwaggerJSON string = `{
                 },
                 "allow_headers": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-allow-headers header",
+                    "description": " Specifies the content for the access-control-allow-headers header\n\nExample: - \"value\"-",
                     "title": "allow_headers",
-                    "x-displayname": "Allow Headers"
+                    "x-displayname": "Allow Headers",
+                    "x-ves-example": "value"
                 },
                 "allow_methods": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-allow-methods header",
+                    "description": " Specifies the content for the access-control-allow-methods header\n\nExample: - \"GET\"-",
                     "title": "allow_methods",
-                    "x-displayname": "Allow Methods"
+                    "x-displayname": "Allow Methods",
+                    "x-ves-example": "GET"
                 },
                 "allow_origin": {
                     "type": "array",
-                    "description": " Specifies the origins that will be allowed to do CORS requests.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the origins that will be allowed to do CORS requests.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "allow_origin",
                     "maxItems": 128,
                     "items": {
@@ -6411,6 +6524,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 256
                     },
                     "x-displayname": "Allow Origin",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_len": "256",
                         "ves.io.schema.rules.repeated.items.string.min_len": "1",
@@ -6420,7 +6534,7 @@ var APISwaggerJSON string = `{
                 },
                 "allow_origin_regex": {
                     "type": "array",
-                    "description": " Specifies regex patterns that match allowed origins.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies regex patterns that match allowed origins.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "allow_origin_regex",
                     "maxItems": 16,
                     "items": {
@@ -6429,6 +6543,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 256
                     },
                     "x-displayname": "Allow Origin Regex",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
                         "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
@@ -6446,16 +6561,18 @@ var APISwaggerJSON string = `{
                 },
                 "expose_headers": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-expose-headers header",
+                    "description": " Specifies the content for the access-control-expose-headers header\n\nExample: - \"value\"-",
                     "title": "expose_headers",
-                    "x-displayname": "Expose Headers"
+                    "x-displayname": "Expose Headers",
+                    "x-ves-example": "value"
                 },
                 "maximum_age": {
                     "type": "integer",
-                    "description": " Specifies the content for the access-control-max-age header in seconds.\n This indicates the maximum number of seconds the results can be cached\n A value of -1 will disable caching.\n Maximum permitted value is 86400 seconds (24 hours)\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 86400\n",
+                    "description": " Specifies the content for the access-control-max-age header in seconds.\n This indicates the maximum number of seconds the results can be cached\n A value of -1 will disable caching.\n Maximum permitted value is 86400 seconds (24 hours)\n\nExample: - \"-1\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 86400\n",
                     "title": "maximum_age",
                     "format": "int32",
                     "x-displayname": "Maximum Age",
+                    "x-ves-example": "-1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.int32.gte": "-1",
                         "ves.io.schema.rules.int32.lte": "86400"
@@ -6609,10 +6726,11 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the HTTP header.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Name of the HTTP header.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "name",
                     "maxLength": 256,
                     "x-displayname": "Name",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -6911,20 +7029,22 @@ var APISwaggerJSON string = `{
             "properties": {
                 "base_interval": {
                     "type": "integer",
-                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - 5-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n",
+                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - \"5\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "base_interval",
                     "format": "int64",
                     "x-displayname": "Base Retry Interval",
+                    "x-ves-example": "5",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gt": "0"
                     }
                 },
                 "max_interval": {
                     "type": "integer",
-                    "description": " Specifies the maximum interval between retries in milliseconds.\n This parameter is optional, but must be greater than or equal\n to the base_interval if set. The default is 10 times the base_interval.\n\nExample: - 60-",
+                    "description": " Specifies the maximum interval between retries in milliseconds.\n This parameter is optional, but must be greater than or equal\n to the base_interval if set. The default is 10 times the base_interval.\n\nExample: - \"60\"-",
                     "title": "max_interval",
                     "format": "int64",
-                    "x-displayname": "Maximum Retry Interval"
+                    "x-displayname": "Maximum Retry Interval",
+                    "x-ves-example": "60"
                 }
             }
         },
@@ -6944,27 +7064,29 @@ var APISwaggerJSON string = `{
                 },
                 "num_retries": {
                     "type": "integer",
-                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - 3-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
+                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - \"3\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
                     "title": "num_retries",
                     "format": "int64",
                     "x-displayname": "Number of Retries",
+                    "x-ves-example": "3",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "8"
                     }
                 },
                 "per_try_timeout": {
                     "type": "integer",
-                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
+                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
                     "title": "per_try_timeout",
                     "format": "int64",
                     "x-displayname": "Per Try Timeout",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "600000"
                     }
                 },
                 "retriable_status_codes": {
                     "type": "array",
-                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - 403-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - \"403\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Retriable status Code",
                     "maxItems": 16,
                     "items": {
@@ -6972,6 +7094,7 @@ var APISwaggerJSON string = `{
                         "format": "int64"
                     },
                     "x-displayname": "Status Code to Retry",
+                    "x-ves-example": "403",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -7297,11 +7420,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate_url": {
                     "type": "string",
-                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "certificate_url",
                     "minLength": 1,
                     "maxLength": 131072,
                     "x-displayname": "Certificate URL",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -7318,9 +7442,10 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Description for the certificate",
+                    "description": " Description for the certificate\n\nExample: - \"Certificate used in production environment\"-",
                     "title": "description",
-                    "x-displayname": "Description"
+                    "x-displayname": "Description",
+                    "x-ves-example": "Certificate used in production environment"
                 },
                 "disable_ocsp_stapling": {
                     "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
@@ -7874,12 +7999,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cipher_suites": {
                     "type": "array",
-                    "description": " The TLS listener will only support the specified cipher list.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " The TLS listener will only support the specified cipher list.\n\nExample: - \"TLS_AES_128_GCM_SHA256\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "cipher_suites",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Cipher Suites",
+                    "x-ves-example": "TLS_AES_128_GCM_SHA256",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -7921,9 +8047,10 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint_subsets": {
                     "type": "object",
-                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
+                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
                     "title": "Origin Servers Subset",
                     "x-displayname": "Origin Servers Subsets",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "16"
                     }
@@ -7940,20 +8067,22 @@ var APISwaggerJSON string = `{
                 },
                 "priority": {
                     "type": "integer",
-                    "description": " Priority of this origin pool, valid only with multiple origin pools.\n Value of 0 will make the pool as lowest priority origin pool\n Priority of 1 means highest priority and is considered active.\n When active origin pool is not available, lower priority origin pools are\n made active as per the increasing priority.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Priority of this origin pool, valid only with multiple origin pools.\n Value of 0 will make the pool as lowest priority origin pool\n Priority of 1 means highest priority and is considered active.\n When active origin pool is not available, lower priority origin pools are\n made active as per the increasing priority.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Priority",
                     "format": "int64",
                     "x-displayname": "Priority",
+                    "x-ves-example": "1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
                 },
                 "weight": {
                     "type": "integer",
-                    "description": " Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool",
+                    "description": " Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool\n\nExample: - \"1\"-",
                     "title": "Weight",
                     "format": "int64",
-                    "x-displayname": "Weight"
+                    "x-displayname": "Weight",
+                    "x-ves-example": "1"
                 }
             }
         },
@@ -8045,9 +8174,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " Use given IP address as VIP on the site\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": " Use given IP address as VIP on the site\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP address on the site",
                     "x-displayname": "IP Address",
+                    "x-ves-example": "8.8.8.8",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
@@ -8916,10 +9046,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "cookie_expiry",
                     "format": "int64",
                     "x-displayname": "Cookie Expiration Period",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "86400"
@@ -8970,10 +9101,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "content_length": {
                     "type": "integer",
-                    "description": " Minimum response length, in bytes, which will trigger compression. The default value is 30.\n\nExample: - 100-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 30\n",
+                    "description": " Minimum response length, in bytes, which will trigger compression. The default value is 30.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 30\n",
                     "title": "content_length",
                     "format": "int64",
                     "x-displayname": "Content Length",
+                    "x-ves-example": "100",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "30"
                     }
@@ -9050,12 +9182,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cache_prefix": {
                     "type": "string",
-                    "description": "x-displayName: \"Cache Identifier\"\nIdentifier for data store to be used by JavaScript. Data store can be\nKeyValue store referred by script.",
+                    "description": "x-displayName: \"Cache Identifier\"\nx-example: \"value\"\nIdentifier for data store to be used by JavaScript. Data store can be\nKeyValue store referred by script.",
                     "title": "CachePrefix"
                 },
                 "custom_script_url": {
                     "type": "string",
-                    "description": "x-displayName: \"Path of Javascript\"\nURL of JavaScript that gets executed",
+                    "description": "x-displayName: \"Path of Javascript\"\nx-example: \"value\"\nURL of JavaScript that gets executed",
                     "title": "ScriptURL"
                 },
                 "script_config": {
@@ -9074,10 +9206,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "cookie_expiry",
                     "format": "int64",
                     "x-displayname": "Cookie Expiration Period",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "86400"
@@ -9097,10 +9230,11 @@ var APISwaggerJSON string = `{
                 },
                 "js_script_delay": {
                     "type": "integer",
-                    "description": " Delay introduced by Javascript, in milliseconds.\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1000\n  ves.io.schema.rules.uint32.lte: 60000\n",
+                    "description": " Delay introduced by Javascript, in milliseconds.\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1000\n  ves.io.schema.rules.uint32.lte: 60000\n",
                     "title": "js_script_delay",
                     "format": "int64",
                     "x-displayname": "Javascript Delay",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1000",
                         "ves.io.schema.rules.uint32.lte": "60000"

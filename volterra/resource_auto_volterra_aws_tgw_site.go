@@ -403,6 +403,66 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
+			"direct_connect_disabled": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"direct_connect_with_hosted_vifs": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"vifs": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
+
+			"direct_connect_with_manual_gw": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"direct_connect_with_standard_vifs": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"local_control_plane": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_local_control_plane": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"no_local_control_plane": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"log_receiver": {
 
 				Type:     schema.TypeSet,
@@ -452,11 +512,6 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 						},
 					},
 				},
-			},
-
-			"site_to_site_tunnel_ip": {
-				Type:     schema.TypeString,
-				Optional: true,
 			},
 
 			"sw": {
@@ -1547,6 +1602,18 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 								},
 							},
 						},
+
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -2132,6 +2199,110 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//direct_connect_choice
+
+	directConnectChoiceTypeFound := false
+
+	if v, ok := d.GetOk("direct_connect_disabled"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+
+		if v.(bool) {
+			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DirectConnectDisabled{}
+			directConnectChoiceInt.DirectConnectDisabled = &ves_io_schema.Empty{}
+			createSpec.DirectConnectChoice = directConnectChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("direct_connect_with_hosted_vifs"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+		directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DirectConnectWithHostedVifs{}
+		directConnectChoiceInt.DirectConnectWithHostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+		createSpec.DirectConnectChoice = directConnectChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				directConnectChoiceInt.DirectConnectWithHostedVifs.Vifs = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("direct_connect_with_manual_gw"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+
+		if v.(bool) {
+			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DirectConnectWithManualGw{}
+			directConnectChoiceInt.DirectConnectWithManualGw = &ves_io_schema.Empty{}
+			createSpec.DirectConnectChoice = directConnectChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("direct_connect_with_standard_vifs"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+
+		if v.(bool) {
+			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DirectConnectWithStandardVifs{}
+			directConnectChoiceInt.DirectConnectWithStandardVifs = &ves_io_schema.Empty{}
+			createSpec.DirectConnectChoice = directConnectChoiceInt
+		}
+
+	}
+
+	//local_control_plane
+	if v, ok := d.GetOk("local_control_plane"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		localControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+		createSpec.LocalControlPlane = localControlPlane
+		for _, set := range sl {
+			localControlPlaneMapStrToI := set.(map[string]interface{})
+
+			localControlPlaneChoiceTypeFound := false
+
+			if v, ok := localControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+				localControlPlaneChoiceTypeFound = true
+
+				if v.(bool) {
+					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+					localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+					localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+				}
+
+			}
+
+			if v, ok := localControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+				localControlPlaneChoiceTypeFound = true
+
+				if v.(bool) {
+					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+					localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+					localControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
 	//logs_receiver_choice
 
 	logsReceiverChoiceTypeFound := false
@@ -2216,14 +2387,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 			}
 
 		}
-
-	}
-
-	//site_to_site_tunnel_ip
-	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
-
-		createSpec.SiteToSiteTunnelIp =
-			v.(string)
 
 	}
 
@@ -3767,6 +3930,32 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := vnConfigMapStrToI["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -3982,6 +4171,69 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	directConnectChoiceTypeFound := false
+
+	if v, ok := d.GetOk("direct_connect_disabled"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+
+		if v.(bool) {
+			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DirectConnectDisabled{}
+			directConnectChoiceInt.DirectConnectDisabled = &ves_io_schema.Empty{}
+			updateSpec.DirectConnectChoice = directConnectChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("direct_connect_with_hosted_vifs"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+		directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DirectConnectWithHostedVifs{}
+		directConnectChoiceInt.DirectConnectWithHostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+		updateSpec.DirectConnectChoice = directConnectChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				directConnectChoiceInt.DirectConnectWithHostedVifs.Vifs = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("direct_connect_with_manual_gw"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+
+		if v.(bool) {
+			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DirectConnectWithManualGw{}
+			directConnectChoiceInt.DirectConnectWithManualGw = &ves_io_schema.Empty{}
+			updateSpec.DirectConnectChoice = directConnectChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("direct_connect_with_standard_vifs"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+
+		if v.(bool) {
+			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DirectConnectWithStandardVifs{}
+			directConnectChoiceInt.DirectConnectWithStandardVifs = &ves_io_schema.Empty{}
+			updateSpec.DirectConnectChoice = directConnectChoiceInt
+		}
+
+	}
+
 	logsReceiverChoiceTypeFound := false
 
 	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
@@ -4026,13 +4278,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
-
-	}
-
-	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
-
-		updateSpec.SiteToSiteTunnelIp =
-			v.(string)
 
 	}
 
@@ -5522,6 +5767,32 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := vnConfigMapStrToI["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 				}
 
 			}

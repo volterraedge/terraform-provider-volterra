@@ -492,6 +492,7 @@ type SNATPoolType struct {
 	// List of IPv4 Prefixes
 	//
 	// x-displayName: "List of IPv4 Prefixes"
+	// x-example: "10.0.0.0/24"
 	// x-required
 	// List of IPv4 prefixes used as SNAT pool
 	Ipv4Prefixes []string `protobuf:"bytes,1,rep,name=ipv4_prefixes,json=ipv4Prefixes,proto3" json:"ipv4_prefixes,omitempty"`
@@ -1028,6 +1029,7 @@ type StaticRouteViewType struct {
 	// IP Prefixes
 	//
 	// x-displayName: "IP Prefixes"
+	// x-example: "10.0.0.0/24"
 	// x-required
 	// List of route prefixes that have common next hop and attributes
 	IpPrefixes []string `protobuf:"bytes,1,rep,name=ip_prefixes,json=ipPrefixes,proto3" json:"ip_prefixes,omitempty"`

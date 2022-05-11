@@ -431,6 +431,17 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_Scim:
+		if fv, exists := v.FldValidators["choice.scim"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Scim).Scim
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("scim"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

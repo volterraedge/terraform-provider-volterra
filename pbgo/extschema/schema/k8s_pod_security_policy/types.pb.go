@@ -36,6 +36,7 @@ type CapabilityListType struct {
 	// Capability List
 	//
 	// x-displayName: "Capability List"
+	// x-example: "value"
 	// x-required
 	// List of capabilities that docker container has.
 	Capabilities []string `protobuf:"bytes,1,rep,name=capabilities,proto3" json:"capabilities,omitempty"`
@@ -84,6 +85,7 @@ type HostPathType struct {
 	// Host Path Prefix
 	//
 	// x-displayName: "Host Path Prefix"
+	// x-example: "value"
 	// x-required
 	// Host path prefix is the path prefix that the host volume must match. It does not support *.
 	PathPrefix string `protobuf:"bytes,1,opt,name=path_prefix,json=pathPrefix,proto3" json:"path_prefix,omitempty"`
@@ -136,6 +138,9 @@ func (m *HostPathType) GetReadOnly() bool {
 	return false
 }
 
+// IDRangeType
+//
+// x-displayName: "IDRangeType"
 type IDRangeType struct {
 	// Starting ID
 	//
@@ -263,12 +268,14 @@ type RuntimeClassStrategyOptions struct {
 	// Allowed Runtime Classes
 	//
 	// x-displayName: "Allowed Runtime Classes"
+	// x-example: "value"
 	// x-required
 	// List of allowed runtime class names
 	AllowedRuntimeClassNames []string `protobuf:"bytes,1,rep,name=allowed_runtime_class_names,json=allowedRuntimeClassNames,proto3" json:"allowed_runtime_class_names,omitempty"`
 	// Default Runtime Class
 	//
 	// x-displayName: "Default Runtime Class"
+	// x-example: "value"
 	// description
 	DefaultRuntimeClassName string `protobuf:"bytes,2,opt,name=default_runtime_class_name,json=defaultRuntimeClassName,proto3" json:"default_runtime_class_name,omitempty"`
 }
@@ -468,11 +475,13 @@ type PodSecurityPolicySpecType struct {
 	// Volumes
 	//
 	// x-displayName: "Volume"
+	// x-example: "gitRepo"
 	// Allow List of volume plugins. Empty no volumes are allowed
 	Volumes []string `protobuf:"bytes,13,rep,name=volumes,proto3" json:"volumes,omitempty"`
 	// Allowed Flex Volumes
 	//
 	// x-displayName: "Allowed Flex Volumes"
+	// x-example: "value"
 	// Restrict list of Flex volumes, default all volumes are allowed
 	AllowedFlexVolumes []string `protobuf:"bytes,14,rep,name=allowed_flex_volumes,json=allowedFlexVolumes,proto3" json:"allowed_flex_volumes,omitempty"`
 	// Allowed Host Paths
@@ -483,6 +492,7 @@ type PodSecurityPolicySpecType struct {
 	// Allowed Proc Mounts
 	//
 	// x-displayName: "Allowed Proc Mounts"
+	// x-example: "value"
 	// allowed list of proc mounts, empty list allows default proc mounts.
 	AllowedProcMounts []string `protobuf:"bytes,16,rep,name=allowed_proc_mounts,json=allowedProcMounts,proto3" json:"allowed_proc_mounts,omitempty"`
 	// Read Only Root Filesystem
@@ -493,6 +503,7 @@ type PodSecurityPolicySpecType struct {
 	// Allowed CSI drivers
 	//
 	// x-displayName: "Allowed CSI drivers"
+	// x-example: "value"
 	// Restrict the available CSI drivers for POD, default all drivers are available.
 	AllowedCsiDrivers []string `protobuf:"bytes,18,rep,name=allowed_csi_drivers,json=allowedCsiDrivers,proto3" json:"allowed_csi_drivers,omitempty"`
 	// Host Network
@@ -519,11 +530,13 @@ type PodSecurityPolicySpecType struct {
 	// Allowed Unsafe Sysctls
 	//
 	// x-displayName: "Allowed Unsafe Sysctls"
+	// x-example: "value"
 	// allowed list of unsafe sysctls, empty list allows none. supports prefix reg-ex
 	AllowedUnsafeSysctls []string `protobuf:"bytes,23,rep,name=allowed_unsafe_sysctls,json=allowedUnsafeSysctls,proto3" json:"allowed_unsafe_sysctls,omitempty"`
 	// Forbidden Sysctls
 	//
 	// x-displayName: "Forbidden Sysctls"
+	// x-example: "value"
 	// Forbidden list of sysctls, empty list forbids none. supports prefix reg-ex
 	ForbiddenSysctls []string `protobuf:"bytes,24,rep,name=forbidden_sysctls,json=forbiddenSysctls,proto3" json:"forbidden_sysctls,omitempty"`
 	// Runs As User

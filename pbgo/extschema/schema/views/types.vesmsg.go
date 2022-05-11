@@ -877,6 +877,145 @@ func GlobalConnectorTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *LinkRefType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LinkRefType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LinkRefType) DeepCopy() *LinkRefType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LinkRefType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LinkRefType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LinkRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LinkRefTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLinkRefType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLinkRefType) HrefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for href")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLinkRefType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLinkRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LinkRefType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LinkRefType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["href"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("href"))
+		if err := fv(ctx, m.GetHref(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLinkRefTypeValidator = func() *ValidateLinkRefType {
+	v := &ValidateLinkRefType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHref := v.HrefValidationRuleHandler
+	rulesHref := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhHref(rulesHref)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LinkRefType.href: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["href"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LinkRefType.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func LinkRefTypeValidator() db.Validator {
+	return DefaultLinkRefTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ObjectRefType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

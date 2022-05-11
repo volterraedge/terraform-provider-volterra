@@ -2822,9 +2822,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -2840,9 +2841,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3375,6 +3377,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3400,7 +3403,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -3834,11 +3838,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate_url": {
                     "type": "string",
-                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "certificate_url",
                     "minLength": 1,
                     "maxLength": 131072,
                     "x-displayname": "Certificate URL",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3855,9 +3860,10 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Description for the certificate",
+                    "description": " Description for the certificate\n\nExample: - \"Certificate used in production environment\"-",
                     "title": "description",
-                    "x-displayname": "Description"
+                    "x-displayname": "Description",
+                    "x-ves-example": "Certificate used in production environment"
                 },
                 "disable_ocsp_stapling": {
                     "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
@@ -3893,12 +3899,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cipher_suites": {
                     "type": "array",
-                    "description": " The following list specifies the supported cipher suite\n   TLS_AES_128_GCM_SHA256\n   TLS_AES_256_GCM_SHA384\n   TLS_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_128_CBC_SHA\n   TLS_RSA_WITH_AES_128_GCM_SHA256\n   TLS_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_256_GCM_SHA384\n\n If not specified, the default list:\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n will be used.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.in: [\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " The following list specifies the supported cipher suite\n   TLS_AES_128_GCM_SHA256\n   TLS_AES_256_GCM_SHA384\n   TLS_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_128_CBC_SHA\n   TLS_RSA_WITH_AES_128_GCM_SHA256\n   TLS_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_256_GCM_SHA384\n\n If not specified, the default list:\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n will be used.\n\nExample: - \"TLS_AES_128_GCM_SHA256\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.in: [\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "cipher_suites",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Cipher Suites",
+                    "x-ves-example": "TLS_AES_128_GCM_SHA256",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.in": "[\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3964,10 +3971,11 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL for a trust store\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
                     "x-displayname": "Trusted CA",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -3975,12 +3983,13 @@ var APISwaggerJSON string = `{
                 },
                 "verify_subject_alt_names": {
                     "type": "array",
-                    "description": " List of acceptable Subject Alt Names/CN in the peer's certificate.\n When skip_hostname_verification is false and verify_subject_alt_names is empty,\n the hostname of the peer will be used for matching against SAN/CN of peer's certificate",
+                    "description": " List of acceptable Subject Alt Names/CN in the peer's certificate.\n When skip_hostname_verification is false and verify_subject_alt_names is empty,\n the hostname of the peer will be used for matching against SAN/CN of peer's certificate\n\nExample: - \"value\"-",
                     "title": "verify_subject_alt_names",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "List of SANs for matching"
+                    "x-displayname": "List of SANs for matching",
+                    "x-ves-example": "value"
                 }
             }
         },

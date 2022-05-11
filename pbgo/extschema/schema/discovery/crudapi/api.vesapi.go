@@ -3039,6 +3039,8 @@ var APISwaggerJSON string = `{
         },
         "discoveryK8SDelegationType": {
             "type": "object",
+            "title": "K8SDelegationType",
+            "x-displayname": "K8SDelegationType",
             "x-ves-proto-message": "ves.io.schema.discovery.K8SDelegationType",
             "properties": {
                 "dns_mode": {
@@ -3053,10 +3055,11 @@ var APISwaggerJSON string = `{
                 },
                 "subdomain": {
                     "type": "string",
-                    "description": " The DNS subdomain for which Volterra will respond to DNS queries.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " The DNS subdomain for which Volterra will respond to DNS queries.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "subdomain",
                     "maxLength": 256,
                     "x-displayname": "Subdomain",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3096,14 +3099,17 @@ var APISwaggerJSON string = `{
         },
         "discoveryK8SPublishType": {
             "type": "object",
+            "title": "K8SPublishType",
+            "x-displayname": "K8SPublishType",
             "x-ves-proto-message": "ves.io.schema.discovery.K8SPublishType",
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace where the service/endpoints need to be created if it's not included in the domain.\n The external K8S administrator needs to ensure that the namespace exists.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " The namespace where the service/endpoints need to be created if it's not included in the domain.\n The external K8S administrator needs to ensure that the namespace exists.\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "namespace",
                     "maxLength": 64,
                     "x-displayname": "Default Namespace",
+                    "x-ves-example": "default",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3114,8 +3120,9 @@ var APISwaggerJSON string = `{
         },
         "discoveryK8SVipDiscoveryInfoType": {
             "type": "object",
-            "description": "x-displayName: \"VIP Publish Configurations\nK8S Configuration to publish VIPs",
+            "description": "K8S Configuration to publish VIPs",
             "title": "K8S VIP Discovery Info Type",
+            "x-displayname": "VIP Publish Configurations",
             "x-ves-oneof-field-publish_choice": "[\"disable\",\"dns_delegation\",\"publish\",\"publish_fqdns\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.K8SVipDiscoveryInfoType",
             "properties": {
@@ -3318,9 +3325,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate": {
                     "type": "string",
-                    "description": " Client  certificate is PEM-encoded certificate or certificate-chain.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " Client  certificate is PEM-encoded certificate or certificate-chain.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "maxLength": 131072,
                     "x-displayname": "Client Certificate",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.uri_ref": "true"
@@ -3346,10 +3354,11 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL or value for trusted Server CA certificate or certificate chain\n Certificates in PEM format including the PEM headers.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " The URL or value for trusted Server CA certificate or certificate chain\n Certificates in PEM format including the PEM headers.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Server CA certificates",
                     "maxLength": 131072,
                     "x-displayname": "Server CA Certificates",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.uri_ref": "true"
@@ -3487,9 +3496,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -3505,9 +3515,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },

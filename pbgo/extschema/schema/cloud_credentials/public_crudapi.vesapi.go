@@ -2164,10 +2164,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "access_key": {
                     "type": "string",
-                    "description": " Access key ID for your AWS account\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "description": " Access key ID for your AWS account\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "AWS Access Key ID",
                     "maxLength": 128,
                     "x-displayname": "Access Key ID",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2196,10 +2197,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate_url": {
                     "type": "string",
-                    "description": " URL for Client Certificate in '.pfx' or '.p12' whose certificate is linked to service principal object\n Certificate URL can contain client certificate in string:///\u003cBase64 of certificate\u003e format.\n Here \u003cBase64 of certificate\u003e is base64 of '.pfx' or '.p12' binary file\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " URL for Client Certificate in '.pfx' or '.p12' whose certificate is linked to service principal object\n Certificate URL can contain client certificate in string:///\u003cBase64 of certificate\u003e format.\n Here \u003cBase64 of certificate\u003e is base64 of '.pfx' or '.p12' binary file\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Azure client certificate",
                     "maxLength": 8192,
                     "x-displayname": "URL for Client Certificate",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2209,10 +2211,11 @@ var APISwaggerJSON string = `{
                 },
                 "client_id": {
                     "type": "string",
-                    "description": " Client ID for your Azure service principal\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Client ID for your Azure service principal\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Azure Client ID",
                     "maxLength": 64,
                     "x-displayname": "Client ID",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2231,10 +2234,11 @@ var APISwaggerJSON string = `{
                 },
                 "subscription_id": {
                     "type": "string",
-                    "description": " Subscription ID for your Azure service principal\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Subscription ID for your Azure service principal\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Azure Subscription ID",
                     "maxLength": 64,
                     "x-displayname": "Subscription ID",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2243,10 +2247,11 @@ var APISwaggerJSON string = `{
                 },
                 "tenant_id": {
                     "type": "string",
-                    "description": " Tenant ID for your Azure service principal\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Tenant ID for your Azure service principal\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Azure Tenant ID",
                     "maxLength": 64,
                     "x-displayname": "Tenant ID",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2265,10 +2270,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "client_id": {
                     "type": "string",
-                    "description": " Client ID for your Azure service principal\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Client ID for your Azure service principal\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Azure Client ID",
                     "maxLength": 64,
                     "x-displayname": "Client ID",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2287,10 +2293,11 @@ var APISwaggerJSON string = `{
                 },
                 "subscription_id": {
                     "type": "string",
-                    "description": " Subscription ID for your Azure service principal\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Subscription ID for your Azure service principal\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Azure Subscription ID",
                     "maxLength": 64,
                     "x-displayname": "Subscription ID",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2299,10 +2306,11 @@ var APISwaggerJSON string = `{
                 },
                 "tenant_id": {
                     "type": "string",
-                    "description": " Tenant ID for your Azure service principal\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Tenant ID for your Azure service principal\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Azure Tenant ID",
                     "maxLength": 64,
                     "x-displayname": "Tenant ID",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2859,9 +2867,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -2877,9 +2886,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3300,6 +3310,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3325,7 +3336,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",

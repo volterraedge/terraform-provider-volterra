@@ -2170,20 +2170,22 @@ var APISwaggerJSON string = `{
                 },
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.\n This will act as an expiry duration on the client side after which client will not  be setting the\n cookie as part of the request.\n Default cookie expiry is 3600 seconds\n\nExample: - 5000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.\n This will act as an expiry duration on the client side after which client will not  be setting the\n cookie as part of the request.\n Default cookie expiry is 3600 seconds\n\nExample: - \"5000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "cookie expiry",
                     "format": "int64",
                     "x-displayname": "Cookie Expiry duration",
+                    "x-ves-example": "5000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "86400"
                     }
                 },
                 "cookie_refresh_interval": {
                     "type": "integer",
-                    "description": " Specifies in seconds refresh interval for session cookie.\n This is used to keep the active user active and reduce re-login.\n When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,\n re-issue a cookie with new expiry and with the same original session expiry.\n Default refresh interval is 3000 seconds\n\nExample: - 3600-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " Specifies in seconds refresh interval for session cookie.\n This is used to keep the active user active and reduce re-login.\n When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,\n re-issue a cookie with new expiry and with the same original session expiry.\n Default refresh interval is 3000 seconds\n\nExample: - \"3600\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "cookie refresh interval",
                     "format": "int64",
                     "x-displayname": "Cookie Refresh Interval",
+                    "x-ves-example": "3600",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "86400"
                     }
@@ -2196,10 +2198,11 @@ var APISwaggerJSON string = `{
                 },
                 "session_expiry": {
                     "type": "integer",
-                    "description": " specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.\n Default session expiry is 86400 seconds(24 hours).\n\nExample: - 36000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1296000\n",
+                    "description": " specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.\n Default session expiry is 86400 seconds(24 hours).\n\nExample: - \"36000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1296000\n",
                     "title": "session expiry",
                     "format": "int64",
                     "x-displayname": "Session Expiry duration",
+                    "x-ves-example": "36000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "1296000"
                     }
@@ -2383,9 +2386,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
                     "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider"
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
@@ -2401,9 +2405,10 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
                     "title": "Store Provider",
-                    "x-displayname": "Store Provider"
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -2538,19 +2543,21 @@ var APISwaggerJSON string = `{
                 },
                 "allow_headers": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-allow-headers header",
+                    "description": " Specifies the content for the access-control-allow-headers header\n\nExample: - \"value\"-",
                     "title": "allow_headers",
-                    "x-displayname": "Allow Headers"
+                    "x-displayname": "Allow Headers",
+                    "x-ves-example": "value"
                 },
                 "allow_methods": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-allow-methods header",
+                    "description": " Specifies the content for the access-control-allow-methods header\n\nExample: - \"GET\"-",
                     "title": "allow_methods",
-                    "x-displayname": "Allow Methods"
+                    "x-displayname": "Allow Methods",
+                    "x-ves-example": "GET"
                 },
                 "allow_origin": {
                     "type": "array",
-                    "description": " Specifies the origins that will be allowed to do CORS requests.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the origins that will be allowed to do CORS requests.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "allow_origin",
                     "maxItems": 128,
                     "items": {
@@ -2559,6 +2566,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 256
                     },
                     "x-displayname": "Allow Origin",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_len": "256",
                         "ves.io.schema.rules.repeated.items.string.min_len": "1",
@@ -2568,7 +2576,7 @@ var APISwaggerJSON string = `{
                 },
                 "allow_origin_regex": {
                     "type": "array",
-                    "description": " Specifies regex patterns that match allowed origins.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies regex patterns that match allowed origins.\n An origin is allowed if either allow_origin or allow_origin_regex match\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "allow_origin_regex",
                     "maxItems": 16,
                     "items": {
@@ -2577,6 +2585,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 256
                     },
                     "x-displayname": "Allow Origin Regex",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
                         "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
@@ -2594,16 +2603,18 @@ var APISwaggerJSON string = `{
                 },
                 "expose_headers": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-expose-headers header",
+                    "description": " Specifies the content for the access-control-expose-headers header\n\nExample: - \"value\"-",
                     "title": "expose_headers",
-                    "x-displayname": "Expose Headers"
+                    "x-displayname": "Expose Headers",
+                    "x-ves-example": "value"
                 },
                 "maximum_age": {
                     "type": "integer",
-                    "description": " Specifies the content for the access-control-max-age header in seconds.\n This indicates the maximum number of seconds the results can be cached\n A value of -1 will disable caching.\n Maximum permitted value is 86400 seconds (24 hours)\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 86400\n",
+                    "description": " Specifies the content for the access-control-max-age header in seconds.\n This indicates the maximum number of seconds the results can be cached\n A value of -1 will disable caching.\n Maximum permitted value is 86400 seconds (24 hours)\n\nExample: - \"-1\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 86400\n",
                     "title": "maximum_age",
                     "format": "int32",
                     "x-displayname": "Maximum Age",
+                    "x-ves-example": "-1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.int32.gte": "-1",
                         "ves.io.schema.rules.int32.lte": "86400"
@@ -2803,10 +2814,11 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the HTTP header.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Name of the HTTP header.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "name",
                     "maxLength": 256,
                     "x-displayname": "Name",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3072,6 +3084,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3097,7 +3110,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -3128,20 +3142,22 @@ var APISwaggerJSON string = `{
             "properties": {
                 "base_interval": {
                     "type": "integer",
-                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - 5-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n",
+                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - \"5\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n",
                     "title": "base_interval",
                     "format": "int64",
                     "x-displayname": "Base Retry Interval",
+                    "x-ves-example": "5",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gt": "0"
                     }
                 },
                 "max_interval": {
                     "type": "integer",
-                    "description": " Specifies the maximum interval between retries in milliseconds.\n This parameter is optional, but must be greater than or equal\n to the base_interval if set. The default is 10 times the base_interval.\n\nExample: - 60-",
+                    "description": " Specifies the maximum interval between retries in milliseconds.\n This parameter is optional, but must be greater than or equal\n to the base_interval if set. The default is 10 times the base_interval.\n\nExample: - \"60\"-",
                     "title": "max_interval",
                     "format": "int64",
-                    "x-displayname": "Maximum Retry Interval"
+                    "x-displayname": "Maximum Retry Interval",
+                    "x-ves-example": "60"
                 }
             }
         },
@@ -3161,27 +3177,29 @@ var APISwaggerJSON string = `{
                 },
                 "num_retries": {
                     "type": "integer",
-                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - 3-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
+                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - \"3\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 8\n",
                     "title": "num_retries",
                     "format": "int64",
                     "x-displayname": "Number of Retries",
+                    "x-ves-example": "3",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "8"
                     }
                 },
                 "per_try_timeout": {
                     "type": "integer",
-                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
+                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
                     "title": "per_try_timeout",
                     "format": "int64",
                     "x-displayname": "Per Try Timeout",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "600000"
                     }
                 },
                 "retriable_status_codes": {
                     "type": "array",
-                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - 403-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - \"403\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Retriable status Code",
                     "maxItems": 16,
                     "items": {
@@ -3189,6 +3207,7 @@ var APISwaggerJSON string = `{
                         "format": "int64"
                     },
                     "x-displayname": "Status Code to Retry",
+                    "x-ves-example": "403",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3597,11 +3616,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate_url": {
                     "type": "string",
-                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "certificate_url",
                     "minLength": 1,
                     "maxLength": 131072,
                     "x-displayname": "Certificate URL",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3618,9 +3638,10 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Description for the certificate",
+                    "description": " Description for the certificate\n\nExample: - \"Certificate used in production environment\"-",
                     "title": "description",
-                    "x-displayname": "Description"
+                    "x-displayname": "Description",
+                    "x-ves-example": "Certificate used in production environment"
                 },
                 "disable_ocsp_stapling": {
                     "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
@@ -3768,12 +3789,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cipher_suites": {
                     "type": "array",
-                    "description": " The following list specifies the supported cipher suite\n   TLS_AES_128_GCM_SHA256\n   TLS_AES_256_GCM_SHA384\n   TLS_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_128_CBC_SHA\n   TLS_RSA_WITH_AES_128_GCM_SHA256\n   TLS_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_256_GCM_SHA384\n\n If not specified, the default list:\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n will be used.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.in: [\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " The following list specifies the supported cipher suite\n   TLS_AES_128_GCM_SHA256\n   TLS_AES_256_GCM_SHA384\n   TLS_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_128_CBC_SHA\n   TLS_RSA_WITH_AES_128_GCM_SHA256\n   TLS_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_256_GCM_SHA384\n\n If not specified, the default list:\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n will be used.\n\nExample: - \"TLS_AES_128_GCM_SHA256\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.in: [\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "cipher_suites",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Cipher Suites",
+                    "x-ves-example": "TLS_AES_128_GCM_SHA256",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.in": "[\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3839,10 +3861,11 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL for a trust store\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
                     "x-displayname": "Trusted CA",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -3850,12 +3873,13 @@ var APISwaggerJSON string = `{
                 },
                 "verify_subject_alt_names": {
                     "type": "array",
-                    "description": " List of acceptable Subject Alt Names/CN in the peer's certificate.\n When skip_hostname_verification is false and verify_subject_alt_names is empty,\n the hostname of the peer will be used for matching against SAN/CN of peer's certificate",
+                    "description": " List of acceptable Subject Alt Names/CN in the peer's certificate.\n When skip_hostname_verification is false and verify_subject_alt_names is empty,\n the hostname of the peer will be used for matching against SAN/CN of peer's certificate\n\nExample: - \"value\"-",
                     "title": "verify_subject_alt_names",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "List of SANs for matching"
+                    "x-displayname": "List of SANs for matching",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -5571,10 +5595,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "cookie_expiry",
                     "format": "int64",
                     "x-displayname": "Cookie Expiration Period",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "86400"
@@ -5652,10 +5677,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "content_length": {
                     "type": "integer",
-                    "description": " Minimum response length, in bytes, which will trigger compression. The default value is 30.\n\nExample: - 100-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 30\n",
+                    "description": " Minimum response length, in bytes, which will trigger compression. The default value is 30.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 30\n",
                     "title": "content_length",
                     "format": "int64",
                     "x-displayname": "Content Length",
+                    "x-ves-example": "100",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "30"
                     }
@@ -5928,15 +5954,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cache_prefix": {
                     "type": "string",
-                    "description": " Identifier for data store to be used by JavaScript. Data store can be\n KeyValue store referred by script.",
+                    "description": " Identifier for data store to be used by JavaScript. Data store can be\n KeyValue store referred by script.\n\nExample: - \"value\"-",
                     "title": "CachePrefix",
-                    "x-displayname": "Cache Identifier"
+                    "x-displayname": "Cache Identifier",
+                    "x-ves-example": "value"
                 },
                 "custom_script_url": {
                     "type": "string",
-                    "description": " URL of JavaScript that gets executed",
+                    "description": " URL of JavaScript that gets executed\n\nExample: - \"value\"-",
                     "title": "ScriptURL",
-                    "x-displayname": "Path of Javascript"
+                    "x-displayname": "Path of Javascript",
+                    "x-ves-example": "value"
                 },
                 "script_config": {
                     "type": "object",
@@ -5955,10 +5983,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "cookie_expiry",
                     "format": "int64",
                     "x-displayname": "Cookie Expiration Period",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "86400"
@@ -5978,10 +6007,11 @@ var APISwaggerJSON string = `{
                 },
                 "js_script_delay": {
                     "type": "integer",
-                    "description": " Delay introduced by Javascript, in milliseconds.\n\nExample: - 1000-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1000\n  ves.io.schema.rules.uint32.lte: 60000\n",
+                    "description": " Delay introduced by Javascript, in milliseconds.\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1000\n  ves.io.schema.rules.uint32.lte: 60000\n",
                     "title": "js_script_delay",
                     "format": "int64",
                     "x-displayname": "Javascript Delay",
+                    "x-ves-example": "1000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1000",
                         "ves.io.schema.rules.uint32.lte": "60000"
@@ -6216,6 +6246,11 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Application ID\"\nx-example: \"707a0c622df8414886a5ca71c46caf2f\"\nShape Bot Defense Application ID is used by shared instances.",
                     "title": "Application ID"
+                },
+                "blocking_pages": {
+                    "type": "object",
+                    "description": "x-displayName: \"Blocking Pages\"\nBlocking pages used by the Bot Defense Instance where the\nkey is an MD5 representation of the blocking page value.\nThe map entries are limited to the max number of protected endpoints.",
+                    "title": "Blocking Pages"
                 },
                 "instance": {
                     "type": "array",

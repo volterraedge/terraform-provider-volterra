@@ -2170,7 +2170,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "capabilities": {
                     "type": "array",
-                    "description": " List of capabilities that docker container has.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of capabilities that docker container has.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Capability List",
                     "minItems": 1,
                     "maxItems": 64,
@@ -2178,6 +2178,7 @@ var APISwaggerJSON string = `{
                         "type": "string"
                     },
                     "x-displayname": "Capability List",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2426,11 +2427,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "path_prefix": {
                     "type": "string",
-                    "description": " Host path prefix is the path prefix that the host volume must match. It does not support *.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " Host path prefix is the path prefix that the host volume must match. It does not support *.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Host Path Prefix",
                     "minLength": 1,
                     "maxLength": 128,
                     "x-displayname": "Host Path Prefix",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2449,6 +2451,8 @@ var APISwaggerJSON string = `{
         },
         "k8s_pod_security_policyIDRangeType": {
             "type": "object",
+            "title": "IDRangeType",
+            "x-displayname": "IDRangeType",
             "x-ves-proto-message": "ves.io.schema.k8s_pod_security_policy.IDRangeType",
             "properties": {
                 "max_id": {
@@ -2702,7 +2706,7 @@ var APISwaggerJSON string = `{
                 },
                 "allowed_csi_drivers": {
                     "type": "array",
-                    "description": " Restrict the available CSI drivers for POD, default all drivers are available.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Restrict the available CSI drivers for POD, default all drivers are available.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed CSI drivers",
                     "maxItems": 8,
                     "items": {
@@ -2711,6 +2715,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 64
                     },
                     "x-displayname": "Allowed CSI drivers",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "64",
                         "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
@@ -2720,7 +2725,7 @@ var APISwaggerJSON string = `{
                 },
                 "allowed_flex_volumes": {
                     "type": "array",
-                    "description": " Restrict list of Flex volumes, default all volumes are allowed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Restrict list of Flex volumes, default all volumes are allowed\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed Flex Volumes",
                     "maxItems": 8,
                     "items": {
@@ -2729,6 +2734,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 64
                     },
                     "x-displayname": "Allowed Flex Volumes",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "64",
                         "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
@@ -2752,13 +2758,14 @@ var APISwaggerJSON string = `{
                 },
                 "allowed_proc_mounts": {
                     "type": "array",
-                    "description": " allowed list of proc mounts, empty list allows default proc mounts.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " allowed list of proc mounts, empty list allows default proc mounts.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed Proc Mounts",
                     "maxItems": 8,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Allowed Proc Mounts",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "8",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2766,13 +2773,14 @@ var APISwaggerJSON string = `{
                 },
                 "allowed_unsafe_sysctls": {
                     "type": "array",
-                    "description": " allowed list of unsafe sysctls, empty list allows none. supports prefix reg-ex\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " allowed list of unsafe sysctls, empty list allows none. supports prefix reg-ex\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Allowed Unsafe Sysctls",
                     "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Allowed Unsafe Sysctls",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2799,13 +2807,14 @@ var APISwaggerJSON string = `{
                 },
                 "forbidden_sysctls": {
                     "type": "array",
-                    "description": " Forbidden list of sysctls, empty list forbids none. supports prefix reg-ex\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Forbidden list of sysctls, empty list forbids none. supports prefix reg-ex\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Forbidden Sysctls",
                     "maxItems": 16,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Forbidden Sysctls",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2936,7 +2945,7 @@ var APISwaggerJSON string = `{
                 },
                 "volumes": {
                     "type": "array",
-                    "description": " Allow List of volume plugins. Empty no volumes are allowed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Allow List of volume plugins. Empty no volumes are allowed\n\nExample: - \"gitRepo\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 64\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Volumes",
                     "maxItems": 8,
                     "items": {
@@ -2945,6 +2954,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 64
                     },
                     "x-displayname": "Volume",
+                    "x-ves-example": "gitRepo",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "64",
                         "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
@@ -3011,7 +3021,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "allowed_runtime_class_names": {
                     "type": "array",
-                    "description": "x-displayName: \"Allowed Runtime Classes\"\nx-required\nList of allowed runtime class names",
+                    "description": "x-displayName: \"Allowed Runtime Classes\"\nx-example: \"value\"\nx-required\nList of allowed runtime class names",
                     "title": "Allowed Runtime Classes",
                     "items": {
                         "type": "string"
@@ -3019,7 +3029,7 @@ var APISwaggerJSON string = `{
                 },
                 "default_runtime_class_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Default Runtime Class\"\ndescription",
+                    "description": "x-displayName: \"Default Runtime Class\"\nx-example: \"value\"\ndescription",
                     "title": "Default Runtime Class"
                 }
             }
@@ -3504,6 +3514,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3529,7 +3540,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",

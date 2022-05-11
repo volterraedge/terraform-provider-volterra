@@ -6634,7 +6634,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 											}
 
-
 											if v, ok := mitigationMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 												actionTypeTypeFound = true

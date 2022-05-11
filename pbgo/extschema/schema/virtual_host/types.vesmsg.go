@@ -8768,6 +8768,51 @@ func (v *ValidateShapeBotDefenseConfigType) TimeoutValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateShapeBotDefenseConfigType) BlockingPagesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for blocking_pages")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for blocking_pages")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for blocking_pages")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map blocking_pages")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items blocking_pages")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ShapeBotDefenseConfigType)
 	if !ok {
@@ -8795,6 +8840,14 @@ func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm int
 
 		vOpts := append(opts, db.WithValidateField("application_id"))
 		if err := fv(ctx, m.GetApplicationId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocking_pages"]; exists {
+		vOpts := append(opts, db.WithValidateField("blocking_pages"))
+		if err := fv(ctx, m.GetBlockingPages(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8859,6 +8912,20 @@ var DefaultShapeBotDefenseConfigTypeValidator = func() *ValidateShapeBotDefenseC
 		panic(errMsg)
 	}
 	v.FldValidators["timeout"] = vFn
+
+	vrhBlockingPages := v.BlockingPagesValidationRuleHandler
+	rulesBlockingPages := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len":   "32",
+		"ves.io.schema.rules.map.keys.string.min_len":   "32",
+		"ves.io.schema.rules.map.max_pairs":             "128",
+		"ves.io.schema.rules.map.values.string.max_len": "4096",
+	}
+	vFn, err = vrhBlockingPages(rulesBlockingPages)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotDefenseConfigType.blocking_pages: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocking_pages"] = vFn
 
 	v.FldValidators["api_auth_key"] = ves_io_schema.SecretTypeValidator().Validate
 

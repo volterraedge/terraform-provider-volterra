@@ -29,6 +29,7 @@ import (
 	ves_io_schema_fast_acl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
 	ves_io_schema_fast_acl_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
+	ves_io_schema_global_log_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver"
 	ves_io_schema_healthcheck "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
 	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
 	ves_io_schema_k8s_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster"
@@ -92,6 +93,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_fast_acl":                  resourceVolterraFastAcl(),
 		"volterra_fast_acl_rule":             resourceVolterraFastAclRule(),
 		"volterra_fleet":                     resourceVolterraFleet(),
+		"volterra_global_log_receiver":       resourceVolterraGlobalLogReceiver(),
 		"volterra_healthcheck":               resourceVolterraHealthcheck(),
 		"volterra_ip_prefix_set":             resourceVolterraIpPrefixSet(),
 		"volterra_k8s_cluster":               resourceVolterraK8SCluster(),
@@ -157,6 +159,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_fast_acl.ObjectType,
 		ves_io_schema_fast_acl_rule.ObjectType,
 		ves_io_schema_fleet.ObjectType,
+		ves_io_schema_global_log_receiver.ObjectType,
 		ves_io_schema_healthcheck.ObjectType,
 		ves_io_schema_ip_prefix_set.ObjectType,
 		ves_io_schema_k8s_cluster.ObjectType,

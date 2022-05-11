@@ -2273,7 +2273,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
         "/public/custom/namespaces/system/users/group_add": {
-            "post": {
+            "put": {
                 "summary": "Add user to the group",
                 "description": "Assign existing user to specific group.",
                 "operationId": "ves.io.schema.user.CustomAPI.AddUserToGroup",
@@ -2357,7 +2357,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
         "/public/custom/namespaces/system/users/group_remove": {
-            "post": {
+            "put": {
                 "summary": "Add user to the group",
                 "description": "Assign existing user to specific group.",
                 "operationId": "ves.io.schema.user.CustomAPI.RemoveUserFromGroup",
@@ -3566,6 +3566,43 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "schemaNamespaceRoleType": {
+            "type": "object",
+            "description": "Allows linking namespaces and roles",
+            "title": "Namespace role",
+            "x-displayname": "Namespace Role",
+            "x-ves-proto-message": "ves.io.schema.NamespaceRoleType",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace the role applies to\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "Namespace",
+                    "maxLength": 256,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                },
+                "role": {
+                    "type": "string",
+                    "description": " Users role for this namespace\n\nExample: - \"ves-io-monitor-role\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "Role",
+                    "maxLength": 256,
+                    "x-displayname": "Role",
+                    "x-ves-example": "ves-io-monitor-role",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                }
+            }
+        },
         "schemaObjectMetaType": {
             "type": "object",
             "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
@@ -4385,7 +4422,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Namespace roles for the user",
                     "title": "Namespace roles",
                     "items": {
-                        "$ref": "#/definitions/userNamespaceRoleType"
+                        "$ref": "#/definitions/schemaNamespaceRoleType"
                     },
                     "x-displayname": "Namespace Roles"
                 },
@@ -4688,10 +4725,10 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace_roles": {
                     "type": "array",
-                    "description": " Namespace roles for the user    ",
+                    "description": " List of roles that the user has for each namespace.",
                     "title": "Namespace roles",
                     "items": {
-                        "$ref": "#/definitions/userNamespaceRoleType"
+                        "$ref": "#/definitions/schemaNamespaceRoleType"
                     },
                     "x-displayname": "Namespace Roles"
                 },
@@ -4720,37 +4757,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "User type",
                     "$ref": "#/definitions/userUserType",
                     "x-displayname": "User Type"
-                }
-            }
-        },
-        "userNamespaceRoleType": {
-            "type": "object",
-            "description": "Allows linking namespaces and roles",
-            "title": "Namespace role",
-            "x-displayname": "Namespace Role",
-            "x-ves-proto-message": "ves.io.schema.user.NamespaceRoleType",
-            "properties": {
-                "namespace": {
-                    "type": "string",
-                    "description": " Namespace the role applies to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "role": {
-                    "type": "string",
-                    "description": " Users role for this namespace\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Role",
-                    "x-displayname": "Role",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
                 }
             }
         },
@@ -4995,7 +5001,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": " List of roles that the user has for each namespace.",
                     "title": "Namespace roles",
                     "items": {
-                        "$ref": "#/definitions/userNamespaceRoleType"
+                        "$ref": "#/definitions/schemaNamespaceRoleType"
                     },
                     "x-displayname": "Namespace Roles"
                 },

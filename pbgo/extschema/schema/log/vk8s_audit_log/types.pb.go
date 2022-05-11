@@ -28,7 +28,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Date Aggregation
 //
-// x-displayName: Date Aggregation
+// x-displayName: "Date Aggregation"
 // Aggregate vK8s audit logs based on timestamp in the log
 type DateAggregation struct {
 	// step

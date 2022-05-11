@@ -778,6 +778,7 @@ type ForbiddenActivitySetting struct {
 	// forbidden requests threshold
 	//
 	// x-displayName: "Forbidden Requests Threshold"
+	// x-example: "10"
 	// x-required
 	// The number of forbidden requests beyond which the system will flag this user as malicious
 	ForbiddenRequestsThreshold uint32 `protobuf:"varint,4,opt,name=forbidden_requests_threshold,json=forbiddenRequestsThreshold,proto3" json:"forbidden_requests_threshold,omitempty"`
@@ -828,6 +829,7 @@ type FailedLoginActivitySetting struct {
 	// Login failures threshold
 	//
 	// x-displayName: "Login Failures Threshold"
+	// x-example: "10"
 	// x-required
 	// The number of failed logins beyond which the system will flag this user as malicious
 	LoginFailuresThreshold uint32 `protobuf:"varint,4,opt,name=login_failures_threshold,json=loginFailuresThreshold,proto3" json:"login_failures_threshold,omitempty"`

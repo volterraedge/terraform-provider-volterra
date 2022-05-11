@@ -2581,7 +2581,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "api_credentialAPICredentialType": {
             "type": "string",
-            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nusing self credential (my credential)\nKubernetes config file to access Virtual Kubernetes API in Volterra\nusing self credential (my credential)\nAPI token to access Volterra public API\nusing self credential (my credential)\nAPI token for service credentials\nusing service user credential (service credential)\nAPI certificate for service credentials\nusing service user credential (service credential)\nService Credential kubeconfig\nusing service user credential (service credential)\nKubeconfig for accessing Site via Global Controller",
+            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nusing self credential (my credential)\nKubernetes config file to access Virtual Kubernetes API in Volterra\nusing self credential (my credential)\nAPI token to access Volterra public API\nusing self credential (my credential)\nAPI token for service credentials\nusing service user credential (service credential)\nAPI certificate for service credentials\nusing service user credential (service credential)\nService Credential kubeconfig\nusing service user credential (service credential)\nKubeconfig for accessing Site via Global Controller\nToken for the SCIM public APIs used to sync users and groups with the Volterra platform.\nExternal identity provider's SCIM client can use this token as Bearer token with Authorization header",
             "title": "API Credential type",
             "enum": [
                 "API_CERTIFICATE",
@@ -2590,7 +2590,8 @@ var APISwaggerJSON string = `{
                 "SERVICE_API_TOKEN",
                 "SERVICE_API_CERTIFICATE",
                 "SERVICE_KUBE_CONFIG",
-                "SITE_GLOBAL_KUBE_CONFIG"
+                "SITE_GLOBAL_KUBE_CONFIG",
+                "SCIM_API_TOKEN"
             ],
             "default": "API_CERTIFICATE",
             "x-displayname": "Credential Type",

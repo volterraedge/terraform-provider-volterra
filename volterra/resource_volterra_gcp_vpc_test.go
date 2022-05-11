@@ -117,5 +117,12 @@ func testGCPVPCSiteConfig(resourceName, name string) string {
 			}
 			ignore_on_delete = true
 		}
+		resource "volterra_set_cloud_site_info" "%[1]s" {
+			name = volterra_gcp_vpc_site.%[1]s.name
+			site_type = "gcp_vpc_site"
+			public_ips = ["10.0.0.1"]
+			private_ips = ["192.168.0.1"]
+
+		}
 		`, resourceName, name)
 }

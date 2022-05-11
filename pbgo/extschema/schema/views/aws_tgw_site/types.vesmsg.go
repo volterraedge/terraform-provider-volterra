@@ -129,6 +129,90 @@ func (v *ValidateAWSTGWInfoConfigType) SubnetIdsValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSTGWInfoConfigType) PublicIpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for public_ips")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for public_ips")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated public_ips")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items public_ips")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSTGWInfoConfigType) PrivateIpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for private_ips")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for private_ips")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated private_ips")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items private_ips")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSTGWInfoConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSTGWInfoConfigType)
 	if !ok {
@@ -141,6 +225,22 @@ func (v *ValidateAWSTGWInfoConfigType) Validate(ctx context.Context, pm interfac
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["private_ips"]; exists {
+		vOpts := append(opts, db.WithValidateField("private_ips"))
+		if err := fv(ctx, m.GetPrivateIps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["public_ips"]; exists {
+		vOpts := append(opts, db.WithValidateField("public_ips"))
+		if err := fv(ctx, m.GetPublicIps(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["subnet_ids"]; exists {
@@ -219,6 +319,34 @@ var DefaultAWSTGWInfoConfigTypeValidator = func() *ValidateAWSTGWInfoConfigType 
 		panic(errMsg)
 	}
 	v.FldValidators["subnet_ids"] = vFn
+
+	vrhPublicIps := v.PublicIpsValidationRuleHandler
+	rulesPublicIps := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
+		"ves.io.schema.rules.repeated.items.string.ip": "true",
+		"ves.io.schema.rules.repeated.num_items":       "0,1,3",
+		"ves.io.schema.rules.repeated.unique":          "true",
+	}
+	vFn, err = vrhPublicIps(rulesPublicIps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWInfoConfigType.public_ips: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["public_ips"] = vFn
+
+	vrhPrivateIps := v.PrivateIpsValidationRuleHandler
+	rulesPrivateIps := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
+		"ves.io.schema.rules.repeated.items.string.ip": "true",
+		"ves.io.schema.rules.repeated.num_items":       "0,1,3",
+		"ves.io.schema.rules.repeated.unique":          "true",
+	}
+	vFn, err = vrhPrivateIps(rulesPrivateIps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWInfoConfigType.private_ips: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_ips"] = vFn
 
 	return v
 }()
@@ -878,6 +1006,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -912,16 +1048,6 @@ func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]s
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
 	}
 
 	return validatorFn, nil
@@ -1013,6 +1139,73 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
+		val := m.GetDirectConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDirectConnectChoice().(type) {
+	case *CreateSpecType_DirectConnectDisabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_disabled"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectDisabled).DirectConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DirectConnectWithHostedVifs:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithHostedVifs).DirectConnectWithHostedVifs
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_hosted_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DirectConnectWithStandardVifs:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_standard_vifs"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithStandardVifs).DirectConnectWithStandardVifs
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_standard_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DirectConnectWithManualGw:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_manual_gw"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithManualGw).DirectConnectWithManualGw
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_manual_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -1053,15 +1246,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1126,6 +1310,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
+	rulesDirectConnectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectChoice(rulesDirectConnectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.direct_connect_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1159,17 +1354,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
-
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
@@ -1182,6 +1366,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
+
+	v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"] = ves_io_schema_views.HostedVIFConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1196,6 +1382,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
 
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
+
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -1582,6 +1770,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1676,16 +1872,6 @@ func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[stri
 			return errors.Wrap(err, "items vip_params_per_az")
 		}
 		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
 	}
 
 	return validatorFn, nil
@@ -1817,6 +2003,73 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
+		val := m.GetDirectConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDirectConnectChoice().(type) {
+	case *GetSpecType_DirectConnectDisabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_disabled"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectDisabled).DirectConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DirectConnectWithHostedVifs:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithHostedVifs).DirectConnectWithHostedVifs
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_hosted_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DirectConnectWithStandardVifs:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_standard_vifs"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithStandardVifs).DirectConnectWithStandardVifs
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_standard_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DirectConnectWithManualGw:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_manual_gw"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithManualGw).DirectConnectWithManualGw
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_manual_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_info"))
+		if err := fv(ctx, m.GetDirectConnectInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -1866,15 +2119,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
 		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1985,6 +2229,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
+	rulesDirectConnectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectChoice(rulesDirectConnectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.direct_connect_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2052,17 +2307,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["vip_params_per_az"] = vFn
 
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
-
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
@@ -2088,6 +2332,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["tunnels"] = vFn
 
+	v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"] = ves_io_schema_views.HostedVIFConfigTypeValidator().Validate
+
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
@@ -2101,6 +2347,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
+
+	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
 }()
@@ -2427,6 +2675,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2521,16 +2777,6 @@ func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[s
 			return errors.Wrap(err, "items vip_params_per_az")
 		}
 		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
 	}
 
 	return validatorFn, nil
@@ -2662,6 +2908,82 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
+		val := m.GetDirectConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDirectConnectChoice().(type) {
+	case *GlobalSpecType_DirectConnectDisabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_disabled"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectDisabled).DirectConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DirectConnectWithHostedVifs:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithHostedVifs).DirectConnectWithHostedVifs
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_hosted_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DirectConnectWithStandardVifs:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_standard_vifs"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithStandardVifs).DirectConnectWithStandardVifs
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_standard_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DirectConnectWithManualGw:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_manual_gw"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithManualGw).DirectConnectWithManualGw
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_manual_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_info"))
+		if err := fv(ctx, m.GetDirectConnectInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -2711,15 +3033,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2857,6 +3170,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
+	rulesDirectConnectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectChoice(rulesDirectConnectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.direct_connect_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2924,17 +3248,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["vip_params_per_az"] = vFn
 
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
-
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
@@ -2960,6 +3273,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["tunnels"] = vFn
 
+	v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"] = ves_io_schema_views.HostedVIFConfigTypeValidator().Validate
+
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
@@ -2978,9 +3293,13 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
+	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
 }()
@@ -3173,6 +3492,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3207,16 +3534,6 @@ func (v *ValidateReplaceSpecType) AwsParametersValidationRuleHandler(rules map[s
 		}
 
 		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
 	}
 
 	return validatorFn, nil
@@ -3263,6 +3580,64 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
+		val := m.GetDirectConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDirectConnectChoice().(type) {
+	case *ReplaceSpecType_DirectConnectDisabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_disabled"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectDisabled).DirectConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DirectConnectWithHostedVifs:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithHostedVifs).DirectConnectWithHostedVifs
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_hosted_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DirectConnectWithStandardVifs:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_standard_vifs"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithStandardVifs).DirectConnectWithStandardVifs
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_standard_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DirectConnectWithManualGw:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_manual_gw"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithManualGw).DirectConnectWithManualGw
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_with_manual_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -3295,15 +3670,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
-			return err
 		}
 
 	}
@@ -3350,6 +3716,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
+	rulesDirectConnectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectChoice(rulesDirectConnectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.direct_connect_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3383,16 +3760,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["aws_parameters"] = vFn
 
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
+	v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"] = ves_io_schema_views.HostedVIFConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5622,6 +5990,14 @@ func (v *ValidateVnConfiguration) OutsideStaticRouteChoiceValidationRuleHandler(
 	return validatorFn, nil
 }
 
+func (v *ValidateVnConfiguration) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VnConfiguration)
 	if !ok {
@@ -5800,6 +6176,42 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *VnConfiguration_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*VnConfiguration_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VnConfiguration_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*VnConfiguration_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -5859,6 +6271,17 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VnConfiguration.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_outside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_inside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5875,6 +6298,53 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 
 func VnConfigurationValidator() db.Validator {
 	return DefaultVnConfigurationValidator
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DirectConnectChoice.(type) {
+	case nil:
+		o.DirectConnectChoice = nil
+
+	case *CreateSpecType_DirectConnectDisabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *CreateSpecType_DirectConnectWithHostedVifs:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
+
+	case *CreateSpecType_DirectConnectWithManualGw:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
+
+	case *CreateSpecType_DirectConnectWithStandardVifs:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DirectConnectChoice.(type) {
+	case nil:
+		r.DirectConnectChoice = nil
+
+	case *GlobalSpecType_DirectConnectDisabled:
+		r.DirectConnectChoice = &CreateSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *GlobalSpecType_DirectConnectWithHostedVifs:
+		r.DirectConnectChoice = &CreateSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
+
+	case *GlobalSpecType_DirectConnectWithManualGw:
+		r.DirectConnectChoice = &CreateSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
+
+	case *GlobalSpecType_DirectConnectWithStandardVifs:
+		r.DirectConnectChoice = &CreateSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -5919,9 +6389,10 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.AwsParameters = f.GetAwsParameters()
 	m.Coordinates = f.GetCoordinates()
+	m.GetDirectConnectChoiceFromGlobalSpecType(f)
+	m.LocalControlPlane = f.GetLocalControlPlane()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.Os = f.GetOs()
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.Sw = f.GetSw()
 	m.Tags = f.GetTags()
 	m.TgwSecurity = f.GetTgwSecurity()
@@ -5938,14 +6409,62 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.AwsParameters = m1.AwsParameters
 	f.Coordinates = m1.Coordinates
+	m1.SetDirectConnectChoiceToGlobalSpecType(f)
+	f.LocalControlPlane = m1.LocalControlPlane
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.Os = m1.Os
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	f.Sw = m1.Sw
 	f.Tags = m1.Tags
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
 	f.VpcAttachments = m1.VpcAttachments
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DirectConnectChoice.(type) {
+	case nil:
+		o.DirectConnectChoice = nil
+
+	case *GetSpecType_DirectConnectDisabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *GetSpecType_DirectConnectWithHostedVifs:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
+
+	case *GetSpecType_DirectConnectWithManualGw:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
+
+	case *GetSpecType_DirectConnectWithStandardVifs:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DirectConnectChoice.(type) {
+	case nil:
+		r.DirectConnectChoice = nil
+
+	case *GlobalSpecType_DirectConnectDisabled:
+		r.DirectConnectChoice = &GetSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *GlobalSpecType_DirectConnectWithHostedVifs:
+		r.DirectConnectChoice = &GetSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
+
+	case *GlobalSpecType_DirectConnectWithManualGw:
+		r.DirectConnectChoice = &GetSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
+
+	case *GlobalSpecType_DirectConnectWithStandardVifs:
+		r.DirectConnectChoice = &GetSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -5990,10 +6509,11 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.AwsParameters = f.GetAwsParameters()
 	m.Coordinates = f.GetCoordinates()
+	m.GetDirectConnectChoiceFromGlobalSpecType(f)
+	m.DirectConnectInfo = f.GetDirectConnectInfo()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.Tags = f.GetTags()
 	m.TgwInfo = f.GetTgwInfo()
 	m.TgwSecurity = f.GetTgwSecurity()
@@ -6015,10 +6535,11 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.AwsParameters = m1.AwsParameters
 	f.Coordinates = m1.Coordinates
+	m1.SetDirectConnectChoiceToGlobalSpecType(f)
+	f.DirectConnectInfo = m1.DirectConnectInfo
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	f.Tags = m1.Tags
 	f.TgwInfo = m1.TgwInfo
 	f.TgwSecurity = m1.TgwSecurity
@@ -6029,6 +6550,53 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.VpcAttachments = m1.VpcAttachments
 	f.VpcIpPrefixes = m1.VpcIpPrefixes
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DirectConnectChoice.(type) {
+	case nil:
+		o.DirectConnectChoice = nil
+
+	case *ReplaceSpecType_DirectConnectDisabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *ReplaceSpecType_DirectConnectWithHostedVifs:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
+
+	case *ReplaceSpecType_DirectConnectWithManualGw:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
+
+	case *ReplaceSpecType_DirectConnectWithStandardVifs:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DirectConnectChoice.(type) {
+	case nil:
+		r.DirectConnectChoice = nil
+
+	case *GlobalSpecType_DirectConnectDisabled:
+		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *GlobalSpecType_DirectConnectWithHostedVifs:
+		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
+
+	case *GlobalSpecType_DirectConnectWithManualGw:
+		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
+
+	case *GlobalSpecType_DirectConnectWithStandardVifs:
+		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -6082,8 +6650,8 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	m.Coordinates = f.GetCoordinates()
+	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
-	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
 	m.VpcAttachments = f.GetVpcAttachments()
@@ -6110,8 +6678,8 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	f.Coordinates = m1.Coordinates
+	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
-	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
 	f.VpcAttachments = m1.VpcAttachments

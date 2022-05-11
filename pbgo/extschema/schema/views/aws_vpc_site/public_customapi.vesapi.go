@@ -36,6 +36,15 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomAPIGrpcClient) doRPCSetCloudSiteInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SetCloudSiteInfoRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.SetCloudSiteInfo(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCSetVIPInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetVIPInfoRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -84,6 +93,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["SetCloudSiteInfo"] = ccl.doRPCSetCloudSiteInfo
+
 	rpcFns["SetVIPInfo"] = ccl.doRPCSetVIPInfo
 
 	rpcFns["SetVPCK8SHostnames"] = ccl.doRPCSetVPCK8SHostnames
@@ -99,6 +110,90 @@ type CustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomAPIRestClient) doRPCSetCloudSiteInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SetCloudSiteInfoRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("aws_vpc_info", fmt.Sprintf("%v", req.AwsVpcInfo))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SetCloudSiteInfoResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomAPIRestClient) doRPCSetVIPInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -293,6 +388,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["SetCloudSiteInfo"] = ccl.doRPCSetCloudSiteInfo
+
 	rpcFns["SetVIPInfo"] = ccl.doRPCSetVIPInfo
 
 	rpcFns["SetVPCK8SHostnames"] = ccl.doRPCSetVPCK8SHostnames
@@ -309,6 +406,55 @@ type CustomAPIInprocClient struct {
 	svc svcfw.Service
 }
 
+func (c *CustomAPIInprocClient) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInfoRequest, opts ...grpc.CallOption) (*SetCloudSiteInfoResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_vpc_site.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *SetCloudSiteInfoResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.SetCloudSiteInfo' operation on 'aws_vpc_site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.aws_vpc_site.CustomAPI.SetCloudSiteInfo"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SetCloudSiteInfo(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoResponse", rsp)...)
+
+	return rsp, nil
+}
 func (c *CustomAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest, opts ...grpc.CallOption) (*SetVIPInfoResponse, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_vpc_site.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -441,6 +587,106 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/{namespace}/aws_vpc_site/{name}/set_cloud_site_info": {
+            "post": {
+                "summary": "Configure AWS VPC Site Information",
+                "description": "Configure AWS VPC Site  Information like public, private ips, subnet ids and others",
+                "operationId": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetCloudSiteInfo",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/aws_vpc_siteSetCloudSiteInfoResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nNamespace for the object to be configured",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"aws-vpc-site-1\"\nName of the object to be configured",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/aws_vpc_siteSetCloudSiteInfoRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setcloudsiteinfo"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetCloudSiteInfo"
+            },
+            "x-displayname": "Custom API for AWS VPC site",
+            "x-ves-proto-service": "ves.io.schema.views.aws_vpc_site.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/aws_vpc_site/{name}/set_vip_info": {
             "post": {
                 "summary": "Configure AWS VPC Site VIP Information",
@@ -643,6 +889,85 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "aws_vpc_siteAWSVPCSiteInfoType": {
+            "type": "object",
+            "description": "AWS VPC Site information like",
+            "title": "AWS VPC Site Information Config",
+            "x-displayname": "AWS VPC Site Information Config",
+            "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCSiteInfoType",
+            "properties": {
+                "private_ips": {
+                    "type": "array",
+                    "description": " AWS Private IPs used by the nodes\n\nExample: - \"10.0.0.1, 10.0.0.2, 10.0.0.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AWS Node Private IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "AWS Node Private IPs",
+                    "x-ves-example": "10.0.0.1, 10.0.0.2, 10.0.0.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "public_ips": {
+                    "type": "array",
+                    "description": " AWS Elastic IPs used by the nodes\n\nExample: - \"1.1.1.1, 2.2.2.2, 3.3.3.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AWS Node Elastic IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "AWS Node Elastic IPs",
+                    "x-ves-example": "1.1.1.1, 2.2.2.2, 3.3.3.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "aws_vpc_siteSetCloudSiteInfoRequest": {
+            "type": "object",
+            "description": "Request to configure Cloud Site Information",
+            "title": "Request to configure Cloud Site Information",
+            "x-displayname": "Request to configure Cloud Site Information",
+            "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoRequest",
+            "properties": {
+                "aws_vpc_info": {
+                    "description": " AWS VPC Site Info Config",
+                    "title": "AWS VPC Site Info Config",
+                    "$ref": "#/definitions/aws_vpc_siteAWSVPCSiteInfoType",
+                    "x-displayname": "AWS VPC Site Info Config"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the object to be configured\n\nExample: - \"aws-vpc-site-1\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "aws-vpc-site-1"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace for the object to be configured\n\nExample: - \"default\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                }
+            }
+        },
+        "aws_vpc_siteSetCloudSiteInfoResponse": {
+            "type": "object",
+            "description": "Response to configure configure Cloud Site Information",
+            "title": "Response to configure Cloud Site Information",
+            "x-displayname": "Response to configure Cloud Site Information",
+            "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoResponse"
+        },
         "aws_vpc_siteSetVIPInfoRequest": {
             "type": "object",
             "description": "Request to configure AWS VPC Site VIP information",

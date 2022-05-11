@@ -2238,6 +2238,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType",
             "properties": {
                 "active_forward_proxy_policies": {
@@ -2337,6 +2338,18 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "sm_connection_public_ip": {
+                    "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Public Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via Public Ip"
+                },
+                "sm_connection_pvt_ip": {
+                    "description": "Exclusive with [sm_connection_public_ip]\n Site Mesh Group Connection Via Private IP. This option will use private IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Private Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via  Private Ip"
                 }
             }
         },
@@ -2444,6 +2457,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType",
             "properties": {
                 "active_forward_proxy_policies": {
@@ -2549,6 +2563,18 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "sm_connection_public_ip": {
+                    "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Public Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via Public Ip"
+                },
+                "sm_connection_pvt_ip": {
+                    "description": "Exclusive with [sm_connection_public_ip]\n Site Mesh Group Connection Via Private IP. This option will use private IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Private Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via  Private Ip"
                 }
             }
         },
@@ -2601,7 +2627,7 @@ var APISwaggerJSON string = `{
             "description": "Single interface Azure ingress site on on Recommended Region",
             "title": "Azure Ingress Gateway on Recommended Region",
             "x-displayname": "Azure Ingress Gateway on Recommended Region",
-            "x-ves-displayorder": "2,1",
+            "x-ves-displayorder": "2,1,3",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType",
             "properties": {
                 "az_nodes": {
@@ -2628,6 +2654,49 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.in": "[\\\"azure-byol-voltmesh\\\"]",
                         "ves.io.schema.rules.string.max_len": "64"
+                    }
+                }
+            }
+        },
+        "azure_vnet_siteAzureVnetSiteInfoType": {
+            "type": "object",
+            "description": "Azure Vnet Site information like",
+            "title": "Azure Vnet Site Information Config",
+            "x-displayname": "Azure Vnet Site Information Config",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetSiteInfoType",
+            "properties": {
+                "private_ips": {
+                    "type": "array",
+                    "description": " Azure VM Private IPs used by the nodes\n\nExample: - \"10.0.0.1, 10.0.0.2, 10.0.0.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Azure VM Private IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Azure VM Private IPs",
+                    "x-ves-example": "10.0.0.1, 10.0.0.2, 10.0.0.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "public_ips": {
+                    "type": "array",
+                    "description": " Azure VM Public IPs used by the nodes\n\nExample: - \"1.1.1.1, 2.2.2.2, 3.3.3.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Azure VM Public IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Azure VM Public IPs",
+                    "x-ves-example": "1.1.1.1, 2.2.2.2, 3.3.3.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -2723,6 +2792,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage\",\"storage_class_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType",
             "properties": {
@@ -2830,6 +2900,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
                 },
+                "sm_connection_public_ip": {
+                    "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Public Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via Public Ip"
+                },
+                "sm_connection_pvt_ip": {
+                    "description": "Exclusive with [sm_connection_public_ip]\n Site Mesh Group Connection Via Private IP. This option will use private IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Private Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via  Private Ip"
+                },
                 "storage_class_list": {
                     "description": "Exclusive with [default_storage]\n Add additional custom storage classes in kubernetes for site",
                     "title": "Custom Storage Class",
@@ -2929,6 +3011,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage\",\"storage_class_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterType",
             "properties": {
@@ -3041,6 +3124,18 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "sm_connection_public_ip": {
+                    "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Public Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via Public Ip"
+                },
+                "sm_connection_pvt_ip": {
+                    "description": "Exclusive with [sm_connection_public_ip]\n Site Mesh Group Connection Via Private IP. This option will use private IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Private Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via  Private Ip"
                 },
                 "storage_class_list": {
                     "description": "Exclusive with [default_storage]\n Add additional custom storage classes in kubernetes for site",
@@ -3551,7 +3646,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Decryption Provider\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": "x-displayName: \"Decryption Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
                     "title": "Decryption Provider"
                 },
                 "location": {
@@ -3561,7 +3656,7 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Store Provider\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
+                    "description": "x-displayName: \"Store Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
                     "title": "Store Provider"
                 }
             }
@@ -3719,7 +3814,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_connect_attempts": {
                     "type": "integer",
-                    "description": "x-displayName: \"Number of connect attempts\"\nx-example: 3\nSpecifies the allowed number of retries on connect failure to upstream server. Defaults to 1.",
+                    "description": "x-displayName: \"Number of connect attempts\"\nx-example: \"3\"\nSpecifies the allowed number of retries on connect failure to upstream server. Defaults to 1.",
                     "title": "max_connect_attempts",
                     "format": "int64"
                 },
@@ -3735,7 +3830,7 @@ var APISwaggerJSON string = `{
                 },
                 "white_listed_ports": {
                     "type": "array",
-                    "description": "x-displayName: \"TCP Ports to Skip Protocol Parsing\"\nx-example: [22, 9400]\nTraffic to these destination TCP ports is not subjected to protocol parsing\nExample \"tmate\" server port",
+                    "description": "x-displayName: \"TCP Ports to Skip Protocol Parsing\"\nx-example: \"[22, 9400]\"\nTraffic to these destination TCP ports is not subjected to protocol parsing\nExample \"tmate\" server port",
                     "title": "Port list",
                     "items": {
                         "type": "integer",
@@ -3891,10 +3986,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - \"24\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Prefix Length",
                     "format": "int64",
                     "x-displayname": "Prefix Length",
+                    "x-ves-example": "24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
@@ -4211,6 +4307,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -4236,7 +4333,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -4342,9 +4440,10 @@ var APISwaggerJSON string = `{
                 },
                 "labels": {
                     "type": "object",
-                    "description": " Add Labels for this Static Route, these labels can be used in network policy",
+                    "description": " Add Labels for this Static Route, these labels can be used in network policy\n\nExample: - \"value\"-",
                     "title": "Static Route labels",
-                    "x-displayname": "Static Route Labels"
+                    "x-displayname": "Static Route Labels",
+                    "x-ves-example": "value"
                 },
                 "nexthop": {
                     "description": " Nexthop for the route",
@@ -4717,7 +4816,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate_url": {
                     "type": "string",
-                    "description": "x-displayName: \"Certificate URL\"\nx-required\nTLS certificate.\nCertificate or certificate chain in PEM format including the PEM headers.",
+                    "description": "x-displayName: \"Certificate URL\"\nx-example: \"value\"\nx-required\nTLS certificate.\nCertificate or certificate chain in PEM format including the PEM headers.",
                     "title": "certificate_url"
                 },
                 "custom_hash_algorithms": {
@@ -4727,7 +4826,7 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": "x-displayName: \"Description\"\nDescription for the certificate",
+                    "description": "x-displayName: \"Description\"\nx-example: \"Certificate used in production environment\"\nDescription for the certificate",
                     "title": "description"
                 },
                 "disable_ocsp_stapling": {
@@ -4958,10 +5057,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "latitude": {
                     "type": "number",
-                    "description": " Latitude of the site location\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
+                    "description": " Latitude of the site location\n\nExample: - \"10.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
                     "title": "latitude",
                     "format": "float",
                     "x-displayname": "Latitude",
+                    "x-ves-example": "10.0",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-90.0",
                         "ves.io.schema.rules.float.lte": "90.0"
@@ -4969,10 +5069,11 @@ var APISwaggerJSON string = `{
                 },
                 "longitude": {
                     "type": "number",
-                    "description": " longitude of site location\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
+                    "description": " longitude of site location\n\nExample: - \"20.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
                     "title": "longitude",
                     "format": "float",
                     "x-displayname": "Longitude",
+                    "x-ves-example": "20.0",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-180.0",
                         "ves.io.schema.rules.float.lte": "180.0"
@@ -5155,10 +5256,11 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of main nodes to create, either 1 or 3.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.in: [1,3]\n",
+                    "description": " Number of main nodes to create, either 1 or 3.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.in: [1,3]\n",
                     "title": "Number of main nodes",
                     "format": "int64",
                     "x-displayname": "Number of main nodes",
+                    "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -5278,10 +5380,11 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of main nodes to create, either 1 or 3.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.in: [1,3]\n",
+                    "description": " Number of main nodes to create, either 1 or 3.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.in: [1,3]\n",
                     "title": "Number of main nodes",
                     "format": "int64",
                     "x-displayname": "Number of main nodes",
+                    "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -5351,11 +5454,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "resource_group": {
                     "type": "string",
-                    "description": " x-example:\"MyResourceGroup\"\n Resource group of existing Vnet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " Resource group of existing Vnet\n\nExample: - \"MyResourceGroup\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Existing Vnet Resource Group",
                     "minLength": 1,
                     "maxLength": 64,
                     "x-displayname": "Existing Vnet Resource Group",
+                    "x-ves-example": "MyResourceGroup",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -5365,11 +5469,12 @@ var APISwaggerJSON string = `{
                 },
                 "vnet_name": {
                     "type": "string",
-                    "description": " x-example:\"MyVnet\"\n Name of existing Vnet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " Name of existing Vnet\n\nExample: - \"MyVnet\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Existing Vnet Name",
                     "minLength": 1,
                     "maxLength": 64,
                     "x-displayname": "Existing Vnet Name",
+                    "x-ves-example": "MyVnet",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -5467,6 +5572,23 @@ var APISwaggerJSON string = `{
                     "title": "Site Local Outside to a Global Network\"",
                     "$ref": "#/definitions/viewsGlobalConnectorType",
                     "x-displayname": "Direct, Site Local Outside to a Global Network"
+                }
+            }
+        },
+        "viewsLocalControlPlaneType": {
+            "type": "object",
+            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "title": "LocalControlPlaneType",
+            "properties": {
+                "default_local_control_plane": {
+                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -5590,10 +5712,11 @@ var APISwaggerJSON string = `{
                 },
                 "storage_class_size": {
                     "type": "integer",
-                    "description": " x-example \"10\"\n Size of each node of storage class. e.g If \"Storage Class Replicas\" will be set to 3 and \"Storage Class Size\" to 10GB.\n Three 10GB disk will be created and assigned to nodes.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
+                    "description": " Size of each node of storage class. e.g If \"Storage Class Replicas\" will be set to 3 and \"Storage Class Size\" to 10GB.\n Three 10GB disk will be created and assigned to nodes.\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
                     "title": "Storage Size",
                     "format": "int64",
                     "x-displayname": "Storage Size",
+                    "x-ves-example": "10",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "1024"
@@ -5807,15 +5930,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
@@ -6018,15 +6132,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteSiteState",
                     "x-displayname": "Site State"
                 },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
@@ -6137,6 +6242,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 },
+                "cloud_site_info": {
+                    "description": " Azure Vnet Site information obtained after creating the site",
+                    "title": "Azure Vnet Site Info",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetSiteInfoType",
+                    "x-displayname": "Azure Vnet Site Info"
+                },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
                     "title": "coordinates",
@@ -6238,16 +6349,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.min_len": "1"
-                    }
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "site_to_site_tunnel_ip",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
                     }
                 },
                 "ssh_key": {
@@ -6388,15 +6489,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "21"
-                    }
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
                     }
                 },
                 "total_nodes": {

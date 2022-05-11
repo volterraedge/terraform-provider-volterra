@@ -183,11 +183,6 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				},
 			},
 
-			"site_to_site_tunnel_ip": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -1398,6 +1393,18 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 								},
 							},
 						},
+
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -2444,6 +2451,18 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 							},
 						},
 
+						"sm_connection_public_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"sm_connection_pvt_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"default_storage": {
 
 							Type:     schema.TypeBool,
@@ -2843,14 +2862,6 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 			}
 
 		}
-
-	}
-
-	//site_to_site_tunnel_ip
-	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
-
-		createSpec.SiteToSiteTunnelIp =
-			v.(string)
 
 	}
 
@@ -4581,6 +4592,32 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -6069,6 +6106,32 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
 			storageClassChoiceTypeFound := false
 
 			if v, ok := cs["default_storage"]; ok && !isIntfNil(v) && !storageClassChoiceTypeFound {
@@ -6493,13 +6556,6 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
-
-	}
-
-	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
-
-		updateSpec.SiteToSiteTunnelIp =
-			v.(string)
 
 	}
 

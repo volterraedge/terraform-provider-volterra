@@ -2161,6 +2161,40 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS TGW Information Config",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType",
             "properties": {
+                "private_ips": {
+                    "type": "array",
+                    "description": " AWS Private IPs used by the nodes\n\nExample: - \"10.0.0.1, 10.0.0.2, 10.0.0.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AWS Node Private IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "AWS Node Private IPs",
+                    "x-ves-example": "10.0.0.1, 10.0.0.2, 10.0.0.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "public_ips": {
+                    "type": "array",
+                    "description": " AWS Elastic IPs used by the nodes\n\nExample: - \"1.1.1.1, 2.2.2.2, 3.3.3.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AWS Node Elastic IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "AWS Node Elastic IPs",
+                    "x-ves-example": "1.1.1.1, 2.2.2.2, 3.3.3.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "subnet_ids": {
                     "type": "array",
                     "description": " AWS Subnet Ids used by volterra site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 0, 1,3\n",
@@ -2969,6 +3003,8 @@ var APISwaggerJSON string = `{
         },
         "aws_tgw_siteTGWParamsType": {
             "type": "object",
+            "title": "TGWParamsType",
+            "x-displayname": "TGWParamsType",
             "x-ves-oneof-field-asn_choice": "[\"system_generated\",\"user_assigned\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.TGWParamsType",
             "properties": {
@@ -3017,9 +3053,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "labels": {
                     "type": "object",
-                    "description": " Add Labels for each of the VPC ID, these labels can be used in firewall policy\n These labels used must be from known key and label defined in shared namespace",
+                    "description": " Add Labels for each of the VPC ID, these labels can be used in firewall policy\n These labels used must be from known key and label defined in shared namespace\n\nExample: - \"value\"-",
                     "title": "Labels For VPC ID",
-                    "x-displayname": "Labels For VPC ID"
+                    "x-displayname": "Labels For VPC ID",
+                    "x-ves-example": "value"
                 },
                 "vpc_id": {
                     "type": "string",
@@ -3069,6 +3106,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VnConfiguration",
             "properties": {
                 "dc_cluster_group_outside_vn": {
@@ -3118,6 +3156,18 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "sm_connection_public_ip": {
+                    "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Public Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via Public Ip"
+                },
+                "sm_connection_pvt_ip": {
+                    "description": "Exclusive with [sm_connection_public_ip]\n Site Mesh Group Connection Via Private IP. This option will use private IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Private Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via  Private Ip"
                 }
             }
         },
@@ -3246,7 +3296,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Decryption Provider\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "description": "x-displayName: \"Decryption Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
                     "title": "Decryption Provider"
                 },
                 "location": {
@@ -3256,7 +3306,7 @@ var APISwaggerJSON string = `{
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Store Provider\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
+                    "description": "x-displayName: \"Store Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
                     "title": "Store Provider"
                 }
             }
@@ -3414,7 +3464,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_connect_attempts": {
                     "type": "integer",
-                    "description": "x-displayName: \"Number of connect attempts\"\nx-example: 3\nSpecifies the allowed number of retries on connect failure to upstream server. Defaults to 1.",
+                    "description": "x-displayName: \"Number of connect attempts\"\nx-example: \"3\"\nSpecifies the allowed number of retries on connect failure to upstream server. Defaults to 1.",
                     "title": "max_connect_attempts",
                     "format": "int64"
                 },
@@ -3430,7 +3480,7 @@ var APISwaggerJSON string = `{
                 },
                 "white_listed_ports": {
                     "type": "array",
-                    "description": "x-displayName: \"TCP Ports to Skip Protocol Parsing\"\nx-example: [22, 9400]\nTraffic to these destination TCP ports is not subjected to protocol parsing\nExample \"tmate\" server port",
+                    "description": "x-displayName: \"TCP Ports to Skip Protocol Parsing\"\nx-example: \"[22, 9400]\"\nTraffic to these destination TCP ports is not subjected to protocol parsing\nExample \"tmate\" server port",
                     "title": "Port list",
                     "items": {
                         "type": "integer",
@@ -3586,10 +3636,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - \"24\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Prefix Length",
                     "format": "int64",
                     "x-displayname": "Prefix Length",
+                    "x-ves-example": "24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
@@ -3906,6 +3957,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3931,7 +3983,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -4037,9 +4090,10 @@ var APISwaggerJSON string = `{
                 },
                 "labels": {
                     "type": "object",
-                    "description": " Add Labels for this Static Route, these labels can be used in network policy",
+                    "description": " Add Labels for this Static Route, these labels can be used in network policy\n\nExample: - \"value\"-",
                     "title": "Static Route labels",
-                    "x-displayname": "Static Route Labels"
+                    "x-displayname": "Static Route Labels",
+                    "x-ves-example": "value"
                 },
                 "nexthop": {
                     "description": " Nexthop for the route",
@@ -4412,7 +4466,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certificate_url": {
                     "type": "string",
-                    "description": "x-displayName: \"Certificate URL\"\nx-required\nTLS certificate.\nCertificate or certificate chain in PEM format including the PEM headers.",
+                    "description": "x-displayName: \"Certificate URL\"\nx-example: \"value\"\nx-required\nTLS certificate.\nCertificate or certificate chain in PEM format including the PEM headers.",
                     "title": "certificate_url"
                 },
                 "custom_hash_algorithms": {
@@ -4422,7 +4476,7 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": "x-displayName: \"Description\"\nDescription for the certificate",
+                    "description": "x-displayName: \"Description\"\nx-example: \"Certificate used in production environment\"\nDescription for the certificate",
                     "title": "description"
                 },
                 "disable_ocsp_stapling": {
@@ -4653,10 +4707,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "latitude": {
                     "type": "number",
-                    "description": " Latitude of the site location\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
+                    "description": " Latitude of the site location\n\nExample: - \"10.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
                     "title": "latitude",
                     "format": "float",
                     "x-displayname": "Latitude",
+                    "x-ves-example": "10.0",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-90.0",
                         "ves.io.schema.rules.float.lte": "90.0"
@@ -4664,10 +4719,11 @@ var APISwaggerJSON string = `{
                 },
                 "longitude": {
                     "type": "number",
-                    "description": " longitude of site location\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
+                    "description": " longitude of site location\n\nExample: - \"20.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
                     "title": "longitude",
                     "format": "float",
                     "x-displayname": "Longitude",
+                    "x-ves-example": "20.0",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-180.0",
                         "ves.io.schema.rules.float.lte": "180.0"
@@ -4971,6 +5027,33 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsDirectConnectInfo": {
+            "type": "object",
+            "description": "DirectConnect Info",
+            "title": "DirectConnect Info",
+            "x-displayname": "DirectConnect Info",
+            "x-ves-proto-message": "ves.io.schema.views.DirectConnectInfo",
+            "properties": {
+                "direct_connect_gateway_id": {
+                    "type": "string",
+                    "description": " DirectConnect Gateway ID",
+                    "title": "DirectConnect Gateway ID",
+                    "x-displayname": "DirectConnect Gateway ID"
+                },
+                "vgw_id": {
+                    "type": "string",
+                    "description": " Virtual Private Gateway ID\n\nExample: - \"vgw-12345678\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Virtual Private Gateway ID",
+                    "x-displayname": "Virtual Private Gateway ID",
+                    "x-ves-example": "vgw-12345678",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.pattern": "^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
         "viewsGlobalConnectorType": {
             "type": "object",
             "description": "Global network reference for direct connection",
@@ -5036,6 +5119,48 @@ var APISwaggerJSON string = `{
                     "title": "Site Local Outside to a Global Network\"",
                     "$ref": "#/definitions/viewsGlobalConnectorType",
                     "x-displayname": "Direct, Site Local Outside to a Global Network"
+                }
+            }
+        },
+        "viewsHostedVIFConfigType": {
+            "type": "object",
+            "description": "Hosted VIF Configuration",
+            "title": "HostedVIFConfigType",
+            "x-displayname": "Hosted VIF Config",
+            "x-ves-proto-message": "ves.io.schema.views.HostedVIFConfigType",
+            "properties": {
+                "vifs": {
+                    "type": "array",
+                    "description": " VIFs\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 30\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.pattern: ^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Hosted VIFs",
+                    "maxItems": 30,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of VIF IDs",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "30",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.pattern": "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
+        "viewsLocalControlPlaneType": {
+            "type": "object",
+            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "title": "LocalControlPlaneType",
+            "properties": {
+                "default_local_control_plane": {
+                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -5152,6 +5277,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "CreateSpecType",
             "x-displayname": "Create AWS TGW site",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_with_hosted_vifs\",\"direct_connect_with_standard_vifs\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.CreateSpecType",
             "properties": {
@@ -5179,6 +5305,21 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "direct_connect_disabled": {
+                    "description": "Exclusive with [direct_connect_with_hosted_vifs direct_connect_with_standard_vifs]\n Direct Connect feature is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Direct Connect"
+                },
+                "direct_connect_with_hosted_vifs": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
+                    "$ref": "#/definitions/viewsHostedVIFConfigType",
+                    "x-displayname": "Direct Connect with hosted VIF mode"
+                },
+                "direct_connect_with_standard_vifs": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Direct Connect with Standard VIF mode"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -5194,16 +5335,6 @@ var APISwaggerJSON string = `{
                     "title": "Operating System",
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "site_to_site_tunnel_ip",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
                 },
                 "sw": {
                     "description": " Volterra Software Details",
@@ -5244,6 +5375,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "GetSpecType",
             "x-displayname": "Get AWS TGW site",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_with_hosted_vifs\",\"direct_connect_with_standard_vifs\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GetSpecType",
             "properties": {
@@ -5271,6 +5403,26 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "direct_connect_disabled": {
+                    "description": "Exclusive with [direct_connect_with_hosted_vifs direct_connect_with_standard_vifs]\n Direct Connect feature is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Direct Connect"
+                },
+                "direct_connect_info": {
+                    "description": " Direct Connect information obtained after creating the site and TGW",
+                    "$ref": "#/definitions/viewsDirectConnectInfo",
+                    "x-displayname": "Direct Connect Information"
+                },
+                "direct_connect_with_hosted_vifs": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
+                    "$ref": "#/definitions/viewsHostedVIFConfigType",
+                    "x-displayname": "Direct Connect with hosted VIF mode"
+                },
+                "direct_connect_with_standard_vifs": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Direct Connect with Standard VIF mode"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -5286,15 +5438,6 @@ var APISwaggerJSON string = `{
                     "title": "site_state",
                     "$ref": "#/definitions/siteSiteState",
                     "x-displayname": "Site State"
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
                 },
                 "tags": {
                     "type": "object",
@@ -5334,6 +5477,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_with_hosted_vifs\",\"direct_connect_with_standard_vifs\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GlobalSpecType",
             "properties": {
@@ -5364,6 +5508,30 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "direct_connect_disabled": {
+                    "description": "Exclusive with [direct_connect_with_hosted_vifs direct_connect_with_standard_vifs]\n Direct Connect feature is disabled",
+                    "title": "Disable Direct Connect",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Direct Connect"
+                },
+                "direct_connect_info": {
+                    "description": " Direct Connect information obtained after creating the site and TGW",
+                    "title": "Direct Connect information",
+                    "$ref": "#/definitions/viewsDirectConnectInfo",
+                    "x-displayname": "Direct Connect Information"
+                },
+                "direct_connect_with_hosted_vifs": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
+                    "title": "Direct Connect With Hosted VIF mode",
+                    "$ref": "#/definitions/viewsHostedVIFConfigType",
+                    "x-displayname": "Direct Connect with hosted VIF mode"
+                },
+                "direct_connect_with_standard_vifs": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
+                    "title": "Direct Connect With Standard VIF mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Direct Connect with Standard VIF mode"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "title": "Disable Logs Streaming",
@@ -5381,16 +5549,6 @@ var APISwaggerJSON string = `{
                     "title": "Operating System",
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "site_to_site_tunnel_ip",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
                 },
                 "sw": {
                     "description": " Volterra Software Details",
@@ -5441,6 +5599,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site replace specification",
             "title": "ReplaceSpecType",
             "x-displayname": "Replace AWS TGW site",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_with_hosted_vifs\",\"direct_connect_with_standard_vifs\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ReplaceSpecType",
             "properties": {
@@ -5468,6 +5627,21 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "direct_connect_disabled": {
+                    "description": "Exclusive with [direct_connect_with_hosted_vifs direct_connect_with_standard_vifs]\n Direct Connect feature is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Direct Connect"
+                },
+                "direct_connect_with_hosted_vifs": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
+                    "$ref": "#/definitions/viewsHostedVIFConfigType",
+                    "x-displayname": "Direct Connect with hosted VIF mode"
+                },
+                "direct_connect_with_standard_vifs": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Direct Connect with Standard VIF mode"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -5477,15 +5651,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
                 },
                 "tgw_security": {
                     "description": " Security Configuration for transit gateway",

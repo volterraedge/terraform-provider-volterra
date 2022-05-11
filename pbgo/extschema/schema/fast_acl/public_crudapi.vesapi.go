@@ -2702,8 +2702,9 @@ var APISwaggerJSON string = `{
         },
         "fast_aclSelectedTenantVIPsType": {
             "type": "object",
-            "description": "x-displayName: \"Specific Tenant VIP \nSelect various tenant public VIP(s)",
+            "description": "Select various tenant public VIP(s)",
             "title": "Specific Tenant VIP",
+            "x-displayname": "Specific Tenant VIP",
             "x-ves-proto-message": "ves.io.schema.fast_acl.SelectedTenantVIPsType",
             "properties": {
                 "default_tenant_vip": {
@@ -2860,8 +2861,9 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_ruleFastAclRuleAction": {
             "type": "object",
-            "description": " FastAclRuleAction specifies possible action to be applied on traffic,\n possible action include dropping, forwarding or ratelimiting the traffic",
+            "description": "FastAclRuleAction specifies possible action to be applied on traffic,\npossible action include dropping, forwarding or ratelimiting the traffic",
             "title": "FastAclRuleAction",
+            "x-displayname": "Action",
             "x-ves-oneof-field-action": "[\"policer_action\",\"protocol_policer_action\",\"simple_action\"]",
             "x-ves-proto-message": "ves.io.schema.fast_acl_rule.FastAclRuleAction",
             "properties": {
@@ -3422,6 +3424,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -3447,7 +3450,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",

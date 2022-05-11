@@ -2434,10 +2434,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "plen": {
                     "type": "integer",
-                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - 24-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - \"24\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "Prefix Length",
                     "format": "int64",
                     "x-displayname": "Prefix Length",
+                    "x-ves-example": "24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
@@ -2769,6 +2770,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -2794,7 +2796,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -2859,13 +2862,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_number": {
                     "type": "integer",
-                    "description": "x-displayName: \"AS Number\"\nx-required\nTwo-Octet AS Number.",
+                    "description": "x-displayName: \"AS Number\"\nx-example: \"100\"\nx-required\nTwo-Octet AS Number.",
                     "title": "as_number",
                     "format": "int64"
                 },
                 "value": {
                     "type": "integer",
-                    "description": "x-displayName: \"Local Administrator Field\"\nx-required\nA 4-byte value that is unique in the scope of the ASN.",
+                    "description": "x-displayName: \"Local Administrator Field\"\nx-example: \"100\"\nx-required\nA 4-byte value that is unique in the scope of the ASN.",
                     "title": "value",
                     "format": "int64"
                 }
@@ -2878,13 +2881,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_number": {
                     "type": "integer",
-                    "description": "x-displayName: \"AS Number\"\nx-required\nFour-Octet AS Number.",
+                    "description": "x-displayName: \"AS Number\"\nx-example: \"100000\"\nx-required\nFour-Octet AS Number.",
                     "title": "as_number",
                     "format": "int64"
                 },
                 "value": {
                     "type": "integer",
-                    "description": "x-displayName: \"Local Administrator Field\"\nx-required\nA 2-byte value that is unique in the scope of the ASN.",
+                    "description": "x-displayName: \"Local Administrator Field\"\nx-example: \"100\"\nx-required\nA 2-byte value that is unique in the scope of the ASN.",
                     "title": "value",
                     "format": "int64"
                 }
@@ -2897,12 +2900,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "x-displayName: \"IPv4 Address\"\nx-required\nIPv4 Address",
+                    "description": "x-displayName: \"IPv4 Address\"\nx-example: \"1.1.1.1\"\nx-required\nIPv4 Address",
                     "title": "address"
                 },
                 "value": {
                     "type": "integer",
-                    "description": "x-displayName: \"Local Administrator Field\"\nx-required\nA 2-byte value that is unique in the scope of the IPv4 address.",
+                    "description": "x-displayName: \"Local Administrator Field\"\nx-example: \"100\"\nx-required\nA 2-byte value that is unique in the scope of the IPv4 address.",
                     "title": "value",
                     "format": "int64"
                 }
@@ -2931,9 +2934,10 @@ var APISwaggerJSON string = `{
                 },
                 "labels": {
                     "type": "object",
-                    "description": " Add Labels for this Static Route, these labels can be used in network policy",
+                    "description": " Add Labels for this Static Route, these labels can be used in network policy\n\nExample: - \"value\"-",
                     "title": "Static Route labels",
-                    "x-displayname": "Static Route Labels"
+                    "x-displayname": "Static Route Labels",
+                    "x-ves-example": "value"
                 },
                 "nexthop": {
                     "description": " Nexthop for the route",
@@ -4144,7 +4148,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ipv4_prefixes": {
                     "type": "array",
-                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-required\nList of IPv4 prefixes used as SNAT pool",
+                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-example: \"10.0.0.0/24\"\nx-required\nList of IPv4 prefixes used as SNAT pool",
                     "title": "List of IPv4 Prefixes",
                     "items": {
                         "type": "string"
@@ -4223,7 +4227,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " List of route prefixes that have common next hop and attributes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of route prefixes that have common next hop and attributes\n\nExample: - \"10.0.0.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP Prefixes",
                     "minItems": 1,
                     "maxItems": 256,
@@ -4231,6 +4235,7 @@ var APISwaggerJSON string = `{
                         "type": "string"
                     },
                     "x-displayname": "IP Prefixes",
+                    "x-ves-example": "10.0.0.0/24",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

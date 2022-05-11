@@ -17,6 +17,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
@@ -2884,8 +2885,94 @@ func (m *SimpleRule) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetWafActionDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRateLimiterSpecsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimiterSpecsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetRateLimitersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWafActionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWafActionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SimpleRule) GetRateLimiterSpecsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRateLimiterSpecs() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRateLimiterSpecs() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimiterSpecs() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("rate_limiter_specs[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+func (m *SimpleRule) GetRateLimitersDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetRateLimiters()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SimpleRule.rate_limiters[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "rate_limiter.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "rate_limiters",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetRateLimitersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SimpleRule) GetRateLimitersDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "rate_limiter.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: rate_limiter")
+	}
+	for _, ref := range m.GetRateLimiters() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -2995,6 +3082,86 @@ func (v *ValidateSimpleRule) SchemeValidationRuleHandler(rules map[string]string
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items scheme")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleRule) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiters")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rate_limiters")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rate_limiters")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleRule) RateLimiterSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_rate_limiter.GlobalSpecType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_rate_limiter.GlobalSpecTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiter_specs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_rate_limiter.GlobalSpecType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_rate_limiter.GlobalSpecType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rate_limiter_specs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rate_limiter_specs")
 		}
 		return nil
 	}
@@ -3195,6 +3362,22 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["rate_limiter_specs"]; exists {
+		vOpts := append(opts, db.WithValidateField("rate_limiter_specs"))
+		if err := fv(ctx, m.GetRateLimiterSpecs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rate_limiters"]; exists {
+		vOpts := append(opts, db.WithValidateField("rate_limiters"))
+		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
@@ -3297,6 +3480,28 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 		panic(errMsg)
 	}
 	v.FldValidators["scheme"] = vFn
+
+	vrhRateLimiters := v.RateLimitersValidationRuleHandler
+	rulesRateLimiters := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "2",
+	}
+	vFn, err = vrhRateLimiters(rulesRateLimiters)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleRule.rate_limiters: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limiters"] = vFn
+
+	vrhRateLimiterSpecs := v.RateLimiterSpecsValidationRuleHandler
+	rulesRateLimiterSpecs := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "2",
+	}
+	vFn, err = vrhRateLimiterSpecs(rulesRateLimiterSpecs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleRule.rate_limiter_specs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limiter_specs"] = vFn
 
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 

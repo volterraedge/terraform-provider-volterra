@@ -262,7 +262,7 @@ type Ipv4SubnetType struct {
 	// Prefix Length
 	//
 	// x-displayName: "Prefix Length"
-	// x-example: 24
+	// x-example: "24"
 	// Prefix-length of the IPv4 subnet. Must be <= 32
 	Plen uint32 `protobuf:"varint,2,opt,name=plen,proto3" json:"plen,omitempty"`
 }

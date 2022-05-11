@@ -2810,6 +2810,46 @@ func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) SiteToSiteIpsecConnectivityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*SiteToSiteTunnelConnectivity, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := SiteToSiteTunnelConnectivityValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for site_to_site_ipsec_connectivity")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SiteToSiteTunnelConnectivity)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SiteToSiteTunnelConnectivity, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated site_to_site_ipsec_connectivity")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items site_to_site_ipsec_connectivity")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -2997,6 +3037,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("site_subtype"))
 		if err := fv(ctx, m.GetSiteSubtype(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_ipsec_connectivity"]; exists {
+		vOpts := append(opts, db.WithValidateField("site_to_site_ipsec_connectivity"))
+		if err := fv(ctx, m.GetSiteToSiteIpsecConnectivity(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3283,6 +3331,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vip_params_per_az"] = vFn
+
+	vrhSiteToSiteIpsecConnectivity := v.SiteToSiteIpsecConnectivityValidationRuleHandler
+	rulesSiteToSiteIpsecConnectivity := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "3",
+	}
+	vFn, err = vrhSiteToSiteIpsecConnectivity(rulesSiteToSiteIpsecConnectivity)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.site_to_site_ipsec_connectivity: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_ipsec_connectivity"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -4148,6 +4207,46 @@ func (v *ValidateGlobalSpecType) ReMeshGroupValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) SiteToSiteIpsecConnectivityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*SiteToSiteTunnelConnectivity, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := SiteToSiteTunnelConnectivityValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for site_to_site_ipsec_connectivity")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SiteToSiteTunnelConnectivity)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SiteToSiteTunnelConnectivity, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated site_to_site_ipsec_connectivity")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items site_to_site_ipsec_connectivity")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4504,6 +4603,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("site_subtype"))
 		if err := fv(ctx, m.GetSiteSubtype(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_ipsec_connectivity"]; exists {
+		vOpts := append(opts, db.WithValidateField("site_to_site_ipsec_connectivity"))
+		if err := fv(ctx, m.GetSiteToSiteIpsecConnectivity(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4933,6 +5040,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["re_mesh_group"] = vFn
+
+	vrhSiteToSiteIpsecConnectivity := v.SiteToSiteIpsecConnectivityValidationRuleHandler
+	rulesSiteToSiteIpsecConnectivity := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "3",
+	}
+	vFn, err = vrhSiteToSiteIpsecConnectivity(rulesSiteToSiteIpsecConnectivity)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.site_to_site_ipsec_connectivity: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_to_site_ipsec_connectivity"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -8025,6 +8143,96 @@ func SiteStatusMetricsFieldDataValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SiteToSiteTunnelConnectivity) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteToSiteTunnelConnectivity) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteToSiteTunnelConnectivity) DeepCopy() *SiteToSiteTunnelConnectivity {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteToSiteTunnelConnectivity{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteToSiteTunnelConnectivity) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteToSiteTunnelConnectivity) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteToSiteTunnelConnectivityValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSiteToSiteTunnelConnectivity struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteToSiteTunnelConnectivity) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteToSiteTunnelConnectivity)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteToSiteTunnelConnectivity got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["destination"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("destination"))
+		for idx, item := range m.GetDestination() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteToSiteTunnelConnectivityValidator = func() *ValidateSiteToSiteTunnelConnectivity {
+	v := &ValidateSiteToSiteTunnelConnectivity{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SiteToSiteTunnelConnectivityValidator() db.Validator {
+	return DefaultSiteToSiteTunnelConnectivityValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *StorageDevice) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -9050,6 +9258,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Region = f.GetRegion()
 	m.SiteState = f.GetSiteState()
 	m.SiteSubtype = f.GetSiteSubtype()
+	m.SiteToSiteIpsecConnectivity = f.GetSiteToSiteIpsecConnectivity()
 	m.SiteToSiteNetworkType = f.GetSiteToSiteNetworkType()
 	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.SiteType = f.GetSiteType()
@@ -9088,6 +9297,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Region = m1.Region
 	f.SiteState = m1.SiteState
 	f.SiteSubtype = m1.SiteSubtype
+	f.SiteToSiteIpsecConnectivity = m1.SiteToSiteIpsecConnectivity
 	f.SiteToSiteNetworkType = m1.SiteToSiteNetworkType
 	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	f.SiteType = m1.SiteType

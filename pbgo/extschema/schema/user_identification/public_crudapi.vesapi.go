@@ -2542,6 +2542,7 @@ var APISwaggerJSON string = `{
                     "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "annotations",
                     "x-displayname": "Annotations",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
@@ -2567,7 +2568,8 @@ var APISwaggerJSON string = `{
                     "type": "object",
                     "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
                     "title": "labels",
-                    "x-displayname": "Labels"
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
@@ -3457,24 +3459,24 @@ var APISwaggerJSON string = `{
             "description": "A user identification rule specifies a single criterion to determine an identifier from the input fields extracted from an API request . A rule is considered\nto have a successful outcome if an identifier gets extracted.",
             "title": "UserIdentificationRule",
             "x-displayname": "User Identification Rule",
-            "x-ves-oneof-field-identifier": "[\"client_asn\",\"client_ip\",\"cookie_name\",\"http_header_name\",\"none\",\"query_param_key\"]",
+            "x-ves-oneof-field-identifier": "[\"client_asn\",\"client_ip\",\"cookie_name\",\"http_header_name\",\"ip_and_http_header_name\",\"ip_and_tls_fingerprint\",\"none\",\"query_param_key\",\"tls_fingerprint\"]",
             "x-ves-proto-message": "ves.io.schema.user_identification.UserIdentificationRule",
             "properties": {
                 "client_asn": {
-                    "description": "Exclusive with [client_ip cookie_name http_header_name none query_param_key]\n Use client ASN as user identifier.\n The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
+                    "description": "Exclusive with [client_ip cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use client ASN as user identifier.\n The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
                     "title": "client asn",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Client Autonomous System"
                 },
                 "client_ip": {
-                    "description": "Exclusive with [client_asn cookie_name http_header_name none query_param_key]\n Use client IP address as user identifier.",
+                    "description": "Exclusive with [client_asn cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use client IP address as user identifier.",
                     "title": "client ip address",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Client IP Address"
                 },
                 "cookie_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip http_header_name none query_param_key]\n Use the HTTP cookie value for the given name as user identifier.\n\nExample: - \"Session\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": "Exclusive with [client_asn client_ip http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use the HTTP cookie value for the given name as user identifier.\n\nExample: - \"Session\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Cookie Name",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3487,7 +3489,7 @@ var APISwaggerJSON string = `{
                 },
                 "http_header_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip cookie_name none query_param_key]\n Use the HTTP header value for the given name as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": "Exclusive with [client_asn client_ip cookie_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use the HTTP header value for the given name as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "HTTP header name",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3498,15 +3500,34 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
                 },
+                "ip_and_http_header_name": {
+                    "type": "string",
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use the combination of Client IP and HTTP header value for the given name as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "HTTP header name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Client IP and HTTP Header Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "ip_and_tls_fingerprint": {
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name ip_and_http_header_name none query_param_key tls_fingerprint]\n Use the combination of Client IP and TLS Fingerprint as user identifier.",
+                    "title": "tls_fingerprint",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client IP and TLS Fingerprint"
+                },
                 "none": {
-                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name query_param_key]\n Do not use any user identifier.",
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint query_param_key tls_fingerprint]\n Do not use any user identifier.",
                     "title": "none",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No User Identifier"
                 },
                 "query_param_key": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name none]\n Use the query parameter value for the given key as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none tls_fingerprint]\n Use the query parameter value for the given key as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "query param key",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3515,6 +3536,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_bytes": "256",
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
+                },
+                "tls_fingerprint": {
+                    "description": "Exclusive with [client_asn client_ip cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key]\n Use TLS Fingerprint as user identifier.",
+                    "title": "tls_fingerprint",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "TLS Fingerprint"
                 }
             }
         }

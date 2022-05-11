@@ -2849,6 +2849,8 @@ var APISwaggerJSON string = `{
         },
         "k8s_cluster_role_bindingServiceAccountType": {
             "type": "object",
+            "title": "ServiceAccountType",
+            "x-displayname": "ServiceAccountType",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role_binding.ServiceAccountType",
             "properties": {
                 "name": {

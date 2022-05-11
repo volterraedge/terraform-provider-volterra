@@ -2808,7 +2808,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "urls": {
                     "type": "array",
-                    "description": " allowed URL(s) that do not represent any K8s resource. URL can be suffix or regex.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " allowed URL(s) that do not represent any K8s resource. URL can be suffix or regex.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Non Resource URL(s)",
                     "minItems": 1,
                     "maxItems": 16,
@@ -2817,6 +2817,7 @@ var APISwaggerJSON string = `{
                         "maxLength": 256
                     },
                     "x-displayname": "Non Resource URL(s)",
+                    "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

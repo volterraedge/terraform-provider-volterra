@@ -2768,6 +2768,8 @@ var APISwaggerJSON string = `{
         },
         "forward_proxy_policyDomainListType": {
             "type": "object",
+            "title": "DomainListType",
+            "x-displayname": "DomainListType",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.DomainListType",
             "properties": {
                 "tls_list": {
@@ -3081,6 +3083,8 @@ var APISwaggerJSON string = `{
         },
         "forward_proxy_policyURLListType": {
             "type": "object",
+            "title": "URLListType",
+            "x-displayname": "URLListType",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.URLListType",
             "properties": {
                 "http_list": {
@@ -3634,7 +3638,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefixes": {
                     "type": "array",
-                    "description": " Destination IPv4 prefixes.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Destination IPv4 prefixes.\n\nExample: - \"10.0.0./24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "prefixes",
                     "minItems": 1,
                     "maxItems": 32,
@@ -3642,6 +3646,7 @@ var APISwaggerJSON string = `{
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefixes",
+                    "x-ves-example": "10.0.0./24",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

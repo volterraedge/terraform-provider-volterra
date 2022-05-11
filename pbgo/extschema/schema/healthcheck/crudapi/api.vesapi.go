@@ -2866,9 +2866,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "headers": {
                     "type": "object",
-                    "description": " Specifies a list of HTTP headers that should be added to each request that is sent to the\n health checked cluster. This is a list of key-value pairs.\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 2048\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
+                    "description": " Specifies a list of HTTP headers that should be added to each request that is sent to the\n health checked cluster. This is a list of key-value pairs.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 2048\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
                     "title": "Headers to add in health check request",
                     "x-displayname": "Request Headers to Add",
+                    "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "256",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
