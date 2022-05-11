@@ -44,6 +44,8 @@ func testTGWInfo(name string) string {
 			workload_subnet_id = "subnet-12345678"
 			az = "us-east-2a"
 		  }
+		  public_ips = ["10.0.0.10"]
+		  private_ips = ["192.168.0.10"]
 		}
 		`, setTGWInfo, name, name)
 }
