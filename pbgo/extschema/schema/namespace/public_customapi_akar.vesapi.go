@@ -970,18 +970,67 @@ func NewNamespaceCustomAPIRestClient(baseURL string, hc http.Client) server.Cust
 	return ccl
 }
 
-// Create NamespaceCustomAPIInprocClient
+// Create namespaceCustomAPIInprocClient
 
 // INPROC Client (satisfying NamespaceCustomAPIClient interface)
-type NamespaceCustomAPIInprocClient struct {
+type namespaceCustomAPIInprocClient struct {
+	NamespaceCustomAPIServer
+}
+
+func (c *namespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*GetActiveAlertPoliciesResponse, error) {
+	return c.NamespaceCustomAPIServer.GetActiveAlertPolicies(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Context, in *GetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*GetActiveNetworkPoliciesResponse, error) {
+	return c.NamespaceCustomAPIServer.GetActiveNetworkPolicies(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) GetActiveServicePolicies(ctx context.Context, in *GetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*GetActiveServicePoliciesResponse, error) {
+	return c.NamespaceCustomAPIServer.GetActiveServicePolicies(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.Context, in *GetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*GetFastACLsForInternetVIPsResponse, error) {
+	return c.NamespaceCustomAPIServer.GetFastACLsForInternetVIPs(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Context, in *SetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*SetActiveAlertPoliciesResponse, error) {
+	return c.NamespaceCustomAPIServer.SetActiveAlertPolicies(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) SetActiveNetworkPolicies(ctx context.Context, in *SetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*SetActiveNetworkPoliciesResponse, error) {
+	return c.NamespaceCustomAPIServer.SetActiveNetworkPolicies(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) SetActiveServicePolicies(ctx context.Context, in *SetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*SetActiveServicePoliciesResponse, error) {
+	return c.NamespaceCustomAPIServer.SetActiveServicePolicies(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.Context, in *SetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*SetFastACLsForInternetVIPsResponse, error) {
+	return c.NamespaceCustomAPIServer.SetFastACLsForInternetVIPs(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
+	return c.NamespaceCustomAPIServer.SuggestValues(ctx, in)
+}
+
+func NewNamespaceCustomAPIInprocClient(svc svcfw.Service) NamespaceCustomAPIClient {
+	return &namespaceCustomAPIInprocClient{NamespaceCustomAPIServer: NewNamespaceCustomAPIServer(svc)}
+}
+
+// RegisterGwNamespaceCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwNamespaceCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterNamespaceCustomAPIHandlerClient(ctx, mux, NewNamespaceCustomAPIInprocClient(s))
+}
+
+// Create namespaceCustomAPISrv
+
+// SERVER (satisfying NamespaceCustomAPIServer interface)
+type namespaceCustomAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *NamespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*GetActiveAlertPoliciesResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest) (*GetActiveAlertPoliciesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -989,7 +1038,7 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Cont
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetActiveAlertPoliciesRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveAlertPoliciesRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1003,13 +1052,13 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Cont
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1022,15 +1071,15 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Cont
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetActiveAlertPoliciesResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveAlertPoliciesResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *NamespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Context, in *GetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*GetActiveNetworkPoliciesResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) GetActiveNetworkPolicies(ctx context.Context, in *GetActiveNetworkPoliciesRequest) (*GetActiveNetworkPoliciesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -1038,7 +1087,7 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Co
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetActiveNetworkPoliciesRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveNetworkPoliciesRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1052,13 +1101,13 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Co
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1071,15 +1120,15 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Co
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetActiveNetworkPoliciesResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveNetworkPoliciesResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *NamespaceCustomAPIInprocClient) GetActiveServicePolicies(ctx context.Context, in *GetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*GetActiveServicePoliciesResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) GetActiveServicePolicies(ctx context.Context, in *GetActiveServicePoliciesRequest) (*GetActiveServicePoliciesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -1087,7 +1136,7 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveServicePolicies(ctx context.Co
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetActiveServicePoliciesRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveServicePoliciesRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1101,13 +1150,13 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveServicePolicies(ctx context.Co
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1120,15 +1169,15 @@ func (c *NamespaceCustomAPIInprocClient) GetActiveServicePolicies(ctx context.Co
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetActiveServicePoliciesResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveServicePoliciesResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *NamespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.Context, in *GetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*GetFastACLsForInternetVIPsResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) GetFastACLsForInternetVIPs(ctx context.Context, in *GetFastACLsForInternetVIPsRequest) (*GetFastACLsForInternetVIPsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -1136,7 +1185,7 @@ func (c *NamespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetFastACLsForInternetVIPsRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetFastACLsForInternetVIPsRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1150,13 +1199,13 @@ func (c *NamespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1169,15 +1218,15 @@ func (c *NamespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *NamespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Context, in *SetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*SetActiveAlertPoliciesResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) SetActiveAlertPolicies(ctx context.Context, in *SetActiveAlertPoliciesRequest) (*SetActiveAlertPoliciesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -1185,7 +1234,7 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Cont
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetActiveAlertPoliciesRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveAlertPoliciesRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1198,17 +1247,17 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Cont
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
-	if err := c.svc.CustomAPIProcessDRef(ctx, in); err != nil {
+	if err := s.svc.CustomAPIProcessDRef(ctx, in); err != nil {
 		return nil, err
 	}
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1221,15 +1270,15 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Cont
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetActiveAlertPoliciesResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveAlertPoliciesResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *NamespaceCustomAPIInprocClient) SetActiveNetworkPolicies(ctx context.Context, in *SetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*SetActiveNetworkPoliciesResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) SetActiveNetworkPolicies(ctx context.Context, in *SetActiveNetworkPoliciesRequest) (*SetActiveNetworkPoliciesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -1237,7 +1286,7 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveNetworkPolicies(ctx context.Co
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetActiveNetworkPoliciesRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveNetworkPoliciesRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1250,17 +1299,17 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveNetworkPolicies(ctx context.Co
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
-	if err := c.svc.CustomAPIProcessDRef(ctx, in); err != nil {
+	if err := s.svc.CustomAPIProcessDRef(ctx, in); err != nil {
 		return nil, err
 	}
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1273,15 +1322,15 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveNetworkPolicies(ctx context.Co
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetActiveNetworkPoliciesResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveNetworkPoliciesResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *NamespaceCustomAPIInprocClient) SetActiveServicePolicies(ctx context.Context, in *SetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*SetActiveServicePoliciesResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) SetActiveServicePolicies(ctx context.Context, in *SetActiveServicePoliciesRequest) (*SetActiveServicePoliciesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -1289,7 +1338,7 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveServicePolicies(ctx context.Co
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetActiveServicePoliciesRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveServicePoliciesRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1302,17 +1351,17 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveServicePolicies(ctx context.Co
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
-	if err := c.svc.CustomAPIProcessDRef(ctx, in); err != nil {
+	if err := s.svc.CustomAPIProcessDRef(ctx, in); err != nil {
 		return nil, err
 	}
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1325,15 +1374,15 @@ func (c *NamespaceCustomAPIInprocClient) SetActiveServicePolicies(ctx context.Co
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetActiveServicePoliciesResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveServicePoliciesResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *NamespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.Context, in *SetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*SetFastACLsForInternetVIPsResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) SetFastACLsForInternetVIPs(ctx context.Context, in *SetFastACLsForInternetVIPsRequest) (*SetFastACLsForInternetVIPsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -1341,7 +1390,7 @@ func (c *NamespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1354,17 +1403,17 @@ func (c *NamespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
-	if err := c.svc.CustomAPIProcessDRef(ctx, in); err != nil {
+	if err := s.svc.CustomAPIProcessDRef(ctx, in); err != nil {
 		return nil, err
 	}
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1377,15 +1426,15 @@ func (c *NamespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *NamespaceCustomAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+func (s *namespaceCustomAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) (*SuggestValuesResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
 	}
 
 	var (
@@ -1393,7 +1442,7 @@ func (c *NamespaceCustomAPIInprocClient) SuggestValues(ctx context.Context, in *
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.SuggestValuesReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1407,13 +1456,13 @@ func (c *NamespaceCustomAPIInprocClient) SuggestValues(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SuggestValues"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SuggestValues"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1426,23 +1475,13 @@ func (c *NamespaceCustomAPIInprocClient) SuggestValues(ctx context.Context, in *
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.SuggestValuesResp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesResp", rsp)...)
 
 	return rsp, nil
 }
 
-func NewNamespaceCustomAPIInprocClient(svc svcfw.Service) NamespaceCustomAPIClient {
-	return &NamespaceCustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwNamespaceCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwNamespaceCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterNamespaceCustomAPIHandlerClient(ctx, mux, NewNamespaceCustomAPIInprocClient(s))
+func NewNamespaceCustomAPIServer(svc svcfw.Service) NamespaceCustomAPIServer {
+	return &namespaceCustomAPISrv{svc: svc}
 }
 
 var NamespaceCustomAPISwaggerJSON string = `{
@@ -2560,7 +2599,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",

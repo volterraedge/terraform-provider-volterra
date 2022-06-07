@@ -371,31 +371,67 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		opt(cco)
 	}
 
-	var req *CreateRequest
+	got := 0
+	if e != nil {
+		got++
+	}
 	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*CreateRequest)
-		if !ok {
-			return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
-		}
-		req = r
-	} else {
-		r, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new create request")
-		}
-		req = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, req); err != nil {
-				return nil, err
-			}
-		}
+		got++
+	}
+	if cco.RequestJSON != "" {
+		got++
+	}
+	if got != 1 {
+		return nil, fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	url := fmt.Sprintf("%s/public/namespaces/%s/gcp_vpc_sites", c.baseURL, req.Metadata.GetNamespace())
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var req *CreateRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*CreateRequest)
+			if !ok {
+				return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
+			}
+			req = r
+		} else {
+			r, err := NewCreateRequest(e)
+			if err != nil {
+				return nil, errors.Wrap(err, "Creating new create request")
+			}
+			req = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, req); err != nil {
+					return nil, err
+				}
+			}
+		}
+
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
+
+	var namespace string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return nil, errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
+	} else {
+		return nil, fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	url := fmt.Sprintf("%s/public/namespaces/%s/gcp_vpc_sites", c.baseURL, namespace)
 
 	hReq, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
@@ -424,7 +460,7 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	if err := codec.FromJSON(string(body), rspo); err != nil {
 		return nil, errors.Wrap(err, "Converting json to response protobuf message")
 	}
-	configapi.TranscribeCall(ctx, req, rspo)
+	configapi.TranscribeCall(ctx, jsn, string(body))
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rspo
 		cco.OutCallResponse.JSON = string(body)
@@ -448,26 +484,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		opt(cco)
 	}
 
-	var rReq *ReplaceRequest
-	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*ReplaceRequest)
-		if !ok {
-			return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
-		}
-		rReq = r
-	} else {
-		r, err := NewReplaceRequest(e)
-		if err != nil {
-			return errors.Wrap(err, "Creating new replace request")
-		}
-		rReq = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, rReq); err != nil {
-				return err
-			}
-		}
-	}
-
 	got := 0
 	if e != nil {
 		got++
@@ -475,43 +491,66 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	if cco.RequestProto != nil {
 		got++
 	}
-	if cco.ReplaceJSONReq != "" {
+	if cco.RequestJSON != "" {
 		got++
 	}
 	if got != 1 {
-		return fmt.Errorf("Only one of entry, WithRequestProto() or WithReplaceJSONRequest() should be specified")
-	}
-	if e == nil && cco.RequestProto == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithRequestProto() nor WithReplaceJSONRequest() specified")
+		return fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	var jsn, namespace, name string
-	var err error
-	_ = namespace
-	if e != nil || cco.RequestProto != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var rReq *ReplaceRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*ReplaceRequest)
+			if !ok {
+				return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
+			}
+			rReq = r
+		} else {
+			r, err := NewReplaceRequest(e)
+			if err != nil {
+				return errors.Wrap(err, "Creating new replace request")
+			}
+			rReq = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, rReq); err != nil {
+					return err
+				}
+			}
+		}
+
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.GetMetadata().GetNamespace()
-		name = rReq.GetMetadata().GetName()
+		jsn = j
+	}
+
+	var namespace, name string
+	_ = namespace
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["namespace"].(string); ok {
-			namespace = val
-		}
-		if val, ok := md["name"].(string); ok {
-			name = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	if val, ok := md["name"].(string); ok {
+		name = val
+	} else {
+		return fmt.Errorf("Request %s does not have 'metadata.name'", jsn)
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/gcp_vpc_sites/%s", c.baseURL, namespace, name)
@@ -538,7 +577,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		return errors.Wrap(err, "RestClient replace")
 	}
 
-	configapi.TranscribeCall(ctx, rReq, nil)
+	configapi.TranscribeCall(ctx, jsn, nil)
 	return nil
 
 }
@@ -1627,7 +1666,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "GCP VPC site",
-        "description": "GCP VPC site view defines a required parameters that can be used in CRUD, to create and manage a volterra site in GCP VPC.\nIt can be used to either automatically create or Manually assisted site creation in GCP VPC.",
+        "description": "GCP VPC site view defines a required parameters that can be used in CRUD, to create and manage a volterra site in GCP VPC.\nIt can be used to automatically site creation in the GCP VPC.",
         "version": "version not set"
     },
     "schemes": [
@@ -2134,6 +2173,61 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "fleetBlockedServices": {
+            "type": "object",
+            "description": "Blocked Services configured explicitly\nBy default all services are allowed and get blocked when config is updated",
+            "title": "BlockedServices specifies the ports of platform services blocked explicitly",
+            "x-displayname": "Blocked Services",
+            "x-ves-oneof-field-blocked_services_value_type_choice": "[\"dns\",\"ssh\",\"web_user_interface\"]",
+            "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
+            "properties": {
+                "dns": {
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "title": "DNS port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DNS port"
+                },
+                "network_type": {
+                    "description": " Network type in which these ports get blocked\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
+                    "title": "network_type",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
+                },
+                "ssh": {
+                    "description": "Exclusive with [dns web_user_interface]\n Matches ssh port 22",
+                    "title": "SSH port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "SSH port"
+                },
+                "web_user_interface": {
+                    "description": "Exclusive with [dns ssh]\n Matches the web user interface port",
+                    "title": "Web UI port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Web UI port"
+                }
+            }
+        },
+        "fleetBlockedServicesListType": {
+            "type": "object",
+            "description": "List of all custom blocked services configuration",
+            "title": "Custom Blocked Services Configuration List",
+            "x-displayname": "Custom Blocked Services Configuration List",
+            "x-ves-proto-message": "ves.io.schema.fleet.BlockedServicesListType",
+            "properties": {
+                "blocked_sevice": {
+                    "type": "array",
+                    "description": " Use custom blocked services configuration",
+                    "title": "Custom Blocked Services Configuration",
+                    "items": {
+                        "$ref": "#/definitions/fleetBlockedServices"
+                    },
+                    "x-displayname": "Custom Blocked Services Configuration"
+                }
+            }
+        },
         "gcp_vpc_siteCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2214,12 +2308,13 @@ var APISwaggerJSON string = `{
             "description": "Two interface GCP ingress/egress site",
             "title": "GCP Ingress Egress Gateway",
             "x-displayname": "GCP Ingress/Egress Gateway",
-            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
+            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_inside_vn\",\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCIngressEgressGwReplaceType",
             "properties": {
                 "active_forward_proxy_policies": {
@@ -2234,8 +2329,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
                     "x-displayname": "Active Firewall Policies"
                 },
+                "dc_cluster_group_inside_vn": {
+                    "description": "Exclusive with [dc_cluster_group_outside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via inside network",
+                    "title": "Member of DC cluster Group via Inside Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Member of DC Cluster Group via Inside Network"
+                },
                 "dc_cluster_group_outside_vn": {
-                    "description": "Exclusive with [no_dc_cluster_group]\n This site is member of dc cluster group connected via outside network",
+                    "description": "Exclusive with [dc_cluster_group_inside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via outside network",
                     "title": "Member of DC cluster Group via Outside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group via Outside Network"
@@ -2259,7 +2360,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Manage Static routes"
                 },
                 "no_dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group_outside_vn]\n This site is not a member of dc cluster group",
+                    "description": "Exclusive with [dc_cluster_group_inside_vn dc_cluster_group_outside_vn]\n This site is not a member of dc cluster group",
                     "title": "Not a Member of DC Cluster Group",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Not a Member of DC Cluster Group"
@@ -2299,6 +2400,18 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "sm_connection_public_ip": {
+                    "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Public Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via Public Ip"
+                },
+                "sm_connection_pvt_ip": {
+                    "description": "Exclusive with [sm_connection_public_ip]\n Site Mesh Group Connection Via Private IP. This option will use private IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Private Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via  Private Ip"
                 }
             }
         },
@@ -2307,7 +2420,7 @@ var APISwaggerJSON string = `{
             "description": "Two interface GCP ingress/egress site",
             "title": "GCP Ingress Egress Gateway",
             "x-displayname": "GCP Ingress/Egress Gateway",
-            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
+            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_inside_vn\",\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
@@ -2328,8 +2441,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
                     "x-displayname": "Active Firewall Policies"
                 },
+                "dc_cluster_group_inside_vn": {
+                    "description": "Exclusive with [dc_cluster_group_outside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via inside network",
+                    "title": "Member of DC cluster Group via Inside Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Member of DC Cluster Group via Inside Network"
+                },
                 "dc_cluster_group_outside_vn": {
-                    "description": "Exclusive with [no_dc_cluster_group]\n This site is member of dc cluster group connected via outside network",
+                    "description": "Exclusive with [dc_cluster_group_inside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via outside network",
                     "title": "Member of DC cluster Group via Outside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group via Outside Network"
@@ -2398,7 +2517,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Subnet for Inside Interface"
                 },
                 "no_dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group_outside_vn]\n This site is not a member of dc cluster group",
+                    "description": "Exclusive with [dc_cluster_group_inside_vn dc_cluster_group_outside_vn]\n This site is not a member of dc cluster group",
                     "title": "Not a Member of DC Cluster Group",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Not a Member of DC Cluster Group"
@@ -2602,6 +2721,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCVoltstackClusterReplaceType",
             "properties": {
                 "active_forward_proxy_policies": {
@@ -2669,6 +2789,18 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "sm_connection_public_ip": {
+                    "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Public Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via Public Ip"
+                },
+                "sm_connection_pvt_ip": {
+                    "description": "Exclusive with [sm_connection_public_ip]\n Site Mesh Group Connection Via Private IP. This option will use private IP for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Private Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via  Private Ip"
                 }
             }
         },
@@ -4617,6 +4749,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaVirtualNetworkType": {
+            "type": "string",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "title": "VirtualNetworkType",
+            "enum": [
+                "VIRTUAL_NETWORK_SITE_LOCAL",
+                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE",
+                "VIRTUAL_NETWORK_PER_SITE",
+                "VIRTUAL_NETWORK_PUBLIC",
+                "VIRTUAL_NETWORK_GLOBAL",
+                "VIRTUAL_NETWORK_SITE_SERVICE",
+                "VIRTUAL_NETWORK_VER_INTERNAL",
+                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE",
+                "VIRTUAL_NETWORK_IP_AUTO",
+                "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
+                "VIRTUAL_NETWORK_SRV6_NETWORK",
+                "VIRTUAL_NETWORK_IP_FABRIC"
+            ],
+            "default": "VIRTUAL_NETWORK_SITE_LOCAL",
+            "x-displayname": "Virtual Network Type",
+            "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
+        },
         "schemaWingmanSecretInfoType": {
             "type": "object",
             "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
@@ -4629,9 +4783,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaviewsLocalControlPlaneType": {
+            "type": "object",
+            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "title": "LocalControlPlaneType",
+            "properties": {
+                "default_local_control_plane": {
+                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
@@ -4671,6 +4842,35 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "acmecorp",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
+        "schemaviewsStorageClassOpenebsEnterpriseType": {
+            "type": "object",
+            "description": "Storage class Device configuration for OpenEBS Enterprise",
+            "title": "OpenEBS Enterprise",
+            "x-displayname": "OpenEBS Enterprise",
+            "x-ves-proto-message": "ves.io.schema.views.StorageClassOpenebsEnterpriseType",
+            "properties": {
+                "replication": {
+                    "type": "integer",
+                    "description": " Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3.\n\nExample: - \"1\"-",
+                    "title": "Replication",
+                    "format": "int32",
+                    "x-displayname": "Replication",
+                    "x-ves-example": "1"
+                },
+                "storage_class_size": {
+                    "type": "integer",
+                    "description": " Size of each node of storage class. e.g If \"Storage Class Replicas\" will be set to 3 and \"Storage Class Size\" to 10GB.\n Three 10GB disk will be created and assigned to nodes.\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
+                    "title": "Storage Size",
+                    "format": "int64",
+                    "x-displayname": "Storage Size",
+                    "x-ves-example": "10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1024"
                     }
                 }
             }
@@ -4960,23 +5160,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsLocalControlPlaneType": {
-            "type": "object",
-            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
-            "title": "LocalControlPlaneType",
-            "properties": {
-                "default_local_control_plane": {
-                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
-                    "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "no_local_control_plane": {
-                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
-                    "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                }
-            }
-        },
         "viewsOperatingSystemType": {
             "type": "object",
             "description": "This is to specify volterra operating version choice",
@@ -5080,35 +5263,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsStorageClassOpenebsEnterpriseType": {
-            "type": "object",
-            "description": "Storage class Device configuration for OpenEBS Enterprise",
-            "title": "OpenEBS Enterprise",
-            "x-displayname": "OpenEBS Enterprise",
-            "x-ves-proto-message": "ves.io.schema.views.StorageClassOpenebsEnterpriseType",
-            "properties": {
-                "replication": {
-                    "type": "integer",
-                    "description": " Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3.\n\nExample: - \"1\"-",
-                    "title": "Replication",
-                    "format": "int32",
-                    "x-displayname": "Replication",
-                    "x-ves-example": "1"
-                },
-                "storage_class_size": {
-                    "type": "integer",
-                    "description": " Size of each node of storage class. e.g If \"Storage Class Replicas\" will be set to 3 and \"Storage Class Size\" to 10GB.\n Three 10GB disk will be created and assigned to nodes.\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
-                    "title": "Storage Size",
-                    "format": "int64",
-                    "x-displayname": "Storage Size",
-                    "x-ves-example": "10",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "1",
-                        "ves.io.schema.rules.uint32.lte": "1024"
-                    }
-                }
-            }
-        },
         "viewsStorageClassType": {
             "type": "object",
             "description": "Configuration of custom storage class",
@@ -5127,7 +5281,7 @@ var APISwaggerJSON string = `{
                 "openebs_enterprise": {
                     "description": "Exclusive with []\n Storage class Device configuration for OpenEBS Enterprise",
                     "title": "OpenEBS Enterprise",
-                    "$ref": "#/definitions/viewsStorageClassOpenebsEnterpriseType",
+                    "$ref": "#/definitions/schemaviewsStorageClassOpenebsEnterpriseType",
                     "x-displayname": "OpenEBS Enterprise"
                 },
                 "storage_class_name": {
@@ -5177,7 +5331,8 @@ var APISwaggerJSON string = `{
             "description": "Shape of the GCP VPC site specification",
             "title": "CreateSpecType",
             "x-displayname": "Create GCP VPC site",
-            "x-ves-oneof-field-deployment": "[\"assisted\",\"cloud_credentials\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-deployment": "[\"cloud_credentials\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.CreateSpecType",
@@ -5192,13 +5347,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
-                "assisted": {
-                    "description": "Exclusive with [cloud_credentials]\n In assisted deployment get GCP parameters generated in status of this objects and run volterra provided terraform script.",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Assisted Deployment"
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
                 },
                 "cloud_credentials": {
-                    "description": "Exclusive with [assisted]\n Reference to GCP credentials for automatic deployment",
+                    "description": "Exclusive with []\n Reference to GCP credentials for automatic deployment",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Automatic Deployment"
                 },
@@ -5206,6 +5361,11 @@ var APISwaggerJSON string = `{
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -5317,7 +5477,8 @@ var APISwaggerJSON string = `{
             "description": "Shape of the GCP VPC site specification",
             "title": "GetSpecType",
             "x-displayname": "Get GCP VPC site",
-            "x-ves-oneof-field-deployment": "[\"assisted\",\"cloud_credentials\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-deployment": "[\"cloud_credentials\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GetSpecType",
@@ -5332,13 +5493,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
-                "assisted": {
-                    "description": "Exclusive with [cloud_credentials]\n In assisted deployment get GCP parameters generated in status of this objects and run volterra provided terraform script.",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Assisted Deployment"
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
                 },
                 "cloud_credentials": {
-                    "description": "Exclusive with [assisted]\n Reference to GCP credentials for automatic deployment",
+                    "description": "Exclusive with []\n Reference to GCP credentials for automatic deployment",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Automatic Deployment"
                 },
@@ -5346,6 +5507,11 @@ var APISwaggerJSON string = `{
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -5451,7 +5617,8 @@ var APISwaggerJSON string = `{
             "description": "Shape of the GCP VPC site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-deployment": "[\"assisted\",\"cloud_credentials\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-deployment": "[\"cloud_credentials\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GlobalSpecType",
@@ -5467,14 +5634,14 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
-                "assisted": {
-                    "description": "Exclusive with [cloud_credentials]\n In assisted deployment get GCP parameters generated in status of this objects and run volterra provided terraform script.",
-                    "title": "Assisted Deployment",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Assisted Deployment"
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "title": "Custom Blocked Services Configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
                 },
                 "cloud_credentials": {
-                    "description": "Exclusive with [assisted]\n Reference to GCP credentials for automatic deployment",
+                    "description": "Exclusive with []\n Reference to GCP credentials for automatic deployment",
                     "title": "Automatic Deployment",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Automatic Deployment"
@@ -5490,6 +5657,12 @@ var APISwaggerJSON string = `{
                     "title": "coordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "title": "Default Blocked Service Configuration",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -5612,6 +5785,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the GCP VPC site replace specification",
             "title": "ReplaceSpecType",
             "x-displayname": "Replace GCP VPC site",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.ReplaceSpecType",
@@ -5626,10 +5800,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
+                },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
                 },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_gw voltstack_cluster]\n Two interface site is useful when site is used as ingress/egress gateway to the VPC network.",

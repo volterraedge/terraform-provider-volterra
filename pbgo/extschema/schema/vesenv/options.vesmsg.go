@@ -82,7 +82,7 @@ func (v *ValidateAPIGroupElementInfo) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -268,7 +268,7 @@ func (v *ValidateAPIGroupNameMap) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("rpc_mappings"))
 		for idx, item := range m.GetRpcMappings() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -682,7 +682,7 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("gc_jobs"))
 		for idx, item := range m.GetGcJobs() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -694,7 +694,7 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("gc_services"))
 		for idx, item := range m.GetGcServices() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -706,7 +706,7 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("non_gc_services"))
 		for idx, item := range m.GetNonGcServices() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1084,7 +1084,7 @@ func (v *ValidateReEncryptSecretsType) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1270,7 +1270,7 @@ func (v *ValidateServiceInfo) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("locations"))
 		for idx, item := range m.GetLocations() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1596,6 +1596,28 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("scim"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Cdn:
+		if fv, exists := v.FldValidators["choice.cdn"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Cdn).Cdn
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("cdn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_NginxMgmtSuiteConnector:
+		if fv, exists := v.FldValidators["choice.nginx_mgmt_suite_connector"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_NginxMgmtSuiteConnector).NginxMgmtSuiteConnector
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("nginx_mgmt_suite_connector"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

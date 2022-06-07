@@ -302,18 +302,46 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 	return ccl
 }
 
-// Create CustomPrivateAPIInprocClient
+// Create customPrivateAPIInprocClient
 
 // INPROC Client (satisfying CustomPrivateAPIClient interface)
-type CustomPrivateAPIInprocClient struct {
+type customPrivateAPIInprocClient struct {
+	CustomPrivateAPIServer
+}
+
+func (c *customPrivateAPIInprocClient) CascadeDelete(ctx context.Context, in *PrivateCascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
+	return c.CustomPrivateAPIServer.CascadeDelete(ctx, in)
+}
+func (c *customPrivateAPIInprocClient) UpdateLastLogin(ctx context.Context, in *LastLoginUpdateRequest, opts ...grpc.CallOption) (*LastLoginUpdateResponse, error) {
+	return c.CustomPrivateAPIServer.UpdateLastLogin(ctx, in)
+}
+
+func NewCustomPrivateAPIInprocClient(svc svcfw.Service) CustomPrivateAPIClient {
+	return &customPrivateAPIInprocClient{CustomPrivateAPIServer: NewCustomPrivateAPIServer(svc)}
+}
+
+// RegisterGwCustomPrivateAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomPrivateAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomPrivateAPIHandlerClient(ctx, mux, NewCustomPrivateAPIInprocClient(s))
+}
+
+// Create customPrivateAPISrv
+
+// SERVER (satisfying CustomPrivateAPIServer interface)
+type customPrivateAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomPrivateAPIInprocClient) CascadeDelete(ctx context.Context, in *PrivateCascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomPrivateAPI")
+func (s *customPrivateAPISrv) CascadeDelete(ctx context.Context, in *PrivateCascadeDeleteRequest) (*CascadeDeleteResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomPrivateAPI")
 	cah, ok := ah.(CustomPrivateAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPIServer", ah)
 	}
 
 	var (
@@ -321,13 +349,13 @@ func (c *CustomPrivateAPIInprocClient) CascadeDelete(ctx context.Context, in *Pr
 		err error
 	)
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomPrivateAPI.CascadeDelete"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomPrivateAPI.CascadeDelete"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -342,11 +370,11 @@ func (c *CustomPrivateAPIInprocClient) CascadeDelete(ctx context.Context, in *Pr
 
 	return rsp, nil
 }
-func (c *CustomPrivateAPIInprocClient) UpdateLastLogin(ctx context.Context, in *LastLoginUpdateRequest, opts ...grpc.CallOption) (*LastLoginUpdateResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomPrivateAPI")
+func (s *customPrivateAPISrv) UpdateLastLogin(ctx context.Context, in *LastLoginUpdateRequest) (*LastLoginUpdateResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomPrivateAPI")
 	cah, ok := ah.(CustomPrivateAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPIServer", ah)
 	}
 
 	var (
@@ -354,13 +382,13 @@ func (c *CustomPrivateAPIInprocClient) UpdateLastLogin(ctx context.Context, in *
 		err error
 	)
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -376,18 +404,8 @@ func (c *CustomPrivateAPIInprocClient) UpdateLastLogin(ctx context.Context, in *
 	return rsp, nil
 }
 
-func NewCustomPrivateAPIInprocClient(svc svcfw.Service) CustomPrivateAPIClient {
-	return &CustomPrivateAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomPrivateAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomPrivateAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomPrivateAPIHandlerClient(ctx, mux, NewCustomPrivateAPIInprocClient(s))
+func NewCustomPrivateAPIServer(svc svcfw.Service) CustomPrivateAPIServer {
+	return &customPrivateAPISrv{svc: svc}
 }
 
 var CustomPrivateAPISwaggerJSON string = `{

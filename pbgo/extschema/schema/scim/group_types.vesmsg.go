@@ -87,11 +87,20 @@ func (v *ValidateCreateGroupRequest) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["members"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("members"))
 		for idx, item := range m.GetMembers() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -112,19 +121,10 @@ func (v *ValidateCreateGroupRequest) Validate(ctx context.Context, pm interface{
 
 		vOpts := append(opts, db.WithValidateField("schemas"))
 		for idx, item := range m.GetSchemas() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["sync_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("sync_id"))
-		if err := fv(ctx, m.GetSyncId(), vOpts...); err != nil {
-			return err
 		}
 
 	}
@@ -222,7 +222,7 @@ func (v *ValidateGroup) Validate(ctx context.Context, pm interface{}, opts ...db
 
 		vOpts := append(opts, db.WithValidateField("members"))
 		for idx, item := range m.GetMembers() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -252,19 +252,10 @@ func (v *ValidateGroup) Validate(ctx context.Context, pm interface{}, opts ...db
 
 		vOpts := append(opts, db.WithValidateField("schemas"))
 		for idx, item := range m.GetSchemas() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["sync_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("sync_id"))
-		if err := fv(ctx, m.GetSyncId(), vOpts...); err != nil {
-			return err
 		}
 
 	}
@@ -575,7 +566,7 @@ func (v *ValidateListGroupResources) Validate(ctx context.Context, pm interface{
 
 		vOpts := append(opts, db.WithValidateField("groups"))
 		for idx, item := range m.GetGroups() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -587,7 +578,7 @@ func (v *ValidateListGroupResources) Validate(ctx context.Context, pm interface{
 
 		vOpts := append(opts, db.WithValidateField("schemas"))
 		for idx, item := range m.GetSchemas() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

@@ -371,31 +371,67 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		opt(cco)
 	}
 
-	var req *CreateRequest
+	got := 0
+	if e != nil {
+		got++
+	}
 	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*CreateRequest)
-		if !ok {
-			return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
-		}
-		req = r
-	} else {
-		r, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new create request")
-		}
-		req = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, req); err != nil {
-				return nil, err
-			}
-		}
+		got++
+	}
+	if cco.RequestJSON != "" {
+		got++
+	}
+	if got != 1 {
+		return nil, fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	url := fmt.Sprintf("%s/public/namespaces/%s/tcp_loadbalancers", c.baseURL, req.Metadata.GetNamespace())
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var req *CreateRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*CreateRequest)
+			if !ok {
+				return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
+			}
+			req = r
+		} else {
+			r, err := NewCreateRequest(e)
+			if err != nil {
+				return nil, errors.Wrap(err, "Creating new create request")
+			}
+			req = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, req); err != nil {
+					return nil, err
+				}
+			}
+		}
+
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
+
+	var namespace string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return nil, errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
+	} else {
+		return nil, fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	url := fmt.Sprintf("%s/public/namespaces/%s/tcp_loadbalancers", c.baseURL, namespace)
 
 	hReq, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
@@ -424,7 +460,7 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	if err := codec.FromJSON(string(body), rspo); err != nil {
 		return nil, errors.Wrap(err, "Converting json to response protobuf message")
 	}
-	configapi.TranscribeCall(ctx, req, rspo)
+	configapi.TranscribeCall(ctx, jsn, string(body))
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rspo
 		cco.OutCallResponse.JSON = string(body)
@@ -448,26 +484,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		opt(cco)
 	}
 
-	var rReq *ReplaceRequest
-	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*ReplaceRequest)
-		if !ok {
-			return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
-		}
-		rReq = r
-	} else {
-		r, err := NewReplaceRequest(e)
-		if err != nil {
-			return errors.Wrap(err, "Creating new replace request")
-		}
-		rReq = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, rReq); err != nil {
-				return err
-			}
-		}
-	}
-
 	got := 0
 	if e != nil {
 		got++
@@ -475,43 +491,66 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	if cco.RequestProto != nil {
 		got++
 	}
-	if cco.ReplaceJSONReq != "" {
+	if cco.RequestJSON != "" {
 		got++
 	}
 	if got != 1 {
-		return fmt.Errorf("Only one of entry, WithRequestProto() or WithReplaceJSONRequest() should be specified")
-	}
-	if e == nil && cco.RequestProto == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithRequestProto() nor WithReplaceJSONRequest() specified")
+		return fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	var jsn, namespace, name string
-	var err error
-	_ = namespace
-	if e != nil || cco.RequestProto != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var rReq *ReplaceRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*ReplaceRequest)
+			if !ok {
+				return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
+			}
+			rReq = r
+		} else {
+			r, err := NewReplaceRequest(e)
+			if err != nil {
+				return errors.Wrap(err, "Creating new replace request")
+			}
+			rReq = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, rReq); err != nil {
+					return err
+				}
+			}
+		}
+
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.GetMetadata().GetNamespace()
-		name = rReq.GetMetadata().GetName()
+		jsn = j
+	}
+
+	var namespace, name string
+	_ = namespace
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["namespace"].(string); ok {
-			namespace = val
-		}
-		if val, ok := md["name"].(string); ok {
-			name = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	if val, ok := md["name"].(string); ok {
+		name = val
+	} else {
+		return fmt.Errorf("Request %s does not have 'metadata.name'", jsn)
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/tcp_loadbalancers/%s", c.baseURL, namespace, name)
@@ -538,7 +577,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		return errors.Wrap(err, "RestClient replace")
 	}
 
-	configapi.TranscribeCall(ctx, rReq, nil)
+	configapi.TranscribeCall(ctx, jsn, nil)
 	return nil
 
 }
@@ -2992,7 +3031,7 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
@@ -3792,7 +3831,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.AdvertisePublic",
             "properties": {
                 "public_ip": {
-                    "description": " Use dedicated public ip as VIP instead of default public VIP \n\n Dedicated public ip are allocated by volterra on request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Use dedicated public ip as VIP instead of default public VIP\n\n Dedicated public ip are allocated by volterra on request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Public IP",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Public IP",
@@ -3928,7 +3967,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [use_default_port]\n TCP port to Listen. \n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [use_default_port]\n TCP port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "TCP port to listen",
                     "format": "int64",
                     "x-displayname": "TCP Listen Port",
@@ -3938,7 +3977,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "site": {
-                    "description": "Exclusive with [virtual_network virtual_site vk8s_service]\n Advertise on a customer site and a given network. ",
+                    "description": "Exclusive with [virtual_network virtual_site vk8s_service]\n Advertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite",
                     "x-displayname": "Site"

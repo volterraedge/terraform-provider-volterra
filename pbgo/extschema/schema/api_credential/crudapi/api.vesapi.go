@@ -372,27 +372,40 @@ type crudAPIRestClient struct {
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	req, err := NewObjectCreateReq(e)
-	if err != nil {
-		return nil, errors.Wrap(err, "Creating new create request")
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	if e != nil && cco.RequestJSON != "" {
+		return nil, fmt.Errorf("Both entry and WithRequestJSON() specified")
+	}
+	if e == nil && cco.RequestJSON == "" {
+		return nil, fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.api_credential.crudapi", ".")
 	t := strings.Join(sl[:len(sl)-1], ".")
 	url := fmt.Sprintf("%s/%s/Objects", c.baseURL, t)
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		req, err := NewObjectCreateReq(e)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new create request")
+		}
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
 
 	hReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
 		return nil, err
-	}
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
 	}
 	client.AddHdrsToReq(cco.Headers, hReq)
 	hReq.Header.Set("Content-Type", "application/json")
@@ -428,43 +441,46 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	rReq, err := NewObjectReplaceReq(e)
-	if err != nil {
-		return errors.Wrap(err, "Creating new replace request")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	if e != nil && cco.ReplaceJSONReq != "" {
-		return fmt.Errorf("Both entry and WithReplaceJSONRequest() specified")
+	if e != nil && cco.RequestJSON != "" {
+		return fmt.Errorf("Both entry and WithRequestJSON() specified")
 	}
-	if e == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithReplaceJSONRequest() specified")
+	if e == nil && cco.RequestJSON == "" {
+		return fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
-	var jsn, objUID string
-	if e != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		rReq, err := NewObjectReplaceReq(e)
+		if err != nil {
+			return errors.Wrap(err, "Creating new replace request")
+		}
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		objUID = rReq.ObjectUid
+		jsn = j
+	}
+
+	var objUID string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["uid"].(string); ok {
+		objUID = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["uid"].(string); ok {
-			objUID = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.uid'", jsn)
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -2581,7 +2597,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "api_credentialAPICredentialType": {
             "type": "string",
-            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nusing self credential (my credential)\nKubernetes config file to access Virtual Kubernetes API in Volterra\nusing self credential (my credential)\nAPI token to access Volterra public API\nusing self credential (my credential)\nAPI token for service credentials\nusing service user credential (service credential)\nAPI certificate for service credentials\nusing service user credential (service credential)\nService Credential kubeconfig\nusing service user credential (service credential)\nKubeconfig for accessing Site via Global Controller\nToken for the SCIM public APIs used to sync users and groups with the Volterra platform.\nExternal identity provider's SCIM client can use this token as Bearer token with Authorization header",
+            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nusing self credential (my credential)\nKubernetes config file to access Virtual Kubernetes API in Volterra\nusing self credential (my credential)\nAPI token to access Volterra public API\nusing self credential (my credential)\nAPI token for service credentials\nusing service user credential (service credential)\nAPI certificate for service credentials\nusing service user credential (service credential)\nService Credential kubeconfig\nusing service user credential (service credential)\nKubeconfig for accessing Site via Global Controller\nusing self credential (my credential)\nToken for the SCIM public APIs used to sync users and groups with the Volterra platform.\nExternal identity provider's SCIM client can use this token as Bearer token with Authorization header\nService Credential Kubeconfig for accessing Site via Global Controller\nusing service user credential (service credential)",
             "title": "API Credential type",
             "enum": [
                 "API_CERTIFICATE",
@@ -2591,7 +2607,8 @@ var APISwaggerJSON string = `{
                 "SERVICE_API_CERTIFICATE",
                 "SERVICE_KUBE_CONFIG",
                 "SITE_GLOBAL_KUBE_CONFIG",
-                "SCIM_API_TOKEN"
+                "SCIM_API_TOKEN",
+                "SERVICE_SITE_GLOBAL_KUBE_CONFIG"
             ],
             "default": "API_CERTIFICATE",
             "x-displayname": "Credential Type",

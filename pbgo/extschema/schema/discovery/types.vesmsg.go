@@ -1008,7 +1008,7 @@ func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("pods"))
 		for idx, item := range m.GetPods() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1028,7 +1028,7 @@ func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("ports"))
 		for idx, item := range m.GetPorts() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -3447,7 +3447,7 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("services"))
 		for idx, item := range m.GetServices() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -3688,7 +3688,7 @@ func (r *CreateSpecType) GetDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -3696,14 +3696,31 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Where = f.GetWhere()
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetDiscoveryChoiceToGlobalSpecType(f)
 	f.Where = m1.Where
+}
+
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -3741,7 +3758,7 @@ func (r *GetSpecType) GetDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType) er
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -3751,16 +3768,33 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Where = f.GetWhere()
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetDiscoveryChoiceToGlobalSpecType(f)
 	f.PublishVip = m1.PublishVip
 	f.Type = m1.Type
 	f.Where = m1.Where
+}
+
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -3798,7 +3832,7 @@ func (r *ReplaceSpecType) GetDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -3806,12 +3840,29 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Where = f.GetWhere()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetDiscoveryChoiceToGlobalSpecType(f)
 	f.Where = m1.Where
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

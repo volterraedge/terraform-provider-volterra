@@ -169,7 +169,7 @@ func (v *ValidateChoiceItemList) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("choice_items"))
 		for idx, item := range m.GetChoiceItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -250,7 +250,7 @@ func (v *ValidateChoices) Validate(ctx context.Context, pm interface{}, opts ...
 
 		vOpts := append(opts, db.WithValidateField("choice"))
 		for idx, item := range m.GetChoice() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -510,7 +510,7 @@ func (v *ValidateColumns) Validate(ctx context.Context, pm interface{}, opts ...
 
 		vOpts := append(opts, db.WithValidateField("column_list"))
 		for idx, item := range m.GetColumnList() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1067,7 +1067,7 @@ func (v *ValidateDisplayKVItemList) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1367,7 +1367,7 @@ func (v *ValidateDisplayOneValue) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("path_list"))
 		for idx, item := range m.GetPathList() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1681,7 +1681,7 @@ func (v *ValidateDisplayOneofItemList) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2050,7 +2050,7 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("ancestor_message_in"))
 		for idx, item := range m.GetAncestorMessageIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2062,7 +2062,7 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("environment_in"))
 		for idx, item := range m.GetEnvironmentIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2083,7 +2083,7 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("path_suffix_in"))
 		for idx, item := range m.GetPathSuffixIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2095,7 +2095,7 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("root_object_in"))
 		for idx, item := range m.GetRootObjectIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2176,7 +2176,7 @@ func (v *ValidateLabelKeyClassList) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("key_classes"))
 		for idx, item := range m.GetKeyClasses() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2527,7 +2527,7 @@ func (v *ValidateSuggestedValues) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("ancestor_message_in"))
 		for idx, item := range m.GetAncestorMessageIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2557,7 +2557,7 @@ func (v *ValidateSuggestedValues) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("path_suffix_in"))
 		for idx, item := range m.GetPathSuffixIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2578,7 +2578,7 @@ func (v *ValidateSuggestedValues) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("root_object_in"))
 		for idx, item := range m.GetRootObjectIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2764,7 +2764,7 @@ func (v *ValidateTiles) Validate(ctx context.Context, pm interface{}, opts ...db
 
 		vOpts := append(opts, db.WithValidateField("tile_list"))
 		for idx, item := range m.GetTileList() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

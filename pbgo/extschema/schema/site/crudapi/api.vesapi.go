@@ -372,27 +372,40 @@ type crudAPIRestClient struct {
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	req, err := NewObjectCreateReq(e)
-	if err != nil {
-		return nil, errors.Wrap(err, "Creating new create request")
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	if e != nil && cco.RequestJSON != "" {
+		return nil, fmt.Errorf("Both entry and WithRequestJSON() specified")
+	}
+	if e == nil && cco.RequestJSON == "" {
+		return nil, fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.site.crudapi", ".")
 	t := strings.Join(sl[:len(sl)-1], ".")
 	url := fmt.Sprintf("%s/%s/Objects", c.baseURL, t)
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		req, err := NewObjectCreateReq(e)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new create request")
+		}
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
 
 	hReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
 		return nil, err
-	}
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
 	}
 	client.AddHdrsToReq(cco.Headers, hReq)
 	hReq.Header.Set("Content-Type", "application/json")
@@ -428,43 +441,46 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	rReq, err := NewObjectReplaceReq(e)
-	if err != nil {
-		return errors.Wrap(err, "Creating new replace request")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	if e != nil && cco.ReplaceJSONReq != "" {
-		return fmt.Errorf("Both entry and WithReplaceJSONRequest() specified")
+	if e != nil && cco.RequestJSON != "" {
+		return fmt.Errorf("Both entry and WithRequestJSON() specified")
 	}
-	if e == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithReplaceJSONRequest() specified")
+	if e == nil && cco.RequestJSON == "" {
+		return fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
-	var jsn, objUID string
-	if e != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		rReq, err := NewObjectReplaceReq(e)
+		if err != nil {
+			return errors.Wrap(err, "Creating new replace request")
+		}
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		objUID = rReq.ObjectUid
+		jsn = j
+	}
+
+	var objUID string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["uid"].(string); ok {
+		objUID = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["uid"].(string); ok {
-			objUID = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.uid'", jsn)
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -4170,6 +4186,13 @@ var APISwaggerJSON string = `{
                     "title": "k8s_api_servers",
                     "x-displayname": "Kubernetes API Servers"
                 },
+                "local_control_plane_enabled": {
+                    "type": "boolean",
+                    "description": " Enable local control plane for L3VPN, SRV6, EVPN, AINs, VK8S, etc",
+                    "title": "Local Control Plane",
+                    "format": "boolean",
+                    "x-displayname": "Local Control Plane enabled"
+                },
                 "local_k8s_access_enabled": {
                     "type": "boolean",
                     "description": " Lets user know if this site has local k8s cluster enabled via fleet configuration.",
@@ -4886,12 +4909,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\"]\n",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\",\\\"AzureAlternateRegion\\\"]\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-east-2a",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\",\\\"AzureAlternateRegion\\\"]"
                     }
                 },
                 "inside_vip": {

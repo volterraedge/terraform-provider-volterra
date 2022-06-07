@@ -412,7 +412,7 @@ func (v *ValidateListApiGroupsRsp) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("api_groups_contents"))
 		for idx, item := range m.GetApiGroupsContents() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -424,7 +424,7 @@ func (v *ValidateListApiGroupsRsp) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("api_groups_names"))
 		for idx, item := range m.GetApiGroupsNames() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

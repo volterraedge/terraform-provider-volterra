@@ -436,6 +436,15 @@ func (v *ValidateCreateObjectResponse) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -721,7 +730,7 @@ func (v *ValidateDeleteObjectResponse) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("deleted_objects"))
 		for idx, item := range m.GetDeletedObjects() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1192,7 +1201,7 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 
 		vOpts := append(opts, db.WithValidateField("versions"))
 		for idx, item := range m.GetVersions() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1461,7 +1470,7 @@ func (v *ValidateListObjectsResponse) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

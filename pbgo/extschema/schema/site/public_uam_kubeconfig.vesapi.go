@@ -397,18 +397,49 @@ func NewUamKubeConfigAPIRestClient(baseURL string, hc http.Client) server.Custom
 	return ccl
 }
 
-// Create UamKubeConfigAPIInprocClient
+// Create uamKubeConfigAPIInprocClient
 
 // INPROC Client (satisfying UamKubeConfigAPIClient interface)
-type UamKubeConfigAPIInprocClient struct {
+type uamKubeConfigAPIInprocClient struct {
+	UamKubeConfigAPIServer
+}
+
+func (c *uamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Context, in *CreateGlobalKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+	return c.UamKubeConfigAPIServer.CreateGlobalKubeConfig(ctx, in)
+}
+func (c *uamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context, in *ListGlobalKubeConfigReq, opts ...grpc.CallOption) (*ListKubeConfigRsp, error) {
+	return c.UamKubeConfigAPIServer.ListGlobalKubeConfig(ctx, in)
+}
+func (c *uamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Context, in *RevokeKubeConfigReq, opts ...grpc.CallOption) (*KubeConfigStatusRsp, error) {
+	return c.UamKubeConfigAPIServer.RevokeGlobalKubeConfig(ctx, in)
+}
+
+func NewUamKubeConfigAPIInprocClient(svc svcfw.Service) UamKubeConfigAPIClient {
+	return &uamKubeConfigAPIInprocClient{UamKubeConfigAPIServer: NewUamKubeConfigAPIServer(svc)}
+}
+
+// RegisterGwUamKubeConfigAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwUamKubeConfigAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterUamKubeConfigAPIHandlerClient(ctx, mux, NewUamKubeConfigAPIInprocClient(s))
+}
+
+// Create uamKubeConfigAPISrv
+
+// SERVER (satisfying UamKubeConfigAPIServer interface)
+type uamKubeConfigAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Context, in *CreateGlobalKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
+func (s *uamKubeConfigAPISrv) CreateGlobalKubeConfig(ctx context.Context, in *CreateGlobalKubeConfigReq) (*google_api.HttpBody, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
 	cah, ok := ah.(UamKubeConfigAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *UamKubeConfigAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *UamKubeConfigAPIServer", ah)
 	}
 
 	var (
@@ -416,7 +447,7 @@ func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Contex
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.CreateGlobalKubeConfigReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.CreateGlobalKubeConfigReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -430,13 +461,13 @@ func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Contex
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -449,15 +480,15 @@ func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Contex
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "google.api.HttpBody", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
 }
-func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context, in *ListGlobalKubeConfigReq, opts ...grpc.CallOption) (*ListKubeConfigRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
+func (s *uamKubeConfigAPISrv) ListGlobalKubeConfig(ctx context.Context, in *ListGlobalKubeConfigReq) (*ListKubeConfigRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
 	cah, ok := ah.(UamKubeConfigAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *UamKubeConfigAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *UamKubeConfigAPIServer", ah)
 	}
 
 	var (
@@ -465,7 +496,7 @@ func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context,
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ListGlobalKubeConfigReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.ListGlobalKubeConfigReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -479,13 +510,13 @@ func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -498,15 +529,15 @@ func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context,
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.site.ListKubeConfigRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.ListKubeConfigRsp", rsp)...)
 
 	return rsp, nil
 }
-func (c *UamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Context, in *RevokeKubeConfigReq, opts ...grpc.CallOption) (*KubeConfigStatusRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
+func (s *uamKubeConfigAPISrv) RevokeGlobalKubeConfig(ctx context.Context, in *RevokeKubeConfigReq) (*KubeConfigStatusRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
 	cah, ok := ah.(UamKubeConfigAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *UamKubeConfigAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *UamKubeConfigAPIServer", ah)
 	}
 
 	var (
@@ -514,7 +545,7 @@ func (c *UamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Contex
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.RevokeKubeConfigReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.RevokeKubeConfigReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -528,13 +559,13 @@ func (c *UamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Contex
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -547,23 +578,13 @@ func (c *UamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Contex
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.site.KubeConfigStatusRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.KubeConfigStatusRsp", rsp)...)
 
 	return rsp, nil
 }
 
-func NewUamKubeConfigAPIInprocClient(svc svcfw.Service) UamKubeConfigAPIClient {
-	return &UamKubeConfigAPIInprocClient{svc: svc}
-}
-
-// RegisterGwUamKubeConfigAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwUamKubeConfigAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterUamKubeConfigAPIHandlerClient(ctx, mux, NewUamKubeConfigAPIInprocClient(s))
+func NewUamKubeConfigAPIServer(svc svcfw.Service) UamKubeConfigAPIServer {
+	return &uamKubeConfigAPISrv{svc: svc}
 }
 
 var UamKubeConfigAPISwaggerJSON string = `{

@@ -512,18 +512,52 @@ func NewWAFMonitoringAPIRestClient(baseURL string, hc http.Client) server.Custom
 	return ccl
 }
 
-// Create WAFMonitoringAPIInprocClient
+// Create wAFMonitoringAPIInprocClient
 
 // INPROC Client (satisfying WAFMonitoringAPIClient interface)
-type WAFMonitoringAPIInprocClient struct {
+type wAFMonitoringAPIInprocClient struct {
+	WAFMonitoringAPIServer
+}
+
+func (c *wAFMonitoringAPIInprocClient) ClientRuleHitsMetrics(ctx context.Context, in *RuleHitsCountRequest, opts ...grpc.CallOption) (*RuleHitsCountResponse, error) {
+	return c.WAFMonitoringAPIServer.ClientRuleHitsMetrics(ctx, in)
+}
+func (c *wAFMonitoringAPIInprocClient) ClientSecurityEventsMetrics(ctx context.Context, in *SecurityEventsCountRequest, opts ...grpc.CallOption) (*SecurityEventsCountResponse, error) {
+	return c.WAFMonitoringAPIServer.ClientSecurityEventsMetrics(ctx, in)
+}
+func (c *wAFMonitoringAPIInprocClient) ServerRuleHitsMetrics(ctx context.Context, in *RuleHitsCountRequest, opts ...grpc.CallOption) (*RuleHitsCountResponse, error) {
+	return c.WAFMonitoringAPIServer.ServerRuleHitsMetrics(ctx, in)
+}
+func (c *wAFMonitoringAPIInprocClient) ServerSecurityEventsMetrics(ctx context.Context, in *SecurityEventsCountRequest, opts ...grpc.CallOption) (*SecurityEventsCountResponse, error) {
+	return c.WAFMonitoringAPIServer.ServerSecurityEventsMetrics(ctx, in)
+}
+
+func NewWAFMonitoringAPIInprocClient(svc svcfw.Service) WAFMonitoringAPIClient {
+	return &wAFMonitoringAPIInprocClient{WAFMonitoringAPIServer: NewWAFMonitoringAPIServer(svc)}
+}
+
+// RegisterGwWAFMonitoringAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwWAFMonitoringAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterWAFMonitoringAPIHandlerClient(ctx, mux, NewWAFMonitoringAPIInprocClient(s))
+}
+
+// Create wAFMonitoringAPISrv
+
+// SERVER (satisfying WAFMonitoringAPIServer interface)
+type wAFMonitoringAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *WAFMonitoringAPIInprocClient) ClientRuleHitsMetrics(ctx context.Context, in *RuleHitsCountRequest, opts ...grpc.CallOption) (*RuleHitsCountResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.waf.WAFMonitoringAPI")
+func (s *wAFMonitoringAPISrv) ClientRuleHitsMetrics(ctx context.Context, in *RuleHitsCountRequest) (*RuleHitsCountResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.waf.WAFMonitoringAPI")
 	cah, ok := ah.(WAFMonitoringAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *WAFMonitoringAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *WAFMonitoringAPIServer", ah)
 	}
 
 	var (
@@ -531,7 +565,7 @@ func (c *WAFMonitoringAPIInprocClient) ClientRuleHitsMetrics(ctx context.Context
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.waf.RuleHitsCountRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.waf.RuleHitsCountRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -545,13 +579,13 @@ func (c *WAFMonitoringAPIInprocClient) ClientRuleHitsMetrics(ctx context.Context
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -564,15 +598,15 @@ func (c *WAFMonitoringAPIInprocClient) ClientRuleHitsMetrics(ctx context.Context
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.waf.RuleHitsCountResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf.RuleHitsCountResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *WAFMonitoringAPIInprocClient) ClientSecurityEventsMetrics(ctx context.Context, in *SecurityEventsCountRequest, opts ...grpc.CallOption) (*SecurityEventsCountResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.waf.WAFMonitoringAPI")
+func (s *wAFMonitoringAPISrv) ClientSecurityEventsMetrics(ctx context.Context, in *SecurityEventsCountRequest) (*SecurityEventsCountResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.waf.WAFMonitoringAPI")
 	cah, ok := ah.(WAFMonitoringAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *WAFMonitoringAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *WAFMonitoringAPIServer", ah)
 	}
 
 	var (
@@ -580,7 +614,7 @@ func (c *WAFMonitoringAPIInprocClient) ClientSecurityEventsMetrics(ctx context.C
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.waf.SecurityEventsCountRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.waf.SecurityEventsCountRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -594,13 +628,13 @@ func (c *WAFMonitoringAPIInprocClient) ClientSecurityEventsMetrics(ctx context.C
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -613,15 +647,15 @@ func (c *WAFMonitoringAPIInprocClient) ClientSecurityEventsMetrics(ctx context.C
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.waf.SecurityEventsCountResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf.SecurityEventsCountResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *WAFMonitoringAPIInprocClient) ServerRuleHitsMetrics(ctx context.Context, in *RuleHitsCountRequest, opts ...grpc.CallOption) (*RuleHitsCountResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.waf.WAFMonitoringAPI")
+func (s *wAFMonitoringAPISrv) ServerRuleHitsMetrics(ctx context.Context, in *RuleHitsCountRequest) (*RuleHitsCountResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.waf.WAFMonitoringAPI")
 	cah, ok := ah.(WAFMonitoringAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *WAFMonitoringAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *WAFMonitoringAPIServer", ah)
 	}
 
 	var (
@@ -629,7 +663,7 @@ func (c *WAFMonitoringAPIInprocClient) ServerRuleHitsMetrics(ctx context.Context
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.waf.RuleHitsCountRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.waf.RuleHitsCountRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -643,13 +677,13 @@ func (c *WAFMonitoringAPIInprocClient) ServerRuleHitsMetrics(ctx context.Context
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -662,15 +696,15 @@ func (c *WAFMonitoringAPIInprocClient) ServerRuleHitsMetrics(ctx context.Context
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.waf.RuleHitsCountResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf.RuleHitsCountResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *WAFMonitoringAPIInprocClient) ServerSecurityEventsMetrics(ctx context.Context, in *SecurityEventsCountRequest, opts ...grpc.CallOption) (*SecurityEventsCountResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.waf.WAFMonitoringAPI")
+func (s *wAFMonitoringAPISrv) ServerSecurityEventsMetrics(ctx context.Context, in *SecurityEventsCountRequest) (*SecurityEventsCountResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.waf.WAFMonitoringAPI")
 	cah, ok := ah.(WAFMonitoringAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *WAFMonitoringAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *WAFMonitoringAPIServer", ah)
 	}
 
 	var (
@@ -678,7 +712,7 @@ func (c *WAFMonitoringAPIInprocClient) ServerSecurityEventsMetrics(ctx context.C
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.waf.SecurityEventsCountRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.waf.SecurityEventsCountRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -692,13 +726,13 @@ func (c *WAFMonitoringAPIInprocClient) ServerSecurityEventsMetrics(ctx context.C
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -711,23 +745,13 @@ func (c *WAFMonitoringAPIInprocClient) ServerSecurityEventsMetrics(ctx context.C
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.waf.SecurityEventsCountResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf.SecurityEventsCountResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewWAFMonitoringAPIInprocClient(svc svcfw.Service) WAFMonitoringAPIClient {
-	return &WAFMonitoringAPIInprocClient{svc: svc}
-}
-
-// RegisterGwWAFMonitoringAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwWAFMonitoringAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterWAFMonitoringAPIHandlerClient(ctx, mux, NewWAFMonitoringAPIInprocClient(s))
+func NewWAFMonitoringAPIServer(svc svcfw.Service) WAFMonitoringAPIServer {
+	return &wAFMonitoringAPISrv{svc: svc}
 }
 
 var WAFMonitoringAPISwaggerJSON string = `{

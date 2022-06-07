@@ -968,24 +968,38 @@ func RegistrationCreateRequestValidator() db.Validator {
 	return DefaultRegistrationCreateRequestValidator
 }
 
-func (m *RegistrationCreateRequest) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*DBObject)
+func (m *RegistrationCreateRequest) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*DBObject)
+	}
 	_ = f
 
 	if m.Metadata == nil {
 		m.Metadata = &ves_io_schema.ObjectCreateMetaType{}
 	}
-	m.Metadata.FromObjectMetaType(f.GetMetadata())
+	m.Metadata.FromObjectMetaTypeWithoutDeepCopy(f.GetMetadata())
 
 	if m.Spec == nil {
 		m.Spec = &CreateSpecType{}
 	}
-	m.Spec.FromGlobalSpecType(f.GetSpec().GetGcSpec())
+	m.Spec.FromGlobalSpecTypeWithoutDeepCopy(f.GetSpec().GetGcSpec())
 
 }
 
-func (m *RegistrationCreateRequest) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
+func (m *RegistrationCreateRequest) FromObject(e db.Entry) {
+	m.fromObject(e, true)
+}
+
+func (m *RegistrationCreateRequest) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *RegistrationCreateRequest) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
 	_ = m1
 	f := e.(*DBObject)
 	_ = f
@@ -999,7 +1013,7 @@ func (m *RegistrationCreateRequest) ToObject(e db.Entry) {
 	}
 
 	if m1.Metadata != nil {
-		m1.Metadata.ToObjectMetaType(f.Metadata)
+		m1.Metadata.ToObjectMetaTypeWithoutDeepCopy(f.Metadata)
 	}
 
 	if m1.Spec != nil {
@@ -1019,7 +1033,15 @@ func (m *RegistrationCreateRequest) ToObject(e db.Entry) {
 	}
 
 	if m1.Spec != nil {
-		m1.Spec.ToGlobalSpecType(f.Spec.GcSpec)
+		m1.Spec.ToGlobalSpecTypeWithoutDeepCopy(f.Spec.GcSpec)
 	}
 
+}
+
+func (m *RegistrationCreateRequest) ToObject(e db.Entry) {
+	m.toObject(e, true)
+}
+
+func (m *RegistrationCreateRequest) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
 }

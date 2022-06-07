@@ -665,7 +665,7 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("master_nodes"))
 		for idx, item := range m.GetMasterNodes() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -695,7 +695,7 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("subnets"))
 		for idx, item := range m.GetSubnets() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -707,7 +707,7 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("svcs_tunnel_information"))
 		for idx, item := range m.GetSvcsTunnelInformation() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -740,7 +740,7 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("tunnel_information"))
 		for idx, item := range m.GetTunnelInformation() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1021,7 +1021,7 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("inside_vip_port_config"))
 		for idx, item := range m.GetInsideVipPortConfig() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1033,7 +1033,7 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("master_nodes"))
 		for idx, item := range m.GetMasterNodes() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1045,7 +1045,7 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("outside_vip_port_config"))
 		for idx, item := range m.GetOutsideVipPortConfig() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1075,7 +1075,7 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("subnets"))
 		for idx, item := range m.GetSubnets() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

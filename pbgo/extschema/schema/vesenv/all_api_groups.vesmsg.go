@@ -827,6 +827,72 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_VoltconsoleNginxMgmtSuiteRead:
+		if fv, exists := v.FldValidators["choice.voltconsole_nginx_mgmt_suite_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleNginxMgmtSuiteRead).VoltconsoleNginxMgmtSuiteRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_nginx_mgmt_suite_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleNginxMgmtSuiteWrite:
+		if fv, exists := v.FldValidators["choice.voltconsole_nginx_mgmt_suite_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleNginxMgmtSuiteWrite).VoltconsoleNginxMgmtSuiteWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_nginx_mgmt_suite_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleLilacCdnRead:
+		if fv, exists := v.FldValidators["choice.voltconsole_lilac_cdn_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleLilacCdnRead).VoltconsoleLilacCdnRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_lilac_cdn_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleLilacCdnWrite:
+		if fv, exists := v.FldValidators["choice.voltconsole_lilac_cdn_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleLilacCdnWrite).VoltconsoleLilacCdnWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_lilac_cdn_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleLilacCdnAdmin:
+		if fv, exists := v.FldValidators["choice.voltconsole_lilac_cdn_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleLilacCdnAdmin).VoltconsoleLilacCdnAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_lilac_cdn_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleLilacCdnSubscriptionMgmt:
+		if fv, exists := v.FldValidators["choice.voltconsole_lilac_cdn_subscription_mgmt"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleLilacCdnSubscriptionMgmt).VoltconsoleLilacCdnSubscriptionMgmt
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_lilac_cdn_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

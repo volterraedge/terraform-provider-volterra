@@ -82,7 +82,7 @@ func (v *ValidateDependencies) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("on"))
 		for idx, item := range m.GetOn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -250,7 +250,7 @@ func (v *ValidateKeys) Validate(ctx context.Context, pm interface{}, opts ...db.
 
 		vOpts := append(opts, db.WithValidateField("keys"))
 		for idx, item := range m.GetKeys() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -331,7 +331,7 @@ func (v *ValidateMetricDef) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("buckets"))
 		for idx, item := range m.GetBuckets() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -352,7 +352,7 @@ func (v *ValidateMetricDef) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for idx, item := range m.GetLabels() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -460,7 +460,7 @@ func (v *ValidateOn) Validate(ctx context.Context, pm interface{}, opts ...db.Va
 
 		vOpts := append(opts, db.WithValidateField("via"))
 		for idx, item := range m.GetVia() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

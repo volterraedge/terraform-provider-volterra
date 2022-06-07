@@ -91,7 +91,7 @@ func (v *ValidateRuleHitsCountRequest) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -103,7 +103,7 @@ func (v *ValidateRuleHitsCountRequest) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		for idx, item := range m.GetLabelFilter() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -220,7 +220,7 @@ func (v *ValidateRuleHitsCountResponse) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -310,7 +310,7 @@ func (v *ValidateSecurityEventsCountRequest) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -322,7 +322,7 @@ func (v *ValidateSecurityEventsCountRequest) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		for idx, item := range m.GetLabelFilter() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -439,7 +439,7 @@ func (v *ValidateSecurityEventsCountResponse) Validate(ctx context.Context, pm i
 
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

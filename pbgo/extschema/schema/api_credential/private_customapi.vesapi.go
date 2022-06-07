@@ -204,18 +204,43 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 	return ccl
 }
 
-// Create CustomPrivateAPIInprocClient
+// Create customPrivateAPIInprocClient
 
 // INPROC Client (satisfying CustomPrivateAPIClient interface)
-type CustomPrivateAPIInprocClient struct {
+type customPrivateAPIInprocClient struct {
+	CustomPrivateAPIServer
+}
+
+func (c *customPrivateAPIInprocClient) ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*ValidateTokenResponse, error) {
+	return c.CustomPrivateAPIServer.ValidateToken(ctx, in)
+}
+
+func NewCustomPrivateAPIInprocClient(svc svcfw.Service) CustomPrivateAPIClient {
+	return &customPrivateAPIInprocClient{CustomPrivateAPIServer: NewCustomPrivateAPIServer(svc)}
+}
+
+// RegisterGwCustomPrivateAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomPrivateAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomPrivateAPIHandlerClient(ctx, mux, NewCustomPrivateAPIInprocClient(s))
+}
+
+// Create customPrivateAPISrv
+
+// SERVER (satisfying CustomPrivateAPIServer interface)
+type customPrivateAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomPrivateAPIInprocClient) ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*ValidateTokenResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomPrivateAPI")
+func (s *customPrivateAPISrv) ValidateToken(ctx context.Context, in *ValidateTokenRequest) (*ValidateTokenResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomPrivateAPI")
 	cah, ok := ah.(CustomPrivateAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPIServer", ah)
 	}
 
 	var (
@@ -223,13 +248,13 @@ func (c *CustomPrivateAPIInprocClient) ValidateToken(ctx context.Context, in *Va
 		err error
 	)
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -245,18 +270,8 @@ func (c *CustomPrivateAPIInprocClient) ValidateToken(ctx context.Context, in *Va
 	return rsp, nil
 }
 
-func NewCustomPrivateAPIInprocClient(svc svcfw.Service) CustomPrivateAPIClient {
-	return &CustomPrivateAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomPrivateAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomPrivateAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomPrivateAPIHandlerClient(ctx, mux, NewCustomPrivateAPIInprocClient(s))
+func NewCustomPrivateAPIServer(svc svcfw.Service) CustomPrivateAPIServer {
+	return &customPrivateAPISrv{svc: svc}
 }
 
 var CustomPrivateAPISwaggerJSON string = `{
@@ -464,6 +479,25 @@ var CustomPrivateAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "api_credentialAPICredentialType": {
+            "type": "string",
+            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nusing self credential (my credential)\nKubernetes config file to access Virtual Kubernetes API in Volterra\nusing self credential (my credential)\nAPI token to access Volterra public API\nusing self credential (my credential)\nAPI token for service credentials\nusing service user credential (service credential)\nAPI certificate for service credentials\nusing service user credential (service credential)\nService Credential kubeconfig\nusing service user credential (service credential)\nKubeconfig for accessing Site via Global Controller\nusing self credential (my credential)\nToken for the SCIM public APIs used to sync users and groups with the Volterra platform.\nExternal identity provider's SCIM client can use this token as Bearer token with Authorization header\nService Credential Kubeconfig for accessing Site via Global Controller\nusing service user credential (service credential)",
+            "title": "API Credential type",
+            "enum": [
+                "API_CERTIFICATE",
+                "KUBE_CONFIG",
+                "API_TOKEN",
+                "SERVICE_API_TOKEN",
+                "SERVICE_API_CERTIFICATE",
+                "SERVICE_KUBE_CONFIG",
+                "SITE_GLOBAL_KUBE_CONFIG",
+                "SCIM_API_TOKEN",
+                "SERVICE_SITE_GLOBAL_KUBE_CONFIG"
+            ],
+            "default": "API_CERTIFICATE",
+            "x-displayname": "Credential Type",
+            "x-ves-proto-enum": "ves.io.schema.api_credential.APICredentialType"
+        },
         "api_credentialValidateTokenRequest": {
             "type": "object",
             "description": "API Credential validate request",
@@ -497,6 +531,12 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "description": " Tenant name in which this credential is issued.",
                     "title": "Tenant",
                     "x-displayname": "tenant"
+                },
+                "type": {
+                    "description": " Type of API credential.",
+                    "title": "Credential Type",
+                    "$ref": "#/definitions/api_credentialAPICredentialType",
+                    "x-displayname": "Credential Type"
                 },
                 "user": {
                     "type": "string",

@@ -2067,7 +2067,7 @@ func (v *ValidateFleetDeploymentState) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("condition"))
 		for idx, item := range m.GetCondition() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2271,7 +2271,7 @@ func (v *ValidateGPU) Validate(ctx context.Context, pm interface{}, opts ...db.V
 
 		vOpts := append(opts, db.WithValidateField("gpu_device"))
 		for idx, item := range m.GetGpuDevice() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -4274,7 +4274,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("ares_list"))
 		for idx, item := range m.GetAresList() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -4286,7 +4286,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("ares_vtrp_list"))
 		for idx, item := range m.GetAresVtrpList() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -4441,6 +4441,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane_enabled"))
+		if err := fv(ctx, m.GetLocalControlPlaneEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_k8s_access_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("local_k8s_access_enabled"))
@@ -4454,7 +4463,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("mars_list"))
 		for idx, item := range m.GetMarsList() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -4466,7 +4475,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("mars_vtrp_list"))
 		for idx, item := range m.GetMarsVtrpList() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -5131,7 +5140,7 @@ func (v *ValidateInterfaceStatus) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("bond_members"))
 		for idx, item := range m.GetBondMembers() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -5808,7 +5817,7 @@ func (v *ValidateListKubeConfigRsp) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -6140,7 +6149,7 @@ func (v *ValidateNetworkDevice) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("ip_address"))
 		for idx, item := range m.GetIpAddress() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -6284,7 +6293,7 @@ func (v *ValidateNodeInfo) Validate(ctx context.Context, pm interface{}, opts ..
 
 		vOpts := append(opts, db.WithValidateField("role"))
 		for idx, item := range m.GetRole() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -6667,7 +6676,7 @@ func (v *ValidateOsInfo) Validate(ctx context.Context, pm interface{}, opts ...d
 
 		vOpts := append(opts, db.WithValidateField("network"))
 		for idx, item := range m.GetNetwork() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -6697,7 +6706,7 @@ func (v *ValidateOsInfo) Validate(ctx context.Context, pm interface{}, opts ...d
 
 		vOpts := append(opts, db.WithValidateField("storage"))
 		for idx, item := range m.GetStorage() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -6709,7 +6718,7 @@ func (v *ValidateOsInfo) Validate(ctx context.Context, pm interface{}, opts ...d
 
 		vOpts := append(opts, db.WithValidateField("usb"))
 		for idx, item := range m.GetUsb() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -7115,7 +7124,7 @@ var DefaultPublishVIPParamsPerAzValidator = func() *ValidatePublishVIPParamsPerA
 
 	vrhAzName := v.AzNameValidationRuleHandler
 	rulesAzName := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"ap-northeast-1a\",\"ap-northeast-1c\",\"ap-northeast-1d\",\"ap-southeast-1a\",\"ap-southeast-1b\",\"ap-southeast-1c\",\"eu-central-1a\",\"eu-central-1b\",\"eu-central-1c\",\"eu-west-1a\",\"eu-west-1b\",\"eu-west-1c\",\"eu-west-3a\",\"eu-west-3b\",\"eu-west-3c\",\"sa-east-1a\",\"sa-east-1b\",\"sa-east-1c\",\"us-east-1a\",\"us-east-1b\",\"us-east-1c\",\"us-east-1d\",\"us-east-1e\",\"us-east-1f\",\"us-east-2a\",\"us-east-2b\",\"us-east-2c\",\"us-west-2a\",\"us-west-2b\",\"us-west-2c\",\"us-west-2d\",\"ca-central-1a\",\"ca-central-1b\",\"ca-central-1d\",\"af-south-1a\",\"af-south-1b\",\"af-south-1c\",\"ap-east-1a\",\"ap-east-1b\",\"ap-east-1c\",\"ap-south-1a\",\"ap-south-1b\",\"ap-south-1c\",\"ap-northeast-2a\",\"ap-northeast-2b\",\"ap-northeast-2c\",\"ap-northeast-2d\",\"ap-southeast-2a\",\"ap-southeast-2b\",\"ap-southeast-2c\",\"eu-south-1a\",\"eu-south-1b\",\"eu-south-1c\",\"eu-north-1a\",\"eu-north-1b\",\"eu-north-1c\",\"eu-west-2a\",\"eu-west-2b\",\"eu-west-2c\",\"me-south-1a\",\"me-south-1b\",\"me-south-1c\",\"us-west-1a\",\"us-west-1c\",\"1\",\"2\",\"3\",\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
+		"ves.io.schema.rules.string.in": "[\"ap-northeast-1a\",\"ap-northeast-1c\",\"ap-northeast-1d\",\"ap-southeast-1a\",\"ap-southeast-1b\",\"ap-southeast-1c\",\"eu-central-1a\",\"eu-central-1b\",\"eu-central-1c\",\"eu-west-1a\",\"eu-west-1b\",\"eu-west-1c\",\"eu-west-3a\",\"eu-west-3b\",\"eu-west-3c\",\"sa-east-1a\",\"sa-east-1b\",\"sa-east-1c\",\"us-east-1a\",\"us-east-1b\",\"us-east-1c\",\"us-east-1d\",\"us-east-1e\",\"us-east-1f\",\"us-east-2a\",\"us-east-2b\",\"us-east-2c\",\"us-west-2a\",\"us-west-2b\",\"us-west-2c\",\"us-west-2d\",\"ca-central-1a\",\"ca-central-1b\",\"ca-central-1d\",\"af-south-1a\",\"af-south-1b\",\"af-south-1c\",\"ap-east-1a\",\"ap-east-1b\",\"ap-east-1c\",\"ap-south-1a\",\"ap-south-1b\",\"ap-south-1c\",\"ap-northeast-2a\",\"ap-northeast-2b\",\"ap-northeast-2c\",\"ap-northeast-2d\",\"ap-southeast-2a\",\"ap-southeast-2b\",\"ap-southeast-2c\",\"eu-south-1a\",\"eu-south-1b\",\"eu-south-1c\",\"eu-north-1a\",\"eu-north-1b\",\"eu-north-1c\",\"eu-west-2a\",\"eu-west-2b\",\"eu-west-2c\",\"me-south-1a\",\"me-south-1b\",\"me-south-1c\",\"us-west-1a\",\"us-west-1c\",\"1\",\"2\",\"3\",\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\",\"AzureAlternateRegion\"]",
 	}
 	vFn, err = vrhAzName(rulesAzName)
 	if err != nil {
@@ -8017,7 +8026,7 @@ func (v *ValidateSiteStatusMetricsData) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -8119,7 +8128,7 @@ func (v *ValidateSiteStatusMetricsFieldData) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("value"))
 		for idx, item := range m.GetValue() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -8200,7 +8209,7 @@ func (v *ValidateSiteToSiteTunnelConnectivity) Validate(ctx context.Context, pm 
 
 		vOpts := append(opts, db.WithValidateField("destination"))
 		for idx, item := range m.GetDestination() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -8977,7 +8986,7 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("ares_status"))
 		for idx, item := range m.GetAresStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -8989,7 +8998,7 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("configured_tunnel_status"))
 		for idx, item := range m.GetConfiguredTunnelStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -9001,7 +9010,7 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("intf_status"))
 		for idx, item := range m.GetIntfStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -9022,7 +9031,7 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("site_tunnel_status"))
 		for idx, item := range m.GetSiteTunnelStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -9180,7 +9189,7 @@ func VolterraSoftwareStatusValidator() db.Validator {
 	return DefaultVolterraSoftwareStatusValidator
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -9206,12 +9215,21 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VolterraSoftwareOveride = f.GetVolterraSoftwareOveride()
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
 	f.BgpPeerAddress = m1.BgpPeerAddress
 	f.BgpRouterId = m1.BgpRouterId
@@ -9234,7 +9252,15 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VolterraSoftwareOveride = m1.VolterraSoftwareOveride
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -9271,12 +9297,21 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
 	f.BgpPeerAddress = m1.BgpPeerAddress
 	f.BgpRouterId = m1.BgpRouterId
@@ -9310,7 +9345,15 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -9335,12 +9378,21 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
 	f.BgpPeerAddress = m1.BgpPeerAddress
 	f.BgpRouterId = m1.BgpRouterId
@@ -9360,4 +9412,12 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VipVrrpMode = m1.VipVrrpMode
 	f.VolterraSoftwareOveride = m1.VolterraSoftwareOveride
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

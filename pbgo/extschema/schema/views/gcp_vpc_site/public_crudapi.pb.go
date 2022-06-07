@@ -5,7 +5,7 @@
 //
 // x-displayName: "Configure GCP VPC Site"
 // GCP VPC site view defines a required parameters that can be used in CRUD, to create and manage a volterra site in GCP VPC.
-// It can be used to either automatically create or Manually assisted site creation in GCP VPC.
+// It can be used to automatically site creation in the GCP VPC.
 //
 //
 

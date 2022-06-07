@@ -395,18 +395,49 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	return ccl
 }
 
-// Create CustomAPIInprocClient
+// Create customAPIInprocClient
 
 // INPROC Client (satisfying CustomAPIClient interface)
-type CustomAPIInprocClient struct {
+type customAPIInprocClient struct {
+	CustomAPIServer
+}
+
+func (c *customAPIInprocClient) Rules(ctx context.Context, in *RulesReq, opts ...grpc.CallOption) (*RulesRsp, error) {
+	return c.CustomAPIServer.Rules(ctx, in)
+}
+func (c *customAPIInprocClient) VirtualHostWafRulesStatus(ctx context.Context, in *VirtualHostWafRulesStatusReq, opts ...grpc.CallOption) (*VirtualHostWafRulesStatusRsp, error) {
+	return c.CustomAPIServer.VirtualHostWafRulesStatus(ctx, in)
+}
+func (c *customAPIInprocClient) WafRulesStatus(ctx context.Context, in *WafRulesStatusReq, opts ...grpc.CallOption) (*WafRulesStatusRsp, error) {
+	return c.CustomAPIServer.WafRulesStatus(ctx, in)
+}
+
+func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
+	return &customAPIInprocClient{CustomAPIServer: NewCustomAPIServer(svc)}
+}
+
+// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+}
+
+// Create customAPISrv
+
+// SERVER (satisfying CustomAPIServer interface)
+type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomAPIInprocClient) Rules(ctx context.Context, in *RulesReq, opts ...grpc.CallOption) (*RulesRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.waf_rules.CustomAPI")
+func (s *customAPISrv) Rules(ctx context.Context, in *RulesReq) (*RulesRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.waf_rules.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -414,7 +445,7 @@ func (c *CustomAPIInprocClient) Rules(ctx context.Context, in *RulesReq, opts ..
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.waf_rules.RulesReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.waf_rules.RulesReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -428,13 +459,13 @@ func (c *CustomAPIInprocClient) Rules(ctx context.Context, in *RulesReq, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.Rules"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.Rules"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -447,15 +478,15 @@ func (c *CustomAPIInprocClient) Rules(ctx context.Context, in *RulesReq, opts ..
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.waf_rules.RulesRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf_rules.RulesRsp", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) VirtualHostWafRulesStatus(ctx context.Context, in *VirtualHostWafRulesStatusReq, opts ...grpc.CallOption) (*VirtualHostWafRulesStatusRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.waf_rules.CustomAPI")
+func (s *customAPISrv) VirtualHostWafRulesStatus(ctx context.Context, in *VirtualHostWafRulesStatusReq) (*VirtualHostWafRulesStatusRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.waf_rules.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -463,7 +494,7 @@ func (c *CustomAPIInprocClient) VirtualHostWafRulesStatus(ctx context.Context, i
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.waf_rules.VirtualHostWafRulesStatusReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.waf_rules.VirtualHostWafRulesStatusReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -477,13 +508,13 @@ func (c *CustomAPIInprocClient) VirtualHostWafRulesStatus(ctx context.Context, i
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.VirtualHostWafRulesStatus"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.VirtualHostWafRulesStatus"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -496,15 +527,15 @@ func (c *CustomAPIInprocClient) VirtualHostWafRulesStatus(ctx context.Context, i
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.waf_rules.VirtualHostWafRulesStatusRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf_rules.VirtualHostWafRulesStatusRsp", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) WafRulesStatus(ctx context.Context, in *WafRulesStatusReq, opts ...grpc.CallOption) (*WafRulesStatusRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.waf_rules.CustomAPI")
+func (s *customAPISrv) WafRulesStatus(ctx context.Context, in *WafRulesStatusReq) (*WafRulesStatusRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.waf_rules.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -512,7 +543,7 @@ func (c *CustomAPIInprocClient) WafRulesStatus(ctx context.Context, in *WafRules
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.waf_rules.WafRulesStatusReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.waf_rules.WafRulesStatusReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -526,13 +557,13 @@ func (c *CustomAPIInprocClient) WafRulesStatus(ctx context.Context, in *WafRules
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.WafRulesStatus"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.WafRulesStatus"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -545,23 +576,13 @@ func (c *CustomAPIInprocClient) WafRulesStatus(ctx context.Context, in *WafRules
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.waf_rules.WafRulesStatusRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf_rules.WafRulesStatusRsp", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
-	return &CustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
+	return &customAPISrv{svc: svc}
 }
 
 var CustomAPISwaggerJSON string = `{

@@ -372,27 +372,40 @@ type crudAPIRestClient struct {
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	req, err := NewObjectCreateReq(e)
-	if err != nil {
-		return nil, errors.Wrap(err, "Creating new create request")
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	if e != nil && cco.RequestJSON != "" {
+		return nil, fmt.Errorf("Both entry and WithRequestJSON() specified")
+	}
+	if e == nil && cco.RequestJSON == "" {
+		return nil, fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.tunnel.crudapi", ".")
 	t := strings.Join(sl[:len(sl)-1], ".")
 	url := fmt.Sprintf("%s/%s/Objects", c.baseURL, t)
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		req, err := NewObjectCreateReq(e)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new create request")
+		}
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
 
 	hReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
 		return nil, err
-	}
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
 	}
 	client.AddHdrsToReq(cco.Headers, hReq)
 	hReq.Header.Set("Content-Type", "application/json")
@@ -428,43 +441,46 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	rReq, err := NewObjectReplaceReq(e)
-	if err != nil {
-		return errors.Wrap(err, "Creating new replace request")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	if e != nil && cco.ReplaceJSONReq != "" {
-		return fmt.Errorf("Both entry and WithReplaceJSONRequest() specified")
+	if e != nil && cco.RequestJSON != "" {
+		return fmt.Errorf("Both entry and WithRequestJSON() specified")
 	}
-	if e == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithReplaceJSONRequest() specified")
+	if e == nil && cco.RequestJSON == "" {
+		return fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
-	var jsn, objUID string
-	if e != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		rReq, err := NewObjectReplaceReq(e)
+		if err != nil {
+			return errors.Wrap(err, "Creating new replace request")
+		}
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		objUID = rReq.ObjectUid
+		jsn = j
+	}
+
+	var objUID string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["uid"].(string); ok {
+		objUID = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["uid"].(string); ok {
-			objUID = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.uid'", jsn)
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -3550,8 +3566,15 @@ var APISwaggerJSON string = `{
             "description": "Desired state of Tunnel",
             "title": "Tunnel specification",
             "x-displayname": "Specification",
+            "x-ves-oneof-field-tunnel_attribute": "[\"default_tunnel_attribute\",\"tunnel_to_aws_tgw\"]",
             "x-ves-proto-message": "ves.io.schema.tunnel.GlobalSpecType",
             "properties": {
+                "default_tunnel_attribute": {
+                    "description": "Exclusive with [tunnel_to_aws_tgw]\n Disable Forward Proxy for this site",
+                    "title": "Disable Forward Proxy",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Forward Proxy"
+                },
                 "local_ip": {
                     "description": " Selects local IP address configuration for tunnel\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Local IP Address selector",
@@ -3577,6 +3600,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "tunnel_to_aws_tgw": {
+                    "description": "Exclusive with [default_tunnel_attribute]\n Tunnel to AWS TGW. When this is enabled\n default route will be exported to AWS TGW route table",
+                    "title": "Tunnel To AWS TGW",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Tunnel To AWS TGW"
                 },
                 "tunnel_type": {
                     "description": " Tunnel type supported is IPSEC with pre-shared key (IPSEC_PSK)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0]\n  ves.io.schema.rules.message.required: true\n",

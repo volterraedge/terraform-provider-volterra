@@ -418,6 +418,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) BondChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -597,6 +605,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *CreateSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*CreateSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*CreateSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -994,6 +1038,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1120,6 +1175,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
 
@@ -1537,6 +1594,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) BondChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1736,6 +1801,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *GetSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GetSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GetSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2142,6 +2243,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2290,6 +2402,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
 
@@ -3169,6 +3283,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) BondChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3368,6 +3490,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *GlobalSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GlobalSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GlobalSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3792,6 +3950,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3940,6 +4109,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
 
@@ -4376,7 +4547,7 @@ var DefaultInterfaceListTypeValidator = func() *ValidateInterfaceListType {
 	vrhInterfaces := v.InterfacesValidationRuleHandler
 	rulesInterfaces := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.max_items": "128",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -4781,6 +4952,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) BondChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4960,6 +5139,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *ReplaceSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*ReplaceSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*ReplaceSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5339,6 +5554,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5465,6 +5691,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
 
@@ -5983,7 +6211,7 @@ var DefaultStorageInterfaceListTypeValidator = func() *ValidateStorageInterfaceL
 	vrhStorageInterfaces := v.StorageInterfacesValidationRuleHandler
 	rulesStorageInterfaces := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -7718,6 +7946,41 @@ func VssStorageConfigurationValidator() db.Validator {
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *CreateSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *CreateSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &CreateSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &CreateSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetBondChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.BondChoice.(type) {
 	case nil:
@@ -8044,11 +8307,12 @@ func (r *CreateSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error 
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.GetBondChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetGpuChoiceFromGlobalSpecType(f)
@@ -8066,13 +8330,23 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WorkerNodes = f.GetWorkerNodes()
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	m1.SetBondChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetGpuChoiceToGlobalSpecType(f)
@@ -8088,6 +8362,49 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.WorkerNodes = m1.WorkerNodes
+}
+
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *GetSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GetSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &GetSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &GetSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -8417,11 +8734,12 @@ func (r *GetSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.GetBondChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetGpuChoiceFromGlobalSpecType(f)
@@ -8440,13 +8758,23 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WorkerNodes = f.GetWorkerNodes()
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	m1.SetBondChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetGpuChoiceToGlobalSpecType(f)
@@ -8463,6 +8791,49 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.WorkerNodes = m1.WorkerNodes
+}
+
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *ReplaceSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *ReplaceSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &ReplaceSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &ReplaceSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -8792,11 +9163,12 @@ func (r *ReplaceSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.GetBondChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetGpuChoiceFromGlobalSpecType(f)
@@ -8812,13 +9184,23 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WorkerNodes = f.GetWorkerNodes()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	m1.SetBondChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetGpuChoiceToGlobalSpecType(f)
@@ -8832,4 +9214,12 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.WorkerNodes = m1.WorkerNodes
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

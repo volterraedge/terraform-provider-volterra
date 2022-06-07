@@ -565,6 +565,20 @@ func (o *StatusObject) SetVtrpStale(isStale bool) {
 	o.GetMetadata().SetVtrpStale(isStale)
 }
 
+func (o *StatusObject) GetStatusObjConditions() []sro.StatusObjectCondition {
+	if o == nil {
+		return nil
+	}
+	return ves_io_schema.ToStatusObjectConditions(o.GetConditions())
+}
+
+func (o *StatusObject) SetStatusObjConditions(socSet []sro.StatusObjectCondition) {
+	if o == nil {
+		return
+	}
+	o.Conditions = ves_io_schema.FromStatusObjectConditions(socSet)
+}
+
 func (o *DBObject) GetObjType() string {
 	return o.Type()
 }
@@ -1212,6 +1226,18 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["conditions"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("conditions"))
+		for idx, item := range e.GetConditions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metadata"))
@@ -1225,7 +1251,7 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("object_refs"))
 		for idx, item := range e.GetObjectRefs() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1248,6 +1274,8 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 // Well-known symbol for default validator implementation
 var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
 
 	return v
 }()

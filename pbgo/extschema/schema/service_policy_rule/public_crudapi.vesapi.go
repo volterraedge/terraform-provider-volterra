@@ -371,31 +371,67 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		opt(cco)
 	}
 
-	var req *CreateRequest
+	got := 0
+	if e != nil {
+		got++
+	}
 	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*CreateRequest)
-		if !ok {
-			return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
-		}
-		req = r
-	} else {
-		r, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new create request")
-		}
-		req = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, req); err != nil {
-				return nil, err
-			}
-		}
+		got++
+	}
+	if cco.RequestJSON != "" {
+		got++
+	}
+	if got != 1 {
+		return nil, fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	url := fmt.Sprintf("%s/public/namespaces/%s/service_policy_rules", c.baseURL, req.Metadata.GetNamespace())
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var req *CreateRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*CreateRequest)
+			if !ok {
+				return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
+			}
+			req = r
+		} else {
+			r, err := NewCreateRequest(e)
+			if err != nil {
+				return nil, errors.Wrap(err, "Creating new create request")
+			}
+			req = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, req); err != nil {
+					return nil, err
+				}
+			}
+		}
+
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
+
+	var namespace string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return nil, errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
+	} else {
+		return nil, fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	url := fmt.Sprintf("%s/public/namespaces/%s/service_policy_rules", c.baseURL, namespace)
 
 	hReq, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
@@ -424,7 +460,7 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	if err := codec.FromJSON(string(body), rspo); err != nil {
 		return nil, errors.Wrap(err, "Converting json to response protobuf message")
 	}
-	configapi.TranscribeCall(ctx, req, rspo)
+	configapi.TranscribeCall(ctx, jsn, string(body))
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rspo
 		cco.OutCallResponse.JSON = string(body)
@@ -448,26 +484,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		opt(cco)
 	}
 
-	var rReq *ReplaceRequest
-	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*ReplaceRequest)
-		if !ok {
-			return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
-		}
-		rReq = r
-	} else {
-		r, err := NewReplaceRequest(e)
-		if err != nil {
-			return errors.Wrap(err, "Creating new replace request")
-		}
-		rReq = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, rReq); err != nil {
-				return err
-			}
-		}
-	}
-
 	got := 0
 	if e != nil {
 		got++
@@ -475,43 +491,66 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	if cco.RequestProto != nil {
 		got++
 	}
-	if cco.ReplaceJSONReq != "" {
+	if cco.RequestJSON != "" {
 		got++
 	}
 	if got != 1 {
-		return fmt.Errorf("Only one of entry, WithRequestProto() or WithReplaceJSONRequest() should be specified")
-	}
-	if e == nil && cco.RequestProto == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithRequestProto() nor WithReplaceJSONRequest() specified")
+		return fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	var jsn, namespace, name string
-	var err error
-	_ = namespace
-	if e != nil || cco.RequestProto != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var rReq *ReplaceRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*ReplaceRequest)
+			if !ok {
+				return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
+			}
+			rReq = r
+		} else {
+			r, err := NewReplaceRequest(e)
+			if err != nil {
+				return errors.Wrap(err, "Creating new replace request")
+			}
+			rReq = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, rReq); err != nil {
+					return err
+				}
+			}
+		}
+
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.GetMetadata().GetNamespace()
-		name = rReq.GetMetadata().GetName()
+		jsn = j
+	}
+
+	var namespace, name string
+	_ = namespace
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["namespace"].(string); ok {
-			namespace = val
-		}
-		if val, ok := md["name"].(string); ok {
-			name = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	if val, ok := md["name"].(string); ok {
+		name = val
+	} else {
+		return fmt.Errorf("Request %s does not have 'metadata.name'", jsn)
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/service_policy_rules/%s", c.baseURL, namespace, name)
@@ -538,7 +577,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		return errors.Wrap(err, "RestClient replace")
 	}
 
-	configapi.TranscribeCall(ctx, rReq, nil)
+	configapi.TranscribeCall(ctx, jsn, nil)
 	return nil
 
 }
@@ -2156,7 +2195,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2184,7 +2223,8 @@ var APISwaggerJSON string = `{
                 "VIOL_MALFORMED_REQUEST",
                 "VIOL_EVASION_MULTIPLE_DECODING",
                 "VIOL_DATA_GUARD",
-                "VIOL_EVASION_APACHE_WHITESPACE"
+                "VIOL_EVASION_APACHE_WHITESPACE",
+                "VIOL_COOKIE_MODIFIED"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2499,6 +2539,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "4"
                     }
+                }
+            }
+        },
+        "policyBotNameContext": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Name\"\nSpecifies bot to be excluded by its name.",
+            "title": "Bot Name Context",
+            "properties": {
+                "bot_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Bot Name\"\nx-example: \"Hydra\"",
+                    "title": "BotName"
                 }
             }
         },
@@ -4238,18 +4290,23 @@ var APISwaggerJSON string = `{
         },
         "schemapolicyBotAction": {
             "type": "object",
-            "description": "x-displayName: \"Bot Action\"\nModify Bot protection behavior for a matching request. The modification could be to entirely skip Bot processing.",
+            "description": "Modify Bot protection behavior for a matching request. The modification could be to entirely skip Bot processing.",
             "title": "Bot Action",
+            "x-displayname": "Bot Action",
+            "x-ves-oneof-field-action_type": "[\"bot_skip_processing\",\"none\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.BotAction",
             "properties": {
                 "bot_skip_processing": {
-                    "description": "x-displayName: \"Skip Bot Processing\"\nSkip all Bot processing for this request",
+                    "description": "Exclusive with [none]\n Skip all Bot processing for this request",
                     "title": "Skip Bot Processing",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip Bot Processing"
                 },
                 "none": {
-                    "description": "x-displayName: \"Do not modify Bot Processing\"\nPerform normal Bot processing for this request",
+                    "description": "Exclusive with [bot_skip_processing]\n Perform normal Bot processing for this request",
                     "title": "Normal Bot Processing",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do not modify Bot Processing"
                 }
             }
         },
@@ -4518,6 +4575,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
                 },
+                "bot_action": {
+                    "description": " Bot action to be enforced if the input request matches the rule.",
+                    "$ref": "#/definitions/schemapolicyBotAction",
+                    "x-displayname": "Bot Action"
+                },
                 "client_name": {
                     "type": "string",
                     "description": "Exclusive with [any_client client_name_matcher client_selector ip_threat_category_list]\n The expected name of the client invoking the request API.\n The predicate evaluates to true if any of the actual names is the same as the expected client name.\n\nExample: - \"backend.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
@@ -4591,7 +4653,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
-                    "$ref": "#/definitions/service_policy_ruleIPThreatCategoryListType",
+                    "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "label_matcher": {
@@ -4706,6 +4768,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
                 },
+                "bot_action": {
+                    "description": " Bot action to be enforced if the input request matches the rule.",
+                    "$ref": "#/definitions/schemapolicyBotAction",
+                    "x-displayname": "Bot Action"
+                },
                 "client_name": {
                     "type": "string",
                     "description": "Exclusive with [any_client client_name_matcher client_selector ip_threat_category_list]\n The expected name of the client invoking the request API.\n The predicate evaluates to true if any of the actual names is the same as the expected client name.\n\nExample: - \"backend.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
@@ -4779,7 +4846,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
-                    "$ref": "#/definitions/service_policy_ruleIPThreatCategoryListType",
+                    "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "label_matcher": {
@@ -4903,6 +4970,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
                 },
+                "bot_action": {
+                    "description": " Bot action to be enforced if the input request matches the rule.",
+                    "title": "Bot Action",
+                    "$ref": "#/definitions/schemapolicyBotAction",
+                    "x-displayname": "Bot Action"
+                },
                 "client_name": {
                     "type": "string",
                     "description": "Exclusive with [any_client client_name_matcher client_selector ip_threat_category_list]\n The expected name of the client invoking the request API.\n The predicate evaluates to true if any of the actual names is the same as the expected client name.\n\nExample: - \"backend.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
@@ -4987,7 +5060,7 @@ var APISwaggerJSON string = `{
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
                     "title": "IP Threat Category List",
-                    "$ref": "#/definitions/service_policy_ruleIPThreatCategoryListType",
+                    "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "label_matcher": {
@@ -5036,6 +5109,31 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "schemaservice_policy_ruleIPThreatCategoryListType": {
+            "type": "object",
+            "description": "List of ip threat categories",
+            "title": "IP Threat Category List Type",
+            "x-displayname": "IP Threat Category List Type",
+            "x-ves-proto-message": "ves.io.schema.service_policy_rule.IPThreatCategoryListType",
+            "properties": {
+                "ip_threat_categories": {
+                    "type": "array",
+                    "description": " The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "IP Threat Categories",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/policyIPThreatCategory"
+                    },
+                    "x-displayname": "List of IP Threat Categories to choose",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -5107,6 +5205,11 @@ var APISwaggerJSON string = `{
                     "description": " Predicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\n The actual request body value is extracted from the request API as a string.",
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
+                },
+                "bot_action": {
+                    "description": " Bot action to be enforced if the input request matches the rule.",
+                    "$ref": "#/definitions/schemapolicyBotAction",
+                    "x-displayname": "Bot Action"
                 },
                 "client_name": {
                     "type": "string",
@@ -5181,7 +5284,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
-                    "$ref": "#/definitions/service_policy_ruleIPThreatCategoryListType",
+                    "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "label_matcher": {
@@ -5379,31 +5482,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "service_policy_ruleIPThreatCategoryListType": {
-            "type": "object",
-            "description": "List of ip threat categories",
-            "title": "IP Threat Category List Type",
-            "x-displayname": "IP Threat Category List Type",
-            "x-ves-proto-message": "ves.io.schema.service_policy_rule.IPThreatCategoryListType",
-            "properties": {
-                "ip_threat_categories": {
-                    "type": "array",
-                    "description": " The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "IP Threat Categories",
-                    "maxItems": 32,
-                    "items": {
-                        "$ref": "#/definitions/policyIPThreatCategory"
-                    },
-                    "x-displayname": "List of IP Threat Categories to choose",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
         },
         "service_policy_ruleListResponse": {
             "type": "object",

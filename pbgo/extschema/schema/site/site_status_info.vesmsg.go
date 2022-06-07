@@ -313,7 +313,7 @@ func (v *ValidateSiteStatusMetricsResponse) Validate(ctx context.Context, pm int
 
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

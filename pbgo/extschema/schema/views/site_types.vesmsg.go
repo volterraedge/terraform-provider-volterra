@@ -3180,6 +3180,277 @@ func DCGWBGPPeerTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DirectConnectConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectConfigType) DeepCopy() *DirectConnectConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectConfigType) VifChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vif_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDirectConnectConfigType) CloudAggregatedPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for cloud_aggregated_prefix")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cloud_aggregated_prefix")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cloud_aggregated_prefix")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cloud_aggregated_prefix")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDirectConnectConfigType) DcConnectAggregatedPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for dc_connect_aggregated_prefix")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dc_connect_aggregated_prefix")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dc_connect_aggregated_prefix")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dc_connect_aggregated_prefix")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDirectConnectConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_aggregated_prefix"]; exists {
+		vOpts := append(opts, db.WithValidateField("cloud_aggregated_prefix"))
+		if err := fv(ctx, m.GetCloudAggregatedPrefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dc_connect_aggregated_prefix"]; exists {
+		vOpts := append(opts, db.WithValidateField("dc_connect_aggregated_prefix"))
+		if err := fv(ctx, m.GetDcConnectAggregatedPrefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_choice"]; exists {
+		val := m.GetVifChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vif_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVifChoice().(type) {
+	case *DirectConnectConfigType_HostedVifs:
+		if fv, exists := v.FldValidators["vif_choice.hosted_vifs"]; exists {
+			val := m.GetVifChoice().(*DirectConnectConfigType_HostedVifs).HostedVifs
+			vOpts := append(opts,
+				db.WithValidateField("vif_choice"),
+				db.WithValidateField("hosted_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DirectConnectConfigType_StandardVifs:
+		if fv, exists := v.FldValidators["vif_choice.standard_vifs"]; exists {
+			val := m.GetVifChoice().(*DirectConnectConfigType_StandardVifs).StandardVifs
+			vOpts := append(opts,
+				db.WithValidateField("vif_choice"),
+				db.WithValidateField("standard_vifs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DirectConnectConfigType_ManualGw:
+		if fv, exists := v.FldValidators["vif_choice.manual_gw"]; exists {
+			val := m.GetVifChoice().(*DirectConnectConfigType_ManualGw).ManualGw
+			vOpts := append(opts,
+				db.WithValidateField("vif_choice"),
+				db.WithValidateField("manual_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectConfigTypeValidator = func() *ValidateDirectConnectConfigType {
+	v := &ValidateDirectConnectConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVifChoice := v.VifChoiceValidationRuleHandler
+	rulesVifChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVifChoice(rulesVifChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DirectConnectConfigType.vif_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vif_choice"] = vFn
+
+	vrhCloudAggregatedPrefix := v.CloudAggregatedPrefixValidationRuleHandler
+	rulesCloudAggregatedPrefix := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "16",
+		"ves.io.schema.rules.repeated.unique":                   "true",
+	}
+	vFn, err = vrhCloudAggregatedPrefix(rulesCloudAggregatedPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DirectConnectConfigType.cloud_aggregated_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_aggregated_prefix"] = vFn
+
+	vrhDcConnectAggregatedPrefix := v.DcConnectAggregatedPrefixValidationRuleHandler
+	rulesDcConnectAggregatedPrefix := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "16",
+		"ves.io.schema.rules.repeated.unique":                   "true",
+	}
+	vFn, err = vrhDcConnectAggregatedPrefix(rulesDcConnectAggregatedPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DirectConnectConfigType.dc_connect_aggregated_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dc_connect_aggregated_prefix"] = vFn
+
+	v.FldValidators["vif_choice.hosted_vifs"] = HostedVIFConfigTypeValidator().Validate
+
+	return v
+}()
+
+func DirectConnectConfigTypeValidator() db.Validator {
+	return DefaultDirectConnectConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DirectConnectInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

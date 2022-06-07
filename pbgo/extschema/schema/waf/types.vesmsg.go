@@ -1096,7 +1096,7 @@ func (v *ValidateRuleHitsCounter) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1450,7 +1450,7 @@ func (v *ValidateSecurityEventsCounter) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1631,47 +1631,81 @@ func SecurityEventsIdValidator() db.Validator {
 	return DefaultSecurityEventsIdValidator
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AppProfile = f.GetAppProfile()
 	m.DisabledDetectionTags = f.GetDisabledDetectionTags()
 	m.Mode = f.GetMode()
+}
+
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	f.AppProfile = m1.AppProfile
+	f.DisabledDetectionTags = m1.DisabledDetectionTags
+	f.Mode = m1.Mode
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	f.AppProfile = m1.AppProfile
-	f.DisabledDetectionTags = m1.DisabledDetectionTags
-	f.Mode = m1.Mode
+	m.AppProfile = f.GetAppProfile()
+	m.DisabledDetectionTags = f.GetDisabledDetectionTags()
+	m.Mode = f.GetMode()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
-	if f == nil {
-		return
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
-	m.AppProfile = f.GetAppProfile()
-	m.DisabledDetectionTags = f.GetDisabledDetectionTags()
-	m.Mode = f.GetMode()
+	_ = m1
+
+	f.AppProfile = m1.AppProfile
+	f.DisabledDetectionTags = m1.DisabledDetectionTags
+	f.Mode = m1.Mode
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
-	}
-	f.AppProfile = m1.AppProfile
-	f.DisabledDetectionTags = m1.DisabledDetectionTags
-	f.Mode = m1.Mode
+	m.toGlobalSpecType(f, true)
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -1680,13 +1714,30 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Mode = f.GetMode()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.AppProfile = m1.AppProfile
 	f.DisabledDetectionTags = m1.DisabledDetectionTags
 	f.Mode = m1.Mode
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

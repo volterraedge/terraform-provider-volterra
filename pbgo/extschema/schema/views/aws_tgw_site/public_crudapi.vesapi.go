@@ -371,31 +371,67 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		opt(cco)
 	}
 
-	var req *CreateRequest
+	got := 0
+	if e != nil {
+		got++
+	}
 	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*CreateRequest)
-		if !ok {
-			return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
-		}
-		req = r
-	} else {
-		r, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new create request")
-		}
-		req = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, req); err != nil {
-				return nil, err
-			}
-		}
+		got++
+	}
+	if cco.RequestJSON != "" {
+		got++
+	}
+	if got != 1 {
+		return nil, fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	url := fmt.Sprintf("%s/public/namespaces/%s/aws_tgw_sites", c.baseURL, req.Metadata.GetNamespace())
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var req *CreateRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*CreateRequest)
+			if !ok {
+				return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
+			}
+			req = r
+		} else {
+			r, err := NewCreateRequest(e)
+			if err != nil {
+				return nil, errors.Wrap(err, "Creating new create request")
+			}
+			req = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, req); err != nil {
+					return nil, err
+				}
+			}
+		}
+
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
+
+	var namespace string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return nil, errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
+	} else {
+		return nil, fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	url := fmt.Sprintf("%s/public/namespaces/%s/aws_tgw_sites", c.baseURL, namespace)
 
 	hReq, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
@@ -424,7 +460,7 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	if err := codec.FromJSON(string(body), rspo); err != nil {
 		return nil, errors.Wrap(err, "Converting json to response protobuf message")
 	}
-	configapi.TranscribeCall(ctx, req, rspo)
+	configapi.TranscribeCall(ctx, jsn, string(body))
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rspo
 		cco.OutCallResponse.JSON = string(body)
@@ -448,26 +484,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		opt(cco)
 	}
 
-	var rReq *ReplaceRequest
-	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*ReplaceRequest)
-		if !ok {
-			return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
-		}
-		rReq = r
-	} else {
-		r, err := NewReplaceRequest(e)
-		if err != nil {
-			return errors.Wrap(err, "Creating new replace request")
-		}
-		rReq = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, rReq); err != nil {
-				return err
-			}
-		}
-	}
-
 	got := 0
 	if e != nil {
 		got++
@@ -475,43 +491,66 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	if cco.RequestProto != nil {
 		got++
 	}
-	if cco.ReplaceJSONReq != "" {
+	if cco.RequestJSON != "" {
 		got++
 	}
 	if got != 1 {
-		return fmt.Errorf("Only one of entry, WithRequestProto() or WithReplaceJSONRequest() should be specified")
-	}
-	if e == nil && cco.RequestProto == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithRequestProto() nor WithReplaceJSONRequest() specified")
+		return fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	var jsn, namespace, name string
-	var err error
-	_ = namespace
-	if e != nil || cco.RequestProto != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var rReq *ReplaceRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*ReplaceRequest)
+			if !ok {
+				return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
+			}
+			rReq = r
+		} else {
+			r, err := NewReplaceRequest(e)
+			if err != nil {
+				return errors.Wrap(err, "Creating new replace request")
+			}
+			rReq = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, rReq); err != nil {
+					return err
+				}
+			}
+		}
+
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.GetMetadata().GetNamespace()
-		name = rReq.GetMetadata().GetName()
+		jsn = j
+	}
+
+	var namespace, name string
+	_ = namespace
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["namespace"].(string); ok {
-			namespace = val
-		}
-		if val, ok := md["name"].(string); ok {
-			name = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	if val, ok := md["name"].(string); ok {
+		name = val
+	} else {
+		return fmt.Errorf("Request %s does not have 'metadata.name'", jsn)
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/aws_tgw_sites/%s", c.baseURL, namespace, name)
@@ -538,7 +577,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		return errors.Wrap(err, "RestClient replace")
 	}
 
-	configapi.TranscribeCall(ctx, rReq, nil)
+	configapi.TranscribeCall(ctx, jsn, nil)
 	return nil
 
 }
@@ -1627,7 +1666,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "AWS TGW site",
-        "description": "AWS TGW site view defines a required parameters that can be used in CRUD, to create and manage a volterra site in AWS VPC.\nIt can be used to either automatically create or Manually assisted site creation in AWS TGW.\n\nView will create following child objects.\n\n* Site",
+        "description": "AWS TGW site view defines a required parameters that can be used in CRUD, to create and manage a volterra site in AWS VPC.\nIt can be used to automatically site creation in the AWS TGW.\n\nView will create following child objects.\n\n* Site",
         "version": "version not set"
     },
     "schemes": [
@@ -2770,18 +2809,12 @@ var APISwaggerJSON string = `{
             "description": "Setup AWS services VPC, transit gateway and site",
             "title": "AWS Service VPC and TGW",
             "x-displayname": "AWS Service VPC and TGW",
-            "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
+            "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-service_vpc_choice": "[\"new_vpc\",\"vpc_id\"]",
             "x-ves-oneof-field-tgw_choice": "[\"existing_tgw\",\"new_tgw\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ServicesVPCType",
             "properties": {
-                "assisted": {
-                    "description": "Exclusive with [aws_cred]\n In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script.",
-                    "title": "Assisted Deployment",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Assisted Deployment"
-                },
                 "aws_certified_hw": {
                     "type": "string",
                     "description": " Name for AWS certified hardware.\n\nExample: - \"aws-byol-multi-nic-voltmesh\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"aws-byol-multi-nic-voltmesh\\\"]\n  ves.io.schema.rules.string.max_len: 64\n",
@@ -2797,7 +2830,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "aws_cred": {
-                    "description": "Exclusive with [assisted]\n Reference to AWS credentials for automatic deployment",
+                    "description": "Exclusive with []\n Reference to AWS credentials for automatic deployment",
                     "title": "Automatic Deployment",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Automatic Deployment"
@@ -3102,15 +3135,21 @@ var APISwaggerJSON string = `{
             "description": "Virtual Network Configuration",
             "title": "Virtual Network Configuration",
             "x-displayname": "Virtual Network Configuration",
-            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
+            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_inside_vn\",\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VnConfiguration",
             "properties": {
+                "dc_cluster_group_inside_vn": {
+                    "description": "Exclusive with [dc_cluster_group_outside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via inside network",
+                    "title": "Member of DC cluster Group via Inside Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Member of DC Cluster Group via Inside Network"
+                },
                 "dc_cluster_group_outside_vn": {
-                    "description": "Exclusive with [no_dc_cluster_group]\n This site is member of dc cluster group connected via outside network",
+                    "description": "Exclusive with [dc_cluster_group_inside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via outside network",
                     "title": "Member of DC cluster Group via Outside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group via Outside Network"
@@ -3128,7 +3167,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Manage Static routes"
                 },
                 "no_dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group_outside_vn]\n This site is not a member of dc cluster group",
+                    "description": "Exclusive with [dc_cluster_group_inside_vn dc_cluster_group_outside_vn]\n This site is not a member of dc cluster group",
                     "title": "Not a Member of DC Cluster Group",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Not a Member of DC Cluster Group"
@@ -3168,6 +3207,61 @@ var APISwaggerJSON string = `{
                     "title": "Site Mesh Group Connection Via Private Ip",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Site Mesh Group Connection Via  Private Ip"
+                }
+            }
+        },
+        "fleetBlockedServices": {
+            "type": "object",
+            "description": "Blocked Services configured explicitly\nBy default all services are allowed and get blocked when config is updated",
+            "title": "BlockedServices specifies the ports of platform services blocked explicitly",
+            "x-displayname": "Blocked Services",
+            "x-ves-oneof-field-blocked_services_value_type_choice": "[\"dns\",\"ssh\",\"web_user_interface\"]",
+            "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
+            "properties": {
+                "dns": {
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "title": "DNS port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DNS port"
+                },
+                "network_type": {
+                    "description": " Network type in which these ports get blocked\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
+                    "title": "network_type",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
+                },
+                "ssh": {
+                    "description": "Exclusive with [dns web_user_interface]\n Matches ssh port 22",
+                    "title": "SSH port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "SSH port"
+                },
+                "web_user_interface": {
+                    "description": "Exclusive with [dns ssh]\n Matches the web user interface port",
+                    "title": "Web UI port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Web UI port"
+                }
+            }
+        },
+        "fleetBlockedServicesListType": {
+            "type": "object",
+            "description": "List of all custom blocked services configuration",
+            "title": "Custom Blocked Services Configuration List",
+            "x-displayname": "Custom Blocked Services Configuration List",
+            "x-ves-proto-message": "ves.io.schema.fleet.BlockedServicesListType",
+            "properties": {
+                "blocked_sevice": {
+                    "type": "array",
+                    "description": " Use custom blocked services configuration",
+                    "title": "Custom Blocked Services Configuration",
+                    "items": {
+                        "$ref": "#/definitions/fleetBlockedServices"
+                    },
+                    "x-displayname": "Custom Blocked Services Configuration"
                 }
             }
         },
@@ -4640,6 +4734,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaVirtualNetworkType": {
+            "type": "string",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "title": "VirtualNetworkType",
+            "enum": [
+                "VIRTUAL_NETWORK_SITE_LOCAL",
+                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE",
+                "VIRTUAL_NETWORK_PER_SITE",
+                "VIRTUAL_NETWORK_PUBLIC",
+                "VIRTUAL_NETWORK_GLOBAL",
+                "VIRTUAL_NETWORK_SITE_SERVICE",
+                "VIRTUAL_NETWORK_VER_INTERNAL",
+                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE",
+                "VIRTUAL_NETWORK_IP_AUTO",
+                "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
+                "VIRTUAL_NETWORK_SRV6_NETWORK",
+                "VIRTUAL_NETWORK_IP_FABRIC"
+            ],
+            "default": "VIRTUAL_NETWORK_SITE_LOCAL",
+            "x-displayname": "Virtual Network Type",
+            "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
+        },
         "schemaWingmanSecretInfoType": {
             "type": "object",
             "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
@@ -4652,9 +4768,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaviewsLocalControlPlaneType": {
+            "type": "object",
+            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "title": "LocalControlPlaneType",
+            "properties": {
+                "default_local_control_plane": {
+                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
@@ -5027,6 +5160,44 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsDirectConnectConfigType": {
+            "type": "object",
+            "description": "x-displayName: \"Direct Connect Configuration\"\nDirect Connect Configuration",
+            "title": "DirectConnectConfigType",
+            "properties": {
+                "cloud_aggregated_prefix": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cloud Aggregated Prefix\"\nx-example: \"10.0.0.0/20\"\nAggregated prefix from cloud to be advertised for DC side",
+                    "title": "Cloud Aggregated Prefix",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "dc_connect_aggregated_prefix": {
+                    "type": "array",
+                    "description": "x-displayName: \"Direct Connect Aggregate Prefixes\"\nx-example: \"20.0.0.0/20\"\nAggregated prefix from direct connect to be advertised for Cloud side",
+                    "title": "Direct Connect Aggregate Prefixes",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "hosted_vifs": {
+                    "description": "x-displayName: \"Hosted VIF mode\"\nHosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway, \nand automatically associate provided hosted VIF and also setup BGP Peering.",
+                    "title": "Hosted VIF mode",
+                    "$ref": "#/definitions/viewsHostedVIFConfigType"
+                },
+                "manual_gw": {
+                    "description": "x-displayName: \"Manual VIF mode\"\nManual Mode. Volterra provisions a Virtual Private Gateway, \nand a user associate AWS DirectConnect Gateway with it.",
+                    "title": "Manual VIF Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "standard_vifs": {
+                    "description": "x-displayName: \"Standard VIF mode\"\nStandard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway, \nand a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
+                    "title": "Standard VIF mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "viewsDirectConnectInfo": {
             "type": "object",
             "description": "DirectConnect Info",
@@ -5124,43 +5295,16 @@ var APISwaggerJSON string = `{
         },
         "viewsHostedVIFConfigType": {
             "type": "object",
-            "description": "Hosted VIF Configuration",
+            "description": "x-displayName: \"Hosted VIF Config\"\nHosted VIF Configuration",
             "title": "HostedVIFConfigType",
-            "x-displayname": "Hosted VIF Config",
-            "x-ves-proto-message": "ves.io.schema.views.HostedVIFConfigType",
             "properties": {
                 "vifs": {
                     "type": "array",
-                    "description": " VIFs\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 30\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.pattern: ^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "description": "x-displayName: \"List of VIF IDs\"\nx-example: \"value\"\nVIFs",
                     "title": "Hosted VIFs",
-                    "maxItems": 30,
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "List of VIF IDs",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "30",
-                        "ves.io.schema.rules.repeated.unique": "true",
-                        "ves.io.schema.rules.string.pattern": "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
-                }
-            }
-        },
-        "viewsLocalControlPlaneType": {
-            "type": "object",
-            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
-            "title": "LocalControlPlaneType",
-            "properties": {
-                "default_local_control_plane": {
-                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
-                    "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "no_local_control_plane": {
-                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
-                    "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -5277,7 +5421,8 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "CreateSpecType",
             "x-displayname": "Create AWS TGW site",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_with_hosted_vifs\",\"direct_connect_with_standard_vifs\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.CreateSpecType",
             "properties": {
@@ -5300,25 +5445,25 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
+                },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
+                },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_with_hosted_vifs direct_connect_with_standard_vifs]\n Direct Connect feature is disabled",
+                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect feature is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Direct Connect"
-                },
-                "direct_connect_with_hosted_vifs": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
-                    "$ref": "#/definitions/viewsHostedVIFConfigType",
-                    "x-displayname": "Direct Connect with hosted VIF mode"
-                },
-                "direct_connect_with_standard_vifs": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Direct Connect with Standard VIF mode"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
@@ -5375,7 +5520,8 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "GetSpecType",
             "x-displayname": "Get AWS TGW site",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_with_hosted_vifs\",\"direct_connect_with_standard_vifs\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GetSpecType",
             "properties": {
@@ -5398,13 +5544,23 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
+                },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
+                },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_with_hosted_vifs direct_connect_with_standard_vifs]\n Direct Connect feature is disabled",
+                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect feature is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Direct Connect"
                 },
@@ -5412,16 +5568,6 @@ var APISwaggerJSON string = `{
                     "description": " Direct Connect information obtained after creating the site and TGW",
                     "$ref": "#/definitions/viewsDirectConnectInfo",
                     "x-displayname": "Direct Connect Information"
-                },
-                "direct_connect_with_hosted_vifs": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
-                    "$ref": "#/definitions/viewsHostedVIFConfigType",
-                    "x-displayname": "Direct Connect with hosted VIF mode"
-                },
-                "direct_connect_with_standard_vifs": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Direct Connect with Standard VIF mode"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
@@ -5477,7 +5623,8 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_with_hosted_vifs\",\"direct_connect_with_standard_vifs\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GlobalSpecType",
             "properties": {
@@ -5502,14 +5649,26 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "title": "Custom Blocked Services Configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
+                },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
                     "title": "coordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "title": "Default Blocked Service Configuration",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
+                },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_with_hosted_vifs direct_connect_with_standard_vifs]\n Direct Connect feature is disabled",
+                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect feature is disabled",
                     "title": "Disable Direct Connect",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Direct Connect"
@@ -5519,18 +5678,6 @@ var APISwaggerJSON string = `{
                     "title": "Direct Connect information",
                     "$ref": "#/definitions/viewsDirectConnectInfo",
                     "x-displayname": "Direct Connect Information"
-                },
-                "direct_connect_with_hosted_vifs": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
-                    "title": "Direct Connect With Hosted VIF mode",
-                    "$ref": "#/definitions/viewsHostedVIFConfigType",
-                    "x-displayname": "Direct Connect with hosted VIF mode"
-                },
-                "direct_connect_with_standard_vifs": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
-                    "title": "Direct Connect With Standard VIF mode",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Direct Connect with Standard VIF mode"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
@@ -5599,7 +5746,8 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site replace specification",
             "title": "ReplaceSpecType",
             "x-displayname": "Replace AWS TGW site",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_with_hosted_vifs\",\"direct_connect_with_standard_vifs\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ReplaceSpecType",
             "properties": {
@@ -5622,25 +5770,25 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
+                },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
+                },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_with_hosted_vifs direct_connect_with_standard_vifs]\n Direct Connect feature is disabled",
+                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect feature is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Direct Connect"
-                },
-                "direct_connect_with_hosted_vifs": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
-                    "$ref": "#/definitions/viewsHostedVIFConfigType",
-                    "x-displayname": "Direct Connect with hosted VIF mode"
-                },
-                "direct_connect_with_standard_vifs": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_with_hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Direct Connect with Standard VIF mode"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",

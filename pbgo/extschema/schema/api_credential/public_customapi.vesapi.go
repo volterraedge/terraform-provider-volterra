@@ -1366,18 +1366,79 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	return ccl
 }
 
-// Create CustomAPIInprocClient
+// Create customAPIInprocClient
 
 // INPROC Client (satisfying CustomAPIClient interface)
-type CustomAPIInprocClient struct {
+type customAPIInprocClient struct {
+	CustomAPIServer
+}
+
+func (c *customAPIInprocClient) Activate(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	return c.CustomAPIServer.Activate(ctx, in)
+}
+func (c *customAPIInprocClient) ActivateServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	return c.CustomAPIServer.ActivateServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	return c.CustomAPIServer.Create(ctx, in)
+}
+func (c *customAPIInprocClient) CreateServiceCredentials(ctx context.Context, in *CreateServiceCredentialsRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	return c.CustomAPIServer.CreateServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	return c.CustomAPIServer.Get(ctx, in)
+}
+func (c *customAPIInprocClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+	return c.CustomAPIServer.List(ctx, in)
+}
+func (c *customAPIInprocClient) ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+	return c.CustomAPIServer.ListServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) RecreateScimToken(ctx context.Context, in *RecreateScimTokenRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	return c.CustomAPIServer.RecreateScimToken(ctx, in)
+}
+func (c *customAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	return c.CustomAPIServer.Renew(ctx, in)
+}
+func (c *customAPIInprocClient) RenewServiceCredentials(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	return c.CustomAPIServer.RenewServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	return c.CustomAPIServer.Revoke(ctx, in)
+}
+func (c *customAPIInprocClient) RevokeScimToken(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	return c.CustomAPIServer.RevokeScimToken(ctx, in)
+}
+func (c *customAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	return c.CustomAPIServer.RevokeServiceCredentials(ctx, in)
+}
+
+func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
+	return &customAPIInprocClient{CustomAPIServer: NewCustomAPIServer(svc)}
+}
+
+// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+}
+
+// Create customAPISrv
+
+// SERVER (satisfying CustomAPIServer interface)
+type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomAPIInprocClient) Activate(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) Activate(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1385,7 +1446,7 @@ func (c *CustomAPIInprocClient) Activate(ctx context.Context, in *GetRequest, op
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1399,13 +1460,13 @@ func (c *CustomAPIInprocClient) Activate(ctx context.Context, in *GetRequest, op
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Activate"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Activate"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1418,15 +1479,15 @@ func (c *CustomAPIInprocClient) Activate(ctx context.Context, in *GetRequest, op
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) ActivateServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) ActivateServiceCredentials(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1434,7 +1495,7 @@ func (c *CustomAPIInprocClient) ActivateServiceCredentials(ctx context.Context, 
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1448,13 +1509,13 @@ func (c *CustomAPIInprocClient) ActivateServiceCredentials(ctx context.Context, 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1467,15 +1528,15 @@ func (c *CustomAPIInprocClient) ActivateServiceCredentials(ctx context.Context, 
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) Create(ctx context.Context, in *CreateRequest) (*CreateResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1483,7 +1544,7 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *CreateRequest, o
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.CreateRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1497,13 +1558,13 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *CreateRequest, o
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Create"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Create"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1516,15 +1577,15 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *CreateRequest, o
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) CreateServiceCredentials(ctx context.Context, in *CreateServiceCredentialsRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) CreateServiceCredentials(ctx context.Context, in *CreateServiceCredentialsRequest) (*CreateResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1532,7 +1593,7 @@ func (c *CustomAPIInprocClient) CreateServiceCredentials(ctx context.Context, in
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.CreateServiceCredentialsRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateServiceCredentialsRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1546,13 +1607,13 @@ func (c *CustomAPIInprocClient) CreateServiceCredentials(ctx context.Context, in
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1565,15 +1626,15 @@ func (c *CustomAPIInprocClient) CreateServiceCredentials(ctx context.Context, in
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1581,7 +1642,7 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1595,13 +1656,13 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Get"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Get"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1614,15 +1675,15 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.GetResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) List(ctx context.Context, in *ListRequest) (*ListResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1630,7 +1691,7 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListRequest, opts 
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.ListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1644,13 +1705,13 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListRequest, opts 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.List"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.List"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1663,15 +1724,15 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListRequest, opts 
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.ListResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) ListServiceCredentials(ctx context.Context, in *ListRequest) (*ListResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1679,7 +1740,7 @@ func (c *CustomAPIInprocClient) ListServiceCredentials(ctx context.Context, in *
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.ListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1693,13 +1754,13 @@ func (c *CustomAPIInprocClient) ListServiceCredentials(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ListServiceCredentials"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ListServiceCredentials"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1712,15 +1773,15 @@ func (c *CustomAPIInprocClient) ListServiceCredentials(ctx context.Context, in *
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.ListResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) RecreateScimToken(ctx context.Context, in *RecreateScimTokenRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) RecreateScimToken(ctx context.Context, in *RecreateScimTokenRequest) (*CreateResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1728,7 +1789,7 @@ func (c *CustomAPIInprocClient) RecreateScimToken(ctx context.Context, in *Recre
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.RecreateScimTokenRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.RecreateScimTokenRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1742,13 +1803,13 @@ func (c *CustomAPIInprocClient) RecreateScimToken(ctx context.Context, in *Recre
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RecreateScimToken"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RecreateScimToken"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1761,15 +1822,15 @@ func (c *CustomAPIInprocClient) RecreateScimToken(ctx context.Context, in *Recre
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) Renew(ctx context.Context, in *RenewRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1777,7 +1838,7 @@ func (c *CustomAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opt
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.RenewRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.RenewRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1791,13 +1852,13 @@ func (c *CustomAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opt
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Renew"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Renew"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1810,15 +1871,15 @@ func (c *CustomAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opt
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) RenewServiceCredentials(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) RenewServiceCredentials(ctx context.Context, in *RenewRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1826,7 +1887,7 @@ func (c *CustomAPIInprocClient) RenewServiceCredentials(ctx context.Context, in 
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.RenewRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.RenewRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1840,13 +1901,13 @@ func (c *CustomAPIInprocClient) RenewServiceCredentials(ctx context.Context, in 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1859,15 +1920,15 @@ func (c *CustomAPIInprocClient) RenewServiceCredentials(ctx context.Context, in 
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) Revoke(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1875,7 +1936,7 @@ func (c *CustomAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1889,13 +1950,13 @@ func (c *CustomAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Revoke"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Revoke"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1908,15 +1969,15 @@ func (c *CustomAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) RevokeScimToken(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) RevokeScimToken(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1924,7 +1985,7 @@ func (c *CustomAPIInprocClient) RevokeScimToken(ctx context.Context, in *GetRequ
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1938,13 +1999,13 @@ func (c *CustomAPIInprocClient) RevokeScimToken(ctx context.Context, in *GetRequ
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RevokeScimToken"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RevokeScimToken"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1957,15 +2018,15 @@ func (c *CustomAPIInprocClient) RevokeScimToken(ctx context.Context, in *GetRequ
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+func (s *customAPISrv) RevokeServiceCredentials(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1973,7 +2034,7 @@ func (c *CustomAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.api_credential.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1987,13 +2048,13 @@ func (c *CustomAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2006,23 +2067,13 @@ func (c *CustomAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
-	return &CustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
+	return &customAPISrv{svc: svc}
 }
 
 var CustomAPISwaggerJSON string = `{
@@ -3218,7 +3269,7 @@ var CustomAPISwaggerJSON string = `{
     "definitions": {
         "api_credentialAPICredentialType": {
             "type": "string",
-            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nusing self credential (my credential)\nKubernetes config file to access Virtual Kubernetes API in Volterra\nusing self credential (my credential)\nAPI token to access Volterra public API\nusing self credential (my credential)\nAPI token for service credentials\nusing service user credential (service credential)\nAPI certificate for service credentials\nusing service user credential (service credential)\nService Credential kubeconfig\nusing service user credential (service credential)\nKubeconfig for accessing Site via Global Controller\nToken for the SCIM public APIs used to sync users and groups with the Volterra platform.\nExternal identity provider's SCIM client can use this token as Bearer token with Authorization header",
+            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nusing self credential (my credential)\nKubernetes config file to access Virtual Kubernetes API in Volterra\nusing self credential (my credential)\nAPI token to access Volterra public API\nusing self credential (my credential)\nAPI token for service credentials\nusing service user credential (service credential)\nAPI certificate for service credentials\nusing service user credential (service credential)\nService Credential kubeconfig\nusing service user credential (service credential)\nKubeconfig for accessing Site via Global Controller\nusing self credential (my credential)\nToken for the SCIM public APIs used to sync users and groups with the Volterra platform.\nExternal identity provider's SCIM client can use this token as Bearer token with Authorization header\nService Credential Kubeconfig for accessing Site via Global Controller\nusing service user credential (service credential)",
             "title": "API Credential type",
             "enum": [
                 "API_CERTIFICATE",
@@ -3228,7 +3279,8 @@ var CustomAPISwaggerJSON string = `{
                 "SERVICE_API_CERTIFICATE",
                 "SERVICE_KUBE_CONFIG",
                 "SITE_GLOBAL_KUBE_CONFIG",
-                "SCIM_API_TOKEN"
+                "SCIM_API_TOKEN",
+                "SERVICE_SITE_GLOBAL_KUBE_CONFIG"
             ],
             "default": "API_CERTIFICATE",
             "x-displayname": "Credential Type",
@@ -3786,7 +3838,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace the role applies to\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "description": " Namespace the role applies to\n '*' value implies all namespaces\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Namespace",
                     "maxLength": 256,
                     "x-displayname": "Namespace",
@@ -3794,8 +3846,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.ves_object_name": "true"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
                 "role": {

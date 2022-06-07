@@ -35,6 +35,1102 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *APIEndpointProtectionRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIEndpointProtectionRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIEndpointProtectionRule) DeepCopy() *APIEndpointProtectionRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIEndpointProtectionRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIEndpointProtectionRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIEndpointProtectionRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIEndpointProtectionRuleValidator().Validate(ctx, m, opts...)
+}
+
+func (m *APIEndpointProtectionRule) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClientMatcherDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *APIEndpointProtectionRule) GetClientMatcherDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetClientMatcher() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetClientMatcher().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetClientMatcher().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "client_matcher." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateAPIEndpointProtectionRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIEndpointProtectionRule) DomainChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpointProtectionRule) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema.EmptyValidator().Validate, nil
+}
+
+func (v *ValidateAPIEndpointProtectionRule) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for specific_domain")
+	}
+	return oValidatorFn_SpecificDomain, nil
+}
+
+func (v *ValidateAPIEndpointProtectionRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpointProtectionRule) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for action")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := APIProtectionRuleActionValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpointProtectionRule) ApiEndpointPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_endpoint_path")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpointProtectionRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIEndpointProtectionRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIEndpointProtectionRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("action"))
+		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_endpoint_method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_endpoint_method"))
+		if err := fv(ctx, m.GetApiEndpointMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_endpoint_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_endpoint_path"))
+		if err := fv(ctx, m.GetApiEndpointPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_matcher"))
+		if err := fv(ctx, m.GetClientMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain_choice"]; exists {
+		val := m.GetDomainChoice()
+		vOpts := append(opts,
+			db.WithValidateField("domain_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDomainChoice().(type) {
+	case *APIEndpointProtectionRule_AnyDomain:
+		if fv, exists := v.FldValidators["domain_choice.any_domain"]; exists {
+			val := m.GetDomainChoice().(*APIEndpointProtectionRule_AnyDomain).AnyDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("any_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIEndpointProtectionRule_SpecificDomain:
+		if fv, exists := v.FldValidators["domain_choice.specific_domain"]; exists {
+			val := m.GetDomainChoice().(*APIEndpointProtectionRule_SpecificDomain).SpecificDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("specific_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_matcher"))
+		if err := fv(ctx, m.GetRequestMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIEndpointProtectionRuleValidator = func() *ValidateAPIEndpointProtectionRule {
+	v := &ValidateAPIEndpointProtectionRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
+	rulesDomainChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDomainChoice(rulesDomainChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpointProtectionRule.domain_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_choice"] = vFn
+
+	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
+	rulesDomainChoiceAnyDomain := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field APIEndpointProtectionRule.domain_choice_any_domain: %s", err)
+		panic(errMsg)
+	}
+	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
+	rulesDomainChoiceSpecificDomain := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+		"ves.io.schema.rules.string.vh_domain": "true",
+	}
+	vFnMap["domain_choice.specific_domain"], err = vrhDomainChoiceSpecificDomain(rulesDomainChoiceSpecificDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field APIEndpointProtectionRule.domain_choice_specific_domain: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
+	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpointProtectionRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	vrhAction := v.ActionValidationRuleHandler
+	rulesAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAction(rulesAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpointProtectionRule.action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["action"] = vFn
+
+	vrhApiEndpointPath := v.ApiEndpointPathValidationRuleHandler
+	rulesApiEndpointPath := map[string]string{
+		"ves.io.schema.rules.message.required":           "true",
+		"ves.io.schema.rules.string.max_len":             "1024",
+		"ves.io.schema.rules.string.templated_http_path": "true",
+	}
+	vFn, err = vrhApiEndpointPath(rulesApiEndpointPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpointProtectionRule.api_endpoint_path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_endpoint_path"] = vFn
+
+	v.FldValidators["api_endpoint_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
+
+	v.FldValidators["request_matcher"] = ves_io_schema_policy.RequestMatcherValidator().Validate
+
+	v.FldValidators["client_matcher"] = ves_io_schema_policy.ClientMatcherValidator().Validate
+
+	return v
+}()
+
+func APIEndpointProtectionRuleValidator() db.Validator {
+	return DefaultAPIEndpointProtectionRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIGroupProtectionRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIGroupProtectionRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIGroupProtectionRule) DeepCopy() *APIGroupProtectionRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIGroupProtectionRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIGroupProtectionRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIGroupProtectionRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIGroupProtectionRuleValidator().Validate(ctx, m, opts...)
+}
+
+func (m *APIGroupProtectionRule) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClientMatcherDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *APIGroupProtectionRule) GetClientMatcherDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetClientMatcher() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetClientMatcher().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetClientMatcher().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "client_matcher." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateAPIGroupProtectionRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIGroupProtectionRule) DomainChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIGroupProtectionRule) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema.EmptyValidator().Validate, nil
+}
+
+func (v *ValidateAPIGroupProtectionRule) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for specific_domain")
+	}
+	return oValidatorFn_SpecificDomain, nil
+}
+
+func (v *ValidateAPIGroupProtectionRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIGroupProtectionRule) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for action")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := APIProtectionRuleActionValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIGroupProtectionRule) ApiGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_group")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIGroupProtectionRule) BasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for base_path")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIGroupProtectionRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIGroupProtectionRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIGroupProtectionRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("action"))
+		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group"))
+		if err := fv(ctx, m.GetApiGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["base_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("base_path"))
+		if err := fv(ctx, m.GetBasePath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_matcher"))
+		if err := fv(ctx, m.GetClientMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain_choice"]; exists {
+		val := m.GetDomainChoice()
+		vOpts := append(opts,
+			db.WithValidateField("domain_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDomainChoice().(type) {
+	case *APIGroupProtectionRule_AnyDomain:
+		if fv, exists := v.FldValidators["domain_choice.any_domain"]; exists {
+			val := m.GetDomainChoice().(*APIGroupProtectionRule_AnyDomain).AnyDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("any_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupProtectionRule_SpecificDomain:
+		if fv, exists := v.FldValidators["domain_choice.specific_domain"]; exists {
+			val := m.GetDomainChoice().(*APIGroupProtectionRule_SpecificDomain).SpecificDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("specific_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_matcher"))
+		if err := fv(ctx, m.GetRequestMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIGroupProtectionRuleValidator = func() *ValidateAPIGroupProtectionRule {
+	v := &ValidateAPIGroupProtectionRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
+	rulesDomainChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDomainChoice(rulesDomainChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIGroupProtectionRule.domain_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_choice"] = vFn
+
+	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
+	rulesDomainChoiceAnyDomain := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field APIGroupProtectionRule.domain_choice_any_domain: %s", err)
+		panic(errMsg)
+	}
+	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
+	rulesDomainChoiceSpecificDomain := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+		"ves.io.schema.rules.string.vh_domain": "true",
+	}
+	vFnMap["domain_choice.specific_domain"], err = vrhDomainChoiceSpecificDomain(rulesDomainChoiceSpecificDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field APIGroupProtectionRule.domain_choice_specific_domain: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
+	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIGroupProtectionRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	vrhAction := v.ActionValidationRuleHandler
+	rulesAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAction(rulesAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIGroupProtectionRule.action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["action"] = vFn
+
+	vrhApiGroup := v.ApiGroupValidationRuleHandler
+	rulesApiGroup := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+	}
+	vFn, err = vrhApiGroup(rulesApiGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIGroupProtectionRule.api_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_group"] = vFn
+
+	vrhBasePath := v.BasePathValidationRuleHandler
+	rulesBasePath := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+	}
+	vFn, err = vrhBasePath(rulesBasePath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIGroupProtectionRule.base_path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["base_path"] = vFn
+
+	v.FldValidators["request_matcher"] = ves_io_schema_policy.RequestMatcherValidator().Validate
+
+	v.FldValidators["client_matcher"] = ves_io_schema_policy.ClientMatcherValidator().Validate
+
+	return v
+}()
+
+func APIGroupProtectionRuleValidator() db.Validator {
+	return DefaultAPIGroupProtectionRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIProtectionRuleAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIProtectionRuleAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIProtectionRuleAction) DeepCopy() *APIProtectionRuleAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIProtectionRuleAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIProtectionRuleAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIProtectionRuleAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIProtectionRuleActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIProtectionRuleAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIProtectionRuleAction) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for action")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIProtectionRuleAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIProtectionRuleAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIProtectionRuleAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action"]; exists {
+		val := m.GetAction()
+		vOpts := append(opts,
+			db.WithValidateField("action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAction().(type) {
+	case *APIProtectionRuleAction_Allow:
+		if fv, exists := v.FldValidators["action.allow"]; exists {
+			val := m.GetAction().(*APIProtectionRuleAction_Allow).Allow
+			vOpts := append(opts,
+				db.WithValidateField("action"),
+				db.WithValidateField("allow"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIProtectionRuleAction_Deny:
+		if fv, exists := v.FldValidators["action.deny"]; exists {
+			val := m.GetAction().(*APIProtectionRuleAction_Deny).Deny
+			vOpts := append(opts,
+				db.WithValidateField("action"),
+				db.WithValidateField("deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIProtectionRuleActionValidator = func() *ValidateAPIProtectionRuleAction {
+	v := &ValidateAPIProtectionRuleAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAction := v.ActionValidationRuleHandler
+	rulesAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAction(rulesAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIProtectionRuleAction.action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["action"] = vFn
+
+	return v
+}()
+
+func APIProtectionRuleActionValidator() db.Validator {
+	return DefaultAPIProtectionRuleActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIProtectionRules) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIProtectionRules) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIProtectionRules) DeepCopy() *APIProtectionRules {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIProtectionRules{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIProtectionRules) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIProtectionRules) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIProtectionRulesValidator().Validate(ctx, m, opts...)
+}
+
+func (m *APIProtectionRules) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiEndpointRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiEndpointRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiGroupsRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiGroupsRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *APIProtectionRules) GetApiEndpointRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiEndpointRules() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetApiEndpointRules() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiEndpointRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("api_endpoint_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *APIProtectionRules) GetApiGroupsRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiGroupsRules() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetApiGroupsRules() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiGroupsRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("api_groups_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateAPIProtectionRules struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIProtectionRules) ApiEndpointRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*APIEndpointProtectionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := APIEndpointProtectionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_endpoint_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*APIEndpointProtectionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*APIEndpointProtectionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_endpoint_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_endpoint_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIProtectionRules) ApiGroupsRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*APIGroupProtectionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := APIGroupProtectionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_groups_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*APIGroupProtectionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*APIGroupProtectionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_groups_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_groups_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIProtectionRules) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIProtectionRules)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIProtectionRules got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_endpoint_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_endpoint_rules"))
+		if err := fv(ctx, m.GetApiEndpointRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_groups_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_groups_rules"))
+		if err := fv(ctx, m.GetApiGroupsRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIProtectionRulesValidator = func() *ValidateAPIProtectionRules {
+	v := &ValidateAPIProtectionRules{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiEndpointRules := v.ApiEndpointRulesValidationRuleHandler
+	rulesApiEndpointRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+	}
+	vFn, err = vrhApiEndpointRules(rulesApiEndpointRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIProtectionRules.api_endpoint_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_endpoint_rules"] = vFn
+
+	vrhApiGroupsRules := v.ApiGroupsRulesValidationRuleHandler
+	rulesApiGroupsRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+	}
+	vFn, err = vrhApiGroupsRules(rulesApiGroupsRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIProtectionRules.api_groups_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_groups_rules"] = vFn
+
+	return v
+}()
+
+func APIProtectionRulesValidator() db.Validator {
+	return DefaultAPIProtectionRulesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *APIRateLimit) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1070,7 +2166,7 @@ var DefaultAdvancedOptionsTypeValidator = func() *ValidateAdvancedOptionsType {
 
 	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
 	rulesIdleTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "300000",
+		"ves.io.schema.rules.uint32.lte": "3600000",
 	}
 	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
 	if err != nil {
@@ -2568,6 +3664,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
 	} else {
@@ -2702,6 +3804,24 @@ func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -3706,6 +4826,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["blocked_clients"]; exists {
 		vOpts := append(opts, db.WithValidateField("blocked_clients"))
 		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
@@ -4523,6 +5652,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["more_option"] = AdvancedOptionsTypeValidator().Validate
 
 	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["api_protection_rules"] = APIProtectionRulesValidator().Validate
 
 	return v
 }()
@@ -5738,6 +6869,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
 	} else {
@@ -5872,6 +7009,24 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -6876,6 +8031,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
@@ -7023,7 +8187,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("dns_info"))
 		for idx, item := range m.GetDnsInfo() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -7043,7 +8207,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("downstream_tls_certificate_expiration_timestamps"))
 		for idx, item := range m.GetDownstreamTlsCertificateExpirationTimestamps() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -7754,6 +8918,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["api_protection_rules"] = APIProtectionRulesValidator().Validate
+
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
 	return v
@@ -7838,6 +9004,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -7982,6 +9154,24 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -9043,6 +10233,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
@@ -9190,7 +10389,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("dns_info"))
 		for idx, item := range m.GetDnsInfo() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -9210,7 +10409,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("downstream_tls_certificate_expiration_timestamps"))
 		for idx, item := range m.GetDownstreamTlsCertificateExpirationTimestamps() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -9978,6 +11177,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["more_option"] = AdvancedOptionsTypeValidator().Validate
 
 	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["api_protection_rules"] = APIProtectionRulesValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -12450,6 +13651,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
 	} else {
@@ -12584,6 +13791,24 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -13588,6 +14813,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["blocked_clients"]; exists {
 		vOpts := append(opts, db.WithValidateField("blocked_clients"))
 		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
@@ -14405,6 +15639,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["more_option"] = AdvancedOptionsTypeValidator().Validate
 
 	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["api_protection_rules"] = APIProtectionRulesValidator().Validate
 
 	return v
 }()
@@ -19850,13 +21086,14 @@ func (r *CreateSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.ApiProtectionRules = f.GetApiProtectionRules()
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
@@ -19880,15 +21117,25 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WafExclusionRules = f.GetWafExclusionRules()
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.AddLocation = m1.AddLocation
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	f.ApiProtectionRules = m1.ApiProtectionRules
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
@@ -19910,6 +21157,14 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetUserIdChoiceToGlobalSpecType(f)
 	m1.SetWafChoiceToGlobalSpecType(f)
 	f.WafExclusionRules = m1.WafExclusionRules
+}
+
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -20416,13 +21671,14 @@ func (r *GetSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.ApiProtectionRules = f.GetApiProtectionRules()
 	m.AutoCertInfo = f.GetAutoCertInfo()
 	m.AutoCertState = f.GetAutoCertState()
 	m.BlockedClients = f.GetBlockedClients()
@@ -20452,15 +21708,25 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WafExclusionRules = f.GetWafExclusionRules()
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.AddLocation = m1.AddLocation
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	f.ApiProtectionRules = m1.ApiProtectionRules
 	f.AutoCertInfo = m1.AutoCertInfo
 	f.AutoCertState = m1.AutoCertState
 	f.BlockedClients = m1.BlockedClients
@@ -20488,6 +21754,14 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetUserIdChoiceToGlobalSpecType(f)
 	m1.SetWafChoiceToGlobalSpecType(f)
 	f.WafExclusionRules = m1.WafExclusionRules
+}
+
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -20994,13 +22268,14 @@ func (r *ReplaceSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.ApiProtectionRules = f.GetApiProtectionRules()
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
@@ -21024,15 +22299,25 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WafExclusionRules = f.GetWafExclusionRules()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.AddLocation = m1.AddLocation
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	f.ApiProtectionRules = m1.ApiProtectionRules
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
@@ -21054,4 +22339,12 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetUserIdChoiceToGlobalSpecType(f)
 	m1.SetWafChoiceToGlobalSpecType(f)
 	f.WafExclusionRules = m1.WafExclusionRules
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

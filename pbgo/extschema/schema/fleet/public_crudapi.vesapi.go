@@ -371,31 +371,67 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		opt(cco)
 	}
 
-	var req *CreateRequest
+	got := 0
+	if e != nil {
+		got++
+	}
 	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*CreateRequest)
-		if !ok {
-			return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
-		}
-		req = r
-	} else {
-		r, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new create request")
-		}
-		req = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, req); err != nil {
-				return nil, err
-			}
-		}
+		got++
+	}
+	if cco.RequestJSON != "" {
+		got++
+	}
+	if got != 1 {
+		return nil, fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	url := fmt.Sprintf("%s/public/namespaces/%s/fleets", c.baseURL, req.Metadata.GetNamespace())
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var req *CreateRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*CreateRequest)
+			if !ok {
+				return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
+			}
+			req = r
+		} else {
+			r, err := NewCreateRequest(e)
+			if err != nil {
+				return nil, errors.Wrap(err, "Creating new create request")
+			}
+			req = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, req); err != nil {
+					return nil, err
+				}
+			}
+		}
+
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
+
+	var namespace string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return nil, errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
+	} else {
+		return nil, fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	url := fmt.Sprintf("%s/public/namespaces/%s/fleets", c.baseURL, namespace)
 
 	hReq, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
@@ -424,7 +460,7 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	if err := codec.FromJSON(string(body), rspo); err != nil {
 		return nil, errors.Wrap(err, "Converting json to response protobuf message")
 	}
-	configapi.TranscribeCall(ctx, req, rspo)
+	configapi.TranscribeCall(ctx, jsn, string(body))
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rspo
 		cco.OutCallResponse.JSON = string(body)
@@ -448,26 +484,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		opt(cco)
 	}
 
-	var rReq *ReplaceRequest
-	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*ReplaceRequest)
-		if !ok {
-			return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
-		}
-		rReq = r
-	} else {
-		r, err := NewReplaceRequest(e)
-		if err != nil {
-			return errors.Wrap(err, "Creating new replace request")
-		}
-		rReq = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, rReq); err != nil {
-				return err
-			}
-		}
-	}
-
 	got := 0
 	if e != nil {
 		got++
@@ -475,43 +491,66 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	if cco.RequestProto != nil {
 		got++
 	}
-	if cco.ReplaceJSONReq != "" {
+	if cco.RequestJSON != "" {
 		got++
 	}
 	if got != 1 {
-		return fmt.Errorf("Only one of entry, WithRequestProto() or WithReplaceJSONRequest() should be specified")
-	}
-	if e == nil && cco.RequestProto == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithRequestProto() nor WithReplaceJSONRequest() specified")
+		return fmt.Errorf("Only one of entry(%v), WithRequestProto()(%v) or WithRequestJSON()(%v) should be specified", e, cco.RequestProto, cco.RequestJSON)
 	}
 
-	var jsn, namespace, name string
-	var err error
-	_ = namespace
-	if e != nil || cco.RequestProto != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		var rReq *ReplaceRequest
+		if cco.RequestProto != nil {
+			r, ok := cco.RequestProto.(*ReplaceRequest)
+			if !ok {
+				return fmt.Errorf("%T is not *ReplaceRequest", cco.RequestProto)
+			}
+			rReq = r
+		} else {
+			r, err := NewReplaceRequest(e)
+			if err != nil {
+				return errors.Wrap(err, "Creating new replace request")
+			}
+			rReq = r
+			if cco.ObjToMsgConverter != nil {
+				if err := cco.ObjToMsgConverter(e, rReq); err != nil {
+					return err
+				}
+			}
+		}
+
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.GetMetadata().GetNamespace()
-		name = rReq.GetMetadata().GetName()
+		jsn = j
+	}
+
+	var namespace, name string
+	_ = namespace
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling json to find namespace/name")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+
+	if val, ok := md["namespace"].(string); ok {
+		namespace = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["namespace"].(string); ok {
-			namespace = val
-		}
-		if val, ok := md["name"].(string); ok {
-			name = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
+	}
+
+	if val, ok := md["name"].(string); ok {
+		name = val
+	} else {
+		return fmt.Errorf("Request %s does not have 'metadata.name'", jsn)
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/fleets/%s", c.baseURL, namespace, name)
@@ -538,7 +577,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		return errors.Wrap(err, "RestClient replace")
 	}
 
-	configapi.TranscribeCall(ctx, rReq, nil)
+	configapi.TranscribeCall(ctx, jsn, nil)
 	return nil
 
 }
@@ -2551,6 +2590,42 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "fleetCustomAllowedServiceList": {
+            "type": "object",
+            "description": "x-displayName: \"Custom Allowed Services List\"\nServices to be allowed are placed as a combination of IP and port",
+            "title": "CustomAllowedServiceList Custom service list to be allowed internally for accessing services",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "x-displayName: \"Items\"\nSet of allowed IP and port for services",
+                    "title": "Items",
+                    "items": {
+                        "$ref": "#/definitions/fleetCustomServiceItem"
+                    }
+                }
+            }
+        },
+        "fleetCustomServiceItem": {
+            "type": "object",
+            "description": "x-displayName: \"Custom Service Item\"\nAllowed Service is identified by IP and port combination which is defined as item",
+            "title": "CustomServiceItem Defines the identification for allowed service",
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": "x-displayName: \"port\"\nx-required\nx-example: \"9400\"\nTraffic to this on configured IPis is allowed to access services",
+                    "title": "Port",
+                    "format": "int64"
+                },
+                "prefix_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"Prefixes\"\nx-required\nx-example: \"[10.1.1.0/28, 11.1.1.1/32]\"\nIP Prefixes to allow to access services on the configured port",
+                    "title": "IP prefixes",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "fleetDeleteRequest": {
             "type": "object",
             "description": "This is the input message of the 'Delete' RPC.",
@@ -3104,10 +3179,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interfaces": {
                     "type": "array",
-                    "description": " Add all interfaces belonging to this fleet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Add all interfaces belonging to this fleet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Interfaces",
                     "minItems": 1,
-                    "maxItems": 32,
+                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
@@ -3115,7 +3190,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.max_items": "256",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -6583,15 +6658,15 @@ var APISwaggerJSON string = `{
                 },
                 "devices": {
                     "type": "array",
-                    "description": " Configuration for all devices in the fleet.\n Examples of devices are - network interfaces, cameras, scanners etc.\n Configuration a device is applied on VER node if the VER node is member of this fleet and\n has an corresponding interface/device. The mapping from device configured in fleet with\n interface/device in VER node depends on the type of device and is documented in\n device instance specific sections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
+                    "description": " Configuration for all devices in the fleet.\n Examples of devices are - network interfaces, cameras, scanners etc.\n Configuration a device is applied on VER node if the VER node is member of this fleet and\n has an corresponding interface/device. The mapping from device configured in fleet with\n interface/device in VER node depends on the type of device and is documented in\n device instance specific sections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "Devices",
-                    "maxItems": 8,
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/fleetDeviceInstanceType"
                     },
                     "x-displayname": "Devices",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8"
+                        "ves.io.schema.rules.repeated.max_items": "128"
                     }
                 },
                 "disable_flow_export": {
@@ -7050,7 +7125,7 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",

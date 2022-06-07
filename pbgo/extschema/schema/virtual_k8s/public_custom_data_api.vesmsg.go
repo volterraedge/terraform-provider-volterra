@@ -82,7 +82,7 @@ func (v *ValidatePVCMetricData) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -184,7 +184,7 @@ func (v *ValidatePVCMetricTypeData) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("value"))
 		for idx, item := range m.GetValue() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -339,7 +339,7 @@ func (v *ValidatePVCMetricsRequest) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -475,7 +475,7 @@ func (v *ValidatePVCMetricsResponse) Validate(ctx context.Context, pm interface{
 
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

@@ -372,27 +372,40 @@ type crudAPIRestClient struct {
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	req, err := NewObjectCreateReq(e)
-	if err != nil {
-		return nil, errors.Wrap(err, "Creating new create request")
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	if e != nil && cco.RequestJSON != "" {
+		return nil, fmt.Errorf("Both entry and WithRequestJSON() specified")
+	}
+	if e == nil && cco.RequestJSON == "" {
+		return nil, fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.app_firewall.crudapi", ".")
 	t := strings.Join(sl[:len(sl)-1], ".")
 	url := fmt.Sprintf("%s/%s/Objects", c.baseURL, t)
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		req, err := NewObjectCreateReq(e)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new create request")
+		}
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
 
 	hReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
 		return nil, err
-	}
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
 	}
 	client.AddHdrsToReq(cco.Headers, hReq)
 	hReq.Header.Set("Content-Type", "application/json")
@@ -428,43 +441,46 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	rReq, err := NewObjectReplaceReq(e)
-	if err != nil {
-		return errors.Wrap(err, "Creating new replace request")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	if e != nil && cco.ReplaceJSONReq != "" {
-		return fmt.Errorf("Both entry and WithReplaceJSONRequest() specified")
+	if e != nil && cco.RequestJSON != "" {
+		return fmt.Errorf("Both entry and WithRequestJSON() specified")
 	}
-	if e == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithReplaceJSONRequest() specified")
+	if e == nil && cco.RequestJSON == "" {
+		return fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
-	var jsn, objUID string
-	if e != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		rReq, err := NewObjectReplaceReq(e)
+		if err != nil {
+			return errors.Wrap(err, "Creating new replace request")
+		}
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		objUID = rReq.ObjectUid
+		jsn = j
+	}
+
+	var objUID string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["uid"].(string); ok {
+		objUID = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["uid"].(string); ok {
-			objUID = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.uid'", jsn)
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -2730,7 +2746,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2758,7 +2774,8 @@ var APISwaggerJSON string = `{
                 "VIOL_MALFORMED_REQUEST",
                 "VIOL_EVASION_MULTIPLE_DECODING",
                 "VIOL_DATA_GUARD",
-                "VIOL_EVASION_APACHE_WHITESPACE"
+                "VIOL_EVASION_APACHE_WHITESPACE",
+                "VIOL_COOKIE_MODIFIED"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",

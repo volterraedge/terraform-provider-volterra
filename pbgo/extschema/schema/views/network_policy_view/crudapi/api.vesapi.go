@@ -372,27 +372,40 @@ type crudAPIRestClient struct {
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	req, err := NewObjectCreateReq(e)
-	if err != nil {
-		return nil, errors.Wrap(err, "Creating new create request")
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	if e != nil && cco.RequestJSON != "" {
+		return nil, fmt.Errorf("Both entry and WithRequestJSON() specified")
+	}
+	if e == nil && cco.RequestJSON == "" {
+		return nil, fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.views.network_policy_view.crudapi", ".")
 	t := strings.Join(sl[:len(sl)-1], ".")
 	url := fmt.Sprintf("%s/%s/Objects", c.baseURL, t)
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		req, err := NewObjectCreateReq(e)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new create request")
+		}
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
 
 	hReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
 		return nil, err
-	}
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
 	}
 	client.AddHdrsToReq(cco.Headers, hReq)
 	hReq.Header.Set("Content-Type", "application/json")
@@ -428,43 +441,46 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	rReq, err := NewObjectReplaceReq(e)
-	if err != nil {
-		return errors.Wrap(err, "Creating new replace request")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	if e != nil && cco.ReplaceJSONReq != "" {
-		return fmt.Errorf("Both entry and WithReplaceJSONRequest() specified")
+	if e != nil && cco.RequestJSON != "" {
+		return fmt.Errorf("Both entry and WithRequestJSON() specified")
 	}
-	if e == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithReplaceJSONRequest() specified")
+	if e == nil && cco.RequestJSON == "" {
+		return fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
-	var jsn, objUID string
-	if e != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		rReq, err := NewObjectReplaceReq(e)
+		if err != nil {
+			return errors.Wrap(err, "Creating new replace request")
+		}
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		objUID = rReq.ObjectUid
+		jsn = j
+	}
+
+	var objUID string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["uid"].(string); ok {
+		objUID = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["uid"].(string); ok {
-			objUID = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.uid'", jsn)
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -3726,7 +3742,7 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
             "properties": {
                 "name": {
