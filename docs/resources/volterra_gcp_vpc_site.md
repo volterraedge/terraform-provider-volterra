@@ -20,7 +20,10 @@ resource "volterra_gcp_vpc_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "cloud_credentials assisted" must be set
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
+
+  // One of the arguments from this list "cloud_credentials" must be set
 
   cloud_credentials {
     name      = "test1"
@@ -29,25 +32,52 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
   logs_streaming_disabled = true
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_gw {
-    gcp_certified_hw = "gcp-byol-voltmesh"
+  voltstack_cluster {
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    no_forward_proxy = true
+    gcp_certified_hw = "gcp-byol-voltstack-combo"
 
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
-    local_network {
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+    no_k8s_cluster = true
+
+    local_control_plane {
+      // One of the arguments from this list "no_local_control_plane default_local_control_plane" must be set
+      no_local_control_plane = true
+    }
+
+    // One of the arguments from this list "active_network_policies no_network_policy" must be set
+    no_network_policy = true
+    node_number       = "1"
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+
+    outside_static_routes {
+      static_route_list {
+        // One of the arguments from this list "simple_static_route custom_static_route" must be set
+        simple_static_route = "10.5.1.0/24"
+      }
+    }
+    site_local_network {
       // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
       new_network_autogenerate {
         autogenerate = true
       }
     }
-
-    local_subnet {
+    site_local_subnet {
       // One of the arguments from this list "new_subnet existing_subnet" must be set
 
       new_subnet {
@@ -55,8 +85,10 @@ resource "volterra_gcp_vpc_site" "example" {
         subnet_name  = "subnet1-in-network1"
       }
     }
-
-    node_number = "node_number"
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+    sm_connection_public_ip = true
+    // One of the arguments from this list "default_storage storage_class_list" must be set
+    default_storage = true
   }
 }
 
@@ -83,9 +115,11 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
-`coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
+`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`assisted` - (Optional) In assisted deployment get GCP parameters generated in status of this objects and run volterra provided terraform script. (bool).
+`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+
+`coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
 `cloud_credentials` - (Optional) Reference to GCP credentials for automatic deployment. See [ref](#ref) below for details.
 
@@ -104,8 +138,6 @@ Argument Reference
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
-
-`site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC network.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -148,6 +180,24 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 `location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Blocked Services
+
+Use custom blocked services configuration.
+
+`blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Sevice ](#blocked-sevice) below for details.
+
+### Blocked Sevice
+
+Use custom blocked services configuration.
+
+`dns` - (Optional) Matches ssh port 53 (bool).
+
+`ssh` - (Optional) Matches ssh port 22 (bool).
+
+`web_user_interface` - (Optional) Matches the web user interface port (bool).
+
+`network_type` - (Optional) Network type in which these ports get blocked (`String`).
 
 ### Clear Secret Info
 
@@ -199,6 +249,10 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
 
+### Default Local Control Plane
+
+Enable Site Local Control Plane.
+
 ### Default Os Version
 
 Will assign latest available OS version.
@@ -222,6 +276,10 @@ Disable Interception.
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
+
+### Dns
+
+Matches ssh port 53.
 
 ### Domain Match
 
@@ -323,6 +381,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `inside_subnet` - (Optional) Subnet for the inside interface of the node.. See [Inside Subnet ](#inside-subnet) below for details.
 
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
+
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -337,6 +397,10 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `outside_subnet` - (Optional) Subnet for the outside interface of the node.. See [Outside Subnet ](#outside-subnet) below for details.
 
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
 ### Ingress Gw
 
 One interface site is useful when site is only used as ingress gateway to the VPC network..
@@ -344,6 +408,8 @@ One interface site is useful when site is only used as ingress gateway to the VP
 `gcp_certified_hw` - (Required) Name for GCP certified hardware. (`String`).
 
 `gcp_zone_names` - (Required) List of zones when instances will be created, needs to match with region selected. (`String`).
+
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `local_network` - (Optional) Network for the local interface of the node. See [Local Network ](#local-network) below for details.
 
@@ -396,6 +462,14 @@ IPv4 Address.
 IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
+
+### Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Local Network
 
@@ -476,6 +550,10 @@ No TLS interception is enabled for this network connector.
 ### No K8s Cluster
 
 Site Local K8s API access is disabled.
+
+### No Local Control Plane
+
+Disable Site Local Control Plane.
 
 ### No Network Policy
 
@@ -587,6 +665,18 @@ Site local outside is connected directly to a given global network.
 
 `global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
 
+### Sm Connection Public Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Sm Connection Pvt Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Ssh
+
+Matches ssh port 22.
+
 ### Static Route List
 
 List of Static routes.
@@ -695,6 +785,8 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
+
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -709,9 +801,17 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `site_local_subnet` - (Optional) Subnet for the local interface of the node.. See [Site Local Subnet ](#site-local-subnet) below for details.
 
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
 `default_storage` - (Optional) Use standard storage class configured as AWS EBS (bool).
 
 `storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for site. See [Storage Class List ](#storage-class-list) below for details.
+
+### Web User Interface
+
+Matches the web user interface port.
 
 ### Wingman Secret Info
 

@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -68,6 +69,55 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"blocked_services": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"blocked_sevice": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"dns": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ssh": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"web_user_interface": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"network_type": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"default_blocked_services": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"coordinates": {
 
 				Type:     schema.TypeSet,
@@ -86,12 +136,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 						},
 					},
 				},
-			},
-
-			"assisted": {
-
-				Type:     schema.TypeBool,
-				Optional: true,
 			},
 
 			"azure_cred": {
@@ -874,6 +918,64 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 						},
 
 						"no_global_network": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"hub": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"spoke_vnets": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"auto": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"manual": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"vnet": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"resource_group": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"vnet_name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"not_hub": {
 
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -1880,6 +1982,64 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 						},
 
 						"no_global_network": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"hub": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"spoke_vnets": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"auto": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"manual": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"vnet": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"resource_group": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"vnet_name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"not_hub": {
 
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -4799,6 +4959,94 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
+	//blocked_services_choice
+
+	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+		blockedServicesChoiceInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_BlockedServices{}
+		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
+		createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+				for i, set := range sl {
+					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+					blockedSeviceMapStrToI := set.(map[string]interface{})
+
+					blockedServicesValueTypeChoiceTypeFound := false
+
+					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_DefaultBlockedServices{}
+			blockedServicesChoiceInt.DefaultBlockedServices = &ves_io_schema.Empty{}
+			createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
+
 	//coordinates
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
@@ -4823,18 +5071,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 	//deployment
 
 	deploymentTypeFound := false
-
-	if v, ok := d.GetOk("assisted"); ok && !deploymentTypeFound {
-
-		deploymentTypeFound = true
-
-		if v.(bool) {
-			deploymentInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_Assisted{}
-			deploymentInt.Assisted = &ves_io_schema.Empty{}
-			createSpec.Deployment = deploymentInt
-		}
-
-	}
 
 	if v, ok := d.GetOk("azure_cred"); ok && !deploymentTypeFound {
 
@@ -5967,6 +6203,94 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 					globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_NoGlobalNetwork{}
 					globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGw.GlobalNetworkChoice = globalNetworkChoiceInt
+				}
+
+			}
+
+			hubChoiceTypeFound := false
+
+			if v, ok := cs["hub"]; ok && !isIntfNil(v) && !hubChoiceTypeFound {
+
+				hubChoiceTypeFound = true
+				hubChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_Hub{}
+				hubChoiceInt.Hub = &ves_io_schema_views_azure_vnet_site.AzureHubVnetType{}
+				siteTypeInt.IngressEgressGw.HubChoice = hubChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["spoke_vnets"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						spokeVnets := make([]*ves_io_schema_views_azure_vnet_site.VnetPeeringType, len(sl))
+						hubChoiceInt.Hub.SpokeVnets = spokeVnets
+						for i, set := range sl {
+							spokeVnets[i] = &ves_io_schema_views_azure_vnet_site.VnetPeeringType{}
+							spokeVnetsMapStrToI := set.(map[string]interface{})
+
+							routingChoiceTypeFound := false
+
+							if v, ok := spokeVnetsMapStrToI["auto"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+								routingChoiceTypeFound = true
+
+								if v.(bool) {
+									routingChoiceInt := &ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}
+									routingChoiceInt.Auto = &ves_io_schema.Empty{}
+									spokeVnets[i].RoutingChoice = routingChoiceInt
+								}
+
+							}
+
+							if v, ok := spokeVnetsMapStrToI["manual"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+								routingChoiceTypeFound = true
+
+								if v.(bool) {
+									routingChoiceInt := &ves_io_schema_views_azure_vnet_site.VnetPeeringType_Manual{}
+									routingChoiceInt.Manual = &ves_io_schema.Empty{}
+									spokeVnets[i].RoutingChoice = routingChoiceInt
+								}
+
+							}
+
+							if v, ok := spokeVnetsMapStrToI["vnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								vnet := &ves_io_schema_views.AzureVnetType{}
+								spokeVnets[i].Vnet = vnet
+								for _, set := range sl {
+									vnetMapStrToI := set.(map[string]interface{})
+
+									if w, ok := vnetMapStrToI["resource_group"]; ok && !isIntfNil(w) {
+										vnet.ResourceGroup = w.(string)
+									}
+
+									if w, ok := vnetMapStrToI["vnet_name"]; ok && !isIntfNil(w) {
+										vnet.VnetName = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["not_hub"]; ok && !isIntfNil(v) && !hubChoiceTypeFound {
+
+				hubChoiceTypeFound = true
+
+				if v.(bool) {
+					hubChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_NotHub{}
+					hubChoiceInt.NotHub = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.HubChoice = hubChoiceInt
 				}
 
 			}
@@ -7384,6 +7708,94 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 					globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_NoGlobalNetwork{}
 					globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGwAr.GlobalNetworkChoice = globalNetworkChoiceInt
+				}
+
+			}
+
+			hubChoiceTypeFound := false
+
+			if v, ok := cs["hub"]; ok && !isIntfNil(v) && !hubChoiceTypeFound {
+
+				hubChoiceTypeFound = true
+				hubChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_Hub{}
+				hubChoiceInt.Hub = &ves_io_schema_views_azure_vnet_site.AzureHubVnetType{}
+				siteTypeInt.IngressEgressGwAr.HubChoice = hubChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["spoke_vnets"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						spokeVnets := make([]*ves_io_schema_views_azure_vnet_site.VnetPeeringType, len(sl))
+						hubChoiceInt.Hub.SpokeVnets = spokeVnets
+						for i, set := range sl {
+							spokeVnets[i] = &ves_io_schema_views_azure_vnet_site.VnetPeeringType{}
+							spokeVnetsMapStrToI := set.(map[string]interface{})
+
+							routingChoiceTypeFound := false
+
+							if v, ok := spokeVnetsMapStrToI["auto"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+								routingChoiceTypeFound = true
+
+								if v.(bool) {
+									routingChoiceInt := &ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}
+									routingChoiceInt.Auto = &ves_io_schema.Empty{}
+									spokeVnets[i].RoutingChoice = routingChoiceInt
+								}
+
+							}
+
+							if v, ok := spokeVnetsMapStrToI["manual"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+								routingChoiceTypeFound = true
+
+								if v.(bool) {
+									routingChoiceInt := &ves_io_schema_views_azure_vnet_site.VnetPeeringType_Manual{}
+									routingChoiceInt.Manual = &ves_io_schema.Empty{}
+									spokeVnets[i].RoutingChoice = routingChoiceInt
+								}
+
+							}
+
+							if v, ok := spokeVnetsMapStrToI["vnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								vnet := &ves_io_schema_views.AzureVnetType{}
+								spokeVnets[i].Vnet = vnet
+								for _, set := range sl {
+									vnetMapStrToI := set.(map[string]interface{})
+
+									if w, ok := vnetMapStrToI["resource_group"]; ok && !isIntfNil(w) {
+										vnet.ResourceGroup = w.(string)
+									}
+
+									if w, ok := vnetMapStrToI["vnet_name"]; ok && !isIntfNil(w) {
+										vnet.VnetName = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["not_hub"]; ok && !isIntfNil(v) && !hubChoiceTypeFound {
+
+				hubChoiceTypeFound = true
+
+				if v.(bool) {
+					hubChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_NotHub{}
+					hubChoiceInt.NotHub = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGwAr.HubChoice = hubChoiceInt
 				}
 
 			}
@@ -11572,6 +11984,92 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
+	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+		blockedServicesChoiceInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_BlockedServices{}
+		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
+		updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+				for i, set := range sl {
+					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+					blockedSeviceMapStrToI := set.(map[string]interface{})
+
+					blockedServicesValueTypeChoiceTypeFound := false
+
+					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_DefaultBlockedServices{}
+			blockedServicesChoiceInt.DefaultBlockedServices = &ves_io_schema.Empty{}
+			updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
@@ -12401,6 +12899,94 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 			}
 
+			hubChoiceTypeFound := false
+
+			if v, ok := cs["hub"]; ok && !isIntfNil(v) && !hubChoiceTypeFound {
+
+				hubChoiceTypeFound = true
+				hubChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_Hub{}
+				hubChoiceInt.Hub = &ves_io_schema_views_azure_vnet_site.AzureHubVnetType{}
+				siteTypeInt.IngressEgressGw.HubChoice = hubChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["spoke_vnets"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						spokeVnets := make([]*ves_io_schema_views_azure_vnet_site.VnetPeeringType, len(sl))
+						hubChoiceInt.Hub.SpokeVnets = spokeVnets
+						for i, set := range sl {
+							spokeVnets[i] = &ves_io_schema_views_azure_vnet_site.VnetPeeringType{}
+							spokeVnetsMapStrToI := set.(map[string]interface{})
+
+							routingChoiceTypeFound := false
+
+							if v, ok := spokeVnetsMapStrToI["auto"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+								routingChoiceTypeFound = true
+
+								if v.(bool) {
+									routingChoiceInt := &ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}
+									routingChoiceInt.Auto = &ves_io_schema.Empty{}
+									spokeVnets[i].RoutingChoice = routingChoiceInt
+								}
+
+							}
+
+							if v, ok := spokeVnetsMapStrToI["manual"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+								routingChoiceTypeFound = true
+
+								if v.(bool) {
+									routingChoiceInt := &ves_io_schema_views_azure_vnet_site.VnetPeeringType_Manual{}
+									routingChoiceInt.Manual = &ves_io_schema.Empty{}
+									spokeVnets[i].RoutingChoice = routingChoiceInt
+								}
+
+							}
+
+							if v, ok := spokeVnetsMapStrToI["vnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								vnet := &ves_io_schema_views.AzureVnetType{}
+								spokeVnets[i].Vnet = vnet
+								for _, set := range sl {
+									vnetMapStrToI := set.(map[string]interface{})
+
+									if w, ok := vnetMapStrToI["resource_group"]; ok && !isIntfNil(w) {
+										vnet.ResourceGroup = w.(string)
+									}
+
+									if w, ok := vnetMapStrToI["vnet_name"]; ok && !isIntfNil(w) {
+										vnet.VnetName = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["not_hub"]; ok && !isIntfNil(v) && !hubChoiceTypeFound {
+
+				hubChoiceTypeFound = true
+
+				if v.(bool) {
+					hubChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NotHub{}
+					hubChoiceInt.NotHub = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.HubChoice = hubChoiceInt
+				}
+
+			}
+
 			insideStaticRouteChoiceTypeFound := false
 
 			if v, ok := cs["inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
@@ -12980,6 +13566,32 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 					}
 
+				}
+
+			}
+
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 				}
 
 			}
@@ -13748,6 +14360,94 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 			}
 
+			hubChoiceTypeFound := false
+
+			if v, ok := cs["hub"]; ok && !isIntfNil(v) && !hubChoiceTypeFound {
+
+				hubChoiceTypeFound = true
+				hubChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_Hub{}
+				hubChoiceInt.Hub = &ves_io_schema_views_azure_vnet_site.AzureHubVnetType{}
+				siteTypeInt.IngressEgressGwAr.HubChoice = hubChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["spoke_vnets"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						spokeVnets := make([]*ves_io_schema_views_azure_vnet_site.VnetPeeringType, len(sl))
+						hubChoiceInt.Hub.SpokeVnets = spokeVnets
+						for i, set := range sl {
+							spokeVnets[i] = &ves_io_schema_views_azure_vnet_site.VnetPeeringType{}
+							spokeVnetsMapStrToI := set.(map[string]interface{})
+
+							routingChoiceTypeFound := false
+
+							if v, ok := spokeVnetsMapStrToI["auto"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+								routingChoiceTypeFound = true
+
+								if v.(bool) {
+									routingChoiceInt := &ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}
+									routingChoiceInt.Auto = &ves_io_schema.Empty{}
+									spokeVnets[i].RoutingChoice = routingChoiceInt
+								}
+
+							}
+
+							if v, ok := spokeVnetsMapStrToI["manual"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+								routingChoiceTypeFound = true
+
+								if v.(bool) {
+									routingChoiceInt := &ves_io_schema_views_azure_vnet_site.VnetPeeringType_Manual{}
+									routingChoiceInt.Manual = &ves_io_schema.Empty{}
+									spokeVnets[i].RoutingChoice = routingChoiceInt
+								}
+
+							}
+
+							if v, ok := spokeVnetsMapStrToI["vnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								vnet := &ves_io_schema_views.AzureVnetType{}
+								spokeVnets[i].Vnet = vnet
+								for _, set := range sl {
+									vnetMapStrToI := set.(map[string]interface{})
+
+									if w, ok := vnetMapStrToI["resource_group"]; ok && !isIntfNil(w) {
+										vnet.ResourceGroup = w.(string)
+									}
+
+									if w, ok := vnetMapStrToI["vnet_name"]; ok && !isIntfNil(w) {
+										vnet.VnetName = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["not_hub"]; ok && !isIntfNil(v) && !hubChoiceTypeFound {
+
+				hubChoiceTypeFound = true
+
+				if v.(bool) {
+					hubChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NotHub{}
+					hubChoiceInt.NotHub = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGwAr.HubChoice = hubChoiceInt
+				}
+
+			}
+
 			insideStaticRouteChoiceTypeFound := false
 
 			if v, ok := cs["inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
@@ -14327,6 +15027,32 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 					}
 
+				}
+
+			}
+
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGwAr.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGwAr.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 				}
 
 			}
@@ -15393,6 +16119,32 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 			}
 
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -16439,6 +17191,32 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 					}
 
+				}
+
+			}
+
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackClusterAr.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackClusterAr.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 				}
 
 			}

@@ -20,10 +20,13 @@ resource "volterra_voltstack_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
+
+  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  // One of the arguments from this list "enable_gpu enable_vgpu disable_gpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
@@ -34,14 +37,14 @@ resource "volterra_voltstack_site" "example" {
 
   master_nodes = ["master-0"]
 
-  // One of the arguments from this list "custom_network_config default_network_config" must be set
+  // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
 
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
 
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  deny_all_usb          = true
+  allow_all_usb         = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
 
@@ -68,9 +71,13 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
-`bond_device_list` - (Optional) Configure Bond Devices for this voltstack site. See [Bond Device List ](#bond-device-list) below for details.
+`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`no_bond_devices` - (Optional) No Bond Devices configured for this voltstack site (bool).
+`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+
+`bond_device_list` - (Optional) Configure Bond Devices for this App Stack site. See [Bond Device List ](#bond-device-list) below for details.
+
+`no_bond_devices` - (Optional) No Bond Devices configured for this App Stack site (bool).
 
 `coordinates` - (Optional) Coordinates of the site, longitude and latitude. See [Coordinates ](#coordinates) below for details.
 
@@ -112,11 +119,11 @@ Argument Reference
 
 `usb_policy` - (Optional) Allow only specific USB devices. See [ref](#ref) below for details.
 
-`disable_vm` - (Optional) VMs support is not enabled for this fleet (bool).
+`disable_vm` - (Optional) VMs support is not enabled for this Site (bool).
 
-`enable_vm` - (Optional) VMs support is enabled for this fleet. See [Enable Vm ](#enable-vm) below for details.
+`enable_vm` - (Optional) VMs support is enabled for this Site. See [Enable Vm ](#enable-vm) below for details.
 
-`volterra_certified_hw` - (Required) Name for generic server certified hardware to form this voltstack site. (`String`).
+`volterra_certified_hw` - (Required) Name for generic server certified hardware to form this App Stack site. (`String`).
 
 `worker_nodes` - (Optional) Names of worker nodes (`List of String`).
 
@@ -132,9 +139,9 @@ Enable Forward Proxy for this site and manage policies.
 
 ### Active Network Policies
 
-Network Policies active for this site..
+Firewall Policies active for this site..
 
-`network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
 ### Automatic From End
 
@@ -172,9 +179,27 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
+### Blocked Services
+
+Use custom blocked services configuration.
+
+`blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Sevice ](#blocked-sevice) below for details.
+
+### Blocked Sevice
+
+Use custom blocked services configuration.
+
+`dns` - (Optional) Matches ssh port 53 (bool).
+
+`ssh` - (Optional) Matches ssh port 22 (bool).
+
+`web_user_interface` - (Optional) Matches the web user interface port (bool).
+
+`network_type` - (Optional) Network type in which these ports get blocked (`String`).
+
 ### Bond Device List
 
-Configure Bond Devices for this voltstack site.
+Configure Bond Devices for this App Stack site.
 
 `bond_devices` - (Required) List of bond devices for this fleet. See [Bond Devices ](#bond-devices) below for details.
 
@@ -264,9 +289,9 @@ Use custom networking configuration.
 
 `interface_list` - (Optional) Add all interfaces belonging to this site. See [Interface List ](#interface-list) below for details.
 
-`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
-`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
 `outside_nameserver` - (Optional) Optional DNS server IP to be used for name resolution in local network (`String`).
 
@@ -424,6 +449,10 @@ Disable Interception.
 
 This is the default behavior if no choice is selected..
 
+### Dns
+
+Matches ssh port 53.
+
 ### Domain Match
 
 Domain value or regular expression to match.
@@ -470,7 +499,7 @@ Enable NVIDIA vGPU hosted on VMware.
 
 ### Enable Vm
 
-VMs support is enabled for this fleet.
+VMs support is enabled for this Site.
 
 ### Ethernet Interface
 
@@ -578,11 +607,11 @@ Configured address for every node.
 
 Add all interfaces belonging to this site.
 
-`interfaces` - (Required) Configure network interfaces for this voltstack. See [Interfaces ](#interfaces) below for details.
+`interfaces` - (Required) Configure network interfaces for this App Stack site. See [Interfaces ](#interfaces) below for details.
 
 ### Interfaces
 
-Configure network interfaces for this voltstack.
+Configure network interfaces for this App Stack site.
 
 `description` - (Optional) Description for this Interface (`String`).
 
@@ -594,7 +623,7 @@ Configure network interfaces for this voltstack.
 
 `tunnel_interface` - (Optional) Tunnel interface, Ipsec tunnels to other networking devices.. See [Tunnel Interface ](#tunnel-interface) below for details.
 
-`labels` - (Optional) Add Labels for this Interface, these labels can be used in network policy (`String`).
+`labels` - (Optional) Add Labels for this Interface, these labels can be used in firewall policy (`String`).
 
 ### Is Primary
 
@@ -658,7 +687,7 @@ Interface does not have an IPv6 Address..
 
 ### No Network Policy
 
-Network Policy is disabled for this site..
+Firewall Policy is disabled for this site..
 
 ### No Static Routes
 
@@ -796,7 +825,7 @@ Configuration for site local network.
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
 
-`labels` - (Optional) Add Labels for this network, these labels can be used in network policy (`String`).
+`labels` - (Optional) Add Labels for this network, these labels can be used in firewall policy (`String`).
 
 `no_static_routes` - (Optional) Static Routes disabled for site local network. (bool).
 
@@ -807,6 +836,10 @@ Configuration for site local network.
 Site local outside is connected directly to a given global network.
 
 `global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
+
+### Ssh
+
+Matches ssh port 22.
 
 ### Static Ip
 
@@ -890,7 +923,7 @@ List of custom storage devices.
 
 ### Storage Interface
 
-Configure storage interface for this voltstack.
+Configure storage interface for this App Stack site.
 
 `dhcp_client` - (Optional) Interface gets it IP address from external DHCP server (bool).
 
@@ -938,17 +971,17 @@ Configure storage interface for this voltstack.
 
 Add all storage interfaces belonging to this site.
 
-`storage_interfaces` - (Required) Configure storage interfaces for this voltstack. See [Storage Interfaces ](#storage-interfaces) below for details.
+`storage_interfaces` - (Required) Configure storage interfaces for this App Stack site. See [Storage Interfaces ](#storage-interfaces) below for details.
 
 ### Storage Interfaces
 
-Configure storage interfaces for this voltstack.
+Configure storage interfaces for this App Stack site.
 
 `description` - (Optional) Description for this Interface (`String`).
 
-`labels` - (Optional) Add Labels for this Interface, these labels can be used in network policy (`String`).
+`labels` - (Optional) Add Labels for this Interface, these labels can be used in firewall policy (`String`).
 
-`storage_interface` - (Required) Configure storage interface for this voltstack. See [Storage Interface ](#storage-interface) below for details.
+`storage_interface` - (Required) Configure storage interface for this App Stack site. See [Storage Interface ](#storage-interface) below for details.
 
 ### Storage Network
 
@@ -1029,6 +1062,10 @@ Volterra certificates for generating intermediate certificate for TLS intercepti
 ### Volterra Trusted Ca
 
 Default volterra trusted CA list for validating upstream server certificate.
+
+### Web User Interface
+
+Matches the web user interface port.
 
 ### Wingman Secret Info
 

@@ -427,6 +427,1138 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
+			"api_protection_rules": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"api_endpoint_rules": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"action": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"allow": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"deny": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"api_endpoint_method": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_matcher": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"methods": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"api_endpoint_path": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"client_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_client": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"client_selector": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"expressions": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"ip_threat_category_list": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ip_threat_categories": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"any_ip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"asn_list": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"as_numbers": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeInt,
+																},
+															},
+														},
+													},
+												},
+
+												"asn_matcher": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"asn_sets": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ip_matcher": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"prefix_sets": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ip_prefix_list": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_match": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"ip_prefixes": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"tls_fingerprint_matcher": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"classes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"exact_values": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"excluded_values": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"any_domain": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"specific_domain": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"request_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cookie_matchers": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"headers": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"query_params": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"key": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"api_groups_rules": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"action": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"allow": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"deny": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"api_group": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"base_path": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"client_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_client": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"client_selector": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"expressions": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"ip_threat_category_list": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ip_threat_categories": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"any_ip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"asn_list": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"as_numbers": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeInt,
+																},
+															},
+														},
+													},
+												},
+
+												"asn_matcher": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"asn_sets": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ip_matcher": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"prefix_sets": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ip_prefix_list": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_match": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"ip_prefixes": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"tls_fingerprint_matcher": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"classes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"exact_values": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"excluded_values": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"any_domain": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"specific_domain": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"request_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cookie_matchers": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"headers": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"query_params": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"key": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"blocked_clients": {
 
 				Type:     schema.TypeList,
@@ -5929,6 +7061,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										},
 									},
 
+									"exclude_bot_name_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"bot_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"exclude_signature_contexts": {
 
 										Type:     schema.TypeList,
@@ -6553,6 +7700,1467 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableApiDefinition{}
 			apiDefinitionChoiceInt.DisableApiDefinition = &ves_io_schema.Empty{}
 			createSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
+		}
+
+	}
+
+	//api_protection_rules
+	if v, ok := d.GetOk("api_protection_rules"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		apiProtectionRules := &ves_io_schema_views_http_loadbalancer.APIProtectionRules{}
+		createSpec.ApiProtectionRules = apiProtectionRules
+		for _, set := range sl {
+			apiProtectionRulesMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiProtectionRulesMapStrToI["api_endpoint_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				apiEndpointRules := make([]*ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule, len(sl))
+				apiProtectionRules.ApiEndpointRules = apiEndpointRules
+				for i, set := range sl {
+					apiEndpointRules[i] = &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule{}
+					apiEndpointRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiEndpointRulesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						action := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction{}
+						apiEndpointRules[i].Action = action
+						for _, set := range sl {
+							actionMapStrToI := set.(map[string]interface{})
+
+							actionTypeFound := false
+
+							if v, ok := actionMapStrToI["allow"]; ok && !isIntfNil(v) && !actionTypeFound {
+
+								actionTypeFound = true
+
+								if v.(bool) {
+									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Allow{}
+									actionInt.Allow = &ves_io_schema.Empty{}
+									action.Action = actionInt
+								}
+
+							}
+
+							if v, ok := actionMapStrToI["deny"]; ok && !isIntfNil(v) && !actionTypeFound {
+
+								actionTypeFound = true
+
+								if v.(bool) {
+									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Deny{}
+									actionInt.Deny = &ves_io_schema.Empty{}
+									action.Action = actionInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["api_endpoint_method"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						apiEndpointMethod := &ves_io_schema_policy.HttpMethodMatcherType{}
+						apiEndpointRules[i].ApiEndpointMethod = apiEndpointMethod
+						for _, set := range sl {
+							apiEndpointMethodMapStrToI := set.(map[string]interface{})
+
+							if w, ok := apiEndpointMethodMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+								apiEndpointMethod.InvertMatcher = w.(bool)
+							}
+
+							if v, ok := apiEndpointMethodMapStrToI["methods"]; ok && !isIntfNil(v) {
+
+								methodsList := []ves_io_schema.HttpMethod{}
+								for _, j := range v.([]interface{}) {
+									methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+								}
+								apiEndpointMethod.Methods = methodsList
+
+							}
+
+						}
+
+					}
+
+					if w, ok := apiEndpointRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(w) {
+						apiEndpointRules[i].ApiEndpointPath = w.(string)
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["client_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						clientMatcher := &ves_io_schema_policy.ClientMatcher{}
+						apiEndpointRules[i].ClientMatcher = clientMatcher
+						for _, set := range sl {
+							clientMatcherMapStrToI := set.(map[string]interface{})
+
+							clientChoiceTypeFound := false
+
+							if v, ok := clientMatcherMapStrToI["any_client"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+
+								if v.(bool) {
+									clientChoiceInt := &ves_io_schema_policy.ClientMatcher_AnyClient{}
+									clientChoiceInt.AnyClient = &ves_io_schema.Empty{}
+									clientMatcher.ClientChoice = clientChoiceInt
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["client_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_policy.ClientMatcher_ClientSelector{}
+								clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
+								clientMatcher.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										clientChoiceInt.ClientSelector.Expressions = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_threat_category_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_policy.ClientMatcher_IpThreatCategoryList{}
+								clientChoiceInt.IpThreatCategoryList = &ves_io_schema_policy.IPThreatCategoryListType{}
+								clientMatcher.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+										ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+										for _, j := range v.([]interface{}) {
+											ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+										}
+										clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
+
+									}
+
+								}
+
+							}
+
+							ipAsnChoiceTypeFound := false
+
+							if v, ok := clientMatcherMapStrToI["any_ip"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+
+								if v.(bool) {
+									ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AnyIp{}
+									ipAsnChoiceInt.AnyIp = &ves_io_schema.Empty{}
+									clientMatcher.IpAsnChoice = ipAsnChoiceInt
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["asn_list"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AsnList{}
+								ipAsnChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
+
+										ls := make([]uint32, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = uint32(v.(int))
+										}
+										ipAsnChoiceInt.AsnList.AsNumbers = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AsnMatcher{}
+								ipAsnChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										ipAsnChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+										for i, ps := range sl {
+
+											asMapToStrVal := ps.(map[string]interface{})
+											asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+											asnSetsInt[i].Kind = "bgp_asn_set"
+
+											if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Name = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_matcher"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_IpMatcher{}
+								ipAsnChoiceInt.IpMatcher = &ves_io_schema_policy.IpMatcherType{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+										ipAsnChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
+									}
+
+									if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										ipAsnChoiceInt.IpMatcher.PrefixSets = prefixSetsInt
+										for i, ps := range sl {
+
+											psMapToStrVal := ps.(map[string]interface{})
+											prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+											prefixSetsInt[i].Kind = "ip_prefix_set"
+
+											if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Name = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_IpPrefixList{}
+								ipAsnChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+										ipAsnChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+									}
+
+									if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
+								clientMatcher.TlsFingerprintMatcher = tlsFingerprintMatcher
+								for _, set := range sl {
+									tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+
+									if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+
+										classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
+										for _, j := range v.([]interface{}) {
+											classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
+										}
+										tlsFingerprintMatcher.Classes = classesList
+
+									}
+
+									if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tlsFingerprintMatcher.ExactValues = ls
+									}
+
+									if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tlsFingerprintMatcher.ExcludedValues = ls
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					domainChoiceTypeFound := false
+
+					if v, ok := apiEndpointRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+
+						if v.(bool) {
+							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule_AnyDomain{}
+							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+							apiEndpointRules[i].DomainChoice = domainChoiceInt
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule_SpecificDomain{}
+
+						apiEndpointRules[i].DomainChoice = domainChoiceInt
+
+						domainChoiceInt.SpecificDomain = v.(string)
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						apiEndpointRules[i].Metadata = metadata
+						for _, set := range sl {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["request_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						requestMatcher := &ves_io_schema_policy.RequestMatcher{}
+						apiEndpointRules[i].RequestMatcher = requestMatcher
+						for _, set := range sl {
+							requestMatcherMapStrToI := set.(map[string]interface{})
+
+							if v, ok := requestMatcherMapStrToI["cookie_matchers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								cookieMatchers := make([]*ves_io_schema_policy.CookieMatcherType, len(sl))
+								requestMatcher.CookieMatchers = cookieMatchers
+								for i, set := range sl {
+									cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
+									cookieMatchersMapStrToI := set.(map[string]interface{})
+
+									if w, ok := cookieMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										cookieMatchers[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := cookieMatchersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											cookieMatchers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											cookieMatchers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.CookieMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										cookieMatchers[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.CookieMatcherType_Presence{}
+
+										cookieMatchers[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+									if w, ok := cookieMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
+										cookieMatchers[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := requestMatcherMapStrToI["headers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								headers := make([]*ves_io_schema_policy.HeaderMatcherType, len(sl))
+								requestMatcher.Headers = headers
+								for i, set := range sl {
+									headers[i] = &ves_io_schema_policy.HeaderMatcherType{}
+									headersMapStrToI := set.(map[string]interface{})
+
+									if w, ok := headersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										headers[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := headersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											headers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											headers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.HeaderMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										headers[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.HeaderMatcherType_Presence{}
+
+										headers[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+									if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+										headers[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								queryParams := make([]*ves_io_schema_policy.QueryParameterMatcherType, len(sl))
+								requestMatcher.QueryParams = queryParams
+								for i, set := range sl {
+									queryParams[i] = &ves_io_schema_policy.QueryParameterMatcherType{}
+									queryParamsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := queryParamsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										queryParams[i].InvertMatcher = w.(bool)
+									}
+
+									if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
+										queryParams[i].Key = w.(string)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := queryParamsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.QueryParameterMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											queryParams[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.QueryParameterMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											queryParams[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										queryParams[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Presence{}
+
+										queryParams[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := apiProtectionRulesMapStrToI["api_groups_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				apiGroupsRules := make([]*ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule, len(sl))
+				apiProtectionRules.ApiGroupsRules = apiGroupsRules
+				for i, set := range sl {
+					apiGroupsRules[i] = &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule{}
+					apiGroupsRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiGroupsRulesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						action := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction{}
+						apiGroupsRules[i].Action = action
+						for _, set := range sl {
+							actionMapStrToI := set.(map[string]interface{})
+
+							actionTypeFound := false
+
+							if v, ok := actionMapStrToI["allow"]; ok && !isIntfNil(v) && !actionTypeFound {
+
+								actionTypeFound = true
+
+								if v.(bool) {
+									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Allow{}
+									actionInt.Allow = &ves_io_schema.Empty{}
+									action.Action = actionInt
+								}
+
+							}
+
+							if v, ok := actionMapStrToI["deny"]; ok && !isIntfNil(v) && !actionTypeFound {
+
+								actionTypeFound = true
+
+								if v.(bool) {
+									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Deny{}
+									actionInt.Deny = &ves_io_schema.Empty{}
+									action.Action = actionInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if w, ok := apiGroupsRulesMapStrToI["api_group"]; ok && !isIntfNil(w) {
+						apiGroupsRules[i].ApiGroup = w.(string)
+					}
+
+					if w, ok := apiGroupsRulesMapStrToI["base_path"]; ok && !isIntfNil(w) {
+						apiGroupsRules[i].BasePath = w.(string)
+					}
+
+					if v, ok := apiGroupsRulesMapStrToI["client_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						clientMatcher := &ves_io_schema_policy.ClientMatcher{}
+						apiGroupsRules[i].ClientMatcher = clientMatcher
+						for _, set := range sl {
+							clientMatcherMapStrToI := set.(map[string]interface{})
+
+							clientChoiceTypeFound := false
+
+							if v, ok := clientMatcherMapStrToI["any_client"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+
+								if v.(bool) {
+									clientChoiceInt := &ves_io_schema_policy.ClientMatcher_AnyClient{}
+									clientChoiceInt.AnyClient = &ves_io_schema.Empty{}
+									clientMatcher.ClientChoice = clientChoiceInt
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["client_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_policy.ClientMatcher_ClientSelector{}
+								clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
+								clientMatcher.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										clientChoiceInt.ClientSelector.Expressions = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_threat_category_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_policy.ClientMatcher_IpThreatCategoryList{}
+								clientChoiceInt.IpThreatCategoryList = &ves_io_schema_policy.IPThreatCategoryListType{}
+								clientMatcher.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+										ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+										for _, j := range v.([]interface{}) {
+											ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+										}
+										clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
+
+									}
+
+								}
+
+							}
+
+							ipAsnChoiceTypeFound := false
+
+							if v, ok := clientMatcherMapStrToI["any_ip"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+
+								if v.(bool) {
+									ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AnyIp{}
+									ipAsnChoiceInt.AnyIp = &ves_io_schema.Empty{}
+									clientMatcher.IpAsnChoice = ipAsnChoiceInt
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["asn_list"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AsnList{}
+								ipAsnChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
+
+										ls := make([]uint32, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = uint32(v.(int))
+										}
+										ipAsnChoiceInt.AsnList.AsNumbers = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AsnMatcher{}
+								ipAsnChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										ipAsnChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+										for i, ps := range sl {
+
+											asMapToStrVal := ps.(map[string]interface{})
+											asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+											asnSetsInt[i].Kind = "bgp_asn_set"
+
+											if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Name = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_matcher"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_IpMatcher{}
+								ipAsnChoiceInt.IpMatcher = &ves_io_schema_policy.IpMatcherType{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+										ipAsnChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
+									}
+
+									if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										ipAsnChoiceInt.IpMatcher.PrefixSets = prefixSetsInt
+										for i, ps := range sl {
+
+											psMapToStrVal := ps.(map[string]interface{})
+											prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+											prefixSetsInt[i].Kind = "ip_prefix_set"
+
+											if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Name = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_IpPrefixList{}
+								ipAsnChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+										ipAsnChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+									}
+
+									if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
+								clientMatcher.TlsFingerprintMatcher = tlsFingerprintMatcher
+								for _, set := range sl {
+									tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+
+									if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+
+										classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
+										for _, j := range v.([]interface{}) {
+											classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
+										}
+										tlsFingerprintMatcher.Classes = classesList
+
+									}
+
+									if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tlsFingerprintMatcher.ExactValues = ls
+									}
+
+									if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tlsFingerprintMatcher.ExcludedValues = ls
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					domainChoiceTypeFound := false
+
+					if v, ok := apiGroupsRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+
+						if v.(bool) {
+							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule_AnyDomain{}
+							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+							apiGroupsRules[i].DomainChoice = domainChoiceInt
+						}
+
+					}
+
+					if v, ok := apiGroupsRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule_SpecificDomain{}
+
+						apiGroupsRules[i].DomainChoice = domainChoiceInt
+
+						domainChoiceInt.SpecificDomain = v.(string)
+
+					}
+
+					if v, ok := apiGroupsRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						apiGroupsRules[i].Metadata = metadata
+						for _, set := range sl {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := apiGroupsRulesMapStrToI["request_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						requestMatcher := &ves_io_schema_policy.RequestMatcher{}
+						apiGroupsRules[i].RequestMatcher = requestMatcher
+						for _, set := range sl {
+							requestMatcherMapStrToI := set.(map[string]interface{})
+
+							if v, ok := requestMatcherMapStrToI["cookie_matchers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								cookieMatchers := make([]*ves_io_schema_policy.CookieMatcherType, len(sl))
+								requestMatcher.CookieMatchers = cookieMatchers
+								for i, set := range sl {
+									cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
+									cookieMatchersMapStrToI := set.(map[string]interface{})
+
+									if w, ok := cookieMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										cookieMatchers[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := cookieMatchersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											cookieMatchers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											cookieMatchers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.CookieMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										cookieMatchers[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.CookieMatcherType_Presence{}
+
+										cookieMatchers[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+									if w, ok := cookieMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
+										cookieMatchers[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := requestMatcherMapStrToI["headers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								headers := make([]*ves_io_schema_policy.HeaderMatcherType, len(sl))
+								requestMatcher.Headers = headers
+								for i, set := range sl {
+									headers[i] = &ves_io_schema_policy.HeaderMatcherType{}
+									headersMapStrToI := set.(map[string]interface{})
+
+									if w, ok := headersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										headers[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := headersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											headers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											headers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.HeaderMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										headers[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.HeaderMatcherType_Presence{}
+
+										headers[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+									if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+										headers[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								queryParams := make([]*ves_io_schema_policy.QueryParameterMatcherType, len(sl))
+								requestMatcher.QueryParams = queryParams
+								for i, set := range sl {
+									queryParams[i] = &ves_io_schema_policy.QueryParameterMatcherType{}
+									queryParamsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := queryParamsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										queryParams[i].InvertMatcher = w.(bool)
+									}
+
+									if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
+										queryParams[i].Key = w.(string)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := queryParamsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.QueryParameterMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											queryParams[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.QueryParameterMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											queryParams[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										queryParams[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Presence{}
+
+										queryParams[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -14182,6 +16790,23 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := appFirewallDetectionControlMapStrToI["exclude_bot_name_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeBotNameContexts := make([]*ves_io_schema_policy.BotNameContext, len(sl))
+						appFirewallDetectionControl.ExcludeBotNameContexts = excludeBotNameContexts
+						for i, set := range sl {
+							excludeBotNameContexts[i] = &ves_io_schema_policy.BotNameContext{}
+							excludeBotNameContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeBotNameContextsMapStrToI["bot_name"]; ok && !isIntfNil(w) {
+								excludeBotNameContexts[i].BotName = w.(string)
+							}
+
+						}
+
+					}
+
 					if v, ok := appFirewallDetectionControlMapStrToI["exclude_signature_contexts"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
@@ -14870,6 +17495,1466 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableApiDefinition{}
 			apiDefinitionChoiceInt.DisableApiDefinition = &ves_io_schema.Empty{}
 			updateSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("api_protection_rules"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		apiProtectionRules := &ves_io_schema_views_http_loadbalancer.APIProtectionRules{}
+		updateSpec.ApiProtectionRules = apiProtectionRules
+		for _, set := range sl {
+			apiProtectionRulesMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiProtectionRulesMapStrToI["api_endpoint_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				apiEndpointRules := make([]*ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule, len(sl))
+				apiProtectionRules.ApiEndpointRules = apiEndpointRules
+				for i, set := range sl {
+					apiEndpointRules[i] = &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule{}
+					apiEndpointRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiEndpointRulesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						action := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction{}
+						apiEndpointRules[i].Action = action
+						for _, set := range sl {
+							actionMapStrToI := set.(map[string]interface{})
+
+							actionTypeFound := false
+
+							if v, ok := actionMapStrToI["allow"]; ok && !isIntfNil(v) && !actionTypeFound {
+
+								actionTypeFound = true
+
+								if v.(bool) {
+									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Allow{}
+									actionInt.Allow = &ves_io_schema.Empty{}
+									action.Action = actionInt
+								}
+
+							}
+
+							if v, ok := actionMapStrToI["deny"]; ok && !isIntfNil(v) && !actionTypeFound {
+
+								actionTypeFound = true
+
+								if v.(bool) {
+									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Deny{}
+									actionInt.Deny = &ves_io_schema.Empty{}
+									action.Action = actionInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["api_endpoint_method"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						apiEndpointMethod := &ves_io_schema_policy.HttpMethodMatcherType{}
+						apiEndpointRules[i].ApiEndpointMethod = apiEndpointMethod
+						for _, set := range sl {
+							apiEndpointMethodMapStrToI := set.(map[string]interface{})
+
+							if w, ok := apiEndpointMethodMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+								apiEndpointMethod.InvertMatcher = w.(bool)
+							}
+
+							if v, ok := apiEndpointMethodMapStrToI["methods"]; ok && !isIntfNil(v) {
+
+								methodsList := []ves_io_schema.HttpMethod{}
+								for _, j := range v.([]interface{}) {
+									methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+								}
+								apiEndpointMethod.Methods = methodsList
+
+							}
+
+						}
+
+					}
+
+					if w, ok := apiEndpointRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(w) {
+						apiEndpointRules[i].ApiEndpointPath = w.(string)
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["client_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						clientMatcher := &ves_io_schema_policy.ClientMatcher{}
+						apiEndpointRules[i].ClientMatcher = clientMatcher
+						for _, set := range sl {
+							clientMatcherMapStrToI := set.(map[string]interface{})
+
+							clientChoiceTypeFound := false
+
+							if v, ok := clientMatcherMapStrToI["any_client"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+
+								if v.(bool) {
+									clientChoiceInt := &ves_io_schema_policy.ClientMatcher_AnyClient{}
+									clientChoiceInt.AnyClient = &ves_io_schema.Empty{}
+									clientMatcher.ClientChoice = clientChoiceInt
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["client_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_policy.ClientMatcher_ClientSelector{}
+								clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
+								clientMatcher.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										clientChoiceInt.ClientSelector.Expressions = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_threat_category_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_policy.ClientMatcher_IpThreatCategoryList{}
+								clientChoiceInt.IpThreatCategoryList = &ves_io_schema_policy.IPThreatCategoryListType{}
+								clientMatcher.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+										ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+										for _, j := range v.([]interface{}) {
+											ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+										}
+										clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
+
+									}
+
+								}
+
+							}
+
+							ipAsnChoiceTypeFound := false
+
+							if v, ok := clientMatcherMapStrToI["any_ip"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+
+								if v.(bool) {
+									ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AnyIp{}
+									ipAsnChoiceInt.AnyIp = &ves_io_schema.Empty{}
+									clientMatcher.IpAsnChoice = ipAsnChoiceInt
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["asn_list"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AsnList{}
+								ipAsnChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
+
+										ls := make([]uint32, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = uint32(v.(int))
+										}
+										ipAsnChoiceInt.AsnList.AsNumbers = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AsnMatcher{}
+								ipAsnChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										ipAsnChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+										for i, ps := range sl {
+
+											asMapToStrVal := ps.(map[string]interface{})
+											asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+											asnSetsInt[i].Kind = "bgp_asn_set"
+
+											if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Name = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_matcher"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_IpMatcher{}
+								ipAsnChoiceInt.IpMatcher = &ves_io_schema_policy.IpMatcherType{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+										ipAsnChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
+									}
+
+									if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										ipAsnChoiceInt.IpMatcher.PrefixSets = prefixSetsInt
+										for i, ps := range sl {
+
+											psMapToStrVal := ps.(map[string]interface{})
+											prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+											prefixSetsInt[i].Kind = "ip_prefix_set"
+
+											if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Name = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_IpPrefixList{}
+								ipAsnChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+										ipAsnChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+									}
+
+									if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
+								clientMatcher.TlsFingerprintMatcher = tlsFingerprintMatcher
+								for _, set := range sl {
+									tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+
+									if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+
+										classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
+										for _, j := range v.([]interface{}) {
+											classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
+										}
+										tlsFingerprintMatcher.Classes = classesList
+
+									}
+
+									if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tlsFingerprintMatcher.ExactValues = ls
+									}
+
+									if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tlsFingerprintMatcher.ExcludedValues = ls
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					domainChoiceTypeFound := false
+
+					if v, ok := apiEndpointRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+
+						if v.(bool) {
+							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule_AnyDomain{}
+							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+							apiEndpointRules[i].DomainChoice = domainChoiceInt
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule_SpecificDomain{}
+
+						apiEndpointRules[i].DomainChoice = domainChoiceInt
+
+						domainChoiceInt.SpecificDomain = v.(string)
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						apiEndpointRules[i].Metadata = metadata
+						for _, set := range sl {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := apiEndpointRulesMapStrToI["request_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						requestMatcher := &ves_io_schema_policy.RequestMatcher{}
+						apiEndpointRules[i].RequestMatcher = requestMatcher
+						for _, set := range sl {
+							requestMatcherMapStrToI := set.(map[string]interface{})
+
+							if v, ok := requestMatcherMapStrToI["cookie_matchers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								cookieMatchers := make([]*ves_io_schema_policy.CookieMatcherType, len(sl))
+								requestMatcher.CookieMatchers = cookieMatchers
+								for i, set := range sl {
+									cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
+									cookieMatchersMapStrToI := set.(map[string]interface{})
+
+									if w, ok := cookieMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										cookieMatchers[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := cookieMatchersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											cookieMatchers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											cookieMatchers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.CookieMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										cookieMatchers[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.CookieMatcherType_Presence{}
+
+										cookieMatchers[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+									if w, ok := cookieMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
+										cookieMatchers[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := requestMatcherMapStrToI["headers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								headers := make([]*ves_io_schema_policy.HeaderMatcherType, len(sl))
+								requestMatcher.Headers = headers
+								for i, set := range sl {
+									headers[i] = &ves_io_schema_policy.HeaderMatcherType{}
+									headersMapStrToI := set.(map[string]interface{})
+
+									if w, ok := headersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										headers[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := headersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											headers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											headers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.HeaderMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										headers[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.HeaderMatcherType_Presence{}
+
+										headers[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+									if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+										headers[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								queryParams := make([]*ves_io_schema_policy.QueryParameterMatcherType, len(sl))
+								requestMatcher.QueryParams = queryParams
+								for i, set := range sl {
+									queryParams[i] = &ves_io_schema_policy.QueryParameterMatcherType{}
+									queryParamsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := queryParamsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										queryParams[i].InvertMatcher = w.(bool)
+									}
+
+									if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
+										queryParams[i].Key = w.(string)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := queryParamsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.QueryParameterMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											queryParams[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.QueryParameterMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											queryParams[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										queryParams[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Presence{}
+
+										queryParams[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := apiProtectionRulesMapStrToI["api_groups_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				apiGroupsRules := make([]*ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule, len(sl))
+				apiProtectionRules.ApiGroupsRules = apiGroupsRules
+				for i, set := range sl {
+					apiGroupsRules[i] = &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule{}
+					apiGroupsRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiGroupsRulesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						action := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction{}
+						apiGroupsRules[i].Action = action
+						for _, set := range sl {
+							actionMapStrToI := set.(map[string]interface{})
+
+							actionTypeFound := false
+
+							if v, ok := actionMapStrToI["allow"]; ok && !isIntfNil(v) && !actionTypeFound {
+
+								actionTypeFound = true
+
+								if v.(bool) {
+									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Allow{}
+									actionInt.Allow = &ves_io_schema.Empty{}
+									action.Action = actionInt
+								}
+
+							}
+
+							if v, ok := actionMapStrToI["deny"]; ok && !isIntfNil(v) && !actionTypeFound {
+
+								actionTypeFound = true
+
+								if v.(bool) {
+									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Deny{}
+									actionInt.Deny = &ves_io_schema.Empty{}
+									action.Action = actionInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if w, ok := apiGroupsRulesMapStrToI["api_group"]; ok && !isIntfNil(w) {
+						apiGroupsRules[i].ApiGroup = w.(string)
+					}
+
+					if w, ok := apiGroupsRulesMapStrToI["base_path"]; ok && !isIntfNil(w) {
+						apiGroupsRules[i].BasePath = w.(string)
+					}
+
+					if v, ok := apiGroupsRulesMapStrToI["client_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						clientMatcher := &ves_io_schema_policy.ClientMatcher{}
+						apiGroupsRules[i].ClientMatcher = clientMatcher
+						for _, set := range sl {
+							clientMatcherMapStrToI := set.(map[string]interface{})
+
+							clientChoiceTypeFound := false
+
+							if v, ok := clientMatcherMapStrToI["any_client"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+
+								if v.(bool) {
+									clientChoiceInt := &ves_io_schema_policy.ClientMatcher_AnyClient{}
+									clientChoiceInt.AnyClient = &ves_io_schema.Empty{}
+									clientMatcher.ClientChoice = clientChoiceInt
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["client_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_policy.ClientMatcher_ClientSelector{}
+								clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
+								clientMatcher.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										clientChoiceInt.ClientSelector.Expressions = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_threat_category_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_policy.ClientMatcher_IpThreatCategoryList{}
+								clientChoiceInt.IpThreatCategoryList = &ves_io_schema_policy.IPThreatCategoryListType{}
+								clientMatcher.ClientChoice = clientChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+										ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+										for _, j := range v.([]interface{}) {
+											ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+										}
+										clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
+
+									}
+
+								}
+
+							}
+
+							ipAsnChoiceTypeFound := false
+
+							if v, ok := clientMatcherMapStrToI["any_ip"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+
+								if v.(bool) {
+									ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AnyIp{}
+									ipAsnChoiceInt.AnyIp = &ves_io_schema.Empty{}
+									clientMatcher.IpAsnChoice = ipAsnChoiceInt
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["asn_list"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AsnList{}
+								ipAsnChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
+
+										ls := make([]uint32, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = uint32(v.(int))
+										}
+										ipAsnChoiceInt.AsnList.AsNumbers = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_AsnMatcher{}
+								ipAsnChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										ipAsnChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+										for i, ps := range sl {
+
+											asMapToStrVal := ps.(map[string]interface{})
+											asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+											asnSetsInt[i].Kind = "bgp_asn_set"
+
+											if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Name = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												asnSetsInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_matcher"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_IpMatcher{}
+								ipAsnChoiceInt.IpMatcher = &ves_io_schema_policy.IpMatcherType{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+										ipAsnChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
+									}
+
+									if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										ipAsnChoiceInt.IpMatcher.PrefixSets = prefixSetsInt
+										for i, ps := range sl {
+
+											psMapToStrVal := ps.(map[string]interface{})
+											prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+											prefixSetsInt[i].Kind = "ip_prefix_set"
+
+											if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Name = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												prefixSetsInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !ipAsnChoiceTypeFound {
+
+								ipAsnChoiceTypeFound = true
+								ipAsnChoiceInt := &ves_io_schema_policy.ClientMatcher_IpPrefixList{}
+								ipAsnChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+								clientMatcher.IpAsnChoice = ipAsnChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+										ipAsnChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+									}
+
+									if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := clientMatcherMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
+								clientMatcher.TlsFingerprintMatcher = tlsFingerprintMatcher
+								for _, set := range sl {
+									tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+
+									if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+
+										classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
+										for _, j := range v.([]interface{}) {
+											classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
+										}
+										tlsFingerprintMatcher.Classes = classesList
+
+									}
+
+									if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tlsFingerprintMatcher.ExactValues = ls
+									}
+
+									if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tlsFingerprintMatcher.ExcludedValues = ls
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					domainChoiceTypeFound := false
+
+					if v, ok := apiGroupsRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+
+						if v.(bool) {
+							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule_AnyDomain{}
+							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+							apiGroupsRules[i].DomainChoice = domainChoiceInt
+						}
+
+					}
+
+					if v, ok := apiGroupsRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+						domainChoiceTypeFound = true
+						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule_SpecificDomain{}
+
+						apiGroupsRules[i].DomainChoice = domainChoiceInt
+
+						domainChoiceInt.SpecificDomain = v.(string)
+
+					}
+
+					if v, ok := apiGroupsRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						apiGroupsRules[i].Metadata = metadata
+						for _, set := range sl {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := apiGroupsRulesMapStrToI["request_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						requestMatcher := &ves_io_schema_policy.RequestMatcher{}
+						apiGroupsRules[i].RequestMatcher = requestMatcher
+						for _, set := range sl {
+							requestMatcherMapStrToI := set.(map[string]interface{})
+
+							if v, ok := requestMatcherMapStrToI["cookie_matchers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								cookieMatchers := make([]*ves_io_schema_policy.CookieMatcherType, len(sl))
+								requestMatcher.CookieMatchers = cookieMatchers
+								for i, set := range sl {
+									cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
+									cookieMatchersMapStrToI := set.(map[string]interface{})
+
+									if w, ok := cookieMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										cookieMatchers[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := cookieMatchersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											cookieMatchers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											cookieMatchers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.CookieMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										cookieMatchers[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cookieMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.CookieMatcherType_Presence{}
+
+										cookieMatchers[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+									if w, ok := cookieMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
+										cookieMatchers[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := requestMatcherMapStrToI["headers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								headers := make([]*ves_io_schema_policy.HeaderMatcherType, len(sl))
+								requestMatcher.Headers = headers
+								for i, set := range sl {
+									headers[i] = &ves_io_schema_policy.HeaderMatcherType{}
+									headersMapStrToI := set.(map[string]interface{})
+
+									if w, ok := headersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										headers[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := headersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											headers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											headers[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.HeaderMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										headers[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.HeaderMatcherType_Presence{}
+
+										headers[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+									if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+										headers[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								queryParams := make([]*ves_io_schema_policy.QueryParameterMatcherType, len(sl))
+								requestMatcher.QueryParams = queryParams
+								for i, set := range sl {
+									queryParams[i] = &ves_io_schema_policy.QueryParameterMatcherType{}
+									queryParamsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := queryParamsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										queryParams[i].InvertMatcher = w.(bool)
+									}
+
+									if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
+										queryParams[i].Key = w.(string)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := queryParamsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.QueryParameterMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											queryParams[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.QueryParameterMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											queryParams[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										queryParams[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := queryParamsMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Presence{}
+
+										queryParams[i].Match = matchInt
+
+										matchInt.Presence = v.(bool)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -22462,6 +26547,23 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
 
+							}
+
+						}
+
+					}
+
+					if v, ok := appFirewallDetectionControlMapStrToI["exclude_bot_name_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeBotNameContexts := make([]*ves_io_schema_policy.BotNameContext, len(sl))
+						appFirewallDetectionControl.ExcludeBotNameContexts = excludeBotNameContexts
+						for i, set := range sl {
+							excludeBotNameContexts[i] = &ves_io_schema_policy.BotNameContext{}
+							excludeBotNameContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeBotNameContextsMapStrToI["bot_name"]; ok && !isIntfNil(w) {
+								excludeBotNameContexts[i].BotName = w.(string)
 							}
 
 						}

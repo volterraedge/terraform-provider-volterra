@@ -20,7 +20,10 @@ resource "volterra_azure_vnet_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "azure_cred assisted" must be set
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
+
+  // One of the arguments from this list "azure_cred" must be set
 
   azure_cred {
     name      = "test1"
@@ -33,12 +36,12 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "voltstack_cluster_ar ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
   ingress_gw {
     az_nodes {
       azure_az  = "1"
-      disk_size = "disk_size"
+      disk_size = "80"
 
       local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
@@ -51,6 +54,11 @@ resource "volterra_azure_vnet_site" "example" {
     }
 
     azure_certified_hw = "azure-byol-voltmesh"
+
+    local_control_plane {
+      // One of the arguments from this list "no_local_control_plane default_local_control_plane" must be set
+      no_local_control_plane = true
+    }
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -62,8 +70,8 @@ resource "volterra_azure_vnet_site" "example" {
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  no_worker_nodes = true
+  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+  nodes_per_az = "2"
 }
 
 ```
@@ -89,9 +97,11 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
-`coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
+`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`assisted` - (Optional) In assisted deployment get Azure parameters generated in status of this objects and run volterra provided terraform script. (bool).
+`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+
+`coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
 `azure_cred` - (Optional) Reference to Azure credentials for automatic deployment. See [ref](#ref) below for details.
 
@@ -110,8 +120,6 @@ Argument Reference
 `azure_region` - (Optional) Name of the azure region which supports availability zones. (`String`).
 
 `resource_group` - (Required) Azure resource group for resources that will be created (`String`).
-
-`site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the Vnet.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -151,6 +159,10 @@ Firewall Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
+### Auto
+
+setup routing for all existing subnets on spoke vnet.
+
 ### Autogenerate
 
 Autogenerate the Vnet Name.
@@ -186,6 +198,24 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 `location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Blocked Services
+
+Use custom blocked services configuration.
+
+`blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Sevice ](#blocked-sevice) below for details.
+
+### Blocked Sevice
+
+Use custom blocked services configuration.
+
+`dns` - (Optional) Matches ssh port 53 (bool).
+
+`ssh` - (Optional) Matches ssh port 22 (bool).
+
+`web_user_interface` - (Optional) Matches the web user interface port (bool).
+
+`network_type` - (Optional) Network type in which these ports get blocked (`String`).
 
 ### Clear Secret Info
 
@@ -237,6 +267,10 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
 
+### Default Local Control Plane
+
+Enable Site Local Control Plane.
+
 ### Default Os Version
 
 Will assign latest available OS version.
@@ -260,6 +294,10 @@ Disable Interception.
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
+
+### Dns
+
+Matches ssh port 53.
 
 ### Domain Match
 
@@ -325,6 +363,12 @@ List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
 
+### Hub
+
+This Vnet is a hub vnet.
+
+`spoke_vnets` - (Optional) Spoke VNets. See [Spoke Vnets ](#spoke-vnets) below for details.
+
 ### Ingress Egress Gw
 
 Two interface site is useful when site is used as ingress/egress gateway to the Vnet..
@@ -349,9 +393,15 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_global_network` - (Optional) No global network to connect (bool).
 
+`hub` - (Optional) This Vnet is a hub vnet. See [Hub ](#hub) below for details.
+
+`not_hub` - (Optional) This Vnet isn't a hub vnet (bool).
+
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
+
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -360,6 +410,10 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
 
 ### Ingress Egress Gw Ar
 
@@ -383,9 +437,15 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_global_network` - (Optional) No global network to connect (bool).
 
+`hub` - (Optional) This Vnet is a hub vnet. See [Hub ](#hub) below for details.
+
+`not_hub` - (Optional) This Vnet isn't a hub vnet (bool).
+
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
+
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -397,6 +457,10 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
 ### Ingress Gw
 
 One interface site is useful when site is only used as ingress gateway to the Vnet..
@@ -405,11 +469,15 @@ One interface site is useful when site is only used as ingress gateway to the Vn
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
+
 ### Ingress Gw Ar
 
 One interface site is useful when site is only used as ingress gateway to the Vnet..
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
+
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `node` - (Optional) Ingress Gateway (One Interface) Node information. See [Node ](#node) below for details.
 
@@ -448,6 +516,18 @@ IPv4 Address.
 IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
+
+### Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
+
+### Manual
+
+Manually setup routing on spoke Vnet.
 
 ### New Vnet
 
@@ -501,6 +581,10 @@ No TLS interception is enabled for this network connector.
 
 Site Local K8s API access is disabled.
 
+### No Local Control Plane
+
+Disable Site Local Control Plane.
+
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
@@ -522,6 +606,10 @@ Ingress/Egress Gateway (Two Interface) Node information..
 `outside_subnet` - (Optional) Subnets for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
 
 `update_domain` - (Optional) Namuber of update domains to be used while creating the availability set (`Int`).
+
+### Not Hub
+
+This Vnet isn't a hub vnet.
 
 ### Openebs Enterprise
 
@@ -596,6 +684,28 @@ Site local inside is connected directly to a given global network.
 Site local outside is connected directly to a given global network.
 
 `global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
+
+### Sm Connection Public Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Sm Connection Pvt Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Spoke Vnets
+
+Spoke VNets.
+
+`auto` - (Optional) setup routing for all existing subnets on spoke vnet (bool).
+
+`manual` - (Optional) Manually setup routing on spoke Vnet (bool).
+
+`vnet` - (Optional) Information about existing Vnet. See [Vnet ](#vnet) below for details.
+
+### Ssh
+
+Matches ssh port 22.
 
 ### Static Route List
 
@@ -691,11 +801,11 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Vnet
 
-Choice of using existing Vnet or create new Vnet.
+Information about existing Vnet.
 
-`existing_vnet` - (Optional) Information about existing Vnet. See [Existing Vnet ](#existing-vnet) below for details.
+`resource_group` - (Required) Resource group of existing Vnet (`String`).
 
-`new_vnet` - (Optional) Parameters for creating new Vnet. See [New Vnet ](#new-vnet) below for details.
+`vnet_name` - (Required) Name of existing Vnet (`String`).
 
 ### Vnet Resource Group
 
@@ -735,6 +845,8 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
+
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -742,6 +854,10 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
 
 `default_storage` - (Optional) Use standard storage class configured as AWS EBS (bool).
 
@@ -771,6 +887,8 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
+
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -781,9 +899,17 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
 `default_storage` - (Optional) Use standard storage class configured as AWS EBS (bool).
 
 `storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for site. See [Storage Class List ](#storage-class-list) below for details.
+
+### Web User Interface
+
+Matches the web user interface port.
 
 ### Wingman Secret Info
 

@@ -72,6 +72,55 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"blocked_services": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"blocked_sevice": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"dns": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ssh": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"web_user_interface": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"network_type": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"default_blocked_services": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"bond_device_list": {
 
 				Type:     schema.TypeSet,
@@ -4857,7 +4906,6 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 			},
 
 			"enable_vm": {
-
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
@@ -4938,6 +4986,94 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.Address =
 			v.(string)
+
+	}
+
+	//blocked_services_choice
+
+	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+		blockedServicesChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_BlockedServices{}
+		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
+		createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+				for i, set := range sl {
+					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+					blockedSeviceMapStrToI := set.(map[string]interface{})
+
+					blockedServicesValueTypeChoiceTypeFound := false
+
+					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_DefaultBlockedServices{}
+			blockedServicesChoiceInt.DefaultBlockedServices = &ves_io_schema.Empty{}
+			createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
 
 	}
 
@@ -5204,11 +5340,11 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 						peers := make([]*ves_io_schema_bgp.Peer, len(sl))
 						bgpConfig.Peers = peers
 						/*
-						for i, set := range sl {
-							peers[i] = &ves_io_schema_bgp.Peer{}
-							peersMapStrToI := set.(map[string]interface{})
+							for i, set := range sl {
+								peers[i] = &ves_io_schema_bgp.Peer{}
+								peersMapStrToI := set.(map[string]interface{})
 
-						}
+							}
 						*/
 
 					}
@@ -11530,7 +11666,7 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	// manually edited the config, should be fixed by next release
+	// manually edited the config, should be fixed by next releas
 	if v, ok := d.GetOk("enable_vm"); ok && !vmChoiceTypeFound {
 
 		vmChoiceTypeFound = true
@@ -11662,6 +11798,92 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 		updateSpec.Address =
 			v.(string)
+
+	}
+
+	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+		blockedServicesChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_BlockedServices{}
+		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
+		updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+				for i, set := range sl {
+					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+					blockedSeviceMapStrToI := set.(map[string]interface{})
+
+					blockedServicesValueTypeChoiceTypeFound := false
+
+					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_DefaultBlockedServices{}
+			blockedServicesChoiceInt.DefaultBlockedServices = &ves_io_schema.Empty{}
+			updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
 
 	}
 
@@ -11919,11 +12141,11 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 						peers := make([]*ves_io_schema_bgp.Peer, len(sl))
 						bgpConfig.Peers = peers
 						/*
-						for i, set := range sl {
-							peers[i] = &ves_io_schema_bgp.Peer{}
-							peersMapStrToI := set.(map[string]interface{})
+							for i, set := range sl {
+								peers[i] = &ves_io_schema_bgp.Peer{}
+								peersMapStrToI := set.(map[string]interface{})
 
-						}
+							}
 						*/
 
 					}
@@ -18158,7 +18380,7 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	// manually edited the config, should be fixed by next release
+	// manually edited the config, should be fixed by next releas
 	if v, ok := d.GetOk("enable_vm"); ok && !vmChoiceTypeFound {
 
 		vmChoiceTypeFound = true
