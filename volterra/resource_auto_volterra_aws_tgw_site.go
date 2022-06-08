@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -383,6 +384,55 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
+			"blocked_services": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"blocked_sevice": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"dns": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ssh": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"web_user_interface": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"network_type": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"default_blocked_services": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"coordinates": {
 
 				Type:     schema.TypeSet,
@@ -409,14 +459,14 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				Optional: true,
 			},
 
-			"direct_connect_with_hosted_vifs": {
+			"direct_connect_enabled": {
 
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"vifs": {
+						"cloud_aggregated_prefix": {
 
 							Type: schema.TypeList,
 
@@ -425,20 +475,50 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 								Type: schema.TypeString,
 							},
 						},
+
+						"dc_connect_aggregated_prefix": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"hosted_vifs": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"vifs": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
+						"manual_gw": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"standard_vifs": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
-			},
-
-			"direct_connect_with_manual_gw": {
-
-				Type:     schema.TypeBool,
-				Optional: true,
-			},
-
-			"direct_connect_with_standard_vifs": {
-
-				Type:     schema.TypeBool,
-				Optional: true,
 			},
 
 			"local_control_plane": {
@@ -2178,6 +2258,94 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//blocked_services_choice
+
+	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+		blockedServicesChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_BlockedServices{}
+		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
+		createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+				for i, set := range sl {
+					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+					blockedSeviceMapStrToI := set.(map[string]interface{})
+
+					blockedServicesValueTypeChoiceTypeFound := false
+
+					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DefaultBlockedServices{}
+			blockedServicesChoiceInt.DefaultBlockedServices = &ves_io_schema.Empty{}
+			createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
+
 	//coordinates
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
@@ -2215,51 +2383,88 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("direct_connect_with_hosted_vifs"); ok && !directConnectChoiceTypeFound {
+	if v, ok := d.GetOk("direct_connect_enabled"); ok && !directConnectChoiceTypeFound {
 
 		directConnectChoiceTypeFound = true
-		directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DirectConnectWithHostedVifs{}
-		directConnectChoiceInt.DirectConnectWithHostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+		directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DirectConnectEnabled{}
+		directConnectChoiceInt.DirectConnectEnabled = &ves_io_schema_views.DirectConnectConfigType{}
 		createSpec.DirectConnectChoice = directConnectChoiceInt
 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
-			if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+			if v, ok := cs["cloud_aggregated_prefix"]; ok && !isIntfNil(v) {
 
 				ls := make([]string, len(v.([]interface{})))
 				for i, v := range v.([]interface{}) {
 					ls[i] = v.(string)
 				}
-				directConnectChoiceInt.DirectConnectWithHostedVifs.Vifs = ls
+				directConnectChoiceInt.DirectConnectEnabled.CloudAggregatedPrefix = ls
 
 			}
 
-		}
+			if v, ok := cs["dc_connect_aggregated_prefix"]; ok && !isIntfNil(v) {
 
-	}
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				directConnectChoiceInt.DirectConnectEnabled.DcConnectAggregatedPrefix = ls
 
-	if v, ok := d.GetOk("direct_connect_with_manual_gw"); ok && !directConnectChoiceTypeFound {
+			}
 
-		directConnectChoiceTypeFound = true
+			vifChoiceTypeFound := false
 
-		if v.(bool) {
-			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DirectConnectWithManualGw{}
-			directConnectChoiceInt.DirectConnectWithManualGw = &ves_io_schema.Empty{}
-			createSpec.DirectConnectChoice = directConnectChoiceInt
-		}
+			if v, ok := cs["hosted_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
 
-	}
+				vifChoiceTypeFound = true
+				vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_HostedVifs{}
+				vifChoiceInt.HostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+				directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
 
-	if v, ok := d.GetOk("direct_connect_with_standard_vifs"); ok && !directConnectChoiceTypeFound {
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
 
-		directConnectChoiceTypeFound = true
+					if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
 
-		if v.(bool) {
-			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DirectConnectWithStandardVifs{}
-			directConnectChoiceInt.DirectConnectWithStandardVifs = &ves_io_schema.Empty{}
-			createSpec.DirectConnectChoice = directConnectChoiceInt
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						vifChoiceInt.HostedVifs.Vifs = ls
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["manual_gw"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+
+				if v.(bool) {
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_ManualGw{}
+					vifChoiceInt.ManualGw = &ves_io_schema.Empty{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["standard_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+
+				if v.(bool) {
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
+					vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -4151,6 +4356,92 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+		blockedServicesChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_BlockedServices{}
+		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
+		updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+				for i, set := range sl {
+					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+					blockedSeviceMapStrToI := set.(map[string]interface{})
+
+					blockedServicesValueTypeChoiceTypeFound := false
+
+					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DefaultBlockedServices{}
+			blockedServicesChoiceInt.DefaultBlockedServices = &ves_io_schema.Empty{}
+			updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
@@ -4185,51 +4476,88 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("direct_connect_with_hosted_vifs"); ok && !directConnectChoiceTypeFound {
+	if v, ok := d.GetOk("direct_connect_enabled"); ok && !directConnectChoiceTypeFound {
 
 		directConnectChoiceTypeFound = true
-		directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DirectConnectWithHostedVifs{}
-		directConnectChoiceInt.DirectConnectWithHostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+		directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DirectConnectEnabled{}
+		directConnectChoiceInt.DirectConnectEnabled = &ves_io_schema_views.DirectConnectConfigType{}
 		updateSpec.DirectConnectChoice = directConnectChoiceInt
 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
-			if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+			if v, ok := cs["cloud_aggregated_prefix"]; ok && !isIntfNil(v) {
 
 				ls := make([]string, len(v.([]interface{})))
 				for i, v := range v.([]interface{}) {
 					ls[i] = v.(string)
 				}
-				directConnectChoiceInt.DirectConnectWithHostedVifs.Vifs = ls
+				directConnectChoiceInt.DirectConnectEnabled.CloudAggregatedPrefix = ls
 
 			}
 
-		}
+			if v, ok := cs["dc_connect_aggregated_prefix"]; ok && !isIntfNil(v) {
 
-	}
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				directConnectChoiceInt.DirectConnectEnabled.DcConnectAggregatedPrefix = ls
 
-	if v, ok := d.GetOk("direct_connect_with_manual_gw"); ok && !directConnectChoiceTypeFound {
+			}
 
-		directConnectChoiceTypeFound = true
+			vifChoiceTypeFound := false
 
-		if v.(bool) {
-			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DirectConnectWithManualGw{}
-			directConnectChoiceInt.DirectConnectWithManualGw = &ves_io_schema.Empty{}
-			updateSpec.DirectConnectChoice = directConnectChoiceInt
-		}
+			if v, ok := cs["hosted_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
 
-	}
+				vifChoiceTypeFound = true
+				vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_HostedVifs{}
+				vifChoiceInt.HostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+				directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
 
-	if v, ok := d.GetOk("direct_connect_with_standard_vifs"); ok && !directConnectChoiceTypeFound {
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
 
-		directConnectChoiceTypeFound = true
+					if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
 
-		if v.(bool) {
-			directConnectChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DirectConnectWithStandardVifs{}
-			directConnectChoiceInt.DirectConnectWithStandardVifs = &ves_io_schema.Empty{}
-			updateSpec.DirectConnectChoice = directConnectChoiceInt
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						vifChoiceInt.HostedVifs.Vifs = ls
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["manual_gw"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+
+				if v.(bool) {
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_ManualGw{}
+					vifChoiceInt.ManualGw = &ves_io_schema.Empty{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["standard_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+
+				if v.(bool) {
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
+					vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
+			}
+
 		}
 
 	}

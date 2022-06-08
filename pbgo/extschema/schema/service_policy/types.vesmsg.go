@@ -4278,7 +4278,7 @@ func (r *CreateSpecType) GetServerChoiceFromGlobalSpecType(o *GlobalSpecType) er
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -4288,16 +4288,33 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetServerChoiceFromGlobalSpecType(f)
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Algo = m1.Algo
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
 	m1.SetServerChoiceToGlobalSpecType(f)
+}
+
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -4412,7 +4429,7 @@ func (r *GetSpecType) GetServerChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -4424,18 +4441,35 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.SimpleRules = f.GetSimpleRules()
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Algo = m1.Algo
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
 	f.Rules = m1.Rules
 	m1.SetServerChoiceToGlobalSpecType(f)
 	f.SimpleRules = m1.SimpleRules
+}
+
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -4550,7 +4584,7 @@ func (r *ReplaceSpecType) GetServerChoiceFromGlobalSpecType(o *GlobalSpecType) e
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -4560,14 +4594,31 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetServerChoiceFromGlobalSpecType(f)
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Algo = m1.Algo
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
 	m1.SetServerChoiceToGlobalSpecType(f)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

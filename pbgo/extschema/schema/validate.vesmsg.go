@@ -82,7 +82,7 @@ func (v *ValidateAnyRules) Validate(ctx context.Context, pm interface{}, opts ..
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -94,7 +94,7 @@ func (v *ValidateAnyRules) Validate(ctx context.Context, pm interface{}, opts ..
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -280,7 +280,7 @@ func (v *ValidateBytesRules) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -319,7 +319,7 @@ func (v *ValidateBytesRules) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -491,7 +491,7 @@ func (v *ValidateDoubleRules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -521,7 +521,7 @@ func (v *ValidateDoubleRules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -629,7 +629,7 @@ func (v *ValidateDurationRules) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -659,7 +659,7 @@ func (v *ValidateDurationRules) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -767,7 +767,7 @@ func (v *ValidateEnumRules) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -779,7 +779,7 @@ func (v *ValidateEnumRules) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1202,7 +1202,7 @@ func (v *ValidateFixed32Rules) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1232,7 +1232,7 @@ func (v *ValidateFixed32Rules) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1340,7 +1340,7 @@ func (v *ValidateFixed64Rules) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1370,7 +1370,7 @@ func (v *ValidateFixed64Rules) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1478,7 +1478,7 @@ func (v *ValidateFloatRules) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1508,7 +1508,7 @@ func (v *ValidateFloatRules) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1616,7 +1616,7 @@ func (v *ValidateInt32Rules) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1646,7 +1646,7 @@ func (v *ValidateInt32Rules) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1754,7 +1754,7 @@ func (v *ValidateInt64Rules) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1784,7 +1784,7 @@ func (v *ValidateInt64Rules) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2252,7 +2252,7 @@ func (v *ValidateSFixed32Rules) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2282,7 +2282,7 @@ func (v *ValidateSFixed32Rules) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2390,7 +2390,7 @@ func (v *ValidateSFixed64Rules) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2420,7 +2420,7 @@ func (v *ValidateSFixed64Rules) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2528,7 +2528,7 @@ func (v *ValidateSInt32Rules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2558,7 +2558,7 @@ func (v *ValidateSInt32Rules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2666,7 +2666,7 @@ func (v *ValidateSInt64Rules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2696,7 +2696,7 @@ func (v *ValidateSInt64Rules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2795,7 +2795,7 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2897,7 +2897,7 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -3571,7 +3571,7 @@ func (v *ValidateUInt32Rules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -3601,7 +3601,7 @@ func (v *ValidateUInt32Rules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -3727,7 +3727,7 @@ func (v *ValidateUInt64Rules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("in"))
 		for idx, item := range m.GetIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -3757,7 +3757,7 @@ func (v *ValidateUInt64Rules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("not_in"))
 		for idx, item := range m.GetNotIn() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

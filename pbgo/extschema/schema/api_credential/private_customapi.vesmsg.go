@@ -174,6 +174,15 @@ func (v *ValidateValidateTokenResponse) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["user"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("user"))

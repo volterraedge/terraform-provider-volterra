@@ -409,6 +409,17 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *QuotaResourceKeyChoice_HttpLoadbalancerLargeIdleTimeout:
+		if fv, exists := v.FldValidators["choice.http_loadbalancer_large_idle_timeout"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_HttpLoadbalancerLargeIdleTimeout).HttpLoadbalancerLargeIdleTimeout
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("http_loadbalancer_large_idle_timeout"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

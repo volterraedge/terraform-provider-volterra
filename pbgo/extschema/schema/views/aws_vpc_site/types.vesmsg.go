@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -423,6 +424,14 @@ func (v *ValidateAWSVPCIngressEgressGwReplaceType) OutsideStaticRouteChoiceValid
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPCIngressEgressGwReplaceType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCIngressEgressGwReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSVPCIngressEgressGwReplaceType)
 	if !ok {
@@ -693,6 +702,42 @@ func (v *ValidateAWSVPCIngressEgressGwReplaceType) Validate(ctx context.Context,
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AWSVPCIngressEgressGwReplaceType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AWSVPCIngressEgressGwReplaceType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSVPCIngressEgressGwReplaceType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AWSVPCIngressEgressGwReplaceType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -773,6 +818,17 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 		panic(errMsg)
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
+
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCIngressEgressGwReplaceType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_outside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_inside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -2513,6 +2569,14 @@ func (v *ValidateAWSVPCVoltstackClusterReplaceType) OutsideStaticRouteChoiceVali
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPCVoltstackClusterReplaceType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCVoltstackClusterReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSVPCVoltstackClusterReplaceType)
 	if !ok {
@@ -2727,6 +2791,42 @@ func (v *ValidateAWSVPCVoltstackClusterReplaceType) Validate(ctx context.Context
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AWSVPCVoltstackClusterReplaceType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AWSVPCVoltstackClusterReplaceType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSVPCVoltstackClusterReplaceType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AWSVPCVoltstackClusterReplaceType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -2796,6 +2896,17 @@ var DefaultAWSVPCVoltstackClusterReplaceTypeValidator = func() *ValidateAWSVPCVo
 		panic(errMsg)
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
+
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCVoltstackClusterReplaceType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3876,10 +3987,6 @@ func (m *CreateSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return []db.DRefInfo{dri}, nil
 
-	case *CreateSpecType_Assisted:
-
-		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -3913,8 +4020,6 @@ func (m *CreateSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interf
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
-	case *CreateSpecType_Assisted:
 
 	}
 
@@ -4026,6 +4131,14 @@ func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateCreateSpecType) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -4202,6 +4315,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *CreateSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*CreateSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*CreateSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -4228,17 +4377,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("deployment"),
 				db.WithValidateField("aws_cred"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_Assisted:
-		if fv, exists := v.FldValidators["deployment.assisted"]; exists {
-			val := m.GetDeployment().(*CreateSpecType_Assisted).Assisted
-			vOpts := append(opts,
-				db.WithValidateField("deployment"),
-				db.WithValidateField("assisted"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4454,6 +4592,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4591,6 +4740,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4870,6 +5021,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5100,6 +5259,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *GetSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GetSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GetSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5382,6 +5577,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5553,6 +5759,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5938,10 +6146,26 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for deployment")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
 	}
 	return validatorFn, nil
 }
@@ -6172,6 +6396,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *GlobalSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GlobalSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GlobalSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cloud_site_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cloud_site_info"))
@@ -6218,6 +6478,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("deployment"),
 				db.WithValidateField("assisted"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
+		val := m.GetDirectConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDirectConnectChoice().(type) {
+	case *GlobalSpecType_DirectConnectDisabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_disabled"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectDisabled).DirectConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DirectConnectEnabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_enabled"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectEnabled).DirectConnectEnabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -6293,6 +6589,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
+		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6486,6 +6791,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6496,6 +6812,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["deployment"] = vFn
+
+	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
+	rulesDirectConnectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectChoice(rulesDirectConnectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.direct_connect_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_choice"] = vFn
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
@@ -6658,7 +6985,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["tags"] = vFn
 
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
+
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -6871,6 +7202,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6939,6 +7278,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *ReplaceSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*ReplaceSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*ReplaceSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -7097,6 +7472,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7164,6 +7550,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -7402,7 +7790,42 @@ func (r *AWSVPCIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceFromAWSVPC
 	return nil
 }
 
-func (m *AWSVPCIngressEgressGwReplaceType) FromAWSVPCIngressEgressGwType(f *AWSVPCIngressEgressGwType) {
+// create setters in AWSVPCIngressEgressGwReplaceType from AWSVPCIngressEgressGwType for oneof fields
+func (r *AWSVPCIngressEgressGwReplaceType) SetSiteMeshGroupChoiceToAWSVPCIngressEgressGwType(o *AWSVPCIngressEgressGwType) error {
+	switch of := r.SiteMeshGroupChoice.(type) {
+	case nil:
+		o.SiteMeshGroupChoice = nil
+
+	case *AWSVPCIngressEgressGwReplaceType_SmConnectionPublicIp:
+		o.SiteMeshGroupChoice = &AWSVPCIngressEgressGwType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AWSVPCIngressEgressGwReplaceType_SmConnectionPvtIp:
+		o.SiteMeshGroupChoice = &AWSVPCIngressEgressGwType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AWSVPCIngressEgressGwReplaceType) GetSiteMeshGroupChoiceFromAWSVPCIngressEgressGwType(o *AWSVPCIngressEgressGwType) error {
+	switch of := o.SiteMeshGroupChoice.(type) {
+	case nil:
+		r.SiteMeshGroupChoice = nil
+
+	case *AWSVPCIngressEgressGwType_SmConnectionPublicIp:
+		r.SiteMeshGroupChoice = &AWSVPCIngressEgressGwReplaceType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AWSVPCIngressEgressGwType_SmConnectionPvtIp:
+		r.SiteMeshGroupChoice = &AWSVPCIngressEgressGwReplaceType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *AWSVPCIngressEgressGwReplaceType) fromAWSVPCIngressEgressGwType(f *AWSVPCIngressEgressGwType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -7414,14 +7837,24 @@ func (m *AWSVPCIngressEgressGwReplaceType) FromAWSVPCIngressEgressGwType(f *AWSV
 	m.GetInsideStaticRouteChoiceFromAWSVPCIngressEgressGwType(f)
 	m.GetNetworkPolicyChoiceFromAWSVPCIngressEgressGwType(f)
 	m.GetOutsideStaticRouteChoiceFromAWSVPCIngressEgressGwType(f)
+	m.GetSiteMeshGroupChoiceFromAWSVPCIngressEgressGwType(f)
 }
 
-func (m *AWSVPCIngressEgressGwReplaceType) ToAWSVPCIngressEgressGwType(f *AWSVPCIngressEgressGwType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *AWSVPCIngressEgressGwReplaceType) FromAWSVPCIngressEgressGwType(f *AWSVPCIngressEgressGwType) {
+	m.fromAWSVPCIngressEgressGwType(f, true)
+}
+
+func (m *AWSVPCIngressEgressGwReplaceType) FromAWSVPCIngressEgressGwTypeWithoutDeepCopy(f *AWSVPCIngressEgressGwType) {
+	m.fromAWSVPCIngressEgressGwType(f, false)
+}
+
+func (m *AWSVPCIngressEgressGwReplaceType) toAWSVPCIngressEgressGwType(f *AWSVPCIngressEgressGwType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.AllowedVipPort = m1.AllowedVipPort
 	f.AllowedVipPortSli = m1.AllowedVipPortSli
 	m1.SetDcClusterGroupChoiceToAWSVPCIngressEgressGwType(f)
@@ -7430,22 +7863,48 @@ func (m *AWSVPCIngressEgressGwReplaceType) ToAWSVPCIngressEgressGwType(f *AWSVPC
 	m1.SetInsideStaticRouteChoiceToAWSVPCIngressEgressGwType(f)
 	m1.SetNetworkPolicyChoiceToAWSVPCIngressEgressGwType(f)
 	m1.SetOutsideStaticRouteChoiceToAWSVPCIngressEgressGwType(f)
+	m1.SetSiteMeshGroupChoiceToAWSVPCIngressEgressGwType(f)
 }
 
-func (m *AWSVPCIngressGwReplaceType) FromAWSVPCIngressGwType(f *AWSVPCIngressGwType) {
+func (m *AWSVPCIngressEgressGwReplaceType) ToAWSVPCIngressEgressGwType(f *AWSVPCIngressEgressGwType) {
+	m.toAWSVPCIngressEgressGwType(f, true)
+}
+
+func (m *AWSVPCIngressEgressGwReplaceType) ToAWSVPCIngressEgressGwTypeWithoutDeepCopy(f *AWSVPCIngressEgressGwType) {
+	m.toAWSVPCIngressEgressGwType(f, false)
+}
+
+func (m *AWSVPCIngressGwReplaceType) fromAWSVPCIngressGwType(f *AWSVPCIngressGwType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AllowedVipPort = f.GetAllowedVipPort()
 }
 
-func (m *AWSVPCIngressGwReplaceType) ToAWSVPCIngressGwType(f *AWSVPCIngressGwType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *AWSVPCIngressGwReplaceType) FromAWSVPCIngressGwType(f *AWSVPCIngressGwType) {
+	m.fromAWSVPCIngressGwType(f, true)
+}
+
+func (m *AWSVPCIngressGwReplaceType) FromAWSVPCIngressGwTypeWithoutDeepCopy(f *AWSVPCIngressGwType) {
+	m.fromAWSVPCIngressGwType(f, false)
+}
+
+func (m *AWSVPCIngressGwReplaceType) toAWSVPCIngressGwType(f *AWSVPCIngressGwType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.AllowedVipPort = m1.AllowedVipPort
+}
+
+func (m *AWSVPCIngressGwReplaceType) ToAWSVPCIngressGwType(f *AWSVPCIngressGwType) {
+	m.toAWSVPCIngressGwType(f, true)
+}
+
+func (m *AWSVPCIngressGwReplaceType) ToAWSVPCIngressGwTypeWithoutDeepCopy(f *AWSVPCIngressGwType) {
+	m.toAWSVPCIngressGwType(f, false)
 }
 
 // create setters in AWSVPCVoltstackClusterReplaceType from AWSVPCVoltstackClusterType for oneof fields
@@ -7629,7 +8088,42 @@ func (r *AWSVPCVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceFromAWSVP
 	return nil
 }
 
-func (m *AWSVPCVoltstackClusterReplaceType) FromAWSVPCVoltstackClusterType(f *AWSVPCVoltstackClusterType) {
+// create setters in AWSVPCVoltstackClusterReplaceType from AWSVPCVoltstackClusterType for oneof fields
+func (r *AWSVPCVoltstackClusterReplaceType) SetSiteMeshGroupChoiceToAWSVPCVoltstackClusterType(o *AWSVPCVoltstackClusterType) error {
+	switch of := r.SiteMeshGroupChoice.(type) {
+	case nil:
+		o.SiteMeshGroupChoice = nil
+
+	case *AWSVPCVoltstackClusterReplaceType_SmConnectionPublicIp:
+		o.SiteMeshGroupChoice = &AWSVPCVoltstackClusterType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AWSVPCVoltstackClusterReplaceType_SmConnectionPvtIp:
+		o.SiteMeshGroupChoice = &AWSVPCVoltstackClusterType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AWSVPCVoltstackClusterReplaceType) GetSiteMeshGroupChoiceFromAWSVPCVoltstackClusterType(o *AWSVPCVoltstackClusterType) error {
+	switch of := o.SiteMeshGroupChoice.(type) {
+	case nil:
+		r.SiteMeshGroupChoice = nil
+
+	case *AWSVPCVoltstackClusterType_SmConnectionPublicIp:
+		r.SiteMeshGroupChoice = &AWSVPCVoltstackClusterReplaceType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AWSVPCVoltstackClusterType_SmConnectionPvtIp:
+		r.SiteMeshGroupChoice = &AWSVPCVoltstackClusterReplaceType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *AWSVPCVoltstackClusterReplaceType) fromAWSVPCVoltstackClusterType(f *AWSVPCVoltstackClusterType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -7639,20 +8133,74 @@ func (m *AWSVPCVoltstackClusterReplaceType) FromAWSVPCVoltstackClusterType(f *AW
 	m.GetGlobalNetworkChoiceFromAWSVPCVoltstackClusterType(f)
 	m.GetNetworkPolicyChoiceFromAWSVPCVoltstackClusterType(f)
 	m.GetOutsideStaticRouteChoiceFromAWSVPCVoltstackClusterType(f)
+	m.GetSiteMeshGroupChoiceFromAWSVPCVoltstackClusterType(f)
 }
 
-func (m *AWSVPCVoltstackClusterReplaceType) ToAWSVPCVoltstackClusterType(f *AWSVPCVoltstackClusterType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *AWSVPCVoltstackClusterReplaceType) FromAWSVPCVoltstackClusterType(f *AWSVPCVoltstackClusterType) {
+	m.fromAWSVPCVoltstackClusterType(f, true)
+}
+
+func (m *AWSVPCVoltstackClusterReplaceType) FromAWSVPCVoltstackClusterTypeWithoutDeepCopy(f *AWSVPCVoltstackClusterType) {
+	m.fromAWSVPCVoltstackClusterType(f, false)
+}
+
+func (m *AWSVPCVoltstackClusterReplaceType) toAWSVPCVoltstackClusterType(f *AWSVPCVoltstackClusterType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.AllowedVipPort = m1.AllowedVipPort
 	m1.SetDcClusterGroupChoiceToAWSVPCVoltstackClusterType(f)
 	m1.SetForwardProxyChoiceToAWSVPCVoltstackClusterType(f)
 	m1.SetGlobalNetworkChoiceToAWSVPCVoltstackClusterType(f)
 	m1.SetNetworkPolicyChoiceToAWSVPCVoltstackClusterType(f)
 	m1.SetOutsideStaticRouteChoiceToAWSVPCVoltstackClusterType(f)
+	m1.SetSiteMeshGroupChoiceToAWSVPCVoltstackClusterType(f)
+}
+
+func (m *AWSVPCVoltstackClusterReplaceType) ToAWSVPCVoltstackClusterType(f *AWSVPCVoltstackClusterType) {
+	m.toAWSVPCVoltstackClusterType(f, true)
+}
+
+func (m *AWSVPCVoltstackClusterReplaceType) ToAWSVPCVoltstackClusterTypeWithoutDeepCopy(f *AWSVPCVoltstackClusterType) {
+	m.toAWSVPCVoltstackClusterType(f, false)
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *CreateSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *CreateSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &CreateSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &CreateSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -7660,9 +8208,6 @@ func (r *CreateSpecType) SetDeploymentToGlobalSpecType(o *GlobalSpecType) error 
 	switch of := r.Deployment.(type) {
 	case nil:
 		o.Deployment = nil
-
-	case *CreateSpecType_Assisted:
-		o.Deployment = &GlobalSpecType_Assisted{Assisted: of.Assisted}
 
 	case *CreateSpecType_AwsCred:
 		o.Deployment = &GlobalSpecType_AwsCred{AwsCred: of.AwsCred}
@@ -7677,9 +8222,6 @@ func (r *CreateSpecType) GetDeploymentFromGlobalSpecType(o *GlobalSpecType) erro
 	switch of := o.Deployment.(type) {
 	case nil:
 		r.Deployment = nil
-
-	case *GlobalSpecType_Assisted:
-		r.Deployment = &CreateSpecType_Assisted{Assisted: of.Assisted}
 
 	case *GlobalSpecType_AwsCred:
 		r.Deployment = &CreateSpecType_AwsCred{AwsCred: of.AwsCred}
@@ -7807,12 +8349,13 @@ func (r *CreateSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) err
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
 	m.AwsRegion = f.GetAwsRegion()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
@@ -7827,14 +8370,24 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
 	f.AwsRegion = m1.AwsRegion
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
@@ -7847,6 +8400,49 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Tags = m1.Tags
 	f.Vpc = m1.Vpc
 	m1.SetWorkerNodesToGlobalSpecType(f)
+}
+
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *GetSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GetSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &GetSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &GetSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -8001,12 +8597,13 @@ func (r *GetSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) error 
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
 	m.AwsRegion = f.GetAwsRegion()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
@@ -8024,14 +8621,24 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
 	f.AwsRegion = m1.AwsRegion
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
@@ -8047,6 +8654,49 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.Vpc = m1.Vpc
 	m1.SetWorkerNodesToGlobalSpecType(f)
+}
+
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *ReplaceSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *ReplaceSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &ReplaceSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &ReplaceSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -8096,7 +8746,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AWSVPCIngressEgressGwType{}
 		}
-		of.IngressEgressGw.ToAWSVPCIngressEgressGwType(f1)
+		of.IngressEgressGw.ToAWSVPCIngressEgressGwTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_IngressEgressGw{IngressEgressGw: f1}
 
 	case *ReplaceSpecType_IngressGw:
@@ -8105,7 +8755,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AWSVPCIngressGwType{}
 		}
-		of.IngressGw.ToAWSVPCIngressGwType(f1)
+		of.IngressGw.ToAWSVPCIngressGwTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_IngressGw{IngressGw: f1}
 
 	case *ReplaceSpecType_VoltstackCluster:
@@ -8114,7 +8764,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AWSVPCVoltstackClusterType{}
 		}
-		of.VoltstackCluster.ToAWSVPCVoltstackClusterType(f1)
+		of.VoltstackCluster.ToAWSVPCVoltstackClusterTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_VoltstackCluster{VoltstackCluster: f1}
 
 	default:
@@ -8131,19 +8781,19 @@ func (r *ReplaceSpecType) GetSiteTypeFromGlobalSpecType(o *GlobalSpecType) error
 	case *GlobalSpecType_IngressEgressGw:
 
 		f1 := &AWSVPCIngressEgressGwReplaceType{}
-		f1.FromAWSVPCIngressEgressGwType(of.IngressEgressGw)
+		f1.FromAWSVPCIngressEgressGwTypeWithoutDeepCopy(of.IngressEgressGw)
 		r.SiteType = &ReplaceSpecType_IngressEgressGw{IngressEgressGw: f1}
 
 	case *GlobalSpecType_IngressGw:
 
 		f1 := &AWSVPCIngressGwReplaceType{}
-		f1.FromAWSVPCIngressGwType(of.IngressGw)
+		f1.FromAWSVPCIngressGwTypeWithoutDeepCopy(of.IngressGw)
 		r.SiteType = &ReplaceSpecType_IngressGw{IngressGw: f1}
 
 	case *GlobalSpecType_VoltstackCluster:
 
 		f1 := &AWSVPCVoltstackClusterReplaceType{}
-		f1.FromAWSVPCVoltstackClusterType(of.VoltstackCluster)
+		f1.FromAWSVPCVoltstackClusterTypeWithoutDeepCopy(of.VoltstackCluster)
 		r.SiteType = &ReplaceSpecType_VoltstackCluster{VoltstackCluster: f1}
 
 	default:
@@ -8193,26 +8843,45 @@ func (r *ReplaceSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) er
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	m1.SetSiteTypeToGlobalSpecType(f)
 	m1.SetWorkerNodesToGlobalSpecType(f)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

@@ -372,27 +372,40 @@ type crudAPIRestClient struct {
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	req, err := NewObjectCreateReq(e)
-	if err != nil {
-		return nil, errors.Wrap(err, "Creating new create request")
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	if e != nil && cco.RequestJSON != "" {
+		return nil, fmt.Errorf("Both entry and WithRequestJSON() specified")
+	}
+	if e == nil && cco.RequestJSON == "" {
+		return nil, fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.views.voltstack_site.crudapi", ".")
 	t := strings.Join(sl[:len(sl)-1], ".")
 	url := fmt.Sprintf("%s/%s/Objects", c.baseURL, t)
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		req, err := NewObjectCreateReq(e)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new create request")
+		}
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
 
 	hReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
 		return nil, err
-	}
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
 	}
 	client.AddHdrsToReq(cco.Headers, hReq)
 	hReq.Header.Set("Content-Type", "application/json")
@@ -428,43 +441,46 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	rReq, err := NewObjectReplaceReq(e)
-	if err != nil {
-		return errors.Wrap(err, "Creating new replace request")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	if e != nil && cco.ReplaceJSONReq != "" {
-		return fmt.Errorf("Both entry and WithReplaceJSONRequest() specified")
+	if e != nil && cco.RequestJSON != "" {
+		return fmt.Errorf("Both entry and WithRequestJSON() specified")
 	}
-	if e == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithReplaceJSONRequest() specified")
+	if e == nil && cco.RequestJSON == "" {
+		return fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
-	var jsn, objUID string
-	if e != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		rReq, err := NewObjectReplaceReq(e)
+		if err != nil {
+			return errors.Wrap(err, "Creating new replace request")
+		}
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		objUID = rReq.ObjectUid
+		jsn = j
+	}
+
+	var objUID string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["uid"].(string); ok {
+		objUID = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["uid"].(string); ok {
-			objUID = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.uid'", jsn)
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -3105,6 +3121,61 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "8",
                         "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
+                }
+            }
+        },
+        "fleetBlockedServices": {
+            "type": "object",
+            "description": "Blocked Services configured explicitly\nBy default all services are allowed and get blocked when config is updated",
+            "title": "BlockedServices specifies the ports of platform services blocked explicitly",
+            "x-displayname": "Blocked Services",
+            "x-ves-oneof-field-blocked_services_value_type_choice": "[\"dns\",\"ssh\",\"web_user_interface\"]",
+            "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
+            "properties": {
+                "dns": {
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "title": "DNS port",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "DNS port"
+                },
+                "network_type": {
+                    "description": " Network type in which these ports get blocked\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
+                    "title": "network_type",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
+                },
+                "ssh": {
+                    "description": "Exclusive with [dns web_user_interface]\n Matches ssh port 22",
+                    "title": "SSH port",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "SSH port"
+                },
+                "web_user_interface": {
+                    "description": "Exclusive with [dns ssh]\n Matches the web user interface port",
+                    "title": "Web UI port",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Web UI port"
+                }
+            }
+        },
+        "fleetBlockedServicesListType": {
+            "type": "object",
+            "description": "List of all custom blocked services configuration",
+            "title": "Custom Blocked Services Configuration List",
+            "x-displayname": "Custom Blocked Services Configuration List",
+            "x-ves-proto-message": "ves.io.schema.fleet.BlockedServicesListType",
+            "properties": {
+                "blocked_sevice": {
+                    "type": "array",
+                    "description": " Use custom blocked services configuration",
+                    "title": "Custom Blocked Services Configuration",
+                    "items": {
+                        "$ref": "#/definitions/fleetBlockedServices"
+                    },
+                    "x-displayname": "Custom Blocked Services Configuration"
                 }
             }
         },
@@ -6433,6 +6504,28 @@ var APISwaggerJSON string = `{
             "x-displayname": "VRRP Virtual-IP",
             "x-ves-proto-enum": "ves.io.schema.VipVrrpType"
         },
+        "schemaVirtualNetworkType": {
+            "type": "string",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "title": "VirtualNetworkType",
+            "enum": [
+                "VIRTUAL_NETWORK_SITE_LOCAL",
+                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE",
+                "VIRTUAL_NETWORK_PER_SITE",
+                "VIRTUAL_NETWORK_PUBLIC",
+                "VIRTUAL_NETWORK_GLOBAL",
+                "VIRTUAL_NETWORK_SITE_SERVICE",
+                "VIRTUAL_NETWORK_VER_INTERNAL",
+                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE",
+                "VIRTUAL_NETWORK_IP_AUTO",
+                "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
+                "VIRTUAL_NETWORK_SRV6_NETWORK",
+                "VIRTUAL_NETWORK_IP_FABRIC"
+            ],
+            "default": "VIRTUAL_NETWORK_SITE_LOCAL",
+            "x-displayname": "Virtual Network Type",
+            "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
+        },
         "schemaWingmanSecretInfoType": {
             "type": "object",
             "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
@@ -6524,7 +6617,7 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
@@ -6710,6 +6803,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the App Stack site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
+            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
@@ -6738,6 +6832,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Allow All USB Devices"
                 },
+                "blocked_services": {
+                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "title": "Custom Blocked Services Configuration",
+                    "$ref": "#/definitions/fleetBlockedServicesListType",
+                    "x-displayname": "Custom Blocked Services Configuration"
+                },
                 "bond_device_list": {
                     "description": "Exclusive with [no_bond_devices]\n Configure Bond Devices for this App Stack site",
                     "title": "Configure Bond Devices",
@@ -6761,6 +6861,12 @@ var APISwaggerJSON string = `{
                     "title": "Custom Storage Configuration",
                     "$ref": "#/definitions/voltstack_siteVssStorageConfiguration",
                     "x-displayname": "Custom Storage Configuration"
+                },
+                "default_blocked_services": {
+                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "title": "Default Blocked Service Configuration",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Blocked Service Configuration"
                 },
                 "default_network_config": {
                     "description": "Exclusive with [custom_network_config]\n Use default networking configuration based on certified hardware.",
@@ -7067,10 +7173,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interfaces": {
                     "type": "array",
-                    "description": " Configure network interfaces for this App Stack site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure network interfaces for this App Stack site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Interfaces",
                     "minItems": 1,
-                    "maxItems": 32,
+                    "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/voltstack_siteInterface"
                     },
@@ -7078,7 +7184,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -7187,10 +7293,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "storage_interfaces": {
                     "type": "array",
-                    "description": " Configure storage interfaces for this App Stack site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure storage interfaces for this App Stack site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Interfaces",
                     "minItems": 1,
-                    "maxItems": 32,
+                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/voltstack_siteStorageInterfaceType"
                     },
@@ -7198,7 +7304,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.max_items": "256",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

@@ -496,18 +496,52 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	return ccl
 }
 
-// Create CustomAPIInprocClient
+// Create customAPIInprocClient
 
 // INPROC Client (satisfying CustomAPIClient interface)
-type CustomAPIInprocClient struct {
+type customAPIInprocClient struct {
+	CustomAPIServer
+}
+
+func (c *customAPIInprocClient) SetTGWInfo(ctx context.Context, in *SetTGWInfoRequest, opts ...grpc.CallOption) (*SetTGWInfoResponse, error) {
+	return c.CustomAPIServer.SetTGWInfo(ctx, in)
+}
+func (c *customAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest, opts ...grpc.CallOption) (*SetVIPInfoResponse, error) {
+	return c.CustomAPIServer.SetVIPInfo(ctx, in)
+}
+func (c *customAPIInprocClient) SetVPCIpPrefixes(ctx context.Context, in *SetVPCIpPrefixesRequest, opts ...grpc.CallOption) (*SetVPCIpPrefixesResponse, error) {
+	return c.CustomAPIServer.SetVPCIpPrefixes(ctx, in)
+}
+func (c *customAPIInprocClient) SetVPNTunnels(ctx context.Context, in *SetVPNTunnelsRequest, opts ...grpc.CallOption) (*SetVPNTunnelsResponse, error) {
+	return c.CustomAPIServer.SetVPNTunnels(ctx, in)
+}
+
+func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
+	return &customAPIInprocClient{CustomAPIServer: NewCustomAPIServer(svc)}
+}
+
+// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+}
+
+// Create customAPISrv
+
+// SERVER (satisfying CustomAPIServer interface)
+type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomAPIInprocClient) SetTGWInfo(ctx context.Context, in *SetTGWInfoRequest, opts ...grpc.CallOption) (*SetTGWInfoResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
+func (s *customAPISrv) SetTGWInfo(ctx context.Context, in *SetTGWInfoRequest) (*SetTGWInfoResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -515,7 +549,7 @@ func (c *CustomAPIInprocClient) SetTGWInfo(ctx context.Context, in *SetTGWInfoRe
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -529,13 +563,13 @@ func (c *CustomAPIInprocClient) SetTGWInfo(ctx context.Context, in *SetTGWInfoRe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -548,15 +582,15 @@ func (c *CustomAPIInprocClient) SetTGWInfo(ctx context.Context, in *SetTGWInfoRe
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest, opts ...grpc.CallOption) (*SetVIPInfoResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
+func (s *customAPISrv) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest) (*SetVIPInfoResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -564,7 +598,7 @@ func (c *CustomAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRe
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetVIPInfoRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVIPInfoRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -578,13 +612,13 @@ func (c *CustomAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetVIPInfo"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetVIPInfo"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -597,15 +631,15 @@ func (c *CustomAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRe
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetVIPInfoResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVIPInfoResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) SetVPCIpPrefixes(ctx context.Context, in *SetVPCIpPrefixesRequest, opts ...grpc.CallOption) (*SetVPCIpPrefixesResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
+func (s *customAPISrv) SetVPCIpPrefixes(ctx context.Context, in *SetVPCIpPrefixesRequest) (*SetVPCIpPrefixesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -613,7 +647,7 @@ func (c *CustomAPIInprocClient) SetVPCIpPrefixes(ctx context.Context, in *SetVPC
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -627,13 +661,13 @@ func (c *CustomAPIInprocClient) SetVPCIpPrefixes(ctx context.Context, in *SetVPC
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPCIpPrefixes"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPCIpPrefixes"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -646,15 +680,15 @@ func (c *CustomAPIInprocClient) SetVPCIpPrefixes(ctx context.Context, in *SetVPC
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) SetVPNTunnels(ctx context.Context, in *SetVPNTunnelsRequest, opts ...grpc.CallOption) (*SetVPNTunnelsResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
+func (s *customAPISrv) SetVPNTunnels(ctx context.Context, in *SetVPNTunnelsRequest) (*SetVPNTunnelsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -662,7 +696,7 @@ func (c *CustomAPIInprocClient) SetVPNTunnels(ctx context.Context, in *SetVPNTun
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetVPNTunnelsRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVPNTunnelsRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -676,13 +710,13 @@ func (c *CustomAPIInprocClient) SetVPNTunnels(ctx context.Context, in *SetVPNTun
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -695,23 +729,13 @@ func (c *CustomAPIInprocClient) SetVPNTunnels(ctx context.Context, in *SetVPNTun
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
-	return &CustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
+	return &customAPISrv{svc: svc}
 }
 
 var CustomAPISwaggerJSON string = `{
@@ -1424,12 +1448,12 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\"]\n",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\",\\\"AzureAlternateRegion\\\"]\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-east-2a",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\",\\\"AzureAlternateRegion\\\"]"
                     }
                 },
                 "inside_vip": {

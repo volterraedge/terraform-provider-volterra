@@ -492,7 +492,7 @@ func (v *ValidateSetVPCK8SHostnamesRequest) Validate(ctx context.Context, pm int
 
 		vOpts := append(opts, db.WithValidateField("node_names"))
 		for idx, item := range m.GetNodeNames() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

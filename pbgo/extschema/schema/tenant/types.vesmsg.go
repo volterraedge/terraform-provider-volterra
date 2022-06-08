@@ -134,6 +134,171 @@ func CAValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CredentialsExpiry) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CredentialsExpiry) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CredentialsExpiry) DeepCopy() *CredentialsExpiry {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CredentialsExpiry{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CredentialsExpiry) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CredentialsExpiry) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CredentialsExpiryValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCredentialsExpiry struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCredentialsExpiry) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CredentialsExpiry)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CredentialsExpiry got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["max_api_certificate_expiry_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_api_certificate_expiry_days"))
+		if err := fv(ctx, m.GetMaxApiCertificateExpiryDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_api_token_expiry_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_api_token_expiry_days"))
+		if err := fv(ctx, m.GetMaxApiTokenExpiryDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_kube_config_expiry_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_kube_config_expiry_days"))
+		if err := fv(ctx, m.GetMaxKubeConfigExpiryDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCredentialsExpiryValidator = func() *ValidateCredentialsExpiry {
+	v := &ValidateCredentialsExpiry{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CredentialsExpiryValidator() db.Validator {
+	return DefaultCredentialsExpiryValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Empty) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Empty) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Empty) DeepCopy() *Empty {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Empty{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Empty) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Empty) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EmptyValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateEmpty struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEmpty) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Empty)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Empty got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEmptyValidator = func() *ValidateEmpty {
+	v := &ValidateEmpty{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func EmptyValidator() db.Validator {
+	return DefaultEmptyValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *EncryptedPassword) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -541,7 +706,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("k8s_server_sub_cas"))
 		for idx, item := range m.GetK8SServerSubCas() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -562,7 +727,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("proxy_root_cas"))
 		for idx, item := range m.GetProxyRootCas() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

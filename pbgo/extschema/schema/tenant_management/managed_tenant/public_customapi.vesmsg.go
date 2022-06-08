@@ -182,7 +182,7 @@ func (v *ValidateGetManagedTenantListResp) Validate(ctx context.Context, pm inte
 
 		vOpts := append(opts, db.WithValidateField("access_config"))
 		for idx, item := range m.GetAccessConfig() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

@@ -202,7 +202,7 @@ func (v *ValidateVirtualHostWafStatusRsp) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("waf_status"))
 		for idx, item := range m.GetWafStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -397,7 +397,7 @@ func (v *ValidateWafStatus) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("waf_ref"))
 		for idx, item := range m.GetWafRef() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -409,7 +409,7 @@ func (v *ValidateWafStatus) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("waf_rules_ref"))
 		for idx, item := range m.GetWafRulesRef() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -421,7 +421,7 @@ func (v *ValidateWafStatus) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("waf_rules_status"))
 		for idx, item := range m.GetWafRulesStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

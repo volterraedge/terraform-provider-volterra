@@ -537,7 +537,7 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
 		for idx, item := range m.GetNamespaceRoles() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1369,7 +1369,7 @@ func (v *ValidateListResponse) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2098,16 +2098,38 @@ func Vk8SKubeconfigTypeValidator() db.Validator {
 	return DefaultVk8SKubeconfigTypeValidator
 }
 
+func (m *CreateRequest) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*DBObject)
+	}
+	_ = f
+
+}
+
 func (m *CreateRequest) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*DBObject)
+	m.fromObject(e, true)
+}
+
+func (m *CreateRequest) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *CreateRequest) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+	f := e.(*DBObject)
 	_ = f
 
 }
 
 func (m *CreateRequest) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
-	_ = m1
-	f := e.(*DBObject)
-	_ = f
+	m.toObject(e, true)
+}
 
+func (m *CreateRequest) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
 }

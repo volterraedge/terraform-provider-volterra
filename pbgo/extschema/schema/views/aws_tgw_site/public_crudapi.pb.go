@@ -5,7 +5,7 @@
 //
 // x-displayName: "Configure AWS TGW Site"
 // AWS TGW site view defines a required parameters that can be used in CRUD, to create and manage a volterra site in AWS VPC.
-// It can be used to either automatically create or Manually assisted site creation in AWS TGW.
+// It can be used to automatically site creation in the AWS TGW.
 //
 // View will create following child objects.
 //

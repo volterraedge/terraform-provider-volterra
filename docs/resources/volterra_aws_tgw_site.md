@@ -27,9 +27,9 @@ resource "volterra_aws_tgw_site" "example" {
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
+      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
       reserved_inside_subnet = true
-      disk_size              = "disk_size"
+      disk_size              = "80"
 
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
@@ -78,10 +78,21 @@ resource "volterra_aws_tgw_site" "example" {
       // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
-    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-    nodes_per_az = "2"
+    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+    no_worker_nodes = true
   }
 
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "web_user_interface dns ssh" must be set
+      web_user_interface = true
+      network_type       = "network_type"
+    }
+  }
+  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
+  direct_connect_disabled = true
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 }
@@ -111,15 +122,23 @@ Argument Reference
 
 `aws_parameters` - (Required) Configure AWS TGW, services VPC and site nodes parameters.. See [Aws Parameters ](#aws-parameters) below for details.
 
+`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
+
+`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
+
+`direct_connect_disabled` - (Optional) Direct Connect feature is disabled (bool).
+
+`direct_connect_enabled` - (Optional) Direct Connect feature is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
+
+`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
-
-`site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
 
 `sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
@@ -239,6 +258,24 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
+### Blocked Services
+
+Use custom blocked services configuration.
+
+`blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Sevice ](#blocked-sevice) below for details.
+
+### Blocked Sevice
+
+Use custom blocked services configuration.
+
+`dns` - (Optional) Matches ssh port 53 (bool).
+
+`ssh` - (Optional) Matches ssh port 22 (bool).
+
+`web_user_interface` - (Optional) Matches the web user interface port (bool).
+
+`network_type` - (Optional) Network type in which these ports get blocked (`String`).
+
 ### Clear Secret Info
 
 Clear Secret is used for the secrets that are not encrypted.
@@ -295,6 +332,10 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
 
+### Default Local Control Plane
+
+Enable Site Local Control Plane.
+
 ### Default Os Version
 
 Will assign latest available OS version.
@@ -302,6 +343,20 @@ Will assign latest available OS version.
 ### Default Sw Version
 
 Will assign latest available SW version.
+
+### Direct Connect Enabled
+
+Direct Connect feature is enabled.
+
+`cloud_aggregated_prefix` - (Optional) Aggregated prefix from cloud to be advertised for DC side (`String`).
+
+`dc_connect_aggregated_prefix` - (Optional) Aggregated prefix from direct connect to be advertised for Cloud side (`String`).
+
+`hosted_vifs` - (Optional) and automatically associate provided hosted VIF and also setup BGP Peering. . See [Hosted Vifs ](#hosted-vifs) below for details.
+
+`manual_gw` - (Optional) and a user associate AWS DirectConnect Gateway with it. (bool).
+
+`standard_vifs` - (Optional) and a user associate VIF to the DirectConnect gateway and setup BGP Peering. (bool).
 
 ### Disable Forward Proxy
 
@@ -314,6 +369,10 @@ Disable Interception.
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
+
+### Dns
+
+Matches ssh port 53.
 
 ### Domain Match
 
@@ -385,6 +444,12 @@ List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
 
+### Hosted Vifs
+
+and automatically associate provided hosted VIF and also setup BGP Peering. .
+
+`vifs` - (Optional) VIFs (`String`).
+
 ### Inside Static Routes
 
 Manage static routes for inside network..
@@ -420,6 +485,18 @@ IPv4 Address.
 IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
+
+### Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
+
+### Manual Gw
+
+and a user associate AWS DirectConnect Gateway with it..
 
 ### New Tgw
 
@@ -482,6 +559,10 @@ Static Routes disabled for inside network..
 ### No Interception
 
 No TLS interception is enabled for this network connector.
+
+### No Local Control Plane
+
+Disable Site Local Control Plane.
 
 ### No Network Policy
 
@@ -564,6 +645,22 @@ Site local inside is connected directly to a given global network.
 Site local outside is connected directly to a given global network.
 
 `global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
+
+### Sm Connection Public Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Sm Connection Pvt Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Ssh
+
+Matches ssh port 22.
+
+### Standard Vifs
+
+and a user associate VIF to the DirectConnect gateway and setup BGP Peering..
 
 ### Static Route List
 
@@ -699,6 +796,10 @@ Virtual Network Configuration for transit gateway.
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
 ### Volterra Certificate
 
 Volterra certificates for generating intermediate certificate for TLS interception..
@@ -720,6 +821,10 @@ List of VPC attachments to transit gateway.
 `labels` - (Optional) These labels used must be from known key and label defined in shared namespace (`String`).
 
 `vpc_id` - (Optional) Information about existing VPC (`String`).
+
+### Web User Interface
+
+Matches the web user interface port.
 
 ### Wingman Secret Info
 

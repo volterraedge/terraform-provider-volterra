@@ -397,18 +397,49 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	return ccl
 }
 
-// Create CustomAPIInprocClient
+// Create customAPIInprocClient
 
 // INPROC Client (satisfying CustomAPIClient interface)
-type CustomAPIInprocClient struct {
+type customAPIInprocClient struct {
+	CustomAPIServer
+}
+
+func (c *customAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *ConfirmAlertReceiverRequest, opts ...grpc.CallOption) (*ConfirmAlertReceiverResponse, error) {
+	return c.CustomAPIServer.ConfirmAlertReceiver(ctx, in)
+}
+func (c *customAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestAlertReceiverRequest, opts ...grpc.CallOption) (*TestAlertReceiverResponse, error) {
+	return c.CustomAPIServer.TestAlertReceiver(ctx, in)
+}
+func (c *customAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *VerifyAlertReceiverRequest, opts ...grpc.CallOption) (*VerifyAlertReceiverResponse, error) {
+	return c.CustomAPIServer.VerifyAlertReceiver(ctx, in)
+}
+
+func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
+	return &customAPIInprocClient{CustomAPIServer: NewCustomAPIServer(svc)}
+}
+
+// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+}
+
+// Create customAPISrv
+
+// SERVER (satisfying CustomAPIServer interface)
+type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *ConfirmAlertReceiverRequest, opts ...grpc.CallOption) (*ConfirmAlertReceiverResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.CustomAPI")
+func (s *customAPISrv) ConfirmAlertReceiver(ctx context.Context, in *ConfirmAlertReceiverRequest) (*ConfirmAlertReceiverResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.alert_receiver.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -416,7 +447,7 @@ func (c *CustomAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *Co
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.alert_receiver.ConfirmAlertReceiverRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.ConfirmAlertReceiverRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -430,13 +461,13 @@ func (c *CustomAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *Co
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -449,15 +480,15 @@ func (c *CustomAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *Co
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestAlertReceiverRequest, opts ...grpc.CallOption) (*TestAlertReceiverResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.CustomAPI")
+func (s *customAPISrv) TestAlertReceiver(ctx context.Context, in *TestAlertReceiverRequest) (*TestAlertReceiverResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.alert_receiver.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -465,7 +496,7 @@ func (c *CustomAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestA
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.alert_receiver.TestAlertReceiverRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.TestAlertReceiverRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -479,13 +510,13 @@ func (c *CustomAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestA
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -498,15 +529,15 @@ func (c *CustomAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestA
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.alert_receiver.TestAlertReceiverResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.TestAlertReceiverResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *VerifyAlertReceiverRequest, opts ...grpc.CallOption) (*VerifyAlertReceiverResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.CustomAPI")
+func (s *customAPISrv) VerifyAlertReceiver(ctx context.Context, in *VerifyAlertReceiverRequest) (*VerifyAlertReceiverResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.alert_receiver.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -514,7 +545,7 @@ func (c *CustomAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *Ver
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.alert_receiver.VerifyAlertReceiverRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.VerifyAlertReceiverRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -528,13 +559,13 @@ func (c *CustomAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *Ver
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -547,23 +578,13 @@ func (c *CustomAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *Ver
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.alert_receiver.VerifyAlertReceiverResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.VerifyAlertReceiverResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
-	return &CustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
+	return &customAPISrv{svc: svc}
 }
 
 var CustomAPISwaggerJSON string = `{

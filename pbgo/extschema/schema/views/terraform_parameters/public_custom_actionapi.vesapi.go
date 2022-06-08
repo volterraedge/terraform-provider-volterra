@@ -303,18 +303,46 @@ func NewCustomActionAPIRestClient(baseURL string, hc http.Client) server.CustomC
 	return ccl
 }
 
-// Create CustomActionAPIInprocClient
+// Create customActionAPIInprocClient
 
 // INPROC Client (satisfying CustomActionAPIClient interface)
-type CustomActionAPIInprocClient struct {
+type customActionAPIInprocClient struct {
+	CustomActionAPIServer
+}
+
+func (c *customActionAPIInprocClient) ForceDelete(ctx context.Context, in *ForceDeleteRequest, opts ...grpc.CallOption) (*ForceDeleteResponse, error) {
+	return c.CustomActionAPIServer.ForceDelete(ctx, in)
+}
+func (c *customActionAPIInprocClient) Run(ctx context.Context, in *RunRequest, opts ...grpc.CallOption) (*RunResponse, error) {
+	return c.CustomActionAPIServer.Run(ctx, in)
+}
+
+func NewCustomActionAPIInprocClient(svc svcfw.Service) CustomActionAPIClient {
+	return &customActionAPIInprocClient{CustomActionAPIServer: NewCustomActionAPIServer(svc)}
+}
+
+// RegisterGwCustomActionAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomActionAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomActionAPIHandlerClient(ctx, mux, NewCustomActionAPIInprocClient(s))
+}
+
+// Create customActionAPISrv
+
+// SERVER (satisfying CustomActionAPIServer interface)
+type customActionAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomActionAPIInprocClient) ForceDelete(ctx context.Context, in *ForceDeleteRequest, opts ...grpc.CallOption) (*ForceDeleteResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.CustomActionAPI")
+func (s *customActionAPISrv) ForceDelete(ctx context.Context, in *ForceDeleteRequest) (*ForceDeleteResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.CustomActionAPI")
 	cah, ok := ah.(CustomActionAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomActionAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomActionAPIServer", ah)
 	}
 
 	var (
@@ -322,7 +350,7 @@ func (c *CustomActionAPIInprocClient) ForceDelete(ctx context.Context, in *Force
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.terraform_parameters.ForceDeleteRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.ForceDeleteRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -336,13 +364,13 @@ func (c *CustomActionAPIInprocClient) ForceDelete(ctx context.Context, in *Force
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -355,15 +383,15 @@ func (c *CustomActionAPIInprocClient) ForceDelete(ctx context.Context, in *Force
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.terraform_parameters.ForceDeleteResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.ForceDeleteResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomActionAPIInprocClient) Run(ctx context.Context, in *RunRequest, opts ...grpc.CallOption) (*RunResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.CustomActionAPI")
+func (s *customActionAPISrv) Run(ctx context.Context, in *RunRequest) (*RunResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.CustomActionAPI")
 	cah, ok := ah.(CustomActionAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomActionAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomActionAPIServer", ah)
 	}
 
 	var (
@@ -371,7 +399,7 @@ func (c *CustomActionAPIInprocClient) Run(ctx context.Context, in *RunRequest, o
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.terraform_parameters.RunRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.RunRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -385,13 +413,13 @@ func (c *CustomActionAPIInprocClient) Run(ctx context.Context, in *RunRequest, o
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomActionAPI.Run"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomActionAPI.Run"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -404,23 +432,13 @@ func (c *CustomActionAPIInprocClient) Run(ctx context.Context, in *RunRequest, o
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.terraform_parameters.RunResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.RunResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomActionAPIInprocClient(svc svcfw.Service) CustomActionAPIClient {
-	return &CustomActionAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomActionAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomActionAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomActionAPIHandlerClient(ctx, mux, NewCustomActionAPIInprocClient(s))
+func NewCustomActionAPIServer(svc svcfw.Service) CustomActionAPIServer {
+	return &customActionAPISrv{svc: svc}
 }
 
 var CustomActionAPISwaggerJSON string = `{

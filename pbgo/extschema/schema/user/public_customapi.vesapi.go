@@ -357,7 +357,7 @@ func (c *CustomAPIRestClient) doRPCAddUserToGroup(ctx context.Context, callOpts 
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("group_name", fmt.Sprintf("%v", req.GroupName))
+		q.Add("group_names", fmt.Sprintf("%v", req.GroupNames))
 		q.Add("username", fmt.Sprintf("%v", req.Username))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -389,9 +389,9 @@ func (c *CustomAPIRestClient) doRPCAddUserToGroup(ctx context.Context, callOpts 
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &Empty{}
+	pbRsp := &UserGroupResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.UserGroupResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -609,7 +609,7 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 		_ = q
 		q.Add("email", fmt.Sprintf("%v", req.Email))
 		q.Add("first_name", fmt.Sprintf("%v", req.FirstName))
-		q.Add("groups", fmt.Sprintf("%v", req.Groups))
+		q.Add("group_names", fmt.Sprintf("%v", req.GroupNames))
 		q.Add("idm_type", fmt.Sprintf("%v", req.IdmType))
 		q.Add("last_name", fmt.Sprintf("%v", req.LastName))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
@@ -943,7 +943,7 @@ func (c *CustomAPIRestClient) doRPCRemoveUserFromGroup(ctx context.Context, call
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("group_name", fmt.Sprintf("%v", req.GroupName))
+		q.Add("group_names", fmt.Sprintf("%v", req.GroupNames))
 		q.Add("username", fmt.Sprintf("%v", req.Username))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -975,9 +975,9 @@ func (c *CustomAPIRestClient) doRPCRemoveUserFromGroup(ctx context.Context, call
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &Empty{}
+	pbRsp := &UserGroupResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.UserGroupResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1028,7 +1028,7 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 		_ = q
 		q.Add("email", fmt.Sprintf("%v", req.Email))
 		q.Add("first_name", fmt.Sprintf("%v", req.FirstName))
-		q.Add("groups", fmt.Sprintf("%v", req.Groups))
+		q.Add("group_names", fmt.Sprintf("%v", req.GroupNames))
 		q.Add("idm_type", fmt.Sprintf("%v", req.IdmType))
 		q.Add("last_name", fmt.Sprintf("%v", req.LastName))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
@@ -1461,18 +1461,82 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	return ccl
 }
 
-// Create CustomAPIInprocClient
+// Create customAPIInprocClient
 
 // INPROC Client (satisfying CustomAPIClient interface)
-type CustomAPIInprocClient struct {
+type customAPIInprocClient struct {
+	CustomAPIServer
+}
+
+func (c *customAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequest, opts ...grpc.CallOption) (*AcceptTOSResponse, error) {
+	return c.CustomAPIServer.AcceptTOS(ctx, in)
+}
+func (c *customAPIInprocClient) AddUserToGroup(ctx context.Context, in *UserGroupRequest, opts ...grpc.CallOption) (*UserGroupResponse, error) {
+	return c.CustomAPIServer.AddUserToGroup(ctx, in)
+}
+func (c *customAPIInprocClient) AssignRole(ctx context.Context, in *AssignRoleRequest, opts ...grpc.CallOption) (*Empty, error) {
+	return c.CustomAPIServer.AssignRole(ctx, in)
+}
+func (c *customAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
+	return c.CustomAPIServer.CascadeDelete(ctx, in)
+}
+func (c *customAPIInprocClient) Create(ctx context.Context, in *UserRoleRequest, opts ...grpc.CallOption) (*Object, error) {
+	return c.CustomAPIServer.Create(ctx, in)
+}
+func (c *customAPIInprocClient) Get(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error) {
+	return c.CustomAPIServer.Get(ctx, in)
+}
+func (c *customAPIInprocClient) GetTOS(ctx context.Context, in *GetTOSRequest, opts ...grpc.CallOption) (*GetTOSResponse, error) {
+	return c.CustomAPIServer.GetTOS(ctx, in)
+}
+func (c *customAPIInprocClient) List(ctx context.Context, in *ListUserRoleRequest, opts ...grpc.CallOption) (*ListUserRoleResponse, error) {
+	return c.CustomAPIServer.List(ctx, in)
+}
+func (c *customAPIInprocClient) RemoveUserFromGroup(ctx context.Context, in *UserGroupRequest, opts ...grpc.CallOption) (*UserGroupResponse, error) {
+	return c.CustomAPIServer.RemoveUserFromGroup(ctx, in)
+}
+func (c *customAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest, opts ...grpc.CallOption) (*Object, error) {
+	return c.CustomAPIServer.Replace(ctx, in)
+}
+func (c *customAPIInprocClient) ResetPassword(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
+	return c.CustomAPIServer.ResetPassword(ctx, in)
+}
+func (c *customAPIInprocClient) ResetPasswordByAdmin(ctx context.Context, in *ResetPasswordByAdminRequest, opts ...grpc.CallOption) (*Empty, error) {
+	return c.CustomAPIServer.ResetPasswordByAdmin(ctx, in)
+}
+func (c *customAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendPasswordEmailRequest, opts ...grpc.CallOption) (*SendPasswordEmailResponse, error) {
+	return c.CustomAPIServer.SendPasswordEmail(ctx, in)
+}
+func (c *customAPIInprocClient) SyncUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
+	return c.CustomAPIServer.SyncUser(ctx, in)
+}
+
+func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
+	return &customAPIInprocClient{CustomAPIServer: NewCustomAPIServer(svc)}
+}
+
+// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+}
+
+// Create customAPISrv
+
+// SERVER (satisfying CustomAPIServer interface)
+type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequest, opts ...grpc.CallOption) (*AcceptTOSResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) AcceptTOS(ctx context.Context, in *AcceptTOSRequest) (*AcceptTOSResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1480,7 +1544,7 @@ func (c *CustomAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequ
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.AcceptTOSRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.AcceptTOSRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1494,13 +1558,13 @@ func (c *CustomAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequ
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AcceptTOS"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AcceptTOS"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1513,23 +1577,23 @@ func (c *CustomAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequ
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.AcceptTOSResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.AcceptTOSResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) AddUserToGroup(ctx context.Context, in *UserGroupRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) AddUserToGroup(ctx context.Context, in *UserGroupRequest) (*UserGroupResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
-		rsp *Empty
+		rsp *UserGroupResponse
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.UserGroupRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.UserGroupRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1543,13 +1607,13 @@ func (c *CustomAPIInprocClient) AddUserToGroup(ctx context.Context, in *UserGrou
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AddUserToGroup"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AddUserToGroup"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1562,15 +1626,15 @@ func (c *CustomAPIInprocClient) AddUserToGroup(ctx context.Context, in *UserGrou
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.UserGroupResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) AssignRole(ctx context.Context, in *AssignRoleRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) AssignRole(ctx context.Context, in *AssignRoleRequest) (*Empty, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1578,7 +1642,7 @@ func (c *CustomAPIInprocClient) AssignRole(ctx context.Context, in *AssignRoleRe
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.AssignRoleRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.AssignRoleRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1592,13 +1656,13 @@ func (c *CustomAPIInprocClient) AssignRole(ctx context.Context, in *AssignRoleRe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AssignRole"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AssignRole"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1611,15 +1675,15 @@ func (c *CustomAPIInprocClient) AssignRole(ctx context.Context, in *AssignRoleRe
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest) (*CascadeDeleteResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1627,7 +1691,7 @@ func (c *CustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.CascadeDeleteRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.CascadeDeleteRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1641,13 +1705,13 @@ func (c *CustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.CascadeDelete"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.CascadeDelete"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1660,15 +1724,15 @@ func (c *CustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.CascadeDeleteResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.CascadeDeleteResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) Create(ctx context.Context, in *UserRoleRequest, opts ...grpc.CallOption) (*Object, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) Create(ctx context.Context, in *UserRoleRequest) (*Object, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1676,7 +1740,7 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *UserRoleRequest,
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.UserRoleRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.UserRoleRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1690,13 +1754,13 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *UserRoleRequest,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Create"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Create"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1709,15 +1773,15 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *UserRoleRequest,
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Object", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Object", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) Get(ctx context.Context, in *GetUserRoleRequest) (*GetUserRoleResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1725,7 +1789,7 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetUserRoleRequest,
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.GetUserRoleRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.GetUserRoleRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1739,13 +1803,13 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetUserRoleRequest,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Get"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Get"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1758,15 +1822,15 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetUserRoleRequest,
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.GetUserRoleResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.GetUserRoleResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) GetTOS(ctx context.Context, in *GetTOSRequest, opts ...grpc.CallOption) (*GetTOSResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) GetTOS(ctx context.Context, in *GetTOSRequest) (*GetTOSResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1774,7 +1838,7 @@ func (c *CustomAPIInprocClient) GetTOS(ctx context.Context, in *GetTOSRequest, o
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.GetTOSRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.GetTOSRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1788,13 +1852,13 @@ func (c *CustomAPIInprocClient) GetTOS(ctx context.Context, in *GetTOSRequest, o
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.GetTOS"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.GetTOS"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1807,15 +1871,15 @@ func (c *CustomAPIInprocClient) GetTOS(ctx context.Context, in *GetTOSRequest, o
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.GetTOSResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.GetTOSResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListUserRoleRequest, opts ...grpc.CallOption) (*ListUserRoleResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) List(ctx context.Context, in *ListUserRoleRequest) (*ListUserRoleResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1823,7 +1887,7 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListUserRoleReques
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.ListUserRoleRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.ListUserRoleRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1837,13 +1901,13 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListUserRoleReques
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.List"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.List"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1856,23 +1920,23 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListUserRoleReques
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.ListUserRoleResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.ListUserRoleResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) RemoveUserFromGroup(ctx context.Context, in *UserGroupRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) RemoveUserFromGroup(ctx context.Context, in *UserGroupRequest) (*UserGroupResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
-		rsp *Empty
+		rsp *UserGroupResponse
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.UserGroupRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.UserGroupRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1886,13 +1950,13 @@ func (c *CustomAPIInprocClient) RemoveUserFromGroup(ctx context.Context, in *Use
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.RemoveUserFromGroup"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.RemoveUserFromGroup"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1905,15 +1969,15 @@ func (c *CustomAPIInprocClient) RemoveUserFromGroup(ctx context.Context, in *Use
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.UserGroupResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest, opts ...grpc.CallOption) (*Object, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) Replace(ctx context.Context, in *UserRoleRequest) (*Object, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1921,7 +1985,7 @@ func (c *CustomAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.UserRoleRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.UserRoleRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1935,13 +1999,13 @@ func (c *CustomAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Replace"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Replace"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1954,15 +2018,15 @@ func (c *CustomAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Object", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Object", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) ResetPassword(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) ResetPassword(ctx context.Context, in *Empty) (*Empty, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -1970,7 +2034,7 @@ func (c *CustomAPIInprocClient) ResetPassword(ctx context.Context, in *Empty, op
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1984,13 +2048,13 @@ func (c *CustomAPIInprocClient) ResetPassword(ctx context.Context, in *Empty, op
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.ResetPassword"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.ResetPassword"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2003,15 +2067,15 @@ func (c *CustomAPIInprocClient) ResetPassword(ctx context.Context, in *Empty, op
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) ResetPasswordByAdmin(ctx context.Context, in *ResetPasswordByAdminRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) ResetPasswordByAdmin(ctx context.Context, in *ResetPasswordByAdminRequest) (*Empty, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2019,7 +2083,7 @@ func (c *CustomAPIInprocClient) ResetPasswordByAdmin(ctx context.Context, in *Re
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.ResetPasswordByAdminRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.ResetPasswordByAdminRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2033,13 +2097,13 @@ func (c *CustomAPIInprocClient) ResetPasswordByAdmin(ctx context.Context, in *Re
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.ResetPasswordByAdmin"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.ResetPasswordByAdmin"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2052,15 +2116,15 @@ func (c *CustomAPIInprocClient) ResetPasswordByAdmin(ctx context.Context, in *Re
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendPasswordEmailRequest, opts ...grpc.CallOption) (*SendPasswordEmailResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) SendPasswordEmail(ctx context.Context, in *SendPasswordEmailRequest) (*SendPasswordEmailResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2068,7 +2132,7 @@ func (c *CustomAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendP
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.SendPasswordEmailRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.SendPasswordEmailRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2082,13 +2146,13 @@ func (c *CustomAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendP
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.SendPasswordEmail"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.SendPasswordEmail"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2101,15 +2165,15 @@ func (c *CustomAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendP
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.SendPasswordEmailResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.SendPasswordEmailResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) SyncUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+func (s *customAPISrv) SyncUser(ctx context.Context, in *Empty) (*Empty, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2117,7 +2181,7 @@ func (c *CustomAPIInprocClient) SyncUser(ctx context.Context, in *Empty, opts ..
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2131,13 +2195,13 @@ func (c *CustomAPIInprocClient) SyncUser(ctx context.Context, in *Empty, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.SyncUser"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.SyncUser"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2150,23 +2214,13 @@ func (c *CustomAPIInprocClient) SyncUser(ctx context.Context, in *Empty, opts ..
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
-	return &CustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
+	return &customAPISrv{svc: svc}
 }
 
 var CustomAPISwaggerJSON string = `{
@@ -2274,14 +2328,14 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/system/users/group_add": {
             "put": {
-                "summary": "Add user to the group",
-                "description": "Assign existing user to specific group.",
+                "summary": "Add user to the groups",
+                "description": "Assign existing user to specific groups.",
                 "operationId": "ves.io.schema.user.CustomAPI.AddUserToGroup",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/schemauserEmpty"
+                            "$ref": "#/definitions/userUserGroupResponse"
                         }
                     },
                     "401": {
@@ -2358,14 +2412,14 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/system/users/group_remove": {
             "put": {
-                "summary": "Add user to the group",
-                "description": "Assign existing user to specific group.",
+                "summary": "Remove user from groups",
+                "description": "remove existing user from specific groups.",
                 "operationId": "ves.io.schema.user.CustomAPI.RemoveUserFromGroup",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/schemauserEmpty"
+                            "$ref": "#/definitions/userUserGroupResponse"
                         }
                     },
                     "401": {
@@ -3504,6 +3558,21 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
+                }
+            }
+        },
         "schemaAddonServiceAccess": {
             "type": "string",
             "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\nThis can mean that addon service is not subscribed or is in pending subscription.\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nPlan based access control denied.\nThis means current plan doesnt allow this addon service.",
@@ -3526,6 +3595,52 @@ var CustomAPISwaggerJSON string = `{
                 "AS_ERROR"
             ],
             "default": "AS_NONE"
+        },
+        "schemaErrorCode": {
+            "type": "string",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "title": "ErrorCode",
+            "enum": [
+                "EOK",
+                "EPERMS",
+                "EBADINPUT",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN",
+                "ESERIALIZE",
+                "EINTERNAL"
+            ],
+            "default": "EOK",
+            "x-displayname": "Error Code",
+            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
+        },
+        "schemaErrorType": {
+            "type": "object",
+            "description": "Information about a error in API operation",
+            "title": "ErrorType",
+            "x-displayname": "Error Type",
+            "x-ves-proto-message": "ves.io.schema.ErrorType",
+            "properties": {
+                "code": {
+                    "description": " A simple general code by category",
+                    "title": "code",
+                    "$ref": "#/definitions/schemaErrorCode",
+                    "x-displayname": "Code"
+                },
+                "error_obj": {
+                    "description": " A structured error object for machine parsing",
+                    "title": "error_obj",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Error Object"
+                },
+                "message": {
+                    "type": "string",
+                    "description": " A human readable string of the error\n\nExample: - \"value\"-",
+                    "title": "message",
+                    "x-displayname": "Message",
+                    "x-ves-example": "value"
+                }
+            }
         },
         "schemaInitializerType": {
             "type": "object",
@@ -3575,7 +3690,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace the role applies to\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "description": " Namespace the role applies to\n '*' value implies all namespaces\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Namespace",
                     "maxLength": 256,
                     "x-displayname": "Namespace",
@@ -3583,8 +3698,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.ves_object_name": "true"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
                 "role": {
@@ -4383,6 +4497,16 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "First Name",
                     "x-ves-example": "value"
                 },
+                "group_names": {
+                    "type": "array",
+                    "description": " Group list must be associated to this user.\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "Groups",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
+                },
                 "idm_type": {
                     "description": " Identity management type of the user (Volterra Managed, SSO)",
                     "title": "IDM type",
@@ -4900,16 +5024,15 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "User group request",
             "x-ves-proto-message": "ves.io.schema.user.UserGroupRequest",
             "properties": {
-                "group_name": {
-                    "type": "string",
-                    "description": " Name of the group.\n\nExample: - \"6880314b-d82d-4f0b-93c9-1e2ce1a9e2d0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
-                    "title": "Group Name",
-                    "maxLength": 64,
-                    "x-displayname": "Group Name",
-                    "x-ves-example": "6880314b-d82d-4f0b-93c9-1e2ce1a9e2d0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
-                    }
+                "group_names": {
+                    "type": "array",
+                    "description": " Group list must be associated to this user.\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "Groups",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
                 },
                 "username": {
                     "type": "string",
@@ -4923,6 +5046,20 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_bytes": "320",
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
+                }
+            }
+        },
+        "userUserGroupResponse": {
+            "type": "object",
+            "title": "User Group Response",
+            "x-displayname": "User Group Response",
+            "x-ves-proto-message": "ves.io.schema.user.UserGroupResponse",
+            "properties": {
+                "error": {
+                    "description": " Error(if any)",
+                    "title": "error\nx-displayName: \"Error\"\nError(if any)",
+                    "$ref": "#/definitions/schemaErrorType",
+                    "x-displayname": "Error"
                 }
             }
         },
@@ -4955,15 +5092,15 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "groups": {
+                "group_names": {
                     "type": "array",
-                    "description": " Group list must be associated to this user.\n\nExample: - \"[\"e40581e1-be77-4bca-a1cd-a2c478bf509e\"]\"-",
+                    "description": " Group list must be associated to this user.\n\nExample: - \"[\"dev-group-1\"]\"-",
                     "title": "Groups",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Groups",
-                    "x-ves-example": "[\"e40581e1-be77-4bca-a1cd-a2c478bf509e\"]"
+                    "x-ves-example": "[\"dev-group-1\"]"
                 },
                 "idm_type": {
                     "description": " Type of the Identity management required for the user.\n if SSO is not enabled, set this to VOLTERRA_MANAGED\n VOLTERRA_MANGED user is a local user fully managed by Volterra's User Access Management.",

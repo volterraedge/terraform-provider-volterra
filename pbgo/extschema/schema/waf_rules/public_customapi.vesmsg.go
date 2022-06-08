@@ -160,7 +160,7 @@ func (v *ValidateRulesRsp) Validate(ctx context.Context, pm interface{}, opts ..
 
 		vOpts := append(opts, db.WithValidateField("rules"))
 		for idx, item := range m.GetRules() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -328,7 +328,7 @@ func (v *ValidateVirtualHostWafRulesStatusRsp) Validate(ctx context.Context, pm 
 
 		vOpts := append(opts, db.WithValidateField("waf_rules_status"))
 		for idx, item := range m.GetWafRulesStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -457,7 +457,7 @@ func (v *ValidateWafRulesStatus) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("rules"))
 		for idx, item := range m.GetRules() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

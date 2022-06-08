@@ -145,6 +145,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_LilacCdn:
+		if fv, exists := v.FldValidators["choice.lilac_cdn"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_LilacCdn).LilacCdn
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("lilac_cdn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

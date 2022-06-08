@@ -372,27 +372,40 @@ type crudAPIRestClient struct {
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	req, err := NewObjectCreateReq(e)
-	if err != nil {
-		return nil, errors.Wrap(err, "Creating new create request")
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	if e != nil && cco.RequestJSON != "" {
+		return nil, fmt.Errorf("Both entry and WithRequestJSON() specified")
+	}
+	if e == nil && cco.RequestJSON == "" {
+		return nil, fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.views.terraform_parameters.crudapi", ".")
 	t := strings.Join(sl[:len(sl)-1], ".")
 	url := fmt.Sprintf("%s/%s/Objects", c.baseURL, t)
-	jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
+
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		req, err := NewObjectCreateReq(e)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new create request")
+		}
+		j, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "RestClient Create")
+		}
+		jsn = j
 	}
 
 	hReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
 	if err != nil {
 		return nil, err
-	}
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
 	}
 	client.AddHdrsToReq(cco.Headers, hReq)
 	hReq.Header.Set("Content-Type", "application/json")
@@ -428,43 +441,46 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	rReq, err := NewObjectReplaceReq(e)
-	if err != nil {
-		return errors.Wrap(err, "Creating new replace request")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	if e != nil && cco.ReplaceJSONReq != "" {
-		return fmt.Errorf("Both entry and WithReplaceJSONRequest() specified")
+	if e != nil && cco.RequestJSON != "" {
+		return fmt.Errorf("Both entry and WithRequestJSON() specified")
 	}
-	if e == nil && cco.ReplaceJSONReq == "" {
-		return fmt.Errorf("Neither entry nor WithReplaceJSONRequest() specified")
+	if e == nil && cco.RequestJSON == "" {
+		return fmt.Errorf("Neither entry nor WithRequestJSON() specified")
 	}
 
-	var jsn, objUID string
-	if e != nil {
+	var jsn string
+	if cco.RequestJSON != "" {
+		jsn = cco.RequestJSON
+	} else {
+		rReq, err := NewObjectReplaceReq(e)
+		if err != nil {
+			return errors.Wrap(err, "Creating new replace request")
+		}
 		rReq.ResourceVersion = cco.ResourceVersion
-		jsn, err = codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
+		j, err := codec.ToJSON(rReq, codec.ToWithUseProtoFieldName())
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		objUID = rReq.ObjectUid
+		jsn = j
+	}
+
+	var objUID string
+	reqMap := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
+		return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
+	}
+	md, ok := reqMap["metadata"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("Request %s does not have 'metadata'", jsn)
+	}
+	if val, ok := md["uid"].(string); ok {
+		objUID = val
 	} else {
-		jsn = cco.ReplaceJSONReq
-		reqMap := make(map[string]interface{})
-		if err := json.Unmarshal([]byte(jsn), &reqMap); err != nil {
-			return errors.Wrapf(err, "Unmarshaling ReplaceJSONReq")
-		}
-		md, ok := reqMap["metadata"].(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("ReplaceJSONReq does not have 'metadata'")
-		}
-		if val, ok := md["uid"].(string); ok {
-			objUID = val
-		}
+		return fmt.Errorf("Request %s does not have 'metadata.uid'", jsn)
 	}
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -3187,6 +3203,12 @@ var APISwaggerJSON string = `{
                 "apply_status": {
                     "$ref": "#/definitions/terraform_parametersApplyStatus"
                 },
+                "conditions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    }
+                },
                 "metadata": {
                     "title": "If StatusObjectListReq has any specified report_fields, it will appear in below fields",
                     "$ref": "#/definitions/schemaStatusMetaType"
@@ -3286,6 +3308,61 @@ var APISwaggerJSON string = `{
                 },
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "schemaConditionType": {
+            "type": "object",
+            "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
+            "title": "ConditionType",
+            "x-displayname": "Status Condition",
+            "x-ves-proto-message": "ves.io.schema.ConditionType",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "description": " Hostname of the instance of the site that sent the status",
+                    "title": "hostname",
+                    "x-displayname": "Hostname"
+                },
+                "last_update_time": {
+                    "type": "string",
+                    "description": " Last time the condition was updated",
+                    "title": "last_update_time",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "value"
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the service that sent the status",
+                    "title": "service name",
+                    "x-displayname": "Service Name"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
+                    "title": "type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3888,6 +3965,15 @@ var APISwaggerJSON string = `{
                     "title": "Apply Status",
                     "$ref": "#/definitions/terraform_parametersApplyStatus",
                     "x-displayname": "Apply Status"
+                },
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions reported by various components of the system",
+                    "title": "conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -6295,6 +6381,12 @@ var StatusAPISwaggerJSON string = `{
                 "apply_status": {
                     "$ref": "#/definitions/terraform_parametersApplyStatus"
                 },
+                "conditions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    }
+                },
                 "metadata": {
                     "title": "If StatusObjectListReq has any specified report_fields, it will appear in below fields",
                     "$ref": "#/definitions/schemaStatusMetaType"
@@ -6394,6 +6486,61 @@ var StatusAPISwaggerJSON string = `{
                 },
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "schemaConditionType": {
+            "type": "object",
+            "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
+            "title": "ConditionType",
+            "x-displayname": "Status Condition",
+            "x-ves-proto-message": "ves.io.schema.ConditionType",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "description": " Hostname of the instance of the site that sent the status",
+                    "title": "hostname",
+                    "x-displayname": "Hostname"
+                },
+                "last_update_time": {
+                    "type": "string",
+                    "description": " Last time the condition was updated",
+                    "title": "last_update_time",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "value"
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the service that sent the status",
+                    "title": "service name",
+                    "x-displayname": "Service Name"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
+                    "title": "type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -6996,6 +7143,15 @@ var StatusAPISwaggerJSON string = `{
                     "title": "Apply Status",
                     "$ref": "#/definitions/terraform_parametersApplyStatus",
                     "x-displayname": "Apply Status"
+                },
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions reported by various components of the system",
+                    "title": "conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",

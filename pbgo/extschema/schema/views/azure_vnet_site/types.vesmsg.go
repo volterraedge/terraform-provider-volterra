@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -27,6 +28,142 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureHubVnetType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureHubVnetType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureHubVnetType) DeepCopy() *AzureHubVnetType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureHubVnetType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureHubVnetType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureHubVnetType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureHubVnetTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureHubVnetType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureHubVnetType) SpokeVnetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*VnetPeeringType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := VnetPeeringTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for spoke_vnets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*VnetPeeringType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*VnetPeeringType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated spoke_vnets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items spoke_vnets")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureHubVnetType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureHubVnetType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureHubVnetType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["spoke_vnets"]; exists {
+		vOpts := append(opts, db.WithValidateField("spoke_vnets"))
+		if err := fv(ctx, m.GetSpokeVnets(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureHubVnetTypeValidator = func() *ValidateAzureHubVnetType {
+	v := &ValidateAzureHubVnetType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSpokeVnets := v.SpokeVnetsValidationRuleHandler
+	rulesSpokeVnets := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "500",
+	}
+	vFn, err = vrhSpokeVnets(rulesSpokeVnets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureHubVnetType.spoke_vnets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["spoke_vnets"] = vFn
+
+	return v
+}()
+
+func AzureHubVnetTypeValidator() db.Validator {
+	return DefaultAzureHubVnetTypeValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -399,6 +536,14 @@ func (v *ValidateAzureVnetIngressEgressGwARReplaceType) GlobalNetworkChoiceValid
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetIngressEgressGwARReplaceType) HubChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hub_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressEgressGwARReplaceType) InsideStaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -419,6 +564,14 @@ func (v *ValidateAzureVnetIngressEgressGwARReplaceType) OutsideStaticRouteChoice
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwARReplaceType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
 	}
 	return validatorFn, nil
 }
@@ -567,6 +720,42 @@ func (v *ValidateAzureVnetIngressEgressGwARReplaceType) Validate(ctx context.Con
 
 	}
 
+	if fv, exists := v.FldValidators["hub_choice"]; exists {
+		val := m.GetHubChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hub_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHubChoice().(type) {
+	case *AzureVnetIngressEgressGwARReplaceType_NotHub:
+		if fv, exists := v.FldValidators["hub_choice.not_hub"]; exists {
+			val := m.GetHubChoice().(*AzureVnetIngressEgressGwARReplaceType_NotHub).NotHub
+			vOpts := append(opts,
+				db.WithValidateField("hub_choice"),
+				db.WithValidateField("not_hub"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARReplaceType_Hub:
+		if fv, exists := v.FldValidators["hub_choice.hub"]; exists {
+			val := m.GetHubChoice().(*AzureVnetIngressEgressGwARReplaceType_Hub).Hub
+			vOpts := append(opts,
+				db.WithValidateField("hub_choice"),
+				db.WithValidateField("hub"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_static_route_choice"]; exists {
 		val := m.GetInsideStaticRouteChoice()
 		vOpts := append(opts,
@@ -675,6 +864,42 @@ func (v *ValidateAzureVnetIngressEgressGwARReplaceType) Validate(ctx context.Con
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -723,6 +948,17 @@ var DefaultAzureVnetIngressEgressGwARReplaceTypeValidator = func() *ValidateAzur
 	}
 	v.FldValidators["global_network_choice"] = vFn
 
+	vrhHubChoice := v.HubChoiceValidationRuleHandler
+	rulesHubChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhHubChoice(rulesHubChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARReplaceType.hub_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hub_choice"] = vFn
+
 	vrhInsideStaticRouteChoice := v.InsideStaticRouteChoiceValidationRuleHandler
 	rulesInsideStaticRouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -756,12 +992,25 @@ var DefaultAzureVnetIngressEgressGwARReplaceTypeValidator = func() *ValidateAzur
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARReplaceType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_outside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_inside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
+
+	v.FldValidators["hub_choice.hub"] = AzureHubVnetTypeValidator().Validate
 
 	v.FldValidators["inside_static_route_choice.inside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
@@ -1147,6 +1396,14 @@ func (v *ValidateAzureVnetIngressEgressGwARType) GlobalNetworkChoiceValidationRu
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetIngressEgressGwARType) HubChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hub_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressEgressGwARType) InsideStaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1334,6 +1591,42 @@ func (v *ValidateAzureVnetIngressEgressGwARType) Validate(ctx context.Context, p
 			vOpts := append(opts,
 				db.WithValidateField("global_network_choice"),
 				db.WithValidateField("global_network_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["hub_choice"]; exists {
+		val := m.GetHubChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hub_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHubChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NotHub:
+		if fv, exists := v.FldValidators["hub_choice.not_hub"]; exists {
+			val := m.GetHubChoice().(*AzureVnetIngressEgressGwARType_NotHub).NotHub
+			vOpts := append(opts,
+				db.WithValidateField("hub_choice"),
+				db.WithValidateField("not_hub"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARType_Hub:
+		if fv, exists := v.FldValidators["hub_choice.hub"]; exists {
+			val := m.GetHubChoice().(*AzureVnetIngressEgressGwARType_Hub).Hub
+			vOpts := append(opts,
+				db.WithValidateField("hub_choice"),
+				db.WithValidateField("hub"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1552,6 +1845,17 @@ var DefaultAzureVnetIngressEgressGwARTypeValidator = func() *ValidateAzureVnetIn
 	}
 	v.FldValidators["global_network_choice"] = vFn
 
+	vrhHubChoice := v.HubChoiceValidationRuleHandler
+	rulesHubChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhHubChoice(rulesHubChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARType.hub_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hub_choice"] = vFn
+
 	vrhInsideStaticRouteChoice := v.InsideStaticRouteChoiceValidationRuleHandler
 	rulesInsideStaticRouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1615,6 +1919,8 @@ var DefaultAzureVnetIngressEgressGwARTypeValidator = func() *ValidateAzureVnetIn
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
+
+	v.FldValidators["hub_choice.hub"] = AzureHubVnetTypeValidator().Validate
 
 	v.FldValidators["inside_static_route_choice.inside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
@@ -2004,6 +2310,14 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) GlobalNetworkChoiceValidat
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetIngressEgressGwReplaceType) HubChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hub_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressEgressGwReplaceType) InsideStaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2024,6 +2338,14 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) OutsideStaticRouteChoiceVa
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwReplaceType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
 	}
 	return validatorFn, nil
 }
@@ -2172,6 +2494,42 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["hub_choice"]; exists {
+		val := m.GetHubChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hub_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHubChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NotHub:
+		if fv, exists := v.FldValidators["hub_choice.not_hub"]; exists {
+			val := m.GetHubChoice().(*AzureVnetIngressEgressGwReplaceType_NotHub).NotHub
+			vOpts := append(opts,
+				db.WithValidateField("hub_choice"),
+				db.WithValidateField("not_hub"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwReplaceType_Hub:
+		if fv, exists := v.FldValidators["hub_choice.hub"]; exists {
+			val := m.GetHubChoice().(*AzureVnetIngressEgressGwReplaceType_Hub).Hub
+			vOpts := append(opts,
+				db.WithValidateField("hub_choice"),
+				db.WithValidateField("hub"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_static_route_choice"]; exists {
 		val := m.GetInsideStaticRouteChoice()
 		vOpts := append(opts,
@@ -2280,6 +2638,42 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -2328,6 +2722,17 @@ var DefaultAzureVnetIngressEgressGwReplaceTypeValidator = func() *ValidateAzureV
 	}
 	v.FldValidators["global_network_choice"] = vFn
 
+	vrhHubChoice := v.HubChoiceValidationRuleHandler
+	rulesHubChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhHubChoice(rulesHubChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwReplaceType.hub_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hub_choice"] = vFn
+
 	vrhInsideStaticRouteChoice := v.InsideStaticRouteChoiceValidationRuleHandler
 	rulesInsideStaticRouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2361,12 +2766,25 @@ var DefaultAzureVnetIngressEgressGwReplaceTypeValidator = func() *ValidateAzureV
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwReplaceType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_outside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_inside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
+
+	v.FldValidators["hub_choice.hub"] = AzureHubVnetTypeValidator().Validate
 
 	v.FldValidators["inside_static_route_choice.inside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
@@ -2752,6 +3170,14 @@ func (v *ValidateAzureVnetIngressEgressGwType) GlobalNetworkChoiceValidationRule
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetIngressEgressGwType) HubChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hub_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressEgressGwType) InsideStaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2995,6 +3421,42 @@ func (v *ValidateAzureVnetIngressEgressGwType) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["hub_choice"]; exists {
+		val := m.GetHubChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hub_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHubChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NotHub:
+		if fv, exists := v.FldValidators["hub_choice.not_hub"]; exists {
+			val := m.GetHubChoice().(*AzureVnetIngressEgressGwType_NotHub).NotHub
+			vOpts := append(opts,
+				db.WithValidateField("hub_choice"),
+				db.WithValidateField("not_hub"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwType_Hub:
+		if fv, exists := v.FldValidators["hub_choice.hub"]; exists {
+			val := m.GetHubChoice().(*AzureVnetIngressEgressGwType_Hub).Hub
+			vOpts := append(opts,
+				db.WithValidateField("hub_choice"),
+				db.WithValidateField("hub"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_static_route_choice"]; exists {
 		val := m.GetInsideStaticRouteChoice()
 		vOpts := append(opts,
@@ -3196,6 +3658,17 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 	}
 	v.FldValidators["global_network_choice"] = vFn
 
+	vrhHubChoice := v.HubChoiceValidationRuleHandler
+	rulesHubChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhHubChoice(rulesHubChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwType.hub_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hub_choice"] = vFn
+
 	vrhInsideStaticRouteChoice := v.InsideStaticRouteChoiceValidationRuleHandler
 	rulesInsideStaticRouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3270,6 +3743,8 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
+
+	v.FldValidators["hub_choice.hub"] = AzureHubVnetTypeValidator().Validate
 
 	v.FldValidators["inside_static_route_choice.inside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
@@ -4251,6 +4726,14 @@ func (v *ValidateAzureVnetVoltstackClusterARReplaceType) OutsideStaticRouteChoic
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetVoltstackClusterARReplaceType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetVoltstackClusterARReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AzureVnetVoltstackClusterARReplaceType)
 	if !ok {
@@ -4456,6 +4939,42 @@ func (v *ValidateAzureVnetVoltstackClusterARReplaceType) Validate(ctx context.Co
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -4525,6 +5044,17 @@ var DefaultAzureVnetVoltstackClusterARReplaceTypeValidator = func() *ValidateAzu
 		panic(errMsg)
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
+
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterARReplaceType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5753,6 +6283,14 @@ func (v *ValidateAzureVnetVoltstackClusterReplaceType) OutsideStaticRouteChoiceV
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetVoltstackClusterReplaceType) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetVoltstackClusterReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AzureVnetVoltstackClusterReplaceType)
 	if !ok {
@@ -5958,6 +6496,42 @@ func (v *ValidateAzureVnetVoltstackClusterReplaceType) Validate(ctx context.Cont
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -6027,6 +6601,17 @@ var DefaultAzureVnetVoltstackClusterReplaceTypeValidator = func() *ValidateAzure
 		panic(errMsg)
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
+
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterReplaceType.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -7102,10 +7687,6 @@ func (m *CreateSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return []db.DRefInfo{dri}, nil
 
-	case *CreateSpecType_Assisted:
-
-		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -7139,8 +7720,6 @@ func (m *CreateSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interf
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
-	case *CreateSpecType_Assisted:
 
 	}
 
@@ -7278,6 +7857,14 @@ func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateCreateSpecType) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -7489,6 +8076,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *CreateSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*CreateSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*CreateSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -7515,17 +8138,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("deployment"),
 				db.WithValidateField("azure_cred"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_Assisted:
-		if fv, exists := v.FldValidators["deployment.assisted"]; exists {
-			val := m.GetDeployment().(*CreateSpecType_Assisted).Assisted
-			vOpts := append(opts,
-				db.WithValidateField("deployment"),
-				db.WithValidateField("assisted"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -7819,6 +8431,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8000,6 +8623,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["deployment.azure_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -8314,6 +8939,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8579,6 +9212,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *GetSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GetSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GetSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -8930,6 +9599,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9145,6 +9825,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["deployment.azure_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -9565,6 +10247,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -9834,6 +10524,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *GlobalSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GlobalSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GlobalSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cloud_site_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cloud_site_info"))
@@ -10000,6 +10726,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("resource_group"))
 		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
+		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -10217,6 +10952,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -10432,6 +11178,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
+
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["deployment.azure_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -10681,6 +11429,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -10749,6 +11505,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *ReplaceSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*ReplaceSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*ReplaceSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -10940,6 +11732,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -11008,6 +11811,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
+
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwReplaceTypeValidator().Validate
@@ -11022,6 +11827,149 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VnetPeeringType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VnetPeeringType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VnetPeeringType) DeepCopy() *VnetPeeringType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VnetPeeringType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VnetPeeringType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VnetPeeringType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VnetPeeringTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVnetPeeringType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVnetPeeringType) RoutingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for routing_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVnetPeeringType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VnetPeeringType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VnetPeeringType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["routing_choice"]; exists {
+		val := m.GetRoutingChoice()
+		vOpts := append(opts,
+			db.WithValidateField("routing_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRoutingChoice().(type) {
+	case *VnetPeeringType_Auto:
+		if fv, exists := v.FldValidators["routing_choice.auto"]; exists {
+			val := m.GetRoutingChoice().(*VnetPeeringType_Auto).Auto
+			vOpts := append(opts,
+				db.WithValidateField("routing_choice"),
+				db.WithValidateField("auto"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VnetPeeringType_Manual:
+		if fv, exists := v.FldValidators["routing_choice.manual"]; exists {
+			val := m.GetRoutingChoice().(*VnetPeeringType_Manual).Manual
+			vOpts := append(opts,
+				db.WithValidateField("routing_choice"),
+				db.WithValidateField("manual"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet"))
+		if err := fv(ctx, m.GetVnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVnetPeeringTypeValidator = func() *ValidateVnetPeeringType {
+	v := &ValidateVnetPeeringType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRoutingChoice := v.RoutingChoiceValidationRuleHandler
+	rulesRoutingChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRoutingChoice(rulesRoutingChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VnetPeeringType.routing_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["routing_choice"] = vFn
+
+	v.FldValidators["vnet"] = ves_io_schema_views.AzureVnetTypeValidator().Validate
+
+	return v
+}()
+
+func VnetPeeringTypeValidator() db.Validator {
+	return DefaultVnetPeeringTypeValidator
 }
 
 // create setters in AzureVnetIngressEgressGwARReplaceType from AzureVnetIngressEgressGwARType for oneof fields
@@ -11142,6 +12090,41 @@ func (r *AzureVnetIngressEgressGwARReplaceType) GetGlobalNetworkChoiceFromAzureV
 }
 
 // create setters in AzureVnetIngressEgressGwARReplaceType from AzureVnetIngressEgressGwARType for oneof fields
+func (r *AzureVnetIngressEgressGwARReplaceType) SetHubChoiceToAzureVnetIngressEgressGwARType(o *AzureVnetIngressEgressGwARType) error {
+	switch of := r.HubChoice.(type) {
+	case nil:
+		o.HubChoice = nil
+
+	case *AzureVnetIngressEgressGwARReplaceType_Hub:
+		o.HubChoice = &AzureVnetIngressEgressGwARType_Hub{Hub: of.Hub}
+
+	case *AzureVnetIngressEgressGwARReplaceType_NotHub:
+		o.HubChoice = &AzureVnetIngressEgressGwARType_NotHub{NotHub: of.NotHub}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AzureVnetIngressEgressGwARReplaceType) GetHubChoiceFromAzureVnetIngressEgressGwARType(o *AzureVnetIngressEgressGwARType) error {
+	switch of := o.HubChoice.(type) {
+	case nil:
+		r.HubChoice = nil
+
+	case *AzureVnetIngressEgressGwARType_Hub:
+		r.HubChoice = &AzureVnetIngressEgressGwARReplaceType_Hub{Hub: of.Hub}
+
+	case *AzureVnetIngressEgressGwARType_NotHub:
+		r.HubChoice = &AzureVnetIngressEgressGwARReplaceType_NotHub{NotHub: of.NotHub}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in AzureVnetIngressEgressGwARReplaceType from AzureVnetIngressEgressGwARType for oneof fields
 func (r *AzureVnetIngressEgressGwARReplaceType) SetInsideStaticRouteChoiceToAzureVnetIngressEgressGwARType(o *AzureVnetIngressEgressGwARType) error {
 	switch of := r.InsideStaticRouteChoice.(type) {
 	case nil:
@@ -11246,30 +12229,86 @@ func (r *AzureVnetIngressEgressGwARReplaceType) GetOutsideStaticRouteChoiceFromA
 	return nil
 }
 
-func (m *AzureVnetIngressEgressGwARReplaceType) FromAzureVnetIngressEgressGwARType(f *AzureVnetIngressEgressGwARType) {
+// create setters in AzureVnetIngressEgressGwARReplaceType from AzureVnetIngressEgressGwARType for oneof fields
+func (r *AzureVnetIngressEgressGwARReplaceType) SetSiteMeshGroupChoiceToAzureVnetIngressEgressGwARType(o *AzureVnetIngressEgressGwARType) error {
+	switch of := r.SiteMeshGroupChoice.(type) {
+	case nil:
+		o.SiteMeshGroupChoice = nil
+
+	case *AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp:
+		o.SiteMeshGroupChoice = &AzureVnetIngressEgressGwARType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp:
+		o.SiteMeshGroupChoice = &AzureVnetIngressEgressGwARType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AzureVnetIngressEgressGwARReplaceType) GetSiteMeshGroupChoiceFromAzureVnetIngressEgressGwARType(o *AzureVnetIngressEgressGwARType) error {
+	switch of := o.SiteMeshGroupChoice.(type) {
+	case nil:
+		r.SiteMeshGroupChoice = nil
+
+	case *AzureVnetIngressEgressGwARType_SmConnectionPublicIp:
+		r.SiteMeshGroupChoice = &AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AzureVnetIngressEgressGwARType_SmConnectionPvtIp:
+		r.SiteMeshGroupChoice = &AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) fromAzureVnetIngressEgressGwARType(f *AzureVnetIngressEgressGwARType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.GetDcClusterGroupChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetForwardProxyChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetGlobalNetworkChoiceFromAzureVnetIngressEgressGwARType(f)
+	m.GetHubChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetInsideStaticRouteChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetOutsideStaticRouteChoiceFromAzureVnetIngressEgressGwARType(f)
+	m.GetSiteMeshGroupChoiceFromAzureVnetIngressEgressGwARType(f)
 }
 
-func (m *AzureVnetIngressEgressGwARReplaceType) ToAzureVnetIngressEgressGwARType(f *AzureVnetIngressEgressGwARType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *AzureVnetIngressEgressGwARReplaceType) FromAzureVnetIngressEgressGwARType(f *AzureVnetIngressEgressGwARType) {
+	m.fromAzureVnetIngressEgressGwARType(f, true)
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) FromAzureVnetIngressEgressGwARTypeWithoutDeepCopy(f *AzureVnetIngressEgressGwARType) {
+	m.fromAzureVnetIngressEgressGwARType(f, false)
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) toAzureVnetIngressEgressGwARType(f *AzureVnetIngressEgressGwARType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetDcClusterGroupChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetForwardProxyChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetIngressEgressGwARType(f)
+	m1.SetHubChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetInsideStaticRouteChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetOutsideStaticRouteChoiceToAzureVnetIngressEgressGwARType(f)
+	m1.SetSiteMeshGroupChoiceToAzureVnetIngressEgressGwARType(f)
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) ToAzureVnetIngressEgressGwARType(f *AzureVnetIngressEgressGwARType) {
+	m.toAzureVnetIngressEgressGwARType(f, true)
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) ToAzureVnetIngressEgressGwARTypeWithoutDeepCopy(f *AzureVnetIngressEgressGwARType) {
+	m.toAzureVnetIngressEgressGwARType(f, false)
 }
 
 // create setters in AzureVnetIngressEgressGwReplaceType from AzureVnetIngressEgressGwType for oneof fields
@@ -11390,6 +12429,41 @@ func (r *AzureVnetIngressEgressGwReplaceType) GetGlobalNetworkChoiceFromAzureVne
 }
 
 // create setters in AzureVnetIngressEgressGwReplaceType from AzureVnetIngressEgressGwType for oneof fields
+func (r *AzureVnetIngressEgressGwReplaceType) SetHubChoiceToAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
+	switch of := r.HubChoice.(type) {
+	case nil:
+		o.HubChoice = nil
+
+	case *AzureVnetIngressEgressGwReplaceType_Hub:
+		o.HubChoice = &AzureVnetIngressEgressGwType_Hub{Hub: of.Hub}
+
+	case *AzureVnetIngressEgressGwReplaceType_NotHub:
+		o.HubChoice = &AzureVnetIngressEgressGwType_NotHub{NotHub: of.NotHub}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AzureVnetIngressEgressGwReplaceType) GetHubChoiceFromAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
+	switch of := o.HubChoice.(type) {
+	case nil:
+		r.HubChoice = nil
+
+	case *AzureVnetIngressEgressGwType_Hub:
+		r.HubChoice = &AzureVnetIngressEgressGwReplaceType_Hub{Hub: of.Hub}
+
+	case *AzureVnetIngressEgressGwType_NotHub:
+		r.HubChoice = &AzureVnetIngressEgressGwReplaceType_NotHub{NotHub: of.NotHub}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in AzureVnetIngressEgressGwReplaceType from AzureVnetIngressEgressGwType for oneof fields
 func (r *AzureVnetIngressEgressGwReplaceType) SetInsideStaticRouteChoiceToAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
 	switch of := r.InsideStaticRouteChoice.(type) {
 	case nil:
@@ -11494,58 +12568,148 @@ func (r *AzureVnetIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceFromAzu
 	return nil
 }
 
-func (m *AzureVnetIngressEgressGwReplaceType) FromAzureVnetIngressEgressGwType(f *AzureVnetIngressEgressGwType) {
+// create setters in AzureVnetIngressEgressGwReplaceType from AzureVnetIngressEgressGwType for oneof fields
+func (r *AzureVnetIngressEgressGwReplaceType) SetSiteMeshGroupChoiceToAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
+	switch of := r.SiteMeshGroupChoice.(type) {
+	case nil:
+		o.SiteMeshGroupChoice = nil
+
+	case *AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp:
+		o.SiteMeshGroupChoice = &AzureVnetIngressEgressGwType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp:
+		o.SiteMeshGroupChoice = &AzureVnetIngressEgressGwType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AzureVnetIngressEgressGwReplaceType) GetSiteMeshGroupChoiceFromAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
+	switch of := o.SiteMeshGroupChoice.(type) {
+	case nil:
+		r.SiteMeshGroupChoice = nil
+
+	case *AzureVnetIngressEgressGwType_SmConnectionPublicIp:
+		r.SiteMeshGroupChoice = &AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AzureVnetIngressEgressGwType_SmConnectionPvtIp:
+		r.SiteMeshGroupChoice = &AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) fromAzureVnetIngressEgressGwType(f *AzureVnetIngressEgressGwType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.GetDcClusterGroupChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetForwardProxyChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetGlobalNetworkChoiceFromAzureVnetIngressEgressGwType(f)
+	m.GetHubChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetInsideStaticRouteChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetOutsideStaticRouteChoiceFromAzureVnetIngressEgressGwType(f)
+	m.GetSiteMeshGroupChoiceFromAzureVnetIngressEgressGwType(f)
 }
 
-func (m *AzureVnetIngressEgressGwReplaceType) ToAzureVnetIngressEgressGwType(f *AzureVnetIngressEgressGwType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *AzureVnetIngressEgressGwReplaceType) FromAzureVnetIngressEgressGwType(f *AzureVnetIngressEgressGwType) {
+	m.fromAzureVnetIngressEgressGwType(f, true)
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) FromAzureVnetIngressEgressGwTypeWithoutDeepCopy(f *AzureVnetIngressEgressGwType) {
+	m.fromAzureVnetIngressEgressGwType(f, false)
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) toAzureVnetIngressEgressGwType(f *AzureVnetIngressEgressGwType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetDcClusterGroupChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetForwardProxyChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetIngressEgressGwType(f)
+	m1.SetHubChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetInsideStaticRouteChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetOutsideStaticRouteChoiceToAzureVnetIngressEgressGwType(f)
+	m1.SetSiteMeshGroupChoiceToAzureVnetIngressEgressGwType(f)
 }
 
-func (m *AzureVnetIngressGwARReplaceType) FromAzureVnetIngressGwARType(f *AzureVnetIngressGwARType) {
+func (m *AzureVnetIngressEgressGwReplaceType) ToAzureVnetIngressEgressGwType(f *AzureVnetIngressEgressGwType) {
+	m.toAzureVnetIngressEgressGwType(f, true)
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) ToAzureVnetIngressEgressGwTypeWithoutDeepCopy(f *AzureVnetIngressEgressGwType) {
+	m.toAzureVnetIngressEgressGwType(f, false)
+}
+
+func (m *AzureVnetIngressGwARReplaceType) fromAzureVnetIngressGwARType(f *AzureVnetIngressGwARType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 }
 
-func (m *AzureVnetIngressGwARReplaceType) ToAzureVnetIngressGwARType(f *AzureVnetIngressGwARType) {
-	m1 := m.DeepCopy()
+func (m *AzureVnetIngressGwARReplaceType) FromAzureVnetIngressGwARType(f *AzureVnetIngressGwARType) {
+	m.fromAzureVnetIngressGwARType(f, true)
+}
+
+func (m *AzureVnetIngressGwARReplaceType) FromAzureVnetIngressGwARTypeWithoutDeepCopy(f *AzureVnetIngressGwARType) {
+	m.fromAzureVnetIngressGwARType(f, false)
+}
+
+func (m *AzureVnetIngressGwARReplaceType) toAzureVnetIngressGwARType(f *AzureVnetIngressGwARType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
 	_ = m1
+
+}
+
+func (m *AzureVnetIngressGwARReplaceType) ToAzureVnetIngressGwARType(f *AzureVnetIngressGwARType) {
+	m.toAzureVnetIngressGwARType(f, true)
+}
+
+func (m *AzureVnetIngressGwARReplaceType) ToAzureVnetIngressGwARTypeWithoutDeepCopy(f *AzureVnetIngressGwARType) {
+	m.toAzureVnetIngressGwARType(f, false)
+}
+
+func (m *AzureVnetIngressGwReplaceType) fromAzureVnetIngressGwType(f *AzureVnetIngressGwType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 }
 
 func (m *AzureVnetIngressGwReplaceType) FromAzureVnetIngressGwType(f *AzureVnetIngressGwType) {
-	if f == nil {
-		return
+	m.fromAzureVnetIngressGwType(f, true)
+}
+
+func (m *AzureVnetIngressGwReplaceType) FromAzureVnetIngressGwTypeWithoutDeepCopy(f *AzureVnetIngressGwType) {
+	m.fromAzureVnetIngressGwType(f, false)
+}
+
+func (m *AzureVnetIngressGwReplaceType) toAzureVnetIngressGwType(f *AzureVnetIngressGwType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 }
 
 func (m *AzureVnetIngressGwReplaceType) ToAzureVnetIngressGwType(f *AzureVnetIngressGwType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
-	}
+	m.toAzureVnetIngressGwType(f, true)
+}
+
+func (m *AzureVnetIngressGwReplaceType) ToAzureVnetIngressGwTypeWithoutDeepCopy(f *AzureVnetIngressGwType) {
+	m.toAzureVnetIngressGwType(f, false)
 }
 
 // create setters in AzureVnetVoltstackClusterARReplaceType from AzureVnetVoltstackClusterARType for oneof fields
@@ -11729,7 +12893,42 @@ func (r *AzureVnetVoltstackClusterARReplaceType) GetOutsideStaticRouteChoiceFrom
 	return nil
 }
 
-func (m *AzureVnetVoltstackClusterARReplaceType) FromAzureVnetVoltstackClusterARType(f *AzureVnetVoltstackClusterARType) {
+// create setters in AzureVnetVoltstackClusterARReplaceType from AzureVnetVoltstackClusterARType for oneof fields
+func (r *AzureVnetVoltstackClusterARReplaceType) SetSiteMeshGroupChoiceToAzureVnetVoltstackClusterARType(o *AzureVnetVoltstackClusterARType) error {
+	switch of := r.SiteMeshGroupChoice.(type) {
+	case nil:
+		o.SiteMeshGroupChoice = nil
+
+	case *AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp:
+		o.SiteMeshGroupChoice = &AzureVnetVoltstackClusterARType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp:
+		o.SiteMeshGroupChoice = &AzureVnetVoltstackClusterARType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AzureVnetVoltstackClusterARReplaceType) GetSiteMeshGroupChoiceFromAzureVnetVoltstackClusterARType(o *AzureVnetVoltstackClusterARType) error {
+	switch of := o.SiteMeshGroupChoice.(type) {
+	case nil:
+		r.SiteMeshGroupChoice = nil
+
+	case *AzureVnetVoltstackClusterARType_SmConnectionPublicIp:
+		r.SiteMeshGroupChoice = &AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AzureVnetVoltstackClusterARType_SmConnectionPvtIp:
+		r.SiteMeshGroupChoice = &AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType) fromAzureVnetVoltstackClusterARType(f *AzureVnetVoltstackClusterARType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -11738,19 +12937,38 @@ func (m *AzureVnetVoltstackClusterARReplaceType) FromAzureVnetVoltstackClusterAR
 	m.GetGlobalNetworkChoiceFromAzureVnetVoltstackClusterARType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetVoltstackClusterARType(f)
 	m.GetOutsideStaticRouteChoiceFromAzureVnetVoltstackClusterARType(f)
+	m.GetSiteMeshGroupChoiceFromAzureVnetVoltstackClusterARType(f)
 }
 
-func (m *AzureVnetVoltstackClusterARReplaceType) ToAzureVnetVoltstackClusterARType(f *AzureVnetVoltstackClusterARType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *AzureVnetVoltstackClusterARReplaceType) FromAzureVnetVoltstackClusterARType(f *AzureVnetVoltstackClusterARType) {
+	m.fromAzureVnetVoltstackClusterARType(f, true)
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType) FromAzureVnetVoltstackClusterARTypeWithoutDeepCopy(f *AzureVnetVoltstackClusterARType) {
+	m.fromAzureVnetVoltstackClusterARType(f, false)
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType) toAzureVnetVoltstackClusterARType(f *AzureVnetVoltstackClusterARType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetDcClusterGroupChoiceToAzureVnetVoltstackClusterARType(f)
 	m1.SetForwardProxyChoiceToAzureVnetVoltstackClusterARType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetVoltstackClusterARType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetVoltstackClusterARType(f)
 	m1.SetOutsideStaticRouteChoiceToAzureVnetVoltstackClusterARType(f)
+	m1.SetSiteMeshGroupChoiceToAzureVnetVoltstackClusterARType(f)
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType) ToAzureVnetVoltstackClusterARType(f *AzureVnetVoltstackClusterARType) {
+	m.toAzureVnetVoltstackClusterARType(f, true)
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType) ToAzureVnetVoltstackClusterARTypeWithoutDeepCopy(f *AzureVnetVoltstackClusterARType) {
+	m.toAzureVnetVoltstackClusterARType(f, false)
 }
 
 // create setters in AzureVnetVoltstackClusterReplaceType from AzureVnetVoltstackClusterType for oneof fields
@@ -11934,7 +13152,42 @@ func (r *AzureVnetVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceFromAz
 	return nil
 }
 
-func (m *AzureVnetVoltstackClusterReplaceType) FromAzureVnetVoltstackClusterType(f *AzureVnetVoltstackClusterType) {
+// create setters in AzureVnetVoltstackClusterReplaceType from AzureVnetVoltstackClusterType for oneof fields
+func (r *AzureVnetVoltstackClusterReplaceType) SetSiteMeshGroupChoiceToAzureVnetVoltstackClusterType(o *AzureVnetVoltstackClusterType) error {
+	switch of := r.SiteMeshGroupChoice.(type) {
+	case nil:
+		o.SiteMeshGroupChoice = nil
+
+	case *AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp:
+		o.SiteMeshGroupChoice = &AzureVnetVoltstackClusterType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp:
+		o.SiteMeshGroupChoice = &AzureVnetVoltstackClusterType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AzureVnetVoltstackClusterReplaceType) GetSiteMeshGroupChoiceFromAzureVnetVoltstackClusterType(o *AzureVnetVoltstackClusterType) error {
+	switch of := o.SiteMeshGroupChoice.(type) {
+	case nil:
+		r.SiteMeshGroupChoice = nil
+
+	case *AzureVnetVoltstackClusterType_SmConnectionPublicIp:
+		r.SiteMeshGroupChoice = &AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp{SmConnectionPublicIp: of.SmConnectionPublicIp}
+
+	case *AzureVnetVoltstackClusterType_SmConnectionPvtIp:
+		r.SiteMeshGroupChoice = &AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp{SmConnectionPvtIp: of.SmConnectionPvtIp}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType) fromAzureVnetVoltstackClusterType(f *AzureVnetVoltstackClusterType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -11943,19 +13196,73 @@ func (m *AzureVnetVoltstackClusterReplaceType) FromAzureVnetVoltstackClusterType
 	m.GetGlobalNetworkChoiceFromAzureVnetVoltstackClusterType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetVoltstackClusterType(f)
 	m.GetOutsideStaticRouteChoiceFromAzureVnetVoltstackClusterType(f)
+	m.GetSiteMeshGroupChoiceFromAzureVnetVoltstackClusterType(f)
 }
 
-func (m *AzureVnetVoltstackClusterReplaceType) ToAzureVnetVoltstackClusterType(f *AzureVnetVoltstackClusterType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *AzureVnetVoltstackClusterReplaceType) FromAzureVnetVoltstackClusterType(f *AzureVnetVoltstackClusterType) {
+	m.fromAzureVnetVoltstackClusterType(f, true)
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType) FromAzureVnetVoltstackClusterTypeWithoutDeepCopy(f *AzureVnetVoltstackClusterType) {
+	m.fromAzureVnetVoltstackClusterType(f, false)
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType) toAzureVnetVoltstackClusterType(f *AzureVnetVoltstackClusterType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetDcClusterGroupChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetForwardProxyChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetOutsideStaticRouteChoiceToAzureVnetVoltstackClusterType(f)
+	m1.SetSiteMeshGroupChoiceToAzureVnetVoltstackClusterType(f)
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType) ToAzureVnetVoltstackClusterType(f *AzureVnetVoltstackClusterType) {
+	m.toAzureVnetVoltstackClusterType(f, true)
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType) ToAzureVnetVoltstackClusterTypeWithoutDeepCopy(f *AzureVnetVoltstackClusterType) {
+	m.toAzureVnetVoltstackClusterType(f, false)
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *CreateSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *CreateSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &CreateSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &CreateSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -11963,9 +13270,6 @@ func (r *CreateSpecType) SetDeploymentToGlobalSpecType(o *GlobalSpecType) error 
 	switch of := r.Deployment.(type) {
 	case nil:
 		o.Deployment = nil
-
-	case *CreateSpecType_Assisted:
-		o.Deployment = &GlobalSpecType_Assisted{Assisted: of.Assisted}
 
 	case *CreateSpecType_AzureCred:
 		o.Deployment = &GlobalSpecType_AzureCred{AzureCred: of.AzureCred}
@@ -11980,9 +13284,6 @@ func (r *CreateSpecType) GetDeploymentFromGlobalSpecType(o *GlobalSpecType) erro
 	switch of := o.Deployment.(type) {
 	case nil:
 		r.Deployment = nil
-
-	case *GlobalSpecType_Assisted:
-		r.Deployment = &CreateSpecType_Assisted{Assisted: of.Assisted}
 
 	case *GlobalSpecType_AzureCred:
 		r.Deployment = &CreateSpecType_AzureCred{AzureCred: of.AzureCred}
@@ -12163,11 +13464,12 @@ func (r *CreateSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) err
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
@@ -12184,13 +13486,23 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
@@ -12205,6 +13517,49 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Tags = m1.Tags
 	f.Vnet = m1.Vnet
 	m1.SetWorkerNodesToGlobalSpecType(f)
+}
+
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *GetSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GetSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &GetSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &GetSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -12412,11 +13767,12 @@ func (r *GetSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) error 
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
@@ -12435,13 +13791,23 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
@@ -12458,6 +13824,49 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Vnet = m1.Vnet
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	m1.SetWorkerNodesToGlobalSpecType(f)
+}
+
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *ReplaceSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *ReplaceSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &ReplaceSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &ReplaceSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -12507,7 +13916,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AzureVnetIngressEgressGwType{}
 		}
-		of.IngressEgressGw.ToAzureVnetIngressEgressGwType(f1)
+		of.IngressEgressGw.ToAzureVnetIngressEgressGwTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_IngressEgressGw{IngressEgressGw: f1}
 
 	case *ReplaceSpecType_IngressEgressGwAr:
@@ -12516,7 +13925,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AzureVnetIngressEgressGwARType{}
 		}
-		of.IngressEgressGwAr.ToAzureVnetIngressEgressGwARType(f1)
+		of.IngressEgressGwAr.ToAzureVnetIngressEgressGwARTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_IngressEgressGwAr{IngressEgressGwAr: f1}
 
 	case *ReplaceSpecType_IngressGw:
@@ -12525,7 +13934,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AzureVnetIngressGwType{}
 		}
-		of.IngressGw.ToAzureVnetIngressGwType(f1)
+		of.IngressGw.ToAzureVnetIngressGwTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_IngressGw{IngressGw: f1}
 
 	case *ReplaceSpecType_IngressGwAr:
@@ -12534,7 +13943,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AzureVnetIngressGwARType{}
 		}
-		of.IngressGwAr.ToAzureVnetIngressGwARType(f1)
+		of.IngressGwAr.ToAzureVnetIngressGwARTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_IngressGwAr{IngressGwAr: f1}
 
 	case *ReplaceSpecType_VoltstackCluster:
@@ -12543,7 +13952,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AzureVnetVoltstackClusterType{}
 		}
-		of.VoltstackCluster.ToAzureVnetVoltstackClusterType(f1)
+		of.VoltstackCluster.ToAzureVnetVoltstackClusterTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_VoltstackCluster{VoltstackCluster: f1}
 
 	case *ReplaceSpecType_VoltstackClusterAr:
@@ -12552,7 +13961,7 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &AzureVnetVoltstackClusterARType{}
 		}
-		of.VoltstackClusterAr.ToAzureVnetVoltstackClusterARType(f1)
+		of.VoltstackClusterAr.ToAzureVnetVoltstackClusterARTypeWithoutDeepCopy(f1)
 		o.SiteType = &GlobalSpecType_VoltstackClusterAr{VoltstackClusterAr: f1}
 
 	default:
@@ -12569,37 +13978,37 @@ func (r *ReplaceSpecType) GetSiteTypeFromGlobalSpecType(o *GlobalSpecType) error
 	case *GlobalSpecType_IngressEgressGw:
 
 		f1 := &AzureVnetIngressEgressGwReplaceType{}
-		f1.FromAzureVnetIngressEgressGwType(of.IngressEgressGw)
+		f1.FromAzureVnetIngressEgressGwTypeWithoutDeepCopy(of.IngressEgressGw)
 		r.SiteType = &ReplaceSpecType_IngressEgressGw{IngressEgressGw: f1}
 
 	case *GlobalSpecType_IngressEgressGwAr:
 
 		f1 := &AzureVnetIngressEgressGwARReplaceType{}
-		f1.FromAzureVnetIngressEgressGwARType(of.IngressEgressGwAr)
+		f1.FromAzureVnetIngressEgressGwARTypeWithoutDeepCopy(of.IngressEgressGwAr)
 		r.SiteType = &ReplaceSpecType_IngressEgressGwAr{IngressEgressGwAr: f1}
 
 	case *GlobalSpecType_IngressGw:
 
 		f1 := &AzureVnetIngressGwReplaceType{}
-		f1.FromAzureVnetIngressGwType(of.IngressGw)
+		f1.FromAzureVnetIngressGwTypeWithoutDeepCopy(of.IngressGw)
 		r.SiteType = &ReplaceSpecType_IngressGw{IngressGw: f1}
 
 	case *GlobalSpecType_IngressGwAr:
 
 		f1 := &AzureVnetIngressGwARReplaceType{}
-		f1.FromAzureVnetIngressGwARType(of.IngressGwAr)
+		f1.FromAzureVnetIngressGwARTypeWithoutDeepCopy(of.IngressGwAr)
 		r.SiteType = &ReplaceSpecType_IngressGwAr{IngressGwAr: f1}
 
 	case *GlobalSpecType_VoltstackCluster:
 
 		f1 := &AzureVnetVoltstackClusterReplaceType{}
-		f1.FromAzureVnetVoltstackClusterType(of.VoltstackCluster)
+		f1.FromAzureVnetVoltstackClusterTypeWithoutDeepCopy(of.VoltstackCluster)
 		r.SiteType = &ReplaceSpecType_VoltstackCluster{VoltstackCluster: f1}
 
 	case *GlobalSpecType_VoltstackClusterAr:
 
 		f1 := &AzureVnetVoltstackClusterARReplaceType{}
-		f1.FromAzureVnetVoltstackClusterARType(of.VoltstackClusterAr)
+		f1.FromAzureVnetVoltstackClusterARTypeWithoutDeepCopy(of.VoltstackClusterAr)
 		r.SiteType = &ReplaceSpecType_VoltstackClusterAr{VoltstackClusterAr: f1}
 
 	default:
@@ -12649,26 +14058,45 @@ func (r *ReplaceSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) er
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	m1.SetSiteTypeToGlobalSpecType(f)
 	m1.SetWorkerNodesToGlobalSpecType(f)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

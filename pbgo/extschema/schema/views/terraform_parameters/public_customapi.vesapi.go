@@ -302,18 +302,46 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	return ccl
 }
 
-// Create CustomAPIInprocClient
+// Create customAPIInprocClient
 
 // INPROC Client (satisfying CustomAPIClient interface)
-type CustomAPIInprocClient struct {
+type customAPIInprocClient struct {
+	CustomAPIServer
+}
+
+func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	return c.CustomAPIServer.Get(ctx, in)
+}
+func (c *customAPIInprocClient) GetStatus(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetStatusResponse, error) {
+	return c.CustomAPIServer.GetStatus(ctx, in)
+}
+
+func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
+	return &customAPIInprocClient{CustomAPIServer: NewCustomAPIServer(svc)}
+}
+
+// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+}
+
+// Create customAPISrv
+
+// SERVER (satisfying CustomAPIServer interface)
+type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.CustomAPI")
+func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -321,7 +349,7 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.terraform_parameters.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.GetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -335,13 +363,13 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomAPI.Get"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomAPI.Get"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -354,15 +382,15 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.terraform_parameters.GetResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.GetResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) GetStatus(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetStatusResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.CustomAPI")
+func (s *customAPISrv) GetStatus(ctx context.Context, in *GetRequest) (*GetStatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -370,7 +398,7 @@ func (c *CustomAPIInprocClient) GetStatus(ctx context.Context, in *GetRequest, o
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.terraform_parameters.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.GetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -384,13 +412,13 @@ func (c *CustomAPIInprocClient) GetStatus(ctx context.Context, in *GetRequest, o
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -403,23 +431,13 @@ func (c *CustomAPIInprocClient) GetStatus(ctx context.Context, in *GetRequest, o
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.terraform_parameters.GetStatusResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.GetStatusResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
-	return &CustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
+	return &customAPISrv{svc: svc}
 }
 
 var CustomAPISwaggerJSON string = `{
@@ -702,6 +720,61 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "schemaConditionType": {
+            "type": "object",
+            "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
+            "title": "ConditionType",
+            "x-displayname": "Status Condition",
+            "x-ves-proto-message": "ves.io.schema.ConditionType",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "description": " Hostname of the instance of the site that sent the status",
+                    "title": "hostname",
+                    "x-displayname": "Hostname"
+                },
+                "last_update_time": {
+                    "type": "string",
+                    "description": " Last time the condition was updated",
+                    "title": "last_update_time",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "value"
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the service that sent the status",
+                    "title": "service name",
+                    "x-displayname": "Service Name"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
+                    "title": "type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
+                }
+            }
+        },
         "schemaStatusMetaType": {
             "type": "object",
             "description": "StatusMetaType is metadata that all status must have.",
@@ -969,6 +1042,15 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Apply Status",
                     "$ref": "#/definitions/terraform_parametersApplyStatus",
                     "x-displayname": "Apply Status"
+                },
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions reported by various components of the system",
+                    "title": "conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",

@@ -302,18 +302,46 @@ func NewUpgradeAPIRestClient(baseURL string, hc http.Client) server.CustomClient
 	return ccl
 }
 
-// Create UpgradeAPIInprocClient
+// Create upgradeAPIInprocClient
 
 // INPROC Client (satisfying UpgradeAPIClient interface)
-type UpgradeAPIInprocClient struct {
+type upgradeAPIInprocClient struct {
+	UpgradeAPIServer
+}
+
+func (c *upgradeAPIInprocClient) UpgradeOS(ctx context.Context, in *UpgradeOSRequest, opts ...grpc.CallOption) (*UpgradeOSResponse, error) {
+	return c.UpgradeAPIServer.UpgradeOS(ctx, in)
+}
+func (c *upgradeAPIInprocClient) UpgradeSW(ctx context.Context, in *UpgradeSWRequest, opts ...grpc.CallOption) (*UpgradeSWResponse, error) {
+	return c.UpgradeAPIServer.UpgradeSW(ctx, in)
+}
+
+func NewUpgradeAPIInprocClient(svc svcfw.Service) UpgradeAPIClient {
+	return &upgradeAPIInprocClient{UpgradeAPIServer: NewUpgradeAPIServer(svc)}
+}
+
+// RegisterGwUpgradeAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwUpgradeAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterUpgradeAPIHandlerClient(ctx, mux, NewUpgradeAPIInprocClient(s))
+}
+
+// Create upgradeAPISrv
+
+// SERVER (satisfying UpgradeAPIServer interface)
+type upgradeAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *UpgradeAPIInprocClient) UpgradeOS(ctx context.Context, in *UpgradeOSRequest, opts ...grpc.CallOption) (*UpgradeOSResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.UpgradeAPI")
+func (s *upgradeAPISrv) UpgradeOS(ctx context.Context, in *UpgradeOSRequest) (*UpgradeOSResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.UpgradeAPI")
 	cah, ok := ah.(UpgradeAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *UpgradeAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *UpgradeAPIServer", ah)
 	}
 
 	var (
@@ -321,7 +349,7 @@ func (c *UpgradeAPIInprocClient) UpgradeOS(ctx context.Context, in *UpgradeOSReq
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.UpgradeOSRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.UpgradeOSRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -335,13 +363,13 @@ func (c *UpgradeAPIInprocClient) UpgradeOS(ctx context.Context, in *UpgradeOSReq
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UpgradeAPI.UpgradeOS"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.UpgradeAPI.UpgradeOS"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -354,15 +382,15 @@ func (c *UpgradeAPIInprocClient) UpgradeOS(ctx context.Context, in *UpgradeOSReq
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.site.UpgradeOSResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.UpgradeOSResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *UpgradeAPIInprocClient) UpgradeSW(ctx context.Context, in *UpgradeSWRequest, opts ...grpc.CallOption) (*UpgradeSWResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.UpgradeAPI")
+func (s *upgradeAPISrv) UpgradeSW(ctx context.Context, in *UpgradeSWRequest) (*UpgradeSWResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.UpgradeAPI")
 	cah, ok := ah.(UpgradeAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *UpgradeAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *UpgradeAPIServer", ah)
 	}
 
 	var (
@@ -370,7 +398,7 @@ func (c *UpgradeAPIInprocClient) UpgradeSW(ctx context.Context, in *UpgradeSWReq
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.UpgradeSWRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.UpgradeSWRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -384,13 +412,13 @@ func (c *UpgradeAPIInprocClient) UpgradeSW(ctx context.Context, in *UpgradeSWReq
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UpgradeAPI.UpgradeSW"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.UpgradeAPI.UpgradeSW"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -403,23 +431,13 @@ func (c *UpgradeAPIInprocClient) UpgradeSW(ctx context.Context, in *UpgradeSWReq
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.site.UpgradeSWResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.UpgradeSWResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewUpgradeAPIInprocClient(svc svcfw.Service) UpgradeAPIClient {
-	return &UpgradeAPIInprocClient{svc: svc}
-}
-
-// RegisterGwUpgradeAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwUpgradeAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterUpgradeAPIHandlerClient(ctx, mux, NewUpgradeAPIInprocClient(s))
+func NewUpgradeAPIServer(svc svcfw.Service) UpgradeAPIServer {
+	return &upgradeAPISrv{svc: svc}
 }
 
 var UpgradeAPISwaggerJSON string = `{

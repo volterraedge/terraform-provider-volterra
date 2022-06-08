@@ -276,7 +276,7 @@ func (v *ValidateAssignRoleRequest) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("username"))
 		for idx, item := range m.GetUsername() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -692,7 +692,7 @@ func (v *ValidateCascadeDeleteResponse) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1193,7 +1193,7 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("billing_flags"))
 		for idx, item := range m.GetBillingFlags() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1268,7 +1268,7 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("feature_flags"))
 		for idx, item := range m.GetFeatureFlags() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1281,6 +1281,18 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["group_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("group_names"))
+		for idx, item := range m.GetGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1334,7 +1346,7 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
 		for idx, item := range m.GetNamespaceRoles() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1609,7 +1621,7 @@ func (v *ValidateListUserRoleResponse) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1782,7 +1794,7 @@ func (v *ValidateListUserRoleResponseItem) Validate(ctx context.Context, pm inte
 
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
 		for idx, item := range m.GetNamespaceRoles() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1901,7 +1913,7 @@ func (v *ValidateNamespacesRoleType) Validate(ctx context.Context, pm interface{
 
 		vOpts := append(opts, db.WithValidateField("namespaces"))
 		for idx, item := range m.GetNamespaces() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2275,16 +2287,6 @@ func (v *ValidateUserGroupRequest) UsernameValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
-func (v *ValidateUserGroupRequest) GroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for group_name")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateUserGroupRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*UserGroupRequest)
 	if !ok {
@@ -2299,11 +2301,14 @@ func (v *ValidateUserGroupRequest) Validate(ctx context.Context, pm interface{},
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["group_name"]; exists {
+	if fv, exists := v.FldValidators["group_names"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("group_name"))
-		if err := fv(ctx, m.GetGroupName(), vOpts...); err != nil {
-			return err
+		vOpts := append(opts, db.WithValidateField("group_names"))
+		for idx, item := range m.GetGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2344,22 +2349,89 @@ var DefaultUserGroupRequestValidator = func() *ValidateUserGroupRequest {
 	}
 	v.FldValidators["username"] = vFn
 
-	vrhGroupName := v.GroupNameValidationRuleHandler
-	rulesGroupName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhGroupName(rulesGroupName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for UserGroupRequest.group_name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["group_name"] = vFn
-
 	return v
 }()
 
 func UserGroupRequestValidator() db.Validator {
 	return DefaultUserGroupRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UserGroupResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UserGroupResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UserGroupResponse) DeepCopy() *UserGroupResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UserGroupResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UserGroupResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UserGroupResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UserGroupResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUserGroupResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUserGroupResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UserGroupResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UserGroupResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["error"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error"))
+		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUserGroupResponseValidator = func() *ValidateUserGroupResponse {
+	v := &ValidateUserGroupResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UserGroupResponseValidator() db.Validator {
+	return DefaultUserGroupResponseValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2465,11 +2537,11 @@ func (v *ValidateUserRoleRequest) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["groups"]; exists {
+	if fv, exists := v.FldValidators["group_names"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("groups"))
-		for idx, item := range m.GetGroups() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+		vOpts := append(opts, db.WithValidateField("group_names"))
+		for idx, item := range m.GetGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2517,7 +2589,7 @@ func (v *ValidateUserRoleRequest) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
 		for idx, item := range m.GetNamespaceRoles() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

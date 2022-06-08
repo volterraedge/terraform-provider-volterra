@@ -3674,7 +3674,7 @@ func (v *ValidateInitializersType) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("pending"))
 		for idx, item := range m.GetPending() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -5199,9 +5199,8 @@ var DefaultNamespaceRoleTypeValidator = func() *ValidateNamespaceRoleType {
 
 	vrhNamespace := v.NamespaceValidationRuleHandler
 	rulesNamespace := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "256",
-		"ves.io.schema.rules.string.ves_object_name": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
 	}
 	vFn, err = vrhNamespace(rulesNamespace)
 	if err != nil {
@@ -10275,7 +10274,7 @@ func (v *ValidateSystemObjectGetMetaType) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("finalizers"))
 		for idx, item := range m.GetFinalizers() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -10626,7 +10625,7 @@ func (v *ValidateSystemObjectMetaType) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("finalizers"))
 		for idx, item := range m.GetFinalizers() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -11726,7 +11725,7 @@ func (v *ValidateTlsParamsType) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("tls_certificates"))
 		for idx, item := range m.GetTlsCertificates() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -11886,7 +11885,7 @@ func (v *ValidateTlsValidationParamsType) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("verify_subject_alt_names"))
 		for idx, item := range m.GetVerifySubjectAltNames() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -14032,7 +14031,7 @@ func WingmanSecretInfoTypeValidator() db.Validator {
 	return DefaultWingmanSecretInfoTypeValidator
 }
 
-func (m *ObjectCreateMetaType) FromObjectMetaType(f *ObjectMetaType) {
+func (m *ObjectCreateMetaType) fromObjectMetaType(f *ObjectMetaType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -14042,49 +14041,83 @@ func (m *ObjectCreateMetaType) FromObjectMetaType(f *ObjectMetaType) {
 	m.Labels = f.GetLabels()
 	m.Name = f.GetName()
 	m.Namespace = f.GetNamespace()
+}
+
+func (m *ObjectCreateMetaType) FromObjectMetaType(f *ObjectMetaType) {
+	m.fromObjectMetaType(f, true)
+}
+
+func (m *ObjectCreateMetaType) FromObjectMetaTypeWithoutDeepCopy(f *ObjectMetaType) {
+	m.fromObjectMetaType(f, false)
+}
+
+func (m *ObjectCreateMetaType) toObjectMetaType(f *ObjectMetaType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	f.Annotations = m1.Annotations
+	f.Description = m1.Description
+	f.Disable = m1.Disable
+	f.Labels = m1.Labels
+	f.Name = m1.Name
+	f.Namespace = m1.Namespace
 }
 
 func (m *ObjectCreateMetaType) ToObjectMetaType(f *ObjectMetaType) {
-	m1 := m.DeepCopy()
-	_ = m1
+	m.toObjectMetaType(f, true)
+}
+
+func (m *ObjectCreateMetaType) ToObjectMetaTypeWithoutDeepCopy(f *ObjectMetaType) {
+	m.toObjectMetaType(f, false)
+}
+
+func (m *ObjectGetMetaType) fromObjectMetaType(f *ObjectMetaType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	f.Annotations = m1.Annotations
-	f.Description = m1.Description
-	f.Disable = m1.Disable
-	f.Labels = m1.Labels
-	f.Name = m1.Name
-	f.Namespace = m1.Namespace
+	m.Annotations = f.GetAnnotations()
+	m.Description = f.GetDescription()
+	m.Disable = f.GetDisable()
+	m.Labels = f.GetLabels()
+	m.Name = f.GetName()
+	m.Namespace = f.GetNamespace()
 }
 
 func (m *ObjectGetMetaType) FromObjectMetaType(f *ObjectMetaType) {
-	if f == nil {
-		return
+	m.fromObjectMetaType(f, true)
+}
+
+func (m *ObjectGetMetaType) FromObjectMetaTypeWithoutDeepCopy(f *ObjectMetaType) {
+	m.fromObjectMetaType(f, false)
+}
+
+func (m *ObjectGetMetaType) toObjectMetaType(f *ObjectMetaType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
-	m.Annotations = f.GetAnnotations()
-	m.Description = f.GetDescription()
-	m.Disable = f.GetDisable()
-	m.Labels = f.GetLabels()
-	m.Name = f.GetName()
-	m.Namespace = f.GetNamespace()
+	_ = m1
+
+	f.Annotations = m1.Annotations
+	f.Description = m1.Description
+	f.Disable = m1.Disable
+	f.Labels = m1.Labels
+	f.Name = m1.Name
+	f.Namespace = m1.Namespace
 }
 
 func (m *ObjectGetMetaType) ToObjectMetaType(f *ObjectMetaType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
-	}
-	f.Annotations = m1.Annotations
-	f.Description = m1.Description
-	f.Disable = m1.Disable
-	f.Labels = m1.Labels
-	f.Name = m1.Name
-	f.Namespace = m1.Namespace
+	m.toObjectMetaType(f, true)
 }
 
-func (m *ObjectReplaceMetaType) FromObjectMetaType(f *ObjectMetaType) {
+func (m *ObjectGetMetaType) ToObjectMetaTypeWithoutDeepCopy(f *ObjectMetaType) {
+	m.toObjectMetaType(f, false)
+}
+
+func (m *ObjectReplaceMetaType) fromObjectMetaType(f *ObjectMetaType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -14096,12 +14129,21 @@ func (m *ObjectReplaceMetaType) FromObjectMetaType(f *ObjectMetaType) {
 	m.Namespace = f.GetNamespace()
 }
 
-func (m *ObjectReplaceMetaType) ToObjectMetaType(f *ObjectMetaType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ObjectReplaceMetaType) FromObjectMetaType(f *ObjectMetaType) {
+	m.fromObjectMetaType(f, true)
+}
+
+func (m *ObjectReplaceMetaType) FromObjectMetaTypeWithoutDeepCopy(f *ObjectMetaType) {
+	m.fromObjectMetaType(f, false)
+}
+
+func (m *ObjectReplaceMetaType) toObjectMetaType(f *ObjectMetaType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Annotations = m1.Annotations
 	f.Description = m1.Description
 	f.Disable = m1.Disable
@@ -14110,7 +14152,15 @@ func (m *ObjectReplaceMetaType) ToObjectMetaType(f *ObjectMetaType) {
 	f.Namespace = m1.Namespace
 }
 
-func (m *SystemObjectGetMetaType) FromSystemObjectMetaType(f *SystemObjectMetaType) {
+func (m *ObjectReplaceMetaType) ToObjectMetaType(f *ObjectMetaType) {
+	m.toObjectMetaType(f, true)
+}
+
+func (m *ObjectReplaceMetaType) ToObjectMetaTypeWithoutDeepCopy(f *ObjectMetaType) {
+	m.toObjectMetaType(f, false)
+}
+
+func (m *SystemObjectGetMetaType) fromSystemObjectMetaType(f *SystemObjectMetaType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -14128,12 +14178,21 @@ func (m *SystemObjectGetMetaType) FromSystemObjectMetaType(f *SystemObjectMetaTy
 	m.Uid = f.GetUid()
 }
 
-func (m *SystemObjectGetMetaType) ToSystemObjectMetaType(f *SystemObjectMetaType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *SystemObjectGetMetaType) FromSystemObjectMetaType(f *SystemObjectMetaType) {
+	m.fromSystemObjectMetaType(f, true)
+}
+
+func (m *SystemObjectGetMetaType) FromSystemObjectMetaTypeWithoutDeepCopy(f *SystemObjectMetaType) {
+	m.fromSystemObjectMetaType(f, false)
+}
+
+func (m *SystemObjectGetMetaType) toSystemObjectMetaType(f *SystemObjectMetaType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.CreationTimestamp = m1.CreationTimestamp
 	f.CreatorClass = m1.CreatorClass
 	f.CreatorId = m1.CreatorId
@@ -14146,4 +14205,12 @@ func (m *SystemObjectGetMetaType) ToSystemObjectMetaType(f *SystemObjectMetaType
 	f.OwnerView = m1.OwnerView
 	f.Tenant = m1.Tenant
 	f.Uid = m1.Uid
+}
+
+func (m *SystemObjectGetMetaType) ToSystemObjectMetaType(f *SystemObjectMetaType) {
+	m.toSystemObjectMetaType(f, true)
+}
+
+func (m *SystemObjectGetMetaType) ToSystemObjectMetaTypeWithoutDeepCopy(f *SystemObjectMetaType) {
+	m.toSystemObjectMetaType(f, false)
 }

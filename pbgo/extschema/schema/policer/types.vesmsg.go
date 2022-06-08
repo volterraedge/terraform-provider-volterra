@@ -792,7 +792,7 @@ func SingleRateTwoColorTypeValidator() db.Validator {
 	return DefaultSingleRateTwoColorTypeValidator
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -800,43 +800,77 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.CommittedInformationRate = f.GetCommittedInformationRate()
 	m.PolicerMode = f.GetPolicerMode()
 	m.PolicerType = f.GetPolicerType()
+}
+
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	f.BurstSize = m1.BurstSize
+	f.CommittedInformationRate = m1.CommittedInformationRate
+	f.PolicerMode = m1.PolicerMode
+	f.PolicerType = m1.PolicerType
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	f.BurstSize = m1.BurstSize
-	f.CommittedInformationRate = m1.CommittedInformationRate
-	f.PolicerMode = m1.PolicerMode
-	f.PolicerType = m1.PolicerType
+	m.BurstSize = f.GetBurstSize()
+	m.CommittedInformationRate = f.GetCommittedInformationRate()
+	m.PolicerMode = f.GetPolicerMode()
+	m.PolicerType = f.GetPolicerType()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
-	if f == nil {
-		return
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
-	m.BurstSize = f.GetBurstSize()
-	m.CommittedInformationRate = f.GetCommittedInformationRate()
-	m.PolicerMode = f.GetPolicerMode()
-	m.PolicerType = f.GetPolicerType()
+	_ = m1
+
+	f.BurstSize = m1.BurstSize
+	f.CommittedInformationRate = m1.CommittedInformationRate
+	f.PolicerMode = m1.PolicerMode
+	f.PolicerType = m1.PolicerType
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
-	}
-	f.BurstSize = m1.BurstSize
-	f.CommittedInformationRate = m1.CommittedInformationRate
-	f.PolicerMode = m1.PolicerMode
-	f.PolicerType = m1.PolicerType
+	m.toGlobalSpecType(f, true)
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -846,14 +880,31 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.PolicerType = f.GetPolicerType()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.BurstSize = m1.BurstSize
 	f.CommittedInformationRate = m1.CommittedInformationRate
 	f.PolicerMode = m1.PolicerMode
 	f.PolicerType = m1.PolicerType
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

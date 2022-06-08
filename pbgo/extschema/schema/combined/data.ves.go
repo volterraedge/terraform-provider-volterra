@@ -9428,6 +9428,478 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.contact"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.contact"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/contact/object.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/contact/object.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/contact/object.proto"] = fInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.contact.Object"] = oInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.contact.StatusObject"] = oInfo
+	}
+
+	keyInfo = &svcfw.KeyInfo{
+		Type: svcfw.KeyType(2),
+	}
+	oInfo.KeysInfo[svcfw.FldName("metadata.uid")] = keyInfo
+	if mdr.KeyIdx != nil {
+		mdr.KeyIdx["ves.io.schema.contact.StatusObject.metadata.uid"] = keyInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.SpecType"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/contact/public_crudapi.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/contact/public_crudapi.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/contact/public_crudapi.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.contact.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.contact.CreateRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.CreateResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/contacts"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.contact.DeleteRequest",
+		InStreaming:  false,
+		OutMsgType:   "google.protobuf.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/contacts/{name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.contact.GetRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.GetResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/contacts/{name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.contact.ListRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.ListResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/contacts"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.contact.ReplaceRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.ReplaceResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/contacts/{metadata.name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.contact.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.CreateRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.CreateResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DeleteRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.DeleteRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.GetRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.GetResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.ListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.ListResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListResponseItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.ListResponseItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.ReplaceRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.ReplaceResponse"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/contact/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/contact/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/contact/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.GetSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GlobalSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.ReplaceSpecType"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.contact.crudapi"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact/crudapi",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.contact.crudapi"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/contact/crudapi/api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/contact/crudapi/api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/contact/crudapi/api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD",
+		IsSDRO:      true,
+		ObjType:     "ves.io.schema.contact.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.contact.crudapi.ObjectCreateReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.crudapi.ObjectCreateRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.contact/Objects", "/ves.io.schema.contact/introspect/write/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.crudapi.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.contact.crudapi.ObjectDeleteReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.crudapi.ObjectDeleteRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.contact/Object/{object_uid}", "/ves.io.schema.contact/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.crudapi.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.contact.crudapi.ObjectGetReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.crudapi.ObjectGetRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.contact/Object/{object_uid}", "/ves.io.schema.contact/introspect/read/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.crudapi.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.contact.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.crudapi.ObjectListRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.contact/Objects", "/ves.io.schema.contact/introspect/read/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.crudapi.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListStream",
+		InMsgType:    "ves.io.schema.contact.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.crudapi.ObjectListRsp",
+		OutStreaming: true,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.contact/Objects/stream"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.crudapi.API.ListStream"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.contact.crudapi.ObjectReplaceReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.contact.crudapi.ObjectReplaceRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.contact/Object/{object_uid}", "/ves.io.schema.contact/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.contact.crudapi.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.contact.crudapi.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectCreateReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectCreateRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectDeleteReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectDeleteRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectGetReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectGetRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectListReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectListRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRspItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectListRspItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectReplaceReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.contact.crudapi.ObjectReplaceRsp"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
 		Name:      svcfw.PkgName("ves.io.schema.container_registry"),
 		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry",
 		IsExtSch:  false,
@@ -13442,6 +13914,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.fleet.BlockedServices"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "BlockedServicesListType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.fleet.BlockedServicesListType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "BondLacpType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -13454,6 +13933,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.fleet.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CustomAllowedServiceList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.fleet.CustomAllowedServiceList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CustomServiceItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.fleet.CustomServiceItem"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "DeviceInstanceType",
@@ -23865,6 +24358,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.policy.BotAction"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "BotNameContext",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.BotNameContext"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ClientMatcher",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.ClientMatcher"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "ContentRewriteAction",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -23877,6 +24384,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.policy.CookieMatcherType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CountryCodeList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.CountryCodeList"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "DataGuardControl",
@@ -23907,6 +24421,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.policy.HeaderMatcherTypeBasic"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "HttpCookieName",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.HttpCookieName"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "HttpHeaderName",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.HttpHeaderName"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "HttpMethodMatcherType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -23914,11 +24442,32 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.policy.HttpMethodMatcherType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "HttpQueryParameterName",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.HttpQueryParameterName"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "IPThreatCategoryListType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.IPThreatCategoryListType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "IpMatcherType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.policy.IpMatcherType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "JwtTokenAuthOptions",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.JwtTokenAuthOptions"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "L4DestMatcherType",
@@ -23968,6 +24517,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.policy.QueryParameterMatcherType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "RequestMatcher",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.policy.RequestMatcher"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "RoleMatcherType",
@@ -32455,6 +33011,531 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	mdr.PkgsInfo["ves.io.schema.tenant"] = pInfo
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/tenant/custom_api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/tenant/custom_api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/tenant/custom_api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "CustomAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "AssignDomainOwner",
+		InMsgType:    "ves.io.schema.tenant.AssignDomainOwnerRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant/domain_owner/assign"}}
+	aInfo.RPCsInfo[svcfw.RPCName("AssignDomainOwner")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.AssignDomainOwner"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "CreateDebugUser",
+		InMsgType:    "ves.io.schema.tenant.CreateDebugUserRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant/debug/user"}}
+	aInfo.RPCsInfo[svcfw.RPCName("CreateDebugUser")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.CreateDebugUser"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DeleteDebugUser",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/system/tenant/debug/user"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DeleteDebugUser")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.DeleteDebugUser"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DeleteImage",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/system/tenant/settings/tenant/image"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DeleteImage")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.DeleteImage"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DeleteTenant",
+		InMsgType:    "ves.io.schema.tenant.DeleteTenantRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.StatusResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant/request-delete"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DeleteTenant")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.DeleteTenant"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DisableTenantLevelOTP",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/tenant/settings/otp/disable"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DisableTenantLevelOTP")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.DisableTenantLevelOTP"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "EnableTenantLevelOTP",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/tenant/settings/otp/enable"}}
+	aInfo.RPCsInfo[svcfw.RPCName("EnableTenantLevelOTP")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.EnableTenantLevelOTP"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetDebugUser",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.DebugUser",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/tenant/debug/user"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetDebugUser")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetDebugUser"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetIDMSettings",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.GlobalSpecType",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/tenant/idm/settings"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetIDMSettings")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetIDMSettings"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetImage",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "google.api.HttpBody",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/tenant/settings/tenant/image"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetImage")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetImage"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetLastLoginMap",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.LastLoginMap",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/tenant/idm/events/last_login"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetLastLoginMap")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetLastLoginMap"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetLoginEvents",
+		InMsgType:    "ves.io.schema.tenant.GetLoginEventsRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.LoginEventsMap",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/tenant/idm/events/login"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetLoginEvents")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetLoginEvents"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetLoginEventsInTimeFrame",
+		InMsgType:    "ves.io.schema.tenant.GetLoginEventsInTimeFrameRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.LoginEventsMap",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant/idm/events/login_in_time"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetLoginEventsInTimeFrame")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetLoginEventsInTimeFrame"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetPasswordPolicy",
+		InMsgType:    "ves.io.schema.tenant.GetPasswordPolicyRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.PasswordPolicyPublicAccess",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/no_auth/tenant/idm/settings/password_policy"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetPasswordPolicy")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetPasswordPolicy"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetTenantEscalationDoc",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "google.api.HttpBody",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/tenant/tenant-escalation-doc"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetTenantEscalationDoc")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetTenantEscalationDoc"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetTenantSettings",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.TenantSettingsResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/tenant/settings"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetTenantSettings")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.GetTenantSettings"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListInactiveUsers",
+		InMsgType:    "ves.io.schema.tenant.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.UserList",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/tenant/idm/users/inactive"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListInactiveUsers")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.ListInactiveUsers"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "LookupCname",
+		InMsgType:    "ves.io.schema.tenant.LookupCnameRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.StatusResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/no_auth/cname/lookup", "/public/namespaces/system/tenant/lookup"}}
+	aInfo.RPCsInfo[svcfw.RPCName("LookupCname")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.LookupCname"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "SetBillingInfo",
+		InMsgType:    "ves.io.schema.tenant.SetBillingInfoRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.StatusResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/tenant/billing-info"}}
+	aInfo.RPCsInfo[svcfw.RPCName("SetBillingInfo")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.SetBillingInfo"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UnassignDomainOwner",
+		InMsgType:    "ves.io.schema.tenant.UnassignDomainOwnerRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant/domain_owner/unassign"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UnassignDomainOwner")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.UnassignDomainOwner"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UpdateIDMSettings",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.GlobalSpecType",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/tenant/idm/settings"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateIDMSettings")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.UpdateIDMSettings"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UpdateImage",
+		InMsgType:    "ves.io.schema.tenant.UpdateImageRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/tenant/settings/tenant/image"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateImage")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.UpdateImage"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UpdateTenantSettings",
+		InMsgType:    "ves.io.schema.tenant.UpdateTenantSettingsRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant.UpdateTenantSettingsResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/tenant/settings"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateTenantSettings")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant.CustomAPI.UpdateTenantSettings"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.tenant.CustomAPI"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AssignDomainOwnerRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.AssignDomainOwnerRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateDebugUserRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.CreateDebugUserRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DebugUser",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.DebugUser"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DeleteTenantRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.DeleteTenantRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DisableTenantResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.DisableTenantResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "EscalationDocResp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.EscalationDocResp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetLoginEventsInTimeFrameRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.GetLoginEventsInTimeFrameRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetLoginEventsRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.GetLoginEventsRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetPasswordPolicyRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.GetPasswordPolicyRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "LastLoginMap",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.LastLoginMap"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "LoginEvent",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.LoginEvent"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "LoginEvents",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.LoginEvents"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "LoginEventsMap",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.LoginEventsMap"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "LookupCnameRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.LookupCnameRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PasswordPolicyPublicAccess",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.PasswordPolicyPublicAccess"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SetBillingInfoRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.SetBillingInfoRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "StatusResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.StatusResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "TenantSettingsResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.TenantSettingsResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UnassignDomainOwnerRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.UnassignDomainOwnerRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UpdateImageRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.UpdateImageRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UpdateTenantSettingsRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.UpdateTenantSettingsRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UpdateTenantSettingsResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.UpdateTenantSettingsResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "User",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.User"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UserList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.UserList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ValidationErrorField",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.ValidationErrorField"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/tenant/object.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -32538,6 +33619,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.tenant.CA"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CredentialsExpiry",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.CredentialsExpiry"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "Empty",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.tenant.Empty"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "EncryptedPassword",
@@ -35734,7 +36829,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		Name:         "AddUserToGroup",
 		InMsgType:    "ves.io.schema.user.UserGroupRequest",
 		InStreaming:  false,
-		OutMsgType:   "ves.io.schema.user.Empty",
+		OutMsgType:   "ves.io.schema.user.UserGroupResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
 		IsDeprecated: false,
@@ -35832,7 +36927,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		Name:         "RemoveUserFromGroup",
 		InMsgType:    "ves.io.schema.user.UserGroupRequest",
 		InStreaming:  false,
-		OutMsgType:   "ves.io.schema.user.Empty",
+		OutMsgType:   "ves.io.schema.user.UserGroupResponse",
 		OutStreaming: false,
 		IsImmutable:  false,
 		IsDeprecated: false,
@@ -36064,6 +37159,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.user.UserGroupRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UserGroupResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.UserGroupResponse"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "UserRoleRequest",
@@ -36324,6 +37426,427 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.user.crudapi.ObjectReplaceRsp"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.user.setting"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user/setting",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.user.setting"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/user/setting/custom_api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/user/setting/custom_api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/user/setting/custom_api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "CustomAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.user.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DeleteUserImage",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/system/user/settings/image"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DeleteUserImage")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.DeleteUserImage"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DisableUserInIDM",
+		InMsgType:    "ves.io.schema.user.setting.UserEmail",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/settings/idm/disable"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DisableUserInIDM")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.DisableUserInIDM"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "EnableUserInIDM",
+		InMsgType:    "ves.io.schema.user.setting.UserEmail",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/settings/idm/enable"}}
+	aInfo.RPCsInfo[svcfw.RPCName("EnableUserInIDM")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.EnableUserInIDM"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.UserSettingsResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/user/settings"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetAdminNtfnPreferences",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.NotificationList",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/user/admin_notifications"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetAdminNtfnPreferences")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.GetAdminNtfnPreferences"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetCombinedNtfnPreferences",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.NotificationList",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/user/combined_notifications"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetCombinedNtfnPreferences")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.GetCombinedNtfnPreferences"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetNtfnPreferences",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.NotificationList",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/user/notifications"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetNtfnPreferences")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.GetNtfnPreferences"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetUserImage",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "google.api.HttpBody",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/user/settings/image"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetUserImage")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.GetUserImage"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetUserSessions",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.UserSessionList",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/user/sessions"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetUserSessions")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.GetUserSessions"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetViewPreference",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.ViewPreference",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/user/settings/view_preference"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetViewPreference")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.GetViewPreference"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "RequestInitialAccess",
+		InMsgType:    "ves.io.schema.user.setting.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/settings/request_initial_access"}}
+	aInfo.RPCsInfo[svcfw.RPCName("RequestInitialAccess")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.RequestInitialAccess"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ResetOtpDeviceByAdmin",
+		InMsgType:    "ves.io.schema.user.setting.UserEmail",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/otp/admin_reset"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ResetOtpDeviceByAdmin")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.ResetOtpDeviceByAdmin"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "SetViewPreference",
+		InMsgType:    "ves.io.schema.user.setting.SetViewPreferenceRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/settings/view_preference"}}
+	aInfo.RPCsInfo[svcfw.RPCName("SetViewPreference")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.SetViewPreference"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UnsetAdminNtfnPreference",
+		InMsgType:    "ves.io.schema.user.setting.NtfnToUnset",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/admin_notifications/unset"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UnsetAdminNtfnPreference")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.UnsetAdminNtfnPreference"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UnsetNtfnPreference",
+		InMsgType:    "ves.io.schema.user.setting.NtfnToUnset",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/notifications/unset"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UnsetNtfnPreference")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.UnsetNtfnPreference"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Update",
+		InMsgType:    "ves.io.schema.user.setting.UserSettingsRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/settings"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Update")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.Update"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UpdateAdminNtfnPreferences",
+		InMsgType:    "ves.io.schema.user.setting.NtfnPreferencesMap",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/admin_notifications"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateAdminNtfnPreferences")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.UpdateAdminNtfnPreferences"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UpdateCombinedNtfnPreferences",
+		InMsgType:    "ves.io.schema.user.setting.NtfnPreferencesMap",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/combined_notifications"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateCombinedNtfnPreferences")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.UpdateCombinedNtfnPreferences"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UpdateNtfnPreferences",
+		InMsgType:    "ves.io.schema.user.setting.NtfnPreferencesMap",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/notifications"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateNtfnPreferences")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.UpdateNtfnPreferences"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "UpdateUserImage",
+		InMsgType:    "ves.io.schema.user.setting.UpdateImageRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.setting.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/system/user/settings/image"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateUserImage")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.setting.CustomAPI.UpdateUserImage"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.user.setting.CustomAPI"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "Empty",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.Empty"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "InitialAccess",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.InitialAccess"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "Notification",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.Notification"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "NotificationList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.NotificationList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "NtfnPreferencesMap",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.NtfnPreferencesMap"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "NtfnToUnset",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.NtfnToUnset"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PersonaPreferences",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.PersonaPreferences"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SetViewPreferenceRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.SetViewPreferenceRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UpdateImageRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.UpdateImageRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UserEmail",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.UserEmail"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UserSession",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.UserSession"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UserSessionList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.UserSessionList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UserSettingsRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.UserSettingsRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "UserSettingsResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.UserSettingsResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ViewPreference",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.setting.ViewPreference"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -37190,6 +38713,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.DCGWBGPPeerType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DirectConnectConfigType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.DirectConnectConfigType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "DirectConnectInfo",
@@ -40688,6 +42218,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureHubVnetType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureHubVnetType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetIngressEgressGwARReplaceType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -40805,6 +42342,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.ReplaceSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "VnetPeeringType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.VnetPeeringType"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -42537,6 +44081,34 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.FileIdx["ves.io/schema/views/http_loadbalancer/types.proto"] = fInfo
 	}
 
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIEndpointProtectionRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.APIEndpointProtectionRule"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIGroupProtectionRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.APIGroupProtectionRule"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIProtectionRuleAction",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.APIProtectionRuleAction"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIProtectionRules",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.APIProtectionRules"] = mInfo
+	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "APIRateLimit",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
@@ -45180,6 +46752,499 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectReplaceRsp"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.views.tenant_configuration"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.views.tenant_configuration"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/tenant_configuration/object.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/tenant_configuration/object.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/tenant_configuration/object.proto"] = fInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.views.tenant_configuration.Object"] = oInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.views.tenant_configuration.StatusObject"] = oInfo
+	}
+
+	keyInfo = &svcfw.KeyInfo{
+		Type: svcfw.KeyType(2),
+	}
+	oInfo.KeysInfo[svcfw.FldName("metadata.uid")] = keyInfo
+	if mdr.KeyIdx != nil {
+		mdr.KeyIdx["ves.io.schema.views.tenant_configuration.StatusObject.metadata.uid"] = keyInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.SpecType"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/tenant_configuration/public_crudapi.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/tenant_configuration/public_crudapi.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/tenant_configuration/public_crudapi.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.views.tenant_configuration.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.CreateRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.CreateResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/tenant_configurations"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.DeleteRequest",
+		InStreaming:  false,
+		OutMsgType:   "google.protobuf.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/tenant_configurations/{name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.GetRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.GetResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tenant_configurations/{name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.ListRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.ListResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tenant_configurations"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.ReplaceRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.ReplaceResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/tenant_configurations/{metadata.name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.tenant_configuration.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.CreateRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.CreateResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DeleteRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.DeleteRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.GetRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.GetResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.ListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.ListResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListResponseItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.ListResponseItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.ReplaceRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.ReplaceResponse"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/tenant_configuration/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/tenant_configuration/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/tenant_configuration/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BasicConfiguration",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.BasicConfiguration"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BruteForceDetectionSettings",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.BruteForceDetectionSettings"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.GetSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GlobalSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PasswordPolicy",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.PasswordPolicy"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.ReplaceSpecType"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.views.tenant_configuration.crudapi"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration/crudapi",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.views.tenant_configuration.crudapi"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/tenant_configuration/crudapi/api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/tenant_configuration/crudapi/api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/tenant_configuration/crudapi/api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD",
+		IsSDRO:      true,
+		ObjType:     "ves.io.schema.views.tenant_configuration.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.crudapi.ObjectCreateReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.crudapi.ObjectCreateRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.tenant_configuration/Objects", "/ves.io.schema.views.tenant_configuration/introspect/write/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.crudapi.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.crudapi.ObjectDeleteReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.crudapi.ObjectDeleteRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.tenant_configuration/Object/{object_uid}", "/ves.io.schema.views.tenant_configuration/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.crudapi.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.crudapi.ObjectGetReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.crudapi.ObjectGetRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tenant_configuration/Object/{object_uid}", "/ves.io.schema.views.tenant_configuration/introspect/read/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.crudapi.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.crudapi.ObjectListRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tenant_configuration/Objects", "/ves.io.schema.views.tenant_configuration/introspect/read/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.crudapi.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListStream",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.crudapi.ObjectListRsp",
+		OutStreaming: true,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tenant_configuration/Objects/stream"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.crudapi.API.ListStream"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.views.tenant_configuration.crudapi.ObjectReplaceReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.tenant_configuration.crudapi.ObjectReplaceRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.tenant_configuration/Object/{object_uid}", "/ves.io.schema.views.tenant_configuration/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.tenant_configuration.crudapi.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.tenant_configuration.crudapi.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectCreateReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectCreateRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectDeleteReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectDeleteRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectGetReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectGetRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectListReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectListRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRspItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectListRspItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectReplaceReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.tenant_configuration.crudapi.ObjectReplaceRsp"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{

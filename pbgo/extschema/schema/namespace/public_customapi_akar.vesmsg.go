@@ -227,7 +227,7 @@ func (v *ValidateGetActiveAlertPoliciesResponse) Validate(ctx context.Context, p
 
 		vOpts := append(opts, db.WithValidateField("alert_policies"))
 		for idx, item := range m.GetAlertPolicies() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -452,7 +452,7 @@ func (v *ValidateGetActiveNetworkPoliciesResponse) Validate(ctx context.Context,
 
 		vOpts := append(opts, db.WithValidateField("network_policies"))
 		for idx, item := range m.GetNetworkPolicies() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -677,7 +677,7 @@ func (v *ValidateGetActiveServicePoliciesResponse) Validate(ctx context.Context,
 
 		vOpts := append(opts, db.WithValidateField("service_policies"))
 		for idx, item := range m.GetServicePolicies() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -902,7 +902,7 @@ func (v *ValidateGetFastACLsForInternetVIPsResponse) Validate(ctx context.Contex
 
 		vOpts := append(opts, db.WithValidateField("fast_acls"))
 		for idx, item := range m.GetFastAcls() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -2252,7 +2252,7 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

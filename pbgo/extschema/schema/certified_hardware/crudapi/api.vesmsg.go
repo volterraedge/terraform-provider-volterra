@@ -522,7 +522,7 @@ func (v *ValidateObjectGetReq) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("backref_types"))
 		for idx, item := range m.GetBackrefTypes() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -656,7 +656,7 @@ func (v *ValidateObjectGetRsp) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("ent_backrefs"))
 		for idx, item := range m.GetEntBackrefs() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -704,7 +704,7 @@ func (v *ValidateObjectGetRsp) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -818,7 +818,7 @@ func (v *ValidateObjectListReq) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("namespace_filter"))
 		for idx, item := range m.GetNamespaceFilter() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -830,7 +830,7 @@ func (v *ValidateObjectListReq) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("report_fields"))
 		for idx, item := range m.GetReportFields() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -851,7 +851,7 @@ func (v *ValidateObjectListReq) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("tenant_filter"))
 		for idx, item := range m.GetTenantFilter() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -972,7 +972,7 @@ func (v *ValidateObjectListRsp) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -993,7 +993,7 @@ func (v *ValidateObjectListRsp) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("uids"))
 		for idx, item := range m.GetUids() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1168,7 +1168,7 @@ func (v *ValidateObjectListRspItem) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1457,59 +1457,118 @@ func ObjectReplaceRspValidator() db.Validator {
 	return DefaultObjectReplaceRspValidator
 }
 
-func (m *ObjectCreateReq) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+func (m *ObjectCreateReq) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*ves_io_schema_certified_hardware.DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+	}
 	_ = f
+
 	m.Metadata = f.GetMetadata()
 	m.Spec = f.GetSpec()
 	m.SystemMetadata = f.GetSystemMetadata()
+}
+
+func (m *ObjectCreateReq) FromObject(e db.Entry) {
+	m.fromObject(e, true)
+}
+
+func (m *ObjectCreateReq) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *ObjectCreateReq) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+	f := e.(*ves_io_schema_certified_hardware.DBObject)
+	_ = f
+	f.Metadata = m1.Metadata
+	f.Spec = m1.Spec
+	f.SystemMetadata = m1.SystemMetadata
 }
 
 func (m *ObjectCreateReq) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
-	_ = m1
+	m.toObject(e, true)
+}
+
+func (m *ObjectCreateReq) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
+}
+
+func (m *ObjectCreateRsp) fromObject(e db.Entry, withDeepCopy bool) {
 	f := e.(*ves_io_schema_certified_hardware.DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+	}
 	_ = f
-	f.Metadata = m1.Metadata
-	f.Spec = m1.Spec
-	f.SystemMetadata = m1.SystemMetadata
+
+	m.Metadata = f.GetMetadata()
+
+	m.Spec = f.GetSpec()
+	m.SystemMetadata = f.GetSystemMetadata()
 }
 
 func (m *ObjectCreateRsp) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+	m.fromObject(e, true)
+}
+
+func (m *ObjectCreateRsp) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *ObjectCreateRsp) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+	f := e.(*ves_io_schema_certified_hardware.DBObject)
 	_ = f
 
-	m.Metadata = f.GetMetadata()
+	f.Metadata = m1.Metadata
 
-	m.Spec = f.GetSpec()
-	m.SystemMetadata = f.GetSystemMetadata()
+	f.Spec = m1.Spec
+	f.SystemMetadata = m1.SystemMetadata
 }
 
 func (m *ObjectCreateRsp) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
-	_ = m1
+	m.toObject(e, true)
+}
+
+func (m *ObjectCreateRsp) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
+}
+
+func (m *ObjectGetRsp) fromObject(e db.Entry, withDeepCopy bool) {
 	f := e.(*ves_io_schema_certified_hardware.DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+	}
 	_ = f
 
-	f.Metadata = m1.Metadata
+	m.Metadata = f.GetMetadata()
 
-	f.Spec = m1.Spec
-	f.SystemMetadata = m1.SystemMetadata
+	m.Spec = f.GetSpec()
+
+	m.SystemMetadata = f.GetSystemMetadata()
 }
 
 func (m *ObjectGetRsp) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
-	_ = f
-
-	m.Metadata = f.GetMetadata()
-
-	m.Spec = f.GetSpec()
-
-	m.SystemMetadata = f.GetSystemMetadata()
+	m.fromObject(e, true)
 }
 
-func (m *ObjectGetRsp) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
+func (m *ObjectGetRsp) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *ObjectGetRsp) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
 	_ = m1
 	f := e.(*ves_io_schema_certified_hardware.DBObject)
 	_ = f
@@ -1521,8 +1580,19 @@ func (m *ObjectGetRsp) ToObject(e db.Entry) {
 	f.SystemMetadata = m1.SystemMetadata
 }
 
-func (m *ObjectListRspItem) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+func (m *ObjectGetRsp) ToObject(e db.Entry) {
+	m.toObject(e, true)
+}
+
+func (m *ObjectGetRsp) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
+}
+
+func (m *ObjectListRspItem) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*ves_io_schema_certified_hardware.DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+	}
 	_ = f
 
 	m.Metadata = f.GetMetadata()
@@ -1530,33 +1600,67 @@ func (m *ObjectListRspItem) FromObject(e db.Entry) {
 	m.Spec = f.GetSpec()
 
 	m.SystemMetadata = f.GetSystemMetadata()
+
+}
+
+func (m *ObjectListRspItem) FromObject(e db.Entry) {
+	m.fromObject(e, true)
+}
+
+func (m *ObjectListRspItem) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *ObjectListRspItem) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+	f := e.(*ves_io_schema_certified_hardware.DBObject)
+	_ = f
+
+	f.Metadata = m1.Metadata
+
+	f.Spec = m1.Spec
+
+	f.SystemMetadata = m1.SystemMetadata
 
 }
 
 func (m *ObjectListRspItem) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
-	_ = m1
-	f := e.(*ves_io_schema_certified_hardware.DBObject)
-	_ = f
-
-	f.Metadata = m1.Metadata
-
-	f.Spec = m1.Spec
-
-	f.SystemMetadata = m1.SystemMetadata
-
+	m.toObject(e, true)
 }
 
-func (m *ObjectReplaceReq) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+func (m *ObjectListRspItem) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
+}
+
+func (m *ObjectReplaceReq) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*ves_io_schema_certified_hardware.DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+	}
 	_ = f
+
 	m.Metadata = f.GetMetadata()
 
 	m.Spec = f.GetSpec()
 }
 
-func (m *ObjectReplaceReq) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
+func (m *ObjectReplaceReq) FromObject(e db.Entry) {
+	m.fromObject(e, true)
+}
+
+func (m *ObjectReplaceReq) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *ObjectReplaceReq) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
 	_ = m1
 	f := e.(*ves_io_schema_certified_hardware.DBObject)
 	_ = f
@@ -1565,8 +1669,19 @@ func (m *ObjectReplaceReq) ToObject(e db.Entry) {
 	f.Spec = m1.Spec
 }
 
-func (m *ObjectReplaceRsp) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+func (m *ObjectReplaceReq) ToObject(e db.Entry) {
+	m.toObject(e, true)
+}
+
+func (m *ObjectReplaceReq) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
+}
+
+func (m *ObjectReplaceRsp) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*ves_io_schema_certified_hardware.DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*ves_io_schema_certified_hardware.DBObject)
+	}
 	_ = f
 
 	m.Metadata = f.GetMetadata()
@@ -1574,8 +1689,19 @@ func (m *ObjectReplaceRsp) FromObject(e db.Entry) {
 	m.SystemMetadata = f.GetSystemMetadata()
 }
 
-func (m *ObjectReplaceRsp) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
+func (m *ObjectReplaceRsp) FromObject(e db.Entry) {
+	m.fromObject(e, true)
+}
+
+func (m *ObjectReplaceRsp) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *ObjectReplaceRsp) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
 	_ = m1
 	f := e.(*ves_io_schema_certified_hardware.DBObject)
 	_ = f
@@ -1583,4 +1709,12 @@ func (m *ObjectReplaceRsp) ToObject(e db.Entry) {
 	f.Metadata = m1.Metadata
 	f.Spec = m1.Spec
 	f.SystemMetadata = m1.SystemMetadata
+}
+
+func (m *ObjectReplaceRsp) ToObject(e db.Entry) {
+	m.toObject(e, true)
+}
+
+func (m *ObjectReplaceRsp) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
 }

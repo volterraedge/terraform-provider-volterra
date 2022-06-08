@@ -495,18 +495,52 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	return ccl
 }
 
-// Create CustomAPIInprocClient
+// Create customAPIInprocClient
 
 // INPROC Client (satisfying CustomAPIClient interface)
-type CustomAPIInprocClient struct {
+type customAPIInprocClient struct {
+	CustomAPIServer
+}
+
+func (c *customAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCreateRequest, opts ...grpc.CallOption) (*Object, error) {
+	return c.CustomAPIServer.CustomCreate(ctx, in)
+}
+func (c *customAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequest, opts ...grpc.CallOption) (*CustomGetResponse, error) {
+	return c.CustomAPIServer.CustomGet(ctx, in)
+}
+func (c *customAPIInprocClient) CustomList(ctx context.Context, in *CustomListRequest, opts ...grpc.CallOption) (*CustomListResponse, error) {
+	return c.CustomAPIServer.CustomList(ctx, in)
+}
+func (c *customAPIInprocClient) CustomReplace(ctx context.Context, in *CustomReplaceRequest, opts ...grpc.CallOption) (*Object, error) {
+	return c.CustomAPIServer.CustomReplace(ctx, in)
+}
+
+func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
+	return &customAPIInprocClient{CustomAPIServer: NewCustomAPIServer(svc)}
+}
+
+// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+}
+
+// Create customAPISrv
+
+// SERVER (satisfying CustomAPIServer interface)
+type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCreateRequest, opts ...grpc.CallOption) (*Object, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.role.CustomAPI")
+func (s *customAPISrv) CustomCreate(ctx context.Context, in *CustomCreateRequest) (*Object, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.role.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -514,7 +548,7 @@ func (c *CustomAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCrea
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.role.CustomCreateRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.role.CustomCreateRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -528,13 +562,13 @@ func (c *CustomAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCrea
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomCreate"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomCreate"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -547,15 +581,15 @@ func (c *CustomAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCrea
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.role.Object", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.role.Object", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequest, opts ...grpc.CallOption) (*CustomGetResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.role.CustomAPI")
+func (s *customAPISrv) CustomGet(ctx context.Context, in *CustomGetRequest) (*CustomGetResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.role.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -563,7 +597,7 @@ func (c *CustomAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequ
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.role.CustomGetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.role.CustomGetRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -577,13 +611,13 @@ func (c *CustomAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequ
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomGet"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomGet"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -596,15 +630,15 @@ func (c *CustomAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequ
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.role.CustomGetResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.role.CustomGetResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) CustomList(ctx context.Context, in *CustomListRequest, opts ...grpc.CallOption) (*CustomListResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.role.CustomAPI")
+func (s *customAPISrv) CustomList(ctx context.Context, in *CustomListRequest) (*CustomListResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.role.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -612,7 +646,7 @@ func (c *CustomAPIInprocClient) CustomList(ctx context.Context, in *CustomListRe
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.role.CustomListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.role.CustomListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -626,13 +660,13 @@ func (c *CustomAPIInprocClient) CustomList(ctx context.Context, in *CustomListRe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -645,15 +679,15 @@ func (c *CustomAPIInprocClient) CustomList(ctx context.Context, in *CustomListRe
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.role.CustomListResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.role.CustomListResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) CustomReplace(ctx context.Context, in *CustomReplaceRequest, opts ...grpc.CallOption) (*Object, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.role.CustomAPI")
+func (s *customAPISrv) CustomReplace(ctx context.Context, in *CustomReplaceRequest) (*Object, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.role.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -661,7 +695,7 @@ func (c *CustomAPIInprocClient) CustomReplace(ctx context.Context, in *CustomRep
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.role.CustomReplaceRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.role.CustomReplaceRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -675,13 +709,13 @@ func (c *CustomAPIInprocClient) CustomReplace(ctx context.Context, in *CustomRep
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomReplace"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomReplace"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -694,23 +728,13 @@ func (c *CustomAPIInprocClient) CustomReplace(ctx context.Context, in *CustomRep
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.role.Object", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.role.Object", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
-	return &CustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
+	return &customAPISrv{svc: svc}
 }
 
 var CustomAPISwaggerJSON string = `{

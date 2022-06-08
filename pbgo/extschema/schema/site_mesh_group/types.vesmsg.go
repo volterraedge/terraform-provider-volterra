@@ -1608,7 +1608,7 @@ func (v *ValidateSiteMeshGroupStatus) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("other_connected_sites"))
 		for idx, item := range m.GetOtherConnectedSites() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -1630,7 +1630,7 @@ func SiteMeshGroupStatusValidator() db.Validator {
 	return DefaultSiteMeshGroupStatusValidator
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -1638,43 +1638,77 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.TunnelType = f.GetTunnelType()
 	m.Type = f.GetType()
 	m.VirtualSite = f.GetVirtualSite()
+}
+
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	f.Hub = m1.Hub
+	f.TunnelType = m1.TunnelType
+	f.Type = m1.Type
+	f.VirtualSite = m1.VirtualSite
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	f.Hub = m1.Hub
-	f.TunnelType = m1.TunnelType
-	f.Type = m1.Type
-	f.VirtualSite = m1.VirtualSite
+	m.Hub = f.GetHub()
+	m.TunnelType = f.GetTunnelType()
+	m.Type = f.GetType()
+	m.VirtualSite = f.GetVirtualSite()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
-	if f == nil {
-		return
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
-	m.Hub = f.GetHub()
-	m.TunnelType = f.GetTunnelType()
-	m.Type = f.GetType()
-	m.VirtualSite = f.GetVirtualSite()
+	_ = m1
+
+	f.Hub = m1.Hub
+	f.TunnelType = m1.TunnelType
+	f.Type = m1.Type
+	f.VirtualSite = m1.VirtualSite
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
-	}
-	f.Hub = m1.Hub
-	f.TunnelType = m1.TunnelType
-	f.Type = m1.Type
-	f.VirtualSite = m1.VirtualSite
+	m.toGlobalSpecType(f, true)
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -1684,14 +1718,31 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VirtualSite = f.GetVirtualSite()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Hub = m1.Hub
 	f.TunnelType = m1.TunnelType
 	f.Type = m1.Type
 	f.VirtualSite = m1.VirtualSite
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

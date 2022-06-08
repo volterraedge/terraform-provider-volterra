@@ -208,18 +208,43 @@ func NewCustomSiteStatusAPIRestClient(baseURL string, hc http.Client) server.Cus
 	return ccl
 }
 
-// Create CustomSiteStatusAPIInprocClient
+// Create customSiteStatusAPIInprocClient
 
 // INPROC Client (satisfying CustomSiteStatusAPIClient interface)
-type CustomSiteStatusAPIInprocClient struct {
+type customSiteStatusAPIInprocClient struct {
+	CustomSiteStatusAPIServer
+}
+
+func (c *customSiteStatusAPIInprocClient) SiteStatusMetrics(ctx context.Context, in *SiteStatusMetricsRequest, opts ...grpc.CallOption) (*SiteStatusMetricsResponse, error) {
+	return c.CustomSiteStatusAPIServer.SiteStatusMetrics(ctx, in)
+}
+
+func NewCustomSiteStatusAPIInprocClient(svc svcfw.Service) CustomSiteStatusAPIClient {
+	return &customSiteStatusAPIInprocClient{CustomSiteStatusAPIServer: NewCustomSiteStatusAPIServer(svc)}
+}
+
+// RegisterGwCustomSiteStatusAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomSiteStatusAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomSiteStatusAPIHandlerClient(ctx, mux, NewCustomSiteStatusAPIInprocClient(s))
+}
+
+// Create customSiteStatusAPISrv
+
+// SERVER (satisfying CustomSiteStatusAPIServer interface)
+type customSiteStatusAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomSiteStatusAPIInprocClient) SiteStatusMetrics(ctx context.Context, in *SiteStatusMetricsRequest, opts ...grpc.CallOption) (*SiteStatusMetricsResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomSiteStatusAPI")
+func (s *customSiteStatusAPISrv) SiteStatusMetrics(ctx context.Context, in *SiteStatusMetricsRequest) (*SiteStatusMetricsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomSiteStatusAPI")
 	cah, ok := ah.(CustomSiteStatusAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomSiteStatusAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomSiteStatusAPIServer", ah)
 	}
 
 	var (
@@ -227,7 +252,7 @@ func (c *CustomSiteStatusAPIInprocClient) SiteStatusMetrics(ctx context.Context,
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.SiteStatusMetricsRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.SiteStatusMetricsRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -241,13 +266,13 @@ func (c *CustomSiteStatusAPIInprocClient) SiteStatusMetrics(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomSiteStatusAPI.SiteStatusMetrics"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomSiteStatusAPI.SiteStatusMetrics"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -260,23 +285,13 @@ func (c *CustomSiteStatusAPIInprocClient) SiteStatusMetrics(ctx context.Context,
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.site.SiteStatusMetricsResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.SiteStatusMetricsResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomSiteStatusAPIInprocClient(svc svcfw.Service) CustomSiteStatusAPIClient {
-	return &CustomSiteStatusAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomSiteStatusAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomSiteStatusAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomSiteStatusAPIHandlerClient(ctx, mux, NewCustomSiteStatusAPIInprocClient(s))
+func NewCustomSiteStatusAPIServer(svc svcfw.Service) CustomSiteStatusAPIServer {
+	return &customSiteStatusAPISrv{svc: svc}
 }
 
 var CustomSiteStatusAPISwaggerJSON string = `{

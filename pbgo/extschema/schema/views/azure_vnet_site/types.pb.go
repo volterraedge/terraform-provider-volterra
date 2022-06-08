@@ -10,6 +10,7 @@ import (
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -31,6 +32,156 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// Azure Hub Vnet Type
+//
+// x-displayName: "Hub VNet type"
+// Hub VNet type
+type AzureHubVnetType struct {
+	// Spoke Vnets
+	//
+	// x-displayName: "Spoke Vnets"
+	// Spoke VNets
+	SpokeVnets []*VnetPeeringType `protobuf:"bytes,1,rep,name=spoke_vnets,json=spokeVnets,proto3" json:"spoke_vnets,omitempty"`
+}
+
+func (m *AzureHubVnetType) Reset()      { *m = AzureHubVnetType{} }
+func (*AzureHubVnetType) ProtoMessage() {}
+func (*AzureHubVnetType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{0}
+}
+func (m *AzureHubVnetType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureHubVnetType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureHubVnetType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureHubVnetType.Merge(m, src)
+}
+func (m *AzureHubVnetType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureHubVnetType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureHubVnetType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureHubVnetType proto.InternalMessageInfo
+
+func (m *AzureHubVnetType) GetSpokeVnets() []*VnetPeeringType {
+	if m != nil {
+		return m.SpokeVnets
+	}
+	return nil
+}
+
+// Vnet Peering
+//
+// x-displayName: "Vnet Peering"
+// Vnet peering to azure vnet site
+type VnetPeeringType struct {
+	// Vnet ID
+	//
+	// x-displayName: "Vnet ID"
+	// Information about existing Vnet
+	Vnet *views.AzureVnetType `protobuf:"bytes,1,opt,name=vnet,proto3" json:"vnet,omitempty"`
+	// Choice of routing configuration
+	//
+	// x-displayName: "Select automatic or manual configuration for routes"
+	// x-required
+	// Select automatic or manual configuration for routes
+	//
+	// Types that are valid to be assigned to RoutingChoice:
+	//	*VnetPeeringType_Auto
+	//	*VnetPeeringType_Manual
+	RoutingChoice isVnetPeeringType_RoutingChoice `protobuf_oneof:"routing_choice"`
+}
+
+func (m *VnetPeeringType) Reset()      { *m = VnetPeeringType{} }
+func (*VnetPeeringType) ProtoMessage() {}
+func (*VnetPeeringType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{1}
+}
+func (m *VnetPeeringType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VnetPeeringType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VnetPeeringType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VnetPeeringType.Merge(m, src)
+}
+func (m *VnetPeeringType) XXX_Size() int {
+	return m.Size()
+}
+func (m *VnetPeeringType) XXX_DiscardUnknown() {
+	xxx_messageInfo_VnetPeeringType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VnetPeeringType proto.InternalMessageInfo
+
+type isVnetPeeringType_RoutingChoice interface {
+	isVnetPeeringType_RoutingChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type VnetPeeringType_Auto struct {
+	Auto *schema.Empty `protobuf:"bytes,3,opt,name=auto,proto3,oneof" json:"auto,omitempty"`
+}
+type VnetPeeringType_Manual struct {
+	Manual *schema.Empty `protobuf:"bytes,4,opt,name=manual,proto3,oneof" json:"manual,omitempty"`
+}
+
+func (*VnetPeeringType_Auto) isVnetPeeringType_RoutingChoice()   {}
+func (*VnetPeeringType_Manual) isVnetPeeringType_RoutingChoice() {}
+
+func (m *VnetPeeringType) GetRoutingChoice() isVnetPeeringType_RoutingChoice {
+	if m != nil {
+		return m.RoutingChoice
+	}
+	return nil
+}
+
+func (m *VnetPeeringType) GetVnet() *views.AzureVnetType {
+	if m != nil {
+		return m.Vnet
+	}
+	return nil
+}
+
+func (m *VnetPeeringType) GetAuto() *schema.Empty {
+	if x, ok := m.GetRoutingChoice().(*VnetPeeringType_Auto); ok {
+		return x.Auto
+	}
+	return nil
+}
+
+func (m *VnetPeeringType) GetManual() *schema.Empty {
+	if x, ok := m.GetRoutingChoice().(*VnetPeeringType_Manual); ok {
+		return x.Manual
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*VnetPeeringType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*VnetPeeringType_Auto)(nil),
+		(*VnetPeeringType_Manual)(nil),
+	}
+}
 
 // Azure Ingress Gateway on Recommended Region
 //
@@ -59,7 +210,7 @@ type AzureVnetIngressGwType struct {
 func (m *AzureVnetIngressGwType) Reset()      { *m = AzureVnetIngressGwType{} }
 func (*AzureVnetIngressGwType) ProtoMessage() {}
 func (*AzureVnetIngressGwType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{0}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{2}
 }
 func (m *AzureVnetIngressGwType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -132,7 +283,7 @@ type AzureVnetIngressGwARType struct {
 func (m *AzureVnetIngressGwARType) Reset()      { *m = AzureVnetIngressGwARType{} }
 func (*AzureVnetIngressGwARType) ProtoMessage() {}
 func (*AzureVnetIngressGwARType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{1}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{3}
 }
 func (m *AzureVnetIngressGwARType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -272,12 +423,22 @@ type AzureVnetIngressEgressGwType struct {
 	// x-displayName: "Site Local Control Plane"
 	// Enable/Disable site local control plane
 	LocalControlPlane *views.LocalControlPlaneType `protobuf:"bytes,25,opt,name=local_control_plane,json=localControlPlane,proto3" json:"local_control_plane,omitempty"`
+	// Choice of hub or not
+	//
+	// x-displayName: "Select VNet type"
+	// x-required
+	// Select VNet is hub or not
+	//
+	// Types that are valid to be assigned to HubChoice:
+	//	*AzureVnetIngressEgressGwType_NotHub
+	//	*AzureVnetIngressEgressGwType_Hub
+	HubChoice isAzureVnetIngressEgressGwType_HubChoice `protobuf_oneof:"hub_choice"`
 }
 
 func (m *AzureVnetIngressEgressGwType) Reset()      { *m = AzureVnetIngressEgressGwType{} }
 func (*AzureVnetIngressEgressGwType) ProtoMessage() {}
 func (*AzureVnetIngressEgressGwType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{2}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{4}
 }
 func (m *AzureVnetIngressEgressGwType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -344,6 +505,12 @@ type isAzureVnetIngressEgressGwType_SiteMeshGroupChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetIngressEgressGwType_HubChoice interface {
+	isAzureVnetIngressEgressGwType_HubChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetIngressEgressGwType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,2,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -393,6 +560,12 @@ type AzureVnetIngressEgressGwType_SmConnectionPublicIp struct {
 type AzureVnetIngressEgressGwType_SmConnectionPvtIp struct {
 	SmConnectionPvtIp *schema.Empty `protobuf:"bytes,28,opt,name=sm_connection_pvt_ip,json=smConnectionPvtIp,proto3,oneof" json:"sm_connection_pvt_ip,omitempty"`
 }
+type AzureVnetIngressEgressGwType_NotHub struct {
+	NotHub *schema.Empty `protobuf:"bytes,30,opt,name=not_hub,json=notHub,proto3,oneof" json:"not_hub,omitempty"`
+}
+type AzureVnetIngressEgressGwType_Hub struct {
+	Hub *AzureHubVnetType `protobuf:"bytes,31,opt,name=hub,proto3,oneof" json:"hub,omitempty"`
+}
 
 func (*AzureVnetIngressEgressGwType_NoNetworkPolicy) isAzureVnetIngressEgressGwType_NetworkPolicyChoice() {
 }
@@ -426,6 +599,8 @@ func (*AzureVnetIngressEgressGwType_SmConnectionPublicIp) isAzureVnetIngressEgre
 }
 func (*AzureVnetIngressEgressGwType_SmConnectionPvtIp) isAzureVnetIngressEgressGwType_SiteMeshGroupChoice() {
 }
+func (*AzureVnetIngressEgressGwType_NotHub) isAzureVnetIngressEgressGwType_HubChoice() {}
+func (*AzureVnetIngressEgressGwType_Hub) isAzureVnetIngressEgressGwType_HubChoice()    {}
 
 func (m *AzureVnetIngressEgressGwType) GetNetworkPolicyChoice() isAzureVnetIngressEgressGwType_NetworkPolicyChoice {
 	if m != nil {
@@ -466,6 +641,12 @@ func (m *AzureVnetIngressEgressGwType) GetDcClusterGroupChoice() isAzureVnetIngr
 func (m *AzureVnetIngressEgressGwType) GetSiteMeshGroupChoice() isAzureVnetIngressEgressGwType_SiteMeshGroupChoice {
 	if m != nil {
 		return m.SiteMeshGroupChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwType) GetHubChoice() isAzureVnetIngressEgressGwType_HubChoice {
+	if m != nil {
+		return m.HubChoice
 	}
 	return nil
 }
@@ -603,6 +784,20 @@ func (m *AzureVnetIngressEgressGwType) GetLocalControlPlane() *views.LocalContro
 	return nil
 }
 
+func (m *AzureVnetIngressEgressGwType) GetNotHub() *schema.Empty {
+	if x, ok := m.GetHubChoice().(*AzureVnetIngressEgressGwType_NotHub); ok {
+		return x.NotHub
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwType) GetHub() *AzureHubVnetType {
+	if x, ok := m.GetHubChoice().(*AzureVnetIngressEgressGwType_Hub); ok {
+		return x.Hub
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetIngressEgressGwType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -622,6 +817,8 @@ func (*AzureVnetIngressEgressGwType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetIngressEgressGwType_DcClusterGroupInsideVn)(nil),
 		(*AzureVnetIngressEgressGwType_SmConnectionPublicIp)(nil),
 		(*AzureVnetIngressEgressGwType_SmConnectionPvtIp)(nil),
+		(*AzureVnetIngressEgressGwType_NotHub)(nil),
+		(*AzureVnetIngressEgressGwType_Hub)(nil),
 	}
 }
 
@@ -719,12 +916,22 @@ type AzureVnetIngressEgressGwARType struct {
 	// x-displayName: "Site Local Control Plane"
 	// Enable/Disable site local control plane
 	LocalControlPlane *views.LocalControlPlaneType `protobuf:"bytes,25,opt,name=local_control_plane,json=localControlPlane,proto3" json:"local_control_plane,omitempty"`
+	// Choice of hub or not
+	//
+	// x-displayName: "Select VNet type"
+	// x-required
+	// Select VNet is hub or not
+	//
+	// Types that are valid to be assigned to HubChoice:
+	//	*AzureVnetIngressEgressGwARType_NotHub
+	//	*AzureVnetIngressEgressGwARType_Hub
+	HubChoice isAzureVnetIngressEgressGwARType_HubChoice `protobuf_oneof:"hub_choice"`
 }
 
 func (m *AzureVnetIngressEgressGwARType) Reset()      { *m = AzureVnetIngressEgressGwARType{} }
 func (*AzureVnetIngressEgressGwARType) ProtoMessage() {}
 func (*AzureVnetIngressEgressGwARType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{3}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{5}
 }
 func (m *AzureVnetIngressEgressGwARType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -791,6 +998,12 @@ type isAzureVnetIngressEgressGwARType_SiteMeshGroupChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetIngressEgressGwARType_HubChoice interface {
+	isAzureVnetIngressEgressGwARType_HubChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetIngressEgressGwARType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,2,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -840,6 +1053,12 @@ type AzureVnetIngressEgressGwARType_SmConnectionPublicIp struct {
 type AzureVnetIngressEgressGwARType_SmConnectionPvtIp struct {
 	SmConnectionPvtIp *schema.Empty `protobuf:"bytes,28,opt,name=sm_connection_pvt_ip,json=smConnectionPvtIp,proto3,oneof" json:"sm_connection_pvt_ip,omitempty"`
 }
+type AzureVnetIngressEgressGwARType_NotHub struct {
+	NotHub *schema.Empty `protobuf:"bytes,30,opt,name=not_hub,json=notHub,proto3,oneof" json:"not_hub,omitempty"`
+}
+type AzureVnetIngressEgressGwARType_Hub struct {
+	Hub *AzureHubVnetType `protobuf:"bytes,31,opt,name=hub,proto3,oneof" json:"hub,omitempty"`
+}
 
 func (*AzureVnetIngressEgressGwARType_NoNetworkPolicy) isAzureVnetIngressEgressGwARType_NetworkPolicyChoice() {
 }
@@ -873,6 +1092,8 @@ func (*AzureVnetIngressEgressGwARType_SmConnectionPublicIp) isAzureVnetIngressEg
 }
 func (*AzureVnetIngressEgressGwARType_SmConnectionPvtIp) isAzureVnetIngressEgressGwARType_SiteMeshGroupChoice() {
 }
+func (*AzureVnetIngressEgressGwARType_NotHub) isAzureVnetIngressEgressGwARType_HubChoice() {}
+func (*AzureVnetIngressEgressGwARType_Hub) isAzureVnetIngressEgressGwARType_HubChoice()    {}
 
 func (m *AzureVnetIngressEgressGwARType) GetNetworkPolicyChoice() isAzureVnetIngressEgressGwARType_NetworkPolicyChoice {
 	if m != nil {
@@ -913,6 +1134,12 @@ func (m *AzureVnetIngressEgressGwARType) GetDcClusterGroupChoice() isAzureVnetIn
 func (m *AzureVnetIngressEgressGwARType) GetSiteMeshGroupChoice() isAzureVnetIngressEgressGwARType_SiteMeshGroupChoice {
 	if m != nil {
 		return m.SiteMeshGroupChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwARType) GetHubChoice() isAzureVnetIngressEgressGwARType_HubChoice {
+	if m != nil {
+		return m.HubChoice
 	}
 	return nil
 }
@@ -1050,6 +1277,20 @@ func (m *AzureVnetIngressEgressGwARType) GetLocalControlPlane() *views.LocalCont
 	return nil
 }
 
+func (m *AzureVnetIngressEgressGwARType) GetNotHub() *schema.Empty {
+	if x, ok := m.GetHubChoice().(*AzureVnetIngressEgressGwARType_NotHub); ok {
+		return x.NotHub
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARType) GetHub() *AzureHubVnetType {
+	if x, ok := m.GetHubChoice().(*AzureVnetIngressEgressGwARType_Hub); ok {
+		return x.Hub
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetIngressEgressGwARType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1069,6 +1310,8 @@ func (*AzureVnetIngressEgressGwARType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn)(nil),
 		(*AzureVnetIngressEgressGwARType_SmConnectionPublicIp)(nil),
 		(*AzureVnetIngressEgressGwARType_SmConnectionPvtIp)(nil),
+		(*AzureVnetIngressEgressGwARType_NotHub)(nil),
+		(*AzureVnetIngressEgressGwARType_Hub)(nil),
 	}
 }
 
@@ -1180,7 +1423,7 @@ type AzureVnetVoltstackClusterType struct {
 func (m *AzureVnetVoltstackClusterType) Reset()      { *m = AzureVnetVoltstackClusterType{} }
 func (*AzureVnetVoltstackClusterType) ProtoMessage() {}
 func (*AzureVnetVoltstackClusterType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{4}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{6}
 }
 func (m *AzureVnetVoltstackClusterType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1660,7 +1903,7 @@ type AzureVnetVoltstackClusterARType struct {
 func (m *AzureVnetVoltstackClusterARType) Reset()      { *m = AzureVnetVoltstackClusterARType{} }
 func (*AzureVnetVoltstackClusterARType) ProtoMessage() {}
 func (*AzureVnetVoltstackClusterARType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{5}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{7}
 }
 func (m *AzureVnetVoltstackClusterARType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2043,7 +2286,7 @@ type AzureVnetIngressGwReplaceType struct {
 func (m *AzureVnetIngressGwReplaceType) Reset()      { *m = AzureVnetIngressGwReplaceType{} }
 func (*AzureVnetIngressGwReplaceType) ProtoMessage() {}
 func (*AzureVnetIngressGwReplaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{6}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{8}
 }
 func (m *AzureVnetIngressGwReplaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2078,7 +2321,7 @@ type AzureVnetIngressGwARReplaceType struct {
 func (m *AzureVnetIngressGwARReplaceType) Reset()      { *m = AzureVnetIngressGwARReplaceType{} }
 func (*AzureVnetIngressGwARReplaceType) ProtoMessage() {}
 func (*AzureVnetIngressGwARReplaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{7}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{9}
 }
 func (m *AzureVnetIngressGwARReplaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2170,12 +2413,32 @@ type AzureVnetIngressEgressGwReplaceType struct {
 	//	*AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn
 	//	*AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn
 	DcClusterGroupChoice isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
+	// Site Mesh Group Connection Type
+	//
+	// x-displayName: "Site Mesh Group Connection Type"
+	// x-required
+	// Select how the site mesh group needs to be connected
+	//
+	// Types that are valid to be assigned to SiteMeshGroupChoice:
+	//	*AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp
+	//	*AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp
+	SiteMeshGroupChoice isAzureVnetIngressEgressGwReplaceType_SiteMeshGroupChoice `protobuf_oneof:"site_mesh_group_choice"`
+	// Choice of hub or not
+	//
+	// x-displayName: "Select VNet type"
+	// x-required
+	// Select VNet is hub or not
+	//
+	// Types that are valid to be assigned to HubChoice:
+	//	*AzureVnetIngressEgressGwReplaceType_NotHub
+	//	*AzureVnetIngressEgressGwReplaceType_Hub
+	HubChoice isAzureVnetIngressEgressGwReplaceType_HubChoice `protobuf_oneof:"hub_choice"`
 }
 
 func (m *AzureVnetIngressEgressGwReplaceType) Reset()      { *m = AzureVnetIngressEgressGwReplaceType{} }
 func (*AzureVnetIngressEgressGwReplaceType) ProtoMessage() {}
 func (*AzureVnetIngressEgressGwReplaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{8}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{10}
 }
 func (m *AzureVnetIngressEgressGwReplaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2236,6 +2499,18 @@ type isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetIngressEgressGwReplaceType_SiteMeshGroupChoice interface {
+	isAzureVnetIngressEgressGwReplaceType_SiteMeshGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isAzureVnetIngressEgressGwReplaceType_HubChoice interface {
+	isAzureVnetIngressEgressGwReplaceType_HubChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetIngressEgressGwReplaceType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,2,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -2279,6 +2554,18 @@ type AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn struct {
 type AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn struct {
 	DcClusterGroupInsideVn *views.ObjectRefType `protobuf:"bytes,24,opt,name=dc_cluster_group_inside_vn,json=dcClusterGroupInsideVn,proto3,oneof" json:"dc_cluster_group_inside_vn,omitempty"`
 }
+type AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp struct {
+	SmConnectionPublicIp *schema.Empty `protobuf:"bytes,27,opt,name=sm_connection_public_ip,json=smConnectionPublicIp,proto3,oneof" json:"sm_connection_public_ip,omitempty"`
+}
+type AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp struct {
+	SmConnectionPvtIp *schema.Empty `protobuf:"bytes,28,opt,name=sm_connection_pvt_ip,json=smConnectionPvtIp,proto3,oneof" json:"sm_connection_pvt_ip,omitempty"`
+}
+type AzureVnetIngressEgressGwReplaceType_NotHub struct {
+	NotHub *schema.Empty `protobuf:"bytes,30,opt,name=not_hub,json=notHub,proto3,oneof" json:"not_hub,omitempty"`
+}
+type AzureVnetIngressEgressGwReplaceType_Hub struct {
+	Hub *AzureHubVnetType `protobuf:"bytes,31,opt,name=hub,proto3,oneof" json:"hub,omitempty"`
+}
 
 func (*AzureVnetIngressEgressGwReplaceType_NoNetworkPolicy) isAzureVnetIngressEgressGwReplaceType_NetworkPolicyChoice() {
 }
@@ -2308,6 +2595,13 @@ func (*AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn) isAzureVnetI
 }
 func (*AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice() {
 }
+func (*AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp) isAzureVnetIngressEgressGwReplaceType_SiteMeshGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp) isAzureVnetIngressEgressGwReplaceType_SiteMeshGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwReplaceType_NotHub) isAzureVnetIngressEgressGwReplaceType_HubChoice() {
+}
+func (*AzureVnetIngressEgressGwReplaceType_Hub) isAzureVnetIngressEgressGwReplaceType_HubChoice() {}
 
 func (m *AzureVnetIngressEgressGwReplaceType) GetNetworkPolicyChoice() isAzureVnetIngressEgressGwReplaceType_NetworkPolicyChoice {
 	if m != nil {
@@ -2342,6 +2636,18 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetGlobalNetworkChoice() isAzureVn
 func (m *AzureVnetIngressEgressGwReplaceType) GetDcClusterGroupChoice() isAzureVnetIngressEgressGwReplaceType_DcClusterGroupChoice {
 	if m != nil {
 		return m.DcClusterGroupChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwReplaceType) GetSiteMeshGroupChoice() isAzureVnetIngressEgressGwReplaceType_SiteMeshGroupChoice {
+	if m != nil {
+		return m.SiteMeshGroupChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwReplaceType) GetHubChoice() isAzureVnetIngressEgressGwReplaceType_HubChoice {
+	if m != nil {
+		return m.HubChoice
 	}
 	return nil
 }
@@ -2444,6 +2750,34 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetDcClusterGroupInsideVn() *views
 	return nil
 }
 
+func (m *AzureVnetIngressEgressGwReplaceType) GetSmConnectionPublicIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp); ok {
+		return x.SmConnectionPublicIp
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) GetSmConnectionPvtIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp); ok {
+		return x.SmConnectionPvtIp
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) GetNotHub() *schema.Empty {
+	if x, ok := m.GetHubChoice().(*AzureVnetIngressEgressGwReplaceType_NotHub); ok {
+		return x.NotHub
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType) GetHub() *AzureHubVnetType {
+	if x, ok := m.GetHubChoice().(*AzureVnetIngressEgressGwReplaceType_Hub); ok {
+		return x.Hub
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetIngressEgressGwReplaceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2461,6 +2795,10 @@ func (*AzureVnetIngressEgressGwReplaceType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup)(nil),
 		(*AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn)(nil),
 		(*AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn)(nil),
+		(*AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp)(nil),
+		(*AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp)(nil),
+		(*AzureVnetIngressEgressGwReplaceType_NotHub)(nil),
+		(*AzureVnetIngressEgressGwReplaceType_Hub)(nil),
 	}
 }
 
@@ -2531,12 +2869,32 @@ type AzureVnetIngressEgressGwARReplaceType struct {
 	//	*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn
 	//	*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn
 	DcClusterGroupChoice isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
+	// Site Mesh Group Connection Type
+	//
+	// x-displayName: "Site Mesh Group Connection Type"
+	// x-required
+	// Select how the site mesh group needs to be connected
+	//
+	// Types that are valid to be assigned to SiteMeshGroupChoice:
+	//	*AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp
+	//	*AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp
+	SiteMeshGroupChoice isAzureVnetIngressEgressGwARReplaceType_SiteMeshGroupChoice `protobuf_oneof:"site_mesh_group_choice"`
+	// Choice of hub or not
+	//
+	// x-displayName: "Select VNet type"
+	// x-required
+	// Select VNet is hub or not
+	//
+	// Types that are valid to be assigned to HubChoice:
+	//	*AzureVnetIngressEgressGwARReplaceType_NotHub
+	//	*AzureVnetIngressEgressGwARReplaceType_Hub
+	HubChoice isAzureVnetIngressEgressGwARReplaceType_HubChoice `protobuf_oneof:"hub_choice"`
 }
 
 func (m *AzureVnetIngressEgressGwARReplaceType) Reset()      { *m = AzureVnetIngressEgressGwARReplaceType{} }
 func (*AzureVnetIngressEgressGwARReplaceType) ProtoMessage() {}
 func (*AzureVnetIngressEgressGwARReplaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{9}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{11}
 }
 func (m *AzureVnetIngressEgressGwARReplaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2597,6 +2955,18 @@ type isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetIngressEgressGwARReplaceType_SiteMeshGroupChoice interface {
+	isAzureVnetIngressEgressGwARReplaceType_SiteMeshGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isAzureVnetIngressEgressGwARReplaceType_HubChoice interface {
+	isAzureVnetIngressEgressGwARReplaceType_HubChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetIngressEgressGwARReplaceType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,2,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -2640,6 +3010,18 @@ type AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn struct {
 type AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn struct {
 	DcClusterGroupInsideVn *views.ObjectRefType `protobuf:"bytes,24,opt,name=dc_cluster_group_inside_vn,json=dcClusterGroupInsideVn,proto3,oneof" json:"dc_cluster_group_inside_vn,omitempty"`
 }
+type AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp struct {
+	SmConnectionPublicIp *schema.Empty `protobuf:"bytes,27,opt,name=sm_connection_public_ip,json=smConnectionPublicIp,proto3,oneof" json:"sm_connection_public_ip,omitempty"`
+}
+type AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp struct {
+	SmConnectionPvtIp *schema.Empty `protobuf:"bytes,28,opt,name=sm_connection_pvt_ip,json=smConnectionPvtIp,proto3,oneof" json:"sm_connection_pvt_ip,omitempty"`
+}
+type AzureVnetIngressEgressGwARReplaceType_NotHub struct {
+	NotHub *schema.Empty `protobuf:"bytes,30,opt,name=not_hub,json=notHub,proto3,oneof" json:"not_hub,omitempty"`
+}
+type AzureVnetIngressEgressGwARReplaceType_Hub struct {
+	Hub *AzureHubVnetType `protobuf:"bytes,31,opt,name=hub,proto3,oneof" json:"hub,omitempty"`
+}
 
 func (*AzureVnetIngressEgressGwARReplaceType_NoNetworkPolicy) isAzureVnetIngressEgressGwARReplaceType_NetworkPolicyChoice() {
 }
@@ -2668,6 +3050,14 @@ func (*AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup) isAzureVnetIngres
 func (*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn) isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice() {
 }
 func (*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp) isAzureVnetIngressEgressGwARReplaceType_SiteMeshGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp) isAzureVnetIngressEgressGwARReplaceType_SiteMeshGroupChoice() {
+}
+func (*AzureVnetIngressEgressGwARReplaceType_NotHub) isAzureVnetIngressEgressGwARReplaceType_HubChoice() {
+}
+func (*AzureVnetIngressEgressGwARReplaceType_Hub) isAzureVnetIngressEgressGwARReplaceType_HubChoice() {
 }
 
 func (m *AzureVnetIngressEgressGwARReplaceType) GetNetworkPolicyChoice() isAzureVnetIngressEgressGwARReplaceType_NetworkPolicyChoice {
@@ -2703,6 +3093,18 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetGlobalNetworkChoice() isAzure
 func (m *AzureVnetIngressEgressGwARReplaceType) GetDcClusterGroupChoice() isAzureVnetIngressEgressGwARReplaceType_DcClusterGroupChoice {
 	if m != nil {
 		return m.DcClusterGroupChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwARReplaceType) GetSiteMeshGroupChoice() isAzureVnetIngressEgressGwARReplaceType_SiteMeshGroupChoice {
+	if m != nil {
+		return m.SiteMeshGroupChoice
+	}
+	return nil
+}
+func (m *AzureVnetIngressEgressGwARReplaceType) GetHubChoice() isAzureVnetIngressEgressGwARReplaceType_HubChoice {
+	if m != nil {
+		return m.HubChoice
 	}
 	return nil
 }
@@ -2805,6 +3207,34 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetDcClusterGroupInsideVn() *vie
 	return nil
 }
 
+func (m *AzureVnetIngressEgressGwARReplaceType) GetSmConnectionPublicIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp); ok {
+		return x.SmConnectionPublicIp
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) GetSmConnectionPvtIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp); ok {
+		return x.SmConnectionPvtIp
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) GetNotHub() *schema.Empty {
+	if x, ok := m.GetHubChoice().(*AzureVnetIngressEgressGwARReplaceType_NotHub); ok {
+		return x.NotHub
+	}
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType) GetHub() *AzureHubVnetType {
+	if x, ok := m.GetHubChoice().(*AzureVnetIngressEgressGwARReplaceType_Hub); ok {
+		return x.Hub
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetIngressEgressGwARReplaceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2822,6 +3252,10 @@ func (*AzureVnetIngressEgressGwARReplaceType) XXX_OneofWrappers() []interface{} 
 		(*AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup)(nil),
 		(*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn)(nil),
 		(*AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn)(nil),
+		(*AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp)(nil),
+		(*AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp)(nil),
+		(*AzureVnetIngressEgressGwARReplaceType_NotHub)(nil),
+		(*AzureVnetIngressEgressGwARReplaceType_Hub)(nil),
 	}
 }
 
@@ -2881,12 +3315,22 @@ type AzureVnetVoltstackClusterReplaceType struct {
 	//	*AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup
 	//	*AzureVnetVoltstackClusterReplaceType_DcClusterGroup
 	DcClusterGroupChoice isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
+	// Site Mesh Group Connection Type
+	//
+	// x-displayName: "Site Mesh Group Connection Type"
+	// x-required
+	// Select how the site mesh group needs to be connected
+	//
+	// Types that are valid to be assigned to SiteMeshGroupChoice:
+	//	*AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp
+	//	*AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp
+	SiteMeshGroupChoice isAzureVnetVoltstackClusterReplaceType_SiteMeshGroupChoice `protobuf_oneof:"site_mesh_group_choice"`
 }
 
 func (m *AzureVnetVoltstackClusterReplaceType) Reset()      { *m = AzureVnetVoltstackClusterReplaceType{} }
 func (*AzureVnetVoltstackClusterReplaceType) ProtoMessage() {}
 func (*AzureVnetVoltstackClusterReplaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{10}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{12}
 }
 func (m *AzureVnetVoltstackClusterReplaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2941,6 +3385,12 @@ type isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetVoltstackClusterReplaceType_SiteMeshGroupChoice interface {
+	isAzureVnetVoltstackClusterReplaceType_SiteMeshGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetVoltstackClusterReplaceType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,4,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -2975,6 +3425,12 @@ type AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup struct {
 type AzureVnetVoltstackClusterReplaceType_DcClusterGroup struct {
 	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,30,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
 }
+type AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp struct {
+	SmConnectionPublicIp *schema.Empty `protobuf:"bytes,34,opt,name=sm_connection_public_ip,json=smConnectionPublicIp,proto3,oneof" json:"sm_connection_public_ip,omitempty"`
+}
+type AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp struct {
+	SmConnectionPvtIp *schema.Empty `protobuf:"bytes,35,opt,name=sm_connection_pvt_ip,json=smConnectionPvtIp,proto3,oneof" json:"sm_connection_pvt_ip,omitempty"`
+}
 
 func (*AzureVnetVoltstackClusterReplaceType_NoNetworkPolicy) isAzureVnetVoltstackClusterReplaceType_NetworkPolicyChoice() {
 }
@@ -2997,6 +3453,10 @@ func (*AzureVnetVoltstackClusterReplaceType_GlobalNetworkList) isAzureVnetVoltst
 func (*AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup) isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice() {
 }
 func (*AzureVnetVoltstackClusterReplaceType_DcClusterGroup) isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp) isAzureVnetVoltstackClusterReplaceType_SiteMeshGroupChoice() {
+}
+func (*AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp) isAzureVnetVoltstackClusterReplaceType_SiteMeshGroupChoice() {
 }
 
 func (m *AzureVnetVoltstackClusterReplaceType) GetNetworkPolicyChoice() isAzureVnetVoltstackClusterReplaceType_NetworkPolicyChoice {
@@ -3026,6 +3486,12 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetGlobalNetworkChoice() isAzureV
 func (m *AzureVnetVoltstackClusterReplaceType) GetDcClusterGroupChoice() isAzureVnetVoltstackClusterReplaceType_DcClusterGroupChoice {
 	if m != nil {
 		return m.DcClusterGroupChoice
+	}
+	return nil
+}
+func (m *AzureVnetVoltstackClusterReplaceType) GetSiteMeshGroupChoice() isAzureVnetVoltstackClusterReplaceType_SiteMeshGroupChoice {
+	if m != nil {
+		return m.SiteMeshGroupChoice
 	}
 	return nil
 }
@@ -3107,6 +3573,20 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetDcClusterGroup() *views.Object
 	return nil
 }
 
+func (m *AzureVnetVoltstackClusterReplaceType) GetSmConnectionPublicIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp); ok {
+		return x.SmConnectionPublicIp
+	}
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType) GetSmConnectionPvtIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp); ok {
+		return x.SmConnectionPvtIp
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetVoltstackClusterReplaceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -3121,6 +3601,8 @@ func (*AzureVnetVoltstackClusterReplaceType) XXX_OneofWrappers() []interface{} {
 		(*AzureVnetVoltstackClusterReplaceType_GlobalNetworkList)(nil),
 		(*AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup)(nil),
 		(*AzureVnetVoltstackClusterReplaceType_DcClusterGroup)(nil),
+		(*AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp)(nil),
+		(*AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp)(nil),
 	}
 }
 
@@ -3180,6 +3662,16 @@ type AzureVnetVoltstackClusterARReplaceType struct {
 	//	*AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup
 	//	*AzureVnetVoltstackClusterARReplaceType_DcClusterGroup
 	DcClusterGroupChoice isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
+	// Site Mesh Group Connection Type
+	//
+	// x-displayName: "Site Mesh Group Connection Type"
+	// x-required
+	// Select how the site mesh group needs to be connected
+	//
+	// Types that are valid to be assigned to SiteMeshGroupChoice:
+	//	*AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp
+	//	*AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp
+	SiteMeshGroupChoice isAzureVnetVoltstackClusterARReplaceType_SiteMeshGroupChoice `protobuf_oneof:"site_mesh_group_choice"`
 }
 
 func (m *AzureVnetVoltstackClusterARReplaceType) Reset() {
@@ -3187,7 +3679,7 @@ func (m *AzureVnetVoltstackClusterARReplaceType) Reset() {
 }
 func (*AzureVnetVoltstackClusterARReplaceType) ProtoMessage() {}
 func (*AzureVnetVoltstackClusterARReplaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{11}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{13}
 }
 func (m *AzureVnetVoltstackClusterARReplaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3242,6 +3734,12 @@ type isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isAzureVnetVoltstackClusterARReplaceType_SiteMeshGroupChoice interface {
+	isAzureVnetVoltstackClusterARReplaceType_SiteMeshGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type AzureVnetVoltstackClusterARReplaceType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,4,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -3276,6 +3774,12 @@ type AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup struct {
 type AzureVnetVoltstackClusterARReplaceType_DcClusterGroup struct {
 	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,31,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
 }
+type AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp struct {
+	SmConnectionPublicIp *schema.Empty `protobuf:"bytes,34,opt,name=sm_connection_public_ip,json=smConnectionPublicIp,proto3,oneof" json:"sm_connection_public_ip,omitempty"`
+}
+type AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp struct {
+	SmConnectionPvtIp *schema.Empty `protobuf:"bytes,35,opt,name=sm_connection_pvt_ip,json=smConnectionPvtIp,proto3,oneof" json:"sm_connection_pvt_ip,omitempty"`
+}
 
 func (*AzureVnetVoltstackClusterARReplaceType_NoNetworkPolicy) isAzureVnetVoltstackClusterARReplaceType_NetworkPolicyChoice() {
 }
@@ -3298,6 +3802,10 @@ func (*AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList) isAzureVnetVolt
 func (*AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup) isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice() {
 }
 func (*AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice() {
+}
+func (*AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp) isAzureVnetVoltstackClusterARReplaceType_SiteMeshGroupChoice() {
+}
+func (*AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp) isAzureVnetVoltstackClusterARReplaceType_SiteMeshGroupChoice() {
 }
 
 func (m *AzureVnetVoltstackClusterARReplaceType) GetNetworkPolicyChoice() isAzureVnetVoltstackClusterARReplaceType_NetworkPolicyChoice {
@@ -3327,6 +3835,12 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetGlobalNetworkChoice() isAzur
 func (m *AzureVnetVoltstackClusterARReplaceType) GetDcClusterGroupChoice() isAzureVnetVoltstackClusterARReplaceType_DcClusterGroupChoice {
 	if m != nil {
 		return m.DcClusterGroupChoice
+	}
+	return nil
+}
+func (m *AzureVnetVoltstackClusterARReplaceType) GetSiteMeshGroupChoice() isAzureVnetVoltstackClusterARReplaceType_SiteMeshGroupChoice {
+	if m != nil {
+		return m.SiteMeshGroupChoice
 	}
 	return nil
 }
@@ -3408,6 +3922,20 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetDcClusterGroup() *views.Obje
 	return nil
 }
 
+func (m *AzureVnetVoltstackClusterARReplaceType) GetSmConnectionPublicIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp); ok {
+		return x.SmConnectionPublicIp
+	}
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType) GetSmConnectionPvtIp() *schema.Empty {
+	if x, ok := m.GetSiteMeshGroupChoice().(*AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp); ok {
+		return x.SmConnectionPvtIp
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AzureVnetVoltstackClusterARReplaceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -3422,6 +3950,8 @@ func (*AzureVnetVoltstackClusterARReplaceType) XXX_OneofWrappers() []interface{}
 		(*AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList)(nil),
 		(*AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup)(nil),
 		(*AzureVnetVoltstackClusterARReplaceType_DcClusterGroup)(nil),
+		(*AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp)(nil),
+		(*AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp)(nil),
 	}
 }
 
@@ -3449,7 +3979,7 @@ type AzureVnetSiteInfoType struct {
 func (m *AzureVnetSiteInfoType) Reset()      { *m = AzureVnetSiteInfoType{} }
 func (*AzureVnetSiteInfoType) ProtoMessage() {}
 func (*AzureVnetSiteInfoType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{12}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{14}
 }
 func (m *AzureVnetSiteInfoType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3538,9 +4068,9 @@ type GlobalSpecType struct {
 	DiskSize uint32 `protobuf:"varint,16,opt,name=disk_size,json=diskSize,proto3" json:"disk_size,omitempty"`
 	// Automatic Deployment
 	//
-	// x-displayName: "Select Automatic or Assisted Deployment"
+	// x-displayName: "Automatic Deployment"
 	// x-required
-	// Choice of deploying automatic via volterra or Assisted using volterra generated parameters.
+	// Deploying automatic via volterra.
 	//
 	// Types that are valid to be assigned to Deployment:
 	//	*GlobalSpecType_AzureCred
@@ -3624,6 +4154,22 @@ type GlobalSpecType struct {
 	// x-displayName: "VIP Params Per AZ"
 	// VIP Parameters Per AZ.
 	VipParamsPerAz []*site.PublishVIPParamsPerAz `protobuf:"bytes,25,rep,name=vip_params_per_az,json=vipParamsPerAz,proto3" json:"vip_params_per_az,omitempty"`
+	// site_to_site_tunnel_ip
+	//
+	// x-displayName: "Site To Site Tunnel IP"
+	// x-example: "10.1.1.1"
+	// Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.
+	SiteToSiteTunnelIp string `protobuf:"bytes,35,opt,name=site_to_site_tunnel_ip,json=siteToSiteTunnelIp,proto3" json:"site_to_site_tunnel_ip,omitempty"`
+	// Select to Configure Blocked Services
+	//
+	// x-displayName: "Select to Configure Blocked Services"
+	// x-required
+	// Select to use default or custom blocked service configuration
+	//
+	// Types that are valid to be assigned to BlockedServicesChoice:
+	//	*GlobalSpecType_DefaultBlockedServices
+	//	*GlobalSpecType_BlockedServices
+	BlockedServicesChoice isGlobalSpecType_BlockedServicesChoice `protobuf_oneof:"blocked_services_choice"`
 	// Reference to terraform parameters
 	//
 	// x-displayName: "Terraform Parameters"
@@ -3644,7 +4190,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{13}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{15}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3699,6 +4245,12 @@ type isGlobalSpecType_LogsReceiverChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_BlockedServicesChoice interface {
+	isGlobalSpecType_BlockedServicesChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_AzureRegion struct {
 	AzureRegion string `protobuf:"bytes,2,opt,name=azure_region,json=azureRegion,proto3,oneof" json:"azure_region,omitempty"`
@@ -3745,22 +4297,30 @@ type GlobalSpecType_LogsStreamingDisabled struct {
 type GlobalSpecType_LogReceiver struct {
 	LogReceiver *views.ObjectRefType `protobuf:"bytes,22,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
+type GlobalSpecType_DefaultBlockedServices struct {
+	DefaultBlockedServices *schema.Empty `protobuf:"bytes,37,opt,name=default_blocked_services,json=defaultBlockedServices,proto3,oneof" json:"default_blocked_services,omitempty"`
+}
+type GlobalSpecType_BlockedServices struct {
+	BlockedServices *fleet.BlockedServicesListType `protobuf:"bytes,41,opt,name=blocked_services,json=blockedServices,proto3,oneof" json:"blocked_services,omitempty"`
+}
 
-func (*GlobalSpecType_AzureRegion) isGlobalSpecType_RegionChoice()                 {}
-func (*GlobalSpecType_AlternateRegion) isGlobalSpecType_RegionChoice()             {}
-func (*GlobalSpecType_IngressGw) isGlobalSpecType_SiteType()                       {}
-func (*GlobalSpecType_IngressEgressGw) isGlobalSpecType_SiteType()                 {}
-func (*GlobalSpecType_VoltstackCluster) isGlobalSpecType_SiteType()                {}
-func (*GlobalSpecType_IngressGwAr) isGlobalSpecType_SiteType()                     {}
-func (*GlobalSpecType_IngressEgressGwAr) isGlobalSpecType_SiteType()               {}
-func (*GlobalSpecType_VoltstackClusterAr) isGlobalSpecType_SiteType()              {}
-func (*GlobalSpecType_AzureCred) isGlobalSpecType_Deployment()                     {}
-func (*GlobalSpecType_Assisted) isGlobalSpecType_Deployment()                      {}
-func (*GlobalSpecType_NodesPerAz) isGlobalSpecType_WorkerNodes()                   {}
-func (*GlobalSpecType_TotalNodes) isGlobalSpecType_WorkerNodes()                   {}
-func (*GlobalSpecType_NoWorkerNodes) isGlobalSpecType_WorkerNodes()                {}
-func (*GlobalSpecType_LogsStreamingDisabled) isGlobalSpecType_LogsReceiverChoice() {}
-func (*GlobalSpecType_LogReceiver) isGlobalSpecType_LogsReceiverChoice()           {}
+func (*GlobalSpecType_AzureRegion) isGlobalSpecType_RegionChoice()                     {}
+func (*GlobalSpecType_AlternateRegion) isGlobalSpecType_RegionChoice()                 {}
+func (*GlobalSpecType_IngressGw) isGlobalSpecType_SiteType()                           {}
+func (*GlobalSpecType_IngressEgressGw) isGlobalSpecType_SiteType()                     {}
+func (*GlobalSpecType_VoltstackCluster) isGlobalSpecType_SiteType()                    {}
+func (*GlobalSpecType_IngressGwAr) isGlobalSpecType_SiteType()                         {}
+func (*GlobalSpecType_IngressEgressGwAr) isGlobalSpecType_SiteType()                   {}
+func (*GlobalSpecType_VoltstackClusterAr) isGlobalSpecType_SiteType()                  {}
+func (*GlobalSpecType_AzureCred) isGlobalSpecType_Deployment()                         {}
+func (*GlobalSpecType_Assisted) isGlobalSpecType_Deployment()                          {}
+func (*GlobalSpecType_NodesPerAz) isGlobalSpecType_WorkerNodes()                       {}
+func (*GlobalSpecType_TotalNodes) isGlobalSpecType_WorkerNodes()                       {}
+func (*GlobalSpecType_NoWorkerNodes) isGlobalSpecType_WorkerNodes()                    {}
+func (*GlobalSpecType_LogsStreamingDisabled) isGlobalSpecType_LogsReceiverChoice()     {}
+func (*GlobalSpecType_LogReceiver) isGlobalSpecType_LogsReceiverChoice()               {}
+func (*GlobalSpecType_DefaultBlockedServices) isGlobalSpecType_BlockedServicesChoice() {}
+func (*GlobalSpecType_BlockedServices) isGlobalSpecType_BlockedServicesChoice()        {}
 
 func (m *GlobalSpecType) GetRegionChoice() isGlobalSpecType_RegionChoice {
 	if m != nil {
@@ -3789,6 +4349,12 @@ func (m *GlobalSpecType) GetWorkerNodes() isGlobalSpecType_WorkerNodes {
 func (m *GlobalSpecType) GetLogsReceiverChoice() isGlobalSpecType_LogsReceiverChoice {
 	if m != nil {
 		return m.LogsReceiverChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetBlockedServicesChoice() isGlobalSpecType_BlockedServicesChoice {
+	if m != nil {
+		return m.BlockedServicesChoice
 	}
 	return nil
 }
@@ -3877,6 +4443,7 @@ func (m *GlobalSpecType) GetAzureCred() *views.ObjectRefType {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *GlobalSpecType) GetAssisted() *schema.Empty {
 	if x, ok := m.GetDeployment().(*GlobalSpecType_Assisted); ok {
 		return x.Assisted
@@ -3989,6 +4556,27 @@ func (m *GlobalSpecType) GetVipParamsPerAz() []*site.PublishVIPParamsPerAz {
 	return nil
 }
 
+func (m *GlobalSpecType) GetSiteToSiteTunnelIp() string {
+	if m != nil {
+		return m.SiteToSiteTunnelIp
+	}
+	return ""
+}
+
+func (m *GlobalSpecType) GetDefaultBlockedServices() *schema.Empty {
+	if x, ok := m.GetBlockedServicesChoice().(*GlobalSpecType_DefaultBlockedServices); ok {
+		return x.DefaultBlockedServices
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetBlockedServices() *fleet.BlockedServicesListType {
+	if x, ok := m.GetBlockedServicesChoice().(*GlobalSpecType_BlockedServices); ok {
+		return x.BlockedServices
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetTfParams() *views.ObjectRefType {
 	if m != nil {
 		return m.TfParams
@@ -4028,6 +4616,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_NoWorkerNodes)(nil),
 		(*GlobalSpecType_LogsStreamingDisabled)(nil),
 		(*GlobalSpecType_LogReceiver)(nil),
+		(*GlobalSpecType_DefaultBlockedServices)(nil),
+		(*GlobalSpecType_BlockedServices)(nil),
 	}
 }
 
@@ -4052,7 +4642,6 @@ type CreateSpecType struct {
 	SiteType isCreateSpecType_SiteType `protobuf_oneof:"site_type"`
 	// Types that are valid to be assigned to Deployment:
 	//	*CreateSpecType_AzureCred
-	//	*CreateSpecType_Assisted
 	Deployment  isCreateSpecType_Deployment `protobuf_oneof:"deployment"`
 	MachineType string                      `protobuf:"bytes,10,opt,name=machine_type,json=machineType,proto3" json:"machine_type,omitempty"`
 	DiskSize    uint32                      `protobuf:"varint,16,opt,name=disk_size,json=diskSize,proto3" json:"disk_size,omitempty"`
@@ -4079,12 +4668,16 @@ type CreateSpecType struct {
 	//	*CreateSpecType_TotalNodes
 	//	*CreateSpecType_NoWorkerNodes
 	WorkerNodes isCreateSpecType_WorkerNodes `protobuf_oneof:"worker_nodes"`
+	// Types that are valid to be assigned to BlockedServicesChoice:
+	//	*CreateSpecType_DefaultBlockedServices
+	//	*CreateSpecType_BlockedServices
+	BlockedServicesChoice isCreateSpecType_BlockedServicesChoice `protobuf_oneof:"blocked_services_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{14}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{16}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4139,6 +4732,12 @@ type isCreateSpecType_WorkerNodes interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_BlockedServicesChoice interface {
+	isCreateSpecType_BlockedServicesChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_AzureRegion struct {
 	AzureRegion string `protobuf:"bytes,2,opt,name=azure_region,json=azureRegion,proto3,oneof" json:"azure_region,omitempty"`
@@ -4167,9 +4766,6 @@ type CreateSpecType_VoltstackClusterAr struct {
 type CreateSpecType_AzureCred struct {
 	AzureCred *views.ObjectRefType `protobuf:"bytes,8,opt,name=azure_cred,json=azureCred,proto3,oneof" json:"azure_cred,omitempty"`
 }
-type CreateSpecType_Assisted struct {
-	Assisted *schema.Empty `protobuf:"bytes,9,opt,name=assisted,proto3,oneof" json:"assisted,omitempty"`
-}
 type CreateSpecType_LogsStreamingDisabled struct {
 	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,21,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
@@ -4185,22 +4781,29 @@ type CreateSpecType_TotalNodes struct {
 type CreateSpecType_NoWorkerNodes struct {
 	NoWorkerNodes *schema.Empty `protobuf:"bytes,28,opt,name=no_worker_nodes,json=noWorkerNodes,proto3,oneof" json:"no_worker_nodes,omitempty"`
 }
+type CreateSpecType_DefaultBlockedServices struct {
+	DefaultBlockedServices *schema.Empty `protobuf:"bytes,37,opt,name=default_blocked_services,json=defaultBlockedServices,proto3,oneof" json:"default_blocked_services,omitempty"`
+}
+type CreateSpecType_BlockedServices struct {
+	BlockedServices *fleet.BlockedServicesListType `protobuf:"bytes,41,opt,name=blocked_services,json=blockedServices,proto3,oneof" json:"blocked_services,omitempty"`
+}
 
-func (*CreateSpecType_AzureRegion) isCreateSpecType_RegionChoice()                 {}
-func (*CreateSpecType_AlternateRegion) isCreateSpecType_RegionChoice()             {}
-func (*CreateSpecType_IngressGw) isCreateSpecType_SiteType()                       {}
-func (*CreateSpecType_IngressEgressGw) isCreateSpecType_SiteType()                 {}
-func (*CreateSpecType_VoltstackCluster) isCreateSpecType_SiteType()                {}
-func (*CreateSpecType_IngressGwAr) isCreateSpecType_SiteType()                     {}
-func (*CreateSpecType_IngressEgressGwAr) isCreateSpecType_SiteType()               {}
-func (*CreateSpecType_VoltstackClusterAr) isCreateSpecType_SiteType()              {}
-func (*CreateSpecType_AzureCred) isCreateSpecType_Deployment()                     {}
-func (*CreateSpecType_Assisted) isCreateSpecType_Deployment()                      {}
-func (*CreateSpecType_LogsStreamingDisabled) isCreateSpecType_LogsReceiverChoice() {}
-func (*CreateSpecType_LogReceiver) isCreateSpecType_LogsReceiverChoice()           {}
-func (*CreateSpecType_NodesPerAz) isCreateSpecType_WorkerNodes()                   {}
-func (*CreateSpecType_TotalNodes) isCreateSpecType_WorkerNodes()                   {}
-func (*CreateSpecType_NoWorkerNodes) isCreateSpecType_WorkerNodes()                {}
+func (*CreateSpecType_AzureRegion) isCreateSpecType_RegionChoice()                     {}
+func (*CreateSpecType_AlternateRegion) isCreateSpecType_RegionChoice()                 {}
+func (*CreateSpecType_IngressGw) isCreateSpecType_SiteType()                           {}
+func (*CreateSpecType_IngressEgressGw) isCreateSpecType_SiteType()                     {}
+func (*CreateSpecType_VoltstackCluster) isCreateSpecType_SiteType()                    {}
+func (*CreateSpecType_IngressGwAr) isCreateSpecType_SiteType()                         {}
+func (*CreateSpecType_IngressEgressGwAr) isCreateSpecType_SiteType()                   {}
+func (*CreateSpecType_VoltstackClusterAr) isCreateSpecType_SiteType()                  {}
+func (*CreateSpecType_AzureCred) isCreateSpecType_Deployment()                         {}
+func (*CreateSpecType_LogsStreamingDisabled) isCreateSpecType_LogsReceiverChoice()     {}
+func (*CreateSpecType_LogReceiver) isCreateSpecType_LogsReceiverChoice()               {}
+func (*CreateSpecType_NodesPerAz) isCreateSpecType_WorkerNodes()                       {}
+func (*CreateSpecType_TotalNodes) isCreateSpecType_WorkerNodes()                       {}
+func (*CreateSpecType_NoWorkerNodes) isCreateSpecType_WorkerNodes()                    {}
+func (*CreateSpecType_DefaultBlockedServices) isCreateSpecType_BlockedServicesChoice() {}
+func (*CreateSpecType_BlockedServices) isCreateSpecType_BlockedServicesChoice()        {}
 
 func (m *CreateSpecType) GetRegionChoice() isCreateSpecType_RegionChoice {
 	if m != nil {
@@ -4229,6 +4832,12 @@ func (m *CreateSpecType) GetLogsReceiverChoice() isCreateSpecType_LogsReceiverCh
 func (m *CreateSpecType) GetWorkerNodes() isCreateSpecType_WorkerNodes {
 	if m != nil {
 		return m.WorkerNodes
+	}
+	return nil
+}
+func (m *CreateSpecType) GetBlockedServicesChoice() isCreateSpecType_BlockedServicesChoice {
+	if m != nil {
+		return m.BlockedServicesChoice
 	}
 	return nil
 }
@@ -4306,13 +4915,6 @@ func (m *CreateSpecType) GetVoltstackClusterAr() *AzureVnetVoltstackClusterARTyp
 func (m *CreateSpecType) GetAzureCred() *views.ObjectRefType {
 	if x, ok := m.GetDeployment().(*CreateSpecType_AzureCred); ok {
 		return x.AzureCred
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetAssisted() *schema.Empty {
-	if x, ok := m.GetDeployment().(*CreateSpecType_Assisted); ok {
-		return x.Assisted
 	}
 	return nil
 }
@@ -4408,6 +5010,20 @@ func (m *CreateSpecType) GetNoWorkerNodes() *schema.Empty {
 	return nil
 }
 
+func (m *CreateSpecType) GetDefaultBlockedServices() *schema.Empty {
+	if x, ok := m.GetBlockedServicesChoice().(*CreateSpecType_DefaultBlockedServices); ok {
+		return x.DefaultBlockedServices
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetBlockedServices() *fleet.BlockedServicesListType {
+	if x, ok := m.GetBlockedServicesChoice().(*CreateSpecType_BlockedServices); ok {
+		return x.BlockedServices
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -4420,12 +5036,13 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_IngressEgressGwAr)(nil),
 		(*CreateSpecType_VoltstackClusterAr)(nil),
 		(*CreateSpecType_AzureCred)(nil),
-		(*CreateSpecType_Assisted)(nil),
 		(*CreateSpecType_LogsStreamingDisabled)(nil),
 		(*CreateSpecType_LogReceiver)(nil),
 		(*CreateSpecType_NodesPerAz)(nil),
 		(*CreateSpecType_TotalNodes)(nil),
 		(*CreateSpecType_NoWorkerNodes)(nil),
+		(*CreateSpecType_DefaultBlockedServices)(nil),
+		(*CreateSpecType_BlockedServices)(nil),
 	}
 }
 
@@ -4459,12 +5076,16 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_TotalNodes
 	//	*ReplaceSpecType_NoWorkerNodes
 	WorkerNodes isReplaceSpecType_WorkerNodes `protobuf_oneof:"worker_nodes"`
+	// Types that are valid to be assigned to BlockedServicesChoice:
+	//	*ReplaceSpecType_DefaultBlockedServices
+	//	*ReplaceSpecType_BlockedServices
+	BlockedServicesChoice isReplaceSpecType_BlockedServicesChoice `protobuf_oneof:"blocked_services_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{15}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{17}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4507,6 +5128,12 @@ type isReplaceSpecType_WorkerNodes interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_BlockedServicesChoice interface {
+	isReplaceSpecType_BlockedServicesChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_IngressGw struct {
 	IngressGw *AzureVnetIngressGwReplaceType `protobuf:"bytes,5,opt,name=ingress_gw,json=ingressGw,proto3,oneof" json:"ingress_gw,omitempty"`
@@ -4541,18 +5168,26 @@ type ReplaceSpecType_TotalNodes struct {
 type ReplaceSpecType_NoWorkerNodes struct {
 	NoWorkerNodes *schema.Empty `protobuf:"bytes,28,opt,name=no_worker_nodes,json=noWorkerNodes,proto3,oneof" json:"no_worker_nodes,omitempty"`
 }
+type ReplaceSpecType_DefaultBlockedServices struct {
+	DefaultBlockedServices *schema.Empty `protobuf:"bytes,37,opt,name=default_blocked_services,json=defaultBlockedServices,proto3,oneof" json:"default_blocked_services,omitempty"`
+}
+type ReplaceSpecType_BlockedServices struct {
+	BlockedServices *fleet.BlockedServicesListType `protobuf:"bytes,41,opt,name=blocked_services,json=blockedServices,proto3,oneof" json:"blocked_services,omitempty"`
+}
 
-func (*ReplaceSpecType_IngressGw) isReplaceSpecType_SiteType()                       {}
-func (*ReplaceSpecType_IngressEgressGw) isReplaceSpecType_SiteType()                 {}
-func (*ReplaceSpecType_VoltstackCluster) isReplaceSpecType_SiteType()                {}
-func (*ReplaceSpecType_IngressGwAr) isReplaceSpecType_SiteType()                     {}
-func (*ReplaceSpecType_IngressEgressGwAr) isReplaceSpecType_SiteType()               {}
-func (*ReplaceSpecType_VoltstackClusterAr) isReplaceSpecType_SiteType()              {}
-func (*ReplaceSpecType_LogsStreamingDisabled) isReplaceSpecType_LogsReceiverChoice() {}
-func (*ReplaceSpecType_LogReceiver) isReplaceSpecType_LogsReceiverChoice()           {}
-func (*ReplaceSpecType_NodesPerAz) isReplaceSpecType_WorkerNodes()                   {}
-func (*ReplaceSpecType_TotalNodes) isReplaceSpecType_WorkerNodes()                   {}
-func (*ReplaceSpecType_NoWorkerNodes) isReplaceSpecType_WorkerNodes()                {}
+func (*ReplaceSpecType_IngressGw) isReplaceSpecType_SiteType()                           {}
+func (*ReplaceSpecType_IngressEgressGw) isReplaceSpecType_SiteType()                     {}
+func (*ReplaceSpecType_VoltstackCluster) isReplaceSpecType_SiteType()                    {}
+func (*ReplaceSpecType_IngressGwAr) isReplaceSpecType_SiteType()                         {}
+func (*ReplaceSpecType_IngressEgressGwAr) isReplaceSpecType_SiteType()                   {}
+func (*ReplaceSpecType_VoltstackClusterAr) isReplaceSpecType_SiteType()                  {}
+func (*ReplaceSpecType_LogsStreamingDisabled) isReplaceSpecType_LogsReceiverChoice()     {}
+func (*ReplaceSpecType_LogReceiver) isReplaceSpecType_LogsReceiverChoice()               {}
+func (*ReplaceSpecType_NodesPerAz) isReplaceSpecType_WorkerNodes()                       {}
+func (*ReplaceSpecType_TotalNodes) isReplaceSpecType_WorkerNodes()                       {}
+func (*ReplaceSpecType_NoWorkerNodes) isReplaceSpecType_WorkerNodes()                    {}
+func (*ReplaceSpecType_DefaultBlockedServices) isReplaceSpecType_BlockedServicesChoice() {}
+func (*ReplaceSpecType_BlockedServices) isReplaceSpecType_BlockedServicesChoice()        {}
 
 func (m *ReplaceSpecType) GetSiteType() isReplaceSpecType_SiteType {
 	if m != nil {
@@ -4569,6 +5204,12 @@ func (m *ReplaceSpecType) GetLogsReceiverChoice() isReplaceSpecType_LogsReceiver
 func (m *ReplaceSpecType) GetWorkerNodes() isReplaceSpecType_WorkerNodes {
 	if m != nil {
 		return m.WorkerNodes
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetBlockedServicesChoice() isReplaceSpecType_BlockedServicesChoice {
+	if m != nil {
+		return m.BlockedServicesChoice
 	}
 	return nil
 }
@@ -4664,6 +5305,20 @@ func (m *ReplaceSpecType) GetNoWorkerNodes() *schema.Empty {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetDefaultBlockedServices() *schema.Empty {
+	if x, ok := m.GetBlockedServicesChoice().(*ReplaceSpecType_DefaultBlockedServices); ok {
+		return x.DefaultBlockedServices
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetBlockedServices() *fleet.BlockedServicesListType {
+	if x, ok := m.GetBlockedServicesChoice().(*ReplaceSpecType_BlockedServices); ok {
+		return x.BlockedServices
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -4678,6 +5333,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_NodesPerAz)(nil),
 		(*ReplaceSpecType_TotalNodes)(nil),
 		(*ReplaceSpecType_NoWorkerNodes)(nil),
+		(*ReplaceSpecType_DefaultBlockedServices)(nil),
+		(*ReplaceSpecType_BlockedServices)(nil),
 	}
 }
 
@@ -4727,12 +5384,16 @@ type GetSpecType struct {
 	//	*GetSpecType_TotalNodes
 	//	*GetSpecType_NoWorkerNodes
 	WorkerNodes isGetSpecType_WorkerNodes `protobuf_oneof:"worker_nodes"`
+	// Types that are valid to be assigned to BlockedServicesChoice:
+	//	*GetSpecType_DefaultBlockedServices
+	//	*GetSpecType_BlockedServices
+	BlockedServicesChoice isGetSpecType_BlockedServicesChoice `protobuf_oneof:"blocked_services_choice"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c594b6b9dd0a0c2b, []int{16}
+	return fileDescriptor_c594b6b9dd0a0c2b, []int{18}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4787,6 +5448,12 @@ type isGetSpecType_WorkerNodes interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_BlockedServicesChoice interface {
+	isGetSpecType_BlockedServicesChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_AzureRegion struct {
 	AzureRegion string `protobuf:"bytes,2,opt,name=azure_region,json=azureRegion,proto3,oneof" json:"azure_region,omitempty"`
@@ -4833,22 +5500,30 @@ type GetSpecType_TotalNodes struct {
 type GetSpecType_NoWorkerNodes struct {
 	NoWorkerNodes *schema.Empty `protobuf:"bytes,28,opt,name=no_worker_nodes,json=noWorkerNodes,proto3,oneof" json:"no_worker_nodes,omitempty"`
 }
+type GetSpecType_DefaultBlockedServices struct {
+	DefaultBlockedServices *schema.Empty `protobuf:"bytes,37,opt,name=default_blocked_services,json=defaultBlockedServices,proto3,oneof" json:"default_blocked_services,omitempty"`
+}
+type GetSpecType_BlockedServices struct {
+	BlockedServices *fleet.BlockedServicesListType `protobuf:"bytes,41,opt,name=blocked_services,json=blockedServices,proto3,oneof" json:"blocked_services,omitempty"`
+}
 
-func (*GetSpecType_AzureRegion) isGetSpecType_RegionChoice()                 {}
-func (*GetSpecType_AlternateRegion) isGetSpecType_RegionChoice()             {}
-func (*GetSpecType_IngressGw) isGetSpecType_SiteType()                       {}
-func (*GetSpecType_IngressEgressGw) isGetSpecType_SiteType()                 {}
-func (*GetSpecType_VoltstackCluster) isGetSpecType_SiteType()                {}
-func (*GetSpecType_IngressGwAr) isGetSpecType_SiteType()                     {}
-func (*GetSpecType_IngressEgressGwAr) isGetSpecType_SiteType()               {}
-func (*GetSpecType_VoltstackClusterAr) isGetSpecType_SiteType()              {}
-func (*GetSpecType_AzureCred) isGetSpecType_Deployment()                     {}
-func (*GetSpecType_Assisted) isGetSpecType_Deployment()                      {}
-func (*GetSpecType_LogsStreamingDisabled) isGetSpecType_LogsReceiverChoice() {}
-func (*GetSpecType_LogReceiver) isGetSpecType_LogsReceiverChoice()           {}
-func (*GetSpecType_NodesPerAz) isGetSpecType_WorkerNodes()                   {}
-func (*GetSpecType_TotalNodes) isGetSpecType_WorkerNodes()                   {}
-func (*GetSpecType_NoWorkerNodes) isGetSpecType_WorkerNodes()                {}
+func (*GetSpecType_AzureRegion) isGetSpecType_RegionChoice()                     {}
+func (*GetSpecType_AlternateRegion) isGetSpecType_RegionChoice()                 {}
+func (*GetSpecType_IngressGw) isGetSpecType_SiteType()                           {}
+func (*GetSpecType_IngressEgressGw) isGetSpecType_SiteType()                     {}
+func (*GetSpecType_VoltstackCluster) isGetSpecType_SiteType()                    {}
+func (*GetSpecType_IngressGwAr) isGetSpecType_SiteType()                         {}
+func (*GetSpecType_IngressEgressGwAr) isGetSpecType_SiteType()                   {}
+func (*GetSpecType_VoltstackClusterAr) isGetSpecType_SiteType()                  {}
+func (*GetSpecType_AzureCred) isGetSpecType_Deployment()                         {}
+func (*GetSpecType_Assisted) isGetSpecType_Deployment()                          {}
+func (*GetSpecType_LogsStreamingDisabled) isGetSpecType_LogsReceiverChoice()     {}
+func (*GetSpecType_LogReceiver) isGetSpecType_LogsReceiverChoice()               {}
+func (*GetSpecType_NodesPerAz) isGetSpecType_WorkerNodes()                       {}
+func (*GetSpecType_TotalNodes) isGetSpecType_WorkerNodes()                       {}
+func (*GetSpecType_NoWorkerNodes) isGetSpecType_WorkerNodes()                    {}
+func (*GetSpecType_DefaultBlockedServices) isGetSpecType_BlockedServicesChoice() {}
+func (*GetSpecType_BlockedServices) isGetSpecType_BlockedServicesChoice()        {}
 
 func (m *GetSpecType) GetRegionChoice() isGetSpecType_RegionChoice {
 	if m != nil {
@@ -4877,6 +5552,12 @@ func (m *GetSpecType) GetLogsReceiverChoice() isGetSpecType_LogsReceiverChoice {
 func (m *GetSpecType) GetWorkerNodes() isGetSpecType_WorkerNodes {
 	if m != nil {
 		return m.WorkerNodes
+	}
+	return nil
+}
+func (m *GetSpecType) GetBlockedServicesChoice() isGetSpecType_BlockedServicesChoice {
+	if m != nil {
+		return m.BlockedServicesChoice
 	}
 	return nil
 }
@@ -5070,6 +5751,20 @@ func (m *GetSpecType) GetNoWorkerNodes() *schema.Empty {
 	return nil
 }
 
+func (m *GetSpecType) GetDefaultBlockedServices() *schema.Empty {
+	if x, ok := m.GetBlockedServicesChoice().(*GetSpecType_DefaultBlockedServices); ok {
+		return x.DefaultBlockedServices
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetBlockedServices() *fleet.BlockedServicesListType {
+	if x, ok := m.GetBlockedServicesChoice().(*GetSpecType_BlockedServices); ok {
+		return x.BlockedServices
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -5088,10 +5783,16 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_NodesPerAz)(nil),
 		(*GetSpecType_TotalNodes)(nil),
 		(*GetSpecType_NoWorkerNodes)(nil),
+		(*GetSpecType_DefaultBlockedServices)(nil),
+		(*GetSpecType_BlockedServices)(nil),
 	}
 }
 
 func init() {
+	proto.RegisterType((*AzureHubVnetType)(nil), "ves.io.schema.views.azure_vnet_site.AzureHubVnetType")
+	golang_proto.RegisterType((*AzureHubVnetType)(nil), "ves.io.schema.views.azure_vnet_site.AzureHubVnetType")
+	proto.RegisterType((*VnetPeeringType)(nil), "ves.io.schema.views.azure_vnet_site.VnetPeeringType")
+	golang_proto.RegisterType((*VnetPeeringType)(nil), "ves.io.schema.views.azure_vnet_site.VnetPeeringType")
 	proto.RegisterType((*AzureVnetIngressGwType)(nil), "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType")
 	golang_proto.RegisterType((*AzureVnetIngressGwType)(nil), "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType")
 	proto.RegisterType((*AzureVnetIngressGwARType)(nil), "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARType")
@@ -5142,312 +5843,452 @@ func init() {
 }
 
 var fileDescriptor_c594b6b9dd0a0c2b = []byte{
-	// 4835 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5d, 0xdd, 0x6f, 0x1b, 0x57,
-	0x76, 0xd7, 0x25, 0x29, 0x89, 0xba, 0xfa, 0x1a, 0x5d, 0x4b, 0x16, 0xad, 0x0f, 0x9a, 0x96, 0x9d,
-	0x84, 0xb2, 0x47, 0x1f, 0x24, 0x25, 0x59, 0x56, 0x36, 0x8a, 0x35, 0x8a, 0x63, 0x49, 0xde, 0xd8,
-	0xda, 0x51, 0xec, 0x34, 0x45, 0x5a, 0x62, 0x44, 0x5e, 0x51, 0xb3, 0x1e, 0xcd, 0xb0, 0x33, 0x43,
-	0x2a, 0xf2, 0xae, 0xb7, 0x5b, 0x2f, 0x0a, 0x74, 0xfb, 0x54, 0x18, 0x2d, 0x16, 0x48, 0xff, 0x80,
-	0xb6, 0x79, 0x69, 0x81, 0xbe, 0x2d, 0x03, 0xac, 0x61, 0xa0, 0xc5, 0xc2, 0xe8, 0x83, 0x8b, 0x16,
-	0x68, 0x90, 0x87, 0x62, 0xa3, 0x00, 0xdd, 0xe4, 0x2d, 0xd8, 0x97, 0x2e, 0xdc, 0x87, 0x2d, 0xee,
-	0x9d, 0x3b, 0xa3, 0x99, 0xe1, 0x90, 0x92, 0x29, 0x39, 0x9b, 0xec, 0xf2, 0x25, 0x11, 0xe7, 0x9e,
-	0xaf, 0xb9, 0xf7, 0x9e, 0x7b, 0x7e, 0xe7, 0x9c, 0x4b, 0x1a, 0x4e, 0x95, 0xb1, 0x31, 0x29, 0x6b,
-	0x53, 0x46, 0x6e, 0x1b, 0xef, 0x48, 0x53, 0x65, 0x19, 0xef, 0x1a, 0x53, 0xd2, 0xbd, 0x92, 0x8e,
-	0xb3, 0x65, 0x15, 0x9b, 0x59, 0x43, 0x36, 0xf1, 0x94, 0xb9, 0x57, 0xc4, 0xc6, 0x64, 0x51, 0xd7,
-	0x4c, 0x0d, 0x9d, 0xb7, 0x18, 0x26, 0x2d, 0x86, 0x49, 0xca, 0x30, 0xe9, 0x63, 0x18, 0x9a, 0x28,
-	0xc8, 0xe6, 0x76, 0x69, 0x73, 0x32, 0xa7, 0xed, 0x4c, 0x15, 0xb4, 0x82, 0x36, 0x45, 0x79, 0x37,
-	0x4b, 0x5b, 0xf4, 0x13, 0xfd, 0x40, 0xff, 0xb2, 0x64, 0x0e, 0x5d, 0xf4, 0x1a, 0xa1, 0x62, 0x73,
-	0x57, 0xd3, 0xef, 0x66, 0xb7, 0x64, 0x1d, 0xef, 0x4a, 0x8a, 0xe2, 0xd6, 0x3f, 0x34, 0xec, 0xa5,
-	0xd5, 0x8a, 0xa6, 0xac, 0xa9, 0xf6, 0x60, 0xdc, 0x3b, 0xe8, 0x37, 0x7e, 0xe8, 0x8c, 0x77, 0xdc,
-	0x3d, 0x34, 0xe2, 0x9b, 0x08, 0x49, 0x91, 0xf3, 0x92, 0x89, 0xd9, 0x68, 0xa2, 0x7a, 0x9a, 0xb2,
-	0x5e, 0xd5, 0x17, 0x82, 0x26, 0x92, 0x18, 0x90, 0x75, 0x6b, 0x79, 0x25, 0x90, 0xca, 0xd4, 0x74,
-	0xa9, 0xe0, 0x25, 0x3c, 0x1b, 0x44, 0xe8, 0x22, 0x18, 0xfb, 0x8f, 0x10, 0x3c, 0xbd, 0x44, 0xa6,
-	0xfd, 0x8e, 0x8a, 0xcd, 0x55, 0xb5, 0xa0, 0x63, 0xc3, 0xb8, 0xbe, 0xfb, 0xf6, 0x5e, 0x11, 0xa3,
-	0xf7, 0x60, 0x54, 0xba, 0x97, 0x55, 0xb5, 0x3c, 0x36, 0x62, 0x20, 0x11, 0x4e, 0x76, 0xa6, 0xd3,
-	0x93, 0x41, 0xab, 0xe6, 0xb0, 0xdf, 0x52, 0xf1, 0xaa, 0x6a, 0x62, 0x7d, 0x4b, 0xca, 0xe1, 0x9b,
-	0x5a, 0x1e, 0x13, 0x29, 0x42, 0xf7, 0x4f, 0xbf, 0x78, 0x14, 0x8e, 0x3e, 0x04, 0xad, 0x17, 0xc3,
-	0x29, 0x3e, 0x23, 0xb6, 0x4b, 0xf7, 0xc8, 0x90, 0x81, 0x0a, 0x10, 0x59, 0xcb, 0x9d, 0xc3, 0xba,
-	0x29, 0x6f, 0xc9, 0x38, 0x9f, 0xdd, 0xde, 0x8d, 0x85, 0x12, 0x20, 0xd9, 0x21, 0x5c, 0xf9, 0xa4,
-	0x02, 0x4e, 0xd1, 0xd1, 0x89, 0xcd, 0x3d, 0x4d, 0x99, 0x28, 0x6b, 0x8a, 0xb9, 0x83, 0x8d, 0xed,
-	0x5f, 0x57, 0x40, 0x0b, 0x11, 0x77, 0x46, 0x1f, 0x8c, 0x5d, 0x15, 0x83, 0x28, 0x44, 0x8e, 0x3e,
-	0x5c, 0xb6, 0x65, 0xae, 0xec, 0xa2, 0x6d, 0x78, 0x4a, 0xd1, 0x72, 0x92, 0x92, 0xcd, 0x69, 0xaa,
-	0xa9, 0x6b, 0x4a, 0xb6, 0xa8, 0x48, 0x2a, 0x8e, 0x85, 0x13, 0x20, 0xd9, 0x99, 0xbe, 0x18, 0xf8,
-	0x46, 0xdf, 0x26, 0xf4, 0xcb, 0x16, 0xf9, 0x3a, 0xa1, 0xa6, 0x6f, 0xd2, 0xf5, 0xa8, 0x02, 0xc0,
-	0xe7, 0x15, 0x00, 0xbe, 0xac, 0x00, 0x20, 0xf6, 0x29, 0x7e, 0xa2, 0x85, 0xe8, 0xaf, 0x16, 0x5b,
-	0xd3, 0x7c, 0x8a, 0xcf, 0x8c, 0xfd, 0x2c, 0x04, 0x63, 0xd5, 0xb3, 0xba, 0x24, 0xd2, 0x79, 0x5d,
-	0x81, 0x11, 0x32, 0xa9, 0x31, 0x40, 0x2d, 0x98, 0x79, 0xbe, 0x39, 0xb5, 0x64, 0x88, 0x54, 0xc2,
-	0xef, 0xe2, 0x1c, 0xb6, 0xfd, 0x6a, 0x31, 0x9c, 0xe6, 0x53, 0x63, 0x7f, 0x87, 0xe0, 0x88, 0x7f,
-	0x06, 0xaf, 0x1d, 0x6b, 0x77, 0xbe, 0xbd, 0xab, 0x1d, 0x7d, 0x77, 0x0a, 0xb0, 0x4f, 0xd5, 0xb2,
-	0xf6, 0x09, 0x52, 0xd4, 0x14, 0x39, 0xb7, 0x47, 0x27, 0xb6, 0x33, 0xdd, 0xef, 0x53, 0x73, 0x6d,
-	0xa7, 0x68, 0xee, 0xad, 0xb4, 0x88, 0xbd, 0xaa, 0x76, 0xd3, 0xa2, 0x5f, 0xa7, 0xe4, 0xc8, 0x80,
-	0x83, 0x52, 0xce, 0x94, 0xcb, 0xd8, 0x2b, 0x47, 0xc6, 0x46, 0x0c, 0x52, 0x49, 0x57, 0x7c, 0x92,
-	0xfc, 0x07, 0xd6, 0xe4, 0x12, 0x65, 0x77, 0x4b, 0x95, 0xb1, 0x41, 0xec, 0x5e, 0x69, 0x11, 0x07,
-	0xa4, 0xa0, 0x41, 0x74, 0x15, 0x72, 0xaa, 0x96, 0xdd, 0xd2, 0xf4, 0x5d, 0x49, 0xcf, 0x67, 0x8b,
-	0xba, 0xf6, 0xfe, 0x5e, 0x2c, 0x52, 0xc7, 0x6e, 0x20, 0xf6, 0xa8, 0xda, 0x9b, 0x16, 0xf9, 0x3a,
-	0xa1, 0x46, 0x3f, 0x02, 0x70, 0x94, 0xd9, 0xed, 0x11, 0x73, 0x60, 0x7d, 0x07, 0x95, 0xb7, 0x78,
-	0x34, 0xeb, 0xdd, 0xb2, 0x3d, 0xaf, 0x00, 0xc4, 0x21, 0xa9, 0x26, 0x05, 0x7a, 0x0b, 0x0e, 0x7a,
-	0xb5, 0x4b, 0x8a, 0xa2, 0xed, 0x92, 0xff, 0xc6, 0xfa, 0xeb, 0xbe, 0x4e, 0xff, 0x96, 0x4b, 0xdc,
-	0x12, 0x61, 0x5a, 0x52, 0x14, 0xf4, 0xbd, 0x40, 0x4f, 0x89, 0x52, 0x4f, 0x79, 0xeb, 0x93, 0x0a,
-	0x18, 0x75, 0xf9, 0xc1, 0x4e, 0x49, 0x31, 0xe5, 0x09, 0x55, 0xce, 0x55, 0xf9, 0xcc, 0x79, 0xfd,
-	0x5c, 0xec, 0xaa, 0x58, 0x9f, 0x36, 0xc0, 0x7b, 0x36, 0xe0, 0xa0, 0xaa, 0x65, 0x65, 0xd5, 0x90,
-	0xf3, 0x38, 0x6b, 0x98, 0x92, 0x29, 0xe7, 0xb2, 0xba, 0x56, 0x32, 0xb1, 0x11, 0xeb, 0xaa, 0xfd,
-	0x2e, 0x42, 0x84, 0xf8, 0xca, 0x4a, 0x48, 0xec, 0x57, 0xb5, 0x55, 0xca, 0xbb, 0x41, 0x59, 0x45,
-	0xca, 0x89, 0x0a, 0xb0, 0x3f, 0x50, 0x62, 0x37, 0x95, 0x38, 0x11, 0xe8, 0x0b, 0x1b, 0xb2, 0xe9,
-	0x11, 0xf2, 0x6d, 0xd9, 0x30, 0xa9, 0x1b, 0xd8, 0xaa, 0x90, 0x5c, 0xad, 0xe8, 0x36, 0x8c, 0xa9,
-	0x5a, 0x56, 0x2b, 0x99, 0x01, 0xca, 0x7a, 0x0f, 0x35, 0x3f, 0x2c, 0x0e, 0xa8, 0xda, 0x2d, 0x8b,
-	0xd9, 0x23, 0x56, 0x86, 0x03, 0xc1, 0x32, 0xb9, 0xc6, 0x5f, 0x20, 0x2c, 0x9e, 0xd2, 0x02, 0x54,
-	0x59, 0xce, 0x5c, 0x50, 0xb4, 0x4d, 0x49, 0xb1, 0x7d, 0x31, 0x86, 0xea, 0xec, 0xa2, 0x08, 0x71,
-	0xe6, 0xeb, 0x94, 0x9e, 0xf9, 0x17, 0xda, 0x82, 0xa7, 0xbc, 0x02, 0xb2, 0x8a, 0x6c, 0x98, 0xb1,
-	0x53, 0x75, 0xce, 0x70, 0x8f, 0x80, 0x65, 0x4d, 0x55, 0x71, 0x8e, 0x44, 0x7a, 0xdb, 0xe6, 0x95,
-	0x88, 0xd8, 0x57, 0x70, 0x93, 0x90, 0x01, 0x74, 0x03, 0x9e, 0x52, 0xb5, 0x6c, 0x3e, 0x97, 0xcd,
-	0x29, 0x25, 0xc3, 0xc4, 0x7a, 0xb6, 0xa0, 0x6b, 0xa5, 0x62, 0xec, 0xf4, 0xa1, 0x13, 0xdd, 0x2a,
-	0x72, 0xaa, 0xf6, 0x46, 0x6e, 0xd9, 0x62, 0xbb, 0x4e, 0xb8, 0xd0, 0xf7, 0xe0, 0xb0, 0x5f, 0x92,
-	0xb3, 0x90, 0x65, 0x35, 0x36, 0x48, 0x85, 0x8e, 0x05, 0x1a, 0x7f, 0x6b, 0xf3, 0xbb, 0x38, 0x67,
-	0x8a, 0x78, 0x8b, 0x4e, 0xef, 0xe0, 0x87, 0xf7, 0x39, 0xbf, 0x24, 0xa6, 0x75, 0x30, 0xef, 0xd1,
-	0xc9, 0x96, 0xfa, 0x8e, 0x8a, 0xee, 0xc3, 0xa1, 0x2a, 0xe5, 0x6c, 0xc7, 0x96, 0xd5, 0x58, 0xec,
-	0xc8, 0xba, 0x87, 0x6b, 0xe8, 0xfe, 0xdc, 0xd2, 0x7f, 0xda, 0xab, 0xdf, 0xf2, 0x94, 0x3b, 0x2a,
-	0x71, 0x3a, 0x63, 0x87, 0xc4, 0x2b, 0x36, 0xed, 0xd9, 0x62, 0x69, 0x53, 0x91, 0x73, 0x59, 0xb9,
-	0x18, 0x1b, 0x3e, 0x74, 0x32, 0xdb, 0xc4, 0x7e, 0x63, 0xe7, 0x60, 0xc9, 0xd6, 0x29, 0xeb, 0x6a,
-	0x11, 0xbd, 0x05, 0xfb, 0x7d, 0x42, 0xcb, 0x26, 0x91, 0x38, 0x72, 0x04, 0x89, 0x7d, 0x1e, 0x89,
-	0x65, 0x73, 0xb5, 0x58, 0x2b, 0xac, 0x9e, 0x39, 0xf9, 0xb0, 0xfa, 0xce, 0xe3, 0x0a, 0xd8, 0x80,
-	0x5d, 0xb0, 0xd5, 0x0a, 0x6f, 0xe1, 0x79, 0x3e, 0x05, 0x47, 0xe0, 0x00, 0xf1, 0xa7, 0x04, 0xdb,
-	0x7e, 0x89, 0x37, 0xd9, 0xc1, 0x8d, 0xc2, 0x73, 0xfc, 0x65, 0xf8, 0x12, 0xe4, 0x96, 0xf2, 0x65,
-	0x49, 0xcd, 0xe1, 0x7c, 0xe2, 0x96, 0x05, 0x51, 0x51, 0x5f, 0xea, 0x32, 0x9f, 0x4e, 0xf1, 0xe9,
-	0x39, 0x3e, 0x95, 0xe2, 0x53, 0x33, 0x7c, 0x7a, 0x56, 0x18, 0x87, 0x03, 0xde, 0x28, 0x99, 0xcd,
-	0x6d, 0x6b, 0x72, 0x0e, 0x23, 0xee, 0x51, 0x05, 0x84, 0x9e, 0x56, 0x40, 0xdb, 0x7e, 0x05, 0x44,
-	0xd2, 0x7c, 0x6a, 0x5a, 0xb8, 0x08, 0xfb, 0xbd, 0x47, 0x3a, 0xa3, 0x44, 0x8f, 0x2a, 0x20, 0xf2,
-	0xb4, 0x02, 0xda, 0xf7, 0x2b, 0xa0, 0x6d, 0x86, 0x4f, 0x4f, 0xf3, 0x57, 0x84, 0x0c, 0x1c, 0x0a,
-	0x38, 0xdd, 0x6c, 0x8e, 0x81, 0x47, 0x15, 0xd0, 0xf5, 0xf3, 0x0a, 0x00, 0x4f, 0x2b, 0xa0, 0x73,
-	0xbf, 0x02, 0x5a, 0x53, 0x69, 0x3e, 0x95, 0x11, 0x66, 0xe0, 0x70, 0xd0, 0x91, 0xe2, 0xe6, 0xea,
-	0x65, 0x5c, 0x3d, 0x94, 0x6b, 0x96, 0x4f, 0xcd, 0x09, 0x93, 0x70, 0xc0, 0xe7, 0xd9, 0x2e, 0x7a,
-	0xc4, 0xe8, 0xfb, 0x28, 0xfd, 0x3c, 0x9f, 0x22, 0xa6, 0x0d, 0x56, 0xed, 0x6b, 0xc6, 0x11, 0x7b,
-	0x54, 0x01, 0xa7, 0x19, 0xc7, 0xc0, 0x7e, 0x05, 0x44, 0xd3, 0x69, 0x3e, 0x9d, 0xe1, 0xd3, 0x33,
-	0xc2, 0x14, 0x3c, 0x4d, 0x41, 0x3c, 0x89, 0x10, 0x5e, 0x1e, 0xa2, 0x65, 0x98, 0xf1, 0x0c, 0x11,
-	0x2d, 0xe9, 0xcb, 0x7c, 0x7a, 0x7e, 0x2d, 0x12, 0x6d, 0xe3, 0xda, 0xd7, 0x22, 0xd1, 0x76, 0x2e,
-	0xba, 0x16, 0x89, 0x76, 0x72, 0x5d, 0x6b, 0x91, 0x68, 0x0f, 0xd7, 0xbb, 0x16, 0x89, 0xf6, 0x71,
-	0x68, 0x2d, 0x12, 0x1d, 0xe0, 0x4e, 0xaf, 0x45, 0xa2, 0x43, 0xdc, 0xf0, 0xd8, 0xdf, 0x20, 0x18,
-	0xaf, 0x85, 0x94, 0x1a, 0x41, 0x9c, 0x7e, 0x9c, 0xe4, 0x41, 0x9c, 0x4d, 0x5c, 0xd4, 0xc4, 0x45,
-	0x4d, 0x5c, 0xd4, 0xc4, 0x45, 0x4d, 0x5c, 0xd4, 0xc4, 0x45, 0x4d, 0x5c, 0xd4, 0xc4, 0x45, 0x5f,
-	0x63, 0x5c, 0xf4, 0xef, 0x08, 0x8e, 0x3a, 0xa0, 0xe6, 0x8e, 0xa6, 0x98, 0x86, 0x29, 0xe5, 0xee,
-	0x32, 0x9f, 0xa0, 0xb0, 0xa8, 0x14, 0x18, 0xfc, 0x00, 0x0d, 0x7e, 0xd7, 0x3f, 0xa9, 0x80, 0x21,
-	0x5f, 0x71, 0x8c, 0x0a, 0x98, 0xc8, 0x69, 0x3b, 0x9b, 0x9a, 0x1d, 0xf9, 0x12, 0x7a, 0x3c, 0x76,
-	0x55, 0xac, 0x43, 0x18, 0x10, 0xf6, 0xdc, 0x95, 0xab, 0xd0, 0x89, 0xd7, 0x55, 0x03, 0x11, 0x5a,
-	0xe4, 0xc4, 0x10, 0x5a, 0xeb, 0x57, 0x8a, 0xd0, 0xda, 0x4f, 0x18, 0xa1, 0x45, 0x7f, 0xbb, 0x08,
-	0xad, 0xb7, 0x01, 0x84, 0x56, 0x0f, 0x66, 0xc0, 0x23, 0xa0, 0xa4, 0xe7, 0x85, 0x19, 0x9d, 0xc7,
-	0xc1, 0x49, 0x47, 0x87, 0x19, 0xdd, 0x75, 0xa6, 0x22, 0x7c, 0x64, 0x98, 0xd1, 0x73, 0x0c, 0x98,
-	0x11, 0x7e, 0x0e, 0x98, 0x11, 0x3f, 0x74, 0xa2, 0x23, 0x01, 0x30, 0xa3, 0x00, 0xab, 0x02, 0x74,
-	0xec, 0xec, 0xf1, 0xb1, 0x45, 0x44, 0xec, 0xf1, 0xc6, 0x76, 0x24, 0xc0, 0x1e, 0x55, 0xcb, 0xde,
-	0x9d, 0x37, 0x6c, 0xea, 0x23, 0x84, 0xf2, 0x56, 0xb1, 0x4b, 0xd5, 0x6e, 0xcc, 0x1b, 0x4c, 0x10,
-	0x7a, 0x17, 0x76, 0xba, 0x05, 0x8c, 0x1c, 0xd9, 0x4e, 0xf4, 0xe1, 0x7d, 0x37, 0x27, 0x13, 0x0e,
-	0xef, 0x1e, 0x88, 0xae, 0x03, 0x39, 0xc6, 0x4e, 0x1c, 0x72, 0x9c, 0x6f, 0x0c, 0x72, 0xbc, 0x0e,
-	0x7b, 0xf3, 0x78, 0x4b, 0x2a, 0x29, 0x66, 0x96, 0xf5, 0xd1, 0x62, 0x7d, 0x75, 0xb6, 0x68, 0xbb,
-	0xd8, 0xc3, 0xc8, 0x37, 0x2c, 0x6a, 0xf4, 0x2e, 0x44, 0x76, 0x03, 0x2e, 0xa7, 0x48, 0x86, 0x61,
-	0x6d, 0x50, 0x0b, 0x4d, 0x8f, 0x07, 0x7b, 0x93, 0x45, 0xbe, 0x4c, 0xa8, 0x9d, 0x5d, 0xd9, 0x2e,
-	0x72, 0x86, 0xef, 0x79, 0x2d, 0x38, 0x94, 0x38, 0x79, 0x38, 0x64, 0x3c, 0xae, 0x00, 0xcd, 0x05,
-	0x87, 0x52, 0x7c, 0xba, 0x0e, 0x1c, 0xca, 0xf0, 0x73, 0x70, 0x18, 0x0e, 0xb0, 0xf7, 0x48, 0x2c,
-	0x6b, 0xea, 0x96, 0x5c, 0x28, 0xe9, 0x12, 0x99, 0x55, 0x14, 0x4a, 0xcd, 0xc1, 0x0b, 0x01, 0x58,
-	0x89, 0xbb, 0xc2, 0xa7, 0xd2, 0x7c, 0xfa, 0x0a, 0x9f, 0xc9, 0x10, 0xc0, 0x94, 0x49, 0x0b, 0xc9,
-	0x5a, 0x50, 0xa9, 0x97, 0x01, 0xa0, 0xf0, 0x7e, 0x05, 0x84, 0x67, 0xf8, 0xd9, 0xba, 0x48, 0xa9,
-	0x9d, 0x61, 0xaa, 0xb6, 0xcb, 0x7c, 0x6a, 0x96, 0x9f, 0x3f, 0x0a, 0xe8, 0x81, 0x0c, 0x5e, 0x74,
-	0x50, 0x10, 0x33, 0xcd, 0xa7, 0x52, 0xf5, 0x41, 0x4f, 0x37, 0xa3, 0xef, 0xa2, 0xf4, 0x19, 0x3e,
-	0x35, 0x23, 0x4c, 0xd7, 0x06, 0x3d, 0x84, 0x23, 0xce, 0x38, 0x46, 0x09, 0x47, 0x66, 0x9a, 0xcf,
-	0xa4, 0x84, 0x4b, 0x10, 0xb9, 0xbc, 0xa5, 0x3e, 0xda, 0x39, 0x04, 0x1e, 0x8d, 0x31, 0x86, 0x73,
-	0x54, 0xfa, 0x0c, 0x9f, 0x99, 0x15, 0x26, 0x60, 0xbf, 0x77, 0x17, 0xba, 0xc8, 0xfb, 0x18, 0x39,
-	0x47, 0xcd, 0xbf, 0xcc, 0xa7, 0x08, 0x9a, 0x0a, 0x73, 0x11, 0x07, 0x53, 0x75, 0x70, 0x70, 0x2d,
-	0x12, 0xed, 0xe2, 0xba, 0xd7, 0x22, 0xd1, 0x51, 0x2e, 0x6e, 0xe1, 0xa8, 0xb5, 0x48, 0xf4, 0x1c,
-	0x37, 0xb6, 0x16, 0x89, 0x72, 0x5c, 0xdf, 0xd8, 0xcf, 0x10, 0x3c, 0x5b, 0x13, 0x53, 0xb1, 0x62,
-	0xd3, 0x6f, 0x09, 0x55, 0xd9, 0x35, 0xae, 0xd0, 0xb1, 0xbb, 0xaa, 0x4d, 0x04, 0xd5, 0x44, 0x50,
-	0x4d, 0x04, 0xf5, 0xfb, 0x85, 0xa0, 0x8e, 0x05, 0x51, 0x5a, 0x4f, 0x1c, 0xa2, 0xb4, 0x06, 0x41,
-	0x94, 0x46, 0x50, 0x5e, 0xdb, 0x8b, 0x44, 0x79, 0x6d, 0x1e, 0x94, 0xd7, 0x44, 0x50, 0x4d, 0x04,
-	0xf5, 0x95, 0x20, 0xa8, 0xe7, 0x06, 0x45, 0xcf, 0x05, 0xb9, 0x4e, 0x18, 0x41, 0x59, 0xd8, 0xc9,
-	0xc2, 0x51, 0x04, 0x41, 0x2d, 0xb8, 0x8a, 0x52, 0xce, 0xc5, 0x30, 0x11, 0x17, 0x15, 0x29, 0x47,
-	0x77, 0xd8, 0xc2, 0x99, 0x27, 0x8b, 0x35, 0x2e, 0xe4, 0x8d, 0x2d, 0xba, 0xc0, 0x97, 0xeb, 0x52,
-	0x99, 0x9b, 0x7b, 0xf8, 0xc9, 0x62, 0xcd, 0x8b, 0x67, 0x63, 0x95, 0x5e, 0x78, 0xbe, 0x56, 0xa7,
-	0xd0, 0x25, 0xa4, 0xd9, 0xe4, 0xfb, 0x1d, 0x6b, 0xf2, 0x35, 0xfb, 0x6c, 0xcd, 0x3e, 0x5b, 0xb3,
-	0xcf, 0xf6, 0xd5, 0xf6, 0xd9, 0x16, 0x36, 0x9f, 0x2c, 0xd6, 0xbd, 0xc0, 0xfa, 0xb8, 0x02, 0x5e,
-	0x3f, 0xa4, 0xd5, 0x74, 0x36, 0x20, 0xf8, 0x77, 0x5a, 0xad, 0x26, 0xda, 0x67, 0x12, 0x84, 0x5a,
-	0x71, 0x7f, 0xdc, 0xdf, 0x64, 0x7a, 0xf0, 0x0c, 0x04, 0x93, 0x0a, 0x42, 0x0d, 0x44, 0x70, 0xb1,
-	0xba, 0xfb, 0xf4, 0xe0, 0x19, 0x08, 0xa4, 0x15, 0xbe, 0x53, 0xb7, 0x2b, 0x95, 0x09, 0xec, 0x4a,
-	0x3d, 0x78, 0x06, 0xea, 0x30, 0x09, 0x1b, 0xf5, 0xc1, 0xc7, 0x4c, 0x60, 0xcf, 0xea, 0xc1, 0x33,
-	0x50, 0x8f, 0x4b, 0xb8, 0x5e, 0x0b, 0x9b, 0x4c, 0x06, 0xb6, 0xb4, 0xc8, 0xa4, 0x05, 0xd2, 0x0b,
-	0x37, 0x6b, 0x83, 0x96, 0x4c, 0xad, 0x5e, 0xd7, 0x83, 0x67, 0xa0, 0x16, 0xd3, 0x51, 0xba, 0x5a,
-	0x63, 0x1f, 0xf5, 0xc2, 0x97, 0x6a, 0xdf, 0xf3, 0x69, 0xc6, 0xef, 0x66, 0xfc, 0x6e, 0xc6, 0xef,
-	0x66, 0xfc, 0x6e, 0xc6, 0xef, 0x13, 0x8a, 0xdf, 0xf9, 0x27, 0x8b, 0x87, 0x5c, 0xab, 0x6c, 0x46,
-	0xf0, 0x6f, 0x70, 0x04, 0xbf, 0x51, 0x3b, 0x82, 0x4f, 0xfb, 0x22, 0x78, 0x2b, 0x8d, 0xe0, 0xc7,
-	0x0d, 0xdf, 0x3f, 0xe9, 0x82, 0x17, 0x6a, 0xb6, 0x4e, 0x0e, 0x8d, 0xde, 0xcd, 0xf6, 0x43, 0xb3,
-	0xfd, 0xd0, 0x6c, 0x3f, 0x34, 0xde, 0x7e, 0x18, 0x3d, 0xb1, 0xf6, 0x43, 0xfc, 0x05, 0xb4, 0x1f,
-	0x16, 0xb2, 0x4f, 0x16, 0xeb, 0xdf, 0x55, 0x7b, 0x5c, 0x01, 0xaf, 0x1e, 0x5a, 0x47, 0xae, 0x8e,
-	0x35, 0xed, 0x56, 0xa9, 0x78, 0x5e, 0x58, 0xaa, 0x15, 0x67, 0x92, 0xbe, 0x0a, 0x71, 0x63, 0x61,
-	0xc6, 0x57, 0x3a, 0xae, 0x19, 0x66, 0x8e, 0x10, 0x13, 0xaa, 0x4b, 0xca, 0xc7, 0x8a, 0x09, 0xd5,
-	0x15, 0xe7, 0x86, 0x63, 0xc2, 0x28, 0x13, 0x35, 0x42, 0x63, 0xc2, 0x15, 0x3e, 0x33, 0x5d, 0x3f,
-	0x26, 0x00, 0x2e, 0xb4, 0x16, 0x89, 0x86, 0xb8, 0x70, 0x9d, 0x22, 0xf1, 0x08, 0x37, 0x3a, 0xf6,
-	0xb7, 0x5d, 0xf0, 0xe5, 0x3a, 0x4d, 0xf5, 0x66, 0x6c, 0x68, 0xc6, 0x86, 0x66, 0x6c, 0xf8, 0xbd,
-	0x6d, 0x4d, 0x2f, 0x48, 0x4f, 0x16, 0x0f, 0xbb, 0x73, 0x73, 0xbc, 0xe8, 0x70, 0xa5, 0x19, 0x1d,
-	0x4e, 0x20, 0x3a, 0x54, 0x37, 0x2a, 0x8f, 0x1f, 0x1d, 0x46, 0xb9, 0xf8, 0xd8, 0x3f, 0x00, 0x38,
-	0xe0, 0x2c, 0x3f, 0x59, 0xe0, 0x55, 0x75, 0x4b, 0xa3, 0xc1, 0xe0, 0x4d, 0x08, 0x9d, 0x5b, 0x0a,
-	0xd6, 0x6f, 0x20, 0x74, 0x08, 0xaf, 0xfc, 0xf4, 0x8b, 0x47, 0xe1, 0x8e, 0x87, 0xa0, 0x6d, 0x2c,
-	0xa2, 0x87, 0x8a, 0x80, 0x7c, 0x82, 0x0f, 0x41, 0xfb, 0xc5, 0xd6, 0x69, 0x3e, 0xc5, 0x67, 0xc8,
-	0xc7, 0xd6, 0x87, 0x20, 0x14, 0x03, 0x62, 0x47, 0x91, 0xdd, 0x52, 0x30, 0xd0, 0x0a, 0xec, 0x2c,
-	0xea, 0x72, 0x59, 0x32, 0x31, 0x15, 0x14, 0x7a, 0x3e, 0x41, 0x90, 0xf1, 0xae, 0x16, 0x8d, 0xb1,
-	0xff, 0x7e, 0x19, 0xf6, 0x58, 0x9e, 0xb9, 0x51, 0xc4, 0x39, 0x6a, 0xe4, 0x1c, 0xec, 0xd1, 0xb1,
-	0xa1, 0x95, 0xf4, 0x1c, 0x66, 0x4e, 0x62, 0xdd, 0x04, 0xeb, 0xb5, 0xef, 0x7a, 0xb5, 0xe9, 0x11,
-	0x0e, 0xc4, 0xae, 0x8a, 0xdd, 0x36, 0x99, 0xe5, 0x5e, 0xff, 0xd8, 0x06, 0xbb, 0xac, 0x6b, 0x64,
-	0x3a, 0x2e, 0xc8, 0x9a, 0xca, 0x7e, 0xd5, 0xe2, 0xc7, 0x6d, 0x84, 0xef, 0xe1, 0x47, 0xe0, 0x7f,
-	0x5b, 0xe1, 0x2c, 0xec, 0x36, 0xb4, 0x92, 0xb9, 0x8d, 0x25, 0xc3, 0x94, 0x0c, 0x59, 0x42, 0x17,
-	0x92, 0x4b, 0x86, 0x2c, 0x25, 0xd6, 0xa5, 0x9c, 0xbc, 0x25, 0xe7, 0xc6, 0x13, 0x1b, 0xf6, 0x68,
-	0x82, 0x3e, 0x17, 0xa9, 0x20, 0x38, 0x02, 0x3b, 0x72, 0x58, 0x35, 0x75, 0x49, 0x29, 0x19, 0xa8,
-	0x37, 0x79, 0x7b, 0x63, 0x3c, 0xb1, 0x6c, 0x7d, 0x4e, 0xdc, 0xde, 0x80, 0xa3, 0xb0, 0x8d, 0x70,
-	0x94, 0x0c, 0x74, 0x8a, 0x0e, 0x5d, 0x23, 0xec, 0xb7, 0x37, 0x6c, 0xe6, 0x04, 0x6c, 0xb7, 0x86,
-	0xd3, 0x68, 0xc0, 0x33, 0x9e, 0xb6, 0x29, 0x26, 0x61, 0x0f, 0xb5, 0xea, 0x40, 0xc7, 0x08, 0x25,
-	0xa4, 0xc6, 0xb8, 0x34, 0xd9, 0xf4, 0x97, 0x60, 0xa7, 0xaa, 0xe9, 0xe6, 0x36, 0x2e, 0xe9, 0x5a,
-	0x11, 0xa3, 0x91, 0xe4, 0x35, 0xfa, 0xc7, 0x78, 0xe2, 0x26, 0x79, 0x9a, 0xb0, 0x3e, 0xd9, 0xc4,
-	0xe3, 0x10, 0xee, 0x62, 0xc3, 0x64, 0xb4, 0xc3, 0x0e, 0xed, 0x3b, 0xd8, 0x30, 0x7d, 0xa4, 0x13,
-	0xb0, 0xe3, 0xbb, 0x52, 0x51, 0x52, 0x89, 0xb9, 0x28, 0xe1, 0x9b, 0x99, 0x35, 0x32, 0x62, 0xd9,
-	0xce, 0xc8, 0x67, 0x61, 0xb7, 0x54, 0x32, 0x88, 0x6d, 0xb2, 0x44, 0x59, 0xfc, 0x93, 0xb9, 0x64,
-	0x8f, 0x7a, 0xd8, 0xa6, 0x60, 0x77, 0x4e, 0x52, 0xa5, 0xbc, 0xc4, 0x5e, 0x17, 0xc5, 0x93, 0xcb,
-	0xf4, 0xf3, 0x78, 0xc2, 0xfa, 0xbf, 0xf3, 0xc6, 0x8c, 0xe1, 0x3c, 0x6c, 0x2f, 0xdd, 0xa5, 0x13,
-	0x84, 0x62, 0x8e, 0xf9, 0xb7, 0x6f, 0xb0, 0xe9, 0x39, 0x98, 0x65, 0xf2, 0x9a, 0x07, 0xb3, 0x4c,
-	0xdf, 0xcf, 0x3d, 0xcb, 0x0e, 0x45, 0xc6, 0x47, 0x91, 0x71, 0x59, 0xb6, 0xa5, 0x93, 0xf3, 0xee,
-	0xc0, 0x32, 0x5b, 0xdd, 0x9b, 0xf4, 0xb9, 0xdf, 0xb2, 0x39, 0xc8, 0x51, 0xbb, 0xa4, 0x2d, 0x5d,
-	0xce, 0x49, 0x74, 0x4d, 0xd0, 0x58, 0x72, 0x89, 0x7e, 0xb2, 0x97, 0xcf, 0xfa, 0xc4, 0x96, 0x86,
-	0xf1, 0xa5, 0x61, 0xe7, 0xa6, 0x2e, 0xdd, 0x93, 0x15, 0xeb, 0xad, 0xce, 0x27, 0x19, 0xe9, 0x0e,
-	0xb6, 0x38, 0x05, 0x3a, 0xe8, 0x7d, 0xc1, 0x05, 0x88, 0x0a, 0x58, 0xdf, 0x91, 0xd4, 0x3d, 0xf2,
-	0x16, 0xb6, 0x85, 0x17, 0x1c, 0x0b, 0xaf, 0x5b, 0x83, 0xd6, 0x5b, 0x79, 0xed, 0x24, 0x3e, 0x13,
-	0xd1, 0x43, 0xb1, 0xab, 0x2b, 0x2d, 0x62, 0x27, 0xf5, 0x10, 0xeb, 0x39, 0xfa, 0xeb, 0x28, 0xe4,
-	0x24, 0xc5, 0xc4, 0xba, 0x4a, 0x3c, 0x99, 0x79, 0xcd, 0x59, 0xea, 0x35, 0xff, 0xd3, 0xce, 0xbc,
-	0xe6, 0x3f, 0xdb, 0xc9, 0xfe, 0xa4, 0xef, 0xe6, 0xdf, 0x9f, 0xd6, 0x3b, 0x55, 0xef, 0x4f, 0x1e,
-	0x76, 0xbb, 0x6c, 0x2c, 0x19, 0x68, 0xf8, 0x60, 0xbe, 0xab, 0xa9, 0x47, 0x61, 0x9b, 0xb5, 0x2e,
-	0xcc, 0x7d, 0xec, 0x65, 0x61, 0xc3, 0x19, 0xd8, 0x75, 0x57, 0xd3, 0xb1, 0xb3, 0x5b, 0xce, 0xfb,
-	0x36, 0xd9, 0x0d, 0x32, 0xe8, 0x5f, 0x98, 0x0c, 0xec, 0x62, 0xf4, 0xb2, 0x9a, 0x97, 0xa5, 0x2a,
-	0x26, 0x9b, 0x7c, 0x95, 0x8c, 0x1e, 0x2c, 0x3f, 0xa4, 0xeb, 0x61, 0xb1, 0x9c, 0x0b, 0x3a, 0x19,
-	0xbc, 0x0c, 0x8b, 0xb0, 0xcf, 0x71, 0x00, 0xa6, 0x2e, 0x8d, 0xc6, 0x6b, 0x3a, 0x81, 0xad, 0xd4,
-	0xd9, 0x91, 0xaf, 0x42, 0xce, 0xcf, 0x8f, 0x5e, 0x39, 0x94, 0xfd, 0x98, 0x7b, 0x6f, 0x1c, 0x42,
-	0x95, 0x44, 0xd2, 0x3d, 0xea, 0xb2, 0xc3, 0xee, 0xb3, 0x63, 0x57, 0xda, 0xf3, 0x7b, 0xaa, 0xb1,
-	0x8b, 0xf3, 0x58, 0xad, 0xf6, 0x87, 0x0d, 0xfa, 0xdc, 0x6f, 0xd3, 0x2c, 0xe4, 0x8c, 0x5d, 0xd9,
-	0xbc, 0x87, 0x75, 0x45, 0x52, 0xf3, 0x96, 0x4d, 0xe7, 0x5c, 0x3c, 0xce, 0x90, 0xd7, 0xa4, 0x8b,
-	0x30, 0x5a, 0x92, 0xb0, 0x45, 0x1e, 0x4f, 0xbe, 0x25, 0xe7, 0xf3, 0x0a, 0xa6, 0x86, 0x8c, 0x27,
-	0x6e, 0x2f, 0x5d, 0xf3, 0xd2, 0x4e, 0x42, 0x58, 0x92, 0x1c, 0x07, 0x4d, 0x54, 0x53, 0x57, 0xed,
-	0x84, 0x5e, 0x97, 0x49, 0x64, 0xa3, 0xa1, 0x44, 0xa0, 0x45, 0x74, 0xdb, 0xf9, 0xe7, 0x88, 0xd2,
-	0x57, 0xcd, 0x91, 0x9b, 0x74, 0x02, 0x76, 0x31, 0xb7, 0xb4, 0xec, 0x1f, 0xad, 0x72, 0x48, 0x8f,
-	0xf9, 0x97, 0x60, 0xa7, 0x75, 0xc4, 0x58, 0x9e, 0x3f, 0xe2, 0x3f, 0x60, 0x3c, 0x2e, 0x3f, 0x0e,
-	0xa1, 0x75, 0x52, 0xb2, 0xa5, 0xf2, 0x1d, 0x93, 0xde, 0xa5, 0x82, 0xd4, 0x4b, 0x2c, 0xb1, 0xe7,
-	0x02, 0x7d, 0xc4, 0x2d, 0xdb, 0x7d, 0x24, 0xf4, 0x3a, 0x47, 0x00, 0x3b, 0x16, 0x04, 0x18, 0x29,
-	0xab, 0xd8, 0x64, 0xbf, 0xd5, 0x94, 0xac, 0x7f, 0x2f, 0x7a, 0x99, 0xa2, 0x13, 0x0b, 0xf5, 0xff,
-	0xd3, 0x47, 0x00, 0x88, 0x94, 0x17, 0x6d, 0x42, 0x28, 0x5b, 0x15, 0xf0, 0x6c, 0x61, 0x97, 0x65,
-	0x89, 0xaf, 0x4e, 0x1e, 0xe1, 0x17, 0xdc, 0x26, 0x83, 0x6f, 0x32, 0x09, 0x04, 0x53, 0x82, 0x15,
-	0x20, 0x76, 0xc8, 0xf6, 0x63, 0x54, 0x82, 0x7d, 0xb6, 0x0e, 0xec, 0xa8, 0x6a, 0xa3, 0xaa, 0x96,
-	0x1a, 0x52, 0x75, 0x2d, 0x48, 0x61, 0xaf, 0xec, 0x1d, 0x44, 0xbb, 0xb0, 0xcf, 0xb9, 0x5b, 0xee,
-	0x5c, 0x8b, 0xb4, 0xee, 0x2d, 0x0a, 0xcf, 0xa7, 0x36, 0xa8, 0x6c, 0xe3, 0xe8, 0xe5, 0xca, 0xbe,
-	0x51, 0x24, 0xc3, 0xee, 0x83, 0x39, 0xcd, 0x4a, 0x3a, 0xbb, 0x8c, 0xf8, 0x5a, 0x83, 0xd3, 0x6a,
-	0x25, 0x02, 0x8e, 0xbe, 0x4e, 0x67, 0x62, 0x97, 0x74, 0xf4, 0x7d, 0xd8, 0x5f, 0x35, 0xb5, 0x44,
-	0xe3, 0x39, 0xaa, 0x71, 0xf9, 0x58, 0xb3, 0xeb, 0xd3, 0xdb, 0xe7, 0x9b, 0xdf, 0x25, 0x1d, 0xfd,
-	0x00, 0xf6, 0x57, 0xcd, 0x30, 0xd1, 0x6e, 0xdd, 0xab, 0x7d, 0xe3, 0x78, 0x93, 0xec, 0x53, 0x8f,
-	0xfc, 0xd3, 0xbc, 0xa4, 0xa3, 0x0c, 0xec, 0xc8, 0xcb, 0xc6, 0xdd, 0xac, 0x21, 0xdf, 0xc3, 0xb4,
-	0x39, 0xd8, 0x2d, 0x9c, 0x26, 0xa9, 0x16, 0x09, 0x89, 0x7f, 0xf1, 0x11, 0xe8, 0xa3, 0x58, 0xf6,
-	0x62, 0x38, 0xf6, 0x9b, 0xb3, 0x62, 0x94, 0x10, 0x6e, 0xc8, 0xf7, 0x30, 0x7a, 0x17, 0x42, 0xf6,
-	0x25, 0x06, 0x1d, 0xe7, 0x59, 0x65, 0xe1, 0x28, 0x79, 0x5d, 0xff, 0x87, 0xf7, 0xfb, 0x72, 0x8a,
-	0x56, 0xca, 0x53, 0x46, 0xac, 0x9a, 0xb2, 0xa4, 0x18, 0x2b, 0x21, 0xb1, 0xc3, 0xfa, 0xbe, 0x82,
-	0x8e, 0xf3, 0x28, 0x0d, 0xa3, 0x92, 0x61, 0xc8, 0x86, 0x89, 0xf3, 0xac, 0x19, 0x1d, 0x9c, 0x28,
-	0x87, 0x44, 0x87, 0x0e, 0xfd, 0x1f, 0x80, 0x5d, 0x3b, 0x52, 0x6e, 0x5b, 0x56, 0xad, 0x9f, 0xf7,
-	0xa3, 0xc5, 0x81, 0x0e, 0xe1, 0xbf, 0xc0, 0x27, 0x15, 0xd0, 0xb3, 0x61, 0x4a, 0x6a, 0x9e, 0x24,
-	0x53, 0x6f, 0x64, 0xb2, 0xe5, 0x34, 0x8b, 0xf4, 0xff, 0x0c, 0xe0, 0x15, 0xe8, 0x1b, 0x42, 0xaf,
-	0x24, 0x67, 0x12, 0xef, 0x27, 0xca, 0xcb, 0xeb, 0xb7, 0xf9, 0x44, 0x6a, 0xe6, 0xba, 0x90, 0x10,
-	0x97, 0xde, 0x1a, 0x4f, 0xec, 0xe0, 0xbc, 0x5c, 0xda, 0x49, 0x14, 0xb1, 0xbe, 0xa5, 0x91, 0x53,
-	0x2e, 0x87, 0xe1, 0x65, 0x37, 0xeb, 0x0c, 0x61, 0x7d, 0x29, 0x39, 0xef, 0xb0, 0xa6, 0xe7, 0x6d,
-	0xd6, 0x6d, 0xb9, 0xb0, 0xed, 0x61, 0x7c, 0xcd, 0xcd, 0x38, 0x4b, 0x18, 0x2f, 0x25, 0x53, 0x73,
-	0x0e, 0xe7, 0xec, 0x9c, 0xcd, 0x59, 0xc6, 0xfa, 0x5e, 0x15, 0xbb, 0x73, 0x90, 0x89, 0x9d, 0xec,
-	0x6d, 0x59, 0x0e, 0xd1, 0x45, 0xbf, 0x2d, 0x9b, 0x2d, 0x92, 0x9d, 0x73, 0x8f, 0x56, 0x5a, 0xba,
-	0x05, 0xf4, 0x49, 0x05, 0x80, 0x69, 0x3b, 0x8d, 0x88, 0x5c, 0x0c, 0xc5, 0x06, 0x56, 0xc2, 0x22,
-	0xa4, 0x94, 0xeb, 0x58, 0x5f, 0xba, 0x87, 0x66, 0x61, 0xa7, 0xa9, 0x99, 0x24, 0x93, 0xa3, 0xdf,
-	0xb5, 0x1d, 0xae, 0xc1, 0xf6, 0x1a, 0x61, 0xa3, 0x84, 0xd6, 0x9d, 0xdd, 0x45, 0xd8, 0xab, 0x6a,
-	0x59, 0x92, 0xfa, 0x61, 0x9d, 0xb1, 0x8e, 0xd4, 0x2d, 0x68, 0x74, 0xab, 0xda, 0x3b, 0x94, 0xda,
-	0xe2, 0x5f, 0x87, 0x67, 0xc8, 0x36, 0xc4, 0xba, 0x2e, 0x65, 0x0d, 0x6d, 0xcb, 0xdc, 0x95, 0xc8,
-	0x5e, 0xc6, 0xba, 0x41, 0x00, 0x59, 0x17, 0x5d, 0xb8, 0xfe, 0x8f, 0xef, 0xd3, 0xfe, 0xa3, 0x63,
-	0x06, 0x7d, 0xe9, 0x41, 0x9b, 0x6d, 0x83, 0x71, 0xdd, 0xb1, 0x98, 0xd0, 0x4d, 0x18, 0xd3, 0x8a,
-	0x58, 0x97, 0x4c, 0x59, 0x2d, 0x64, 0x8d, 0x3d, 0xc3, 0xc4, 0x3b, 0x8e, 0xc0, 0xee, 0x3a, 0x02,
-	0x4f, 0x3b, 0x5c, 0x1b, 0x94, 0xc9, 0x96, 0xf7, 0x0a, 0x6c, 0x37, 0x8c, 0xed, 0xec, 0x5d, 0xbc,
-	0x47, 0x8b, 0x2c, 0x1d, 0x42, 0xcf, 0xaf, 0x2b, 0x20, 0x4c, 0x1d, 0x41, 0x0f, 0xc7, 0x7e, 0x78,
-	0x55, 0x6c, 0x33, 0x8c, 0xed, 0x1b, 0x78, 0x0f, 0x25, 0x61, 0xbb, 0x94, 0xcf, 0x13, 0x57, 0xa6,
-	0xfd, 0xee, 0x0e, 0xa1, 0x87, 0x78, 0x8e, 0x43, 0x18, 0x12, 0xed, 0x61, 0x74, 0x1d, 0x76, 0xe6,
-	0x34, 0x4d, 0xcf, 0xcb, 0x24, 0xf4, 0x18, 0xac, 0xaf, 0x7d, 0xd6, 0x37, 0x61, 0xd4, 0x97, 0x97,
-	0x0f, 0xc8, 0xac, 0xf2, 0x8a, 0xe8, 0xe6, 0x44, 0x6f, 0xc3, 0x41, 0x45, 0x2b, 0x18, 0x59, 0xc3,
-	0xd4, 0xb1, 0xb4, 0x43, 0x5e, 0x38, 0x2f, 0x1b, 0xd2, 0xa6, 0x82, 0xf3, 0xb1, 0x81, 0x23, 0x14,
-	0x6a, 0x06, 0x08, 0xf3, 0x86, 0xcd, 0xfb, 0x06, 0x63, 0x45, 0xef, 0xc1, 0x2e, 0x45, 0x2b, 0x64,
-	0x75, 0x9c, 0xc3, 0x72, 0x19, 0xeb, 0xac, 0x1f, 0x7e, 0x14, 0x8f, 0x3e, 0xf5, 0xe1, 0x7d, 0x0f,
-	0x2b, 0xd3, 0xd3, 0xa9, 0x68, 0x05, 0x91, 0x3d, 0x42, 0xcb, 0x30, 0x64, 0xec, 0xb2, 0x76, 0x78,
-	0xf0, 0x4d, 0xf5, 0x3b, 0xbe, 0x95, 0xa5, 0xa2, 0xa3, 0x8f, 0xec, 0x8b, 0xe4, 0x21, 0x63, 0x17,
-	0x09, 0x30, 0xa4, 0x19, 0xac, 0xaf, 0x1d, 0x1c, 0xa6, 0x6f, 0x79, 0x57, 0xd3, 0x2f, 0x43, 0x33,
-	0xd0, 0x8f, 0x01, 0x8c, 0x98, 0x52, 0xc1, 0x88, 0x25, 0xe9, 0xf7, 0xca, 0x8f, 0x16, 0x4c, 0xbc,
-	0x19, 0xfb, 0xe4, 0xdb, 0x52, 0xc1, 0xb8, 0xa6, 0x9a, 0xfa, 0x9e, 0x30, 0x67, 0x2f, 0x76, 0xc7,
-	0x07, 0x56, 0x1d, 0x20, 0xf6, 0xa7, 0x74, 0xe9, 0x3f, 0x00, 0x21, 0xae, 0x95, 0x56, 0x04, 0x3e,
-	0x00, 0xed, 0x17, 0xc9, 0x4e, 0xf8, 0x0d, 0xd8, 0xff, 0xc5, 0xbf, 0x84, 0xdb, 0xfe, 0xf2, 0x23,
-	0x10, 0x8a, 0xb6, 0x88, 0xd4, 0x04, 0xf4, 0x67, 0x00, 0xf6, 0x95, 0xe5, 0x62, 0xb6, 0x28, 0xe9,
-	0xd2, 0x8e, 0xe3, 0xbb, 0x67, 0xa8, 0x61, 0xe3, 0x41, 0x1b, 0x83, 0x7e, 0x6f, 0xc2, 0xd8, 0xbe,
-	0xb3, 0xba, 0xbe, 0x4e, 0x59, 0xa8, 0x13, 0x0b, 0x97, 0xd8, 0xce, 0xae, 0x59, 0x81, 0xa0, 0x9a,
-	0x1f, 0x12, 0xcd, 0x40, 0xec, 0x29, 0xcb, 0x45, 0x17, 0x33, 0xfa, 0x23, 0xd8, 0x61, 0x6e, 0x31,
-	0x0b, 0x62, 0xbf, 0x6c, 0x7f, 0x9e, 0x3b, 0x03, 0xfd, 0x74, 0xbd, 0xc8, 0xc9, 0x64, 0xf1, 0x63,
-	0x13, 0xeb, 0x06, 0x31, 0x44, 0x8c, 0x9a, 0x5b, 0x96, 0x0e, 0xf4, 0xc7, 0xb0, 0x9b, 0xfe, 0x84,
-	0xab, 0xac, 0x52, 0xcc, 0xa5, 0xc4, 0x3e, 0x6f, 0x7f, 0x9e, 0x48, 0xe1, 0x65, 0xa6, 0xb2, 0xbb,
-	0xc8, 0xa3, 0x55, 0xf6, 0x04, 0xe5, 0x60, 0xaf, 0x15, 0x4c, 0xe8, 0x7d, 0x77, 0x59, 0xdd, 0xd2,
-	0x62, 0x5f, 0x58, 0x1a, 0x16, 0x9e, 0x2f, 0x6c, 0xba, 0xeb, 0x46, 0x62, 0x37, 0x95, 0x69, 0x3f,
-	0x1a, 0xba, 0x0c, 0x3b, 0x9c, 0x25, 0x47, 0x1c, 0x0c, 0x93, 0x53, 0x81, 0xd6, 0x68, 0x44, 0xf2,
-	0x27, 0xea, 0x87, 0xad, 0x65, 0x49, 0x29, 0x59, 0x5f, 0xac, 0xeb, 0x10, 0xad, 0x0f, 0x0b, 0xa1,
-	0x79, 0xb0, 0xb0, 0xf7, 0xb8, 0x02, 0x4a, 0xf0, 0x1c, 0x3c, 0x45, 0xcb, 0x8e, 0x44, 0x74, 0x62,
-	0x03, 0x2b, 0x56, 0x21, 0x16, 0xc1, 0x14, 0x9f, 0x99, 0xe6, 0x33, 0xfc, 0x0c, 0x7f, 0x19, 0xbe,
-	0x0c, 0xfb, 0xad, 0xca, 0xa4, 0x96, 0xc7, 0x89, 0x75, 0x67, 0x32, 0x51, 0x4f, 0x6a, 0x9a, 0x4f,
-	0xcd, 0xf1, 0xa9, 0x19, 0x9e, 0x36, 0xeb, 0x61, 0x12, 0x9e, 0x76, 0x6a, 0x94, 0xde, 0xaf, 0x42,
-	0xf4, 0xa4, 0xa7, 0xad, 0x4b, 0x74, 0xfc, 0xcc, 0x34, 0x9f, 0xbe, 0x22, 0xbc, 0x0c, 0xbb, 0xad,
-	0x04, 0xd7, 0x7d, 0x3b, 0x3f, 0xf4, 0xb4, 0x02, 0xe2, 0xb4, 0x37, 0xc3, 0x27, 0x32, 0x29, 0x32,
-	0x9d, 0x02, 0x0f, 0x3b, 0x9c, 0xdf, 0xce, 0x45, 0x67, 0x1f, 0x55, 0x40, 0xeb, 0xd3, 0x0a, 0x88,
-	0xec, 0x57, 0x40, 0xef, 0x2c, 0x3f, 0xc7, 0xa7, 0x2e, 0xf3, 0x99, 0x34, 0x9f, 0xc9, 0xf0, 0x99,
-	0x19, 0x4a, 0x3d, 0x0a, 0x61, 0x1e, 0x17, 0x15, 0x6d, 0x6f, 0x07, 0xab, 0x26, 0xfd, 0xee, 0x44,
-	0x94, 0x5d, 0x9f, 0x08, 0xcf, 0xf3, 0x57, 0x84, 0x24, 0xec, 0x72, 0x07, 0x05, 0xfa, 0xab, 0x16,
-	0x23, 0xae, 0xaa, 0x5f, 0x34, 0x35, 0xcb, 0x3b, 0xdf, 0x21, 0xa0, 0x67, 0x98, 0x7d, 0x66, 0xb8,
-	0xad, 0x1c, 0x60, 0x1c, 0xfd, 0xd4, 0xd2, 0x14, 0x9f, 0x4e, 0xaf, 0x45, 0xa2, 0x71, 0xee, 0xec,
-	0x5a, 0x24, 0x1a, 0xe1, 0x5a, 0x9d, 0x4b, 0x04, 0xd6, 0xb7, 0x07, 0xac, 0xab, 0x04, 0xfd, 0xdc,
-	0xc0, 0x5a, 0x24, 0x7a, 0x9e, 0xbb, 0x30, 0xf6, 0x6f, 0xbd, 0xb0, 0x67, 0x59, 0xc7, 0x92, 0x89,
-	0x9d, 0x02, 0xdb, 0x4b, 0xc1, 0x05, 0x36, 0x7f, 0x3d, 0xed, 0x7c, 0x50, 0x39, 0xcd, 0x5f, 0x42,
-	0xb8, 0x54, 0xab, 0x82, 0x10, 0x94, 0x58, 0x7c, 0xab, 0xb1, 0xc4, 0x82, 0xa5, 0x14, 0xef, 0x9d,
-	0x70, 0x4a, 0xe1, 0x4d, 0x26, 0xb4, 0x17, 0x99, 0x4c, 0x04, 0xa5, 0x11, 0x7f, 0xf2, 0x42, 0xd3,
-	0x88, 0xc0, 0x04, 0x22, 0xf7, 0x22, 0x12, 0x08, 0x7f, 0xea, 0x50, 0x7e, 0xe1, 0xa9, 0x43, 0x70,
-	0xd2, 0xf0, 0xfe, 0x8b, 0x4f, 0x1a, 0x6a, 0xa4, 0x0b, 0x5f, 0x33, 0xe4, 0x7f, 0x2e, 0x08, 0xf8,
-	0x7b, 0xe1, 0xf1, 0x70, 0x55, 0x82, 0xe3, 0x4a, 0x64, 0x06, 0x7d, 0x50, 0xcf, 0x81, 0x76, 0x31,
-	0x1f, 0xb4, 0x3b, 0x80, 0x72, 0x4b, 0x8d, 0x40, 0x39, 0x2f, 0x88, 0xbb, 0xd9, 0x10, 0x88, 0x5b,
-	0x09, 0xd7, 0x82, 0x6f, 0x7f, 0xd0, 0x30, 0x7c, 0xeb, 0xf5, 0xc1, 0xb7, 0x95, 0xb0, 0x17, 0xba,
-	0xbd, 0xde, 0x18, 0x74, 0x8b, 0x38, 0xb0, 0x6d, 0xb1, 0x21, 0xd8, 0x16, 0x71, 0x20, 0xdb, 0x77,
-	0x1a, 0x40, 0x6c, 0xde, 0x10, 0x70, 0x80, 0xd8, 0x18, 0xf2, 0x1a, 0x0b, 0xca, 0x97, 0x56, 0x22,
-	0x9e, 0xdc, 0xe8, 0x5c, 0x40, 0x6e, 0x44, 0x48, 0x1a, 0xcf, 0x83, 0x22, 0xbe, 0x3c, 0xa8, 0x71,
-	0x60, 0xd1, 0xf7, 0x64, 0xd1, 0xd7, 0x46, 0x12, 0xc6, 0xfc, 0x01, 0xbf, 0xef, 0xc1, 0x33, 0xe0,
-	0x7d, 0x24, 0x0c, 0xb9, 0x83, 0x7d, 0xf7, 0x83, 0x67, 0xe0, 0xe0, 0xa3, 0x30, 0xe2, 0x09, 0xed,
-	0x3d, 0x0f, 0x9e, 0x01, 0xd7, 0x67, 0x61, 0xba, 0x46, 0xbc, 0x8e, 0x3d, 0x78, 0x06, 0x02, 0x47,
-	0x84, 0x84, 0x0f, 0x0b, 0x70, 0x0f, 0x9e, 0x01, 0xcf, 0x13, 0x5f, 0x38, 0xb7, 0xfa, 0x79, 0xdd,
-	0x5c, 0x8f, 0x27, 0x9c, 0xff, 0x12, 0xc2, 0x5e, 0x76, 0xbd, 0xc3, 0x89, 0xe7, 0x72, 0x40, 0x60,
-	0x14, 0x1a, 0x3c, 0xd3, 0x5d, 0x57, 0x47, 0x58, 0x89, 0xa4, 0xc5, 0x1d, 0x25, 0xbf, 0x5f, 0x3b,
-	0x4a, 0xae, 0x1c, 0xeb, 0x64, 0x0f, 0xd2, 0x5b, 0x15, 0x32, 0x7f, 0x50, 0x3b, 0x64, 0xae, 0x1e,
-	0xef, 0x7c, 0x0f, 0x52, 0x5f, 0x1d, 0x3f, 0x8b, 0xc1, 0xf1, 0xf3, 0x8d, 0x86, 0xe3, 0x67, 0x90,
-	0x5a, 0x4f, 0x30, 0xfd, 0x11, 0xa8, 0x1b, 0x4d, 0xd7, 0x8e, 0x19, 0x4d, 0x83, 0xf4, 0x07, 0x84,
-	0xd6, 0x3f, 0x07, 0x75, 0x63, 0xeb, 0x8d, 0xe3, 0xc6, 0xd6, 0x20, 0x33, 0x82, 0x02, 0xed, 0xd7,
-	0x31, 0x00, 0x81, 0xaf, 0x20, 0x00, 0x01, 0x6f, 0x00, 0x0a, 0x3e, 0xac, 0x43, 0x87, 0x1f, 0xd6,
-	0xa1, 0xe3, 0x1c, 0xd6, 0x21, 0xdf, 0x61, 0xbd, 0x70, 0xab, 0xea, 0xcc, 0x7d, 0x5c, 0x01, 0x0b,
-	0xf0, 0x34, 0xec, 0x63, 0xf7, 0x49, 0x64, 0xb5, 0xc0, 0x92, 0x32, 0x04, 0x66, 0x60, 0xa2, 0x46,
-	0x4a, 0x17, 0xa5, 0x99, 0x1c, 0x49, 0xd1, 0xea, 0x9d, 0xc6, 0x2f, 0xf2, 0xbc, 0x0d, 0x3e, 0x69,
-	0xff, 0x95, 0x83, 0x9d, 0xd7, 0xb1, 0xd9, 0xcc, 0x9a, 0x9a, 0x59, 0x53, 0x33, 0x6b, 0x6a, 0x66,
-	0x4d, 0x87, 0x65, 0x4d, 0x0b, 0x87, 0x96, 0xf0, 0x6b, 0x17, 0xeb, 0xe7, 0x0f, 0x2b, 0xd6, 0xd7,
-	0x2c, 0xcb, 0x37, 0x73, 0xb5, 0xfa, 0xb9, 0xda, 0x4d, 0x4f, 0xaa, 0x74, 0xb4, 0x12, 0xa8, 0xeb,
-	0xd0, 0xaf, 0xca, 0x93, 0xbe, 0x05, 0x21, 0x8d, 0x49, 0x86, 0x29, 0x99, 0x98, 0xe6, 0x80, 0x3d,
-	0xe9, 0xd1, 0xa0, 0xb9, 0xb3, 0xaf, 0xc6, 0x62, 0x91, 0x06, 0x31, 0xfa, 0x27, 0x7a, 0xfb, 0x24,
-	0xca, 0xdb, 0x55, 0x15, 0xeb, 0x6f, 0x7a, 0xee, 0xd6, 0x5f, 0x85, 0x23, 0x3e, 0x5f, 0x04, 0xdf,
-	0xf8, 0xf4, 0xcd, 0x01, 0x12, 0xc2, 0x4f, 0xc0, 0xd3, 0x4f, 0xe3, 0x2d, 0x1f, 0x7f, 0x1a, 0x6f,
-	0xf9, 0xf2, 0xd3, 0x38, 0xf8, 0xe1, 0x7e, 0x1c, 0xfc, 0xfd, 0x7e, 0x1c, 0xfc, 0x7c, 0x3f, 0x0e,
-	0x9e, 0xee, 0xc7, 0xc1, 0xc7, 0xfb, 0x71, 0xf0, 0x8b, 0xfd, 0x38, 0xf8, 0x7c, 0x3f, 0xde, 0xf2,
-	0xe5, 0x7e, 0x1c, 0xfc, 0xd5, 0x67, 0xf1, 0x96, 0x47, 0x9f, 0xc5, 0xc1, 0xd3, 0xcf, 0xe2, 0x2d,
-	0x1f, 0x7f, 0x16, 0x6f, 0xf9, 0xc3, 0x77, 0x0b, 0x5a, 0xf1, 0x6e, 0x61, 0xd2, 0x3e, 0x3b, 0x26,
-	0x4b, 0xc6, 0x94, 0xd3, 0x67, 0x98, 0x28, 0xea, 0x5a, 0x59, 0xce, 0x63, 0x7d, 0xc2, 0x1e, 0x9e,
-	0x2a, 0x6e, 0x16, 0xb4, 0x29, 0xfc, 0xbe, 0x69, 0xff, 0x43, 0x74, 0x75, 0xfe, 0x75, 0xbd, 0xcd,
-	0x36, 0xfa, 0x0f, 0xba, 0x65, 0xfe, 0x3f, 0x00, 0x00, 0xff, 0xff, 0x87, 0x1a, 0x29, 0x62, 0x8b,
-	0x6f, 0x00, 0x00,
+	// 5318 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7d, 0xdf, 0x6f, 0x1b, 0x57,
+	0x76, 0xbf, 0x2e, 0x49, 0x49, 0xd4, 0x95, 0x44, 0x0d, 0x47, 0x92, 0x45, 0xeb, 0x07, 0x4d, 0xcb,
+	0x76, 0x2c, 0xd9, 0xa3, 0x1f, 0x24, 0x25, 0x59, 0xd6, 0x6e, 0xb4, 0xd6, 0x28, 0x8e, 0x25, 0x79,
+	0x63, 0x6b, 0x47, 0xb6, 0x77, 0xf3, 0xfd, 0x6e, 0x4b, 0x8c, 0xc8, 0x2b, 0x6a, 0xd6, 0xa3, 0x19,
+	0x76, 0x66, 0x48, 0x45, 0xde, 0xf5, 0x36, 0x55, 0xb0, 0x40, 0xb7, 0x2f, 0x29, 0xdc, 0x02, 0x05,
+	0xf2, 0x17, 0xb4, 0x79, 0x69, 0x81, 0xbe, 0x2d, 0x53, 0xac, 0x60, 0xa0, 0xc0, 0xc2, 0x4f, 0x2e,
+	0x5a, 0x60, 0x83, 0x3c, 0x6d, 0x14, 0xb4, 0x4d, 0xde, 0x82, 0x45, 0x81, 0x2e, 0xd4, 0x02, 0x5b,
+	0xdc, 0x3b, 0x77, 0x46, 0x33, 0xc3, 0x21, 0x25, 0x53, 0x72, 0x92, 0x4d, 0xf8, 0x62, 0x6b, 0xe6,
+	0x9e, 0x73, 0xee, 0x99, 0x73, 0xef, 0xb9, 0xe7, 0x73, 0xee, 0xb9, 0x33, 0x84, 0x13, 0x25, 0xa4,
+	0x8f, 0x4b, 0xea, 0x84, 0x9e, 0xdd, 0x44, 0x5b, 0xe2, 0x44, 0x49, 0x42, 0xdb, 0xfa, 0x84, 0xf8,
+	0xa8, 0xa8, 0xa1, 0x4c, 0x49, 0x41, 0x46, 0x46, 0x97, 0x0c, 0x34, 0x61, 0xec, 0x14, 0x90, 0x3e,
+	0x5e, 0xd0, 0x54, 0x43, 0x65, 0x2f, 0x98, 0x0c, 0xe3, 0x26, 0xc3, 0x38, 0x61, 0x18, 0xf7, 0x30,
+	0xf4, 0x8f, 0xe5, 0x25, 0x63, 0xb3, 0xb8, 0x3e, 0x9e, 0x55, 0xb7, 0x26, 0xf2, 0x6a, 0x5e, 0x9d,
+	0x20, 0xbc, 0xeb, 0xc5, 0x0d, 0x72, 0x45, 0x2e, 0xc8, 0x5f, 0xa6, 0xcc, 0xfe, 0x73, 0x6e, 0x25,
+	0x36, 0x64, 0x84, 0x0c, 0x67, 0xa7, 0xfd, 0x57, 0xdc, 0x04, 0x0a, 0x32, 0xb6, 0x55, 0xed, 0x61,
+	0x66, 0x43, 0xd2, 0xd0, 0xb6, 0x28, 0xcb, 0x2e, 0xda, 0x01, 0x37, 0xad, 0x5a, 0x30, 0x24, 0x55,
+	0xb1, 0x1a, 0xe3, 0xee, 0x46, 0xef, 0xd3, 0xf5, 0x9f, 0x75, 0xb7, 0x3b, 0x9b, 0x06, 0x3d, 0x96,
+	0x12, 0x65, 0x29, 0x27, 0x1a, 0x88, 0xb6, 0x26, 0x2a, 0xed, 0x98, 0x71, 0x77, 0x7d, 0xd1, 0xcf,
+	0xd2, 0x58, 0x81, 0x8c, 0xb3, 0x97, 0xcb, 0xbe, 0x54, 0x86, 0xaa, 0x89, 0x79, 0x37, 0xe1, 0x39,
+	0x3f, 0x42, 0x07, 0xc1, 0x70, 0x09, 0x32, 0x0b, 0x78, 0x58, 0x96, 0x8a, 0xeb, 0x0f, 0x14, 0x64,
+	0xdc, 0xdb, 0x29, 0x20, 0x76, 0x1d, 0xb6, 0xeb, 0x05, 0xf5, 0xa1, 0x39, 0x54, 0x7a, 0x0c, 0x24,
+	0x82, 0x23, 0xed, 0xa9, 0xa9, 0xf1, 0x63, 0x0c, 0xe9, 0x38, 0x96, 0xb1, 0x8a, 0x90, 0x26, 0x29,
+	0x79, 0x2c, 0x8a, 0x6f, 0xff, 0xc5, 0x67, 0x7b, 0xc1, 0x96, 0x27, 0x20, 0xc8, 0xfc, 0x57, 0x50,
+	0x80, 0x44, 0x2a, 0x26, 0xd1, 0x87, 0x3f, 0x08, 0xc0, 0x2e, 0x0f, 0x31, 0x3b, 0x03, 0x43, 0x58,
+	0x52, 0x0c, 0x24, 0xc0, 0x48, 0x7b, 0x6a, 0xd8, 0xb7, 0x43, 0xa2, 0xac, 0xa5, 0xa9, 0x40, 0xe8,
+	0xd9, 0x2b, 0x30, 0x24, 0x16, 0x0d, 0x35, 0x16, 0x24, 0x7c, 0x3d, 0x1e, 0xbe, 0x9b, 0x5b, 0x05,
+	0x63, 0x67, 0xa9, 0x49, 0x20, 0x34, 0xec, 0x38, 0x6c, 0xd9, 0x12, 0x95, 0xa2, 0x28, 0xc7, 0x42,
+	0x35, 0xa9, 0x29, 0xd5, 0x9c, 0xfc, 0xac, 0x0c, 0x36, 0x21, 0x07, 0xbb, 0x71, 0x9f, 0x09, 0x01,
+	0xe9, 0x6a, 0x51, 0xcb, 0xa2, 0xc4, 0x2d, 0x4d, 0x2d, 0x16, 0xfa, 0x7b, 0x61, 0x37, 0x56, 0x60,
+	0x5c, 0xa3, 0xb7, 0x33, 0x79, 0x7c, 0x1b, 0x0e, 0xc1, 0x36, 0x42, 0x7d, 0x47, 0xdc, 0x42, 0xfd,
+	0x0c, 0x8c, 0x10, 0x1a, 0x62, 0x23, 0x45, 0xdc, 0x42, 0xf0, 0x2c, 0x6c, 0x15, 0xd4, 0xa2, 0x21,
+	0x29, 0xf9, 0x54, 0xc4, 0xd4, 0xdc, 0xd2, 0x89, 0x3f, 0x0f, 0x23, 0x9a, 0xd9, 0x94, 0xc9, 0x6e,
+	0xaa, 0x52, 0x16, 0xb1, 0x5d, 0x7b, 0x65, 0x10, 0x7c, 0x5e, 0x06, 0x81, 0xfd, 0x32, 0x08, 0xa6,
+	0xb9, 0xa9, 0x95, 0x50, 0x38, 0xc0, 0x04, 0x87, 0xff, 0x35, 0x00, 0xcf, 0xd8, 0xa6, 0x58, 0x56,
+	0xf2, 0x1a, 0xd2, 0xf5, 0x5b, 0xdb, 0xc4, 0x8a, 0x3f, 0x84, 0x61, 0xf1, 0x51, 0x46, 0x51, 0x73,
+	0xc8, 0x1a, 0xba, 0x54, 0x6d, 0x4b, 0xde, 0x55, 0xd0, 0xb2, 0x62, 0x20, 0x6d, 0x43, 0xcc, 0xa2,
+	0x3b, 0x6a, 0x0e, 0x91, 0x81, 0xeb, 0xc4, 0x03, 0x17, 0x7e, 0x02, 0x9a, 0xaf, 0x04, 0x93, 0x5c,
+	0x5a, 0x68, 0x15, 0x1f, 0xe1, 0x26, 0x9d, 0xcd, 0x43, 0xd6, 0x1c, 0xf3, 0x2c, 0xd2, 0x0c, 0x69,
+	0x43, 0x42, 0xb9, 0xcc, 0xe6, 0x76, 0x2c, 0x90, 0x00, 0x23, 0x6d, 0xfc, 0xf5, 0x8f, 0xca, 0xa0,
+	0x9b, 0xb4, 0x8e, 0xad, 0xef, 0xa8, 0xf2, 0x58, 0x49, 0x95, 0x8d, 0x2d, 0xa4, 0x6f, 0xfe, 0xae,
+	0x0c, 0x9a, 0xb0, 0xb8, 0xb3, 0x5a, 0x5f, 0xec, 0x86, 0xe0, 0x47, 0x21, 0x30, 0xe4, 0xe6, 0xa2,
+	0x25, 0x73, 0x69, 0x9b, 0xdd, 0x84, 0xdd, 0xb2, 0x9a, 0x15, 0xe5, 0x4c, 0x56, 0x55, 0x0c, 0x4d,
+	0x95, 0x33, 0x05, 0x59, 0x54, 0x10, 0x1d, 0xe3, 0x2b, 0xbe, 0x4f, 0xf4, 0x5d, 0x4c, 0xbf, 0x68,
+	0x92, 0xaf, 0x62, 0x6a, 0xf2, 0x24, 0x1d, 0x7b, 0x65, 0x00, 0x3e, 0x2d, 0x03, 0xf0, 0x79, 0x19,
+	0x00, 0x21, 0x2a, 0x7b, 0x89, 0xe6, 0xc2, 0xbf, 0x9d, 0x6f, 0x4e, 0x71, 0x49, 0x2e, 0x3d, 0xfc,
+	0xcb, 0x00, 0x8c, 0x55, 0x5a, 0x75, 0x41, 0x20, 0x76, 0x5d, 0x82, 0x21, 0x6c, 0x54, 0x3a, 0x3b,
+	0xa7, 0x5e, 0xcc, 0xa6, 0xa6, 0x0c, 0x81, 0x48, 0xf8, 0x3a, 0xda, 0xb0, 0xe5, 0xb7, 0xf3, 0xc1,
+	0x14, 0x97, 0x1c, 0xfe, 0xf7, 0x6e, 0x38, 0xe8, 0xb5, 0xe0, 0xcd, 0x13, 0xcd, 0xce, 0x7b, 0xdb,
+	0xea, 0xf1, 0x67, 0x27, 0x0f, 0xa3, 0x8a, 0x9a, 0xb1, 0x16, 0xfe, 0x82, 0x2a, 0x4b, 0xd9, 0x1d,
+	0x62, 0xd8, 0xea, 0x8e, 0xde, 0xa5, 0xa8, 0x77, 0x4c, 0xfa, 0x55, 0x42, 0xce, 0xea, 0xb0, 0x4f,
+	0xcc, 0x1a, 0x52, 0x09, 0xb9, 0xe5, 0x48, 0x48, 0x8f, 0x41, 0x22, 0xe9, 0xba, 0x47, 0x92, 0x37,
+	0xce, 0x8c, 0x2f, 0x10, 0x76, 0xa7, 0x54, 0x09, 0xe9, 0x58, 0xef, 0xa5, 0x26, 0xa1, 0x57, 0xf4,
+	0x6b, 0x64, 0x6f, 0x40, 0x46, 0x51, 0x33, 0x1b, 0xaa, 0xb6, 0x2d, 0x6a, 0xb9, 0x4c, 0x41, 0x53,
+	0xdf, 0xda, 0xa9, 0xb9, 0x40, 0x01, 0x21, 0xa2, 0xa8, 0xaf, 0x9b, 0xe4, 0xab, 0x98, 0x9a, 0x7d,
+	0x07, 0xc0, 0x21, 0xaa, 0xb7, 0x4b, 0xcc, 0xa1, 0xf6, 0x6d, 0x44, 0xde, 0xfc, 0xf1, 0xb4, 0x77,
+	0xca, 0x76, 0x3d, 0x02, 0x10, 0xfa, 0xc5, 0xaa, 0x14, 0xec, 0x1b, 0xb0, 0xcf, 0xdd, 0xbb, 0x28,
+	0xcb, 0xea, 0x36, 0xfe, 0x37, 0xd6, 0x53, 0xf3, 0x71, 0x7a, 0x36, 0x1c, 0xe2, 0x16, 0x30, 0xd3,
+	0x82, 0x2c, 0xb3, 0x3f, 0xf6, 0xf5, 0x94, 0x30, 0xf1, 0x94, 0x37, 0x3e, 0x2a, 0x83, 0x21, 0x87,
+	0x1f, 0x6c, 0x15, 0x65, 0x43, 0x1a, 0x53, 0xa4, 0x6c, 0x85, 0xcf, 0x5c, 0xd0, 0xce, 0xc7, 0x6e,
+	0x08, 0xb5, 0x69, 0x7d, 0xbc, 0x67, 0x0d, 0xf6, 0x29, 0x6a, 0x46, 0x52, 0x74, 0x29, 0x87, 0x32,
+	0xba, 0x21, 0x1a, 0x52, 0x36, 0x83, 0x57, 0x67, 0xa4, 0xc7, 0x3a, 0xaa, 0x3f, 0x0b, 0x1f, 0xc2,
+	0xbe, 0xb2, 0x14, 0x10, 0x7a, 0x14, 0x75, 0x99, 0xf0, 0xae, 0x11, 0x56, 0x81, 0x70, 0xb2, 0x79,
+	0xd8, 0xe3, 0x2b, 0xb1, 0x93, 0x48, 0x1c, 0xf3, 0xf5, 0x85, 0x35, 0xc9, 0x70, 0x09, 0xf9, 0xae,
+	0xa4, 0x93, 0xf0, 0x67, 0x77, 0xc5, 0x4a, 0x95, 0x1d, 0xdd, 0x87, 0x31, 0x45, 0xcd, 0xa8, 0x45,
+	0xc3, 0xa7, 0xb3, 0xae, 0x23, 0xd5, 0x0f, 0x0a, 0xbd, 0x8a, 0x7a, 0xd7, 0x64, 0x76, 0x89, 0x95,
+	0x60, 0xaf, 0xbf, 0x4c, 0xa6, 0xfe, 0x07, 0x08, 0x0a, 0xdd, 0xaa, 0x4f, 0x57, 0xa6, 0x33, 0xe7,
+	0x65, 0x75, 0x5d, 0x94, 0x2d, 0x5f, 0x8c, 0xb1, 0x35, 0x66, 0x51, 0x08, 0x3b, 0xf3, 0x2d, 0x42,
+	0x4f, 0xfd, 0x8b, 0xdd, 0x80, 0xdd, 0x6e, 0x01, 0x19, 0x59, 0xd2, 0x8d, 0x58, 0x77, 0x8d, 0x35,
+	0xdc, 0x25, 0x60, 0x51, 0x55, 0x14, 0x94, 0xc5, 0x00, 0xcd, 0xd2, 0x79, 0x29, 0x24, 0x44, 0xf3,
+	0x4e, 0x12, 0xdc, 0xc0, 0xde, 0x86, 0xdd, 0x8a, 0x9a, 0xc9, 0x65, 0x33, 0x59, 0xb9, 0xa8, 0x1b,
+	0x48, 0x33, 0x91, 0x40, 0xec, 0xcc, 0x91, 0x86, 0x6e, 0x16, 0x18, 0x45, 0x7d, 0x2d, 0xbb, 0x68,
+	0xb2, 0x11, 0x58, 0xc1, 0xfe, 0x18, 0x0e, 0x78, 0x25, 0xd9, 0x03, 0x59, 0x52, 0x62, 0x7d, 0x35,
+	0xe0, 0xd1, 0xdd, 0xf5, 0x1f, 0xa1, 0xac, 0x21, 0xa0, 0x0d, 0x62, 0xde, 0xbe, 0xf7, 0x1f, 0x33,
+	0x5e, 0x49, 0xb4, 0xd7, 0xbe, 0x9c, 0xab, 0x4f, 0x3a, 0xd4, 0x0f, 0x14, 0x76, 0x07, 0xf6, 0x57,
+	0x74, 0x4e, 0x67, 0x6c, 0x49, 0x89, 0xc5, 0x4e, 0xa3, 0xef, 0x33, 0xee, 0xbe, 0x4d, 0x2f, 0x79,
+	0xa0, 0x60, 0x87, 0xd3, 0xb7, 0x70, 0xac, 0xa2, 0x26, 0xcf, 0x14, 0x8a, 0xeb, 0xb2, 0x94, 0xcd,
+	0x48, 0x85, 0xd8, 0xc0, 0x91, 0x86, 0x6c, 0x11, 0x7a, 0xf4, 0xad, 0xc3, 0xe1, 0x5a, 0x25, 0xac,
+	0xcb, 0x05, 0xf6, 0x0d, 0xd8, 0xe3, 0x11, 0x5a, 0x32, 0xb0, 0xc4, 0xc1, 0x63, 0x48, 0x8c, 0xba,
+	0x24, 0x96, 0x8c, 0xe5, 0x42, 0xb5, 0x90, 0x7a, 0xf6, 0xd4, 0x43, 0x2a, 0x3b, 0x01, 0x5b, 0x15,
+	0xd5, 0xc8, 0x6c, 0x16, 0xd7, 0x63, 0xf1, 0x1a, 0x93, 0xbe, 0x55, 0x68, 0x51, 0x54, 0x63, 0xa9,
+	0xb8, 0xce, 0xde, 0x85, 0x41, 0x4c, 0x7c, 0x8e, 0x10, 0x4f, 0x1f, 0x0b, 0xae, 0x7b, 0xa1, 0x3f,
+	0x1f, 0x7a, 0x8e, 0x9f, 0xbc, 0x55, 0xc0, 0x92, 0xe6, 0x0a, 0x4f, 0xcb, 0x40, 0x86, 0x1d, 0xb0,
+	0xd9, 0x0c, 0xae, 0xc1, 0x59, 0x2e, 0x09, 0xfb, 0x60, 0x74, 0xa9, 0xb8, 0x9e, 0x58, 0x54, 0x95,
+	0x0d, 0x29, 0x5f, 0xd4, 0x44, 0x6c, 0x19, 0x36, 0x90, 0xba, 0x0e, 0x07, 0x61, 0x2f, 0x76, 0xf3,
+	0x04, 0xf5, 0x8a, 0xc4, 0xeb, 0x34, 0x9e, 0xb0, 0xc1, 0x19, 0xee, 0x1a, 0xbc, 0x04, 0x99, 0x85,
+	0x5c, 0x49, 0x54, 0xb2, 0x28, 0x97, 0xb8, 0x6b, 0x26, 0x3c, 0x6c, 0x34, 0x79, 0x8d, 0x4b, 0x25,
+	0xb9, 0xd4, 0x0c, 0x97, 0x4c, 0x72, 0xc9, 0x29, 0x2e, 0x35, 0xcd, 0x8f, 0xc2, 0x5e, 0x77, 0xf0,
+	0xb6, 0x60, 0x30, 0xb3, 0x57, 0x06, 0x81, 0xe7, 0x65, 0xd0, 0xb2, 0x5f, 0x06, 0xa1, 0x14, 0x97,
+	0x9c, 0xe4, 0xaf, 0xc0, 0x1e, 0x77, 0xa4, 0xa1, 0x94, 0xec, 0x5e, 0x19, 0xe0, 0xa7, 0x68, 0xdd,
+	0x2f, 0x83, 0x96, 0x29, 0x2e, 0x35, 0xc9, 0x5d, 0xe7, 0xd3, 0xb0, 0xdf, 0x67, 0xd1, 0xb5, 0x38,
+	0x7a, 0xf7, 0xca, 0xa0, 0xe3, 0x57, 0x65, 0x00, 0x9e, 0x97, 0x41, 0xfb, 0x7e, 0x19, 0x34, 0x27,
+	0x53, 0x5c, 0x32, 0xcd, 0x4f, 0xc1, 0x01, 0xbf, 0x95, 0xce, 0xc9, 0xd5, 0x45, 0xb9, 0x22, 0x84,
+	0x6b, 0x9a, 0x4b, 0xce, 0xf0, 0xe3, 0xb0, 0xd7, 0xb3, 0xe0, 0x38, 0xe8, 0x59, 0x4a, 0x1f, 0x25,
+	0xf4, 0xb3, 0x5c, 0x12, 0xab, 0xd6, 0x57, 0xe1, 0x6e, 0x94, 0x23, 0xb6, 0x57, 0x06, 0x67, 0x28,
+	0x47, 0xef, 0x7e, 0x19, 0x84, 0x53, 0x29, 0x2e, 0x95, 0xe6, 0x52, 0x53, 0xfc, 0x04, 0x3c, 0x43,
+	0x52, 0x42, 0x1c, 0xb8, 0xdc, 0x3c, 0xb8, 0x97, 0x01, 0xca, 0xd3, 0x8f, 0x7b, 0x49, 0x5d, 0xe3,
+	0x52, 0xb3, 0xfc, 0x39, 0x08, 0x37, 0x8b, 0xeb, 0x16, 0x51, 0x74, 0xaf, 0x0c, 0xe2, 0xcf, 0xcb,
+	0x60, 0x08, 0x13, 0xa4, 0x27, 0xb9, 0x74, 0x72, 0x25, 0x14, 0x6e, 0x61, 0x5a, 0x57, 0x42, 0xe1,
+	0x56, 0x26, 0xbc, 0x12, 0x0a, 0xb7, 0x33, 0x1d, 0x2b, 0xa1, 0x70, 0x84, 0xe9, 0x5a, 0x09, 0x85,
+	0xa3, 0x0c, 0xbb, 0x12, 0x0a, 0xf7, 0x32, 0x67, 0x56, 0x42, 0xe1, 0x7e, 0x66, 0x60, 0x25, 0x14,
+	0x1e, 0x62, 0xe2, 0xc3, 0xbf, 0xee, 0x86, 0xf1, 0x6a, 0x38, 0xaf, 0x1e, 0xbc, 0xec, 0x45, 0x79,
+	0x2e, 0xbc, 0xdc, 0x40, 0x75, 0x0d, 0x54, 0xd7, 0x40, 0x75, 0x0d, 0x54, 0xd7, 0x40, 0x75, 0x0d,
+	0x54, 0xd7, 0x40, 0x75, 0x0d, 0x54, 0xd7, 0x40, 0x75, 0x26, 0xaa, 0xbb, 0xe0, 0x42, 0x75, 0x98,
+	0x28, 0x4e, 0x89, 0x4e, 0x80, 0xec, 0xfe, 0x85, 0x85, 0x43, 0x36, 0x2c, 0x7b, 0xa0, 0xca, 0x86,
+	0x6e, 0x88, 0xd9, 0x87, 0xd4, 0xb3, 0x09, 0xb0, 0x2b, 0xfa, 0x86, 0x6f, 0x40, 0xc2, 0xf7, 0xad,
+	0x8f, 0xca, 0xa0, 0xdf, 0xb3, 0x39, 0x49, 0x04, 0x8c, 0x65, 0xd5, 0xad, 0x75, 0xd5, 0x8a, 0xdd,
+	0x09, 0x2d, 0x1e, 0xbb, 0x21, 0xd4, 0x20, 0xf4, 0x09, 0xdc, 0xce, 0x9d, 0xc3, 0xc0, 0xa9, 0xef,
+	0x6b, 0xfb, 0x62, 0xcc, 0xd0, 0xa9, 0x61, 0xcc, 0xe6, 0x2f, 0x14, 0x63, 0xb6, 0x9e, 0x32, 0xc6,
+	0x0c, 0x7f, 0xb9, 0x18, 0xb3, 0xab, 0x0e, 0x8c, 0x59, 0x0b, 0x28, 0xc1, 0x63, 0xe0, 0xbc, 0x17,
+	0x05, 0x4a, 0xed, 0x27, 0x41, 0x7a, 0xc7, 0x07, 0x4a, 0x9d, 0x35, 0x4c, 0x11, 0x3c, 0x36, 0x50,
+	0x8a, 0x9c, 0x00, 0x28, 0x05, 0x5f, 0x00, 0x28, 0xc5, 0x8f, 0x34, 0x74, 0xc8, 0x07, 0x28, 0xe5,
+	0x61, 0x05, 0xc4, 0xa0, 0xe1, 0xef, 0x44, 0x08, 0x25, 0x24, 0x44, 0xdc, 0x08, 0x85, 0xe5, 0x61,
+	0x44, 0x51, 0x33, 0x0f, 0x67, 0x75, 0x8b, 0xfa, 0x18, 0x80, 0xa4, 0x59, 0xe8, 0x50, 0xd4, 0xdb,
+	0xb3, 0x3a, 0x15, 0xc4, 0xbe, 0x09, 0xdb, 0x9d, 0x02, 0x06, 0x8f, 0xad, 0x27, 0xfb, 0xfe, 0x63,
+	0x27, 0x27, 0x15, 0x0e, 0x1f, 0x1e, 0x8a, 0xae, 0x01, 0x9c, 0x86, 0x4f, 0x1d, 0x38, 0x5d, 0xa8,
+	0x0f, 0x38, 0x7d, 0x07, 0x76, 0xe5, 0xd0, 0x86, 0x58, 0x94, 0x8d, 0x0c, 0x2d, 0x3f, 0xc7, 0xa2,
+	0x35, 0x61, 0x4d, 0x84, 0x92, 0xaf, 0x99, 0xd4, 0xec, 0x9b, 0x90, 0xb5, 0xea, 0xd6, 0x59, 0x59,
+	0xd4, 0x75, 0x73, 0x82, 0x9a, 0xf9, 0xc0, 0xa8, 0xbf, 0x37, 0x99, 0xe4, 0x8b, 0x98, 0xda, 0x9e,
+	0x95, 0xad, 0x02, 0xa3, 0x7b, 0xee, 0x57, 0x03, 0x75, 0x89, 0xd3, 0xaf, 0x7e, 0xe9, 0x4f, 0xcb,
+	0x40, 0x75, 0x40, 0xaa, 0x24, 0x97, 0xaa, 0x81, 0x9c, 0xd2, 0xdc, 0x0c, 0x1c, 0x80, 0xbd, 0xf4,
+	0x39, 0xbc, 0xa0, 0x2b, 0x39, 0x03, 0x2f, 0xfa, 0xc0, 0x2a, 0xe6, 0x3a, 0x97, 0x4c, 0x71, 0xa9,
+	0xeb, 0x5c, 0x3a, 0x8d, 0xb1, 0x55, 0x3a, 0xc5, 0x8f, 0x54, 0x43, 0x55, 0x5d, 0x14, 0x2b, 0x05,
+	0xf7, 0xcb, 0x20, 0x38, 0xc5, 0x4d, 0xd7, 0x04, 0x55, 0xad, 0x14, 0x7e, 0xb5, 0x5c, 0xe3, 0x92,
+	0xd3, 0xdc, 0xec, 0x71, 0xf0, 0x11, 0xa4, 0x20, 0xa3, 0x8d, 0xe0, 0x9d, 0x49, 0x2e, 0x99, 0xac,
+	0x8d, 0x8f, 0x3a, 0x29, 0x7d, 0x07, 0xa1, 0x4f, 0x73, 0xc9, 0x29, 0x7e, 0xb2, 0x3a, 0x3e, 0xf2,
+	0x87, 0x31, 0xfc, 0x55, 0xc8, 0x3a, 0xbc, 0xe5, 0x08, 0x60, 0x54, 0x1b, 0x49, 0x0d, 0x53, 0x86,
+	0xf3, 0x44, 0xfa, 0x14, 0x97, 0x9e, 0xe6, 0xc7, 0x60, 0x8f, 0x7b, 0x16, 0x3a, 0xc8, 0xa3, 0x94,
+	0x9c, 0x21, 0xea, 0x5f, 0xe3, 0x92, 0xb3, 0x2b, 0xa1, 0x70, 0x90, 0x09, 0xd9, 0xc8, 0xaa, 0x8d,
+	0x81, 0x2b, 0xa1, 0x70, 0x07, 0xd3, 0x69, 0x22, 0x28, 0x1b, 0x4d, 0x9d, 0x67, 0x86, 0x57, 0x42,
+	0x61, 0x86, 0x89, 0x0e, 0xff, 0x92, 0x85, 0xe7, 0xaa, 0x62, 0x2a, 0xba, 0x5d, 0xf6, 0x25, 0xa1,
+	0x2a, 0x6b, 0x97, 0x2e, 0x70, 0xe2, 0xaa, 0x76, 0x03, 0x41, 0x35, 0x10, 0x54, 0x03, 0x41, 0x7d,
+	0xb3, 0x10, 0xd4, 0x89, 0x20, 0x4a, 0xf3, 0xa9, 0x43, 0x94, 0x66, 0x3f, 0x88, 0x52, 0x0f, 0xca,
+	0x6b, 0x79, 0x99, 0x28, 0xaf, 0xc5, 0x85, 0xf2, 0x1a, 0x08, 0xaa, 0x81, 0xa0, 0xbe, 0x10, 0x04,
+	0xf5, 0xc2, 0xa0, 0xe8, 0x85, 0x20, 0xd7, 0x29, 0x23, 0x28, 0x13, 0x3b, 0x99, 0x38, 0x0a, 0x23,
+	0xa8, 0x39, 0xc7, 0xa6, 0x94, 0x7d, 0x30, 0x4f, 0x40, 0x05, 0x59, 0xcc, 0x92, 0x19, 0x36, 0x77,
+	0xf6, 0xd9, 0x7c, 0x95, 0x03, 0x91, 0xc3, 0xf3, 0x0e, 0xf0, 0xe5, 0x38, 0xd4, 0xe7, 0xe4, 0x1e,
+	0x78, 0x36, 0x5f, 0xf5, 0xe0, 0xdf, 0xf0, 0x3b, 0xdd, 0xf0, 0x42, 0xb5, 0x5a, 0xa7, 0x43, 0x48,
+	0xa3, 0x4c, 0xf9, 0x35, 0x2b, 0x53, 0x36, 0x2a, 0x85, 0x8d, 0x4a, 0x61, 0xa3, 0x52, 0xd8, 0xa8,
+	0x14, 0xba, 0xd0, 0xe4, 0x97, 0x5f, 0xbf, 0xfb, 0xe9, 0xb3, 0xf9, 0x9a, 0x47, 0xac, 0x9f, 0x96,
+	0xc1, 0xff, 0xaf, 0xb7, 0xa0, 0x37, 0xec, 0x83, 0x9b, 0x22, 0xee, 0x82, 0x1e, 0xcf, 0x57, 0x43,
+	0x4d, 0xa3, 0xde, 0x6a, 0xde, 0xee, 0x01, 0xf0, 0x27, 0xe5, 0xf9, 0x2a, 0x78, 0xea, 0x4a, 0x65,
+	0x99, 0x6f, 0xf7, 0x00, 0xf8, 0xd2, 0xf2, 0xdf, 0xab, 0x59, 0xfe, 0x4b, 0xfb, 0x96, 0xff, 0x76,
+	0x0f, 0x40, 0x0d, 0x26, 0x7e, 0xad, 0x36, 0x74, 0x9b, 0xf2, 0x2d, 0x0e, 0xee, 0x1e, 0x80, 0x5a,
+	0x5c, 0xfc, 0xad, 0x6a, 0xc8, 0x6e, 0xdc, 0xb7, 0x76, 0x88, 0x8d, 0xe6, 0x4b, 0xcf, 0xdf, 0xa9,
+	0x0e, 0xf9, 0xd2, 0xd5, 0x8a, 0x8a, 0xbb, 0x07, 0xa0, 0x1a, 0x13, 0xbf, 0x5c, 0x15, 0x10, 0x4e,
+	0xf8, 0x62, 0xbc, 0xdd, 0x03, 0x50, 0x85, 0x81, 0x4f, 0xba, 0x2a, 0x91, 0x17, 0x7c, 0x01, 0xe8,
+	0xee, 0x01, 0x70, 0x10, 0xbd, 0x70, 0x5d, 0xf2, 0x67, 0xdd, 0xf0, 0x52, 0xf5, 0x13, 0x67, 0x0d,
+	0x1c, 0xd6, 0xc0, 0x61, 0x0d, 0x1c, 0xd6, 0xc0, 0x61, 0x0d, 0x1c, 0xd6, 0xc0, 0x61, 0x5f, 0x10,
+	0x0e, 0x7b, 0x1b, 0x3c, 0x9b, 0x3f, 0xe2, 0x0c, 0x74, 0x03, 0x8a, 0x7d, 0x4d, 0xa1, 0xd8, 0xed,
+	0xea, 0x50, 0x6c, 0xd2, 0x03, 0xc5, 0x9a, 0x09, 0x14, 0xfb, 0xfa, 0xe0, 0xb0, 0x77, 0x23, 0xf0,
+	0x62, 0xd5, 0x5a, 0xe6, 0x91, 0x30, 0xac, 0x51, 0x0f, 0x6c, 0xd4, 0x03, 0x1b, 0xf5, 0xc0, 0xfa,
+	0xeb, 0x81, 0x43, 0xa7, 0x56, 0x0f, 0x8c, 0x7f, 0x43, 0xeb, 0x81, 0x73, 0xeb, 0xcf, 0xe6, 0x6b,
+	0x1f, 0x70, 0x7d, 0x5a, 0x06, 0xf3, 0x47, 0x14, 0x9f, 0xe2, 0x3e, 0xc1, 0x19, 0x9a, 0xf5, 0xa5,
+	0x59, 0x2e, 0x9d, 0xe6, 0x17, 0xaa, 0x05, 0xe6, 0x11, 0x4f, 0x65, 0xa9, 0xbe, 0xb8, 0xec, 0x29,
+	0x39, 0x55, 0x8d, 0xcb, 0xc7, 0x08, 0xa2, 0x95, 0xa5, 0xa8, 0x13, 0x05, 0xd1, 0xca, 0x4a, 0x55,
+	0xdd, 0x41, 0x74, 0x88, 0x8a, 0x1a, 0x24, 0x81, 0xef, 0x3a, 0x97, 0x9e, 0xac, 0x3f, 0x88, 0x56,
+	0x56, 0xb7, 0xaa, 0x07, 0xd1, 0x95, 0x50, 0x18, 0x30, 0x01, 0xf3, 0x3b, 0x1b, 0x35, 0xea, 0x54,
+	0x83, 0xcc, 0x90, 0x59, 0xa7, 0x1a, 0xfe, 0xab, 0x08, 0x7c, 0xa5, 0xc6, 0xe9, 0x9e, 0x46, 0x4c,
+	0x6c, 0xc4, 0xc4, 0x46, 0x4c, 0x6c, 0x9c, 0x91, 0xf9, 0x2a, 0xc7, 0xc4, 0xdc, 0xb3, 0xf9, 0xa3,
+	0x0e, 0x28, 0x9e, 0x2c, 0x2a, 0x5e, 0x6f, 0x44, 0xc5, 0xd3, 0x89, 0x8a, 0xbe, 0xf9, 0xdc, 0x57,
+	0x27, 0x2a, 0xda, 0xa7, 0x37, 0x86, 0xff, 0x0e, 0xc0, 0x5e, 0x7b, 0x4a, 0xe1, 0x49, 0xb3, 0xac,
+	0x6c, 0xa8, 0x24, 0x08, 0xbe, 0x0e, 0xa1, 0xed, 0x02, 0xe6, 0x47, 0x80, 0xda, 0xf8, 0xcb, 0xbf,
+	0xf8, 0x6c, 0x2f, 0xd8, 0xf6, 0x04, 0xb4, 0x0c, 0x87, 0xb4, 0x40, 0x01, 0xe0, 0x2b, 0xf8, 0x04,
+	0xb4, 0x5e, 0x69, 0x9e, 0xe4, 0x92, 0x5c, 0x1a, 0x5f, 0x36, 0x3f, 0x01, 0x81, 0x18, 0x10, 0xda,
+	0x0a, 0xd4, 0x05, 0x74, 0x76, 0x09, 0xb6, 0x17, 0x34, 0xa9, 0x24, 0x1a, 0x88, 0x08, 0x0a, 0xbc,
+	0x98, 0x20, 0x48, 0x79, 0x97, 0x0b, 0xfa, 0xf0, 0xbb, 0xa3, 0x30, 0x62, 0xae, 0x48, 0x6b, 0x05,
+	0x94, 0xa5, 0xdf, 0x22, 0x8b, 0xb8, 0xbf, 0xea, 0x45, 0x8f, 0xe2, 0x76, 0x59, 0x87, 0x6d, 0x5b,
+	0xb4, 0x10, 0x03, 0x62, 0x37, 0x84, 0x4e, 0x8b, 0xcc, 0xf4, 0xf6, 0xbf, 0x6f, 0x81, 0x1d, 0xe6,
+	0x3e, 0x92, 0x86, 0xf2, 0x92, 0xaa, 0xd0, 0xcf, 0x3a, 0xfd, 0xbc, 0x05, 0xf3, 0x3d, 0xf9, 0x00,
+	0xfc, 0x77, 0x33, 0x9c, 0x86, 0x9d, 0xba, 0x5a, 0x34, 0x36, 0x91, 0xa8, 0x1b, 0xa2, 0x2e, 0x89,
+	0xec, 0xc5, 0x91, 0x05, 0x5d, 0x12, 0x13, 0xab, 0x62, 0x56, 0xda, 0x90, 0xb2, 0xa3, 0x89, 0x35,
+	0xab, 0x35, 0x41, 0xee, 0x0b, 0x44, 0x10, 0x1c, 0x84, 0x6d, 0x59, 0xa4, 0x18, 0x9a, 0x28, 0x17,
+	0x75, 0xb6, 0x6b, 0xe4, 0xfe, 0xda, 0x68, 0x62, 0xd1, 0xbc, 0x4e, 0xdc, 0x5f, 0x83, 0x43, 0xb0,
+	0x05, 0x73, 0x14, 0x75, 0xb6, 0x9b, 0x34, 0xdd, 0xc4, 0xec, 0xf7, 0xd7, 0x2c, 0xe6, 0x04, 0x6c,
+	0x35, 0x9b, 0x53, 0x6c, 0xaf, 0xab, 0x3d, 0x65, 0x51, 0x8c, 0xc3, 0x08, 0xd1, 0xea, 0xb0, 0x8f,
+	0x41, 0x42, 0x48, 0x94, 0x71, 0xf4, 0x64, 0xd1, 0x5f, 0x85, 0xed, 0x8a, 0xaa, 0x19, 0x9b, 0xa8,
+	0xa8, 0xa9, 0x05, 0xc4, 0x0e, 0x8e, 0xdc, 0x24, 0x7f, 0x8c, 0x26, 0xee, 0xe0, 0xbb, 0x09, 0xf3,
+	0xca, 0x22, 0x1e, 0x85, 0x70, 0x1b, 0xe9, 0x06, 0xa5, 0x1d, 0xb0, 0x69, 0xbf, 0x8f, 0x74, 0xc3,
+	0x43, 0x3a, 0x06, 0xdb, 0x7e, 0x24, 0x16, 0x44, 0x05, 0xab, 0xcb, 0x26, 0x3c, 0x96, 0x59, 0xc1,
+	0x2d, 0xa6, 0xee, 0x94, 0x7c, 0x1a, 0x76, 0x8a, 0x45, 0x1d, 0xeb, 0x26, 0x89, 0x84, 0xc5, 0x6b,
+	0xcc, 0x05, 0xab, 0xd5, 0xc5, 0x36, 0x01, 0x3b, 0xb3, 0xa2, 0x22, 0xe6, 0x44, 0xfa, 0xb8, 0x6c,
+	0x7c, 0x64, 0x91, 0x5c, 0x8f, 0x26, 0xcc, 0xff, 0xed, 0x27, 0xa6, 0x0c, 0x17, 0x60, 0x6b, 0xf1,
+	0x21, 0x31, 0x10, 0x1b, 0xb3, 0xd5, 0xbf, 0x7f, 0x9b, 0x9a, 0xe7, 0xd0, 0xca, 0xf8, 0x31, 0x0f,
+	0xad, 0x4c, 0x9e, 0xcf, 0x69, 0x65, 0x9b, 0x22, 0xed, 0xa1, 0x48, 0x3b, 0x34, 0xdb, 0xd0, 0xf0,
+	0x1a, 0x7a, 0xa8, 0x99, 0xd5, 0xdd, 0xeb, 0xe4, 0xbe, 0x57, 0xb3, 0x19, 0xc8, 0x10, 0xbd, 0xc4,
+	0x0d, 0x4d, 0xca, 0x8a, 0x64, 0x4c, 0xd8, 0xe1, 0x91, 0x05, 0x72, 0x65, 0x0d, 0x9f, 0x79, 0x45,
+	0x87, 0x86, 0xf2, 0xa5, 0x60, 0xfb, 0xba, 0x26, 0x3e, 0x92, 0x64, 0xf3, 0xa9, 0x2e, 0x8c, 0x50,
+	0xd2, 0x2d, 0x64, 0x72, 0xf2, 0xa4, 0xd1, 0xfd, 0x80, 0x73, 0x90, 0xcd, 0x23, 0x6d, 0x4b, 0x54,
+	0x76, 0xf0, 0x53, 0x58, 0x1a, 0x5e, 0xb4, 0x35, 0xbc, 0x65, 0x36, 0x9a, 0x4f, 0xe5, 0xd6, 0x13,
+	0xfb, 0x4c, 0x48, 0x0b, 0xc4, 0x6e, 0x2c, 0x35, 0x09, 0xed, 0xc4, 0x43, 0xcc, 0xfb, 0xec, 0x5f,
+	0x87, 0x21, 0x23, 0xca, 0x06, 0xd2, 0x14, 0xec, 0xc9, 0xd4, 0x6b, 0xce, 0x11, 0xaf, 0xf9, 0x8f,
+	0x56, 0xea, 0x35, 0xff, 0xd6, 0x8a, 0xe7, 0x27, 0x79, 0x36, 0xef, 0xfc, 0x34, 0x9f, 0xa9, 0x72,
+	0x7e, 0x72, 0xb0, 0xd3, 0xa1, 0x63, 0x51, 0x67, 0x07, 0x0e, 0xed, 0x5d, 0x49, 0x3d, 0x04, 0x5b,
+	0xcc, 0x71, 0xa1, 0xee, 0x63, 0x0d, 0x0b, 0x6d, 0x4e, 0xc3, 0x8e, 0x87, 0xaa, 0x86, 0xec, 0xd9,
+	0x72, 0xc1, 0x33, 0xc9, 0x6e, 0xe3, 0x46, 0xef, 0xc0, 0xa4, 0x61, 0x07, 0xa5, 0x97, 0x94, 0x9c,
+	0x24, 0x56, 0x30, 0x59, 0xe4, 0xcb, 0xb8, 0xf5, 0x70, 0xf8, 0x21, 0x19, 0x0f, 0x93, 0xe5, 0xbc,
+	0xdf, 0xca, 0xe0, 0x66, 0x98, 0x87, 0x51, 0xdb, 0x01, 0x68, 0x77, 0x29, 0x76, 0xb4, 0xaa, 0x13,
+	0x58, 0x9d, 0xda, 0x33, 0xf2, 0x5b, 0x90, 0xf1, 0xf2, 0xb3, 0x97, 0x8f, 0x64, 0x3f, 0xe1, 0xdc,
+	0x1b, 0x85, 0x50, 0xc1, 0xa1, 0x79, 0x87, 0xb8, 0xec, 0x80, 0x73, 0xed, 0xd8, 0x16, 0x77, 0xbc,
+	0x9e, 0xaa, 0x6f, 0xa3, 0x1c, 0x52, 0x2a, 0xfd, 0x61, 0x8d, 0xdc, 0xf7, 0xea, 0x34, 0x0d, 0x19,
+	0x7d, 0x5b, 0x32, 0x1e, 0x21, 0x4d, 0x16, 0x95, 0x9c, 0xa9, 0xd3, 0x79, 0x07, 0x8f, 0xdd, 0xe4,
+	0x56, 0xe9, 0x0a, 0x0c, 0x17, 0x45, 0x64, 0x92, 0xc7, 0x47, 0xde, 0x90, 0x72, 0x39, 0x19, 0x11,
+	0x45, 0x46, 0x13, 0xf7, 0x17, 0x6e, 0xba, 0x69, 0xc7, 0x21, 0x2c, 0x8a, 0xb6, 0x83, 0x26, 0x2a,
+	0xa9, 0x2b, 0x66, 0x42, 0x97, 0x43, 0x25, 0x3c, 0xd1, 0xd8, 0x84, 0xaf, 0x46, 0x64, 0xda, 0x79,
+	0x6d, 0x44, 0xe8, 0x2b, 0x6c, 0xe4, 0x24, 0x1d, 0x83, 0x1d, 0xd4, 0x2d, 0x4d, 0xfd, 0x87, 0x2a,
+	0x1c, 0xd2, 0xa5, 0xfe, 0x55, 0xd8, 0x6e, 0x2e, 0x31, 0xa6, 0xe7, 0x0f, 0x7a, 0x17, 0x18, 0x97,
+	0xcb, 0x8f, 0x42, 0x68, 0xae, 0x94, 0x74, 0xa8, 0x3c, 0xcb, 0xa4, 0x7b, 0xa8, 0x20, 0xf1, 0x12,
+	0x53, 0xec, 0x79, 0x5f, 0x1f, 0x71, 0xca, 0x76, 0x2e, 0x09, 0x5d, 0xf6, 0x12, 0x40, 0x97, 0x05,
+	0x9e, 0x7e, 0x0c, 0xd4, 0xfc, 0x58, 0xe1, 0x48, 0xed, 0x17, 0x53, 0x16, 0x09, 0x46, 0x31, 0xb3,
+	0x9d, 0x7f, 0xf8, 0x00, 0x00, 0xfa, 0x61, 0xd0, 0x75, 0x08, 0x25, 0xb3, 0x2e, 0x93, 0xc9, 0x6f,
+	0xd3, 0xec, 0xf8, 0x5b, 0xc7, 0x2f, 0xfd, 0x54, 0x1c, 0x25, 0xa5, 0x05, 0x20, 0x20, 0xb4, 0x49,
+	0xd6, 0x6d, 0xb6, 0x08, 0xa3, 0x56, 0x1f, 0xc8, 0xee, 0xaa, 0x85, 0x74, 0xb5, 0x50, 0x57, 0x57,
+	0x37, 0xfd, 0x3a, 0xec, 0x92, 0xdc, 0x8d, 0xec, 0x36, 0x8c, 0xda, 0x2f, 0xf7, 0xd8, 0xe7, 0xd2,
+	0xcd, 0x83, 0xe3, 0xfc, 0x8b, 0x75, 0xeb, 0xb7, 0x05, 0x66, 0xf7, 0xcb, 0x94, 0x3c, 0xad, 0xac,
+	0x04, 0x3b, 0x0f, 0x6d, 0x9a, 0x11, 0x35, 0x7a, 0x1a, 0xfc, 0xd5, 0x3a, 0xcd, 0x6a, 0x26, 0x17,
+	0x76, 0x7f, 0xed, 0xb6, 0x61, 0x17, 0x34, 0xf6, 0x27, 0xb0, 0xa7, 0xc2, 0xb4, 0xb8, 0xc7, 0xf3,
+	0xa4, 0xc7, 0xc5, 0x13, 0x59, 0xd7, 0xd3, 0x6f, 0xd4, 0x63, 0xdf, 0x05, 0x8d, 0xfd, 0x29, 0xec,
+	0xa9, 0xb0, 0x30, 0xee, 0xdd, 0x4c, 0xda, 0x5e, 0x3b, 0x99, 0x91, 0x3d, 0xdd, 0xb3, 0x5e, 0x33,
+	0x2f, 0x68, 0x6c, 0x1a, 0xb6, 0xe5, 0x24, 0xfd, 0x61, 0x46, 0x97, 0x1e, 0x21, 0x52, 0xd5, 0xef,
+	0xe4, 0xcf, 0xe0, 0x0c, 0x0e, 0x87, 0xc4, 0x3f, 0xff, 0x00, 0x44, 0x09, 0x96, 0xbd, 0x12, 0x8c,
+	0xfd, 0xfe, 0x9c, 0x10, 0xc6, 0x84, 0x6b, 0xd2, 0x23, 0xc4, 0xbe, 0x09, 0x21, 0x7d, 0x8b, 0x4c,
+	0x43, 0x39, 0xba, 0xa3, 0x72, 0x9c, 0x7c, 0xb6, 0xe7, 0xfd, 0xc7, 0xd1, 0xac, 0xac, 0x16, 0x73,
+	0x84, 0x11, 0x29, 0x86, 0x24, 0xca, 0xfa, 0x52, 0x40, 0x68, 0x33, 0x5f, 0x18, 0xd3, 0x50, 0x8e,
+	0x7d, 0x15, 0x86, 0x45, 0x5d, 0x97, 0x74, 0x03, 0xe5, 0xe8, 0x29, 0x12, 0xff, 0x34, 0xb3, 0xed,
+	0xc3, 0xc7, 0xe4, 0xa8, 0x7f, 0x0c, 0x2c, 0x05, 0x04, 0x9b, 0x85, 0xfd, 0x1f, 0x00, 0x3b, 0xb6,
+	0xc4, 0xec, 0xa6, 0xa4, 0x98, 0x5f, 0x28, 0x26, 0xfb, 0x23, 0x6d, 0xfc, 0xaf, 0xc1, 0x47, 0x65,
+	0x10, 0x59, 0x33, 0x44, 0x25, 0x87, 0x13, 0xb5, 0xd7, 0xd2, 0x99, 0x52, 0x8a, 0x06, 0xfd, 0x7f,
+	0x04, 0xf0, 0x3a, 0xf4, 0x34, 0xb1, 0x97, 0x47, 0xa6, 0x12, 0x6f, 0x25, 0x4a, 0x8b, 0xab, 0xf7,
+	0xb9, 0x44, 0x72, 0xea, 0x16, 0x9f, 0x10, 0x16, 0xde, 0x18, 0x4d, 0x6c, 0xa1, 0x9c, 0x54, 0xdc,
+	0x4a, 0x14, 0x90, 0xb6, 0xa1, 0xe2, 0x05, 0x2f, 0x8b, 0xe0, 0x35, 0x27, 0xeb, 0x14, 0x66, 0xbd,
+	0x34, 0x32, 0x6b, 0xb3, 0xa6, 0x66, 0x2d, 0xd6, 0x4d, 0x29, 0xbf, 0xe9, 0x62, 0x7c, 0xd5, 0xc9,
+	0x38, 0x8d, 0x19, 0xaf, 0x8e, 0x24, 0x67, 0x6c, 0xce, 0xe9, 0x19, 0x8b, 0xb3, 0x84, 0xb4, 0x9d,
+	0x0a, 0x76, 0x7b, 0x4d, 0x13, 0xda, 0xe9, 0xd3, 0xd2, 0x74, 0xa2, 0x83, 0x7c, 0xb9, 0x20, 0x53,
+	0xc0, 0x93, 0xe8, 0x11, 0xd9, 0x6c, 0xea, 0xe4, 0xd9, 0x8f, 0xca, 0x00, 0x4c, 0x5a, 0x19, 0x45,
+	0xe8, 0x4a, 0x20, 0xd6, 0xbb, 0x14, 0x14, 0x20, 0xa1, 0x5c, 0x45, 0xda, 0xc2, 0x23, 0x76, 0x1a,
+	0xb6, 0x1b, 0xaa, 0x81, 0xb3, 0x44, 0xf2, 0xdd, 0x83, 0x81, 0x2a, 0x6c, 0xaf, 0x62, 0x36, 0x42,
+	0x68, 0xbe, 0x3f, 0x31, 0x0f, 0xbb, 0x14, 0x35, 0x83, 0xd3, 0x4a, 0xa4, 0x51, 0xd6, 0xc1, 0x9a,
+	0x7b, 0x3a, 0x9d, 0x8a, 0xfa, 0x7d, 0x42, 0x6d, 0xf2, 0xaf, 0xc2, 0xb3, 0x78, 0x46, 0x22, 0x4d,
+	0x13, 0x33, 0xba, 0xba, 0x61, 0x6c, 0x8b, 0x78, 0x5a, 0x23, 0x4d, 0xc7, 0xd8, 0xac, 0x83, 0x0c,
+	0x5c, 0x0f, 0x1d, 0x66, 0x5b, 0x0d, 0xf2, 0xd0, 0x7d, 0x16, 0xdb, 0x1a, 0xe5, 0x7a, 0x60, 0x32,
+	0xb1, 0x77, 0x60, 0x4c, 0x2d, 0x20, 0x4d, 0x24, 0xdf, 0x36, 0xd6, 0x77, 0x74, 0x03, 0x6d, 0xd9,
+	0x02, 0x3b, 0x6b, 0x08, 0x3c, 0x63, 0x73, 0xad, 0x11, 0x26, 0x4b, 0xde, 0x65, 0xd8, 0xaa, 0xeb,
+	0x9b, 0x99, 0x87, 0x68, 0x87, 0xec, 0x33, 0xb5, 0xf1, 0x91, 0xdf, 0x95, 0x41, 0x90, 0xf8, 0x84,
+	0x16, 0x8c, 0xbd, 0x7d, 0x43, 0x68, 0xd1, 0xf5, 0xcd, 0xdb, 0x68, 0x87, 0x1d, 0x81, 0xad, 0x62,
+	0x2e, 0x87, 0xbd, 0x9a, 0x9c, 0x59, 0x69, 0xe3, 0x23, 0xd8, 0x89, 0x6c, 0xc2, 0x80, 0x60, 0x35,
+	0xb3, 0xb7, 0x60, 0x7b, 0x56, 0x55, 0xb5, 0x9c, 0x84, 0xa3, 0x90, 0x4e, 0xcf, 0xa6, 0x9c, 0xf3,
+	0x18, 0x8c, 0xb8, 0xf5, 0xe2, 0x21, 0x99, 0xb9, 0xab, 0x22, 0x38, 0x39, 0xd9, 0x7b, 0xb0, 0x4f,
+	0x56, 0xf3, 0x7a, 0x46, 0x37, 0x34, 0x24, 0x6e, 0xe1, 0x07, 0xce, 0x49, 0xba, 0xb8, 0x2e, 0xa3,
+	0x5c, 0xac, 0xf7, 0x18, 0x7b, 0x55, 0xbd, 0x98, 0x79, 0xcd, 0xe2, 0x7d, 0x8d, 0xb2, 0xb2, 0x3f,
+	0x84, 0x1d, 0xb2, 0x9a, 0xcf, 0x68, 0x28, 0x8b, 0xa4, 0x12, 0xd2, 0xe8, 0x99, 0x96, 0xe3, 0x38,
+	0x77, 0xf7, 0xfb, 0x8f, 0x5d, 0xac, 0xb4, 0x9f, 0x76, 0x59, 0xcd, 0x0b, 0xf4, 0x16, 0xbb, 0x08,
+	0x03, 0xfa, 0x36, 0x3d, 0xd2, 0xe2, 0xff, 0xd6, 0xd0, 0x03, 0xcf, 0xc8, 0x12, 0xd1, 0xe1, 0x3d,
+	0xeb, 0xa5, 0x9e, 0x80, 0xbe, 0xcd, 0xf2, 0x30, 0xa0, 0xea, 0xf4, 0x6c, 0x8a, 0x7f, 0xc4, 0xbe,
+	0xeb, 0x1e, 0x4d, 0xaf, 0x0c, 0x55, 0x67, 0x7f, 0x0e, 0x60, 0xc8, 0x10, 0xf3, 0x7a, 0x6c, 0x84,
+	0x7c, 0xe3, 0xe3, 0x78, 0x71, 0xc5, 0x9d, 0xbc, 0x8f, 0xdf, 0x13, 0xf3, 0xfa, 0x4d, 0xc5, 0xd0,
+	0x76, 0xf8, 0x19, 0x6b, 0xb0, 0xdb, 0xde, 0x33, 0xb7, 0x04, 0x62, 0x7f, 0x4a, 0x86, 0xfe, 0x3d,
+	0x10, 0x60, 0x9a, 0xc9, 0xe6, 0xc0, 0x7b, 0xa0, 0xf5, 0x0a, 0x9e, 0x09, 0xbf, 0x07, 0xfb, 0xbf,
+	0xf9, 0xe7, 0x60, 0xcb, 0x5f, 0x7c, 0x00, 0x02, 0xe1, 0x26, 0x81, 0xa8, 0xc0, 0xfe, 0x19, 0x80,
+	0xd1, 0x92, 0x54, 0xc8, 0x14, 0x44, 0x4d, 0xdc, 0xb2, 0x7d, 0xf7, 0x2c, 0x51, 0x6c, 0xd4, 0x6f,
+	0x62, 0x90, 0xfd, 0x39, 0x7d, 0xf3, 0xc1, 0xf2, 0xea, 0x2a, 0x61, 0x21, 0x4e, 0xcc, 0x5f, 0xa5,
+	0x33, 0xbb, 0xea, 0x66, 0x04, 0xe9, 0xf9, 0x09, 0xee, 0x19, 0x08, 0x91, 0x92, 0x54, 0x70, 0x30,
+	0xb3, 0xdf, 0xa2, 0x5b, 0x38, 0x86, 0x9a, 0x31, 0xff, 0x2f, 0x2a, 0x0a, 0x92, 0xad, 0xbd, 0xbe,
+	0x36, 0xbe, 0x95, 0x0a, 0x17, 0x58, 0xdc, 0x7c, 0x4f, 0x5d, 0xc3, 0xff, 0x12, 0x9a, 0xe5, 0x02,
+	0xbb, 0x0a, 0x63, 0xd6, 0xcb, 0x65, 0xeb, 0xb2, 0x9a, 0x7d, 0x88, 0x72, 0x19, 0x1d, 0x69, 0x25,
+	0x29, 0x8b, 0xf4, 0xd8, 0xa5, 0x1a, 0x0b, 0x42, 0xb3, 0x70, 0x86, 0xf2, 0xf1, 0x26, 0xdb, 0x1a,
+	0xe5, 0x62, 0xdf, 0x84, 0x4c, 0x85, 0xa4, 0x51, 0x22, 0x89, 0xf3, 0x48, 0x22, 0xdf, 0xe7, 0x1f,
+	0xf7, 0xf0, 0xdb, 0x1b, 0xbc, 0xcd, 0x42, 0xd7, 0xba, 0x47, 0xf4, 0x1f, 0xc1, 0x36, 0x63, 0x83,
+	0xda, 0x3a, 0xf6, 0x9f, 0xad, 0xc7, 0x9e, 0xde, 0x03, 0xef, 0x3f, 0xee, 0x21, 0x33, 0x13, 0xaf,
+	0xc1, 0x26, 0x3f, 0x32, 0x90, 0xa6, 0x13, 0xab, 0x84, 0x8d, 0x0d, 0xd3, 0x9a, 0xec, 0x1f, 0xc3,
+	0x4e, 0xf2, 0xbd, 0x7d, 0x49, 0x21, 0x40, 0x53, 0x8e, 0x7d, 0xda, 0xfa, 0x22, 0xe1, 0xd1, 0xcd,
+	0x4c, 0x64, 0x77, 0xe0, 0x5b, 0xcb, 0xf4, 0x0e, 0x9b, 0x85, 0x5d, 0x66, 0x04, 0x25, 0xc3, 0x24,
+	0x29, 0x1b, 0x6a, 0xec, 0x33, 0xb3, 0x87, 0xb9, 0x17, 0xc3, 0x0a, 0xce, 0xcd, 0x32, 0xa1, 0x93,
+	0xc8, 0xb4, 0x6e, 0xf5, 0x5f, 0x83, 0x6d, 0xf6, 0xe4, 0x66, 0x19, 0x18, 0xc4, 0xeb, 0x1f, 0xd9,
+	0x98, 0x12, 0xf0, 0x9f, 0x6c, 0x0f, 0x6c, 0x2e, 0x89, 0x72, 0xd1, 0x7c, 0x9d, 0xbb, 0x4d, 0x30,
+	0x2f, 0xe6, 0x02, 0xb3, 0x60, 0xee, 0x27, 0x4f, 0xcb, 0xe0, 0x2d, 0x78, 0x1e, 0x76, 0x93, 0xfd,
+	0x5b, 0x2c, 0x3a, 0xb1, 0x86, 0x64, 0x73, 0x0f, 0x98, 0x85, 0x49, 0x2e, 0x3d, 0xc9, 0xa5, 0xb9,
+	0x29, 0xee, 0x1a, 0x7c, 0x05, 0xf6, 0x98, 0x5b, 0xbc, 0x6a, 0x0e, 0x25, 0x56, 0x6d, 0x63, 0xb2,
+	0x91, 0xe4, 0x24, 0x97, 0x9c, 0xe1, 0x92, 0x53, 0x1c, 0x39, 0x1b, 0x03, 0xaf, 0xc2, 0x33, 0xf6,
+	0x66, 0xaf, 0xfb, 0x6c, 0x53, 0x34, 0x35, 0x69, 0x1e, 0x3e, 0xe6, 0xa6, 0x26, 0xc9, 0xce, 0xef,
+	0x0c, 0xff, 0x0a, 0xec, 0x34, 0x13, 0x7b, 0xe7, 0x6b, 0x61, 0x81, 0xe7, 0x65, 0x10, 0x27, 0xc5,
+	0x3d, 0x2e, 0x91, 0x4e, 0x62, 0x8b, 0xf2, 0x1c, 0x6c, 0xb3, 0x7f, 0xeb, 0x80, 0x3d, 0xb7, 0x57,
+	0x06, 0xcd, 0xcf, 0xcb, 0x20, 0xb4, 0x5f, 0x06, 0x5d, 0xd3, 0xdc, 0x0c, 0x97, 0xbc, 0xc6, 0xa5,
+	0x53, 0x5c, 0x3a, 0xcd, 0xa5, 0xa7, 0x08, 0xf5, 0x00, 0x84, 0x39, 0x54, 0x90, 0xd5, 0x9d, 0x2d,
+	0xa4, 0x18, 0x6c, 0xe7, 0x5e, 0x19, 0x84, 0xe9, 0x81, 0x25, 0x30, 0xcb, 0x8f, 0xc0, 0x0e, 0x67,
+	0xfc, 0x23, 0xdf, 0x5d, 0x1a, 0x74, 0x6c, 0x9e, 0x86, 0x93, 0xd3, 0x9c, 0xfd, 0xea, 0x1a, 0x59,
+	0xae, 0xad, 0xe5, 0xd1, 0xa9, 0x63, 0x2f, 0xe5, 0xe8, 0x21, 0x7a, 0x26, 0xb9, 0x54, 0x8a, 0x1f,
+	0x83, 0x7d, 0x5e, 0x0f, 0x70, 0xbe, 0x0e, 0x78, 0xe9, 0x79, 0x19, 0x5c, 0xdc, 0x2f, 0x83, 0x96,
+	0xf4, 0x35, 0x2e, 0x31, 0x95, 0x5c, 0x09, 0x85, 0xe3, 0xcc, 0xb9, 0x95, 0x50, 0x38, 0xc4, 0x34,
+	0xdb, 0xa7, 0x6c, 0xcc, 0x5d, 0x52, 0xf3, 0xac, 0x4d, 0x0f, 0xd3, 0xbb, 0x12, 0x0a, 0x5f, 0x64,
+	0x2e, 0xad, 0x84, 0xc2, 0xaf, 0x30, 0x97, 0x57, 0x42, 0xe1, 0xcb, 0xcc, 0xc8, 0xf0, 0xbb, 0x51,
+	0x18, 0x59, 0xd4, 0x90, 0x68, 0x20, 0x7b, 0x47, 0xf2, 0x92, 0xff, 0x8e, 0xa4, 0x77, 0x03, 0xf2,
+	0x82, 0xdf, 0xfe, 0xa3, 0x77, 0xcf, 0xe5, 0x6a, 0xb5, 0x2d, 0x17, 0xbf, 0x4c, 0xec, 0xdb, 0xf5,
+	0x65, 0x62, 0x34, 0x07, 0xfb, 0xe1, 0x29, 0xe7, 0x60, 0xee, 0xec, 0x4b, 0x7d, 0x99, 0xd9, 0x97,
+	0x5f, 0xde, 0xf5, 0x27, 0x2f, 0x35, 0xef, 0xf2, 0xcd, 0xb8, 0xb2, 0x2f, 0x23, 0xe3, 0xf2, 0xe6,
+	0x5a, 0xa5, 0x97, 0x9e, 0x6b, 0xf9, 0x67, 0x59, 0x6f, 0xbd, 0xfc, 0x2c, 0xab, 0x4a, 0x7e, 0xf5,
+	0x12, 0x53, 0xa5, 0xf3, 0x7e, 0xa9, 0x8e, 0x3b, 0x21, 0x18, 0xa8, 0xc8, 0xee, 0x1c, 0x59, 0x5c,
+	0x9f, 0x07, 0xdc, 0xda, 0x60, 0x36, 0xe6, 0x01, 0xb3, 0x87, 0xe0, 0x75, 0xa1, 0x1e, 0xf0, 0xea,
+	0x86, 0xad, 0x77, 0xea, 0x82, 0xad, 0x4b, 0xc1, 0x6a, 0x80, 0xf5, 0x07, 0x75, 0x03, 0xd6, 0x2e,
+	0x0f, 0x60, 0x5d, 0x0a, 0xba, 0xc1, 0xea, 0x77, 0xea, 0x03, 0xab, 0x21, 0x1b, 0xa8, 0xce, 0xd7,
+	0x05, 0x54, 0x43, 0x36, 0x48, 0xfd, 0x5e, 0x1d, 0x18, 0xd5, 0xbd, 0x9c, 0x1f, 0x62, 0x54, 0x8a,
+	0x35, 0x87, 0xfd, 0x32, 0xc4, 0xa5, 0x90, 0x2b, 0x1b, 0x3c, 0xef, 0x93, 0x0d, 0x62, 0x92, 0xfa,
+	0x33, 0xbf, 0x50, 0x65, 0xe6, 0xf7, 0x87, 0x83, 0x18, 0xeb, 0x47, 0x43, 0xd1, 0x67, 0xf3, 0x9e,
+	0x82, 0x1f, 0x3f, 0xec, 0x85, 0x28, 0xd1, 0xdd, 0x03, 0xe0, 0xbe, 0xc5, 0xf7, 0x3b, 0xe1, 0x49,
+	0xe7, 0xee, 0x01, 0x38, 0xbc, 0xe4, 0x07, 0x5d, 0x60, 0x24, 0xb2, 0x7b, 0x00, 0x1c, 0xd7, 0xfc,
+	0x64, 0x15, 0x8c, 0x11, 0xdb, 0x3d, 0x00, 0xbe, 0x2d, 0x7c, 0xc2, 0x83, 0x5f, 0x98, 0xdd, 0x03,
+	0xe0, 0xba, 0xc3, 0xcf, 0x54, 0x07, 0x22, 0x03, 0xbb, 0x07, 0xa0, 0x5a, 0xa3, 0x07, 0x8b, 0x98,
+	0x75, 0xdb, 0x4e, 0x26, 0x62, 0x63, 0x91, 0x0b, 0xcc, 0x45, 0x1f, 0x44, 0xf2, 0xbf, 0x1d, 0xb0,
+	0x8b, 0x1e, 0x65, 0xb2, 0x21, 0x89, 0xe4, 0x13, 0xdb, 0xf9, 0x3a, 0xc3, 0x92, 0xe3, 0x98, 0x14,
+	0xdd, 0x16, 0x6b, 0x72, 0x06, 0xfa, 0x9f, 0x54, 0x0f, 0xf4, 0x4b, 0x27, 0x0a, 0x4e, 0x7e, 0xfd,
+	0x56, 0x44, 0xfd, 0x9f, 0x56, 0x8f, 0xfa, 0xcb, 0x27, 0x0b, 0x51, 0x7e, 0xdd, 0x57, 0x42, 0x80,
+	0x82, 0x3f, 0x04, 0x78, 0xad, 0x6e, 0x08, 0xe0, 0xd7, 0xad, 0x0b, 0x0f, 0xbc, 0x03, 0x6a, 0x02,
+	0x82, 0x95, 0x13, 0x02, 0x02, 0xbf, 0xfe, 0x7d, 0xd0, 0xc1, 0xcf, 0x40, 0x4d, 0x78, 0x70, 0xfb,
+	0xa4, 0xf0, 0xc0, 0x4f, 0x0d, 0x3f, 0xac, 0xf0, 0x55, 0x8c, 0xbb, 0xe0, 0x0b, 0x88, 0xbb, 0xc0,
+	0x1d, 0x77, 0xfd, 0x63, 0x54, 0xe0, 0xe8, 0x18, 0x15, 0x38, 0x49, 0x8c, 0x0a, 0x9c, 0x56, 0x8c,
+	0x0a, 0xbe, 0xf4, 0x18, 0x15, 0xac, 0x88, 0x51, 0x73, 0x5b, 0x15, 0xa1, 0xe6, 0x69, 0x19, 0xfc,
+	0x00, 0x9e, 0x81, 0x51, 0x7a, 0x88, 0x4a, 0x52, 0xf2, 0x34, 0x81, 0x66, 0xc1, 0x14, 0x4c, 0x54,
+	0x49, 0xbf, 0xc3, 0x24, 0xeb, 0xe6, 0xc8, 0x6b, 0x43, 0xd5, 0x12, 0xef, 0x40, 0x7a, 0xa6, 0x66,
+	0x88, 0xfa, 0x2a, 0x06, 0xa1, 0xe3, 0x86, 0x9f, 0x7f, 0x62, 0x61, 0xfb, 0x2d, 0x64, 0x34, 0xb2,
+	0xe1, 0x46, 0x36, 0xdc, 0xc8, 0x86, 0xff, 0xb0, 0xb2, 0xe1, 0xd4, 0xf1, 0x0a, 0x87, 0xae, 0x6a,
+	0xe1, 0x49, 0x33, 0xe8, 0xb9, 0x23, 0x0b, 0x58, 0xd5, 0x4b, 0x55, 0xb3, 0x47, 0x95, 0xaa, 0xaa,
+	0x16, 0xa5, 0x1a, 0x79, 0x7b, 0xed, 0xbc, 0xfd, 0x8e, 0x2b, 0x6d, 0x3e, 0xde, 0xb6, 0xb8, 0x63,
+	0xd1, 0xaf, 0xc8, 0x99, 0xbf, 0x0d, 0x21, 0x89, 0x6e, 0xba, 0x21, 0x1a, 0x88, 0xec, 0x07, 0x44,
+	0x52, 0x43, 0x7e, 0xb6, 0xb3, 0xce, 0xc6, 0x23, 0x81, 0x84, 0x43, 0xf2, 0x27, 0x7b, 0xef, 0x34,
+	0x8a, 0x3b, 0x15, 0xf5, 0x9a, 0x46, 0x1e, 0xff, 0x05, 0xe6, 0xf1, 0x3d, 0x15, 0xe0, 0xea, 0xd3,
+	0x79, 0xf0, 0x8d, 0x4d, 0xe5, 0x6b, 0xe0, 0x27, 0xfe, 0x6f, 0xc0, 0xf3, 0x8f, 0xe3, 0x4d, 0x1f,
+	0x7e, 0x1c, 0x6f, 0xfa, 0xfc, 0xe3, 0x38, 0x78, 0x7b, 0x3f, 0x0e, 0xfe, 0x76, 0x3f, 0x0e, 0x7e,
+	0xb5, 0x1f, 0x07, 0xcf, 0xf7, 0xe3, 0xe0, 0xc3, 0xfd, 0x38, 0xf8, 0xcd, 0x7e, 0x1c, 0x7c, 0xba,
+	0x1f, 0x6f, 0xfa, 0x7c, 0x3f, 0x0e, 0xfe, 0xf2, 0x93, 0x78, 0xd3, 0xde, 0x27, 0x71, 0xf0, 0xfc,
+	0x93, 0x78, 0xd3, 0x87, 0x9f, 0xc4, 0x9b, 0xfe, 0xdf, 0x9b, 0x79, 0xb5, 0xf0, 0x30, 0x3f, 0x6e,
+	0x2d, 0x99, 0xe3, 0x45, 0x7d, 0xc2, 0x2e, 0xb9, 0x8d, 0x15, 0x34, 0xb5, 0x24, 0xe5, 0x90, 0x36,
+	0x66, 0x35, 0x4f, 0x14, 0xd6, 0xf3, 0xea, 0x04, 0x7a, 0xcb, 0xb0, 0x7e, 0x40, 0xbb, 0xc6, 0xcf,
+	0x86, 0xaf, 0xb7, 0x90, 0x1f, 0xa2, 0x4e, 0xff, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x29, 0x34,
+	0xe7, 0x78, 0x64, 0x7c, 0x00, 0x00,
 }
 
+func (this *AzureHubVnetType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureHubVnetType)
+	if !ok {
+		that2, ok := that.(AzureHubVnetType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.SpokeVnets) != len(that1.SpokeVnets) {
+		return false
+	}
+	for i := range this.SpokeVnets {
+		if !this.SpokeVnets[i].Equal(that1.SpokeVnets[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *VnetPeeringType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VnetPeeringType)
+	if !ok {
+		that2, ok := that.(VnetPeeringType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Vnet.Equal(that1.Vnet) {
+		return false
+	}
+	if that1.RoutingChoice == nil {
+		if this.RoutingChoice != nil {
+			return false
+		}
+	} else if this.RoutingChoice == nil {
+		return false
+	} else if !this.RoutingChoice.Equal(that1.RoutingChoice) {
+		return false
+	}
+	return true
+}
+func (this *VnetPeeringType_Auto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VnetPeeringType_Auto)
+	if !ok {
+		that2, ok := that.(VnetPeeringType_Auto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Auto.Equal(that1.Auto) {
+		return false
+	}
+	return true
+}
+func (this *VnetPeeringType_Manual) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VnetPeeringType_Manual)
+	if !ok {
+		that2, ok := that.(VnetPeeringType_Manual)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Manual.Equal(that1.Manual) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetIngressGwType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5607,6 +6448,15 @@ func (this *AzureVnetIngressEgressGwType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.LocalControlPlane.Equal(that1.LocalControlPlane) {
+		return false
+	}
+	if that1.HubChoice == nil {
+		if this.HubChoice != nil {
+			return false
+		}
+	} else if this.HubChoice == nil {
+		return false
+	} else if !this.HubChoice.Equal(that1.HubChoice) {
 		return false
 	}
 	return true
@@ -5995,6 +6845,54 @@ func (this *AzureVnetIngressEgressGwType_SmConnectionPvtIp) Equal(that interface
 	}
 	return true
 }
+func (this *AzureVnetIngressEgressGwType_NotHub) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwType_NotHub)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwType_NotHub)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NotHub.Equal(that1.NotHub) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwType_Hub) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwType_Hub)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwType_Hub)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Hub.Equal(that1.Hub) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetIngressEgressGwARType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6084,6 +6982,15 @@ func (this *AzureVnetIngressEgressGwARType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.LocalControlPlane.Equal(that1.LocalControlPlane) {
+		return false
+	}
+	if that1.HubChoice == nil {
+		if this.HubChoice != nil {
+			return false
+		}
+	} else if this.HubChoice == nil {
+		return false
+	} else if !this.HubChoice.Equal(that1.HubChoice) {
 		return false
 	}
 	return true
@@ -6468,6 +7375,54 @@ func (this *AzureVnetIngressEgressGwARType_SmConnectionPvtIp) Equal(that interfa
 		return false
 	}
 	if !this.SmConnectionPvtIp.Equal(that1.SmConnectionPvtIp) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARType_NotHub) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARType_NotHub)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARType_NotHub)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NotHub.Equal(that1.NotHub) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARType_Hub) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARType_Hub)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARType_Hub)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Hub.Equal(that1.Hub) {
 		return false
 	}
 	return true
@@ -7612,6 +8567,24 @@ func (this *AzureVnetIngressEgressGwReplaceType) Equal(that interface{}) bool {
 	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
 		return false
 	}
+	if that1.SiteMeshGroupChoice == nil {
+		if this.SiteMeshGroupChoice != nil {
+			return false
+		}
+	} else if this.SiteMeshGroupChoice == nil {
+		return false
+	} else if !this.SiteMeshGroupChoice.Equal(that1.SiteMeshGroupChoice) {
+		return false
+	}
+	if that1.HubChoice == nil {
+		if this.HubChoice != nil {
+			return false
+		}
+	} else if this.HubChoice == nil {
+		return false
+	} else if !this.HubChoice.Equal(that1.HubChoice) {
+		return false
+	}
 	return true
 }
 func (this *AzureVnetIngressEgressGwReplaceType_NoNetworkPolicy) Equal(that interface{}) bool {
@@ -7950,6 +8923,102 @@ func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) Equal(th
 	}
 	return true
 }
+func (this *AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPublicIp.Equal(that1.SmConnectionPublicIp) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPvtIp.Equal(that1.SmConnectionPvtIp) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwReplaceType_NotHub) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwReplaceType_NotHub)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwReplaceType_NotHub)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NotHub.Equal(that1.NotHub) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwReplaceType_Hub) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwReplaceType_Hub)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwReplaceType_Hub)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Hub.Equal(that1.Hub) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetIngressEgressGwARReplaceType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -8021,6 +9090,24 @@ func (this *AzureVnetIngressEgressGwARReplaceType) Equal(that interface{}) bool 
 	} else if this.DcClusterGroupChoice == nil {
 		return false
 	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
+		return false
+	}
+	if that1.SiteMeshGroupChoice == nil {
+		if this.SiteMeshGroupChoice != nil {
+			return false
+		}
+	} else if this.SiteMeshGroupChoice == nil {
+		return false
+	} else if !this.SiteMeshGroupChoice.Equal(that1.SiteMeshGroupChoice) {
+		return false
+	}
+	if that1.HubChoice == nil {
+		if this.HubChoice != nil {
+			return false
+		}
+	} else if this.HubChoice == nil {
+		return false
+	} else if !this.HubChoice.Equal(that1.HubChoice) {
 		return false
 	}
 	return true
@@ -8361,6 +9448,102 @@ func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) Equal(
 	}
 	return true
 }
+func (this *AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPublicIp.Equal(that1.SmConnectionPublicIp) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPvtIp.Equal(that1.SmConnectionPvtIp) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_NotHub) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARReplaceType_NotHub)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARReplaceType_NotHub)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NotHub.Equal(that1.NotHub) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_Hub) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetIngressEgressGwARReplaceType_Hub)
+	if !ok {
+		that2, ok := that.(AzureVnetIngressEgressGwARReplaceType_Hub)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Hub.Equal(that1.Hub) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetVoltstackClusterReplaceType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -8423,6 +9606,15 @@ func (this *AzureVnetVoltstackClusterReplaceType) Equal(that interface{}) bool {
 	} else if this.DcClusterGroupChoice == nil {
 		return false
 	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
+		return false
+	}
+	if that1.SiteMeshGroupChoice == nil {
+		if this.SiteMeshGroupChoice != nil {
+			return false
+		}
+	} else if this.SiteMeshGroupChoice == nil {
+		return false
+	} else if !this.SiteMeshGroupChoice.Equal(that1.SiteMeshGroupChoice) {
 		return false
 	}
 	return true
@@ -8691,6 +9883,54 @@ func (this *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) Equal(that inte
 	}
 	return true
 }
+func (this *AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPublicIp.Equal(that1.SmConnectionPublicIp) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPvtIp.Equal(that1.SmConnectionPvtIp) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetVoltstackClusterARReplaceType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -8753,6 +9993,15 @@ func (this *AzureVnetVoltstackClusterARReplaceType) Equal(that interface{}) bool
 	} else if this.DcClusterGroupChoice == nil {
 		return false
 	} else if !this.DcClusterGroupChoice.Equal(that1.DcClusterGroupChoice) {
+		return false
+	}
+	if that1.SiteMeshGroupChoice == nil {
+		if this.SiteMeshGroupChoice != nil {
+			return false
+		}
+	} else if this.SiteMeshGroupChoice == nil {
+		return false
+	} else if !this.SiteMeshGroupChoice.Equal(that1.SiteMeshGroupChoice) {
 		return false
 	}
 	return true
@@ -9021,6 +10270,54 @@ func (this *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) Equal(that in
 	}
 	return true
 }
+func (this *AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPublicIp.Equal(that1.SmConnectionPublicIp) {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp)
+	if !ok {
+		that2, ok := that.(AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SmConnectionPvtIp.Equal(that1.SmConnectionPvtIp) {
+		return false
+	}
+	return true
+}
 func (this *AzureVnetSiteInfoType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -9170,6 +10467,18 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		if !this.VipParamsPerAz[i].Equal(that1.VipParamsPerAz[i]) {
 			return false
 		}
+	}
+	if this.SiteToSiteTunnelIp != that1.SiteToSiteTunnelIp {
+		return false
+	}
+	if that1.BlockedServicesChoice == nil {
+		if this.BlockedServicesChoice != nil {
+			return false
+		}
+	} else if this.BlockedServicesChoice == nil {
+		return false
+	} else if !this.BlockedServicesChoice.Equal(that1.BlockedServicesChoice) {
+		return false
 	}
 	if !this.TfParams.Equal(that1.TfParams) {
 		return false
@@ -9542,6 +10851,54 @@ func (this *GlobalSpecType_LogReceiver) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_DefaultBlockedServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DefaultBlockedServices)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DefaultBlockedServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultBlockedServices.Equal(that1.DefaultBlockedServices) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_BlockedServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_BlockedServices)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_BlockedServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BlockedServices.Equal(that1.BlockedServices) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -9639,6 +10996,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.WorkerNodes == nil {
 		return false
 	} else if !this.WorkerNodes.Equal(that1.WorkerNodes) {
+		return false
+	}
+	if that1.BlockedServicesChoice == nil {
+		if this.BlockedServicesChoice != nil {
+			return false
+		}
+	} else if this.BlockedServicesChoice == nil {
+		return false
+	} else if !this.BlockedServicesChoice.Equal(that1.BlockedServicesChoice) {
 		return false
 	}
 	return true
@@ -9859,30 +11225,6 @@ func (this *CreateSpecType_AzureCred) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_Assisted) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_Assisted)
-	if !ok {
-		that2, ok := that.(CreateSpecType_Assisted)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Assisted.Equal(that1.Assisted) {
-		return false
-	}
-	return true
-}
 func (this *CreateSpecType_LogsStreamingDisabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -10003,6 +11345,54 @@ func (this *CreateSpecType_NoWorkerNodes) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_DefaultBlockedServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DefaultBlockedServices)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DefaultBlockedServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultBlockedServices.Equal(that1.DefaultBlockedServices) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_BlockedServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_BlockedServices)
+	if !ok {
+		that2, ok := that.(CreateSpecType_BlockedServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BlockedServices.Equal(that1.BlockedServices) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -10053,6 +11443,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.WorkerNodes == nil {
 		return false
 	} else if !this.WorkerNodes.Equal(that1.WorkerNodes) {
+		return false
+	}
+	if that1.BlockedServicesChoice == nil {
+		if this.BlockedServicesChoice != nil {
+			return false
+		}
+	} else if this.BlockedServicesChoice == nil {
+		return false
+	} else if !this.BlockedServicesChoice.Equal(that1.BlockedServicesChoice) {
 		return false
 	}
 	return true
@@ -10321,6 +11720,54 @@ func (this *ReplaceSpecType_NoWorkerNodes) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_DefaultBlockedServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DefaultBlockedServices)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DefaultBlockedServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultBlockedServices.Equal(that1.DefaultBlockedServices) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_BlockedServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_BlockedServices)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_BlockedServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BlockedServices.Equal(that1.BlockedServices) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -10429,6 +11876,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.WorkerNodes == nil {
 		return false
 	} else if !this.WorkerNodes.Equal(that1.WorkerNodes) {
+		return false
+	}
+	if that1.BlockedServicesChoice == nil {
+		if this.BlockedServicesChoice != nil {
+			return false
+		}
+	} else if this.BlockedServicesChoice == nil {
+		return false
+	} else if !this.BlockedServicesChoice.Equal(that1.BlockedServicesChoice) {
 		return false
 	}
 	return true
@@ -10793,6 +12249,97 @@ func (this *GetSpecType_NoWorkerNodes) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_DefaultBlockedServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DefaultBlockedServices)
+	if !ok {
+		that2, ok := that.(GetSpecType_DefaultBlockedServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultBlockedServices.Equal(that1.DefaultBlockedServices) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_BlockedServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_BlockedServices)
+	if !ok {
+		that2, ok := that.(GetSpecType_BlockedServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BlockedServices.Equal(that1.BlockedServices) {
+		return false
+	}
+	return true
+}
+func (this *AzureHubVnetType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&azure_vnet_site.AzureHubVnetType{")
+	if this.SpokeVnets != nil {
+		s = append(s, "SpokeVnets: "+fmt.Sprintf("%#v", this.SpokeVnets)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *VnetPeeringType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&azure_vnet_site.VnetPeeringType{")
+	if this.Vnet != nil {
+		s = append(s, "Vnet: "+fmt.Sprintf("%#v", this.Vnet)+",\n")
+	}
+	if this.RoutingChoice != nil {
+		s = append(s, "RoutingChoice: "+fmt.Sprintf("%#v", this.RoutingChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *VnetPeeringType_Auto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.VnetPeeringType_Auto{` +
+		`Auto:` + fmt.Sprintf("%#v", this.Auto) + `}`}, ", ")
+	return s
+}
+func (this *VnetPeeringType_Manual) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.VnetPeeringType_Manual{` +
+		`Manual:` + fmt.Sprintf("%#v", this.Manual) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetIngressGwType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -10829,7 +12376,7 @@ func (this *AzureVnetIngressEgressGwType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 23)
+	s := make([]string, 0, 25)
 	s = append(s, "&azure_vnet_site.AzureVnetIngressEgressGwType{")
 	if this.AzNodes != nil {
 		s = append(s, "AzNodes: "+fmt.Sprintf("%#v", this.AzNodes)+",\n")
@@ -10858,6 +12405,9 @@ func (this *AzureVnetIngressEgressGwType) GoString() string {
 	}
 	if this.LocalControlPlane != nil {
 		s = append(s, "LocalControlPlane: "+fmt.Sprintf("%#v", this.LocalControlPlane)+",\n")
+	}
+	if this.HubChoice != nil {
+		s = append(s, "HubChoice: "+fmt.Sprintf("%#v", this.HubChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -10990,11 +12540,27 @@ func (this *AzureVnetIngressEgressGwType_SmConnectionPvtIp) GoString() string {
 		`SmConnectionPvtIp:` + fmt.Sprintf("%#v", this.SmConnectionPvtIp) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetIngressEgressGwType_NotHub) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwType_NotHub{` +
+		`NotHub:` + fmt.Sprintf("%#v", this.NotHub) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwType_Hub) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwType_Hub{` +
+		`Hub:` + fmt.Sprintf("%#v", this.Hub) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetIngressEgressGwARType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 23)
+	s := make([]string, 0, 25)
 	s = append(s, "&azure_vnet_site.AzureVnetIngressEgressGwARType{")
 	if this.Node != nil {
 		s = append(s, "Node: "+fmt.Sprintf("%#v", this.Node)+",\n")
@@ -11023,6 +12589,9 @@ func (this *AzureVnetIngressEgressGwARType) GoString() string {
 	}
 	if this.LocalControlPlane != nil {
 		s = append(s, "LocalControlPlane: "+fmt.Sprintf("%#v", this.LocalControlPlane)+",\n")
+	}
+	if this.HubChoice != nil {
+		s = append(s, "HubChoice: "+fmt.Sprintf("%#v", this.HubChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -11153,6 +12722,22 @@ func (this *AzureVnetIngressEgressGwARType_SmConnectionPvtIp) GoString() string 
 	}
 	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARType_SmConnectionPvtIp{` +
 		`SmConnectionPvtIp:` + fmt.Sprintf("%#v", this.SmConnectionPvtIp) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARType_NotHub) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARType_NotHub{` +
+		`NotHub:` + fmt.Sprintf("%#v", this.NotHub) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARType_Hub) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARType_Hub{` +
+		`Hub:` + fmt.Sprintf("%#v", this.Hub) + `}`}, ", ")
 	return s
 }
 func (this *AzureVnetVoltstackClusterType) GoString() string {
@@ -11529,7 +13114,7 @@ func (this *AzureVnetIngressEgressGwReplaceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 18)
+	s := make([]string, 0, 22)
 	s = append(s, "&azure_vnet_site.AzureVnetIngressEgressGwReplaceType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -11548,6 +13133,12 @@ func (this *AzureVnetIngressEgressGwReplaceType) GoString() string {
 	}
 	if this.DcClusterGroupChoice != nil {
 		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
+	}
+	if this.SiteMeshGroupChoice != nil {
+		s = append(s, "SiteMeshGroupChoice: "+fmt.Sprintf("%#v", this.SiteMeshGroupChoice)+",\n")
+	}
+	if this.HubChoice != nil {
+		s = append(s, "HubChoice: "+fmt.Sprintf("%#v", this.HubChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -11664,11 +13255,43 @@ func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) GoString
 		`DcClusterGroupInsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupInsideVn) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp{` +
+		`SmConnectionPublicIp:` + fmt.Sprintf("%#v", this.SmConnectionPublicIp) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp{` +
+		`SmConnectionPvtIp:` + fmt.Sprintf("%#v", this.SmConnectionPvtIp) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_NotHub) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NotHub{` +
+		`NotHub:` + fmt.Sprintf("%#v", this.NotHub) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_Hub) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwReplaceType_Hub{` +
+		`Hub:` + fmt.Sprintf("%#v", this.Hub) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetIngressEgressGwARReplaceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 18)
+	s := make([]string, 0, 22)
 	s = append(s, "&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -11687,6 +13310,12 @@ func (this *AzureVnetIngressEgressGwARReplaceType) GoString() string {
 	}
 	if this.DcClusterGroupChoice != nil {
 		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
+	}
+	if this.SiteMeshGroupChoice != nil {
+		s = append(s, "SiteMeshGroupChoice: "+fmt.Sprintf("%#v", this.SiteMeshGroupChoice)+",\n")
+	}
+	if this.HubChoice != nil {
+		s = append(s, "HubChoice: "+fmt.Sprintf("%#v", this.HubChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -11803,11 +13432,43 @@ func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) GoStri
 		`DcClusterGroupInsideVn:` + fmt.Sprintf("%#v", this.DcClusterGroupInsideVn) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp{` +
+		`SmConnectionPublicIp:` + fmt.Sprintf("%#v", this.SmConnectionPublicIp) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp{` +
+		`SmConnectionPvtIp:` + fmt.Sprintf("%#v", this.SmConnectionPvtIp) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_NotHub) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NotHub{` +
+		`NotHub:` + fmt.Sprintf("%#v", this.NotHub) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_Hub) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_Hub{` +
+		`Hub:` + fmt.Sprintf("%#v", this.Hub) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetVoltstackClusterReplaceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 17)
 	s = append(s, "&azure_vnet_site.AzureVnetVoltstackClusterReplaceType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -11823,6 +13484,9 @@ func (this *AzureVnetVoltstackClusterReplaceType) GoString() string {
 	}
 	if this.DcClusterGroupChoice != nil {
 		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
+	}
+	if this.SiteMeshGroupChoice != nil {
+		s = append(s, "SiteMeshGroupChoice: "+fmt.Sprintf("%#v", this.SiteMeshGroupChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -11915,11 +13579,27 @@ func (this *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) GoString() stri
 		`DcClusterGroup:` + fmt.Sprintf("%#v", this.DcClusterGroup) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp{` +
+		`SmConnectionPublicIp:` + fmt.Sprintf("%#v", this.SmConnectionPublicIp) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp{` +
+		`SmConnectionPvtIp:` + fmt.Sprintf("%#v", this.SmConnectionPvtIp) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetVoltstackClusterARReplaceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 17)
 	s = append(s, "&azure_vnet_site.AzureVnetVoltstackClusterARReplaceType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -11935,6 +13615,9 @@ func (this *AzureVnetVoltstackClusterARReplaceType) GoString() string {
 	}
 	if this.DcClusterGroupChoice != nil {
 		s = append(s, "DcClusterGroupChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupChoice)+",\n")
+	}
+	if this.SiteMeshGroupChoice != nil {
+		s = append(s, "SiteMeshGroupChoice: "+fmt.Sprintf("%#v", this.SiteMeshGroupChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12027,6 +13710,22 @@ func (this *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) GoString() st
 		`DcClusterGroup:` + fmt.Sprintf("%#v", this.DcClusterGroup) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp{` +
+		`SmConnectionPublicIp:` + fmt.Sprintf("%#v", this.SmConnectionPublicIp) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp{` +
+		`SmConnectionPvtIp:` + fmt.Sprintf("%#v", this.SmConnectionPvtIp) + `}`}, ", ")
+	return s
+}
 func (this *AzureVnetSiteInfoType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -12042,7 +13741,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 35)
+	s := make([]string, 0, 38)
 	s = append(s, "&azure_vnet_site.GlobalSpecType{")
 	s = append(s, "ResourceGroup: "+fmt.Sprintf("%#v", this.ResourceGroup)+",\n")
 	if this.RegionChoice != nil {
@@ -12093,6 +13792,10 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.VipParamsPerAz != nil {
 		s = append(s, "VipParamsPerAz: "+fmt.Sprintf("%#v", this.VipParamsPerAz)+",\n")
+	}
+	s = append(s, "SiteToSiteTunnelIp: "+fmt.Sprintf("%#v", this.SiteToSiteTunnelIp)+",\n")
+	if this.BlockedServicesChoice != nil {
+		s = append(s, "BlockedServicesChoice: "+fmt.Sprintf("%#v", this.BlockedServicesChoice)+",\n")
 	}
 	if this.TfParams != nil {
 		s = append(s, "TfParams: "+fmt.Sprintf("%#v", this.TfParams)+",\n")
@@ -12226,11 +13929,27 @@ func (this *GlobalSpecType_LogReceiver) GoString() string {
 		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_DefaultBlockedServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.GlobalSpecType_DefaultBlockedServices{` +
+		`DefaultBlockedServices:` + fmt.Sprintf("%#v", this.DefaultBlockedServices) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_BlockedServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.GlobalSpecType_BlockedServices{` +
+		`BlockedServices:` + fmt.Sprintf("%#v", this.BlockedServices) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 29)
+	s := make([]string, 0, 30)
 	s = append(s, "&azure_vnet_site.CreateSpecType{")
 	s = append(s, "ResourceGroup: "+fmt.Sprintf("%#v", this.ResourceGroup)+",\n")
 	if this.RegionChoice != nil {
@@ -12276,6 +13995,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.WorkerNodes != nil {
 		s = append(s, "WorkerNodes: "+fmt.Sprintf("%#v", this.WorkerNodes)+",\n")
+	}
+	if this.BlockedServicesChoice != nil {
+		s = append(s, "BlockedServicesChoice: "+fmt.Sprintf("%#v", this.BlockedServicesChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12352,14 +14074,6 @@ func (this *CreateSpecType_AzureCred) GoString() string {
 		`AzureCred:` + fmt.Sprintf("%#v", this.AzureCred) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_Assisted) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&azure_vnet_site.CreateSpecType_Assisted{` +
-		`Assisted:` + fmt.Sprintf("%#v", this.Assisted) + `}`}, ", ")
-	return s
-}
 func (this *CreateSpecType_LogsStreamingDisabled) GoString() string {
 	if this == nil {
 		return "nil"
@@ -12400,11 +14114,27 @@ func (this *CreateSpecType_NoWorkerNodes) GoString() string {
 		`NoWorkerNodes:` + fmt.Sprintf("%#v", this.NoWorkerNodes) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_DefaultBlockedServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.CreateSpecType_DefaultBlockedServices{` +
+		`DefaultBlockedServices:` + fmt.Sprintf("%#v", this.DefaultBlockedServices) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_BlockedServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.CreateSpecType_BlockedServices{` +
+		`BlockedServices:` + fmt.Sprintf("%#v", this.BlockedServices) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 17)
+	s := make([]string, 0, 19)
 	s = append(s, "&azure_vnet_site.ReplaceSpecType{")
 	if this.SiteType != nil {
 		s = append(s, "SiteType: "+fmt.Sprintf("%#v", this.SiteType)+",\n")
@@ -12418,6 +14148,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.WorkerNodes != nil {
 		s = append(s, "WorkerNodes: "+fmt.Sprintf("%#v", this.WorkerNodes)+",\n")
+	}
+	if this.BlockedServicesChoice != nil {
+		s = append(s, "BlockedServicesChoice: "+fmt.Sprintf("%#v", this.BlockedServicesChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12510,11 +14243,27 @@ func (this *ReplaceSpecType_NoWorkerNodes) GoString() string {
 		`NoWorkerNodes:` + fmt.Sprintf("%#v", this.NoWorkerNodes) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_DefaultBlockedServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.ReplaceSpecType_DefaultBlockedServices{` +
+		`DefaultBlockedServices:` + fmt.Sprintf("%#v", this.DefaultBlockedServices) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_BlockedServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.ReplaceSpecType_BlockedServices{` +
+		`BlockedServices:` + fmt.Sprintf("%#v", this.BlockedServices) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 31)
+	s := make([]string, 0, 33)
 	s = append(s, "&azure_vnet_site.GetSpecType{")
 	s = append(s, "ResourceGroup: "+fmt.Sprintf("%#v", this.ResourceGroup)+",\n")
 	if this.RegionChoice != nil {
@@ -12560,6 +14309,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.WorkerNodes != nil {
 		s = append(s, "WorkerNodes: "+fmt.Sprintf("%#v", this.WorkerNodes)+",\n")
+	}
+	if this.BlockedServicesChoice != nil {
+		s = append(s, "BlockedServicesChoice: "+fmt.Sprintf("%#v", this.BlockedServicesChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12684,6 +14436,22 @@ func (this *GetSpecType_NoWorkerNodes) GoString() string {
 		`NoWorkerNodes:` + fmt.Sprintf("%#v", this.NoWorkerNodes) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_DefaultBlockedServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.GetSpecType_DefaultBlockedServices{` +
+		`DefaultBlockedServices:` + fmt.Sprintf("%#v", this.DefaultBlockedServices) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_BlockedServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&azure_vnet_site.GetSpecType_BlockedServices{` +
+		`BlockedServices:` + fmt.Sprintf("%#v", this.BlockedServices) + `}`}, ", ")
+	return s
+}
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -12691,6 +14459,129 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
+}
+func (m *AzureHubVnetType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureHubVnetType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureHubVnetType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SpokeVnets) > 0 {
+		for iNdEx := len(m.SpokeVnets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.SpokeVnets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VnetPeeringType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VnetPeeringType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnetPeeringType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.RoutingChoice != nil {
+		{
+			size := m.RoutingChoice.Size()
+			i -= size
+			if _, err := m.RoutingChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Vnet != nil {
+		{
+			size, err := m.Vnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VnetPeeringType_Auto) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnetPeeringType_Auto) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Auto != nil {
+		{
+			size, err := m.Auto.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *VnetPeeringType_Manual) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnetPeeringType_Manual) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Manual != nil {
+		{
+			size, err := m.Manual.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
 }
 func (m *AzureVnetIngressGwType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -12822,6 +14713,15 @@ func (m *AzureVnetIngressEgressGwType) MarshalToSizedBuffer(dAtA []byte) (int, e
 	_ = i
 	var l int
 	_ = l
+	if m.HubChoice != nil {
+		{
+			size := m.HubChoice.Size()
+			i -= size
+			if _, err := m.HubChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.SiteMeshGroupChoice != nil {
 		{
 			size := m.SiteMeshGroupChoice.Size()
@@ -13277,6 +15177,52 @@ func (m *AzureVnetIngressEgressGwType_SmConnectionPvtIp) MarshalToSizedBuffer(dA
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetIngressEgressGwType_NotHub) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwType_NotHub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NotHub != nil {
+		{
+			size, err := m.NotHub.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwType_Hub) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwType_Hub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Hub != nil {
+		{
+			size, err := m.Hub.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetIngressEgressGwARType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -13297,6 +15243,15 @@ func (m *AzureVnetIngressEgressGwARType) MarshalToSizedBuffer(dAtA []byte) (int,
 	_ = i
 	var l int
 	_ = l
+	if m.HubChoice != nil {
+		{
+			size := m.HubChoice.Size()
+			i -= size
+			if _, err := m.HubChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.SiteMeshGroupChoice != nil {
 		{
 			size := m.SiteMeshGroupChoice.Size()
@@ -13747,6 +15702,52 @@ func (m *AzureVnetIngressEgressGwARType_SmConnectionPvtIp) MarshalToSizedBuffer(
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARType_NotHub) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARType_NotHub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NotHub != nil {
+		{
+			size, err := m.NotHub.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARType_Hub) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARType_Hub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Hub != nil {
+		{
+			size, err := m.Hub.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
 	return len(dAtA) - i, nil
 }
@@ -14820,6 +16821,24 @@ func (m *AzureVnetIngressEgressGwReplaceType) MarshalToSizedBuffer(dAtA []byte) 
 	_ = i
 	var l int
 	_ = l
+	if m.HubChoice != nil {
+		{
+			size := m.HubChoice.Size()
+			i -= size
+			if _, err := m.HubChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SiteMeshGroupChoice != nil {
+		{
+			size := m.SiteMeshGroupChoice.Size()
+			i -= size
+			if _, err := m.SiteMeshGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DcClusterGroupChoice != nil {
 		{
 			size := m.DcClusterGroupChoice.Size()
@@ -15185,6 +17204,98 @@ func (m *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) MarshalToSi
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPublicIp != nil {
+		{
+			size, err := m.SmConnectionPublicIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPvtIp != nil {
+		{
+			size, err := m.SmConnectionPvtIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwReplaceType_NotHub) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType_NotHub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NotHub != nil {
+		{
+			size, err := m.NotHub.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwReplaceType_Hub) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwReplaceType_Hub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Hub != nil {
+		{
+			size, err := m.Hub.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetIngressEgressGwARReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -15205,6 +17316,24 @@ func (m *AzureVnetIngressEgressGwARReplaceType) MarshalToSizedBuffer(dAtA []byte
 	_ = i
 	var l int
 	_ = l
+	if m.HubChoice != nil {
+		{
+			size := m.HubChoice.Size()
+			i -= size
+			if _, err := m.HubChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SiteMeshGroupChoice != nil {
+		{
+			size := m.SiteMeshGroupChoice.Size()
+			i -= size
+			if _, err := m.SiteMeshGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DcClusterGroupChoice != nil {
 		{
 			size := m.DcClusterGroupChoice.Size()
@@ -15570,6 +17699,98 @@ func (m *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) MarshalTo
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPublicIp != nil {
+		{
+			size, err := m.SmConnectionPublicIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPvtIp != nil {
+		{
+			size, err := m.SmConnectionPvtIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_NotHub) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType_NotHub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NotHub != nil {
+		{
+			size, err := m.NotHub.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_Hub) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetIngressEgressGwARReplaceType_Hub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Hub != nil {
+		{
+			size, err := m.Hub.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetVoltstackClusterReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -15590,6 +17811,15 @@ func (m *AzureVnetVoltstackClusterReplaceType) MarshalToSizedBuffer(dAtA []byte)
 	_ = i
 	var l int
 	_ = l
+	if m.SiteMeshGroupChoice != nil {
+		{
+			size := m.SiteMeshGroupChoice.Size()
+			i -= size
+			if _, err := m.SiteMeshGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DcClusterGroupChoice != nil {
 		{
 			size := m.DcClusterGroupChoice.Size()
@@ -15873,6 +18103,52 @@ func (m *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) MarshalToSizedBuff
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPublicIp != nil {
+		{
+			size, err := m.SmConnectionPublicIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPvtIp != nil {
+		{
+			size, err := m.SmConnectionPvtIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetVoltstackClusterARReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -15893,6 +18169,15 @@ func (m *AzureVnetVoltstackClusterARReplaceType) MarshalToSizedBuffer(dAtA []byt
 	_ = i
 	var l int
 	_ = l
+	if m.SiteMeshGroupChoice != nil {
+		{
+			size := m.SiteMeshGroupChoice.Size()
+			i -= size
+			if _, err := m.SiteMeshGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DcClusterGroupChoice != nil {
 		{
 			size := m.DcClusterGroupChoice.Size()
@@ -16176,6 +18461,52 @@ func (m *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) MarshalToSizedBu
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPublicIp != nil {
+		{
+			size, err := m.SmConnectionPublicIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SmConnectionPvtIp != nil {
+		{
+			size, err := m.SmConnectionPvtIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureVnetSiteInfoType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -16279,6 +18610,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xba
 	}
+	if m.BlockedServicesChoice != nil {
+		{
+			size := m.BlockedServicesChoice.Size()
+			i -= size
+			if _, err := m.BlockedServicesChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Tags) > 0 {
 		keysForTags := make([]string, 0, len(m.Tags))
 		for k := range m.Tags {
@@ -16304,6 +18644,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0xc2
 		}
+	}
+	if len(m.SiteToSiteTunnelIp) > 0 {
+		i -= len(m.SiteToSiteTunnelIp)
+		copy(dAtA[i:], m.SiteToSiteTunnelIp)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteToSiteTunnelIp)))
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
 	}
 	if m.SiteType != nil {
 		{
@@ -16775,6 +19124,52 @@ func (m *GlobalSpecType_VoltstackClusterAr) MarshalToSizedBuffer(dAtA []byte) (i
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_DefaultBlockedServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DefaultBlockedServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultBlockedServices != nil {
+		{
+			size, err := m.DefaultBlockedServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_BlockedServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_BlockedServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BlockedServices != nil {
+		{
+			size, err := m.BlockedServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -16795,6 +19190,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.BlockedServicesChoice != nil {
+		{
+			size := m.BlockedServicesChoice.Size()
+			i -= size
+			if _, err := m.BlockedServicesChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Tags) > 0 {
 		keysForTags := make([]string, 0, len(m.Tags))
 		for k := range m.Tags {
@@ -17037,27 +19441,6 @@ func (m *CreateSpecType_AzureCred) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	return len(dAtA) - i, nil
 }
-func (m *CreateSpecType_Assisted) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_Assisted) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Assisted != nil {
-		{
-			size, err := m.Assisted.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x4a
-	}
-	return len(dAtA) - i, nil
-}
 func (m *CreateSpecType_NodesPerAz) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -17261,6 +19644,52 @@ func (m *CreateSpecType_VoltstackClusterAr) MarshalToSizedBuffer(dAtA []byte) (i
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_DefaultBlockedServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DefaultBlockedServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultBlockedServices != nil {
+		{
+			size, err := m.DefaultBlockedServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_BlockedServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_BlockedServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BlockedServices != nil {
+		{
+			size, err := m.BlockedServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -17281,6 +19710,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.BlockedServicesChoice != nil {
+		{
+			size := m.BlockedServicesChoice.Size()
+			i -= size
+			if _, err := m.BlockedServicesChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.SiteType != nil {
 		{
 			size := m.SiteType.Size()
@@ -17563,6 +20001,52 @@ func (m *ReplaceSpecType_VoltstackClusterAr) MarshalToSizedBuffer(dAtA []byte) (
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_DefaultBlockedServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DefaultBlockedServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultBlockedServices != nil {
+		{
+			size, err := m.DefaultBlockedServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_BlockedServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_BlockedServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BlockedServices != nil {
+		{
+			size, err := m.BlockedServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -17583,6 +20067,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.BlockedServicesChoice != nil {
+		{
+			size := m.BlockedServicesChoice.Size()
+			i -= size
+			if _, err := m.BlockedServicesChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Tags) > 0 {
 		keysForTags := make([]string, 0, len(m.Tags))
 		for k := range m.Tags {
@@ -18058,6 +20551,52 @@ func (m *GetSpecType_VoltstackClusterAr) MarshalToSizedBuffer(dAtA []byte) (int,
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_DefaultBlockedServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DefaultBlockedServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultBlockedServices != nil {
+		{
+			size, err := m.DefaultBlockedServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_BlockedServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_BlockedServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BlockedServices != nil {
+		{
+			size, err := m.BlockedServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -18068,6 +20607,61 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	}
 	dAtA[offset] = uint8(v)
 	return base
+}
+func (m *AzureHubVnetType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.SpokeVnets) > 0 {
+		for _, e := range m.SpokeVnets {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *VnetPeeringType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Vnet != nil {
+		l = m.Vnet.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.RoutingChoice != nil {
+		n += m.RoutingChoice.Size()
+	}
+	return n
+}
+
+func (m *VnetPeeringType_Auto) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Auto != nil {
+		l = m.Auto.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *VnetPeeringType_Manual) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Manual != nil {
+		l = m.Manual.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
 }
 func (m *AzureVnetIngressGwType) Size() (n int) {
 	if m == nil {
@@ -18153,6 +20747,9 @@ func (m *AzureVnetIngressEgressGwType) Size() (n int) {
 	}
 	if m.SiteMeshGroupChoice != nil {
 		n += m.SiteMeshGroupChoice.Size()
+	}
+	if m.HubChoice != nil {
+		n += m.HubChoice.Size()
 	}
 	return n
 }
@@ -18349,6 +20946,30 @@ func (m *AzureVnetIngressEgressGwType_SmConnectionPvtIp) Size() (n int) {
 	}
 	return n
 }
+func (m *AzureVnetIngressEgressGwType_NotHub) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NotHub != nil {
+		l = m.NotHub.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwType_Hub) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Hub != nil {
+		l = m.Hub.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetIngressEgressGwARType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -18387,6 +21008,9 @@ func (m *AzureVnetIngressEgressGwARType) Size() (n int) {
 	}
 	if m.SiteMeshGroupChoice != nil {
 		n += m.SiteMeshGroupChoice.Size()
+	}
+	if m.HubChoice != nil {
+		n += m.HubChoice.Size()
 	}
 	return n
 }
@@ -18579,6 +21203,30 @@ func (m *AzureVnetIngressEgressGwARType_SmConnectionPvtIp) Size() (n int) {
 	_ = l
 	if m.SmConnectionPvtIp != nil {
 		l = m.SmConnectionPvtIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARType_NotHub) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NotHub != nil {
+		l = m.NotHub.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARType_Hub) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Hub != nil {
+		l = m.Hub.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -19125,6 +21773,12 @@ func (m *AzureVnetIngressEgressGwReplaceType) Size() (n int) {
 	if m.DcClusterGroupChoice != nil {
 		n += m.DcClusterGroupChoice.Size()
 	}
+	if m.SiteMeshGroupChoice != nil {
+		n += m.SiteMeshGroupChoice.Size()
+	}
+	if m.HubChoice != nil {
+		n += m.HubChoice.Size()
+	}
 	return n
 }
 
@@ -19296,6 +21950,54 @@ func (m *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) Size() (n i
 	}
 	return n
 }
+func (m *AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPublicIp != nil {
+		l = m.SmConnectionPublicIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPvtIp != nil {
+		l = m.SmConnectionPvtIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwReplaceType_NotHub) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NotHub != nil {
+		l = m.NotHub.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwReplaceType_Hub) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Hub != nil {
+		l = m.Hub.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetIngressEgressGwARReplaceType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -19319,6 +22021,12 @@ func (m *AzureVnetIngressEgressGwARReplaceType) Size() (n int) {
 	}
 	if m.DcClusterGroupChoice != nil {
 		n += m.DcClusterGroupChoice.Size()
+	}
+	if m.SiteMeshGroupChoice != nil {
+		n += m.SiteMeshGroupChoice.Size()
+	}
+	if m.HubChoice != nil {
+		n += m.HubChoice.Size()
 	}
 	return n
 }
@@ -19491,6 +22199,54 @@ func (m *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) Size() (n
 	}
 	return n
 }
+func (m *AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPublicIp != nil {
+		l = m.SmConnectionPublicIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPvtIp != nil {
+		l = m.SmConnectionPvtIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_NotHub) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NotHub != nil {
+		l = m.NotHub.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetIngressEgressGwARReplaceType_Hub) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Hub != nil {
+		l = m.Hub.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetVoltstackClusterReplaceType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -19511,6 +22267,9 @@ func (m *AzureVnetVoltstackClusterReplaceType) Size() (n int) {
 	}
 	if m.DcClusterGroupChoice != nil {
 		n += m.DcClusterGroupChoice.Size()
+	}
+	if m.SiteMeshGroupChoice != nil {
+		n += m.SiteMeshGroupChoice.Size()
 	}
 	return n
 }
@@ -19647,6 +22406,30 @@ func (m *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) Size() (n int) {
 	}
 	return n
 }
+func (m *AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPublicIp != nil {
+		l = m.SmConnectionPublicIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPvtIp != nil {
+		l = m.SmConnectionPvtIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetVoltstackClusterARReplaceType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -19667,6 +22450,9 @@ func (m *AzureVnetVoltstackClusterARReplaceType) Size() (n int) {
 	}
 	if m.DcClusterGroupChoice != nil {
 		n += m.DcClusterGroupChoice.Size()
+	}
+	if m.SiteMeshGroupChoice != nil {
+		n += m.SiteMeshGroupChoice.Size()
 	}
 	return n
 }
@@ -19803,6 +22589,30 @@ func (m *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) Size() (n int) {
 	}
 	return n
 }
+func (m *AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPublicIp != nil {
+		l = m.SmConnectionPublicIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SmConnectionPvtIp != nil {
+		l = m.SmConnectionPvtIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetSiteInfoType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -19893,6 +22703,13 @@ func (m *GlobalSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
+	}
+	l = len(m.SiteToSiteTunnelIp)
+	if l > 0 {
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.BlockedServicesChoice != nil {
+		n += m.BlockedServicesChoice.Size()
 	}
 	if len(m.Tags) > 0 {
 		for k, v := range m.Tags {
@@ -20087,6 +22904,30 @@ func (m *GlobalSpecType_VoltstackClusterAr) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_DefaultBlockedServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultBlockedServices != nil {
+		l = m.DefaultBlockedServices.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_BlockedServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BlockedServices != nil {
+		l = m.BlockedServices.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -20143,6 +22984,9 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.Os.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
+	if m.BlockedServicesChoice != nil {
+		n += m.BlockedServicesChoice.Size()
+	}
 	if len(m.Tags) > 0 {
 		for k, v := range m.Tags {
 			_ = k
@@ -20196,18 +23040,6 @@ func (m *CreateSpecType_AzureCred) Size() (n int) {
 	_ = l
 	if m.AzureCred != nil {
 		l = m.AzureCred.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_Assisted) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Assisted != nil {
-		l = m.Assisted.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -20324,6 +23156,30 @@ func (m *CreateSpecType_VoltstackClusterAr) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_DefaultBlockedServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultBlockedServices != nil {
+		l = m.DefaultBlockedServices.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_BlockedServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BlockedServices != nil {
+		l = m.BlockedServices.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -20346,6 +23202,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.LogsReceiverChoice != nil {
 		n += m.LogsReceiverChoice.Size()
+	}
+	if m.BlockedServicesChoice != nil {
+		n += m.BlockedServicesChoice.Size()
 	}
 	return n
 }
@@ -20476,6 +23335,30 @@ func (m *ReplaceSpecType_VoltstackClusterAr) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_DefaultBlockedServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultBlockedServices != nil {
+		l = m.DefaultBlockedServices.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_BlockedServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BlockedServices != nil {
+		l = m.BlockedServices.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -20540,6 +23423,9 @@ func (m *GetSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.BlockedServicesChoice != nil {
+		n += m.BlockedServicesChoice.Size()
 	}
 	if len(m.Tags) > 0 {
 		for k, v := range m.Tags {
@@ -20722,12 +23608,82 @@ func (m *GetSpecType_VoltstackClusterAr) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_DefaultBlockedServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultBlockedServices != nil {
+		l = m.DefaultBlockedServices.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_BlockedServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BlockedServices != nil {
+		l = m.BlockedServices.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (this *AzureHubVnetType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForSpokeVnets := "[]*VnetPeeringType{"
+	for _, f := range this.SpokeVnets {
+		repeatedStringForSpokeVnets += strings.Replace(f.String(), "VnetPeeringType", "VnetPeeringType", 1) + ","
+	}
+	repeatedStringForSpokeVnets += "}"
+	s := strings.Join([]string{`&AzureHubVnetType{`,
+		`SpokeVnets:` + repeatedStringForSpokeVnets + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VnetPeeringType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VnetPeeringType{`,
+		`Vnet:` + strings.Replace(fmt.Sprintf("%v", this.Vnet), "AzureVnetType", "views.AzureVnetType", 1) + `,`,
+		`RoutingChoice:` + fmt.Sprintf("%v", this.RoutingChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VnetPeeringType_Auto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VnetPeeringType_Auto{`,
+		`Auto:` + strings.Replace(fmt.Sprintf("%v", this.Auto), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VnetPeeringType_Manual) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VnetPeeringType_Manual{`,
+		`Manual:` + strings.Replace(fmt.Sprintf("%v", this.Manual), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
 }
 func (this *AzureVnetIngressGwType) String() string {
 	if this == nil {
@@ -20778,6 +23734,7 @@ func (this *AzureVnetIngressEgressGwType) String() string {
 		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "views.LocalControlPlaneType", 1) + `,`,
 		`SiteMeshGroupChoice:` + fmt.Sprintf("%v", this.SiteMeshGroupChoice) + `,`,
+		`HubChoice:` + fmt.Sprintf("%v", this.HubChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -20942,6 +23899,26 @@ func (this *AzureVnetIngressEgressGwType_SmConnectionPvtIp) String() string {
 	}, "")
 	return s
 }
+func (this *AzureVnetIngressEgressGwType_NotHub) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwType_NotHub{`,
+		`NotHub:` + strings.Replace(fmt.Sprintf("%v", this.NotHub), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwType_Hub) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwType_Hub{`,
+		`Hub:` + strings.Replace(fmt.Sprintf("%v", this.Hub), "AzureHubVnetType", "AzureHubVnetType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetIngressEgressGwARType) String() string {
 	if this == nil {
 		return "nil"
@@ -20957,6 +23934,7 @@ func (this *AzureVnetIngressEgressGwARType) String() string {
 		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
 		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "views.LocalControlPlaneType", 1) + `,`,
 		`SiteMeshGroupChoice:` + fmt.Sprintf("%v", this.SiteMeshGroupChoice) + `,`,
+		`HubChoice:` + fmt.Sprintf("%v", this.HubChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -21117,6 +24095,26 @@ func (this *AzureVnetIngressEgressGwARType_SmConnectionPvtIp) String() string {
 	}
 	s := strings.Join([]string{`&AzureVnetIngressEgressGwARType_SmConnectionPvtIp{`,
 		`SmConnectionPvtIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPvtIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARType_NotHub) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARType_NotHub{`,
+		`NotHub:` + strings.Replace(fmt.Sprintf("%v", this.NotHub), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARType_Hub) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARType_Hub{`,
+		`Hub:` + strings.Replace(fmt.Sprintf("%v", this.Hub), "AzureHubVnetType", "AzureHubVnetType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -21535,6 +24533,8 @@ func (this *AzureVnetIngressEgressGwReplaceType) String() string {
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
+		`SiteMeshGroupChoice:` + fmt.Sprintf("%v", this.SiteMeshGroupChoice) + `,`,
+		`HubChoice:` + fmt.Sprintf("%v", this.HubChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -21679,6 +24679,46 @@ func (this *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn) String()
 	}, "")
 	return s
 }
+func (this *AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp{`,
+		`SmConnectionPublicIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPublicIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp{`,
+		`SmConnectionPvtIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPvtIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_NotHub) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwReplaceType_NotHub{`,
+		`NotHub:` + strings.Replace(fmt.Sprintf("%v", this.NotHub), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwReplaceType_Hub) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwReplaceType_Hub{`,
+		`Hub:` + strings.Replace(fmt.Sprintf("%v", this.Hub), "AzureHubVnetType", "AzureHubVnetType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetIngressEgressGwARReplaceType) String() string {
 	if this == nil {
 		return "nil"
@@ -21690,6 +24730,8 @@ func (this *AzureVnetIngressEgressGwARReplaceType) String() string {
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
+		`SiteMeshGroupChoice:` + fmt.Sprintf("%v", this.SiteMeshGroupChoice) + `,`,
+		`HubChoice:` + fmt.Sprintf("%v", this.HubChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -21834,6 +24876,46 @@ func (this *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn) String
 	}, "")
 	return s
 }
+func (this *AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp{`,
+		`SmConnectionPublicIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPublicIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp{`,
+		`SmConnectionPvtIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPvtIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_NotHub) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARReplaceType_NotHub{`,
+		`NotHub:` + strings.Replace(fmt.Sprintf("%v", this.NotHub), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetIngressEgressGwARReplaceType_Hub) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetIngressEgressGwARReplaceType_Hub{`,
+		`Hub:` + strings.Replace(fmt.Sprintf("%v", this.Hub), "AzureHubVnetType", "AzureHubVnetType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetVoltstackClusterReplaceType) String() string {
 	if this == nil {
 		return "nil"
@@ -21844,6 +24926,7 @@ func (this *AzureVnetVoltstackClusterReplaceType) String() string {
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
+		`SiteMeshGroupChoice:` + fmt.Sprintf("%v", this.SiteMeshGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -21958,6 +25041,26 @@ func (this *AzureVnetVoltstackClusterReplaceType_DcClusterGroup) String() string
 	}, "")
 	return s
 }
+func (this *AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp{`,
+		`SmConnectionPublicIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPublicIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp{`,
+		`SmConnectionPvtIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPvtIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetVoltstackClusterARReplaceType) String() string {
 	if this == nil {
 		return "nil"
@@ -21968,6 +25071,7 @@ func (this *AzureVnetVoltstackClusterARReplaceType) String() string {
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`DcClusterGroupChoice:` + fmt.Sprintf("%v", this.DcClusterGroupChoice) + `,`,
+		`SiteMeshGroupChoice:` + fmt.Sprintf("%v", this.SiteMeshGroupChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -22082,6 +25186,26 @@ func (this *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup) String() stri
 	}, "")
 	return s
 }
+func (this *AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp{`,
+		`SmConnectionPublicIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPublicIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp{`,
+		`SmConnectionPvtIp:` + strings.Replace(fmt.Sprintf("%v", this.SmConnectionPvtIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVnetSiteInfoType) String() string {
 	if this == nil {
 		return "nil"
@@ -22130,6 +25254,8 @@ func (this *GlobalSpecType) String() string {
 		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "views.VolterraSoftwareType", 1) + `,`,
 		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "views.OperatingSystemType", 1) + `,`,
 		`VipParamsPerAz:` + repeatedStringForVipParamsPerAz + `,`,
+		`SiteToSiteTunnelIp:` + fmt.Sprintf("%v", this.SiteToSiteTunnelIp) + `,`,
+		`BlockedServicesChoice:` + fmt.Sprintf("%v", this.BlockedServicesChoice) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`TfParams:` + strings.Replace(fmt.Sprintf("%v", this.TfParams), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
@@ -22288,6 +25414,26 @@ func (this *GlobalSpecType_VoltstackClusterAr) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_DefaultBlockedServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DefaultBlockedServices{`,
+		`DefaultBlockedServices:` + strings.Replace(fmt.Sprintf("%v", this.DefaultBlockedServices), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_BlockedServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_BlockedServices{`,
+		`BlockedServices:` + strings.Replace(fmt.Sprintf("%v", this.BlockedServices), "BlockedServicesListType", "fleet.BlockedServicesListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -22317,6 +25463,7 @@ func (this *CreateSpecType) String() string {
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "views.VolterraSoftwareType", 1) + `,`,
 		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "views.OperatingSystemType", 1) + `,`,
+		`BlockedServicesChoice:` + fmt.Sprintf("%v", this.BlockedServicesChoice) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`}`,
 	}, "")
@@ -22358,16 +25505,6 @@ func (this *CreateSpecType_AzureCred) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_AzureCred{`,
 		`AzureCred:` + strings.Replace(fmt.Sprintf("%v", this.AzureCred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_Assisted) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_Assisted{`,
-		`Assisted:` + strings.Replace(fmt.Sprintf("%v", this.Assisted), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -22472,6 +25609,26 @@ func (this *CreateSpecType_VoltstackClusterAr) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_DefaultBlockedServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DefaultBlockedServices{`,
+		`DefaultBlockedServices:` + strings.Replace(fmt.Sprintf("%v", this.DefaultBlockedServices), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_BlockedServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_BlockedServices{`,
+		`BlockedServices:` + strings.Replace(fmt.Sprintf("%v", this.BlockedServices), "BlockedServicesListType", "fleet.BlockedServicesListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -22482,6 +25639,7 @@ func (this *ReplaceSpecType) String() string {
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
 		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
+		`BlockedServicesChoice:` + fmt.Sprintf("%v", this.BlockedServicesChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -22596,6 +25754,26 @@ func (this *ReplaceSpecType_VoltstackClusterAr) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_DefaultBlockedServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DefaultBlockedServices{`,
+		`DefaultBlockedServices:` + strings.Replace(fmt.Sprintf("%v", this.DefaultBlockedServices), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_BlockedServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_BlockedServices{`,
+		`BlockedServices:` + strings.Replace(fmt.Sprintf("%v", this.BlockedServices), "BlockedServicesListType", "fleet.BlockedServicesListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -22632,6 +25810,7 @@ func (this *GetSpecType) String() string {
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`SiteState:` + fmt.Sprintf("%v", this.SiteState) + `,`,
 		`VipParamsPerAz:` + repeatedStringForVipParamsPerAz + `,`,
+		`BlockedServicesChoice:` + fmt.Sprintf("%v", this.BlockedServicesChoice) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`}`,
 	}, "")
@@ -22787,6 +25966,26 @@ func (this *GetSpecType_VoltstackClusterAr) String() string {
 	}, "")
 	return s
 }
+func (this *GetSpecType_DefaultBlockedServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DefaultBlockedServices{`,
+		`DefaultBlockedServices:` + strings.Replace(fmt.Sprintf("%v", this.DefaultBlockedServices), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_BlockedServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_BlockedServices{`,
+		`BlockedServices:` + strings.Replace(fmt.Sprintf("%v", this.BlockedServices), "BlockedServicesListType", "fleet.BlockedServicesListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func valueToStringTypes(v interface{}) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -22794,6 +25993,252 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *AzureHubVnetType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureHubVnetType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureHubVnetType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SpokeVnets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SpokeVnets = append(m.SpokeVnets, &VnetPeeringType{})
+			if err := m.SpokeVnets[len(m.SpokeVnets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VnetPeeringType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VnetPeeringType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VnetPeeringType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vnet", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Vnet == nil {
+				m.Vnet = &views.AzureVnetType{}
+			}
+			if err := m.Vnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Auto", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RoutingChoice = &VnetPeeringType_Auto{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Manual", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RoutingChoice = &VnetPeeringType_Manual{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *AzureVnetIngressGwType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -23798,6 +27243,76 @@ func (m *AzureVnetIngressEgressGwType) Unmarshal(dAtA []byte) error {
 			}
 			m.SiteMeshGroupChoice = &AzureVnetIngressEgressGwType_SmConnectionPvtIp{v}
 			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotHub", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubChoice = &AzureVnetIngressEgressGwType_NotHub{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hub", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureHubVnetType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubChoice = &AzureVnetIngressEgressGwType_Hub{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -24514,6 +28029,76 @@ func (m *AzureVnetIngressEgressGwARType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.SiteMeshGroupChoice = &AzureVnetIngressEgressGwARType_SmConnectionPvtIp{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotHub", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubChoice = &AzureVnetIngressEgressGwARType_NotHub{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hub", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureHubVnetType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubChoice = &AzureVnetIngressEgressGwARType_Hub{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -26666,6 +30251,146 @@ func (m *AzureVnetIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn{v}
 			iNdEx = postIndex
+		case 27:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPublicIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &AzureVnetIngressEgressGwReplaceType_SmConnectionPublicIp{v}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPvtIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &AzureVnetIngressEgressGwReplaceType_SmConnectionPvtIp{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotHub", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubChoice = &AzureVnetIngressEgressGwReplaceType_NotHub{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hub", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureHubVnetType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubChoice = &AzureVnetIngressEgressGwReplaceType_Hub{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -27209,6 +30934,146 @@ func (m *AzureVnetIngressEgressGwARReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			m.DcClusterGroupChoice = &AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn{v}
 			iNdEx = postIndex
+		case 27:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPublicIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &AzureVnetIngressEgressGwARReplaceType_SmConnectionPublicIp{v}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPvtIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &AzureVnetIngressEgressGwARReplaceType_SmConnectionPvtIp{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotHub", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubChoice = &AzureVnetIngressEgressGwARReplaceType_NotHub{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hub", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureHubVnetType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubChoice = &AzureVnetIngressEgressGwARReplaceType_Hub{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -27647,6 +31512,76 @@ func (m *AzureVnetVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterReplaceType_DcClusterGroup{v}
 			iNdEx = postIndex
+		case 34:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPublicIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &AzureVnetVoltstackClusterReplaceType_SmConnectionPublicIp{v}
+			iNdEx = postIndex
+		case 35:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPvtIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &AzureVnetVoltstackClusterReplaceType_SmConnectionPvtIp{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -28084,6 +32019,76 @@ func (m *AzureVnetVoltstackClusterARReplaceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.DcClusterGroupChoice = &AzureVnetVoltstackClusterARReplaceType_DcClusterGroup{v}
+			iNdEx = postIndex
+		case 34:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPublicIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp{v}
+			iNdEx = postIndex
+		case 35:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SmConnectionPvtIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteMeshGroupChoice = &AzureVnetVoltstackClusterARReplaceType_SmConnectionPvtIp{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -29133,6 +33138,73 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.SiteType = &GlobalSpecType_VoltstackClusterAr{v}
 			iNdEx = postIndex
+		case 35:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteToSiteTunnelIp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SiteToSiteTunnelIp = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultBlockedServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{v}
+			iNdEx = postIndex
 		case 40:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
@@ -29259,6 +33331,41 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 41:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockedServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &fleet.BlockedServicesListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockedServicesChoice = &GlobalSpecType_BlockedServices{v}
 			iNdEx = postIndex
 		case 999:
 			if wireType != 2 {
@@ -29625,41 +33732,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Deployment = &CreateSpecType_AzureCred{v}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Assisted", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Deployment = &CreateSpecType_Assisted{v}
 			iNdEx = postIndex
 		case 10:
 			if wireType != 2 {
@@ -30201,6 +34273,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.SiteType = &CreateSpecType_VoltstackClusterAr{v}
 			iNdEx = postIndex
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultBlockedServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockedServicesChoice = &CreateSpecType_DefaultBlockedServices{v}
+			iNdEx = postIndex
 		case 40:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
@@ -30327,6 +34434,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 41:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockedServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &fleet.BlockedServicesListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockedServicesChoice = &CreateSpecType_BlockedServices{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -30803,6 +34945,76 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.SiteType = &ReplaceSpecType_VoltstackClusterAr{v}
+			iNdEx = postIndex
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultBlockedServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockedServicesChoice = &ReplaceSpecType_DefaultBlockedServices{v}
+			iNdEx = postIndex
+		case 41:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockedServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &fleet.BlockedServicesListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockedServicesChoice = &ReplaceSpecType_BlockedServices{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -31682,6 +35894,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.SiteType = &GetSpecType_VoltstackClusterAr{v}
 			iNdEx = postIndex
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultBlockedServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockedServicesChoice = &GetSpecType_DefaultBlockedServices{v}
+			iNdEx = postIndex
 		case 40:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
@@ -31808,6 +36055,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 41:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockedServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &fleet.BlockedServicesListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockedServicesChoice = &GetSpecType_BlockedServices{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

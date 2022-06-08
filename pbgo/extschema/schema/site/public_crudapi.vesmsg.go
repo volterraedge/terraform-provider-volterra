@@ -233,7 +233,7 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("referring_objects"))
 		for idx, item := range m.GetReferringObjects() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -272,7 +272,7 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -390,7 +390,7 @@ func (v *ValidateListRequest) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("report_fields"))
 		for idx, item := range m.GetReportFields() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -402,7 +402,7 @@ func (v *ValidateListRequest) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("report_status_fields"))
 		for idx, item := range m.GetReportStatusFields() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -514,7 +514,7 @@ func (v *ValidateListResponse) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("errors"))
 		for idx, item := range m.GetErrors() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -526,7 +526,7 @@ func (v *ValidateListResponse) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -739,7 +739,7 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("status_set"))
 		for idx, item := range m.GetStatusSet() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -965,29 +965,43 @@ func ReplaceResponseValidator() db.Validator {
 	return DefaultReplaceResponseValidator
 }
 
-func (m *GetResponse) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*DBObject)
+func (m *GetResponse) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*DBObject)
+	}
 	_ = f
 
 	if m.Metadata == nil {
 		m.Metadata = &ves_io_schema.ObjectGetMetaType{}
 	}
-	m.Metadata.FromObjectMetaType(f.GetMetadata())
+	m.Metadata.FromObjectMetaTypeWithoutDeepCopy(f.GetMetadata())
 
 	if m.Spec == nil {
 		m.Spec = &GetSpecType{}
 	}
-	m.Spec.FromGlobalSpecType(f.GetSpec().GetGcSpec())
+	m.Spec.FromGlobalSpecTypeWithoutDeepCopy(f.GetSpec().GetGcSpec())
 
 	if m.SystemMetadata == nil {
 		m.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 	}
-	m.SystemMetadata.FromSystemObjectMetaType(f.GetSystemMetadata())
+	m.SystemMetadata.FromSystemObjectMetaTypeWithoutDeepCopy(f.GetSystemMetadata())
 
 }
 
-func (m *GetResponse) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
+func (m *GetResponse) FromObject(e db.Entry) {
+	m.fromObject(e, true)
+}
+
+func (m *GetResponse) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *GetResponse) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
 	_ = m1
 	f := e.(*DBObject)
 	_ = f
@@ -1001,7 +1015,7 @@ func (m *GetResponse) ToObject(e db.Entry) {
 	}
 
 	if m1.Metadata != nil {
-		m1.Metadata.ToObjectMetaType(f.Metadata)
+		m1.Metadata.ToObjectMetaTypeWithoutDeepCopy(f.Metadata)
 	}
 
 	if m1.Spec != nil {
@@ -1021,7 +1035,7 @@ func (m *GetResponse) ToObject(e db.Entry) {
 	}
 
 	if m1.Spec != nil {
-		m1.Spec.ToGlobalSpecType(f.Spec.GcSpec)
+		m1.Spec.ToGlobalSpecTypeWithoutDeepCopy(f.Spec.GcSpec)
 	}
 
 	if m1.SystemMetadata != nil {
@@ -1033,29 +1047,51 @@ func (m *GetResponse) ToObject(e db.Entry) {
 	}
 
 	if m1.SystemMetadata != nil {
-		m1.SystemMetadata.ToSystemObjectMetaType(f.SystemMetadata)
+		m1.SystemMetadata.ToSystemObjectMetaTypeWithoutDeepCopy(f.SystemMetadata)
 	}
 
 }
 
-func (m *ReplaceRequest) FromObject(e db.Entry) {
-	f := e.DeepCopy().(*DBObject)
+func (m *GetResponse) ToObject(e db.Entry) {
+	m.toObject(e, true)
+}
+
+func (m *GetResponse) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
+}
+
+func (m *ReplaceRequest) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*DBObject)
+	}
 	_ = f
 
 	if m.Metadata == nil {
 		m.Metadata = &ves_io_schema.ObjectReplaceMetaType{}
 	}
-	m.Metadata.FromObjectMetaType(f.GetMetadata())
+	m.Metadata.FromObjectMetaTypeWithoutDeepCopy(f.GetMetadata())
 
 	if m.Spec == nil {
 		m.Spec = &ReplaceSpecType{}
 	}
-	m.Spec.FromGlobalSpecType(f.GetSpec().GetGcSpec())
+	m.Spec.FromGlobalSpecTypeWithoutDeepCopy(f.GetSpec().GetGcSpec())
 
 }
 
-func (m *ReplaceRequest) ToObject(e db.Entry) {
-	m1 := m.DeepCopy()
+func (m *ReplaceRequest) FromObject(e db.Entry) {
+	m.fromObject(e, true)
+}
+
+func (m *ReplaceRequest) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *ReplaceRequest) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
 	_ = m1
 	f := e.(*DBObject)
 	_ = f
@@ -1069,7 +1105,7 @@ func (m *ReplaceRequest) ToObject(e db.Entry) {
 	}
 
 	if m1.Metadata != nil {
-		m1.Metadata.ToObjectMetaType(f.Metadata)
+		m1.Metadata.ToObjectMetaTypeWithoutDeepCopy(f.Metadata)
 	}
 
 	if m1.Spec != nil {
@@ -1089,7 +1125,15 @@ func (m *ReplaceRequest) ToObject(e db.Entry) {
 	}
 
 	if m1.Spec != nil {
-		m1.Spec.ToGlobalSpecType(f.Spec.GcSpec)
+		m1.Spec.ToGlobalSpecTypeWithoutDeepCopy(f.Spec.GcSpec)
 	}
 
+}
+
+func (m *ReplaceRequest) ToObject(e db.Entry) {
+	m.toObject(e, true)
+}
+
+func (m *ReplaceRequest) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
 }

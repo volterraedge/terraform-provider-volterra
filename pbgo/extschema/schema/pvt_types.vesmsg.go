@@ -343,7 +343,7 @@ func (v *ValidateDaemonTlsParametersType) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("cipher_suites"))
 		for idx, item := range m.GetCipherSuites() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -373,7 +373,7 @@ func (v *ValidateDaemonTlsParametersType) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("tls_certificates"))
 		for idx, item := range m.GetTlsCertificates() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -685,7 +685,7 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

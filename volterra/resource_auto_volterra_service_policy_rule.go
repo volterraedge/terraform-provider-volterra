@@ -1427,6 +1427,21 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 										},
 									},
 
+									"exclude_bot_name_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"bot_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"exclude_signature_contexts": {
 
 										Type:     schema.TypeList,
@@ -3349,6 +3364,23 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
 
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_bot_name_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeBotNameContexts := make([]*ves_io_schema_policy.BotNameContext, len(sl))
+						actionTypeInt.AppFirewallDetectionControl.ExcludeBotNameContexts = excludeBotNameContexts
+						for i, set := range sl {
+							excludeBotNameContexts[i] = &ves_io_schema_policy.BotNameContext{}
+							excludeBotNameContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeBotNameContextsMapStrToI["bot_name"]; ok && !isIntfNil(w) {
+								excludeBotNameContexts[i].BotName = w.(string)
 							}
 
 						}
@@ -5329,6 +5361,23 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
 
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_bot_name_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeBotNameContexts := make([]*ves_io_schema_policy.BotNameContext, len(sl))
+						actionTypeInt.AppFirewallDetectionControl.ExcludeBotNameContexts = excludeBotNameContexts
+						for i, set := range sl {
+							excludeBotNameContexts[i] = &ves_io_schema_policy.BotNameContext{}
+							excludeBotNameContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeBotNameContextsMapStrToI["bot_name"]; ok && !isIntfNil(w) {
+								excludeBotNameContexts[i].BotName = w.(string)
 							}
 
 						}

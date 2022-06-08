@@ -178,7 +178,7 @@ func (v *ValidateAPIItemList) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -460,7 +460,7 @@ func (v *ValidateCascadeDeleteResponse) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -541,7 +541,7 @@ func (v *ValidateEvaluateAPIAccessReq) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("item_lists"))
 		for idx, item := range m.GetItemLists() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -631,7 +631,7 @@ func (v *ValidateEvaluateAPIAccessResp) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("item_lists"))
 		for idx, item := range m.GetItemLists() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

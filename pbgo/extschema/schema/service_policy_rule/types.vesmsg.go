@@ -7068,7 +7068,7 @@ func (r *ChallengeRuleSpec) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) err
 	return nil
 }
 
-func (m *ChallengeRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ChallengeRuleSpec) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -7083,7 +7083,7 @@ func (m *ChallengeRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.DomainMatcher == nil {
 			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
-		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+		m.DomainMatcher.FromMatcherTypeWithoutDeepCopy(f.GetDomainMatcher())
 	} else {
 		m.DomainMatcher = nil
 	}
@@ -7097,12 +7097,21 @@ func (m *ChallengeRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 }
 
-func (m *ChallengeRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ChallengeRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ChallengeRuleSpec) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ChallengeRuleSpec) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.ArgMatchers = m1.ArgMatchers
 	m1.SetAsnChoiceToGlobalSpecType(f)
 	f.BodyMatcher = m1.BodyMatcher
@@ -7119,7 +7128,7 @@ func (m *ChallengeRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.DomainMatcher != nil {
-		m1.DomainMatcher.ToMatcherType(f.DomainMatcher)
+		m1.DomainMatcher.ToMatcherTypeWithoutDeepCopy(f.DomainMatcher)
 	}
 
 	f.ExpirationTimestamp = m1.ExpirationTimestamp
@@ -7129,6 +7138,14 @@ func (m *ChallengeRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Path = m1.Path
 	f.QueryParams = m1.QueryParams
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
+}
+
+func (m *ChallengeRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ChallengeRuleSpec) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -7190,7 +7207,7 @@ func (r *CreateSpecType) SetClientChoiceToGlobalSpecType(o *GlobalSpecType) erro
 		if f1 == nil {
 			f1 = &ves_io_schema_policy.MatcherType{}
 		}
-		of.ClientNameMatcher.ToMatcherType(f1)
+		of.ClientNameMatcher.ToMatcherTypeWithoutDeepCopy(f1)
 		o.ClientChoice = &GlobalSpecType_ClientNameMatcher{ClientNameMatcher: f1}
 
 	case *CreateSpecType_ClientSelector:
@@ -7219,7 +7236,7 @@ func (r *CreateSpecType) GetClientChoiceFromGlobalSpecType(o *GlobalSpecType) er
 	case *GlobalSpecType_ClientNameMatcher:
 
 		f1 := &ves_io_schema_policy.MatcherTypeBasic{}
-		f1.FromMatcherType(of.ClientNameMatcher)
+		f1.FromMatcherTypeWithoutDeepCopy(of.ClientNameMatcher)
 		r.ClientChoice = &CreateSpecType_ClientNameMatcher{ClientNameMatcher: f1}
 
 	case *GlobalSpecType_ClientSelector:
@@ -7357,7 +7374,7 @@ func (r *CreateSpecType) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) error 
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -7377,7 +7394,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.DomainMatcher == nil {
 			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
-		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+		m.DomainMatcher.FromMatcherTypeWithoutDeepCopy(f.GetDomainMatcher())
 	} else {
 		m.DomainMatcher = nil
 	}
@@ -7406,7 +7423,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.VirtualHostMatcher == nil {
 			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
-		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
+		m.VirtualHostMatcher.FromMatcherTypeWithoutDeepCopy(f.GetVirtualHostMatcher())
 	} else {
 		m.VirtualHostMatcher = nil
 	}
@@ -7414,12 +7431,21 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WafAction = f.GetWafAction()
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Action = m1.Action
 	f.ApiGroupMatcher = m1.ApiGroupMatcher
 	f.ArgMatchers = m1.ArgMatchers
@@ -7441,7 +7467,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.DomainMatcher != nil {
-		m1.DomainMatcher.ToMatcherType(f.DomainMatcher)
+		m1.DomainMatcher.ToMatcherTypeWithoutDeepCopy(f.DomainMatcher)
 	}
 
 	m1.SetDstAsnChoiceToGlobalSpecType(f)
@@ -7473,10 +7499,18 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.VirtualHostMatcher != nil {
-		m1.VirtualHostMatcher.ToMatcherType(f.VirtualHostMatcher)
+		m1.VirtualHostMatcher.ToMatcherTypeWithoutDeepCopy(f.VirtualHostMatcher)
 	}
 
 	f.WafAction = m1.WafAction
+}
+
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -7538,7 +7572,7 @@ func (r *GetSpecType) SetClientChoiceToGlobalSpecType(o *GlobalSpecType) error {
 		if f1 == nil {
 			f1 = &ves_io_schema_policy.MatcherType{}
 		}
-		of.ClientNameMatcher.ToMatcherType(f1)
+		of.ClientNameMatcher.ToMatcherTypeWithoutDeepCopy(f1)
 		o.ClientChoice = &GlobalSpecType_ClientNameMatcher{ClientNameMatcher: f1}
 
 	case *GetSpecType_ClientSelector:
@@ -7567,7 +7601,7 @@ func (r *GetSpecType) GetClientChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	case *GlobalSpecType_ClientNameMatcher:
 
 		f1 := &ves_io_schema_policy.MatcherTypeBasic{}
-		f1.FromMatcherType(of.ClientNameMatcher)
+		f1.FromMatcherTypeWithoutDeepCopy(of.ClientNameMatcher)
 		r.ClientChoice = &GetSpecType_ClientNameMatcher{ClientNameMatcher: f1}
 
 	case *GlobalSpecType_ClientSelector:
@@ -7705,7 +7739,7 @@ func (r *GetSpecType) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -7725,7 +7759,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.DomainMatcher == nil {
 			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
-		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+		m.DomainMatcher.FromMatcherTypeWithoutDeepCopy(f.GetDomainMatcher())
 	} else {
 		m.DomainMatcher = nil
 	}
@@ -7754,7 +7788,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.VirtualHostMatcher == nil {
 			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
-		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
+		m.VirtualHostMatcher.FromMatcherTypeWithoutDeepCopy(f.GetVirtualHostMatcher())
 	} else {
 		m.VirtualHostMatcher = nil
 	}
@@ -7762,12 +7796,21 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WafAction = f.GetWafAction()
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Action = m1.Action
 	f.ApiGroupMatcher = m1.ApiGroupMatcher
 	f.ArgMatchers = m1.ArgMatchers
@@ -7789,7 +7832,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.DomainMatcher != nil {
-		m1.DomainMatcher.ToMatcherType(f.DomainMatcher)
+		m1.DomainMatcher.ToMatcherTypeWithoutDeepCopy(f.DomainMatcher)
 	}
 
 	m1.SetDstAsnChoiceToGlobalSpecType(f)
@@ -7821,13 +7864,21 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.VirtualHostMatcher != nil {
-		m1.VirtualHostMatcher.ToMatcherType(f.VirtualHostMatcher)
+		m1.VirtualHostMatcher.ToMatcherTypeWithoutDeepCopy(f.VirtualHostMatcher)
 	}
 
 	f.WafAction = m1.WafAction
 }
 
-func (m *RateLimiterRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *RateLimiterRuleSpec) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -7836,7 +7887,7 @@ func (m *RateLimiterRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.DomainMatcher == nil {
 			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
-		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+		m.DomainMatcher.FromMatcherTypeWithoutDeepCopy(f.GetDomainMatcher())
 	} else {
 		m.DomainMatcher = nil
 	}
@@ -7846,12 +7897,20 @@ func (m *RateLimiterRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Path = f.GetPath()
 }
 
-func (m *RateLimiterRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *RateLimiterRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *RateLimiterRuleSpec) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *RateLimiterRuleSpec) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
 
 	if m1.DomainMatcher != nil {
 		if f.DomainMatcher == nil {
@@ -7862,12 +7921,20 @@ func (m *RateLimiterRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.DomainMatcher != nil {
-		m1.DomainMatcher.ToMatcherType(f.DomainMatcher)
+		m1.DomainMatcher.ToMatcherTypeWithoutDeepCopy(f.DomainMatcher)
 	}
 
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
 	f.Path = m1.Path
+}
+
+func (m *RateLimiterRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *RateLimiterRuleSpec) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -7929,7 +7996,7 @@ func (r *ReplaceSpecType) SetClientChoiceToGlobalSpecType(o *GlobalSpecType) err
 		if f1 == nil {
 			f1 = &ves_io_schema_policy.MatcherType{}
 		}
-		of.ClientNameMatcher.ToMatcherType(f1)
+		of.ClientNameMatcher.ToMatcherTypeWithoutDeepCopy(f1)
 		o.ClientChoice = &GlobalSpecType_ClientNameMatcher{ClientNameMatcher: f1}
 
 	case *ReplaceSpecType_ClientSelector:
@@ -7958,7 +8025,7 @@ func (r *ReplaceSpecType) GetClientChoiceFromGlobalSpecType(o *GlobalSpecType) e
 	case *GlobalSpecType_ClientNameMatcher:
 
 		f1 := &ves_io_schema_policy.MatcherTypeBasic{}
-		f1.FromMatcherType(of.ClientNameMatcher)
+		f1.FromMatcherTypeWithoutDeepCopy(of.ClientNameMatcher)
 		r.ClientChoice = &ReplaceSpecType_ClientNameMatcher{ClientNameMatcher: f1}
 
 	case *GlobalSpecType_ClientSelector:
@@ -8096,7 +8163,7 @@ func (r *ReplaceSpecType) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -8116,7 +8183,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.DomainMatcher == nil {
 			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
-		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+		m.DomainMatcher.FromMatcherTypeWithoutDeepCopy(f.GetDomainMatcher())
 	} else {
 		m.DomainMatcher = nil
 	}
@@ -8145,7 +8212,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.VirtualHostMatcher == nil {
 			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
-		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
+		m.VirtualHostMatcher.FromMatcherTypeWithoutDeepCopy(f.GetVirtualHostMatcher())
 	} else {
 		m.VirtualHostMatcher = nil
 	}
@@ -8153,12 +8220,21 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.WafAction = f.GetWafAction()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Action = m1.Action
 	f.ApiGroupMatcher = m1.ApiGroupMatcher
 	f.ArgMatchers = m1.ArgMatchers
@@ -8180,7 +8256,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.DomainMatcher != nil {
-		m1.DomainMatcher.ToMatcherType(f.DomainMatcher)
+		m1.DomainMatcher.ToMatcherTypeWithoutDeepCopy(f.DomainMatcher)
 	}
 
 	m1.SetDstAsnChoiceToGlobalSpecType(f)
@@ -8212,8 +8288,16 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.VirtualHostMatcher != nil {
-		m1.VirtualHostMatcher.ToMatcherType(f.VirtualHostMatcher)
+		m1.VirtualHostMatcher.ToMatcherTypeWithoutDeepCopy(f.VirtualHostMatcher)
 	}
 
 	f.WafAction = m1.WafAction
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

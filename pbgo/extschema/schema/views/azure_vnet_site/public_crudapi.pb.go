@@ -5,7 +5,7 @@
 //
 // x-displayName: "Configure Azure Vnet Site"
 // Azure Vnet site view defines a required parameters that can be used in CRUD, to create and manage a volterra site in Azure Vnet.
-// It can be used to either automatically create or Manually assisted site creation in Azure Vnet.
+// It can be used to automatically site creation in the Azure Vnet.
 //
 // View will create following child objects.
 //

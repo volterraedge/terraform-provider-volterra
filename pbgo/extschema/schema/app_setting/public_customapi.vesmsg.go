@@ -82,7 +82,7 @@ func (v *ValidateSuspiciousUser) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("logs"))
 		for idx, item := range m.GetLogs() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
@@ -334,7 +334,7 @@ func (v *ValidateSuspiciousUserStatusRsp) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("suspicious_users"))
 		for idx, item := range m.GetSuspiciousUsers() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}

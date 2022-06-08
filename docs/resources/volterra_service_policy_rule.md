@@ -22,44 +22,21 @@ resource "volterra_service_policy_rule" "example" {
   action    = ["action"]
 
   // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
-
-  asn_matcher {
-    asn_sets {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  any_asn          = true
   challenge_action = ["challenge_action"]
 
   // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
 
-  client_selector {
-    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+  ip_threat_category_list {
+    ip_threat_categories = ["ip_threat_categories"]
   }
-
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-
-  ip_matcher {
-    invert_matcher = true
-
-    prefix_sets {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  any_ip = true
   waf_action {
-    // One of the arguments from this list "waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control data_guard_control none" must be set
+    // One of the arguments from this list "app_firewall_detection_control data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode" must be set
 
-    waf_rule_control {
-      exclude_rule_ids {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-
-      monitoring_mode = true
+    data_guard_control {
+      policy_name = "value"
     }
   }
 }
@@ -189,6 +166,8 @@ App Firewall detection changes to be applied for this request.
 
 `exclude_attack_type_contexts` - (Optional) App Firewall attack types contexts to be excluded for this request. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
 
+`exclude_bot_name_contexts` - (Optional) Bot names contexts to be excluded for this request. See [Exclude Bot Name Contexts ](#exclude-bot-name-contexts) below for details.
+
 `exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
 
 `exclude_violation_contexts` - (Optional) App Firewall violation contexts to be excluded for this request. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
@@ -234,6 +213,8 @@ The predicate evaluates to true if the origin ASN is present in one of the BGP A
 Block bot request and send response with custom content..
 
 `body` - (Optional) E.g. "<p> Your request was blocked </p>". Base64 encoded string for this html is "LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==" (`String`).
+
+`body_hash` - (Optional) Represents the corresponding MD5 Hash for the body message. (`String`).
 
 `status` - (Optional) HTTP Status code to respond with (`String`).
 
@@ -360,6 +341,12 @@ The predicate evaluates to true if the destination address is covered by one or 
 App Firewall attack types contexts to be excluded for this request.
 
 `exclude_attack_type` - (Required) App Firewall Attack type (`String`).
+
+### Exclude Bot Name Contexts
+
+Bot names contexts to be excluded for this request.
+
+`bot_name` - (Optional) x-example: "Hydra" (`String`).
 
 ### Exclude Signature Contexts
 

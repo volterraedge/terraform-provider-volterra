@@ -587,6 +587,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) TunnelAttributeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_attribute")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -678,6 +686,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["tunnel_attribute"]; exists {
+		val := m.GetTunnelAttribute()
+		vOpts := append(opts,
+			db.WithValidateField("tunnel_attribute"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTunnelAttribute().(type) {
+	case *GlobalSpecType_DefaultTunnelAttribute:
+		if fv, exists := v.FldValidators["tunnel_attribute.default_tunnel_attribute"]; exists {
+			val := m.GetTunnelAttribute().(*GlobalSpecType_DefaultTunnelAttribute).DefaultTunnelAttribute
+			vOpts := append(opts,
+				db.WithValidateField("tunnel_attribute"),
+				db.WithValidateField("default_tunnel_attribute"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_TunnelToAwsTgw:
+		if fv, exists := v.FldValidators["tunnel_attribute.tunnel_to_aws_tgw"]; exists {
+			val := m.GetTunnelAttribute().(*GlobalSpecType_TunnelToAwsTgw).TunnelToAwsTgw
+			vOpts := append(opts,
+				db.WithValidateField("tunnel_attribute"),
+				db.WithValidateField("tunnel_to_aws_tgw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
@@ -701,6 +745,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhTunnelAttribute := v.TunnelAttributeValidationRuleHandler
+	rulesTunnelAttribute := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTunnelAttribute(rulesTunnelAttribute)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.tunnel_attribute: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tunnel_attribute"] = vFn
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
@@ -1975,7 +2030,7 @@ func TunnelParamsValidator() db.Validator {
 	return DefaultTunnelParamsValidator
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -1983,43 +2038,77 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Params = f.GetParams()
 	m.RemoteIp = f.GetRemoteIp()
 	m.TunnelType = f.GetTunnelType()
+}
+
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	f.LocalIp = m1.LocalIp
+	f.Params = m1.Params
+	f.RemoteIp = m1.RemoteIp
+	f.TunnelType = m1.TunnelType
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	f.LocalIp = m1.LocalIp
-	f.Params = m1.Params
-	f.RemoteIp = m1.RemoteIp
-	f.TunnelType = m1.TunnelType
+	m.LocalIp = f.GetLocalIp()
+	m.Params = f.GetParams()
+	m.RemoteIp = f.GetRemoteIp()
+	m.TunnelType = f.GetTunnelType()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
-	if f == nil {
-		return
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
-	m.LocalIp = f.GetLocalIp()
-	m.Params = f.GetParams()
-	m.RemoteIp = f.GetRemoteIp()
-	m.TunnelType = f.GetTunnelType()
+	_ = m1
+
+	f.LocalIp = m1.LocalIp
+	f.Params = m1.Params
+	f.RemoteIp = m1.RemoteIp
+	f.TunnelType = m1.TunnelType
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
-	}
-	f.LocalIp = m1.LocalIp
-	f.Params = m1.Params
-	f.RemoteIp = m1.RemoteIp
-	f.TunnelType = m1.TunnelType
+	m.toGlobalSpecType(f, true)
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -2029,14 +2118,31 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.TunnelType = f.GetTunnelType()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.LocalIp = m1.LocalIp
 	f.Params = m1.Params
 	f.RemoteIp = m1.RemoteIp
 	f.TunnelType = m1.TunnelType
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

@@ -205,18 +205,43 @@ func NewCustomStateAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 	return ccl
 }
 
-// Create CustomStateAPIInprocClient
+// Create customStateAPIInprocClient
 
 // INPROC Client (satisfying CustomStateAPIClient interface)
-type CustomStateAPIInprocClient struct {
+type customStateAPIInprocClient struct {
+	CustomStateAPIServer
+}
+
+func (c *customStateAPIInprocClient) SetState(ctx context.Context, in *SetStateReq, opts ...grpc.CallOption) (*SetStateResp, error) {
+	return c.CustomStateAPIServer.SetState(ctx, in)
+}
+
+func NewCustomStateAPIInprocClient(svc svcfw.Service) CustomStateAPIClient {
+	return &customStateAPIInprocClient{CustomStateAPIServer: NewCustomStateAPIServer(svc)}
+}
+
+// RegisterGwCustomStateAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomStateAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomStateAPIHandlerClient(ctx, mux, NewCustomStateAPIInprocClient(s))
+}
+
+// Create customStateAPISrv
+
+// SERVER (satisfying CustomStateAPIServer interface)
+type customStateAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomStateAPIInprocClient) SetState(ctx context.Context, in *SetStateReq, opts ...grpc.CallOption) (*SetStateResp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomStateAPI")
+func (s *customStateAPISrv) SetState(ctx context.Context, in *SetStateReq) (*SetStateResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomStateAPI")
 	cah, ok := ah.(CustomStateAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomStateAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomStateAPIServer", ah)
 	}
 
 	var (
@@ -224,7 +249,7 @@ func (c *CustomStateAPIInprocClient) SetState(ctx context.Context, in *SetStateR
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.SetStateReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.SetStateReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -238,13 +263,13 @@ func (c *CustomStateAPIInprocClient) SetState(ctx context.Context, in *SetStateR
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomStateAPI.SetState"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomStateAPI.SetState"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -257,23 +282,13 @@ func (c *CustomStateAPIInprocClient) SetState(ctx context.Context, in *SetStateR
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.site.SetStateResp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.SetStateResp", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomStateAPIInprocClient(svc svcfw.Service) CustomStateAPIClient {
-	return &CustomStateAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomStateAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomStateAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomStateAPIHandlerClient(ctx, mux, NewCustomStateAPIInprocClient(s))
+func NewCustomStateAPIServer(svc svcfw.Service) CustomStateAPIServer {
+	return &customStateAPISrv{svc: svc}
 }
 
 var CustomStateAPISwaggerJSON string = `{

@@ -21,7 +21,10 @@ resource "volterra_aws_vpc_site" "example" {
   namespace  = "staging"
   aws_region = ["us-east-1"]
 
-  // One of the arguments from this list "aws_cred assisted" must be set
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
+
+  // One of the arguments from this list "aws_cred" must be set
 
   aws_cred {
     name      = "test1"
@@ -32,19 +35,19 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
-      use_http_port = true
+      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
+      use_http_https_port = true
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
 
     az_nodes {
       aws_az_name = "us-west-2a"
-      disk_size   = "disk_size"
+      disk_size   = "80"
 
       local_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
@@ -58,11 +61,11 @@ resource "volterra_aws_vpc_site" "example" {
 
     local_control_plane {
       // One of the arguments from this list "no_local_control_plane default_local_control_plane" must be set
-      default_local_control_plane = true
+      no_local_control_plane = true
     }
   }
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  nodes_per_az = "2"
+  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+  total_nodes = "1"
 }
 
 ```
@@ -90,9 +93,11 @@ Argument Reference
 
 `aws_region` - (Required) Name for AWS Region. (`String`).
 
-`coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
+`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`assisted` - (Optional) In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script. (bool).
+`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+
+`coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
 `aws_cred` - (Optional) Reference to AWS credentials for automatic deployment. See [ref](#ref) below for details.
 
@@ -105,8 +110,6 @@ Argument Reference
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
-
-`site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -204,6 +207,24 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
+### Blocked Services
+
+Use custom blocked services configuration.
+
+`blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Sevice ](#blocked-sevice) below for details.
+
+### Blocked Sevice
+
+Use custom blocked services configuration.
+
+`dns` - (Optional) Matches ssh port 53 (bool).
+
+`ssh` - (Optional) Matches ssh port 22 (bool).
+
+`web_user_interface` - (Optional) Matches the web user interface port (bool).
+
+`network_type` - (Optional) Network type in which these ports get blocked (`String`).
+
 ### Clear Secret Info
 
 Clear Secret is used for the secrets that are not encrypted.
@@ -287,6 +308,10 @@ Disable Interception.
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
+
+### Dns
+
+Matches ssh port 53.
 
 ### Domain Match
 
@@ -385,6 +410,10 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
 
 ### Ingress Gw
 
@@ -586,6 +615,18 @@ Site local outside is connected directly to a given global network.
 
 `global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
 
+### Sm Connection Public Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Sm Connection Pvt Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Ssh
+
+Matches ssh port 22.
+
 ### Static Route List
 
 List of Static routes.
@@ -726,6 +767,10 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `outside_static_routes` - (Optional) Manage static routes for site local network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+
 `default_storage` - (Optional) Use standard storage class configured as AWS EBS (bool).
 
 `storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for site. See [Storage Class List ](#storage-class-list) below for details.
@@ -737,6 +782,10 @@ Choice of using existing VPC or create new VPC.
 `new_vpc` - (Optional) Parameters for creating new VPC. See [New Vpc ](#new-vpc) below for details.
 
 `vpc_id` - (Optional) Information about existing VPC ID (`String`).
+
+### Web User Interface
+
+Matches the web user interface port.
 
 ### Wingman Secret Info
 

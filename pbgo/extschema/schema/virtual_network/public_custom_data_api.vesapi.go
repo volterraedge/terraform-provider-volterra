@@ -210,18 +210,43 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 	return ccl
 }
 
-// Create CustomDataAPIInprocClient
+// Create customDataAPIInprocClient
 
 // INPROC Client (satisfying CustomDataAPIClient interface)
-type CustomDataAPIInprocClient struct {
+type customDataAPIInprocClient struct {
+	CustomDataAPIServer
+}
+
+func (c *customDataAPIInprocClient) SIDCounters(ctx context.Context, in *SIDCounterRequest, opts ...grpc.CallOption) (*SIDCounterResponse, error) {
+	return c.CustomDataAPIServer.SIDCounters(ctx, in)
+}
+
+func NewCustomDataAPIInprocClient(svc svcfw.Service) CustomDataAPIClient {
+	return &customDataAPIInprocClient{CustomDataAPIServer: NewCustomDataAPIServer(svc)}
+}
+
+// RegisterGwCustomDataAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomDataAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomDataAPIHandlerClient(ctx, mux, NewCustomDataAPIInprocClient(s))
+}
+
+// Create customDataAPISrv
+
+// SERVER (satisfying CustomDataAPIServer interface)
+type customDataAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomDataAPIInprocClient) SIDCounters(ctx context.Context, in *SIDCounterRequest, opts ...grpc.CallOption) (*SIDCounterResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_network.CustomDataAPI")
+func (s *customDataAPISrv) SIDCounters(ctx context.Context, in *SIDCounterRequest) (*SIDCounterResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_network.CustomDataAPI")
 	cah, ok := ah.(CustomDataAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataAPIServer", ah)
 	}
 
 	var (
@@ -229,7 +254,7 @@ func (c *CustomDataAPIInprocClient) SIDCounters(ctx context.Context, in *SIDCoun
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.virtual_network.SIDCounterRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_network.SIDCounterRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -243,13 +268,13 @@ func (c *CustomDataAPIInprocClient) SIDCounters(ctx context.Context, in *SIDCoun
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_network.CustomDataAPI.SIDCounters"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_network.CustomDataAPI.SIDCounters"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -262,23 +287,13 @@ func (c *CustomDataAPIInprocClient) SIDCounters(ctx context.Context, in *SIDCoun
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.virtual_network.SIDCounterResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_network.SIDCounterResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomDataAPIInprocClient(svc svcfw.Service) CustomDataAPIClient {
-	return &CustomDataAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomDataAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomDataAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomDataAPIHandlerClient(ctx, mux, NewCustomDataAPIInprocClient(s))
+func NewCustomDataAPIServer(svc svcfw.Service) CustomDataAPIServer {
+	return &customDataAPISrv{svc: svc}
 }
 
 var CustomDataAPISwaggerJSON string = `{

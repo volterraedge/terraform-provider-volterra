@@ -378,6 +378,89 @@ func BlockedServicesValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BlockedServicesListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BlockedServicesListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BlockedServicesListType) DeepCopy() *BlockedServicesListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BlockedServicesListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BlockedServicesListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BlockedServicesListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BlockedServicesListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBlockedServicesListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBlockedServicesListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BlockedServicesListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BlockedServicesListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["blocked_sevice"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("blocked_sevice"))
+		for idx, item := range m.GetBlockedSevice() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBlockedServicesListTypeValidator = func() *ValidateBlockedServicesListType {
+	v := &ValidateBlockedServicesListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["blocked_sevice"] = BlockedServicesValidator().Validate
+
+	return v
+}()
+
+func BlockedServicesListTypeValidator() db.Validator {
+	return DefaultBlockedServicesListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BondLacpType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2195,6 +2278,259 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomAllowedServiceList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomAllowedServiceList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomAllowedServiceList) DeepCopy() *CustomAllowedServiceList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomAllowedServiceList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomAllowedServiceList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomAllowedServiceList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomAllowedServiceListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomAllowedServiceList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomAllowedServiceList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomAllowedServiceList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomAllowedServiceList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomAllowedServiceListValidator = func() *ValidateCustomAllowedServiceList {
+	v := &ValidateCustomAllowedServiceList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["items"] = CustomServiceItemValidator().Validate
+
+	return v
+}()
+
+func CustomAllowedServiceListValidator() db.Validator {
+	return DefaultCustomAllowedServiceListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomServiceItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomServiceItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomServiceItem) DeepCopy() *CustomServiceItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomServiceItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomServiceItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomServiceItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomServiceItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomServiceItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomServiceItem) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomServiceItem) PrefixListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for prefix_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for prefix_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated prefix_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items prefix_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomServiceItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomServiceItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomServiceItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["prefix_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("prefix_list"))
+		if err := fv(ctx, m.GetPrefixList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomServiceItemValidator = func() *ValidateCustomServiceItem {
+	v := &ValidateCustomServiceItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomServiceItem.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	vrhPrefixList := v.PrefixListValidationRuleHandler
+	rulesPrefixList := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.string.ipv4_prefix": "true",
+	}
+	vFn, err = vrhPrefixList(rulesPrefixList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomServiceItem.prefix_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["prefix_list"] = vFn
+
+	return v
+}()
+
+func CustomServiceItemValidator() db.Validator {
+	return DefaultCustomServiceItemValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4528,7 +4864,7 @@ var DefaultFleetInterfaceListTypeValidator = func() *ValidateFleetInterfaceListT
 	vrhInterfaces := v.InterfacesValidationRuleHandler
 	rulesInterfaces := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -8801,6 +9137,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allowed_services"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allowed_services"))
+		if err := fv(ctx, m.GetAllowedServices(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["blocked_services"]; exists {
 		vOpts := append(opts, db.WithValidateField("blocked_services"))
 		if err := fv(ctx, m.GetBlockedServices(), vOpts...); err != nil {
@@ -9552,7 +9897,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhDevices := v.DevicesValidationRuleHandler
 	rulesDevices := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.max_items": "128",
 	}
 	vFn, err = vrhDevices(rulesDevices)
 	if err != nil {
@@ -9676,6 +10021,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["local_control_plane"] = LocalControlPlaneTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["allowed_services"] = CustomAllowedServiceListValidator().Validate
 
 	return v
 }()
@@ -16558,7 +16905,7 @@ func (r *CreateSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error 
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -16584,12 +16931,21 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.BlockedServices = m1.BlockedServices
 	m1.SetBondChoiceToGlobalSpecType(f)
 	m1.SetDcClusterGroupChoiceToGlobalSpecType(f)
@@ -16610,6 +16966,14 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
+}
+
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -16980,7 +17344,7 @@ func (r *GetSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -17006,12 +17370,21 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.BlockedServices = m1.BlockedServices
 	m1.SetBondChoiceToGlobalSpecType(f)
 	m1.SetDcClusterGroupChoiceToGlobalSpecType(f)
@@ -17032,6 +17405,14 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
+}
+
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -17402,7 +17783,7 @@ func (r *ReplaceSpecType) GetVmChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -17427,12 +17808,21 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.BlockedServices = m1.BlockedServices
 	m1.SetBondChoiceToGlobalSpecType(f)
 	m1.SetDcClusterGroupChoiceToGlobalSpecType(f)
@@ -17452,4 +17842,12 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }

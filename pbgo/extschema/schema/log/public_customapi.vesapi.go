@@ -2191,18 +2191,103 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	return ccl
 }
 
-// Create CustomAPIInprocClient
+// Create customAPIInprocClient
 
 // INPROC Client (satisfying CustomAPIClient interface)
-type CustomAPIInprocClient struct {
+type customAPIInprocClient struct {
+	CustomAPIServer
+}
+
+func (c *customAPIInprocClient) AccessLogAggregationQuery(ctx context.Context, in *AccessLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	return c.CustomAPIServer.AccessLogAggregationQuery(ctx, in)
+}
+func (c *customAPIInprocClient) AccessLogQueryV2(ctx context.Context, in *AccessLogRequestV2, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.AccessLogQueryV2(ctx, in)
+}
+func (c *customAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.AccessLogScrollQuery(ctx, in)
+}
+func (c *customAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in *AuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	return c.CustomAPIServer.AuditLogAggregationQuery(ctx, in)
+}
+func (c *customAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLogRequestV2, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.AuditLogQueryV2(ctx, in)
+}
+func (c *customAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.AuditLogScrollQuery(ctx, in)
+}
+func (c *customAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context, in *FirewallLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	return c.CustomAPIServer.FirewallLogAggregationQuery(ctx, in)
+}
+func (c *customAPIInprocClient) FirewallLogQuery(ctx context.Context, in *FirewallLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.FirewallLogQuery(ctx, in)
+}
+func (c *customAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.FirewallLogScrollQuery(ctx, in)
+}
+func (c *customAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	return c.CustomAPIServer.K8SAuditLogAggregationQuery(ctx, in)
+}
+func (c *customAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.K8SAuditLogQuery(ctx, in)
+}
+func (c *customAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.K8SAuditLogScrollQuery(ctx, in)
+}
+func (c *customAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, in *K8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	return c.CustomAPIServer.K8SEventsAggregationQuery(ctx, in)
+}
+func (c *customAPIInprocClient) K8SEventsQuery(ctx context.Context, in *K8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.K8SEventsQuery(ctx, in)
+}
+func (c *customAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.K8SEventsScrollQuery(ctx, in)
+}
+func (c *customAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context, in *VK8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	return c.CustomAPIServer.VK8SAuditLogAggregationQuery(ctx, in)
+}
+func (c *customAPIInprocClient) VK8SAuditLogQuery(ctx context.Context, in *VK8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.VK8SAuditLogQuery(ctx, in)
+}
+func (c *customAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.VK8SAuditLogScrollQuery(ctx, in)
+}
+func (c *customAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, in *VK8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	return c.CustomAPIServer.VK8SEventsAggregationQuery(ctx, in)
+}
+func (c *customAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.VK8SEventsQuery(ctx, in)
+}
+func (c *customAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	return c.CustomAPIServer.VK8SEventsScrollQuery(ctx, in)
+}
+
+func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
+	return &customAPIInprocClient{CustomAPIServer: NewCustomAPIServer(svc)}
+}
+
+// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+}
+
+// Create customAPISrv
+
+// SERVER (satisfying CustomAPIServer interface)
+type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomAPIInprocClient) AccessLogAggregationQuery(ctx context.Context, in *AccessLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) AccessLogAggregationQuery(ctx context.Context, in *AccessLogAggregationRequest) (*LogAggregationResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2210,7 +2295,7 @@ func (c *CustomAPIInprocClient) AccessLogAggregationQuery(ctx context.Context, i
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.AccessLogAggregationRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.AccessLogAggregationRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2224,13 +2309,13 @@ func (c *CustomAPIInprocClient) AccessLogAggregationQuery(ctx context.Context, i
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogAggregationQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2243,15 +2328,15 @@ func (c *CustomAPIInprocClient) AccessLogAggregationQuery(ctx context.Context, i
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) AccessLogQueryV2(ctx context.Context, in *AccessLogRequestV2, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) AccessLogQueryV2(ctx context.Context, in *AccessLogRequestV2) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2259,7 +2344,7 @@ func (c *CustomAPIInprocClient) AccessLogQueryV2(ctx context.Context, in *Access
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.AccessLogRequestV2", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.AccessLogRequestV2", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2273,13 +2358,13 @@ func (c *CustomAPIInprocClient) AccessLogQueryV2(ctx context.Context, in *Access
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogQueryV2"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogQueryV2"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2292,15 +2377,15 @@ func (c *CustomAPIInprocClient) AccessLogQueryV2(ctx context.Context, in *Access
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) AccessLogScrollQuery(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2308,7 +2393,7 @@ func (c *CustomAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *Lo
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2322,13 +2407,13 @@ func (c *CustomAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *Lo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogScrollQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2341,15 +2426,15 @@ func (c *CustomAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *Lo
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in *AuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) AuditLogAggregationQuery(ctx context.Context, in *AuditLogAggregationRequest) (*LogAggregationResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2357,7 +2442,7 @@ func (c *CustomAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.AuditLogAggregationRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.AuditLogAggregationRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2371,13 +2456,13 @@ func (c *CustomAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogAggregationQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2390,15 +2475,15 @@ func (c *CustomAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLogRequestV2, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) AuditLogQueryV2(ctx context.Context, in *AuditLogRequestV2) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2406,7 +2491,7 @@ func (c *CustomAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLo
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.AuditLogRequestV2", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.AuditLogRequestV2", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2420,13 +2505,13 @@ func (c *CustomAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogQueryV2"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogQueryV2"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2439,15 +2524,15 @@ func (c *CustomAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLo
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) AuditLogScrollQuery(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2455,7 +2540,7 @@ func (c *CustomAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *Log
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2469,13 +2554,13 @@ func (c *CustomAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *Log
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogScrollQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2488,15 +2573,15 @@ func (c *CustomAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *Log
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context, in *FirewallLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) FirewallLogAggregationQuery(ctx context.Context, in *FirewallLogAggregationRequest) (*LogAggregationResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2504,7 +2589,7 @@ func (c *CustomAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context,
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.FirewallLogAggregationRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.FirewallLogAggregationRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2518,13 +2603,13 @@ func (c *CustomAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2537,15 +2622,15 @@ func (c *CustomAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context,
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) FirewallLogQuery(ctx context.Context, in *FirewallLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) FirewallLogQuery(ctx context.Context, in *FirewallLogRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2553,7 +2638,7 @@ func (c *CustomAPIInprocClient) FirewallLogQuery(ctx context.Context, in *Firewa
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.FirewallLogRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.FirewallLogRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2567,13 +2652,13 @@ func (c *CustomAPIInprocClient) FirewallLogQuery(ctx context.Context, in *Firewa
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2586,15 +2671,15 @@ func (c *CustomAPIInprocClient) FirewallLogQuery(ctx context.Context, in *Firewa
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) FirewallLogScrollQuery(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2602,7 +2687,7 @@ func (c *CustomAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2616,13 +2701,13 @@ func (c *CustomAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2635,15 +2720,15 @@ func (c *CustomAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest) (*LogAggregationResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2651,7 +2736,7 @@ func (c *CustomAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context,
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.K8SAuditLogAggregationRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.K8SAuditLogAggregationRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2665,13 +2750,13 @@ func (c *CustomAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2684,15 +2769,15 @@ func (c *CustomAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context,
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) K8SAuditLogQuery(ctx context.Context, in *K8SAuditLogRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2700,7 +2785,7 @@ func (c *CustomAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAud
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.K8SAuditLogRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.K8SAuditLogRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2714,13 +2799,13 @@ func (c *CustomAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAud
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2733,15 +2818,15 @@ func (c *CustomAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAud
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) K8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2749,7 +2834,7 @@ func (c *CustomAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2763,13 +2848,13 @@ func (c *CustomAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2782,15 +2867,15 @@ func (c *CustomAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, in *K8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) K8SEventsAggregationQuery(ctx context.Context, in *K8SEventsAggregationRequest) (*LogAggregationResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2798,7 +2883,7 @@ func (c *CustomAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, i
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.K8SEventsAggregationRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.K8SEventsAggregationRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2812,13 +2897,13 @@ func (c *CustomAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, i
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2831,15 +2916,15 @@ func (c *CustomAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, i
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) K8SEventsQuery(ctx context.Context, in *K8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) K8SEventsQuery(ctx context.Context, in *K8SEventsRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2847,7 +2932,7 @@ func (c *CustomAPIInprocClient) K8SEventsQuery(ctx context.Context, in *K8SEvent
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.K8SEventsRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.K8SEventsRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2861,13 +2946,13 @@ func (c *CustomAPIInprocClient) K8SEventsQuery(ctx context.Context, in *K8SEvent
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2880,15 +2965,15 @@ func (c *CustomAPIInprocClient) K8SEventsQuery(ctx context.Context, in *K8SEvent
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) K8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2896,7 +2981,7 @@ func (c *CustomAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *Lo
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2910,13 +2995,13 @@ func (c *CustomAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *Lo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2929,15 +3014,15 @@ func (c *CustomAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *Lo
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context, in *VK8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) VK8SAuditLogAggregationQuery(ctx context.Context, in *VK8SAuditLogAggregationRequest) (*LogAggregationResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2945,7 +3030,7 @@ func (c *CustomAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.VK8SAuditLogAggregationRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.VK8SAuditLogAggregationRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2959,13 +3044,13 @@ func (c *CustomAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2978,15 +3063,15 @@ func (c *CustomAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) VK8SAuditLogQuery(ctx context.Context, in *VK8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) VK8SAuditLogQuery(ctx context.Context, in *VK8SAuditLogRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -2994,7 +3079,7 @@ func (c *CustomAPIInprocClient) VK8SAuditLogQuery(ctx context.Context, in *VK8SA
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.VK8SAuditLogRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.VK8SAuditLogRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -3008,13 +3093,13 @@ func (c *CustomAPIInprocClient) VK8SAuditLogQuery(ctx context.Context, in *VK8SA
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -3027,15 +3112,15 @@ func (c *CustomAPIInprocClient) VK8SAuditLogQuery(ctx context.Context, in *VK8SA
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) VK8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -3043,7 +3128,7 @@ func (c *CustomAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in 
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -3057,13 +3142,13 @@ func (c *CustomAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -3076,15 +3161,15 @@ func (c *CustomAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in 
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, in *VK8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) VK8SEventsAggregationQuery(ctx context.Context, in *VK8SEventsAggregationRequest) (*LogAggregationResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -3092,7 +3177,7 @@ func (c *CustomAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, 
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.VK8SEventsAggregationRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.VK8SEventsAggregationRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -3106,13 +3191,13 @@ func (c *CustomAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -3125,15 +3210,15 @@ func (c *CustomAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, 
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) VK8SEventsQuery(ctx context.Context, in *VK8SEventsRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -3141,7 +3226,7 @@ func (c *CustomAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEve
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.VK8SEventsRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.VK8SEventsRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -3155,13 +3240,13 @@ func (c *CustomAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEve
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -3174,15 +3259,15 @@ func (c *CustomAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEve
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+func (s *customAPISrv) VK8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
 	}
 
 	var (
@@ -3190,7 +3275,7 @@ func (c *CustomAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *L
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -3204,13 +3289,13 @@ func (c *CustomAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *L
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -3223,23 +3308,13 @@ func (c *CustomAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *L
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
-	return &CustomAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomAPIHandlerClient(ctx, mux, NewCustomAPIInprocClient(s))
+func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
+	return &customAPISrv{svc: svc}
 }
 
 var CustomAPISwaggerJSON string = `{

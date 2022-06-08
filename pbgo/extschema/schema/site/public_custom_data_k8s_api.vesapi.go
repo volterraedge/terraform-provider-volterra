@@ -1550,18 +1550,85 @@ func NewCustomDataK8SAPIRestClient(baseURL string, hc http.Client) server.Custom
 	return ccl
 }
 
-// Create CustomDataK8SAPIInprocClient
+// Create customDataK8SAPIInprocClient
 
 // INPROC Client (satisfying CustomDataK8SAPIClient interface)
-type CustomDataK8SAPIInprocClient struct {
+type customDataK8SAPIInprocClient struct {
+	CustomDataK8SAPIServer
+}
+
+func (c *customDataK8SAPIInprocClient) ConfigMapList(ctx context.Context, in *ConfigMapListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.ConfigMapList, error) {
+	return c.CustomDataK8SAPIServer.ConfigMapList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) CronJobList(ctx context.Context, in *CronJobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1beta1.CronJobList, error) {
+	return c.CustomDataK8SAPIServer.CronJobList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) DaemonSetList(ctx context.Context, in *DaemonSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.DaemonSetList, error) {
+	return c.CustomDataK8SAPIServer.DaemonSetList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *DeploymentListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.DeploymentList, error) {
+	return c.CustomDataK8SAPIServer.DeploymentList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) EndpointsList(ctx context.Context, in *EndpointsListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.EndpointsList, error) {
+	return c.CustomDataK8SAPIServer.EndpointsList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1.JobList, error) {
+	return c.CustomDataK8SAPIServer.JobList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *NamespaceListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.NamespaceList, error) {
+	return c.CustomDataK8SAPIServer.NamespaceList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) NodeList(ctx context.Context, in *NodeListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.NodeList, error) {
+	return c.CustomDataK8SAPIServer.NodeList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Context, in *PersistentVolumeClaimListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeClaimList, error) {
+	return c.CustomDataK8SAPIServer.PersistentVolumeClaimList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context, in *PersistentVolumeListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeList, error) {
+	return c.CustomDataK8SAPIServer.PersistentVolumeList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PodList, error) {
+	return c.CustomDataK8SAPIServer.PodList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *ReplicaSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.ReplicaSetList, error) {
+	return c.CustomDataK8SAPIServer.ReplicaSetList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) SecretList(ctx context.Context, in *SecretListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.SecretList, error) {
+	return c.CustomDataK8SAPIServer.SecretList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) ServiceList(ctx context.Context, in *ServiceListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.ServiceList, error) {
+	return c.CustomDataK8SAPIServer.ServiceList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) StatefulSetList(ctx context.Context, in *StatefulSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.StatefulSetList, error) {
+	return c.CustomDataK8SAPIServer.StatefulSetList(ctx, in)
+}
+
+func NewCustomDataK8SAPIInprocClient(svc svcfw.Service) CustomDataK8SAPIClient {
+	return &customDataK8SAPIInprocClient{CustomDataK8SAPIServer: NewCustomDataK8SAPIServer(svc)}
+}
+
+// RegisterGwCustomDataK8SAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwCustomDataK8SAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterCustomDataK8SAPIHandlerClient(ctx, mux, NewCustomDataK8SAPIInprocClient(s))
+}
+
+// Create customDataK8SAPISrv
+
+// SERVER (satisfying CustomDataK8SAPIServer interface)
+type customDataK8SAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *CustomDataK8SAPIInprocClient) ConfigMapList(ctx context.Context, in *ConfigMapListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.ConfigMapList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) ConfigMapList(ctx context.Context, in *ConfigMapListRequest) (*k8s_io_api_core_v1.ConfigMapList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1569,7 +1636,7 @@ func (c *CustomDataK8SAPIInprocClient) ConfigMapList(ctx context.Context, in *Co
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ConfigMapListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.ConfigMapListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1583,13 +1650,13 @@ func (c *CustomDataK8SAPIInprocClient) ConfigMapList(ctx context.Context, in *Co
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1602,15 +1669,15 @@ func (c *CustomDataK8SAPIInprocClient) ConfigMapList(ctx context.Context, in *Co
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.ConfigMapList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.ConfigMapList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) CronJobList(ctx context.Context, in *CronJobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1beta1.CronJobList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) CronJobList(ctx context.Context, in *CronJobListRequest) (*k8s_io_api_batch_v1beta1.CronJobList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1618,7 +1685,7 @@ func (c *CustomDataK8SAPIInprocClient) CronJobList(ctx context.Context, in *Cron
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.CronJobListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.CronJobListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1632,13 +1699,13 @@ func (c *CustomDataK8SAPIInprocClient) CronJobList(ctx context.Context, in *Cron
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.CronJobList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.CronJobList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1651,15 +1718,15 @@ func (c *CustomDataK8SAPIInprocClient) CronJobList(ctx context.Context, in *Cron
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.batch.v1beta1.CronJobList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.batch.v1beta1.CronJobList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) DaemonSetList(ctx context.Context, in *DaemonSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.DaemonSetList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) DaemonSetList(ctx context.Context, in *DaemonSetListRequest) (*k8s_io_api_apps_v1.DaemonSetList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1667,7 +1734,7 @@ func (c *CustomDataK8SAPIInprocClient) DaemonSetList(ctx context.Context, in *Da
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.DaemonSetListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.DaemonSetListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1681,13 +1748,13 @@ func (c *CustomDataK8SAPIInprocClient) DaemonSetList(ctx context.Context, in *Da
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1700,15 +1767,15 @@ func (c *CustomDataK8SAPIInprocClient) DaemonSetList(ctx context.Context, in *Da
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.apps.v1.DaemonSetList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.apps.v1.DaemonSetList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *DeploymentListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.DeploymentList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) DeploymentList(ctx context.Context, in *DeploymentListRequest) (*k8s_io_api_apps_v1.DeploymentList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1716,7 +1783,7 @@ func (c *CustomDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *D
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.DeploymentListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.DeploymentListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1730,13 +1797,13 @@ func (c *CustomDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *D
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.DeploymentList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.DeploymentList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1749,15 +1816,15 @@ func (c *CustomDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *D
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.apps.v1.DeploymentList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.apps.v1.DeploymentList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) EndpointsList(ctx context.Context, in *EndpointsListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.EndpointsList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) EndpointsList(ctx context.Context, in *EndpointsListRequest) (*k8s_io_api_core_v1.EndpointsList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1765,7 +1832,7 @@ func (c *CustomDataK8SAPIInprocClient) EndpointsList(ctx context.Context, in *En
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.EndpointsListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.EndpointsListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1779,13 +1846,13 @@ func (c *CustomDataK8SAPIInprocClient) EndpointsList(ctx context.Context, in *En
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.EndpointsList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.EndpointsList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1798,15 +1865,15 @@ func (c *CustomDataK8SAPIInprocClient) EndpointsList(ctx context.Context, in *En
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.EndpointsList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.EndpointsList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1.JobList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) JobList(ctx context.Context, in *JobListRequest) (*k8s_io_api_batch_v1.JobList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1814,7 +1881,7 @@ func (c *CustomDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListR
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.JobListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.JobListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1828,13 +1895,13 @@ func (c *CustomDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListR
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.JobList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.JobList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1847,15 +1914,15 @@ func (c *CustomDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListR
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.batch.v1.JobList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.batch.v1.JobList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *NamespaceListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.NamespaceList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) NamespaceList(ctx context.Context, in *NamespaceListRequest) (*k8s_io_api_core_v1.NamespaceList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1863,7 +1930,7 @@ func (c *CustomDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *Na
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.NamespaceListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.NamespaceListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1877,13 +1944,13 @@ func (c *CustomDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *Na
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.NamespaceList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.NamespaceList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1896,15 +1963,15 @@ func (c *CustomDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *Na
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.NamespaceList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.NamespaceList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) NodeList(ctx context.Context, in *NodeListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.NodeList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) NodeList(ctx context.Context, in *NodeListRequest) (*k8s_io_api_core_v1.NodeList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1912,7 +1979,7 @@ func (c *CustomDataK8SAPIInprocClient) NodeList(ctx context.Context, in *NodeLis
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.NodeListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.NodeListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1926,13 +1993,13 @@ func (c *CustomDataK8SAPIInprocClient) NodeList(ctx context.Context, in *NodeLis
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.NodeList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.NodeList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1945,15 +2012,15 @@ func (c *CustomDataK8SAPIInprocClient) NodeList(ctx context.Context, in *NodeLis
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.NodeList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.NodeList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Context, in *PersistentVolumeClaimListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeClaimList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) PersistentVolumeClaimList(ctx context.Context, in *PersistentVolumeClaimListRequest) (*k8s_io_api_core_v1.PersistentVolumeClaimList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -1961,7 +2028,7 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Con
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.PersistentVolumeClaimListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.PersistentVolumeClaimListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1975,13 +2042,13 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Con
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -1994,15 +2061,15 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Con
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.PersistentVolumeClaimList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.PersistentVolumeClaimList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context, in *PersistentVolumeListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) PersistentVolumeList(ctx context.Context, in *PersistentVolumeListRequest) (*k8s_io_api_core_v1.PersistentVolumeList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -2010,7 +2077,7 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context,
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.PersistentVolumeListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.PersistentVolumeListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2024,13 +2091,13 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2043,15 +2110,15 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context,
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.PersistentVolumeList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.PersistentVolumeList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PodList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) PodList(ctx context.Context, in *PodListRequest) (*k8s_io_api_core_v1.PodList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -2059,7 +2126,7 @@ func (c *CustomDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListR
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.PodListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.PodListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2073,13 +2140,13 @@ func (c *CustomDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListR
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PodList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PodList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2092,15 +2159,15 @@ func (c *CustomDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListR
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.PodList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.PodList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *ReplicaSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.ReplicaSetList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) ReplicaSetList(ctx context.Context, in *ReplicaSetListRequest) (*k8s_io_api_apps_v1.ReplicaSetList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -2108,7 +2175,7 @@ func (c *CustomDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *R
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ReplicaSetListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.ReplicaSetListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2122,13 +2189,13 @@ func (c *CustomDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *R
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2141,15 +2208,15 @@ func (c *CustomDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *R
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.apps.v1.ReplicaSetList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.apps.v1.ReplicaSetList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) SecretList(ctx context.Context, in *SecretListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.SecretList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) SecretList(ctx context.Context, in *SecretListRequest) (*k8s_io_api_core_v1.SecretList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -2157,7 +2224,7 @@ func (c *CustomDataK8SAPIInprocClient) SecretList(ctx context.Context, in *Secre
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.SecretListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.SecretListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2171,13 +2238,13 @@ func (c *CustomDataK8SAPIInprocClient) SecretList(ctx context.Context, in *Secre
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.SecretList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.SecretList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2190,15 +2257,15 @@ func (c *CustomDataK8SAPIInprocClient) SecretList(ctx context.Context, in *Secre
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.SecretList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.SecretList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) ServiceList(ctx context.Context, in *ServiceListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.ServiceList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) ServiceList(ctx context.Context, in *ServiceListRequest) (*k8s_io_api_core_v1.ServiceList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -2206,7 +2273,7 @@ func (c *CustomDataK8SAPIInprocClient) ServiceList(ctx context.Context, in *Serv
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ServiceListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.ServiceListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2220,13 +2287,13 @@ func (c *CustomDataK8SAPIInprocClient) ServiceList(ctx context.Context, in *Serv
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ServiceList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ServiceList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2239,15 +2306,15 @@ func (c *CustomDataK8SAPIInprocClient) ServiceList(ctx context.Context, in *Serv
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.ServiceList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.ServiceList", rsp)...)
 
 	return rsp, nil
 }
-func (c *CustomDataK8SAPIInprocClient) StatefulSetList(ctx context.Context, in *StatefulSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.StatefulSetList, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+func (s *customDataK8SAPISrv) StatefulSetList(ctx context.Context, in *StatefulSetListRequest) (*k8s_io_api_apps_v1.StatefulSetList, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
 	}
 
 	var (
@@ -2255,7 +2322,7 @@ func (c *CustomDataK8SAPIInprocClient) StatefulSetList(ctx context.Context, in *
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.StatefulSetListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.StatefulSetListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2269,13 +2336,13 @@ func (c *CustomDataK8SAPIInprocClient) StatefulSetList(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -2288,23 +2355,13 @@ func (c *CustomDataK8SAPIInprocClient) StatefulSetList(ctx context.Context, in *
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.apps.v1.StatefulSetList", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.apps.v1.StatefulSetList", rsp)...)
 
 	return rsp, nil
 }
 
-func NewCustomDataK8SAPIInprocClient(svc svcfw.Service) CustomDataK8SAPIClient {
-	return &CustomDataK8SAPIInprocClient{svc: svc}
-}
-
-// RegisterGwCustomDataK8SAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomDataK8SAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterCustomDataK8SAPIHandlerClient(ctx, mux, NewCustomDataK8SAPIInprocClient(s))
+func NewCustomDataK8SAPIServer(svc svcfw.Service) CustomDataK8SAPIServer {
+	return &customDataK8SAPISrv{svc: svc}
 }
 
 var CustomDataK8SAPISwaggerJSON string = `{

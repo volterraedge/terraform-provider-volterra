@@ -204,18 +204,43 @@ func NewPrivateConfigKubeConfigAPIRestClient(baseURL string, hc http.Client) ser
 	return ccl
 }
 
-// Create PrivateConfigKubeConfigAPIInprocClient
+// Create privateConfigKubeConfigAPIInprocClient
 
 // INPROC Client (satisfying PrivateConfigKubeConfigAPIClient interface)
-type PrivateConfigKubeConfigAPIInprocClient struct {
+type privateConfigKubeConfigAPIInprocClient struct {
+	PrivateConfigKubeConfigAPIServer
+}
+
+func (c *privateConfigKubeConfigAPIInprocClient) GlobalAccessEnabled(ctx context.Context, in *GlobalAccessCheckRequest, opts ...grpc.CallOption) (*GlobalAccessCheckResponse, error) {
+	return c.PrivateConfigKubeConfigAPIServer.GlobalAccessEnabled(ctx, in)
+}
+
+func NewPrivateConfigKubeConfigAPIInprocClient(svc svcfw.Service) PrivateConfigKubeConfigAPIClient {
+	return &privateConfigKubeConfigAPIInprocClient{PrivateConfigKubeConfigAPIServer: NewPrivateConfigKubeConfigAPIServer(svc)}
+}
+
+// RegisterGwPrivateConfigKubeConfigAPIHandler registers with grpc-gw with an inproc-client backing so that
+// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
+func RegisterGwPrivateConfigKubeConfigAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterPrivateConfigKubeConfigAPIHandlerClient(ctx, mux, NewPrivateConfigKubeConfigAPIInprocClient(s))
+}
+
+// Create privateConfigKubeConfigAPISrv
+
+// SERVER (satisfying PrivateConfigKubeConfigAPIServer interface)
+type privateConfigKubeConfigAPISrv struct {
 	svc svcfw.Service
 }
 
-func (c *PrivateConfigKubeConfigAPIInprocClient) GlobalAccessEnabled(ctx context.Context, in *GlobalAccessCheckRequest, opts ...grpc.CallOption) (*GlobalAccessCheckResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.PrivateConfigKubeConfigAPI")
+func (s *privateConfigKubeConfigAPISrv) GlobalAccessEnabled(ctx context.Context, in *GlobalAccessCheckRequest) (*GlobalAccessCheckResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.PrivateConfigKubeConfigAPI")
 	cah, ok := ah.(PrivateConfigKubeConfigAPIServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *PrivateConfigKubeConfigAPISrv", ah)
+		return nil, fmt.Errorf("ah %v is not of type *PrivateConfigKubeConfigAPIServer", ah)
 	}
 
 	var (
@@ -223,13 +248,13 @@ func (c *PrivateConfigKubeConfigAPIInprocClient) GlobalAccessEnabled(ctx context
 		err error
 	)
 
-	if err := svcfw.FillOneofDefaultChoice(ctx, c.svc, in); err != nil {
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
-	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.PrivateConfigKubeConfigAPI.GlobalAccessEnabled"); rvFn != nil {
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.PrivateConfigKubeConfigAPI.GlobalAccessEnabled"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -245,18 +270,8 @@ func (c *PrivateConfigKubeConfigAPIInprocClient) GlobalAccessEnabled(ctx context
 	return rsp, nil
 }
 
-func NewPrivateConfigKubeConfigAPIInprocClient(svc svcfw.Service) PrivateConfigKubeConfigAPIClient {
-	return &PrivateConfigKubeConfigAPIInprocClient{svc: svc}
-}
-
-// RegisterGwPrivateConfigKubeConfigAPIHandler registers with grpc-gw with an inproc-client backing so that
-// rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwPrivateConfigKubeConfigAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
-	s, ok := svc.(svcfw.Service)
-	if !ok {
-		return fmt.Errorf("svc is not svcfw.Service")
-	}
-	return RegisterPrivateConfigKubeConfigAPIHandlerClient(ctx, mux, NewPrivateConfigKubeConfigAPIInprocClient(s))
+func NewPrivateConfigKubeConfigAPIServer(svc svcfw.Service) PrivateConfigKubeConfigAPIServer {
+	return &privateConfigKubeConfigAPISrv{svc: svc}
 }
 
 var PrivateConfigKubeConfigAPISwaggerJSON string = `{

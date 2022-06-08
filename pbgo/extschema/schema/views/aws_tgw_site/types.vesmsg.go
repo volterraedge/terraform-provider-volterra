@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -1006,6 +1007,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1130,6 +1139,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *CreateSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*CreateSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*CreateSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -1161,34 +1206,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *CreateSpecType_DirectConnectWithHostedVifs:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"]; exists {
-			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithHostedVifs).DirectConnectWithHostedVifs
+	case *CreateSpecType_DirectConnectEnabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_enabled"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectEnabled).DirectConnectEnabled
 			vOpts := append(opts,
 				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_hosted_vifs"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_DirectConnectWithStandardVifs:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_standard_vifs"]; exists {
-			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithStandardVifs).DirectConnectWithStandardVifs
-			vOpts := append(opts,
-				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_standard_vifs"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_DirectConnectWithManualGw:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_manual_gw"]; exists {
-			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectWithManualGw).DirectConnectWithManualGw
-			vOpts := append(opts,
-				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_manual_gw"),
+				db.WithValidateField("direct_connect_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1310,6 +1333,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
 	rulesDirectConnectChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1367,7 +1401,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["tags"] = vFn
 
-	v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"] = ves_io_schema_views.HostedVIFConfigTypeValidator().Validate
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
+
+	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1770,6 +1806,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1994,6 +2038,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *GetSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GetSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GetSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -2025,34 +2105,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-	case *GetSpecType_DirectConnectWithHostedVifs:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"]; exists {
-			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithHostedVifs).DirectConnectWithHostedVifs
+	case *GetSpecType_DirectConnectEnabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_enabled"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectEnabled).DirectConnectEnabled
 			vOpts := append(opts,
 				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_hosted_vifs"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_DirectConnectWithStandardVifs:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_standard_vifs"]; exists {
-			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithStandardVifs).DirectConnectWithStandardVifs
-			vOpts := append(opts,
-				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_standard_vifs"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_DirectConnectWithManualGw:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_manual_gw"]; exists {
-			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectWithManualGw).DirectConnectWithManualGw
-			vOpts := append(opts,
-				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_manual_gw"),
+				db.WithValidateField("direct_connect_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2229,6 +2287,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
 	rulesDirectConnectChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2332,7 +2401,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["tunnels"] = vFn
 
-	v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"] = ves_io_schema_views.HostedVIFConfigTypeValidator().Validate
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
+
+	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -2675,6 +2746,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2899,6 +2978,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *GlobalSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GlobalSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*GlobalSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -2930,34 +3045,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *GlobalSpecType_DirectConnectWithHostedVifs:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"]; exists {
-			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithHostedVifs).DirectConnectWithHostedVifs
+	case *GlobalSpecType_DirectConnectEnabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_enabled"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectEnabled).DirectConnectEnabled
 			vOpts := append(opts,
 				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_hosted_vifs"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_DirectConnectWithStandardVifs:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_standard_vifs"]; exists {
-			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithStandardVifs).DirectConnectWithStandardVifs
-			vOpts := append(opts,
-				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_standard_vifs"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_DirectConnectWithManualGw:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_manual_gw"]; exists {
-			val := m.GetDirectConnectChoice().(*GlobalSpecType_DirectConnectWithManualGw).DirectConnectWithManualGw
-			vOpts := append(opts,
-				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_manual_gw"),
+				db.WithValidateField("direct_connect_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3033,6 +3126,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
+		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3170,6 +3272,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
 	rulesDirectConnectChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3273,7 +3386,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["tunnels"] = vFn
 
-	v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"] = ves_io_schema_views.HostedVIFConfigTypeValidator().Validate
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
+
+	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3492,6 +3607,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) BlockedServicesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for blocked_services_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3571,6 +3694,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
+		val := m.GetBlockedServicesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("blocked_services_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBlockedServicesChoice().(type) {
+	case *ReplaceSpecType_DefaultBlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.default_blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*ReplaceSpecType_DefaultBlockedServices).DefaultBlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("default_blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BlockedServices:
+		if fv, exists := v.FldValidators["blocked_services_choice.blocked_services"]; exists {
+			val := m.GetBlockedServicesChoice().(*ReplaceSpecType_BlockedServices).BlockedServices
+			vOpts := append(opts,
+				db.WithValidateField("blocked_services_choice"),
+				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -3602,34 +3761,12 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-	case *ReplaceSpecType_DirectConnectWithHostedVifs:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"]; exists {
-			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithHostedVifs).DirectConnectWithHostedVifs
+	case *ReplaceSpecType_DirectConnectEnabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_enabled"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectEnabled).DirectConnectEnabled
 			vOpts := append(opts,
 				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_hosted_vifs"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_DirectConnectWithStandardVifs:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_standard_vifs"]; exists {
-			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithStandardVifs).DirectConnectWithStandardVifs
-			vOpts := append(opts,
-				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_standard_vifs"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_DirectConnectWithManualGw:
-		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_with_manual_gw"]; exists {
-			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectWithManualGw).DirectConnectWithManualGw
-			vOpts := append(opts,
-				db.WithValidateField("direct_connect_choice"),
-				db.WithValidateField("direct_connect_with_manual_gw"),
+				db.WithValidateField("direct_connect_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3716,6 +3853,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
+	rulesBlockedServicesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBlockedServicesChoice(rulesBlockedServicesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.blocked_services_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_services_choice"] = vFn
+
 	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
 	rulesDirectConnectChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3760,7 +3908,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["aws_parameters"] = vFn
 
-	v.FldValidators["direct_connect_choice.direct_connect_with_hosted_vifs"] = ves_io_schema_views.HostedVIFConfigTypeValidator().Validate
+	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
+
+	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -6301,6 +6451,41 @@ func VnConfigurationValidator() db.Validator {
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *CreateSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *CreateSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &CreateSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &CreateSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.DirectConnectChoice.(type) {
 	case nil:
@@ -6309,14 +6494,8 @@ func (r *CreateSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecTyp
 	case *CreateSpecType_DirectConnectDisabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
 
-	case *CreateSpecType_DirectConnectWithHostedVifs:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
-
-	case *CreateSpecType_DirectConnectWithManualGw:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
-
-	case *CreateSpecType_DirectConnectWithStandardVifs:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+	case *CreateSpecType_DirectConnectEnabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6332,14 +6511,8 @@ func (r *CreateSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecT
 	case *GlobalSpecType_DirectConnectDisabled:
 		r.DirectConnectChoice = &CreateSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
 
-	case *GlobalSpecType_DirectConnectWithHostedVifs:
-		r.DirectConnectChoice = &CreateSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
-
-	case *GlobalSpecType_DirectConnectWithManualGw:
-		r.DirectConnectChoice = &CreateSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
-
-	case *GlobalSpecType_DirectConnectWithStandardVifs:
-		r.DirectConnectChoice = &CreateSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+	case *GlobalSpecType_DirectConnectEnabled:
+		r.DirectConnectChoice = &CreateSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6382,12 +6555,13 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 	return nil
 }
 
-func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
 	m.AwsParameters = f.GetAwsParameters()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.LocalControlPlane = f.GetLocalControlPlane()
@@ -6400,14 +6574,24 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VpcAttachments = f.GetVpcAttachments()
 }
 
-func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
 	f.AwsParameters = m1.AwsParameters
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.LocalControlPlane = m1.LocalControlPlane
@@ -6420,6 +6604,49 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VpcAttachments = m1.VpcAttachments
 }
 
+func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *GetSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GetSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &GetSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &GetSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 // create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.DirectConnectChoice.(type) {
@@ -6429,14 +6656,8 @@ func (r *GetSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) 
 	case *GetSpecType_DirectConnectDisabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
 
-	case *GetSpecType_DirectConnectWithHostedVifs:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
-
-	case *GetSpecType_DirectConnectWithManualGw:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
-
-	case *GetSpecType_DirectConnectWithStandardVifs:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+	case *GetSpecType_DirectConnectEnabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6452,14 +6673,8 @@ func (r *GetSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType
 	case *GlobalSpecType_DirectConnectDisabled:
 		r.DirectConnectChoice = &GetSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
 
-	case *GlobalSpecType_DirectConnectWithHostedVifs:
-		r.DirectConnectChoice = &GetSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
-
-	case *GlobalSpecType_DirectConnectWithManualGw:
-		r.DirectConnectChoice = &GetSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
-
-	case *GlobalSpecType_DirectConnectWithStandardVifs:
-		r.DirectConnectChoice = &GetSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+	case *GlobalSpecType_DirectConnectEnabled:
+		r.DirectConnectChoice = &GetSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6502,12 +6717,13 @@ func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
-func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
 	m.AwsParameters = f.GetAwsParameters()
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DirectConnectInfo = f.GetDirectConnectInfo()
@@ -6526,14 +6742,24 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VpcIpPrefixes = f.GetVpcIpPrefixes()
 }
 
-func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
 	f.AwsParameters = m1.AwsParameters
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DirectConnectInfo = m1.DirectConnectInfo
@@ -6552,6 +6778,49 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VpcIpPrefixes = m1.VpcIpPrefixes
 }
 
+func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetBlockedServicesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BlockedServicesChoice.(type) {
+	case nil:
+		o.BlockedServicesChoice = nil
+
+	case *ReplaceSpecType_BlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *ReplaceSpecType_DefaultBlockedServices:
+		o.BlockedServicesChoice = &GlobalSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BlockedServicesChoice.(type) {
+	case nil:
+		r.BlockedServicesChoice = nil
+
+	case *GlobalSpecType_BlockedServices:
+		r.BlockedServicesChoice = &ReplaceSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	case *GlobalSpecType_DefaultBlockedServices:
+		r.BlockedServicesChoice = &ReplaceSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.DirectConnectChoice.(type) {
@@ -6561,14 +6830,8 @@ func (r *ReplaceSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecTy
 	case *ReplaceSpecType_DirectConnectDisabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
 
-	case *ReplaceSpecType_DirectConnectWithHostedVifs:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
-
-	case *ReplaceSpecType_DirectConnectWithManualGw:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
-
-	case *ReplaceSpecType_DirectConnectWithStandardVifs:
-		o.DirectConnectChoice = &GlobalSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+	case *ReplaceSpecType_DirectConnectEnabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6584,14 +6847,8 @@ func (r *ReplaceSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpec
 	case *GlobalSpecType_DirectConnectDisabled:
 		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
 
-	case *GlobalSpecType_DirectConnectWithHostedVifs:
-		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithHostedVifs{DirectConnectWithHostedVifs: of.DirectConnectWithHostedVifs}
-
-	case *GlobalSpecType_DirectConnectWithManualGw:
-		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithManualGw{DirectConnectWithManualGw: of.DirectConnectWithManualGw}
-
-	case *GlobalSpecType_DirectConnectWithStandardVifs:
-		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectWithStandardVifs{DirectConnectWithStandardVifs: of.DirectConnectWithStandardVifs}
+	case *GlobalSpecType_DirectConnectEnabled:
+		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6634,7 +6891,7 @@ func (r *ReplaceSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecT
 	return nil
 }
 
-func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -6644,11 +6901,12 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		if m.AwsParameters == nil {
 			m.AwsParameters = &ServicesVPCReplaceType{}
 		}
-		m.AwsParameters.FromServicesVPCType(f.GetAwsParameters())
+		m.AwsParameters.FromServicesVPCTypeWithoutDeepCopy(f.GetAwsParameters())
 	} else {
 		m.AwsParameters = nil
 	}
 
+	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
@@ -6657,12 +6915,21 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VpcAttachments = f.GetVpcAttachments()
 }
 
-func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) FromGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.fromGlobalSpecType(f, false)
+}
+
+func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.Address = m1.Address
 
 	if m1.AwsParameters != nil {
@@ -6674,15 +6941,24 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	if m1.AwsParameters != nil {
-		m1.AwsParameters.ToServicesVPCType(f.AwsParameters)
+		m1.AwsParameters.ToServicesVPCTypeWithoutDeepCopy(f.AwsParameters)
 	}
 
+	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
 	f.VpcAttachments = m1.VpcAttachments
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, true)
+}
+
+func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
+	m.toGlobalSpecType(f, false)
 }
 
 // create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
@@ -6726,18 +7002,35 @@ func (r *ServicesVPCReplaceType) GetWorkerNodesFromServicesVPCType(o *ServicesVP
 	return nil
 }
 
-func (m *ServicesVPCReplaceType) FromServicesVPCType(f *ServicesVPCType) {
+func (m *ServicesVPCReplaceType) fromServicesVPCType(f *ServicesVPCType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.GetWorkerNodesFromServicesVPCType(f)
 }
 
-func (m *ServicesVPCReplaceType) ToServicesVPCType(f *ServicesVPCType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *ServicesVPCReplaceType) FromServicesVPCType(f *ServicesVPCType) {
+	m.fromServicesVPCType(f, true)
+}
+
+func (m *ServicesVPCReplaceType) FromServicesVPCTypeWithoutDeepCopy(f *ServicesVPCType) {
+	m.fromServicesVPCType(f, false)
+}
+
+func (m *ServicesVPCReplaceType) toServicesVPCType(f *ServicesVPCType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetWorkerNodesToServicesVPCType(f)
+}
+
+func (m *ServicesVPCReplaceType) ToServicesVPCType(f *ServicesVPCType) {
+	m.toServicesVPCType(f, true)
+}
+
+func (m *ServicesVPCReplaceType) ToServicesVPCTypeWithoutDeepCopy(f *ServicesVPCType) {
+	m.toServicesVPCType(f, false)
 }

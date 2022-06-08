@@ -301,6 +301,46 @@ func (v *ValidateAppFirewallDetectionControl) ExcludeAttackTypeContextsValidatio
 	return validatorFn, nil
 }
 
+func (v *ValidateAppFirewallDetectionControl) ExcludeBotNameContextsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*BotNameContext, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := BotNameContextValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_bot_name_contexts")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*BotNameContext)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*BotNameContext, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated exclude_bot_name_contexts")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items exclude_bot_name_contexts")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAppFirewallDetectionControl) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AppFirewallDetectionControl)
 	if !ok {
@@ -318,6 +358,14 @@ func (v *ValidateAppFirewallDetectionControl) Validate(ctx context.Context, pm i
 	if fv, exists := v.FldValidators["exclude_attack_type_contexts"]; exists {
 		vOpts := append(opts, db.WithValidateField("exclude_attack_type_contexts"))
 		if err := fv(ctx, m.GetExcludeAttackTypeContexts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["exclude_bot_name_contexts"]; exists {
+		vOpts := append(opts, db.WithValidateField("exclude_bot_name_contexts"))
+		if err := fv(ctx, m.GetExcludeBotNameContexts(), vOpts...); err != nil {
 			return err
 		}
 
@@ -389,6 +437,18 @@ var DefaultAppFirewallDetectionControlValidator = func() *ValidateAppFirewallDet
 		panic(errMsg)
 	}
 	v.FldValidators["exclude_attack_type_contexts"] = vFn
+
+	vrhExcludeBotNameContexts := v.ExcludeBotNameContextsValidationRuleHandler
+	rulesExcludeBotNameContexts := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExcludeBotNameContexts(rulesExcludeBotNameContexts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallDetectionControl.exclude_bot_name_contexts: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exclude_bot_name_contexts"] = vFn
 
 	return v
 }()
@@ -1282,6 +1342,389 @@ func BotActionValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BotNameContext) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotNameContext) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotNameContext) DeepCopy() *BotNameContext {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotNameContext{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotNameContext) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotNameContext) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotNameContextValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotNameContext struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotNameContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotNameContext)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotNameContext got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bot_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_name"))
+		if err := fv(ctx, m.GetBotName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotNameContextValidator = func() *ValidateBotNameContext {
+	v := &ValidateBotNameContext{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BotNameContextValidator() db.Validator {
+	return DefaultBotNameContextValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ClientMatcher) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ClientMatcher) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ClientMatcher) DeepCopy() *ClientMatcher {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ClientMatcher{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ClientMatcher) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ClientMatcher) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ClientMatcherValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ClientMatcher) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpAsnChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ClientMatcher) GetIpAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpAsnChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIpAsnChoice().(type) {
+	case *ClientMatcher_AnyIp:
+
+		return nil, nil
+
+	case *ClientMatcher_IpPrefixList:
+
+		return nil, nil
+
+	case *ClientMatcher_IpMatcher:
+		drInfos, err := m.GetIpMatcher().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_matcher." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ClientMatcher_AsnList:
+
+		return nil, nil
+
+	case *ClientMatcher_AsnMatcher:
+		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "asn_matcher." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateClientMatcher struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateClientMatcher) ClientChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateClientMatcher) IpAsnChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_asn_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateClientMatcher) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ClientMatcher)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ClientMatcher got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["client_choice"]; exists {
+		val := m.GetClientChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientChoice().(type) {
+	case *ClientMatcher_AnyClient:
+		if fv, exists := v.FldValidators["client_choice.any_client"]; exists {
+			val := m.GetClientChoice().(*ClientMatcher_AnyClient).AnyClient
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("any_client"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientMatcher_IpThreatCategoryList:
+		if fv, exists := v.FldValidators["client_choice.ip_threat_category_list"]; exists {
+			val := m.GetClientChoice().(*ClientMatcher_IpThreatCategoryList).IpThreatCategoryList
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("ip_threat_category_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientMatcher_ClientSelector:
+		if fv, exists := v.FldValidators["client_choice.client_selector"]; exists {
+			val := m.GetClientChoice().(*ClientMatcher_ClientSelector).ClientSelector
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("client_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_asn_choice"]; exists {
+		val := m.GetIpAsnChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ip_asn_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetIpAsnChoice().(type) {
+	case *ClientMatcher_AnyIp:
+		if fv, exists := v.FldValidators["ip_asn_choice.any_ip"]; exists {
+			val := m.GetIpAsnChoice().(*ClientMatcher_AnyIp).AnyIp
+			vOpts := append(opts,
+				db.WithValidateField("ip_asn_choice"),
+				db.WithValidateField("any_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientMatcher_IpPrefixList:
+		if fv, exists := v.FldValidators["ip_asn_choice.ip_prefix_list"]; exists {
+			val := m.GetIpAsnChoice().(*ClientMatcher_IpPrefixList).IpPrefixList
+			vOpts := append(opts,
+				db.WithValidateField("ip_asn_choice"),
+				db.WithValidateField("ip_prefix_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientMatcher_IpMatcher:
+		if fv, exists := v.FldValidators["ip_asn_choice.ip_matcher"]; exists {
+			val := m.GetIpAsnChoice().(*ClientMatcher_IpMatcher).IpMatcher
+			vOpts := append(opts,
+				db.WithValidateField("ip_asn_choice"),
+				db.WithValidateField("ip_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientMatcher_AsnList:
+		if fv, exists := v.FldValidators["ip_asn_choice.asn_list"]; exists {
+			val := m.GetIpAsnChoice().(*ClientMatcher_AsnList).AsnList
+			vOpts := append(opts,
+				db.WithValidateField("ip_asn_choice"),
+				db.WithValidateField("asn_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientMatcher_AsnMatcher:
+		if fv, exists := v.FldValidators["ip_asn_choice.asn_matcher"]; exists {
+			val := m.GetIpAsnChoice().(*ClientMatcher_AsnMatcher).AsnMatcher
+			vOpts := append(opts,
+				db.WithValidateField("ip_asn_choice"),
+				db.WithValidateField("asn_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
+		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultClientMatcherValidator = func() *ValidateClientMatcher {
+	v := &ValidateClientMatcher{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhClientChoice := v.ClientChoiceValidationRuleHandler
+	rulesClientChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClientChoice(rulesClientChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClientMatcher.client_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_choice"] = vFn
+
+	vrhIpAsnChoice := v.IpAsnChoiceValidationRuleHandler
+	rulesIpAsnChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhIpAsnChoice(rulesIpAsnChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClientMatcher.ip_asn_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_asn_choice"] = vFn
+
+	v.FldValidators["client_choice.ip_threat_category_list"] = IPThreatCategoryListTypeValidator().Validate
+	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["ip_asn_choice.ip_prefix_list"] = PrefixMatchListValidator().Validate
+	v.FldValidators["ip_asn_choice.ip_matcher"] = IpMatcherTypeValidator().Validate
+	v.FldValidators["ip_asn_choice.asn_list"] = AsnMatchListValidator().Validate
+	v.FldValidators["ip_asn_choice.asn_matcher"] = AsnMatcherTypeValidator().Validate
+
+	v.FldValidators["tls_fingerprint_matcher"] = TlsFingerprintMatcherTypeValidator().Validate
+
+	return v
+}()
+
+func ClientMatcherValidator() db.Validator {
+	return DefaultClientMatcherValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ContentRewriteAction) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1622,6 +2065,162 @@ var DefaultCookieMatcherTypeValidator = func() *ValidateCookieMatcherType {
 
 func CookieMatcherTypeValidator() db.Validator {
 	return DefaultCookieMatcherTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CountryCodeList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CountryCodeList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CountryCodeList) DeepCopy() *CountryCodeList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CountryCodeList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CountryCodeList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CountryCodeList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CountryCodeListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCountryCodeList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCountryCodeList) CountryCodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(CountryCode)
+		return int32(i)
+	}
+	// CountryCode_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, CountryCode_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for country_codes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []CountryCode, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for country_codes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]CountryCode)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []CountryCode, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated country_codes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items country_codes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCountryCodeList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CountryCodeList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CountryCodeList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["country_codes"]; exists {
+		vOpts := append(opts, db.WithValidateField("country_codes"))
+		if err := fv(ctx, m.GetCountryCodes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["invert_match"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("invert_match"))
+		if err := fv(ctx, m.GetInvertMatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCountryCodeListValidator = func() *ValidateCountryCodeList {
+	v := &ValidateCountryCodeList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCountryCodes := v.CountryCodesValidationRuleHandler
+	rulesCountryCodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCountryCodes(rulesCountryCodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CountryCodeList.country_codes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["country_codes"] = vFn
+
+	return v
+}()
+
+func CountryCodeListValidator() db.Validator {
+	return DefaultCountryCodeListValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2215,6 +2814,223 @@ func HeaderMatcherTypeBasicValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *HttpCookieName) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HttpCookieName) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HttpCookieName) DeepCopy() *HttpCookieName {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HttpCookieName{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HttpCookieName) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HttpCookieName) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HttpCookieNameValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttpCookieName struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttpCookieName) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHttpCookieName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HttpCookieName)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HttpCookieName got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttpCookieNameValidator = func() *ValidateHttpCookieName {
+	v := &ValidateHttpCookieName{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpCookieName.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func HttpCookieNameValidator() db.Validator {
+	return DefaultHttpCookieNameValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HttpHeaderName) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HttpHeaderName) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HttpHeaderName) DeepCopy() *HttpHeaderName {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HttpHeaderName{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HttpHeaderName) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HttpHeaderName) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HttpHeaderNameValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttpHeaderName struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttpHeaderName) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHttpHeaderName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HttpHeaderName)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HttpHeaderName got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttpHeaderNameValidator = func() *ValidateHttpHeaderName {
+	v := &ValidateHttpHeaderName{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
+		"ves.io.schema.rules.string.http_header_field": "true",
+		"ves.io.schema.rules.string.max_bytes":         "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpHeaderName.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func HttpHeaderNameValidator() db.Validator {
+	return DefaultHttpHeaderNameValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *HttpMethodMatcherType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2366,6 +3182,260 @@ var DefaultHttpMethodMatcherTypeValidator = func() *ValidateHttpMethodMatcherTyp
 
 func HttpMethodMatcherTypeValidator() db.Validator {
 	return DefaultHttpMethodMatcherTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HttpQueryParameterName) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HttpQueryParameterName) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HttpQueryParameterName) DeepCopy() *HttpQueryParameterName {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HttpQueryParameterName{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HttpQueryParameterName) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HttpQueryParameterName) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HttpQueryParameterNameValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttpQueryParameterName struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttpQueryParameterName) KeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for key")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHttpQueryParameterName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HttpQueryParameterName)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HttpQueryParameterName got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key"))
+		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttpQueryParameterNameValidator = func() *ValidateHttpQueryParameterName {
+	v := &ValidateHttpQueryParameterName{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKey := v.KeyValidationRuleHandler
+	rulesKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "256",
+	}
+	vFn, err = vrhKey(rulesKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpQueryParameterName.key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["key"] = vFn
+
+	return v
+}()
+
+func HttpQueryParameterNameValidator() db.Validator {
+	return DefaultHttpQueryParameterNameValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPThreatCategoryListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPThreatCategoryListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPThreatCategoryListType) DeepCopy() *IPThreatCategoryListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPThreatCategoryListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPThreatCategoryListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPThreatCategoryListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPThreatCategoryListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPThreatCategoryListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPThreatCategoryListType) IpThreatCategoriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(IPThreatCategory)
+		return int32(i)
+	}
+	// IPThreatCategory_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, IPThreatCategory_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_threat_categories")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []IPThreatCategory, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ip_threat_categories")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]IPThreatCategory)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []IPThreatCategory, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ip_threat_categories")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ip_threat_categories")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPThreatCategoryListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPThreatCategoryListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPThreatCategoryListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ip_threat_categories"]; exists {
+		vOpts := append(opts, db.WithValidateField("ip_threat_categories"))
+		if err := fv(ctx, m.GetIpThreatCategories(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPThreatCategoryListTypeValidator = func() *ValidateIPThreatCategoryListType {
+	v := &ValidateIPThreatCategoryListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpThreatCategories := v.IpThreatCategoriesValidationRuleHandler
+	rulesIpThreatCategories := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpThreatCategories(rulesIpThreatCategories)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPThreatCategoryListType.ip_threat_categories: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_threat_categories"] = vFn
+
+	return v
+}()
+
+func IPThreatCategoryListTypeValidator() db.Validator {
+	return DefaultIPThreatCategoryListTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2566,6 +3636,152 @@ var DefaultIpMatcherTypeValidator = func() *ValidateIpMatcherType {
 
 func IpMatcherTypeValidator() db.Validator {
 	return DefaultIpMatcherTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *JwtTokenAuthOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *JwtTokenAuthOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *JwtTokenAuthOptions) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSecretKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting JwtTokenAuthOptions.secret_key")
+	}
+
+	return nil
+}
+
+func (m *JwtTokenAuthOptions) DeepCopy() *JwtTokenAuthOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &JwtTokenAuthOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *JwtTokenAuthOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *JwtTokenAuthOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return JwtTokenAuthOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateJwtTokenAuthOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateJwtTokenAuthOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*JwtTokenAuthOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *JwtTokenAuthOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["secret_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("secret_key"))
+		if err := fv(ctx, m.GetSecretKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetTokenSource().(type) {
+	case *JwtTokenAuthOptions_Header:
+		if fv, exists := v.FldValidators["token_source.header"]; exists {
+			val := m.GetTokenSource().(*JwtTokenAuthOptions_Header).Header
+			vOpts := append(opts,
+				db.WithValidateField("token_source"),
+				db.WithValidateField("header"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *JwtTokenAuthOptions_Cookie:
+		if fv, exists := v.FldValidators["token_source.cookie"]; exists {
+			val := m.GetTokenSource().(*JwtTokenAuthOptions_Cookie).Cookie
+			vOpts := append(opts,
+				db.WithValidateField("token_source"),
+				db.WithValidateField("cookie"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *JwtTokenAuthOptions_QueryParam:
+		if fv, exists := v.FldValidators["token_source.query_param"]; exists {
+			val := m.GetTokenSource().(*JwtTokenAuthOptions_QueryParam).QueryParam
+			vOpts := append(opts,
+				db.WithValidateField("token_source"),
+				db.WithValidateField("query_param"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *JwtTokenAuthOptions_BearerToken:
+		if fv, exists := v.FldValidators["token_source.bearer_token"]; exists {
+			val := m.GetTokenSource().(*JwtTokenAuthOptions_BearerToken).BearerToken
+			vOpts := append(opts,
+				db.WithValidateField("token_source"),
+				db.WithValidateField("bearer_token"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultJwtTokenAuthOptionsValidator = func() *ValidateJwtTokenAuthOptions {
+	v := &ValidateJwtTokenAuthOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["token_source.header"] = HttpHeaderNameValidator().Validate
+	v.FldValidators["token_source.cookie"] = HttpCookieNameValidator().Validate
+	v.FldValidators["token_source.query_param"] = HttpQueryParameterNameValidator().Validate
+
+	v.FldValidators["secret_key"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func JwtTokenAuthOptionsValidator() db.Validator {
+	return DefaultJwtTokenAuthOptionsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4095,6 +5311,260 @@ var DefaultQueryParameterMatcherTypeValidator = func() *ValidateQueryParameterMa
 
 func QueryParameterMatcherTypeValidator() db.Validator {
 	return DefaultQueryParameterMatcherTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RequestMatcher) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RequestMatcher) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RequestMatcher) DeepCopy() *RequestMatcher {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RequestMatcher{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RequestMatcher) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RequestMatcher) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RequestMatcherValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRequestMatcher struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRequestMatcher) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*QueryParameterMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := QueryParameterMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for query_params")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*QueryParameterMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*QueryParameterMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated query_params")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items query_params")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestMatcher) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*HeaderMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*HeaderMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*HeaderMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestMatcher) CookieMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*CookieMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := CookieMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cookie_matchers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CookieMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CookieMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cookie_matchers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cookie_matchers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestMatcher) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RequestMatcher)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RequestMatcher got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
+		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["headers"]; exists {
+		vOpts := append(opts, db.WithValidateField("headers"))
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_params"]; exists {
+		vOpts := append(opts, db.WithValidateField("query_params"))
+		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRequestMatcherValidator = func() *ValidateRequestMatcher {
+	v := &ValidateRequestMatcher{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhQueryParams := v.QueryParamsValidationRuleHandler
+	rulesQueryParams := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhQueryParams(rulesQueryParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestMatcher.query_params: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["query_params"] = vFn
+
+	vrhHeaders := v.HeadersValidationRuleHandler
+	rulesHeaders := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhHeaders(rulesHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestMatcher.headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["headers"] = vFn
+
+	vrhCookieMatchers := v.CookieMatchersValidationRuleHandler
+	rulesCookieMatchers := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhCookieMatchers(rulesCookieMatchers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestMatcher.cookie_matchers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cookie_matchers"] = vFn
+
+	return v
+}()
+
+func RequestMatcherValidator() db.Validator {
+	return DefaultRequestMatcherValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -7237,7 +8707,7 @@ func (r *HeaderMatcherTypeBasic) GetMatchFromHeaderMatcherType(o *HeaderMatcherT
 	return nil
 }
 
-func (m *HeaderMatcherTypeBasic) FromHeaderMatcherType(f *HeaderMatcherType) {
+func (m *HeaderMatcherTypeBasic) fromHeaderMatcherType(f *HeaderMatcherType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -7245,17 +8715,34 @@ func (m *HeaderMatcherTypeBasic) FromHeaderMatcherType(f *HeaderMatcherType) {
 	m.Name = f.GetName()
 }
 
-func (m *HeaderMatcherTypeBasic) ToHeaderMatcherType(f *HeaderMatcherType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *HeaderMatcherTypeBasic) FromHeaderMatcherType(f *HeaderMatcherType) {
+	m.fromHeaderMatcherType(f, true)
+}
+
+func (m *HeaderMatcherTypeBasic) FromHeaderMatcherTypeWithoutDeepCopy(f *HeaderMatcherType) {
+	m.fromHeaderMatcherType(f, false)
+}
+
+func (m *HeaderMatcherTypeBasic) toHeaderMatcherType(f *HeaderMatcherType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	m1.SetMatchToHeaderMatcherType(f)
 	f.Name = m1.Name
 }
 
-func (m *MatcherTypeBasic) FromMatcherType(f *MatcherType) {
+func (m *HeaderMatcherTypeBasic) ToHeaderMatcherType(f *HeaderMatcherType) {
+	m.toHeaderMatcherType(f, true)
+}
+
+func (m *HeaderMatcherTypeBasic) ToHeaderMatcherTypeWithoutDeepCopy(f *HeaderMatcherType) {
+	m.toHeaderMatcherType(f, false)
+}
+
+func (m *MatcherTypeBasic) fromMatcherType(f *MatcherType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
@@ -7263,12 +8750,29 @@ func (m *MatcherTypeBasic) FromMatcherType(f *MatcherType) {
 	m.RegexValues = f.GetRegexValues()
 }
 
-func (m *MatcherTypeBasic) ToMatcherType(f *MatcherType) {
-	m1 := m.DeepCopy()
-	_ = m1
-	if f == nil {
-		return
+func (m *MatcherTypeBasic) FromMatcherType(f *MatcherType) {
+	m.fromMatcherType(f, true)
+}
+
+func (m *MatcherTypeBasic) FromMatcherTypeWithoutDeepCopy(f *MatcherType) {
+	m.fromMatcherType(f, false)
+}
+
+func (m *MatcherTypeBasic) toMatcherType(f *MatcherType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
 	}
+	_ = m1
+
 	f.ExactValues = m1.ExactValues
 	f.RegexValues = m1.RegexValues
+}
+
+func (m *MatcherTypeBasic) ToMatcherType(f *MatcherType) {
+	m.toMatcherType(f, true)
+}
+
+func (m *MatcherTypeBasic) ToMatcherTypeWithoutDeepCopy(f *MatcherType) {
+	m.toMatcherType(f, false)
 }

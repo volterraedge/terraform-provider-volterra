@@ -304,6 +304,8 @@ func (v *ValidateGetStatusResponse) Validate(ctx context.Context, pm interface{}
 var DefaultGetStatusResponseValidator = func() *ValidateGetStatusResponse {
 	v := &ValidateGetStatusResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["status"] = StatusObjectValidator().Validate
+
 	return v
 }()
 

@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -68,6 +69,55 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"blocked_services": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"blocked_sevice": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"dns": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ssh": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"web_user_interface": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"network_type": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"default_blocked_services": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"coordinates": {
 
 				Type:     schema.TypeSet,
@@ -86,12 +136,6 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 						},
 					},
 				},
-			},
-
-			"assisted": {
-
-				Type:     schema.TypeBool,
-				Optional: true,
 			},
 
 			"cloud_credentials": {
@@ -2650,6 +2694,94 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//blocked_services_choice
+
+	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+		blockedServicesChoiceInt := &ves_io_schema_views_gcp_vpc_site.CreateSpecType_BlockedServices{}
+		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
+		createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+				for i, set := range sl {
+					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+					blockedSeviceMapStrToI := set.(map[string]interface{})
+
+					blockedServicesValueTypeChoiceTypeFound := false
+
+					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_gcp_vpc_site.CreateSpecType_DefaultBlockedServices{}
+			blockedServicesChoiceInt.DefaultBlockedServices = &ves_io_schema.Empty{}
+			createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
+
 	//coordinates
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
@@ -2674,18 +2806,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//deployment
 
 	deploymentTypeFound := false
-
-	if v, ok := d.GetOk("assisted"); ok && !deploymentTypeFound {
-
-		deploymentTypeFound = true
-
-		if v.(bool) {
-			deploymentInt := &ves_io_schema_views_gcp_vpc_site.CreateSpecType_Assisted{}
-			deploymentInt.Assisted = &ves_io_schema.Empty{}
-			createSpec.Deployment = deploymentInt
-		}
-
-	}
 
 	if v, ok := d.GetOk("cloud_credentials"); ok && !deploymentTypeFound {
 
@@ -6330,6 +6450,92 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+		blockedServicesChoiceInt := &ves_io_schema_views_gcp_vpc_site.ReplaceSpecType_BlockedServices{}
+		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
+		updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+				for i, set := range sl {
+					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+					blockedSeviceMapStrToI := set.(map[string]interface{})
+
+					blockedServicesValueTypeChoiceTypeFound := false
+
+					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+						blockedServicesValueTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_blocked_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_gcp_vpc_site.ReplaceSpecType_DefaultBlockedServices{}
+			blockedServicesChoiceInt.DefaultBlockedServices = &ves_io_schema.Empty{}
+			updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
@@ -7742,6 +7948,32 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwReplaceType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwReplaceType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -8794,6 +9026,32 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			siteMeshGroupChoiceTypeFound := false
+
+			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterReplaceType_SmConnectionPublicIp{}
+					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+				siteMeshGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					siteMeshGroupChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterReplaceType_SmConnectionPvtIp{}
+					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 				}
 
 			}
