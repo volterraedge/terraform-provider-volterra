@@ -6488,7 +6488,8 @@ var DefaultShapeBotRedirectMitigationActionTypeValidator = func() *ValidateShape
 
 	vrhUri := v.UriValidationRuleHandler
 	rulesUri := map[string]string{
-		"ves.io.schema.rules.string.uri_ref": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.uri_ref":   "true",
 	}
 	vFn, err = vrhUri(rulesUri)
 	if err != nil {

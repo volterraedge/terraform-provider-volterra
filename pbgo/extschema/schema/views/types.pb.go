@@ -1151,9 +1151,9 @@ func (m *CustomCiphers) GetCipherSuites() []string {
 // x-displayName: "TLS Config"
 // This defines various options to configure TLS configuration parameters
 type TlsConfig struct {
-	// Security Level
+	// TLS Security Level
 	//
-	// x-displayName: "Security Level"
+	// x-displayName: "TLS Security Level"
 	// x-required
 	// The security level for TLS handshake between client/server and the platform.
 	//

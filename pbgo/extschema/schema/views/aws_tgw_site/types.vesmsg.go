@@ -2732,7 +2732,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
 	rulesVipParamsPerAz := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+		"ves.io.schema.rules.repeated.num_items": "0,1,2,3",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
@@ -3717,7 +3717,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
 	rulesVipParamsPerAz := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+		"ves.io.schema.rules.repeated.num_items": "0,1,2,3",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)

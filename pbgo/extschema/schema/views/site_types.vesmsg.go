@@ -3508,6 +3508,16 @@ func (v *ValidateDirectConnectInfo) VgwIdValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
+func (v *ValidateDirectConnectInfo) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDirectConnectInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DirectConnectInfo)
 	if !ok {
@@ -3520,6 +3530,15 @@ func (v *ValidateDirectConnectInfo) Validate(ctx context.Context, pm interface{}
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn"))
+		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["direct_connect_gateway_id"]; exists {
@@ -3577,6 +3596,18 @@ var DefaultDirectConnectInfoValidator = func() *ValidateDirectConnectInfo {
 		panic(errMsg)
 	}
 	v.FldValidators["vgw_id"] = vFn
+
+	vrhAsn := v.AsnValidationRuleHandler
+	rulesAsn := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "2147483647",
+	}
+	vFn, err = vrhAsn(rulesAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DirectConnectInfo.asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["asn"] = vFn
 
 	return v
 }()

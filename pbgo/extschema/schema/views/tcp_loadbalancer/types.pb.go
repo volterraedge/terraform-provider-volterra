@@ -33,13 +33,13 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // GlobalSpecType
 //
 // x-displayName: "View Specification"
-// Shape of the TCP loadbalancer view specification
+// Shape of the TCP load balancer view specification
 type GlobalSpecType struct {
 	// Domains
 	//
 	// x-displayName: "Domains"
 	// x-example: "www.foo.com"
-	// A list of domains (host/authority header) that will be matched to this loadbalancer.
+	// A list of domains (host/authority header) that will be matched to this load balancer.
 	//
 	// Domains are also used for SNI matching if the with_sni is true
 	// Domains also indicate the list of names for which DNS resolution will be done by VER
@@ -48,13 +48,13 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Listen Port"
 	// x-example: "0"
-	// Listen Port for this TCP proxy
+	// Listen Port for this load balancer
 	ListenPort uint32 `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
 	// With SNI
 	//
 	// x-displayName: "With SNI"
 	// x-example: "true"
-	// Set to true to enable TCP loadbalancer with SNI
+	// Set to true to enable load balancer with SNI
 	WithSni bool `protobuf:"varint,3,opt,name=with_sni,json=withSni,proto3" json:"with_sni,omitempty"`
 	// Manage DNS Domain
 	//
@@ -65,12 +65,12 @@ type GlobalSpecType struct {
 	// Origin Pools
 	//
 	// x-displayName: "Origin Pools(deprecated)"
-	// Origin pools with equal weights used for this loadbalancer. This field will be removed.
+	// Origin pools with equal weights used for this load balancer. This field will be removed.
 	OriginPools []*views.ObjectRefType `protobuf:"bytes,4,rep,name=origin_pools,json=originPools,proto3" json:"origin_pools,omitempty"`
 	// Origin Pools with Weights
 	//
 	// x-displayName: "Origin Pools"
-	// Origin pools and weights used for this loadbalancer.
+	// Origin pools and weights used for this load balancer.
 	OriginPoolsWeights []*views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights,proto3" json:"origin_pools_weights,omitempty"`
 	// Advertise choice
 	//
@@ -397,8 +397,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 
 // CreateSpecType
 //
-// x-displayName: "Create TCP Loadbalancer"
-// Shape of the TCP loadbalancer create specification
+// x-displayName: "Create TCP Load Balancer"
+// Shape of the TCP load balancer create specification
 type CreateSpecType struct {
 	Domains            []string                      `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
 	ListenPort         uint32                        `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
@@ -662,8 +662,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 
 // ReplaceSpecType
 //
-// x-displayName: "Replace TCP Loadbalancer"
-// Shape of the TCP loadbalancer replace specification
+// x-displayName: "Replace TCP Load Balancer"
+// Shape of the TCP load balancer replace specification
 type ReplaceSpecType struct {
 	Domains            []string                      `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
 	ListenPort         uint32                        `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
@@ -935,8 +935,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 
 // GetSpecType
 //
-// x-displayName: "Get TCP Loadbalancer"
-// Shape of the TCP loadbalancer get specification
+// x-displayName: "Get TCP Load Balancer"
+// Shape of the TCP load balancer get specification
 type GetSpecType struct {
 	Domains            []string                      `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
 	ListenPort         uint32                        `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`

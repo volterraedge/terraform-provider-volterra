@@ -5147,7 +5147,7 @@ var APISwaggerJSON string = `{
                 },
                 "gcp_labels": {
                     "type": "object",
-                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in Azure console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "GCP Labels",
                     "x-displayname": "GCP Labels",
                     "x-ves-example": "dev: staging",

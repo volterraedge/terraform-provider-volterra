@@ -4412,14 +4412,14 @@ var APISwaggerJSON string = `{
                 },
                 "vip_params_per_az": {
                     "type": "array",
-                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n",
+                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,2,3\n",
                     "title": "vip_params_per_az",
                     "items": {
                         "$ref": "#/definitions/sitePublishVIPParamsPerAz"
                     },
                     "x-displayname": "Publish VIP Params Per AZ",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.num_items": "0,1,3"
+                        "ves.io.schema.rules.repeated.num_items": "0,1,2,3"
                     }
                 },
                 "vip_vrrp_mode": {

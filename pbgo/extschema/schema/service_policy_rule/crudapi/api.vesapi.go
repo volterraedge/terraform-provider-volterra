@@ -2905,7 +2905,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallAttackTypeContext",
             "properties": {
                 "exclude_attack_type": {
-                    "description": " App Firewall Attack type\n\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AttackType",
                     "$ref": "#/definitions/app_firewallAttackType",
                     "x-displayname": "Attack Type",
@@ -2919,7 +2919,7 @@ var APISwaggerJSON string = `{
         },
         "policyAppFirewallDetectionControl": {
             "type": "object",
-            "description": "App Firewall detection changes to be applied for this request",
+            "description": "Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.",
             "title": "App Firewall Detection Control",
             "x-displayname": "App Firewall Detection Control",
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallDetectionControl",
@@ -2991,7 +2991,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "signature_id": {
                     "type": "integer",
-                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
+                    "description": "\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
@@ -3013,7 +3013,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
             "properties": {
                 "exclude_violation": {
-                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "ViolationType",
                     "$ref": "#/definitions/app_firewallAppFirewallViolationType",
                     "x-displayname": "Violation Type",
@@ -3666,7 +3666,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nURI location for redirect may be relative or absolute.",
+                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nx-required\nURI location for redirect may be relative or absolute.",
                     "title": "URI"
                 }
             }
@@ -3860,7 +3860,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
                 "app_firewall_detection_control": {
-                    "description": "Exclusive with [none waf_skip_processing]\n App Firewall detection changes to be applied for this request\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
+                    "description": "Exclusive with [none waf_skip_processing]\n Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
                     "title": "App Firewall Detection control",
                     "$ref": "#/definitions/policyAppFirewallDetectionControl",
                     "x-displayname": "App Firewall Detection Control",

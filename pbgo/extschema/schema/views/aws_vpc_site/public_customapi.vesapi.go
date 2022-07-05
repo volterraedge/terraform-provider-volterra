@@ -1019,7 +1019,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "vip_params_per_az": {
                     "type": "array",
-                    "description": " VIP Parameters per AZ\n\nExample: - \"master-0\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "description": " VIP Parameters per AZ\n\nExample: - \"master-0\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 1,2,3\n",
                     "title": "VIP Params Per AZ",
                     "items": {
                         "$ref": "#/definitions/sitePublishVIPParamsPerAz"
@@ -1027,7 +1027,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "VIP Params Per AZ",
                     "x-ves-example": "master-0",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                        "ves.io.schema.rules.repeated.num_items": "1,2,3"
                     }
                 }
             }
@@ -1161,6 +1161,17 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "DirectConnect Info",
             "x-ves-proto-message": "ves.io.schema.views.DirectConnectInfo",
             "properties": {
+                "asn": {
+                    "type": "integer",
+                    "description": " The autonomous system (AS) number on the AWS side for Border Gateway Protocol (BGP) configuration\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
+                    "title": "AWS Side ASN",
+                    "format": "int64",
+                    "x-displayname": "AWS Side ASN",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
+                    }
+                },
                 "direct_connect_gateway_id": {
                     "type": "string",
                     "description": " DirectConnect Gateway ID\n\nExample: - \"f2a50c04-xxxx-yyyy-zzzz-00000000a043\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

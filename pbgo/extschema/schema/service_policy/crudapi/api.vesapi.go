@@ -2905,7 +2905,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallAttackTypeContext",
             "properties": {
                 "exclude_attack_type": {
-                    "description": " App Firewall Attack type\n\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AttackType",
                     "$ref": "#/definitions/app_firewallAttackType",
                     "x-displayname": "Attack Type",
@@ -2919,7 +2919,7 @@ var APISwaggerJSON string = `{
         },
         "policyAppFirewallDetectionControl": {
             "type": "object",
-            "description": "App Firewall detection changes to be applied for this request",
+            "description": "Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.",
             "title": "App Firewall Detection Control",
             "x-displayname": "App Firewall Detection Control",
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallDetectionControl",
@@ -2991,7 +2991,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "signature_id": {
                     "type": "integer",
-                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
+                    "description": "\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
@@ -3013,7 +3013,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
             "properties": {
                 "exclude_violation": {
-                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "ViolationType",
                     "$ref": "#/definitions/app_firewallAppFirewallViolationType",
                     "x-displayname": "Violation Type",
@@ -4015,7 +4015,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nURI location for redirect may be relative or absolute.",
+                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nx-required\nURI location for redirect may be relative or absolute.",
                     "title": "URI"
                 }
             }
@@ -4209,7 +4209,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
                 "app_firewall_detection_control": {
-                    "description": "Exclusive with [none waf_skip_processing]\n App Firewall detection changes to be applied for this request\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
+                    "description": "Exclusive with [none waf_skip_processing]\n Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
                     "title": "App Firewall Detection control",
                     "$ref": "#/definitions/policyAppFirewallDetectionControl",
                     "x-displayname": "App Firewall Detection Control",
@@ -5271,13 +5271,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.GlobalSpecType",
             "properties": {
                 "allow_all_requests": {
-                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n Allow all requests",
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n",
                     "title": "allow_all_requests",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Allow All Requests"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n List of allowed sources for requests",
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n",
                     "title": "allow_list",
                     "$ref": "#/definitions/service_policySourceList",
                     "x-displayname": "Allowed Sources"
@@ -5289,25 +5289,25 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Any Server"
                 },
                 "deny_all_requests": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n Deny all requests",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n",
                     "title": "deny_all_requests",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Deny All Requests"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n List of denied sources for requests",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n",
                     "title": "deny_list",
                     "$ref": "#/definitions/service_policySourceList",
                     "x-displayname": "Denied Sources"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n List of references to service_policy_rule objects",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n",
                     "title": "legacy_rule_list",
                     "$ref": "#/definitions/service_policyLegacyRuleList",
                     "x-displayname": "Legacy Rule List"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n List of custom rules",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n",
                     "title": "rule_list",
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"

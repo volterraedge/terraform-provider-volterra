@@ -12313,7 +12313,6 @@ var DefaultMobileTrafficIdentifierTypeValidator = func() *ValidateMobileTrafficI
 
 	vrhHeaders := v.HeadersValidationRuleHandler
 	rulesHeaders := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "32",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}

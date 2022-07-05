@@ -763,7 +763,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "vip_params_per_az": {
                     "type": "array",
-                    "description": " VIP Parameters per AZ\n\nExample: - \"master-0\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "description": " VIP Parameters per AZ\n\nExample: - \"master-0\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 1,2,3\n",
                     "title": "VIP Params Per AZ",
                     "items": {
                         "$ref": "#/definitions/sitePublishVIPParamsPerAz"
@@ -771,7 +771,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "VIP Params Per AZ",
                     "x-ves-example": "master-0",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                        "ves.io.schema.rules.repeated.num_items": "1,2,3"
                     }
                 }
             }

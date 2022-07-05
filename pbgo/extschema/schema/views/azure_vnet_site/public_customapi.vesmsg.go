@@ -330,7 +330,7 @@ var DefaultSetVIPInfoRequestValidator = func() *ValidateSetVIPInfoRequest {
 
 	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
 	rulesVipParamsPerAz := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "1,3",
+		"ves.io.schema.rules.repeated.num_items": "1,2,3",
 	}
 	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
 	if err != nil {

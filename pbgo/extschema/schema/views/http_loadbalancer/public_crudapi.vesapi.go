@@ -1665,8 +1665,8 @@ func RegisterGwAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interf
 var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "HTTP loadbalancer",
-        "description": "HTTP Loadbalancer view defines a required parameters that can be used in CRUD, to create and manage HTTP loadbalancer.\nIt can be used to create HTTP loadbalancer and HTTPS loadbalancer.\n\nView will create following child objects.\n\n* Virtual-host\n* routes\n* clusters\n* endpoints\n* advertise policy",
+        "title": "HTTP Load Balancer",
+        "description": "HTTP Load Balancer view defines a required parameters that can be used in CRUD, to create and manage HTTP Load Balancer.\nIt can be used to create HTTP Load Balancer and HTTPS Load Balancer.\n\nView will create following child objects.\n\n* virtual_host\n* routes\n* clusters\n* endpoints\n* advertise_policy",
         "version": "version not set"
     },
     "schemes": [
@@ -1684,7 +1684,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/http_loadbalancers": {
             "post": {
                 "summary": "CreateSpecType",
-                "description": "Shape of the HTTP loadbalancer specification",
+                "description": "Shape of the HTTP load balancer specification",
                 "operationId": "ves.io.schema.views.http_loadbalancer.API.Create",
                 "responses": {
                     "200": {
@@ -1769,14 +1769,14 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.API.Create"
             },
-            "x-displayname": "Configure HTTP Loadbalancer",
+            "x-displayname": "Configure HTTP Load Balancer",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
         "/public/namespaces/{metadata.namespace}/http_loadbalancers/{metadata.name}": {
             "put": {
                 "summary": "ReplaceSpecType",
-                "description": "Shape of the HTTP loadbalancer specification",
+                "description": "Shape of the HTTP load balancer specification",
                 "operationId": "ves.io.schema.views.http_loadbalancer.API.Replace",
                 "responses": {
                     "200": {
@@ -1869,7 +1869,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.API.Replace"
             },
-            "x-displayname": "Configure HTTP Loadbalancer",
+            "x-displayname": "Configure HTTP Load Balancer",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
@@ -1985,14 +1985,14 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.API.List"
             },
-            "x-displayname": "Configure HTTP Loadbalancer",
+            "x-displayname": "Configure HTTP Load Balancer",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
         "/public/namespaces/{namespace}/http_loadbalancers/{name}": {
             "get": {
                 "summary": "GetSpecType",
-                "description": "Shape of the HTTP loadbalancer specification",
+                "description": "Shape of the HTTP load balancer specification",
                 "operationId": "ves.io.schema.views.http_loadbalancer.API.Get",
                 "responses": {
                     "200": {
@@ -2187,7 +2187,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.API.Delete"
             },
-            "x-displayname": "Configure HTTP Loadbalancer",
+            "x-displayname": "Configure HTTP Load Balancer",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         }
@@ -2567,7 +2567,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Buffer Policy"
                 },
                 "compression_params": {
-                    "description": " Enables loadbalancer to compress dispatched data from an upstream service upon client request.\n Only GZIP compression is supported",
+                    "description": " Enables load balancer to compress dispatched data from an upstream service upon client request.\n Only GZIP compression is supported",
                     "title": "Compression configuration",
                     "$ref": "#/definitions/virtual_hostCompressionType",
                     "x-displayname": "Compression Parameters"
@@ -2617,7 +2617,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": " The maximum request header size for downstream connections, in KiB.\n A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size.\n\n If multiple loadbalancers share the same advertise_policy, the highest value configured across all\n such loadbalancers is used for all the loadbalancers in question.\n\nExample: - \"60\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 96\n",
+                    "description": " The maximum request header size for downstream connections, in KiB.\n A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size.\n\n If multiple load balancers share the same advertise_policy, the highest value configured across all\n such load balancers is used for all the load balancers in question.\n\nExample: - \"60\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 96\n",
                     "title": "Maximum request header size",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size",
@@ -3502,7 +3502,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "headers": {
                     "type": "array",
-                    "description": "x-displayName: \"Headers\"\nx-required\nHeaders that can be used to identify mobile traffic.",
+                    "description": "x-displayName: \"Headers\"\nHeaders that can be used to identify mobile traffic.",
                     "title": "Mobile headers",
                     "items": {
                         "$ref": "#/definitions/policyHeaderMatcherTypeBasic"
@@ -3520,7 +3520,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_volterra_managed": {
                     "type": "boolean",
-                    "description": " DNS records for domains will be managed automatically by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature.",
+                    "description": " DNS records for domains will be managed automatically by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
                     "title": "Manage DNS Domain",
                     "format": "boolean",
                     "x-displayname": "Automatically Manage DNS Records"
@@ -3620,7 +3620,7 @@ var APISwaggerJSON string = `{
                 "tls_parameters": {
                     "description": " TLS parameters for downstream connections.",
                     "$ref": "#/definitions/viewshttp_loadbalancerDownstreamTlsParamsType",
-                    "x-displayname": "HTTP Loadbalancer TLS Parameters"
+                    "x-displayname": "TLS Parameters"
                 }
             }
         },
@@ -3757,7 +3757,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No Rate Limiter Policies"
                 },
                 "policies": {
-                    "description": "Exclusive with [no_policies]\n Apply rate limiter policies to requests that are not from the IP Allowed List.\n The policies are evaluated sequentially until a matching rule is identified. If there's a match, the rate limiting behavior is modified according\n to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP loadbalancer is honored.",
+                    "description": "Exclusive with [no_policies]\n Apply rate limiter policies to requests that are not from the IP Allowed List.\n The policies are evaluated sequentially until a matching rule is identified. If there's a match, the rate limiting behavior is modified according\n to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP load balancer is honored.",
                     "title": "policies",
                     "$ref": "#/definitions/rate_limiter_policyPolicyList",
                     "x-displayname": "Rate Limiter Policies"
@@ -3830,10 +3830,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Common buffering Configuration"
                 },
                 "common_hash_policy": {
-                    "description": "Exclusive with [specific_hash_policy]\n Use Load balancer hash policy for this route",
+                    "description": "Exclusive with [specific_hash_policy]\n Use load balancer hash policy for this route",
                     "title": "Common Hash Policy",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Use Load balancer Hash Policy"
+                    "x-displayname": "Use Load Balancer Hash Policy"
                 },
                 "cors_policy": {
                     "description": " Cross-Origin Resource Sharing requests configuration\n\n CORS is a mechanism that uses additional HTTP headers to tell a browser to let\n a web application running at one origin (domain) have permission to access selected\n resources from a server at a different origin",
@@ -3996,7 +3996,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
+                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for load balancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
                     "title": "retract_cluster",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Retract cluster with no healthy endpoints"
@@ -4602,7 +4602,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Specific settings for Machine learning analysis on this HTTP LB, independently from other LBs.",
             "title": "Single load balancer app setting",
-            "x-displayname": "Single LoadBalancer App Setting",
+            "x-displayname": "Single Load Balancer App Setting",
             "x-ves-oneof-field-api_discovery_choice": "[\"disable_discovery\",\"enable_discovery\"]",
             "x-ves-oneof-field-ddos_detection_choice": "[\"disable_ddos_detection\",\"enable_ddos_detection\"]",
             "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
@@ -4882,7 +4882,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallAttackTypeContext",
             "properties": {
                 "exclude_attack_type": {
-                    "description": " App Firewall Attack type\n\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AttackType",
                     "$ref": "#/definitions/app_firewallAttackType",
                     "x-displayname": "Attack Type",
@@ -4896,7 +4896,7 @@ var APISwaggerJSON string = `{
         },
         "policyAppFirewallDetectionControl": {
             "type": "object",
-            "description": "App Firewall detection changes to be applied for this request",
+            "description": "Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.",
             "title": "App Firewall Detection Control",
             "x-displayname": "App Firewall Detection Control",
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallDetectionControl",
@@ -4968,7 +4968,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "signature_id": {
                     "type": "integer",
-                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
+                    "description": "\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
@@ -4990,7 +4990,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
             "properties": {
                 "exclude_violation": {
-                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "ViolationType",
                     "$ref": "#/definitions/app_firewallAppFirewallViolationType",
                     "x-displayname": "Violation Type",
@@ -5919,7 +5919,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nURI location for redirect may be relative or absolute.",
+                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nx-required\nURI location for redirect may be relative or absolute.",
                     "title": "URI"
                 }
             }
@@ -6018,7 +6018,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Any Domain"
                 },
                 "app_firewall_detection_control": {
-                    "description": " App Firewall detection changes to be applied for this request\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
+                    "description": " Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
                     "title": "App Firewall Detection control",
                     "$ref": "#/definitions/policyAppFirewallDetectionControl",
                     "x-displayname": "App Firewall Detection Control",
@@ -8856,9 +8856,9 @@ var APISwaggerJSON string = `{
         },
         "viewshttp_loadbalancerCreateSpecType": {
             "type": "object",
-            "description": "Shape of the HTTP loadbalancer specification",
+            "description": "Shape of the HTTP load balancer specification",
             "title": "CreateSpecType",
-            "x-displayname": "Create HTTP Loadbalancer",
+            "x-displayname": "Create HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
@@ -8886,17 +8886,17 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "true"
                 },
                 "advertise_custom": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on specific sites",
+                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on specific sites",
                     "$ref": "#/definitions/viewsAdvertiseCustom",
                     "x-displayname": "Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Internet (Specified VIP)"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Internet"
                 },
@@ -8911,7 +8911,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "API Protection Rules"
                 },
                 "api_rate_limit": {
-                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for oen or more API endpoints",
+                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
                     "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
                     "x-displayname": "API Rate Limit"
                 },
@@ -8998,7 +8998,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable"
                 },
                 "disable_rate_limit": {
-                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this loadbalancer",
+                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -9008,13 +9008,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Advertise"
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to loadbalancer.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the loadbalancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to load balancer.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the load balancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 32,
                     "items": {
@@ -9041,17 +9041,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "http": {
-                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load balancer.",
+                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load Balancer.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttp",
                     "x-displayname": "HTTP"
                 },
                 "https": {
-                    "description": "Exclusive with [http https_auto_cert]\n HTTPS Load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this Load Balancer.",
+                    "description": "Exclusive with [http https_auto_cert]\n HTTPS load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this load balancer.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttps",
                     "x-displayname": "HTTPS with Custom Certificate"
                 },
                 "https_auto_cert": {
-                    "description": "Exclusive with [http https]\n HTTPS Load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature.",
+                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts",
                     "x-displayname": "HTTPS with Automatic Certificate"
                 },
@@ -9071,7 +9071,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "More Options"
                 },
                 "multi_lb_app": {
-                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP loadbalancers.\n It should be configured externally using app type feature and label should be added to the HTTP loadbalancer.",
+                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP load balancers.\n It should be configured externally using app type feature and label should be added to the HTTP load balancer.",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Custom"
                 },
@@ -9096,7 +9096,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Random"
                 },
                 "rate_limit": {
-                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this loadbalancer",
+                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this load balancer",
                     "$ref": "#/definitions/http_loadbalancerRateLimitConfigType",
                     "x-displayname": "Custom Rate Limiting Parameters"
                 },
@@ -9112,7 +9112,7 @@ var APISwaggerJSON string = `{
                 },
                 "routes": {
                     "type": "array",
-                    "description": " Routes for this loadbalancer\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Routes for this load balancer\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/viewshttp_loadbalancerRouteType"
@@ -9129,7 +9129,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Apply Namespace Service Policies"
                 },
                 "single_lb_app": {
-                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this Load Balancer",
+                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this load balancer",
                     "$ref": "#/definitions/http_loadbalancerSingleLoadBalancerAppSetting",
                     "x-displayname": "Default"
                 },
@@ -9163,7 +9163,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the signature IDs and Violations/Attack Types that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
@@ -9178,9 +9178,9 @@ var APISwaggerJSON string = `{
         },
         "viewshttp_loadbalancerDownstreamTlsParamsType": {
             "type": "object",
-            "description": "TLS parameters for HTTP loadbalancer.",
+            "description": "TLS parameters for HTTP load balancer.",
             "title": "DownstreamTlsParamsType",
-            "x-displayname": "HTTP Loadbalancer TLS Parameters",
+            "x-displayname": "TLS Parameters",
             "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.DownstreamTlsParamsType",
             "properties": {
@@ -9223,9 +9223,9 @@ var APISwaggerJSON string = `{
         },
         "viewshttp_loadbalancerGetSpecType": {
             "type": "object",
-            "description": "Shape of the HTTP loadbalancer specification",
+            "description": "Shape of the HTTP load balancer specification",
             "title": "GetSpecType",
-            "x-displayname": "Get HTTP Loadbalancer",
+            "x-displayname": "Get HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
@@ -9253,17 +9253,17 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "true"
                 },
                 "advertise_custom": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on specific sites",
+                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on specific sites",
                     "$ref": "#/definitions/viewsAdvertiseCustom",
                     "x-displayname": "Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Internet (Specified VIP)"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Internet"
                 },
@@ -9278,7 +9278,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "API Protection Rules"
                 },
                 "api_rate_limit": {
-                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for oen or more API endpoints",
+                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
                     "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
                     "x-displayname": "API Rate Limit"
                 },
@@ -9370,7 +9370,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable"
                 },
                 "disable_rate_limit": {
-                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this loadbalancer",
+                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -9388,13 +9388,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DNS Information"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Advertise"
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to loadbalancer.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the loadbalancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to load balancer.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the load balancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 32,
                     "items": {
@@ -9427,17 +9427,17 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io"
                 },
                 "http": {
-                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load balancer.",
+                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load Balancer.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttp",
                     "x-displayname": "HTTP"
                 },
                 "https": {
-                    "description": "Exclusive with [http https_auto_cert]\n HTTPS Load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this Load Balancer.",
+                    "description": "Exclusive with [http https_auto_cert]\n HTTPS load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this load balancer.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttps",
                     "x-displayname": "HTTPS with Custom Certificate"
                 },
                 "https_auto_cert": {
-                    "description": "Exclusive with [http https]\n HTTPS Load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature.",
+                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts",
                     "x-displayname": "HTTPS with Automatic Certificate"
                 },
@@ -9457,7 +9457,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "More Options"
                 },
                 "multi_lb_app": {
-                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP loadbalancers.\n It should be configured externally using app type feature and label should be added to the HTTP loadbalancer.",
+                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP load balancers.\n It should be configured externally using app type feature and label should be added to the HTTP load balancer.",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Custom"
                 },
@@ -9482,7 +9482,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Random"
                 },
                 "rate_limit": {
-                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this loadbalancer",
+                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this load balancer",
                     "$ref": "#/definitions/http_loadbalancerRateLimitConfigType",
                     "x-displayname": "Custom Rate Limiting Parameters"
                 },
@@ -9498,7 +9498,7 @@ var APISwaggerJSON string = `{
                 },
                 "routes": {
                     "type": "array",
-                    "description": " Routes for this loadbalancer\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Routes for this load balancer\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/viewshttp_loadbalancerRouteType"
@@ -9515,7 +9515,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Apply Namespace Service Policies"
                 },
                 "single_lb_app": {
-                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this Load Balancer",
+                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this load balancer",
                     "$ref": "#/definitions/http_loadbalancerSingleLoadBalancerAppSetting",
                     "x-displayname": "Default"
                 },
@@ -9554,7 +9554,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the signature IDs and Violations/Attack Types that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
@@ -9569,7 +9569,7 @@ var APISwaggerJSON string = `{
         },
         "viewshttp_loadbalancerGlobalSpecType": {
             "type": "object",
-            "description": "Shape of the HTTP loadbalancer specification",
+            "description": "Shape of the HTTP load balancer specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
@@ -9602,19 +9602,19 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "true"
                 },
                 "advertise_custom": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on specific sites",
+                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on specific sites",
                     "title": "Advertise Custom",
                     "$ref": "#/definitions/viewsAdvertiseCustom",
                     "x-displayname": "Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "title": "Advertise On Public",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Internet (Specified VIP)"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "title": "Advertise On Public Default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Internet"
@@ -9632,7 +9632,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "API Protection Rules"
                 },
                 "api_rate_limit": {
-                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for oen or more API endpoints",
+                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
                     "title": "Rate Limiting Parameters",
                     "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
                     "x-displayname": "API Rate Limit"
@@ -9748,7 +9748,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable"
                 },
                 "disable_rate_limit": {
-                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this loadbalancer",
+                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this load balancer",
                     "title": "Disable Rate Limiting",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
@@ -9769,14 +9769,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DNS Information"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "title": "Do Not Advertise",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Advertise"
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to loadbalancer.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the loadbalancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to load balancer.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the load balancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Domains",
                     "minItems": 1,
                     "maxItems": 32,
@@ -9822,19 +9822,19 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http": {
-                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load balancer.",
+                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load Balancer.",
                     "title": "HTTP",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttp",
                     "x-displayname": "HTTP"
                 },
                 "https": {
-                    "description": "Exclusive with [http https_auto_cert]\n HTTPS Load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this Load Balancer.",
+                    "description": "Exclusive with [http https_auto_cert]\n HTTPS load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this load balancer.",
                     "title": "HTTPS",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttps",
                     "x-displayname": "HTTPS with Custom Certificate"
                 },
                 "https_auto_cert": {
-                    "description": "Exclusive with [http https]\n HTTPS Load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature.",
+                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
                     "title": "HTTPS",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts",
                     "x-displayname": "HTTPS with Automatic Certificate"
@@ -9858,7 +9858,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "More Options"
                 },
                 "multi_lb_app": {
-                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP loadbalancers.\n It should be configured externally using app type feature and label should be added to the HTTP loadbalancer.",
+                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP load balancers.\n It should be configured externally using app type feature and label should be added to the HTTP load balancer.",
                     "title": "Multi load balancer application",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Custom"
@@ -9888,7 +9888,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Random"
                 },
                 "rate_limit": {
-                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this loadbalancer",
+                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this load balancer",
                     "title": "Custom Rate Limiting Parameters",
                     "$ref": "#/definitions/http_loadbalancerRateLimitConfigType",
                     "x-displayname": "Custom Rate Limiting Parameters"
@@ -9907,7 +9907,7 @@ var APISwaggerJSON string = `{
                 },
                 "routes": {
                     "type": "array",
-                    "description": " Routes for this loadbalancer\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Routes for this load balancer\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Routes",
                     "maxItems": 256,
                     "items": {
@@ -9926,7 +9926,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Apply Namespace Service Policies"
                 },
                 "single_lb_app": {
-                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this Load Balancer",
+                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this load balancer",
                     "title": "Single load balancer application",
                     "$ref": "#/definitions/http_loadbalancerSingleLoadBalancerAppSetting",
                     "x-displayname": "Default"
@@ -9971,7 +9971,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the signature IDs and Violations/Attack Types that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "WAF Exclusion Rules",
                     "maxItems": 256,
                     "items": {
@@ -10154,9 +10154,9 @@ var APISwaggerJSON string = `{
         },
         "viewshttp_loadbalancerReplaceSpecType": {
             "type": "object",
-            "description": "Shape of the HTTP loadbalancer specification",
+            "description": "Shape of the HTTP load balancer specification",
             "title": "ReplaceSpecType",
-            "x-displayname": "Replace HTTP Loadbalancer",
+            "x-displayname": "Replace HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
@@ -10184,17 +10184,17 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "true"
                 },
                 "advertise_custom": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on specific sites",
+                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on specific sites",
                     "$ref": "#/definitions/viewsAdvertiseCustom",
                     "x-displayname": "Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Internet (Specified VIP)"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Internet"
                 },
@@ -10209,7 +10209,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "API Protection Rules"
                 },
                 "api_rate_limit": {
-                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for oen or more API endpoints",
+                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
                     "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
                     "x-displayname": "API Rate Limit"
                 },
@@ -10296,7 +10296,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable"
                 },
                 "disable_rate_limit": {
-                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this loadbalancer",
+                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -10306,13 +10306,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Advertise"
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to loadbalancer.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the loadbalancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to load balancer.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the load balancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 32,
                     "items": {
@@ -10339,17 +10339,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "http": {
-                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load balancer.",
+                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load Balancer.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttp",
                     "x-displayname": "HTTP"
                 },
                 "https": {
-                    "description": "Exclusive with [http https_auto_cert]\n HTTPS Load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this Load Balancer.",
+                    "description": "Exclusive with [http https_auto_cert]\n HTTPS load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this load balancer.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttps",
                     "x-displayname": "HTTPS with Custom Certificate"
                 },
                 "https_auto_cert": {
-                    "description": "Exclusive with [http https]\n HTTPS Load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature.",
+                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts",
                     "x-displayname": "HTTPS with Automatic Certificate"
                 },
@@ -10369,7 +10369,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "More Options"
                 },
                 "multi_lb_app": {
-                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP loadbalancers.\n It should be configured externally using app type feature and label should be added to the HTTP loadbalancer.",
+                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP load balancers.\n It should be configured externally using app type feature and label should be added to the HTTP load balancer.",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Custom"
                 },
@@ -10394,7 +10394,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Random"
                 },
                 "rate_limit": {
-                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this loadbalancer",
+                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this load balancer",
                     "$ref": "#/definitions/http_loadbalancerRateLimitConfigType",
                     "x-displayname": "Custom Rate Limiting Parameters"
                 },
@@ -10410,7 +10410,7 @@ var APISwaggerJSON string = `{
                 },
                 "routes": {
                     "type": "array",
-                    "description": " Routes for this loadbalancer\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Routes for this load balancer\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/viewshttp_loadbalancerRouteType"
@@ -10427,7 +10427,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Apply Namespace Service Policies"
                 },
                 "single_lb_app": {
-                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this Load Balancer",
+                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this load balancer",
                     "$ref": "#/definitions/http_loadbalancerSingleLoadBalancerAppSetting",
                     "x-displayname": "Default"
                 },
@@ -10461,7 +10461,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the signature IDs and Violations/Attack Types that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
@@ -11044,6 +11044,6 @@ var APISwaggerJSON string = `{
             "default": "WAF_RULE_ALL"
         }
     },
-    "x-displayname": "Configure HTTP Loadbalancer",
+    "x-displayname": "Configure HTTP Load Balancer",
     "x-ves-proto-file": "ves.io/schema/views/http_loadbalancer/public_crudapi.proto"
 }`

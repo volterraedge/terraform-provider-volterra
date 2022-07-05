@@ -297,7 +297,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "HTTP loadbalancer",
-        "description": "HTTP Loadbalancer view defines a required parameters that can be used in CRUD, to create and manage HTTP loadbalancer.\nIt can be used to create HTTP loadbalancer and HTTPS loadbalancer.\n\nView will create following child objects.\n\n* Virtual-host\n* routes\n* clusters\n* endpoints\n* advertise policy",
+        "description": "HTTP Loadbalancer view defines a required parameters that can be used in CRUD, to create and manage HTTP load balancer.\nIt can be used to create HTTP load balancer and HTTPS load balancer.\n\nView will create following child objects.\n\n* Virtual-host\n* routes\n* clusters\n* endpoints\n* advertise policy",
         "version": "version not set"
     },
     "schemes": [
@@ -315,7 +315,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints/swagger_spec": {
             "get": {
                 "summary": "Get Swagger Spec for App Type",
-                "description": "Get the corresponding Swagger spec for the given Http Loadbalancer",
+                "description": "Get the corresponding Swagger spec for the given HTTP load balancer",
                 "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec",
                 "responses": {
                     "200": {
@@ -376,7 +376,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the Http Loadbalancer for current request",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the HTTP Load Balancer for current request",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -384,11 +384,11 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "name",
-                        "description": "Virtual Host Name\n\nx-example: \"blogging-app\"\nHttp LoadBalancer for current request",
+                        "description": "Name\n\nx-example: \"blogging-app\"\nHTTP load balancer for current request",
                         "in": "path",
                         "required": true,
                         "type": "string",
-                        "x-displayname": "Virtual Host Name"
+                        "x-displayname": "Name"
                     }
                 ],
                 "tags": [
@@ -400,7 +400,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec"
             },
-            "x-displayname": "HTTP loadbalancer Custom API",
+            "x-displayname": "HTTP Load Balancer Custom API",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
@@ -444,6 +444,6 @@ var ApiepLBCustomAPISwaggerJSON string = `{
             }
         }
     },
-    "x-displayname": "Configure HTTP Loadbalancer",
+    "x-displayname": "Configure HTTP Load Balancer",
     "x-ves-proto-file": "ves.io/schema/views/http_loadbalancer/public_apiep_customapi.proto"
 }`
