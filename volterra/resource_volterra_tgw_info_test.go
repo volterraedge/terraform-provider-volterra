@@ -27,6 +27,9 @@ func TestResourceTGWInfo(t *testing.T) {
 			{
 				Config: testTGWInfo(name),
 			},
+			{
+				Config: testTGWInfoWithDirectConnectInfo(name),
+			},
 		},
 	})
 }
@@ -46,6 +49,29 @@ func testTGWInfo(name string) string {
 		  }
 		  public_ips = ["10.0.0.10"]
 		  private_ips = ["192.168.0.10"]
+		}
+		`, setTGWInfo, name, name)
+}
+
+func testTGWInfoWithDirectConnectInfo(name string) string {
+
+	return fmt.Sprintf(`
+		resource "%s" "%s" {
+		  name = "%s"
+		  tgw_id = "tgw-0d9bf32a5171e5a49"
+		  vpc_id = "vpc-02d0d70860b330393"
+		  subnet_ids {
+			outside_subnet_id = "subnet-12345678"
+			inside_subnet_id = "subnet-12345678"
+			workload_subnet_id = "subnet-12345678"
+			az = "us-east-2a"
+		  }
+		  public_ips = ["10.0.0.10"]
+		  private_ips = ["192.168.0.10"]
+		  direct_connect_info {
+			direct_connect_gateway_id = "1234-6789-0987-1234-09876"
+			vgw_id = "vgw-12345678"
+		  }
 		}
 		`, setTGWInfo, name, name)
 }

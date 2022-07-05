@@ -146,7 +146,7 @@ func dataSourceVolterraHttpLoadbalancerStateRead(d *schema.ResourceData, meta in
 	}
 
 	// auto_cert_state info
-	if autoCertState, ok := vh.VirtualHostState_name[int32(getSpec.GetAutoCertState())]; ok {
+	if autoCertState, ok := vh.CertificationState_name[int32(getSpec.GetAutoCertInfo().GetAutoCertState())]; ok {
 		if err := d.Set("auto_cert_state", autoCertState); err != nil {
 			return fmt.Errorf("setting auto_cert_state for http lb %s failed: %s", httpLbPath, err.Error())
 		}

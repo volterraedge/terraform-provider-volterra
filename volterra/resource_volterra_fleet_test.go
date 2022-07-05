@@ -121,25 +121,15 @@ func testConfigFleet(resourceName, name, namespace string) string {
 			  storage_classes {
 				storage_class_name = "mayastor"
 				storage_device = "sd-test"
-				openebs_enterprise {
-				  protocol = "nvmf"
-				  replication = 3
+				custom_storage {
+					yaml = "https://example-yaml.com/custom-storeag.yaml"
 				}
 			  }
 			}
 			storage_device_list {
 			  storage_devices {
 				storage_device = "sd-test"
-				openebs_enterprise {
-				  dynamic "mayastor_pools" {
-					for_each = toset(["test1", "test2", "test3"])
-					content {
-					  node = mayastor_pools.key
-					  pool_disk_devices = ["/dev/sdb"]
-					  pool_name = "msp-${mayastor_pools.key}"
-					}
-				  }
-				}
+				custom_storage = true
 			  }
 			}
 		  }

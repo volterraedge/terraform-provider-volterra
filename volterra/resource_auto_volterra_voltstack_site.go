@@ -2257,26 +2257,6 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 													},
 												},
 
-												"openebs_enterprise": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"protocol": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"replication": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-														},
-													},
-												},
-
 												"pure_service_orchestrator": {
 
 													Type:     schema.TypeSet,
@@ -8161,33 +8141,6 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["storage_pools"]; ok && !isIntfNil(v) {
 
 										deviceChoiceInt.NetappTrident.StoragePools = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := storageClassesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
-
-								deviceChoiceTypeFound = true
-								deviceChoiceInt := &ves_io_schema_fleet.FleetStorageClassType_OpenebsEnterprise{}
-								deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_fleet.StorageClassOpenebsEnterpriseType{}
-								storageClasses[i].DeviceChoice = deviceChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.Protocol = v.(string)
-
-									}
-
-									if v, ok := cs["replication"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
 
 									}
 
@@ -14917,33 +14870,6 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["storage_pools"]; ok && !isIntfNil(v) {
 
 										deviceChoiceInt.NetappTrident.StoragePools = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := storageClassesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
-
-								deviceChoiceTypeFound = true
-								deviceChoiceInt := &ves_io_schema_fleet.FleetStorageClassType_OpenebsEnterprise{}
-								deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_fleet.StorageClassOpenebsEnterpriseType{}
-								storageClasses[i].DeviceChoice = deviceChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.Protocol = v.(string)
-
-									}
-
-									if v, ok := cs["replication"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
 
 									}
 
