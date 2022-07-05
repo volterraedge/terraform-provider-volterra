@@ -2886,6 +2886,24 @@ func (m *SimpleRule) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAsnMatcherDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAsnMatcherDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetGotoPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIpMatcherDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpMatcherDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetRateLimiterSpecsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterSpecsDRefInfo() FAILED")
 	} else {
@@ -2905,6 +2923,87 @@ func (m *SimpleRule) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SimpleRule) GetAsnMatcherDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAsnMatcher() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetAsnMatcher().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "asn_matcher." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+func (m *SimpleRule) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetGotoPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SimpleRule.goto_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "goto_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SimpleRule) GetGotoPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for _, ref := range m.GetGotoPolicy() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *SimpleRule) GetIpMatcherDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpMatcher() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetIpMatcher().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ip_matcher." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -3169,6 +3268,46 @@ func (v *ValidateSimpleRule) RateLimiterSpecsValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateSimpleRule) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for goto_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated goto_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items goto_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleRule)
 	if !ok {
@@ -3205,6 +3344,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("asn_list"))
 		if err := fv(ctx, m.GetAsnList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["asn_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn_matcher"))
+		if err := fv(ctx, m.GetAsnMatcher(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3282,6 +3430,14 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["goto_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("goto_policy"))
+		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
@@ -3299,10 +3455,28 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["ip_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_matcher"))
+		if err := fv(ctx, m.GetIpMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ip_prefix_list"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ip_prefix_list"))
 		if err := fv(ctx, m.GetIpPrefixList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
+		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3330,6 +3504,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("metric_name_label"))
 		if err := fv(ctx, m.GetMetricNameLabel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mum_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mum_action"))
+		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3503,6 +3686,17 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	}
 	v.FldValidators["rate_limiter_specs"] = vFn
 
+	vrhGotoPolicy := v.GotoPolicyValidationRuleHandler
+	rulesGotoPolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhGotoPolicy(rulesGotoPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleRule.goto_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["goto_policy"] = vFn
+
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
@@ -3540,6 +3734,14 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
 
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
+
+	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
+
+	v.FldValidators["asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 
 	return v
 }()

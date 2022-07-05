@@ -1820,6 +1820,15 @@ func (v *ValidateTenantSettingsResponse) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["original_tenant"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("original_tenant"))
+		if err := fv(ctx, m.GetOriginalTenant(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["otp_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("otp_enabled"))
@@ -1833,6 +1842,15 @@ func (v *ValidateTenantSettingsResponse) Validate(ctx context.Context, pm interf
 
 		vOpts := append(opts, db.WithValidateField("otp_status"))
 		if err := fv(ctx, m.GetOtpStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scim_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scim_enabled"))
+		if err := fv(ctx, m.GetScimEnabled(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2228,6 +2246,15 @@ func (v *ValidateUpdateTenantSettingsResponse) Validate(ctx context.Context, pm 
 
 		vOpts := append(opts, db.WithValidateField("otp_status"))
 		if err := fv(ctx, m.GetOtpStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scim_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scim_enabled"))
+		if err := fv(ctx, m.GetScimEnabled(), vOpts...); err != nil {
 			return err
 		}
 

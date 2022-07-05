@@ -1194,6 +1194,15 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
+		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["outside_vip_port_config"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("outside_vip_port_config"))

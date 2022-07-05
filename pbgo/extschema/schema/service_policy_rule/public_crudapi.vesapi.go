@@ -2356,6 +2356,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "exclude_bot_name_contexts": {
+                    "type": "array",
+                    "description": " Bot names contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Exclude Bot Names Contexts",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policyBotNameContext"
+                    },
+                    "x-displayname": "Exclude Bot Names Contexts",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "exclude_signature_contexts": {
                     "type": "array",
                     "description": " App Firewall signature contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -2544,13 +2558,21 @@ var APISwaggerJSON string = `{
         },
         "policyBotNameContext": {
             "type": "object",
-            "description": "x-displayName: \"Bot Name\"\nSpecifies bot to be excluded by its name.",
+            "description": "Specifies bot to be excluded by its name.",
             "title": "Bot Name Context",
+            "x-displayname": "Bot Name",
+            "x-ves-proto-message": "ves.io.schema.policy.BotNameContext",
             "properties": {
                 "bot_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Bot Name\"\nx-example: \"Hydra\"",
-                    "title": "BotName"
+                    "description": "\nExample: - \"Hydra\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BotName",
+                    "x-displayname": "Bot Name",
+                    "x-ves-example": "Hydra",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2895,6 +2917,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                }
+            }
+        },
+        "policyModifyAction": {
+            "type": "object",
+            "description": "Modify behavior for a matching request. The modification could be to entirely skip processing.",
+            "title": "Select Modification Action",
+            "x-displayname": "Select Modification Action",
+            "x-ves-oneof-field-action_type": "[\"default\",\"skip_processing\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ModifyAction",
+            "properties": {
+                "default": {
+                    "description": "Exclusive with [skip_processing]\n Perform the default enforcement for this request",
+                    "title": "Do not modify",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do not modify"
+                },
+                "skip_processing": {
+                    "description": "Exclusive with [default]\n Do not perform enforcement for this request",
+                    "title": "Skip Processing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip Processing"
                 }
             }
         },
@@ -4651,6 +4695,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyPrefixMatchList",
                     "x-displayname": "IPv4 Prefix List"
                 },
+                "ip_reputation_action": {
+                    "description": " Specifies how IP Reputation is handled",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "IP Reputation Action"
+                },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
@@ -4661,6 +4710,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
+                },
+                "mum_action": {
+                    "description": " Specifies how Malicious User Mitigation is handled",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "Malicious User Mitigation Action"
                 },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
@@ -4844,6 +4898,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyPrefixMatchList",
                     "x-displayname": "IPv4 Prefix List"
                 },
+                "ip_reputation_action": {
+                    "description": " Specifies how IP Reputation is handled",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "IP Reputation Action"
+                },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
@@ -4854,6 +4913,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
+                },
+                "mum_action": {
+                    "description": " Specifies how Malicious User Mitigation is handled",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "Malicious User Mitigation Action"
                 },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
@@ -5057,6 +5121,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyPrefixMatchList",
                     "x-displayname": "IPv4 Prefix List"
                 },
+                "ip_reputation_action": {
+                    "description": " Specifies how IP Reputation is handled",
+                    "title": "IP Reputation Action",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "IP Reputation Action"
+                },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
                     "title": "IP Threat Category List",
@@ -5069,6 +5139,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
+                },
+                "mum_action": {
+                    "description": " Specifies how Malicious User Mitigation is handled",
+                    "title": "Malicious User Mitigation Action",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "Malicious User Mitigation Action"
                 },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
@@ -5282,6 +5358,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyPrefixMatchList",
                     "x-displayname": "IPv4 Prefix List"
                 },
+                "ip_reputation_action": {
+                    "description": " Specifies how IP Reputation is handled",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "IP Reputation Action"
+                },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
@@ -5292,6 +5373,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
+                },
+                "mum_action": {
+                    "description": " Specifies how Malicious User Mitigation is handled",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "Malicious User Mitigation Action"
                 },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",

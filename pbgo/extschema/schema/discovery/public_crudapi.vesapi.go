@@ -2341,9 +2341,19 @@ var APISwaggerJSON string = `{
             "description": "API to create discovery object for a site or virtual site in system namespace",
             "title": "Create discovery",
             "x-displayname": "Create Discovery",
+            "x-ves-oneof-field-cluster_identifier_choice": "[\"cluster_id\",\"no_cluster_id\"]",
             "x-ves-oneof-field-discovery_choice": "[\"discovery_consul\",\"discovery_k8s\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.CreateSpecType",
             "properties": {
+                "cluster_id": {
+                    "type": "string",
+                    "description": "Exclusive with [no_cluster_id]\n Specify identifier for discovery cluster. This identifier can be\n specified in endpoint object to discover only from this discovery object.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Discovery cluster Identifier",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
                 "discovery_consul": {
                     "description": "Exclusive with [discovery_k8s]\n Discovery configuration for Hashicorp Consul",
                     "$ref": "#/definitions/discoveryConsulDiscoveryType",
@@ -2353,6 +2363,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [discovery_consul]\n Discovery configuration for K8s.",
                     "$ref": "#/definitions/discoveryK8SDiscoveryType",
                     "x-displayname": "K8S Discovery Configuration"
+                },
+                "no_cluster_id": {
+                    "description": "Exclusive with [cluster_id]\n There is no cluster identifier specified. In this mode all endpoints\n of the site will discover from this discovery object.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No cluster identifier"
                 },
                 "where": {
                     "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2557,9 +2572,19 @@ var APISwaggerJSON string = `{
             "description": "API to Get discovery object for a site or virtual site in system namespace",
             "title": "Get discovery",
             "x-displayname": "Get Discovery",
+            "x-ves-oneof-field-cluster_identifier_choice": "[\"cluster_id\",\"no_cluster_id\"]",
             "x-ves-oneof-field-discovery_choice": "[\"discovery_consul\",\"discovery_k8s\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.GetSpecType",
             "properties": {
+                "cluster_id": {
+                    "type": "string",
+                    "description": "Exclusive with [no_cluster_id]\n Specify identifier for discovery cluster. This identifier can be\n specified in endpoint object to discover only from this discovery object.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Discovery cluster Identifier",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
                 "discovery_consul": {
                     "description": "Exclusive with [discovery_k8s]\n Discovery configuration for Hashicorp Consul",
                     "$ref": "#/definitions/discoveryConsulDiscoveryType",
@@ -2569,6 +2594,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [discovery_consul]\n Discovery configuration for K8s.",
                     "$ref": "#/definitions/discoveryK8SDiscoveryType",
                     "x-displayname": "K8S Discovery Configuration"
+                },
+                "no_cluster_id": {
+                    "description": "Exclusive with [cluster_id]\n There is no cluster identifier specified. In this mode all endpoints\n of the site will discover from this discovery object.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No cluster identifier"
                 },
                 "where": {
                     "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2587,18 +2617,17 @@ var APISwaggerJSON string = `{
             "title": "Specification for discovery",
             "x-displayname": "Specification",
             "x-ves-oneof-field-access_info": "[]",
+            "x-ves-oneof-field-cluster_identifier_choice": "[\"cluster_id\",\"no_cluster_id\"]",
             "x-ves-oneof-field-discovery_choice": "[\"discovery_consul\",\"discovery_k8s\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.GlobalSpecType",
             "properties": {
-                "cluster_identifier": {
+                "cluster_id": {
                     "type": "string",
-                    "description": " Specify identifier for discovery cluster. This identifier can be\n specified in endpoint object to discover only from this discovery object.\n This is useful when a site has multiple discovery objects and endpoint wants\n to discover from few of them. The default behaviour for endpoint is to\n discover from all discovery objects of the site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "discovery cluster identifier",
+                    "description": "Exclusive with [no_cluster_id]\n Specify identifier for discovery cluster. This identifier can be\n specified in endpoint object to discover only from this discovery object.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Cluster identifier",
                     "maxLength": 256,
-                    "x-displayname": "Select Discovery Cluster Identifier",
-                    "x-ves-required": "true",
+                    "x-displayname": "Discovery cluster Identifier",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
@@ -2613,6 +2642,12 @@ var APISwaggerJSON string = `{
                     "title": "discovery K8s",
                     "$ref": "#/definitions/discoveryK8SDiscoveryType",
                     "x-displayname": "K8S Discovery Configuration"
+                },
+                "no_cluster_id": {
+                    "description": "Exclusive with [cluster_id]\n There is no cluster identifier specified. In this mode all endpoints\n of the site will discover from this discovery object.",
+                    "title": "no cluster identifier",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No cluster identifier"
                 },
                 "where": {
                     "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3045,9 +3080,19 @@ var APISwaggerJSON string = `{
             "description": "API to replace discovery object for a site or virtual site in system namespace",
             "title": "Replace discovery",
             "x-displayname": "Replace Discovery",
+            "x-ves-oneof-field-cluster_identifier_choice": "[\"cluster_id\",\"no_cluster_id\"]",
             "x-ves-oneof-field-discovery_choice": "[\"discovery_consul\",\"discovery_k8s\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.ReplaceSpecType",
             "properties": {
+                "cluster_id": {
+                    "type": "string",
+                    "description": "Exclusive with [no_cluster_id]\n Specify identifier for discovery cluster. This identifier can be\n specified in endpoint object to discover only from this discovery object.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Discovery cluster Identifier",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
                 "discovery_consul": {
                     "description": "Exclusive with [discovery_k8s]\n Discovery configuration for Hashicorp Consul",
                     "$ref": "#/definitions/discoveryConsulDiscoveryType",
@@ -3057,6 +3102,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [discovery_consul]\n Discovery configuration for K8s.",
                     "$ref": "#/definitions/discoveryK8SDiscoveryType",
                     "x-displayname": "K8S Discovery Configuration"
+                },
+                "no_cluster_id": {
+                    "description": "Exclusive with [cluster_id]\n There is no cluster identifier specified. In this mode all endpoints\n of the site will discover from this discovery object.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No cluster identifier"
                 },
                 "where": {
                     "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

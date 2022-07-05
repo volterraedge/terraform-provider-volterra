@@ -1245,6 +1245,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_status"))
+		if err := fv(ctx, e.GetDirectConnectStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metadata"))

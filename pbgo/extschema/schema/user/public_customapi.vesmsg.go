@@ -1342,6 +1342,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["namespace_access"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_access"))
+		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["namespace_roles"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
@@ -1350,6 +1359,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["original_tenant"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("original_tenant"))
+		if err := fv(ctx, m.GetOriginalTenant(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1476,6 +1494,8 @@ var DefaultGetUserRoleResponseValidator = func() *ValidateGetUserRoleResponse {
 	v := &ValidateGetUserRoleResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
+
+	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
 
 	return v
 }()
@@ -1741,6 +1761,18 @@ func (v *ValidateListUserRoleResponseItem) Validate(ctx context.Context, pm inte
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["group_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("group_names"))
+		for idx, item := range m.GetGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}

@@ -95,6 +95,99 @@ func (StoredObjectResponseStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_26a4f37803eefdf5, []int{1}
 }
 
+// OSType
+//
+// x-displayName: "Operating System type"
+// Defines a selection for operating system type. Its either ANDROID or IOS
+type OSType int32
+
+const (
+	// ANDROID
+	//
+	// x-displayName: "ANDROID"
+	ANDROID OSType = 0
+	// IOS
+	//
+	// x-displayName: "IOS"
+	IOS OSType = 1
+)
+
+var OSType_name = map[int32]string{
+	0: "ANDROID",
+	1: "IOS",
+}
+
+var OSType_value = map[string]int32{
+	"ANDROID": 0,
+	"IOS":     1,
+}
+
+func (OSType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_26a4f37803eefdf5, []int{2}
+}
+
+// MobileSDKAttributes
+//
+// x-displayName: "mobile-sdk attributes"
+// Describes attributes specific to object type - mobile-sdk
+type MobileSDKAttributes struct {
+	// os_type
+	//
+	// x-displayName: "Operating System type"
+	// x-example: "IOS"
+	// x-required
+	// Select the Operating System type for mobile SDK release.
+	OsType OSType `protobuf:"varint,1,opt,name=os_type,json=osType,proto3,enum=ves.io.schema.stored_object.OSType" json:"os_type,omitempty"`
+	// mobile_sdk_version
+	//
+	// x-displayName: "mobile sdk version"
+	// x-example: "v.4.2.1"
+	// Version of mobile sdk release
+	MobileSdkVersion string `protobuf:"bytes,2,opt,name=mobile_sdk_version,json=mobileSdkVersion,proto3" json:"mobile_sdk_version,omitempty"`
+}
+
+func (m *MobileSDKAttributes) Reset()      { *m = MobileSDKAttributes{} }
+func (*MobileSDKAttributes) ProtoMessage() {}
+func (*MobileSDKAttributes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_26a4f37803eefdf5, []int{0}
+}
+func (m *MobileSDKAttributes) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MobileSDKAttributes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MobileSDKAttributes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MobileSDKAttributes.Merge(m, src)
+}
+func (m *MobileSDKAttributes) XXX_Size() int {
+	return m.Size()
+}
+func (m *MobileSDKAttributes) XXX_DiscardUnknown() {
+	xxx_messageInfo_MobileSDKAttributes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MobileSDKAttributes proto.InternalMessageInfo
+
+func (m *MobileSDKAttributes) GetOsType() OSType {
+	if m != nil {
+		return m.OsType
+	}
+	return ANDROID
+}
+
+func (m *MobileSDKAttributes) GetMobileSdkVersion() string {
+	if m != nil {
+		return m.MobileSdkVersion
+	}
+	return ""
+}
+
 // CreateObjectRequest
 //
 // x-displayName: "Create Object Request"
@@ -142,12 +235,21 @@ type CreateObjectRequest struct {
 	// x-example: "value"
 	// The optional description associated with object
 	Description string `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty"`
+	// object_attributes
+	//
+	// x-displayName: "Attributes of a object specific to its type"
+	// Select the object attributes specific to its type
+	//
+	// Types that are valid to be assigned to ObjectAttributes:
+	//	*CreateObjectRequest_NoAttributes
+	//	*CreateObjectRequest_MobileSdk
+	ObjectAttributes isCreateObjectRequest_ObjectAttributes `protobuf_oneof:"object_attributes"`
 }
 
 func (m *CreateObjectRequest) Reset()      { *m = CreateObjectRequest{} }
 func (*CreateObjectRequest) ProtoMessage() {}
 func (*CreateObjectRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{0}
+	return fileDescriptor_26a4f37803eefdf5, []int{1}
 }
 func (m *CreateObjectRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -178,6 +280,12 @@ type isCreateObjectRequest_Contents interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateObjectRequest_ObjectAttributes interface {
+	isCreateObjectRequest_ObjectAttributes()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateObjectRequest_StringValue struct {
 	StringValue string `protobuf:"bytes,4,opt,name=string_value,json=stringValue,proto3,oneof" json:"string_value,omitempty"`
@@ -185,13 +293,27 @@ type CreateObjectRequest_StringValue struct {
 type CreateObjectRequest_BytesValue struct {
 	BytesValue []byte `protobuf:"bytes,5,opt,name=bytes_value,json=bytesValue,proto3,oneof" json:"bytes_value,omitempty"`
 }
+type CreateObjectRequest_NoAttributes struct {
+	NoAttributes *schema.Empty `protobuf:"bytes,10,opt,name=no_attributes,json=noAttributes,proto3,oneof" json:"no_attributes,omitempty"`
+}
+type CreateObjectRequest_MobileSdk struct {
+	MobileSdk *MobileSDKAttributes `protobuf:"bytes,11,opt,name=mobile_sdk,json=mobileSdk,proto3,oneof" json:"mobile_sdk,omitempty"`
+}
 
-func (*CreateObjectRequest_StringValue) isCreateObjectRequest_Contents() {}
-func (*CreateObjectRequest_BytesValue) isCreateObjectRequest_Contents()  {}
+func (*CreateObjectRequest_StringValue) isCreateObjectRequest_Contents()          {}
+func (*CreateObjectRequest_BytesValue) isCreateObjectRequest_Contents()           {}
+func (*CreateObjectRequest_NoAttributes) isCreateObjectRequest_ObjectAttributes() {}
+func (*CreateObjectRequest_MobileSdk) isCreateObjectRequest_ObjectAttributes()    {}
 
 func (m *CreateObjectRequest) GetContents() isCreateObjectRequest_Contents {
 	if m != nil {
 		return m.Contents
+	}
+	return nil
+}
+func (m *CreateObjectRequest) GetObjectAttributes() isCreateObjectRequest_ObjectAttributes {
+	if m != nil {
+		return m.ObjectAttributes
 	}
 	return nil
 }
@@ -245,11 +367,27 @@ func (m *CreateObjectRequest) GetDescription() string {
 	return ""
 }
 
+func (m *CreateObjectRequest) GetNoAttributes() *schema.Empty {
+	if x, ok := m.GetObjectAttributes().(*CreateObjectRequest_NoAttributes); ok {
+		return x.NoAttributes
+	}
+	return nil
+}
+
+func (m *CreateObjectRequest) GetMobileSdk() *MobileSDKAttributes {
+	if x, ok := m.GetObjectAttributes().(*CreateObjectRequest_MobileSdk); ok {
+		return x.MobileSdk
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateObjectRequest) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateObjectRequest_StringValue)(nil),
 		(*CreateObjectRequest_BytesValue)(nil),
+		(*CreateObjectRequest_NoAttributes)(nil),
+		(*CreateObjectRequest_MobileSdk)(nil),
 	}
 }
 
@@ -284,7 +422,7 @@ type CreateObjectResponse struct {
 func (m *CreateObjectResponse) Reset()      { *m = CreateObjectResponse{} }
 func (*CreateObjectResponse) ProtoMessage() {}
 func (*CreateObjectResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{1}
+	return fileDescriptor_26a4f37803eefdf5, []int{2}
 }
 func (m *CreateObjectResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -406,7 +544,7 @@ type GetObjectRequest struct {
 func (m *GetObjectRequest) Reset()      { *m = GetObjectRequest{} }
 func (*GetObjectRequest) ProtoMessage() {}
 func (*GetObjectRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{2}
+	return fileDescriptor_26a4f37803eefdf5, []int{3}
 }
 func (m *GetObjectRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -491,7 +629,7 @@ type GetObjectResponse struct {
 func (m *GetObjectResponse) Reset()      { *m = GetObjectResponse{} }
 func (*GetObjectResponse) ProtoMessage() {}
 func (*GetObjectResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{3}
+	return fileDescriptor_26a4f37803eefdf5, []int{4}
 }
 func (m *GetObjectResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -607,7 +745,7 @@ type PreSignedUrl struct {
 func (m *PreSignedUrl) Reset()      { *m = PreSignedUrl{} }
 func (*PreSignedUrl) ProtoMessage() {}
 func (*PreSignedUrl) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{4}
+	return fileDescriptor_26a4f37803eefdf5, []int{5}
 }
 func (m *PreSignedUrl) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -686,7 +824,7 @@ type PresignedUrlData struct {
 func (m *PresignedUrlData) Reset()      { *m = PresignedUrlData{} }
 func (*PresignedUrlData) ProtoMessage() {}
 func (*PresignedUrlData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{5}
+	return fileDescriptor_26a4f37803eefdf5, []int{6}
 }
 func (m *PresignedUrlData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -765,7 +903,7 @@ type ListObjectsRequest struct {
 func (m *ListObjectsRequest) Reset()      { *m = ListObjectsRequest{} }
 func (*ListObjectsRequest) ProtoMessage() {}
 func (*ListObjectsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{6}
+	return fileDescriptor_26a4f37803eefdf5, []int{7}
 }
 func (m *ListObjectsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -865,12 +1003,21 @@ type StoredObjectDescriptor struct {
 	// x-required
 	// Creation date & time for the object
 	CreationTimestamp *types.Timestamp `protobuf:"bytes,3,opt,name=creation_timestamp,json=creationTimestamp,proto3" json:"creation_timestamp,omitempty"`
+	// object_attributes
+	//
+	// x-displayName: "Attributes of a object specific to its type"
+	// Select the object attributes specific to its type
+	//
+	// Types that are valid to be assigned to ObjectAttributes:
+	//	*StoredObjectDescriptor_NoAttributes
+	//	*StoredObjectDescriptor_MobileSdk
+	ObjectAttributes isStoredObjectDescriptor_ObjectAttributes `protobuf_oneof:"object_attributes"`
 }
 
 func (m *StoredObjectDescriptor) Reset()      { *m = StoredObjectDescriptor{} }
 func (*StoredObjectDescriptor) ProtoMessage() {}
 func (*StoredObjectDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{7}
+	return fileDescriptor_26a4f37803eefdf5, []int{8}
 }
 func (m *StoredObjectDescriptor) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -894,6 +1041,30 @@ func (m *StoredObjectDescriptor) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_StoredObjectDescriptor proto.InternalMessageInfo
+
+type isStoredObjectDescriptor_ObjectAttributes interface {
+	isStoredObjectDescriptor_ObjectAttributes()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type StoredObjectDescriptor_NoAttributes struct {
+	NoAttributes *schema.Empty `protobuf:"bytes,8,opt,name=no_attributes,json=noAttributes,proto3,oneof" json:"no_attributes,omitempty"`
+}
+type StoredObjectDescriptor_MobileSdk struct {
+	MobileSdk *MobileSDKAttributes `protobuf:"bytes,9,opt,name=mobile_sdk,json=mobileSdk,proto3,oneof" json:"mobile_sdk,omitempty"`
+}
+
+func (*StoredObjectDescriptor_NoAttributes) isStoredObjectDescriptor_ObjectAttributes() {}
+func (*StoredObjectDescriptor_MobileSdk) isStoredObjectDescriptor_ObjectAttributes()    {}
+
+func (m *StoredObjectDescriptor) GetObjectAttributes() isStoredObjectDescriptor_ObjectAttributes {
+	if m != nil {
+		return m.ObjectAttributes
+	}
+	return nil
+}
 
 func (m *StoredObjectDescriptor) GetNamespace() string {
 	if m != nil {
@@ -937,6 +1108,28 @@ func (m *StoredObjectDescriptor) GetCreationTimestamp() *types.Timestamp {
 	return nil
 }
 
+func (m *StoredObjectDescriptor) GetNoAttributes() *schema.Empty {
+	if x, ok := m.GetObjectAttributes().(*StoredObjectDescriptor_NoAttributes); ok {
+		return x.NoAttributes
+	}
+	return nil
+}
+
+func (m *StoredObjectDescriptor) GetMobileSdk() *MobileSDKAttributes {
+	if x, ok := m.GetObjectAttributes().(*StoredObjectDescriptor_MobileSdk); ok {
+		return x.MobileSdk
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*StoredObjectDescriptor) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*StoredObjectDescriptor_NoAttributes)(nil),
+		(*StoredObjectDescriptor_MobileSdk)(nil),
+	}
+}
+
 // VersionDescriptor
 //
 // x-displayName: "Version Descriptor"
@@ -974,7 +1167,7 @@ type VersionDescriptor struct {
 func (m *VersionDescriptor) Reset()      { *m = VersionDescriptor{} }
 func (*VersionDescriptor) ProtoMessage() {}
 func (*VersionDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{8}
+	return fileDescriptor_26a4f37803eefdf5, []int{9}
 }
 func (m *VersionDescriptor) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1055,12 +1248,21 @@ type ListItemDescriptor struct {
 	// x-displayName: "Versions"
 	// Available versions for the stored object.
 	Versions []*VersionDescriptor `protobuf:"bytes,2,rep,name=versions,proto3" json:"versions,omitempty"`
+	// object_attributes
+	//
+	// x-displayName: "Attributes of a object specific to its type"
+	// Select the object attributes specific to its type
+	//
+	// Types that are valid to be assigned to ObjectAttributes:
+	//	*ListItemDescriptor_NoAttributes
+	//	*ListItemDescriptor_MobileSdk
+	ObjectAttributes isListItemDescriptor_ObjectAttributes `protobuf_oneof:"object_attributes"`
 }
 
 func (m *ListItemDescriptor) Reset()      { *m = ListItemDescriptor{} }
 func (*ListItemDescriptor) ProtoMessage() {}
 func (*ListItemDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{9}
+	return fileDescriptor_26a4f37803eefdf5, []int{10}
 }
 func (m *ListItemDescriptor) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1085,6 +1287,30 @@ func (m *ListItemDescriptor) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListItemDescriptor proto.InternalMessageInfo
 
+type isListItemDescriptor_ObjectAttributes interface {
+	isListItemDescriptor_ObjectAttributes()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ListItemDescriptor_NoAttributes struct {
+	NoAttributes *schema.Empty `protobuf:"bytes,5,opt,name=no_attributes,json=noAttributes,proto3,oneof" json:"no_attributes,omitempty"`
+}
+type ListItemDescriptor_MobileSdk struct {
+	MobileSdk *MobileSDKAttributes `protobuf:"bytes,6,opt,name=mobile_sdk,json=mobileSdk,proto3,oneof" json:"mobile_sdk,omitempty"`
+}
+
+func (*ListItemDescriptor_NoAttributes) isListItemDescriptor_ObjectAttributes() {}
+func (*ListItemDescriptor_MobileSdk) isListItemDescriptor_ObjectAttributes()    {}
+
+func (m *ListItemDescriptor) GetObjectAttributes() isListItemDescriptor_ObjectAttributes {
+	if m != nil {
+		return m.ObjectAttributes
+	}
+	return nil
+}
+
 func (m *ListItemDescriptor) GetTenant() string {
 	if m != nil {
 		return m.Tenant
@@ -1106,6 +1332,28 @@ func (m *ListItemDescriptor) GetVersions() []*VersionDescriptor {
 	return nil
 }
 
+func (m *ListItemDescriptor) GetNoAttributes() *schema.Empty {
+	if x, ok := m.GetObjectAttributes().(*ListItemDescriptor_NoAttributes); ok {
+		return x.NoAttributes
+	}
+	return nil
+}
+
+func (m *ListItemDescriptor) GetMobileSdk() *MobileSDKAttributes {
+	if x, ok := m.GetObjectAttributes().(*ListItemDescriptor_MobileSdk); ok {
+		return x.MobileSdk
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ListItemDescriptor) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ListItemDescriptor_NoAttributes)(nil),
+		(*ListItemDescriptor_MobileSdk)(nil),
+	}
+}
+
 // ListObjectsResponse
 //
 // x-displayName: "List Objects Response"
@@ -1121,7 +1369,7 @@ type ListObjectsResponse struct {
 func (m *ListObjectsResponse) Reset()      { *m = ListObjectsResponse{} }
 func (*ListObjectsResponse) ProtoMessage() {}
 func (*ListObjectsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{10}
+	return fileDescriptor_26a4f37803eefdf5, []int{11}
 }
 func (m *ListObjectsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1196,7 +1444,7 @@ type DeleteObjectRequest struct {
 func (m *DeleteObjectRequest) Reset()      { *m = DeleteObjectRequest{} }
 func (*DeleteObjectRequest) ProtoMessage() {}
 func (*DeleteObjectRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{11}
+	return fileDescriptor_26a4f37803eefdf5, []int{12}
 }
 func (m *DeleteObjectRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1272,7 +1520,7 @@ type DeleteObjectResponse struct {
 func (m *DeleteObjectResponse) Reset()      { *m = DeleteObjectResponse{} }
 func (*DeleteObjectResponse) ProtoMessage() {}
 func (*DeleteObjectResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_26a4f37803eefdf5, []int{12}
+	return fileDescriptor_26a4f37803eefdf5, []int{13}
 }
 func (m *DeleteObjectResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1309,6 +1557,10 @@ func init() {
 	golang_proto.RegisterEnum("ves.io.schema.stored_object.QueryType", QueryType_name, QueryType_value)
 	proto.RegisterEnum("ves.io.schema.stored_object.StoredObjectResponseStatus", StoredObjectResponseStatus_name, StoredObjectResponseStatus_value)
 	golang_proto.RegisterEnum("ves.io.schema.stored_object.StoredObjectResponseStatus", StoredObjectResponseStatus_name, StoredObjectResponseStatus_value)
+	proto.RegisterEnum("ves.io.schema.stored_object.OSType", OSType_name, OSType_value)
+	golang_proto.RegisterEnum("ves.io.schema.stored_object.OSType", OSType_name, OSType_value)
+	proto.RegisterType((*MobileSDKAttributes)(nil), "ves.io.schema.stored_object.MobileSDKAttributes")
+	golang_proto.RegisterType((*MobileSDKAttributes)(nil), "ves.io.schema.stored_object.MobileSDKAttributes")
 	proto.RegisterType((*CreateObjectRequest)(nil), "ves.io.schema.stored_object.CreateObjectRequest")
 	golang_proto.RegisterType((*CreateObjectRequest)(nil), "ves.io.schema.stored_object.CreateObjectRequest")
 	proto.RegisterType((*CreateObjectResponse)(nil), "ves.io.schema.stored_object.CreateObjectResponse")
@@ -1345,99 +1597,112 @@ func init() {
 }
 
 var fileDescriptor_26a4f37803eefdf5 = []byte{
-	// 1460 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x57, 0x5f, 0x6f, 0x13, 0xc7,
-	0x16, 0xf7, 0xd8, 0x8e, 0x71, 0xc6, 0x21, 0x71, 0x26, 0x11, 0xd7, 0x24, 0xb0, 0xf8, 0x2e, 0x01,
-	0x1c, 0x88, 0xd7, 0xe0, 0x5c, 0x89, 0x7b, 0xaf, 0x74, 0x6f, 0xea, 0xc4, 0xa6, 0x49, 0x04, 0x24,
-	0xac, 0x1d, 0x4a, 0x1b, 0x85, 0xd5, 0xda, 0x9e, 0x6c, 0x96, 0xae, 0x77, 0xcc, 0xec, 0x38, 0x60,
-	0xfe, 0x48, 0xf9, 0x00, 0x95, 0xda, 0x0f, 0xd0, 0x87, 0x3e, 0xf2, 0x19, 0x9a, 0x17, 0xd4, 0x27,
-	0x1e, 0xf3, 0x88, 0xd4, 0x07, 0x8a, 0xf3, 0xd0, 0xf6, 0xa9, 0x48, 0x7d, 0xea, 0x5b, 0xb5, 0xb3,
-	0x63, 0xc7, 0xeb, 0x24, 0x6e, 0x1f, 0x90, 0x10, 0x4f, 0x9e, 0x9d, 0xf3, 0x3b, 0x67, 0xce, 0xf9,
-	0x9d, 0x3f, 0x33, 0x86, 0xca, 0x36, 0x76, 0x14, 0x93, 0x64, 0x9c, 0xca, 0x16, 0xae, 0xe9, 0x19,
-	0x87, 0x11, 0x8a, 0xab, 0x1a, 0x29, 0x3f, 0xc0, 0x15, 0x96, 0xa9, 0x90, 0x5a, 0x8d, 0xd8, 0x1a,
-	0x6b, 0xd6, 0xb1, 0xa3, 0xd4, 0x29, 0x61, 0x04, 0x4d, 0x7a, 0x78, 0xc5, 0xc3, 0x2b, 0x3e, 0xfc,
-	0x44, 0xda, 0x30, 0xd9, 0x56, 0xa3, 0xac, 0x54, 0x48, 0x2d, 0x63, 0x10, 0x83, 0x64, 0xb8, 0x4e,
-	0xb9, 0xb1, 0xc9, 0xbf, 0xf8, 0x07, 0x5f, 0x79, 0xb6, 0x26, 0xce, 0x19, 0x84, 0x18, 0x16, 0x3e,
-	0x40, 0x31, 0xb3, 0x86, 0x1d, 0xa6, 0xd7, 0xea, 0x02, 0x30, 0xe9, 0x77, 0x8e, 0xd4, 0x99, 0x49,
-	0x6c, 0xe1, 0xc9, 0xc4, 0x69, 0xbf, 0xb0, 0xcb, 0xc9, 0x89, 0x33, 0x7e, 0xd1, 0xb6, 0x6e, 0x99,
-	0x55, 0x9d, 0x61, 0x21, 0x4d, 0xf6, 0x48, 0x4d, 0xfc, 0x48, 0xf3, 0x99, 0x96, 0x7f, 0x0e, 0xc1,
-	0xb1, 0x05, 0x8a, 0x75, 0x86, 0x57, 0x78, 0x60, 0x2a, 0x7e, 0xd8, 0xc0, 0x0e, 0x43, 0x67, 0xe0,
-	0xa0, 0xad, 0xd7, 0xb0, 0x53, 0xd7, 0x2b, 0x38, 0x01, 0x92, 0x20, 0x35, 0xa8, 0x1e, 0x6c, 0xa0,
-	0xdb, 0x30, 0xe6, 0xf1, 0xc0, 0x09, 0x4b, 0x04, 0x5d, 0xf9, 0x7c, 0xfa, 0xfb, 0x5f, 0x5f, 0x86,
-	0x52, 0xf4, 0xa2, 0x3a, 0xb5, 0x2e, 0x3b, 0x8f, 0x74, 0xc3, 0xc0, 0x54, 0x9e, 0x49, 0xca, 0x06,
-	0xb6, 0x31, 0x35, 0x2b, 0xee, 0xb2, 0x6c, 0x1a, 0x69, 0x4f, 0x4f, 0xde, 0x50, 0xa1, 0xb7, 0x2a,
-	0x35, 0xeb, 0x18, 0x5d, 0x83, 0x61, 0xd7, 0x78, 0x22, 0xc4, 0x0d, 0x9d, 0x75, 0x0d, 0x0d, 0xd0,
-	0x50, 0x62, 0x27, 0xec, 0xae, 0xc2, 0x34, 0x18, 0x07, 0x62, 0xeb, 0xbb, 0x20, 0x50, 0x39, 0x14,
-	0xcd, 0xc2, 0x21, 0x87, 0x51, 0xd3, 0x36, 0xb4, 0x6d, 0xdd, 0x6a, 0xe0, 0x44, 0x98, 0xab, 0x0e,
-	0xbf, 0x7a, 0xce, 0xa1, 0x11, 0x1a, 0x4e, 0xec, 0xec, 0x7c, 0xb2, 0x18, 0x50, 0x63, 0x1e, 0xea,
-	0xae, 0x0b, 0x42, 0xd7, 0x60, 0xac, 0xdc, 0x64, 0xd8, 0x11, 0x3a, 0x03, 0x49, 0x90, 0x1a, 0x3a,
-	0xd0, 0x79, 0xd2, 0xd6, 0x81, 0x1c, 0xe4, 0xa9, 0xa8, 0x70, 0xb8, 0x42, 0x6c, 0x86, 0x6d, 0xa6,
-	0x6d, 0x12, 0x5a, 0xd3, 0x59, 0xe2, 0x04, 0x3f, 0xe9, 0x8a, 0xab, 0x72, 0x91, 0x4e, 0xa9, 0xf2,
-	0xba, 0xec, 0xc6, 0xf6, 0xc0, 0x21, 0xb6, 0xfb, 0xdb, 0xd4, 0x6b, 0x96, 0xfb, 0xcb, 0x1e, 0x33,
-	0x2f, 0x64, 0x5b, 0xde, 0x50, 0x4f, 0x0a, 0x13, 0x37, 0xb8, 0x05, 0x34, 0x03, 0x63, 0x55, 0xec,
-	0x54, 0xa8, 0xc9, 0x53, 0x91, 0x88, 0x72, 0x83, 0xf0, 0x20, 0x6a, 0xb5, 0x5b, 0xfc, 0xdf, 0xe9,
-	0x1f, 0x76, 0xc1, 0x05, 0x38, 0x02, 0xa3, 0xb7, 0x30, 0xd3, 0xab, 0x3a, 0xd3, 0x51, 0x68, 0x76,
-	0xe6, 0xdf, 0x10, 0xc1, 0xd8, 0x5a, 0xdd, 0x22, 0x7a, 0x35, 0x79, 0xc3, 0xb4, 0x30, 0x0a, 0xfd,
-	0x6b, 0xe6, 0xfa, 0xfc, 0x38, 0x8c, 0x8a, 0x93, 0x1c, 0x14, 0x7d, 0xb9, 0x0b, 0xc2, 0x7b, 0xbb,
-	0x20, 0xb2, 0x1c, 0x8e, 0x46, 0xe2, 0x27, 0xe4, 0x3f, 0x82, 0x70, 0xdc, 0x9f, 0x69, 0xa7, 0x4e,
-	0x6c, 0x07, 0xa3, 0x15, 0x18, 0xad, 0x09, 0xcb, 0x3c, 0x93, 0xb1, 0xec, 0xac, 0xd2, 0xa7, 0xf4,
-	0x95, 0x22, 0xff, 0xf2, 0x8c, 0xe4, 0x85, 0x9f, 0x84, 0xaa, 0x1d, 0x23, 0x28, 0x0f, 0x91, 0x4d,
-	0x34, 0xbd, 0x5a, 0x35, 0x5d, 0xff, 0x75, 0x4b, 0x33, 0xed, 0x4d, 0xc2, 0x13, 0x14, 0xcb, 0x8e,
-	0xf7, 0x98, 0x2e, 0xd4, 0xea, 0xac, 0xb9, 0x18, 0x50, 0xe3, 0x36, 0xc9, 0x75, 0x14, 0x96, 0xec,
-	0x4d, 0x82, 0x56, 0xe1, 0xc9, 0x3a, 0xc5, 0x8e, 0x69, 0xd8, 0xb8, 0xaa, 0x35, 0xa8, 0xc5, 0xb3,
-	0x15, 0xcb, 0x4e, 0xf7, 0xf5, 0x6d, 0x95, 0xe2, 0x22, 0xd7, 0x58, 0xa3, 0xd6, 0x62, 0x40, 0x1d,
-	0xea, 0x58, 0x58, 0xa3, 0x16, 0x5a, 0x81, 0x11, 0x87, 0xe9, 0xac, 0xe1, 0x24, 0x22, 0x49, 0x90,
-	0x1a, 0xce, 0x5e, 0xff, 0xdb, 0x61, 0xb6, 0xb9, 0x2a, 0x72, 0x75, 0x55, 0x98, 0x99, 0x9f, 0x84,
-	0x23, 0x3d, 0x51, 0x76, 0x58, 0x0f, 0x2d, 0x87, 0xa3, 0x20, 0x1e, 0x5c, 0x0e, 0x47, 0x43, 0xf1,
-	0xb0, 0xfc, 0x3b, 0x80, 0xf1, 0x4f, 0x31, 0xfb, 0xc8, 0x5a, 0xec, 0xff, 0xf0, 0xc4, 0x36, 0xa6,
-	0x8e, 0x5b, 0xa2, 0x5e, 0x77, 0x4d, 0xb9, 0x90, 0x73, 0xf4, 0x6c, 0x76, 0xf2, 0x7e, 0x6a, 0xfb,
-	0xd9, 0xdd, 0xe9, 0xf5, 0xab, 0xe9, 0xff, 0x6c, 0x5c, 0x49, 0xa5, 0xf9, 0xef, 0xd3, 0xec, 0xf3,
-	0xe9, 0xa7, 0xb3, 0xcf, 0xa7, 0xd4, 0xb6, 0x92, 0xfc, 0x63, 0x10, 0x8e, 0x76, 0x45, 0x7d, 0x44,
-	0xb9, 0x45, 0xde, 0x47, 0xb9, 0x5d, 0xed, 0x99, 0x04, 0x9c, 0xca, 0xf9, 0x58, 0x9f, 0x31, 0xa0,
-	0xf8, 0xc7, 0x40, 0x90, 0x8f, 0x81, 0xd8, 0xf1, 0x33, 0xe0, 0xfd, 0x97, 0xe2, 0x85, 0x43, 0x53,
-	0x85, 0x33, 0xdc, 0x33, 0x28, 0x0e, 0xf5, 0x33, 0x10, 0x95, 0xe5, 0xd6, 0xd4, 0x33, 0x38, 0xd4,
-	0x7d, 0x04, 0xca, 0xc1, 0x90, 0xfe, 0xc8, 0x11, 0x1d, 0x9c, 0xfe, 0x2b, 0xd7, 0x3a, 0xae, 0xe4,
-	0x75, 0xa6, 0x2f, 0x06, 0x54, 0x57, 0x77, 0xfe, 0x3c, 0xfc, 0x87, 0x0b, 0xd4, 0x0d, 0xac, 0xd5,
-	0x29, 0xd9, 0x36, 0xab, 0x98, 0x6a, 0x95, 0x2d, 0x62, 0x56, 0x30, 0x3f, 0x3d, 0xb8, 0xb7, 0x0b,
-	0x80, 0x57, 0xd7, 0xf2, 0x67, 0x30, 0xde, 0x6b, 0x05, 0xc5, 0x61, 0xc8, 0x25, 0xc7, 0x2b, 0x65,
-	0x77, 0x89, 0xae, 0xc1, 0x48, 0x0d, 0xb3, 0x2d, 0x52, 0xe5, 0x6e, 0x0d, 0x67, 0x4f, 0xf7, 0xb8,
-	0xb5, 0xc8, 0x58, 0xfd, 0x16, 0x07, 0xa8, 0x02, 0x28, 0xbf, 0x09, 0x42, 0x74, 0xd3, 0x74, 0x44,
-	0xd5, 0x38, 0x1f, 0xa6, 0x59, 0xaa, 0xbe, 0x66, 0x59, 0xf5, 0x37, 0x4b, 0x8e, 0xce, 0x65, 0xff,
-	0x77, 0x3f, 0x95, 0x5a, 0xd7, 0xd3, 0x4f, 0x36, 0x52, 0xeb, 0x69, 0x3d, 0xfd, 0xc4, 0xad, 0xff,
-	0xcb, 0xeb, 0x62, 0x31, 0x3d, 0x97, 0x99, 0x9e, 0x3b, 0x5e, 0x38, 0x3d, 0x37, 0x25, 0xfa, 0xab,
-	0x00, 0xe1, 0xc3, 0x06, 0xa6, 0x4d, 0xcf, 0xe9, 0x30, 0x67, 0xe8, 0x62, 0xdf, 0xc4, 0xdd, 0x71,
-	0xe1, 0xae, 0x87, 0xea, 0xe0, 0xc3, 0xf6, 0x12, 0x29, 0x70, 0xcc, 0xd2, 0x19, 0x76, 0x98, 0x26,
-	0x1a, 0x4f, 0x23, 0xb6, 0xd5, 0xe4, 0x35, 0x1a, 0x55, 0x47, 0x3d, 0xd1, 0x5d, 0x4f, 0xb2, 0x62,
-	0x5b, 0x4d, 0xf9, 0x37, 0x00, 0x4f, 0x1d, 0xdd, 0x54, 0x7e, 0x96, 0xc3, 0xbd, 0x2c, 0x23, 0xc1,
-	0xca, 0x00, 0x17, 0x78, 0x31, 0x24, 0x0e, 0x66, 0x44, 0x84, 0x6f, 0xb7, 0x3f, 0x8f, 0xa8, 0x86,
-	0x9e, 0x6b, 0x2f, 0xd8, 0xf7, 0xda, 0x43, 0x4b, 0x10, 0x55, 0xdc, 0xeb, 0xca, 0x0d, 0xa8, 0xf3,
-	0x5a, 0xe2, 0x19, 0x89, 0x65, 0x27, 0x14, 0xef, 0x3d, 0xa5, 0xb4, 0xdf, 0x53, 0x4a, 0xa9, 0x8d,
-	0x50, 0x47, 0xdb, 0x5a, 0x9d, 0x2d, 0xf9, 0x0d, 0x80, 0xa3, 0x82, 0x81, 0xae, 0x60, 0xbb, 0x5c,
-	0x07, 0x7e, 0xd7, 0x3f, 0x94, 0xa3, 0x6d, 0xce, 0xc2, 0x07, 0x9c, 0x5d, 0x80, 0xc3, 0xfe, 0xe4,
-	0x8a, 0xbc, 0x9e, 0xf4, 0xe5, 0x55, 0xfe, 0x0a, 0x78, 0x5d, 0xb3, 0xc4, 0x70, 0xad, 0x2b, 0xc4,
-	0x53, 0x30, 0xc2, 0xb0, 0xad, 0xdb, 0xcc, 0xab, 0x64, 0x55, 0x7c, 0x75, 0x32, 0x09, 0xba, 0x32,
-	0xb9, 0x0c, 0xa3, 0xe2, 0x08, 0x77, 0x88, 0x84, 0x52, 0xb1, 0xac, 0xd2, 0xb7, 0x16, 0x0f, 0x11,
-	0xaa, 0x76, 0xf4, 0xe5, 0x32, 0x1c, 0xf3, 0xf5, 0xb0, 0x18, 0xfd, 0x05, 0x38, 0x60, 0x32, 0x5c,
-	0x6b, 0xdb, 0xcf, 0xf4, 0xb5, 0x7f, 0x38, 0x1c, 0xd5, 0xd3, 0x16, 0x13, 0xe8, 0xdb, 0x20, 0x1c,
-	0xcb, 0x63, 0x0b, 0x7f, 0x74, 0x2f, 0xd7, 0x5c, 0xef, 0xb5, 0x7a, 0xc9, 0x85, 0xc8, 0x34, 0x99,
-	0x95, 0xfa, 0x5c, 0xab, 0xcf, 0xee, 0x1f, 0xdc, 0xac, 0xe8, 0x9f, 0x70, 0x68, 0x93, 0xd0, 0x0a,
-	0xd6, 0xaa, 0x9c, 0x00, 0x51, 0x13, 0x31, 0xbe, 0xe7, 0x71, 0x22, 0xcf, 0xc1, 0x71, 0x3f, 0x3b,
-	0x22, 0x07, 0x97, 0xe0, 0x88, 0xa7, 0xd4, 0x26, 0xda, 0x49, 0x80, 0x64, 0x28, 0x35, 0xa8, 0x0e,
-	0x8b, 0x6d, 0x91, 0xb4, 0xcb, 0x0a, 0x1c, 0xec, 0x8c, 0x1b, 0x34, 0x02, 0x63, 0x85, 0x7b, 0xb9,
-	0x85, 0x92, 0x76, 0x2b, 0x57, 0x5a, 0x58, 0x8c, 0x07, 0x50, 0x1c, 0x0e, 0xad, 0xaa, 0x85, 0x1b,
-	0x4b, 0xf7, 0xc4, 0x0e, 0xb8, 0xfc, 0x02, 0xc0, 0x89, 0xe3, 0xdf, 0x4c, 0xe8, 0x2c, 0x3c, 0x5d,
-	0x2c, 0xad, 0xa8, 0x85, 0xbc, 0xb6, 0x32, 0xbf, 0x5c, 0x58, 0x28, 0x69, 0xc5, 0x52, 0xae, 0xb4,
-	0x56, 0xd4, 0x6e, 0xaf, 0xdc, 0x2e, 0xc4, 0x03, 0x28, 0x09, 0xcf, 0x1c, 0x29, 0x5e, 0x50, 0x0b,
-	0xb9, 0x52, 0x21, 0x1f, 0x07, 0xc7, 0x22, 0xd6, 0x56, 0xf3, 0x1c, 0x11, 0x44, 0x97, 0xe0, 0xf9,
-	0x23, 0x11, 0xb9, 0x9b, 0x6a, 0x21, 0x97, 0xff, 0x5c, 0x2b, 0xdc, 0x5b, 0x2a, 0x96, 0x8a, 0xf1,
-	0xd0, 0xfc, 0xd7, 0x60, 0xef, 0xad, 0x14, 0x78, 0xfd, 0x56, 0x0a, 0xbc, 0x7b, 0x2b, 0x81, 0x9d,
-	0x96, 0x04, 0x5e, 0xb4, 0x24, 0xf0, 0xaa, 0x25, 0x81, 0xbd, 0x96, 0x04, 0x5e, 0xb7, 0x24, 0xf0,
-	0x53, 0x4b, 0x02, 0xbf, 0xb4, 0xa4, 0xc0, 0xbb, 0x96, 0x04, 0xbe, 0xd9, 0x97, 0x02, 0x2f, 0xf7,
-	0x25, 0xb0, 0xb7, 0x2f, 0x05, 0x5e, 0xef, 0x4b, 0x81, 0x2f, 0xee, 0x18, 0xa4, 0xfe, 0xa5, 0xa1,
-	0x6c, 0x13, 0x8b, 0x61, 0x4a, 0x75, 0xa5, 0xe1, 0x64, 0xf8, 0xc2, 0xbd, 0xc9, 0xd3, 0xed, 0x8b,
-	0x33, 0xdd, 0x16, 0x67, 0xea, 0x65, 0x83, 0x64, 0xf0, 0x63, 0xd6, 0xfe, 0xdf, 0x79, 0xc4, 0xdf,
-	0xcf, 0x72, 0x84, 0xcf, 0x87, 0xd9, 0x3f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x74, 0xa9, 0xa1, 0x8d,
-	0xa4, 0x0e, 0x00, 0x00,
+	// 1676 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x58, 0x4f, 0x73, 0x1b, 0x49,
+	0x15, 0x57, 0x4b, 0x63, 0x59, 0x7a, 0x72, 0x9c, 0x71, 0x3b, 0xb5, 0x28, 0x4e, 0x32, 0x2b, 0x26,
+	0xc9, 0x46, 0xce, 0x5a, 0xa3, 0x44, 0xde, 0x62, 0x81, 0x2d, 0x30, 0x92, 0xa5, 0x60, 0x9b, 0x4d,
+	0xe4, 0xb4, 0xe4, 0x10, 0x30, 0xc9, 0xd4, 0x48, 0x6a, 0x2b, 0xb3, 0x91, 0xa6, 0x95, 0x99, 0x96,
+	0xb3, 0xce, 0x26, 0x55, 0x81, 0x3b, 0x05, 0x1f, 0x81, 0x03, 0x87, 0xad, 0xfd, 0x08, 0xf8, 0x12,
+	0x38, 0xed, 0xd1, 0xc7, 0x54, 0x71, 0x80, 0xd8, 0x17, 0x38, 0x50, 0xb5, 0x57, 0x6e, 0xd4, 0xf4,
+	0xb4, 0xfe, 0xda, 0x16, 0xd4, 0xd6, 0x52, 0x90, 0xd3, 0x74, 0xf7, 0xfb, 0xd3, 0xef, 0xfd, 0xfa,
+	0xd7, 0xaf, 0x9f, 0x04, 0xc6, 0x2e, 0xf5, 0x0c, 0x9b, 0x65, 0xbd, 0xfa, 0x23, 0xda, 0xb6, 0xb2,
+	0x1e, 0x67, 0x2e, 0x6d, 0x98, 0xac, 0xf6, 0x09, 0xad, 0xf3, 0x6c, 0x9d, 0xb5, 0xdb, 0xcc, 0x31,
+	0xf9, 0x5e, 0x87, 0x7a, 0x46, 0xc7, 0x65, 0x9c, 0xe1, 0x0b, 0x81, 0xbe, 0x11, 0xe8, 0x1b, 0x23,
+	0xfa, 0x0b, 0x99, 0xa6, 0xcd, 0x1f, 0x75, 0x6b, 0x46, 0x9d, 0xb5, 0xb3, 0x4d, 0xd6, 0x64, 0x59,
+	0x61, 0x53, 0xeb, 0xee, 0x88, 0x99, 0x98, 0x88, 0x51, 0xe0, 0x6b, 0xe1, 0xdd, 0x26, 0x63, 0xcd,
+	0x16, 0x1d, 0x68, 0x71, 0xbb, 0x4d, 0x3d, 0x6e, 0xb5, 0x3b, 0x52, 0xe1, 0xc2, 0x68, 0x70, 0xac,
+	0xc3, 0x6d, 0xe6, 0xc8, 0x48, 0x16, 0xce, 0x8f, 0x0a, 0x87, 0x82, 0x5c, 0xb8, 0x38, 0x2a, 0xda,
+	0xb5, 0x5a, 0x76, 0xc3, 0xe2, 0x54, 0x4a, 0x53, 0x63, 0x52, 0x9b, 0x3e, 0x35, 0x47, 0x5c, 0xeb,
+	0xbf, 0x46, 0x30, 0x7f, 0x9b, 0xd5, 0xec, 0x16, 0xad, 0x14, 0x7f, 0x92, 0xe7, 0xdc, 0xb5, 0x6b,
+	0x5d, 0x4e, 0x3d, 0xbc, 0x06, 0xd3, 0xcc, 0x13, 0x70, 0x24, 0x51, 0x0a, 0xa5, 0x67, 0x73, 0x97,
+	0x8d, 0x09, 0x70, 0x18, 0xe5, 0x4a, 0x75, 0xaf, 0x43, 0x0b, 0xf0, 0x87, 0xbf, 0xbf, 0x8a, 0x4c,
+	0xfd, 0x0a, 0x85, 0x55, 0x44, 0xa2, 0xcc, 0xf3, 0xd7, 0xf0, 0x12, 0xe0, 0xb6, 0xd8, 0xc0, 0xf4,
+	0x1a, 0x8f, 0xcd, 0x5d, 0xea, 0x7a, 0x36, 0x73, 0x92, 0xe1, 0x14, 0x4a, 0xc7, 0x89, 0x1a, 0x48,
+	0x2a, 0x8d, 0xc7, 0xf7, 0x82, 0x75, 0xfd, 0x8b, 0x29, 0x98, 0x5f, 0x75, 0xa9, 0xc5, 0x69, 0x59,
+	0x78, 0x26, 0xf4, 0x49, 0x97, 0x7a, 0x1c, 0x5f, 0x84, 0xb8, 0x63, 0xb5, 0xa9, 0xd7, 0xb1, 0xea,
+	0x41, 0x44, 0x71, 0x32, 0x58, 0xc0, 0xbf, 0x80, 0x44, 0x10, 0x48, 0x10, 0xb1, 0x70, 0x5e, 0xf8,
+	0xc8, 0x0f, 0xe6, 0x3b, 0xee, 0x07, 0x24, 0xb7, 0xad, 0x7b, 0x4f, 0xad, 0x66, 0x93, 0xba, 0xfa,
+	0x52, 0x4a, 0x6f, 0x52, 0x87, 0xba, 0x76, 0xdd, 0x1f, 0xd6, 0xec, 0x66, 0x26, 0xb0, 0xf3, 0x67,
+	0x41, 0x2c, 0x19, 0xaf, 0xf1, 0x58, 0x7f, 0x40, 0x20, 0x58, 0x17, 0x19, 0xdc, 0x04, 0xc5, 0xdf,
+	0x2a, 0x19, 0x11, 0x6e, 0x2f, 0x89, 0x1c, 0xdd, 0x48, 0xf2, 0xa5, 0xe2, 0x8f, 0x14, 0x37, 0xac,
+	0x22, 0xb9, 0xf4, 0xbb, 0x30, 0x22, 0x42, 0x15, 0x2f, 0xc3, 0x8c, 0xc7, 0x5d, 0xdb, 0x69, 0x9a,
+	0xbb, 0x56, 0xab, 0x4b, 0x93, 0x8a, 0x30, 0x9d, 0xfd, 0xf2, 0x85, 0x50, 0x8d, 0xba, 0x4a, 0xf2,
+	0xe5, 0xcb, 0x1f, 0xad, 0x85, 0x48, 0x22, 0xd0, 0xba, 0xe7, 0x2b, 0xe1, 0x9b, 0x90, 0xa8, 0xed,
+	0x71, 0xea, 0x49, 0x9b, 0xa9, 0x14, 0x4a, 0xcf, 0x0c, 0x6c, 0x9e, 0xf5, 0x6c, 0x40, 0x28, 0x05,
+	0x26, 0x04, 0x66, 0xeb, 0xcc, 0xe1, 0xd4, 0xe1, 0xe6, 0x0e, 0x73, 0xdb, 0x16, 0x4f, 0x4e, 0x8b,
+	0x9d, 0xde, 0xf7, 0x4d, 0xde, 0x73, 0xaf, 0x10, 0x7d, 0x5b, 0xf7, 0x73, 0xfb, 0xc4, 0x63, 0x8e,
+	0xff, 0xdd, 0xb3, 0xda, 0x2d, 0xff, 0xcb, 0x3f, 0xe5, 0x01, 0x00, 0x8e, 0xfe, 0x80, 0x9c, 0x91,
+	0x2e, 0x6e, 0x09, 0x0f, 0x78, 0x09, 0x12, 0x0d, 0xea, 0xd5, 0x5d, 0x5b, 0x10, 0x25, 0x19, 0x13,
+	0x0e, 0x61, 0x90, 0x35, 0x19, 0x16, 0xe3, 0x8f, 0xe0, 0x8c, 0xc3, 0x4c, 0xab, 0xcf, 0x9c, 0x24,
+	0xa4, 0x50, 0x3a, 0x91, 0x3b, 0x37, 0x46, 0x97, 0x52, 0xbb, 0xc3, 0xf7, 0xd6, 0x10, 0x99, 0x71,
+	0xd8, 0x10, 0xcb, 0xee, 0x02, 0x0c, 0xb8, 0x91, 0x4c, 0x08, 0xcb, 0x1b, 0x13, 0x89, 0x76, 0x02,
+	0x57, 0xd7, 0x10, 0x89, 0xf7, 0x79, 0xf4, 0xfd, 0xc5, 0x3f, 0xed, 0xa3, 0xab, 0x70, 0x16, 0x62,
+	0xb7, 0x29, 0xb7, 0x1a, 0x16, 0xb7, 0x70, 0x64, 0x79, 0xe9, 0xbb, 0x80, 0x21, 0xb1, 0xd5, 0x69,
+	0x31, 0xab, 0x91, 0xba, 0x65, 0xb7, 0x28, 0x8e, 0x7c, 0xb0, 0xf4, 0x61, 0xe1, 0x1c, 0xc4, 0x64,
+	0xe6, 0x1e, 0x8e, 0xbd, 0xda, 0x47, 0xca, 0xc1, 0x3e, 0x8a, 0x16, 0x2e, 0xc1, 0x9c, 0xe4, 0xd2,
+	0x20, 0x29, 0x21, 0x86, 0x83, 0x7d, 0x14, 0xdf, 0x50, 0x62, 0x51, 0x75, 0x7a, 0x43, 0x89, 0xc5,
+	0x55, 0xd0, 0xff, 0x19, 0x86, 0x73, 0xa3, 0x64, 0xf5, 0x3a, 0xcc, 0xf1, 0x28, 0x2e, 0x43, 0xac,
+	0x2d, 0xb7, 0x17, 0x64, 0x4c, 0xe4, 0x96, 0x27, 0x66, 0x55, 0x11, 0xb3, 0xc0, 0x49, 0x51, 0x82,
+	0xcb, 0x5c, 0xd2, 0x77, 0x82, 0x8b, 0x80, 0x7d, 0x94, 0x1b, 0x0d, 0xdb, 0x07, 0xdd, 0x6a, 0x99,
+	0xb6, 0xb3, 0xc3, 0x04, 0xab, 0x4e, 0x83, 0x3a, 0x44, 0x54, 0x87, 0xe5, 0xfb, 0x06, 0xeb, 0xce,
+	0x0e, 0xc3, 0x9b, 0x70, 0xa6, 0xe3, 0x52, 0xcf, 0x6e, 0x3a, 0xb4, 0x61, 0x76, 0xdd, 0x96, 0xa0,
+	0x58, 0x22, 0xb7, 0x38, 0x31, 0xb6, 0x4d, 0x97, 0x56, 0x84, 0xc5, 0x96, 0xdb, 0x5a, 0x0b, 0x91,
+	0x99, 0xbe, 0x87, 0x2d, 0xb7, 0x85, 0xcb, 0x10, 0xf5, 0xb8, 0xc5, 0xbb, 0x5e, 0x32, 0x2a, 0xaa,
+	0xc4, 0x87, 0xff, 0x71, 0x9a, 0x3d, 0xac, 0x2a, 0xc2, 0x9c, 0x48, 0x37, 0x85, 0x0b, 0x70, 0x76,
+	0x2c, 0xcb, 0xfe, 0xd1, 0x44, 0x36, 0x94, 0x18, 0x52, 0xc3, 0x1b, 0x4a, 0x2c, 0xa2, 0x2a, 0xfa,
+	0x2f, 0xc3, 0xa0, 0xfe, 0x98, 0xf2, 0xb7, 0xba, 0x4a, 0xfc, 0x10, 0xa6, 0x7b, 0xf5, 0x30, 0x28,
+	0x10, 0x57, 0x7c, 0x95, 0x77, 0xdd, 0x4b, 0xb9, 0x0b, 0x0f, 0xd3, 0xbb, 0xcf, 0xef, 0x2d, 0x6e,
+	0xdf, 0xc8, 0x7c, 0xef, 0xc1, 0xfb, 0xe9, 0x8c, 0xf8, 0x7e, 0x96, 0x7b, 0xb1, 0xf8, 0xd9, 0xf2,
+	0x8b, 0x2b, 0xa4, 0x67, 0xa4, 0xff, 0x39, 0x0c, 0x73, 0x43, 0x18, 0x9c, 0x40, 0xbe, 0xe8, 0x37,
+	0x41, 0xbe, 0x1b, 0x63, 0xc5, 0x4c, 0x00, 0x5b, 0x48, 0x4c, 0xa8, 0x64, 0xc6, 0x68, 0x25, 0x0b,
+	0x8b, 0x4a, 0x96, 0x38, 0xbd, 0x8c, 0x7d, 0xf3, 0xc4, 0xbc, 0x7a, 0xac, 0x30, 0x0a, 0x84, 0xc7,
+	0x6a, 0xdd, 0xb1, 0x12, 0x80, 0x24, 0xcf, 0x7c, 0x86, 0x3d, 0x87, 0x99, 0xe1, 0x2d, 0x70, 0x1e,
+	0x22, 0xd6, 0x53, 0x4f, 0xde, 0xe7, 0xcc, 0xbf, 0x0b, 0xad, 0x1f, 0x4a, 0xd1, 0xe2, 0xd6, 0x5a,
+	0x88, 0xf8, 0xb6, 0x85, 0xcb, 0xf0, 0x2d, 0x5f, 0xd1, 0x6a, 0x52, 0xb3, 0xe3, 0xb2, 0x5d, 0xbb,
+	0x41, 0x5d, 0xb3, 0xfe, 0x88, 0xd9, 0x75, 0x2a, 0x76, 0x0f, 0x1f, 0xec, 0x23, 0x14, 0xb0, 0x5c,
+	0xff, 0x29, 0xa8, 0xe3, 0x5e, 0xb0, 0x0a, 0x11, 0x1f, 0x9c, 0x80, 0xd8, 0xfe, 0x10, 0xdf, 0x84,
+	0x68, 0x9b, 0xf2, 0x47, 0xac, 0x21, 0xc2, 0x9a, 0xcd, 0x9d, 0x1f, 0x0b, 0x6b, 0x8d, 0xf3, 0xce,
+	0x6d, 0xa1, 0x40, 0xa4, 0xa2, 0xfe, 0x8f, 0x30, 0xe0, 0x8f, 0x6d, 0x4f, 0xb2, 0xc6, 0xfb, 0x7f,
+	0xb8, 0x3a, 0x8d, 0x91, 0xab, 0xb3, 0x39, 0x7a, 0x75, 0xf2, 0xee, 0x4a, 0xee, 0x07, 0x0f, 0xd3,
+	0xe9, 0x6d, 0x2b, 0xf3, 0xec, 0x41, 0x7a, 0x3b, 0x63, 0x65, 0x9e, 0xf9, 0xb7, 0xe1, 0xfa, 0xb6,
+	0x1c, 0x2c, 0xae, 0x64, 0x17, 0x57, 0x4e, 0x17, 0x2e, 0xae, 0x5c, 0x91, 0xb7, 0xad, 0x04, 0xf0,
+	0xa4, 0x4b, 0xdd, 0xbd, 0x20, 0x05, 0x45, 0xe0, 0xf5, 0xde, 0xc4, 0x63, 0xbc, 0xeb, 0xab, 0xfb,
+	0x11, 0x92, 0xf8, 0x93, 0xde, 0x10, 0x1b, 0x30, 0xdf, 0xb2, 0x38, 0xf5, 0x78, 0xaf, 0x97, 0x31,
+	0x99, 0xd3, 0xda, 0x13, 0x8c, 0x8d, 0x91, 0xb9, 0x40, 0x24, 0xbb, 0x99, 0xb2, 0xd3, 0xda, 0xd3,
+	0x7f, 0x1f, 0x81, 0x77, 0x4e, 0xbe, 0x62, 0xa3, 0x98, 0x2b, 0xe3, 0x98, 0x63, 0x89, 0xca, 0x94,
+	0x10, 0x04, 0x39, 0x24, 0x07, 0x15, 0x23, 0x2a, 0x96, 0x7b, 0xd3, 0x13, 0xb8, 0x31, 0xf6, 0x8e,
+	0x87, 0x27, 0xbf, 0xe3, 0xeb, 0x80, 0xeb, 0xfe, 0x53, 0xe6, 0x27, 0xd4, 0x6f, 0x4e, 0xc5, 0x89,
+	0x24, 0x72, 0x0b, 0x46, 0xd0, 0xbe, 0x1a, 0xbd, 0xf6, 0xd5, 0xa8, 0xf6, 0x34, 0xc8, 0x5c, 0xcf,
+	0xaa, 0xbf, 0x74, 0xbc, 0x25, 0x88, 0x4d, 0x7c, 0xa7, 0x26, 0xb5, 0x04, 0xf1, 0xaf, 0xd9, 0x12,
+	0x84, 0x86, 0x5a, 0x82, 0xd3, 0x5f, 0xf4, 0xd8, 0xc1, 0x3e, 0xf2, 0xdf, 0xf2, 0x69, 0x35, 0xa6,
+	0xff, 0x05, 0xc1, 0x9c, 0x3c, 0xb6, 0xa1, 0x13, 0x1a, 0xc2, 0x1b, 0x8d, 0xe2, 0xfd, 0x3f, 0x43,
+	0x57, 0x1e, 0xb4, 0x32, 0x38, 0xe8, 0xab, 0x30, 0x3b, 0xca, 0x48, 0x49, 0xc6, 0x33, 0x23, 0x64,
+	0xd4, 0xff, 0x28, 0x2f, 0xfe, 0x3a, 0xa7, 0xed, 0xa1, 0x14, 0xdf, 0x81, 0x28, 0xa7, 0x8e, 0xe5,
+	0xf0, 0xe0, 0xfa, 0x11, 0x39, 0xeb, 0xd3, 0x0f, 0x0d, 0xd1, 0x6f, 0x03, 0x62, 0x72, 0x0b, 0xbf,
+	0x0e, 0x46, 0xd2, 0x89, 0x9c, 0x31, 0xf1, 0x68, 0x8e, 0x01, 0x4a, 0xfa, 0xf6, 0xc7, 0x59, 0x32,
+	0xf5, 0xb5, 0x59, 0x12, 0xfd, 0xaf, 0xb2, 0x64, 0xea, 0x60, 0x1f, 0x29, 0x1b, 0x4a, 0x4c, 0x51,
+	0xa7, 0xf4, 0x1a, 0xcc, 0x8f, 0xd4, 0x4e, 0xf9, 0xe4, 0x96, 0x60, 0xca, 0xe6, 0xb4, 0xdd, 0x03,
+	0x25, 0x3b, 0x31, 0x92, 0xe3, 0x67, 0x40, 0x02, 0x6b, 0x59, 0xf9, 0xbf, 0x08, 0xc3, 0x7c, 0x91,
+	0xb6, 0xe8, 0x5b, 0xfe, 0x13, 0x28, 0x3f, 0xde, 0xdc, 0x5c, 0xf3, 0x55, 0x74, 0x37, 0x95, 0xd3,
+	0x26, 0x34, 0x37, 0xcf, 0x1f, 0x0e, 0xfa, 0x1b, 0xfc, 0x6d, 0x98, 0xd9, 0x61, 0x6e, 0x9d, 0x9a,
+	0x0d, 0x01, 0x87, 0xa4, 0x75, 0x42, 0xac, 0x05, 0x08, 0xe9, 0x2b, 0x70, 0x6e, 0x14, 0x2b, 0x79,
+	0x22, 0xd7, 0xe0, 0x6c, 0x60, 0xd4, 0x83, 0xdd, 0x4b, 0xa2, 0x54, 0x24, 0x1d, 0x27, 0xb3, 0x72,
+	0x59, 0x1e, 0xe1, 0x75, 0x03, 0xe2, 0xfd, 0x32, 0x8f, 0xcf, 0x42, 0xa2, 0x74, 0x3f, 0xbf, 0x5a,
+	0x35, 0x6f, 0xe7, 0xab, 0xab, 0x6b, 0x6a, 0x08, 0xab, 0x30, 0xb3, 0x49, 0x4a, 0xb7, 0xd6, 0xef,
+	0xcb, 0x15, 0x74, 0xfd, 0x73, 0x04, 0x0b, 0xa7, 0xf7, 0xb1, 0xf8, 0x12, 0x9c, 0xaf, 0x54, 0xcb,
+	0xa4, 0x54, 0x34, 0xcb, 0x85, 0x8d, 0xd2, 0x6a, 0xd5, 0xac, 0x54, 0xf3, 0xd5, 0xad, 0x8a, 0x79,
+	0xa7, 0x7c, 0xa7, 0xa4, 0x86, 0x70, 0x0a, 0x2e, 0x9e, 0x28, 0x5e, 0x25, 0xa5, 0x7c, 0xb5, 0x54,
+	0x54, 0xd1, 0xa9, 0x1a, 0x5b, 0x9b, 0x45, 0xa1, 0x11, 0xc6, 0xd7, 0xe0, 0xf2, 0x89, 0x1a, 0xf9,
+	0x8f, 0x49, 0x29, 0x5f, 0xfc, 0x99, 0x59, 0xba, 0xbf, 0x5e, 0xa9, 0x56, 0xd4, 0xc8, 0x75, 0x0d,
+	0xa2, 0xc1, 0xef, 0x72, 0x9c, 0x80, 0xe9, 0xfc, 0x9d, 0x22, 0x29, 0xaf, 0x17, 0xd5, 0x10, 0x9e,
+	0x86, 0xc8, 0x7a, 0xb9, 0xa2, 0xa2, 0xc2, 0x6f, 0xd0, 0xc1, 0x1b, 0x2d, 0xf4, 0xfa, 0x8d, 0x16,
+	0xfa, 0xea, 0x8d, 0x86, 0x5e, 0x1e, 0x6a, 0xe8, 0xf3, 0x43, 0x0d, 0x7d, 0x79, 0xa8, 0xa1, 0x83,
+	0x43, 0x0d, 0xbd, 0x3e, 0xd4, 0xd0, 0x5f, 0x0f, 0x35, 0xf4, 0xb7, 0x43, 0x2d, 0xf4, 0xd5, 0xa1,
+	0x86, 0x7e, 0x7b, 0xa4, 0x85, 0x5e, 0x1d, 0x69, 0xe8, 0xe0, 0x48, 0x0b, 0xbd, 0x3e, 0xd2, 0x42,
+	0x3f, 0xbf, 0xdb, 0x64, 0x9d, 0xc7, 0x4d, 0x63, 0x97, 0xb5, 0x38, 0x75, 0x5d, 0xcb, 0xe8, 0x7a,
+	0x59, 0x31, 0xf0, 0xfb, 0xad, 0x4c, 0xaf, 0xbd, 0xc9, 0xf4, 0xc4, 0xd9, 0x4e, 0xad, 0xc9, 0xb2,
+	0xf4, 0x53, 0xde, 0xfb, 0xfb, 0xe5, 0x84, 0x7f, 0x61, 0x6a, 0x51, 0x51, 0x02, 0x97, 0xff, 0x15,
+	0x00, 0x00, 0xff, 0xff, 0xce, 0xbe, 0x88, 0x9c, 0xab, 0x11, 0x00, 0x00,
 }
 
 func (x QueryType) String() string {
@@ -1453,6 +1718,40 @@ func (x StoredObjectResponseStatus) String() string {
 		return s
 	}
 	return strconv.Itoa(int(x))
+}
+func (x OSType) String() string {
+	s, ok := OSType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (this *MobileSDKAttributes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MobileSDKAttributes)
+	if !ok {
+		that2, ok := that.(MobileSDKAttributes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.OsType != that1.OsType {
+		return false
+	}
+	if this.MobileSdkVersion != that1.MobileSdkVersion {
+		return false
+	}
+	return true
 }
 func (this *CreateObjectRequest) Equal(that interface{}) bool {
 	if that == nil {
@@ -1495,6 +1794,15 @@ func (this *CreateObjectRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Description != that1.Description {
+		return false
+	}
+	if that1.ObjectAttributes == nil {
+		if this.ObjectAttributes != nil {
+			return false
+		}
+	} else if this.ObjectAttributes == nil {
+		return false
+	} else if !this.ObjectAttributes.Equal(that1.ObjectAttributes) {
 		return false
 	}
 	return true
@@ -1543,6 +1851,54 @@ func (this *CreateObjectRequest_BytesValue) Equal(that interface{}) bool {
 		return false
 	}
 	if !bytes.Equal(this.BytesValue, that1.BytesValue) {
+		return false
+	}
+	return true
+}
+func (this *CreateObjectRequest_NoAttributes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateObjectRequest_NoAttributes)
+	if !ok {
+		that2, ok := that.(CreateObjectRequest_NoAttributes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoAttributes.Equal(that1.NoAttributes) {
+		return false
+	}
+	return true
+}
+func (this *CreateObjectRequest_MobileSdk) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateObjectRequest_MobileSdk)
+	if !ok {
+		that2, ok := that.(CreateObjectRequest_MobileSdk)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MobileSdk.Equal(that1.MobileSdk) {
 		return false
 	}
 	return true
@@ -1926,6 +2282,63 @@ func (this *StoredObjectDescriptor) Equal(that interface{}) bool {
 	if !this.CreationTimestamp.Equal(that1.CreationTimestamp) {
 		return false
 	}
+	if that1.ObjectAttributes == nil {
+		if this.ObjectAttributes != nil {
+			return false
+		}
+	} else if this.ObjectAttributes == nil {
+		return false
+	} else if !this.ObjectAttributes.Equal(that1.ObjectAttributes) {
+		return false
+	}
+	return true
+}
+func (this *StoredObjectDescriptor_NoAttributes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*StoredObjectDescriptor_NoAttributes)
+	if !ok {
+		that2, ok := that.(StoredObjectDescriptor_NoAttributes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoAttributes.Equal(that1.NoAttributes) {
+		return false
+	}
+	return true
+}
+func (this *StoredObjectDescriptor_MobileSdk) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*StoredObjectDescriptor_MobileSdk)
+	if !ok {
+		that2, ok := that.(StoredObjectDescriptor_MobileSdk)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MobileSdk.Equal(that1.MobileSdk) {
+		return false
+	}
 	return true
 }
 func (this *VersionDescriptor) Equal(that interface{}) bool {
@@ -1996,6 +2409,63 @@ func (this *ListItemDescriptor) Equal(that interface{}) bool {
 		if !this.Versions[i].Equal(that1.Versions[i]) {
 			return false
 		}
+	}
+	if that1.ObjectAttributes == nil {
+		if this.ObjectAttributes != nil {
+			return false
+		}
+	} else if this.ObjectAttributes == nil {
+		return false
+	} else if !this.ObjectAttributes.Equal(that1.ObjectAttributes) {
+		return false
+	}
+	return true
+}
+func (this *ListItemDescriptor_NoAttributes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListItemDescriptor_NoAttributes)
+	if !ok {
+		that2, ok := that.(ListItemDescriptor_NoAttributes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoAttributes.Equal(that1.NoAttributes) {
+		return false
+	}
+	return true
+}
+func (this *ListItemDescriptor_MobileSdk) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListItemDescriptor_MobileSdk)
+	if !ok {
+		that2, ok := that.(ListItemDescriptor_MobileSdk)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MobileSdk.Equal(that1.MobileSdk) {
+		return false
 	}
 	return true
 }
@@ -2093,11 +2563,22 @@ func (this *DeleteObjectResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *MobileSDKAttributes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&stored_object.MobileSDKAttributes{")
+	s = append(s, "OsType: "+fmt.Sprintf("%#v", this.OsType)+",\n")
+	s = append(s, "MobileSdkVersion: "+fmt.Sprintf("%#v", this.MobileSdkVersion)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *CreateObjectRequest) goString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 13)
 	s = append(s, "&stored_object.CreateObjectRequest{")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "ObjectType: "+fmt.Sprintf("%#v", this.ObjectType)+",\n")
@@ -2107,6 +2588,9 @@ func (this *CreateObjectRequest) goString() string {
 	}
 	s = append(s, "ContentFormat: "+fmt.Sprintf("%#v", this.ContentFormat)+",\n")
 	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	if this.ObjectAttributes != nil {
+		s = append(s, "ObjectAttributes: "+fmt.Sprintf("%#v", this.ObjectAttributes)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -2124,6 +2608,22 @@ func (this *CreateObjectRequest_BytesValue) GoString() string {
 	}
 	s := strings.Join([]string{`&stored_object.CreateObjectRequest_BytesValue{` +
 		`BytesValue:` + fmt.Sprintf("%#v", this.BytesValue) + `}`}, ", ")
+	return s
+}
+func (this *CreateObjectRequest_NoAttributes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.CreateObjectRequest_NoAttributes{` +
+		`NoAttributes:` + fmt.Sprintf("%#v", this.NoAttributes) + `}`}, ", ")
+	return s
+}
+func (this *CreateObjectRequest_MobileSdk) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.CreateObjectRequest_MobileSdk{` +
+		`MobileSdk:` + fmt.Sprintf("%#v", this.MobileSdk) + `}`}, ", ")
 	return s
 }
 func (this *CreateObjectResponse) GoString() string {
@@ -2260,7 +2760,7 @@ func (this *StoredObjectDescriptor) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 12)
 	s = append(s, "&stored_object.StoredObjectDescriptor{")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
@@ -2270,8 +2770,27 @@ func (this *StoredObjectDescriptor) GoString() string {
 	if this.CreationTimestamp != nil {
 		s = append(s, "CreationTimestamp: "+fmt.Sprintf("%#v", this.CreationTimestamp)+",\n")
 	}
+	if this.ObjectAttributes != nil {
+		s = append(s, "ObjectAttributes: "+fmt.Sprintf("%#v", this.ObjectAttributes)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *StoredObjectDescriptor_NoAttributes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.StoredObjectDescriptor_NoAttributes{` +
+		`NoAttributes:` + fmt.Sprintf("%#v", this.NoAttributes) + `}`}, ", ")
+	return s
+}
+func (this *StoredObjectDescriptor_MobileSdk) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.StoredObjectDescriptor_MobileSdk{` +
+		`MobileSdk:` + fmt.Sprintf("%#v", this.MobileSdk) + `}`}, ", ")
+	return s
 }
 func (this *VersionDescriptor) GoString() string {
 	if this == nil {
@@ -2293,15 +2812,34 @@ func (this *ListItemDescriptor) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&stored_object.ListItemDescriptor{")
 	s = append(s, "Tenant: "+fmt.Sprintf("%#v", this.Tenant)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	if this.Versions != nil {
 		s = append(s, "Versions: "+fmt.Sprintf("%#v", this.Versions)+",\n")
 	}
+	if this.ObjectAttributes != nil {
+		s = append(s, "ObjectAttributes: "+fmt.Sprintf("%#v", this.ObjectAttributes)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *ListItemDescriptor_NoAttributes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.ListItemDescriptor_NoAttributes{` +
+		`NoAttributes:` + fmt.Sprintf("%#v", this.NoAttributes) + `}`}, ", ")
+	return s
+}
+func (this *ListItemDescriptor_MobileSdk) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&stored_object.ListItemDescriptor_MobileSdk{` +
+		`MobileSdk:` + fmt.Sprintf("%#v", this.MobileSdk) + `}`}, ", ")
+	return s
 }
 func (this *ListObjectsResponse) GoString() string {
 	if this == nil {
@@ -2347,6 +2885,41 @@ func valueToGoStringCommonTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
+func (m *MobileSDKAttributes) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MobileSDKAttributes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MobileSDKAttributes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.MobileSdkVersion) > 0 {
+		i -= len(m.MobileSdkVersion)
+		copy(dAtA[i:], m.MobileSdkVersion)
+		i = encodeVarintCommonTypes(dAtA, i, uint64(len(m.MobileSdkVersion)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.OsType != 0 {
+		i = encodeVarintCommonTypes(dAtA, i, uint64(m.OsType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CreateObjectRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2367,6 +2940,15 @@ func (m *CreateObjectRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ObjectAttributes != nil {
+		{
+			size := m.ObjectAttributes.Size()
+			i -= size
+			if _, err := m.ObjectAttributes.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Description) > 0 {
 		i -= len(m.Description)
 		copy(dAtA[i:], m.Description)
@@ -2441,6 +3023,48 @@ func (m *CreateObjectRequest_BytesValue) MarshalToSizedBuffer(dAtA []byte) (int,
 		i = encodeVarintCommonTypes(dAtA, i, uint64(len(m.BytesValue)))
 		i--
 		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateObjectRequest_NoAttributes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateObjectRequest_NoAttributes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoAttributes != nil {
+		{
+			size, err := m.NoAttributes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateObjectRequest_MobileSdk) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateObjectRequest_MobileSdk) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MobileSdk != nil {
+		{
+			size, err := m.MobileSdk.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
 	}
 	return len(dAtA) - i, nil
 }
@@ -2855,6 +3479,15 @@ func (m *StoredObjectDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
+	if m.ObjectAttributes != nil {
+		{
+			size := m.ObjectAttributes.Size()
+			i -= size
+			if _, err := m.ObjectAttributes.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Version) > 0 {
 		i -= len(m.Version)
 		copy(dAtA[i:], m.Version)
@@ -2905,6 +3538,48 @@ func (m *StoredObjectDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
+func (m *StoredObjectDescriptor_NoAttributes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StoredObjectDescriptor_NoAttributes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoAttributes != nil {
+		{
+			size, err := m.NoAttributes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *StoredObjectDescriptor_MobileSdk) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StoredObjectDescriptor_MobileSdk) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MobileSdk != nil {
+		{
+			size, err := m.MobileSdk.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *VersionDescriptor) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2991,6 +3666,15 @@ func (m *ListItemDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ObjectAttributes != nil {
+		{
+			size := m.ObjectAttributes.Size()
+			i -= size
+			if _, err := m.ObjectAttributes.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Tenant) > 0 {
 		i -= len(m.Tenant)
 		copy(dAtA[i:], m.Tenant)
@@ -3022,6 +3706,48 @@ func (m *ListItemDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ListItemDescriptor_NoAttributes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListItemDescriptor_NoAttributes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoAttributes != nil {
+		{
+			size, err := m.NoAttributes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ListItemDescriptor_MobileSdk) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListItemDescriptor_MobileSdk) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MobileSdk != nil {
+		{
+			size, err := m.MobileSdk.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCommonTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ListObjectsResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3163,6 +3889,22 @@ func encodeVarintCommonTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *MobileSDKAttributes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OsType != 0 {
+		n += 1 + sovCommonTypes(uint64(m.OsType))
+	}
+	l = len(m.MobileSdkVersion)
+	if l > 0 {
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *CreateObjectRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3192,6 +3934,9 @@ func (m *CreateObjectRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovCommonTypes(uint64(l))
 	}
+	if m.ObjectAttributes != nil {
+		n += m.ObjectAttributes.Size()
+	}
 	return n
 }
 
@@ -3213,6 +3958,30 @@ func (m *CreateObjectRequest_BytesValue) Size() (n int) {
 	_ = l
 	if m.BytesValue != nil {
 		l = len(m.BytesValue)
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateObjectRequest_NoAttributes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoAttributes != nil {
+		l = m.NoAttributes.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateObjectRequest_MobileSdk) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MobileSdk != nil {
+		l = m.MobileSdk.Size()
 		n += 1 + l + sovCommonTypes(uint64(l))
 	}
 	return n
@@ -3436,9 +4205,36 @@ func (m *StoredObjectDescriptor) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovCommonTypes(uint64(l))
 	}
+	if m.ObjectAttributes != nil {
+		n += m.ObjectAttributes.Size()
+	}
 	return n
 }
 
+func (m *StoredObjectDescriptor_NoAttributes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoAttributes != nil {
+		l = m.NoAttributes.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+func (m *StoredObjectDescriptor_MobileSdk) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MobileSdk != nil {
+		l = m.MobileSdk.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
 func (m *VersionDescriptor) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3487,9 +4283,36 @@ func (m *ListItemDescriptor) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovCommonTypes(uint64(l))
 	}
+	if m.ObjectAttributes != nil {
+		n += m.ObjectAttributes.Size()
+	}
 	return n
 }
 
+func (m *ListItemDescriptor_NoAttributes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoAttributes != nil {
+		l = m.NoAttributes.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
+func (m *ListItemDescriptor_MobileSdk) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MobileSdk != nil {
+		l = m.MobileSdk.Size()
+		n += 1 + l + sovCommonTypes(uint64(l))
+	}
+	return n
+}
 func (m *ListObjectsResponse) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3554,6 +4377,17 @@ func sovCommonTypes(x uint64) (n int) {
 func sozCommonTypes(x uint64) (n int) {
 	return sovCommonTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+func (this *MobileSDKAttributes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MobileSDKAttributes{`,
+		`OsType:` + fmt.Sprintf("%v", this.OsType) + `,`,
+		`MobileSdkVersion:` + fmt.Sprintf("%v", this.MobileSdkVersion) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateObjectRequest) string() string {
 	if this == nil {
 		return "nil"
@@ -3565,6 +4399,7 @@ func (this *CreateObjectRequest) string() string {
 		`Contents:` + fmt.Sprintf("%v", this.Contents) + `,`,
 		`ContentFormat:` + fmt.Sprintf("%v", this.ContentFormat) + `,`,
 		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`ObjectAttributes:` + fmt.Sprintf("%v", this.ObjectAttributes) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3585,6 +4420,26 @@ func (this *CreateObjectRequest_BytesValue) String() string {
 	}
 	s := strings.Join([]string{`&CreateObjectRequest_BytesValue{`,
 		`BytesValue:` + fmt.Sprintf("%v", this.BytesValue) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateObjectRequest_NoAttributes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateObjectRequest_NoAttributes{`,
+		`NoAttributes:` + strings.Replace(fmt.Sprintf("%v", this.NoAttributes), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateObjectRequest_MobileSdk) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateObjectRequest_MobileSdk{`,
+		`MobileSdk:` + strings.Replace(fmt.Sprintf("%v", this.MobileSdk), "MobileSDKAttributes", "MobileSDKAttributes", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3732,6 +4587,27 @@ func (this *StoredObjectDescriptor) String() string {
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`Version:` + fmt.Sprintf("%v", this.Version) + `,`,
+		`ObjectAttributes:` + fmt.Sprintf("%v", this.ObjectAttributes) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *StoredObjectDescriptor_NoAttributes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&StoredObjectDescriptor_NoAttributes{`,
+		`NoAttributes:` + strings.Replace(fmt.Sprintf("%v", this.NoAttributes), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *StoredObjectDescriptor_MobileSdk) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&StoredObjectDescriptor_MobileSdk{`,
+		`MobileSdk:` + strings.Replace(fmt.Sprintf("%v", this.MobileSdk), "MobileSDKAttributes", "MobileSDKAttributes", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3763,6 +4639,27 @@ func (this *ListItemDescriptor) String() string {
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`Versions:` + repeatedStringForVersions + `,`,
 		`Tenant:` + fmt.Sprintf("%v", this.Tenant) + `,`,
+		`ObjectAttributes:` + fmt.Sprintf("%v", this.ObjectAttributes) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListItemDescriptor_NoAttributes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListItemDescriptor_NoAttributes{`,
+		`NoAttributes:` + strings.Replace(fmt.Sprintf("%v", this.NoAttributes), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListItemDescriptor_MobileSdk) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListItemDescriptor_MobileSdk{`,
+		`MobileSdk:` + strings.Replace(fmt.Sprintf("%v", this.MobileSdk), "MobileSDKAttributes", "MobileSDKAttributes", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3813,6 +4710,110 @@ func valueToStringCommonTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *MobileSDKAttributes) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCommonTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MobileSDKAttributes: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MobileSDKAttributes: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OsType", wireType)
+			}
+			m.OsType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OsType |= OSType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MobileSdkVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MobileSdkVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCommonTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *CreateObjectRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -4067,6 +5068,76 @@ func (m *CreateObjectRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoAttributes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ObjectAttributes = &CreateObjectRequest_NoAttributes{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MobileSdk", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &MobileSDKAttributes{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ObjectAttributes = &CreateObjectRequest_MobileSdk{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -5277,6 +6348,76 @@ func (m *StoredObjectDescriptor) Unmarshal(dAtA []byte) error {
 			}
 			m.Version = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoAttributes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ObjectAttributes = &StoredObjectDescriptor_NoAttributes{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MobileSdk", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &MobileSDKAttributes{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ObjectAttributes = &StoredObjectDescriptor_MobileSdk{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCommonTypes(dAtA[iNdEx:])
@@ -5632,6 +6773,76 @@ func (m *ListItemDescriptor) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Tenant = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoAttributes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ObjectAttributes = &ListItemDescriptor_NoAttributes{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MobileSdk", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommonTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommonTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &MobileSDKAttributes{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ObjectAttributes = &ListItemDescriptor_MobileSdk{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

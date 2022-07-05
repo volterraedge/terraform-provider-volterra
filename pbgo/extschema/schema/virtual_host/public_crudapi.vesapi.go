@@ -3871,7 +3871,7 @@ var APISwaggerJSON string = `{
         },
         "schemaTlsProtocol": {
             "type": "string",
-            "description": "TlsProtocol is enumeration of supported TLS versions\n\nVolterra will choose the optimal TLS version.\nTLS 1.0\nTLS 1.1\nTLS 1.2\nTLS 1.3",
+            "description": "TlsProtocol is enumeration of supported TLS versions\n\nF5 Distributed Cloud will choose the optimal TLS version.",
             "title": "TlsProtocol",
             "enum": [
                 "TLS_AUTO",
@@ -5682,6 +5682,15 @@ var APISwaggerJSON string = `{
                     "title": "Live Streaming",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Live Streaming"
+                },
+                "service_domains": {
+                    "type": "array",
+                    "description": " CNAME provided from service per domain",
+                    "title": "Service Domains",
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostServiceDomain"
+                    },
+                    "x-displayname": "Service Domains"
                 }
             }
         },
@@ -6271,6 +6280,24 @@ var APISwaggerJSON string = `{
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.virtual_host.ReplaceResponse"
         },
+        "virtual_hostServiceDomain": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.ServiceDomain",
+            "properties": {
+                "domain": {
+                    "type": "string",
+                    "description": " Domain Name",
+                    "title": "Domain Name",
+                    "x-displayname": "Domain Name"
+                },
+                "service_domain": {
+                    "type": "string",
+                    "description": " Serivce Domain",
+                    "title": "Serivce Domain",
+                    "x-displayname": "Serivce Domain"
+                }
+            }
+        },
         "virtual_hostShapeBotDefenseConfigType": {
             "type": "object",
             "description": "x-displayName: \"Shape Bot Defense Config for virtual host\"\nThis defines various configuration options for Shape Bot Defense per virtual host.",
@@ -6298,6 +6325,11 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     }
+                },
+                "reload_header_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"SDK Config Header Name\"\nHeader that is used for SDK configuration sync",
+                    "title": "Reload Header Name"
                 },
                 "timeout": {
                     "type": "integer",

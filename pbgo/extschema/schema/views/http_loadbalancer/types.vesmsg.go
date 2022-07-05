@@ -2626,16 +2626,6 @@ func (v *ValidateApiEndpointRule) RateLimiterChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
-func (v *ValidateApiEndpointRule) BasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for base_path")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateApiEndpointRule) ApiEndpointPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -2819,19 +2809,6 @@ var DefaultApiEndpointRuleValidator = func() *ValidateApiEndpointRule {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limiter_choice"] = vFn
-
-	vrhBasePath := v.BasePathValidationRuleHandler
-	rulesBasePath := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.http_path": "true",
-		"ves.io.schema.rules.string.max_len":   "128",
-	}
-	vFn, err = vrhBasePath(rulesBasePath)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiEndpointRule.base_path: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["base_path"] = vFn
 
 	vrhApiEndpointPath := v.ApiEndpointPathValidationRuleHandler
 	rulesApiEndpointPath := map[string]string{
@@ -8049,15 +8026,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["auto_cert_state"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("auto_cert_state"))
-		if err := fv(ctx, m.GetAutoCertState(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["blocked_clients"]; exists {
 		vOpts := append(opts, db.WithValidateField("blocked_clients"))
 		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
@@ -12103,6 +12071,264 @@ var DefaultMirrorPolicyTypeValidator = func() *ValidateMirrorPolicyType {
 
 func MirrorPolicyTypeValidator() db.Validator {
 	return DefaultMirrorPolicyTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MobileSDKConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MobileSDKConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MobileSDKConfigType) DeepCopy() *MobileSDKConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MobileSDKConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MobileSDKConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MobileSDKConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MobileSDKConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMobileSDKConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMobileSDKConfigType) ReloadHeaderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for reload_header_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMobileSDKConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MobileSDKConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MobileSDKConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["mobile_identifier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mobile_identifier"))
+		if err := fv(ctx, m.GetMobileIdentifier(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["reload_header_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("reload_header_name"))
+		if err := fv(ctx, m.GetReloadHeaderName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMobileSDKConfigTypeValidator = func() *ValidateMobileSDKConfigType {
+	v := &ValidateMobileSDKConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhReloadHeaderName := v.ReloadHeaderNameValidationRuleHandler
+	rulesReloadHeaderName := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
+		"ves.io.schema.rules.string.http_header_field": "true",
+		"ves.io.schema.rules.string.max_bytes":         "256",
+	}
+	vFn, err = vrhReloadHeaderName(rulesReloadHeaderName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MobileSDKConfigType.reload_header_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["reload_header_name"] = vFn
+
+	v.FldValidators["mobile_identifier"] = MobileTrafficIdentifierTypeValidator().Validate
+
+	return v
+}()
+
+func MobileSDKConfigTypeValidator() db.Validator {
+	return DefaultMobileSDKConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MobileTrafficIdentifierType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MobileTrafficIdentifierType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MobileTrafficIdentifierType) DeepCopy() *MobileTrafficIdentifierType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MobileTrafficIdentifierType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MobileTrafficIdentifierType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MobileTrafficIdentifierType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MobileTrafficIdentifierTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMobileTrafficIdentifierType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMobileTrafficIdentifierType) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.HeaderMatcherTypeBasic, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.HeaderMatcherTypeBasicValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.HeaderMatcherTypeBasic)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.HeaderMatcherTypeBasic, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMobileTrafficIdentifierType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MobileTrafficIdentifierType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MobileTrafficIdentifierType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["headers"]; exists {
+		vOpts := append(opts, db.WithValidateField("headers"))
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMobileTrafficIdentifierTypeValidator = func() *ValidateMobileTrafficIdentifierType {
+	v := &ValidateMobileTrafficIdentifierType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHeaders := v.HeadersValidationRuleHandler
+	rulesHeaders := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhHeaders(rulesHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MobileTrafficIdentifierType.headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["headers"] = vFn
+
+	return v
+}()
+
+func MobileTrafficIdentifierTypeValidator() db.Validator {
+	return DefaultMobileTrafficIdentifierTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -18655,6 +18881,14 @@ func (v *ValidateShapeBotDefensePolicyType) JavaScriptChoiceValidationRuleHandle
 	return validatorFn, nil
 }
 
+func (v *ValidateShapeBotDefensePolicyType) MobileSdkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mobile_sdk_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateShapeBotDefensePolicyType) ProtectedAppEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*AppEndpointType, opts ...db.ValidateOpt) error {
@@ -18786,6 +19020,42 @@ func (v *ValidateShapeBotDefensePolicyType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["mobile_sdk_choice"]; exists {
+		val := m.GetMobileSdkChoice()
+		vOpts := append(opts,
+			db.WithValidateField("mobile_sdk_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMobileSdkChoice().(type) {
+	case *ShapeBotDefensePolicyType_DisableMobileSdk:
+		if fv, exists := v.FldValidators["mobile_sdk_choice.disable_mobile_sdk"]; exists {
+			val := m.GetMobileSdkChoice().(*ShapeBotDefensePolicyType_DisableMobileSdk).DisableMobileSdk
+			vOpts := append(opts,
+				db.WithValidateField("mobile_sdk_choice"),
+				db.WithValidateField("disable_mobile_sdk"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ShapeBotDefensePolicyType_MobileSdkConfig:
+		if fv, exists := v.FldValidators["mobile_sdk_choice.mobile_sdk_config"]; exists {
+			val := m.GetMobileSdkChoice().(*ShapeBotDefensePolicyType_MobileSdkConfig).MobileSdkConfig
+			vOpts := append(opts,
+				db.WithValidateField("mobile_sdk_choice"),
+				db.WithValidateField("mobile_sdk_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["protected_app_endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("protected_app_endpoints"))
 		if err := fv(ctx, m.GetProtectedAppEndpoints(), vOpts...); err != nil {
@@ -18820,6 +19090,17 @@ var DefaultShapeBotDefensePolicyTypeValidator = func() *ValidateShapeBotDefenseP
 	}
 	v.FldValidators["java_script_choice"] = vFn
 
+	vrhMobileSdkChoice := v.MobileSdkChoiceValidationRuleHandler
+	rulesMobileSdkChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMobileSdkChoice(rulesMobileSdkChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotDefensePolicyType.mobile_sdk_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mobile_sdk_choice"] = vFn
+
 	vrhProtectedAppEndpoints := v.ProtectedAppEndpointsValidationRuleHandler
 	rulesProtectedAppEndpoints := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
@@ -18847,6 +19128,8 @@ var DefaultShapeBotDefensePolicyTypeValidator = func() *ValidateShapeBotDefenseP
 
 	v.FldValidators["java_script_choice.js_insert_all_pages_except"] = ShapeJavaScriptInsertAllWithExceptionsTypeValidator().Validate
 	v.FldValidators["java_script_choice.js_insertion_rules"] = ShapeJavaScriptInsertTypeValidator().Validate
+
+	v.FldValidators["mobile_sdk_choice.mobile_sdk_config"] = MobileSDKConfigTypeValidator().Validate
 
 	return v
 }()
@@ -20014,6 +20297,54 @@ func (v *ValidateSimpleClientSrcRule) MetadataValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateSimpleClientSrcRule) ActionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ClientSrcRuleAction)
+		return int32(i)
+	}
+	// ClientSrcRuleAction_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ClientSrcRuleAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for actions")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ClientSrcRuleAction, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for actions")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ClientSrcRuleAction)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ClientSrcRuleAction, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated actions")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items actions")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSimpleClientSrcRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleClientSrcRule)
 	if !ok {
@@ -20061,6 +20392,14 @@ func (v *ValidateSimpleClientSrcRule) Validate(ctx context.Context, pm interface
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["actions"]; exists {
+		vOpts := append(opts, db.WithValidateField("actions"))
+		if err := fv(ctx, m.GetActions(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -20212,6 +20551,19 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
+
+	vrhActions := v.ActionsValidationRuleHandler
+	rulesActions := map[string]string{
+		"ves.io.schema.rules.enum.defined_only":  "true",
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhActions(rulesActions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleClientSrcRule.actions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["actions"] = vFn
 
 	return v
 }()
@@ -20505,27 +20857,6 @@ type ValidateWebMobileTrafficType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateWebMobileTrafficType) HeaderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for header")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema_policy.HeaderMatcherTypeBasicValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateWebMobileTrafficType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*WebMobileTrafficType)
 	if !ok {
@@ -20549,6 +20880,27 @@ func (v *ValidateWebMobileTrafficType) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["headers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("headers"))
+		for idx, item := range m.GetHeaders() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mobile_identifier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mobile_identifier"))
+		if err := fv(ctx, m.GetMobileIdentifier(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -20556,24 +20908,9 @@ func (v *ValidateWebMobileTrafficType) Validate(ctx context.Context, pm interfac
 var DefaultWebMobileTrafficTypeValidator = func() *ValidateWebMobileTrafficType {
 	v := &ValidateWebMobileTrafficType{FldValidators: map[string]db.ValidatorFunc{}}
 
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
+	v.FldValidators["header"] = ves_io_schema_policy.HeaderMatcherTypeBasicValidator().Validate
 
-	vrhHeader := v.HeaderValidationRuleHandler
-	rulesHeader := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhHeader(rulesHeader)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for WebMobileTrafficType.header: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["header"] = vFn
+	v.FldValidators["headers"] = ves_io_schema_policy.HeaderMatcherTypeBasicValidator().Validate
 
 	return v
 }()
@@ -21680,7 +22017,6 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
 	m.ApiProtectionRules = f.GetApiProtectionRules()
 	m.AutoCertInfo = f.GetAutoCertInfo()
-	m.AutoCertState = f.GetAutoCertState()
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
@@ -21728,7 +22064,6 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
 	f.ApiProtectionRules = m1.ApiProtectionRules
 	f.AutoCertInfo = m1.AutoCertInfo
-	f.AutoCertState = m1.AutoCertState
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)

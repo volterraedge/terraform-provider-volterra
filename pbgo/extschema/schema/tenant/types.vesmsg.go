@@ -644,6 +644,16 @@ func (v *ValidateGlobalSpecType) AddonServicesSubscribedValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) DirectConnectAsnOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_asn_offset")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -688,6 +698,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("deleted"))
 		if err := fv(ctx, m.GetDeleted(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_asn_offset"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_asn_offset"))
+		if err := fv(ctx, m.GetDirectConnectAsnOffset(), vOpts...); err != nil {
 			return err
 		}
 
@@ -868,6 +887,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["addon_services_subscribed"] = vFn
+
+	vrhDirectConnectAsnOffset := v.DirectConnectAsnOffsetValidationRuleHandler
+	rulesDirectConnectAsnOffset := map[string]string{
+		"ves.io.schema.rules.uint32.ranges": "0,64512-65471,4200000000-4294963198",
+	}
+	vFn, err = vrhDirectConnectAsnOffset(rulesDirectConnectAsnOffset)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.direct_connect_asn_offset: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_asn_offset"] = vFn
 
 	v.FldValidators["k8s_server_sub_cas"] = SubCAValidator().Validate
 

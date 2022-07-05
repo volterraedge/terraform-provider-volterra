@@ -1262,6 +1262,8 @@ gopkg.volterra.us/stdlib v0.0.0-20220325025208-7a45c9586b4c h1:M4u8veeO2GSq2WQSF
 gopkg.volterra.us/stdlib v0.0.0-20220325025208-7a45c9586b4c/go.mod h1:mMOXmVGs6CQhgon3RmCVx1hUb121r/48wj+fxS+x7jE=
 gopkg.volterra.us/stdlib v0.0.0-20220512122132-8587192285c9 h1:xD0qRj74z50M+1v4wk6elqzVcWh80716Gr67fzGeJKM=
 gopkg.volterra.us/stdlib v0.0.0-20220512122132-8587192285c9/go.mod h1:moACdfsG3AiKtawNMTBn4G8nvCaxBbrhd6OvCCarj/g=
+gopkg.volterra.us/stdlib v0.0.0-20220519215901-b4a66f7f3a87 h1:Azf3SLqdiDE3HoRzVdHME+dNidCAWpVZPvAMLhKYuHg=
+gopkg.volterra.us/stdlib v0.0.0-20220519215901-b4a66f7f3a87/go.mod h1:moACdfsG3AiKtawNMTBn4G8nvCaxBbrhd6OvCCarj/g=
 gotest.tools v2.2.0+incompatible/go.mod h1:DsYFclhRJ6vuDpmuTbkuFWG+y2sxOXAzmJt81HFBacw=
 honnef.co/go/tools v0.0.0-20180728063816-88497007e858/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=

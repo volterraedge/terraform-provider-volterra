@@ -606,6 +606,17 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesCdnLoadbalancerCertificate:
+		if fv, exists := v.FldValidators["choice.ves_cdn_loadbalancer_certificate"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesCdnLoadbalancerCertificate).VesCdnLoadbalancerCertificate
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_cdn_loadbalancer_certificate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -736,6 +747,15 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("policy_uid"))
 		if err := fv(ctx, m.GetPolicyUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["well_known_tenant_prefix"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("well_known_tenant_prefix"))
+		if err := fv(ctx, m.GetWellKnownTenantPrefix(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1618,6 +1638,28 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("nginx_mgmt_suite_connector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_BotDefenseMobileSdk:
+		if fv, exists := v.FldValidators["choice.bot_defense_mobile_sdk"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_BotDefenseMobileSdk).BotDefenseMobileSdk
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("bot_defense_mobile_sdk"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Nginx:
+		if fv, exists := v.FldValidators["choice.nginx"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Nginx).Nginx
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("nginx"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

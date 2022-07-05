@@ -1430,6 +1430,372 @@ func CreateSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DirectConnectBGPPeerInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectBGPPeerInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectBGPPeerInfo) DeepCopy() *DirectConnectBGPPeerInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectBGPPeerInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectBGPPeerInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectBGPPeerInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectBGPPeerInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectBGPPeerInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectBGPPeerInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectBGPPeerInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectBGPPeerInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["address_family"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address_family"))
+		if err := fv(ctx, m.GetAddressFamily(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["amazon_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("amazon_address"))
+		if err := fv(ctx, m.GetAmazonAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn"))
+		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_id"))
+		if err := fv(ctx, m.GetBgpPeerId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_state"))
+		if err := fv(ctx, m.GetBgpPeerState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_status"))
+		if err := fv(ctx, m.GetBgpStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["customer_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("customer_address"))
+		if err := fv(ctx, m.GetCustomerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectBGPPeerInfoValidator = func() *ValidateDirectConnectBGPPeerInfo {
+	v := &ValidateDirectConnectBGPPeerInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DirectConnectBGPPeerInfoValidator() db.Validator {
+	return DefaultDirectConnectBGPPeerInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DirectConnectStatusInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectStatusInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectStatusInfo) DeepCopy() *DirectConnectStatusInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectStatusInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectStatusInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectStatusInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectStatusInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectStatusInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectStatusInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectStatusInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectStatusInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_gateway_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_id"))
+		if err := fv(ctx, m.GetDirectConnectGatewayId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_gateway_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_state"))
+		if err := fv(ctx, m.GetDirectConnectGatewayState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_vgw_association_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_vgw_association_state"))
+		if err := fv(ctx, m.GetDirectConnectVgwAssociationState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vgw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vgw_id"))
+		if err := fv(ctx, m.GetVgwId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vgw_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vgw_state"))
+		if err := fv(ctx, m.GetVgwState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_states"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vif_states"))
+		for idx, item := range m.GetVifStates() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectStatusInfoValidator = func() *ValidateDirectConnectStatusInfo {
+	v := &ValidateDirectConnectStatusInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DirectConnectStatusInfoValidator() db.Validator {
+	return DefaultDirectConnectStatusInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DirectConnectVIFStateInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectVIFStateInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectVIFStateInfo) DeepCopy() *DirectConnectVIFStateInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectVIFStateInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectVIFStateInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectVIFStateInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectVIFStateInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectVIFStateInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectVIFStateInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectVIFStateInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectVIFStateInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["attachment_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("attachment_state"))
+		if err := fv(ctx, m.GetAttachmentState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peers"))
+		for idx, item := range m.GetBgpPeers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vif_id"))
+		if err := fv(ctx, m.GetVifId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vif_state"))
+		if err := fv(ctx, m.GetVifState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectVIFStateInfoValidator = func() *ValidateDirectConnectVIFStateInfo {
+	v := &ValidateDirectConnectVIFStateInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DirectConnectVIFStateInfoValidator() db.Validator {
+	return DefaultDirectConnectVIFStateInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ExistingTGWType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

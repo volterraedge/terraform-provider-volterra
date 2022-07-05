@@ -2782,6 +2782,50 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2876,6 +2920,13 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -2992,62 +3043,16 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
-            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl",
+            "description": "x-displayName: \"Tunnel type\"\nTunnel encapsulation to be used between sites\n\n - SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL: x-displayName: \"IPSEC or SSL\"\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\n - SITE_TO_SITE_TUNNEL_IPSEC: x-displayName: \"IPSEC\"\nSite to site tunnel is of type ipsec\n - SITE_TO_SITE_TUNNEL_SSL: x-displayName: \"SSL\"\nSite to site tunnel is of type ssl",
             "title": "Site to site tunnel type",
             "enum": [
                 "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
                 "SITE_TO_SITE_TUNNEL_IPSEC",
                 "SITE_TO_SITE_TUNNEL_SSL"
             ],
-            "default": "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
-            "x-displayname": "Tunnel type",
-            "x-ves-proto-enum": "ves.io.schema.SiteToSiteTunnelType"
+            "default": "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL"
         },
         "schemaStatusMetaType": {
             "type": "object",
@@ -3232,7 +3237,7 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference",
                     "x-ves-validation-rules": {
@@ -3339,44 +3344,26 @@ var APISwaggerJSON string = `{
             "description": "Site Mesh Group specification",
             "title": "Global Specification",
             "x-displayname": "Specification",
+            "x-ves-oneof-field-mesh_choice": "[\"full_mesh\",\"hub_mesh\",\"spoke_mesh\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.GlobalSpecType",
             "properties": {
-                "hub": {
-                    "type": "array",
-                    "description": " If 'Type' is Spoke, 'Hub' refers to a Site Mesh Group of 'type' Hub.\n Spoke sites will connect to all the member sites of Hub Site Mesh Group\n Hub must be empty when Site Mesh Group type is Hub or Full Mesh\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                "full_mesh": {
+                    "description": "Exclusive with [hub_mesh spoke_mesh]\n  Full mesh of tunnels are created between all sites",
+                    "title": "full_mesh",
+                    "$ref": "#/definitions/site_mesh_groupFullMeshGroupType",
+                    "x-displayname": "Full Mesh"
+                },
+                "hub_mesh": {
+                    "description": "Exclusive with [full_mesh spoke_mesh]\n  Mesh of Type Hub",
                     "title": "hub",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Hub (site mesh group)",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Hub"
                 },
-                "tunnel_type": {
-                    "description": " Type of tunnel. Can be IPSec, SSL or Clear.\n If Site reachability is over private network and application traffic is always using TLS, then Clear is preferable.\n In case of Clear simple GRE tunnel will be used.\n Only tunnels of type IPSec are support currently.\n\nExample: - \"SITE_TO_SITE_TUNNEL_IPSEC\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [1]\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "tunnel_type",
-                    "$ref": "#/definitions/schemaSiteToSiteTunnelType",
-                    "x-displayname": "Tunnel Type",
-                    "x-ves-example": "SITE_TO_SITE_TUNNEL_IPSEC",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[1]",
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "type": {
-                    "description": " Type of Site to Site connectivity (Spoke, Hub or Full Mesh)\n\nExample: - \"mesh-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [1,2,3]\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "type",
-                    "$ref": "#/definitions/site_mesh_groupSiteMeshGroupType",
-                    "x-displayname": "Site Mesh Group Type",
-                    "x-ves-example": "mesh-1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[1,2,3]",
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                "spoke_mesh": {
+                    "description": "Exclusive with [full_mesh hub_mesh]\n  Mesh of Type Spoke",
+                    "title": "spoke",
+                    "$ref": "#/definitions/site_mesh_groupSpokeMeshGroupType",
+                    "x-displayname": "Spoke"
                 },
                 "virtual_site": {
                     "type": "array",
@@ -3384,12 +3371,80 @@ var APISwaggerJSON string = `{
                     "title": "virtual_site",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Virtual Site (Sites in this group)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
+        "site_mesh_groupFullMeshGroupType": {
+            "type": "object",
+            "description": "Details of Full Mesh Group Type",
+            "title": "Full Mesh Group Type",
+            "x-displayname": "Full Mesh",
+            "x-ves-oneof-field-full_mesh_choice": "[\"control_and_data_plane_mesh\",\"data_plane_mesh\"]",
+            "x-ves-proto-message": "ves.io.schema.site_mesh_group.FullMeshGroupType",
+            "properties": {
+                "control_and_data_plane_mesh": {
+                    "description": "Exclusive with [data_plane_mesh]\n Full mesh of data plane tunnels across sites\n and control plane peering across sites",
+                    "title": "Control and Data Plane Mesh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Control and Data Plane Mesh"
+                },
+                "data_plane_mesh": {
+                    "description": "Exclusive with [control_and_data_plane_mesh]\n Full Mesh of data plane tunnels across sites",
+                    "title": "Data Plane Mesh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Data Plane Mesh"
                 }
             }
         },
@@ -3414,7 +3469,7 @@ var APISwaggerJSON string = `{
         },
         "site_mesh_groupSiteMeshGroupType": {
             "type": "string",
-            "description": "Defines different types of Mesh\n\nInvalid mesh type\nMesh of type Hub\nMesh of type Spoke\nFull mesh of tunnels are created between all sites",
+            "description": "x-displayName: \"Mesh Type\"\nDefines different types of Mesh\n\n - SITE_MESH_GROUP_TYPE_INVALID: x-displayName: \"Invalid\"\nInvalid mesh type\n - SITE_MESH_GROUP_TYPE_HUB_FULL_MESH: x-displayName: \"Hub\"\nMesh of type Hub\n - SITE_MESH_GROUP_TYPE_SPOKE: x-displayName: \"Spoke\"\nMesh of type Spoke\n - SITE_MESH_GROUP_TYPE_FULL_MESH: x-displayName: \"Full Mesh\"\nFull mesh of tunnels are created between all sites",
             "title": "Site Mesh Group Type",
             "enum": [
                 "SITE_MESH_GROUP_TYPE_INVALID",
@@ -3422,9 +3477,7 @@ var APISwaggerJSON string = `{
                 "SITE_MESH_GROUP_TYPE_SPOKE",
                 "SITE_MESH_GROUP_TYPE_FULL_MESH"
             ],
-            "default": "SITE_MESH_GROUP_TYPE_INVALID",
-            "x-displayname": "Mesh Type",
-            "x-ves-proto-enum": "ves.io.schema.site_mesh_group.SiteMeshGroupType"
+            "default": "SITE_MESH_GROUP_TYPE_INVALID"
         },
         "site_mesh_groupSpecType": {
             "type": "object",
@@ -3436,6 +3489,21 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/schemasite_mesh_groupGlobalSpecType",
                     "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "site_mesh_groupSpokeMeshGroupType": {
+            "type": "object",
+            "description": "Details of Spoke Mesh Group Type",
+            "title": "Spoke Mesh Group Type",
+            "x-displayname": "Spoke",
+            "x-ves-proto-message": "ves.io.schema.site_mesh_group.SpokeMeshGroupType",
+            "properties": {
+                "hub_mesh_group": {
+                    "description": " 'hub_mesh_group' refers to a Site Mesh Group of 'type' Hub.\n Spoke sites will connect to all the member sites of Hub Site Mesh Group",
+                    "title": "hub_mesh_group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "hub_mesh_group (site mesh group)"
                 }
             }
         },
@@ -3466,7 +3534,7 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 },

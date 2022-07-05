@@ -619,6 +619,15 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
+		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["node"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("node"))

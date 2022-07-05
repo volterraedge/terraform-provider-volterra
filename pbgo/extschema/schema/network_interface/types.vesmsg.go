@@ -3133,6 +3133,10 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *GlobalSpecType_LoopbackInterface:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -3712,6 +3716,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_LoopbackInterface:
+		if fv, exists := v.FldValidators["interface_choice.loopback_interface"]; exists {
+			val := m.GetInterfaceChoice().(*GlobalSpecType_LoopbackInterface).LoopbackInterface
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("loopback_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3823,6 +3838,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vhost_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vhost_type"))
+		if err := fv(ctx, m.GetVhostType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4032,6 +4056,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["dhcp_server_params"] = DHCPServerParametersTypeValidator().Validate
 
 	v.FldValidators["ipv6_static_addresses"] = StaticIPParametersTypeValidator().Validate
+
+	v.FldValidators["vhost_type"] = VhostInterfaceTypeValidator().Validate
 
 	return v
 }()
@@ -4751,6 +4777,75 @@ var DefaultLinkQualityMonitorConfigValidator = func() *ValidateLinkQualityMonito
 
 func LinkQualityMonitorConfigValidator() db.Validator {
 	return DefaultLinkQualityMonitorConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LoopbackInterfaceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LoopbackInterfaceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LoopbackInterfaceType) DeepCopy() *LoopbackInterfaceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LoopbackInterfaceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LoopbackInterfaceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LoopbackInterfaceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LoopbackInterfaceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLoopbackInterfaceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLoopbackInterfaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LoopbackInterfaceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LoopbackInterfaceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceType {
+	v := &ValidateLoopbackInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func LoopbackInterfaceTypeValidator() db.Validator {
+	return DefaultLoopbackInterfaceTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5814,7 +5909,7 @@ var DefaultStaticIpParametersClusterTypeValidator = func() *ValidateStaticIpPara
 	rulesInterfaceIpMap := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len": "128",
 		"ves.io.schema.rules.map.keys.string.min_len": "1",
-		"ves.io.schema.rules.map.max_pairs":           "64",
+		"ves.io.schema.rules.map.max_pairs":           "128",
 	}
 	vFn, err = vrhInterfaceIpMap(rulesInterfaceIpMap)
 	if err != nil {
@@ -6732,6 +6827,149 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 
 func TunnelInterfaceTypeValidator() db.Validator {
 	return DefaultTunnelInterfaceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VhostInterfaceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VhostInterfaceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VhostInterfaceType) DeepCopy() *VhostInterfaceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VhostInterfaceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VhostInterfaceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VhostInterfaceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VhostInterfaceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVhostInterfaceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVhostInterfaceType) HostChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for host_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVhostInterfaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VhostInterfaceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VhostInterfaceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["host_choice"]; exists {
+		val := m.GetHostChoice()
+		vOpts := append(opts,
+			db.WithValidateField("host_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHostChoice().(type) {
+	case *VhostInterfaceType_NoHost:
+		if fv, exists := v.FldValidators["host_choice.no_host"]; exists {
+			val := m.GetHostChoice().(*VhostInterfaceType_NoHost).NoHost
+			vOpts := append(opts,
+				db.WithValidateField("host_choice"),
+				db.WithValidateField("no_host"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VhostInterfaceType_Vhost:
+		if fv, exists := v.FldValidators["host_choice.vhost"]; exists {
+			val := m.GetHostChoice().(*VhostInterfaceType_Vhost).Vhost
+			vOpts := append(opts,
+				db.WithValidateField("host_choice"),
+				db.WithValidateField("vhost"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VhostInterfaceType_Virtual:
+		if fv, exists := v.FldValidators["host_choice.virtual"]; exists {
+			val := m.GetHostChoice().(*VhostInterfaceType_Virtual).Virtual
+			vOpts := append(opts,
+				db.WithValidateField("host_choice"),
+				db.WithValidateField("virtual"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVhostInterfaceTypeValidator = func() *ValidateVhostInterfaceType {
+	v := &ValidateVhostInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHostChoice := v.HostChoiceValidationRuleHandler
+	rulesHostChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhHostChoice(rulesHostChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VhostInterfaceType.host_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["host_choice"] = vFn
+
+	return v
+}()
+
+func VhostInterfaceTypeValidator() db.Validator {
+	return DefaultVhostInterfaceTypeValidator
 }
 
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {

@@ -1381,6 +1381,16 @@ type ValidateBotNameContext struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateBotNameContext) BotNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateBotNameContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*BotNameContext)
 	if !ok {
@@ -1410,6 +1420,25 @@ func (v *ValidateBotNameContext) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultBotNameContextValidator = func() *ValidateBotNameContext {
 	v := &ValidateBotNameContext{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBotName := v.BotNameValidationRuleHandler
+	rulesBotName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhBotName(rulesBotName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotNameContext.bot_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_name"] = vFn
 
 	return v
 }()
@@ -2381,6 +2410,32 @@ func (v *ValidateDenyInformation) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("error_message"))
 		if err := fv(ctx, m.GetErrorMessage(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetEventType().(type) {
+	case *DenyInformation_UndefinedSecEvent:
+		if fv, exists := v.FldValidators["event_type.undefined_sec_event"]; exists {
+			val := m.GetEventType().(*DenyInformation_UndefinedSecEvent).UndefinedSecEvent
+			vOpts := append(opts,
+				db.WithValidateField("event_type"),
+				db.WithValidateField("undefined_sec_event"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DenyInformation_ApiSecEvent:
+		if fv, exists := v.FldValidators["event_type.api_sec_event"]; exists {
+			val := m.GetEventType().(*DenyInformation_ApiSecEvent).ApiSecEvent
+			vOpts := append(opts,
+				db.WithValidateField("event_type"),
+				db.WithValidateField("api_sec_event"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4410,6 +4465,138 @@ var DefaultMatcherTypeBasicValidator = func() *ValidateMatcherTypeBasic {
 
 func MatcherTypeBasicValidator() db.Validator {
 	return DefaultMatcherTypeBasicValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ModifyAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ModifyAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ModifyAction) DeepCopy() *ModifyAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ModifyAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ModifyAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ModifyAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ModifyActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateModifyAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateModifyAction) ActionTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for action_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateModifyAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ModifyAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ModifyAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action_type"]; exists {
+		val := m.GetActionType()
+		vOpts := append(opts,
+			db.WithValidateField("action_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetActionType().(type) {
+	case *ModifyAction_Default:
+		if fv, exists := v.FldValidators["action_type.default"]; exists {
+			val := m.GetActionType().(*ModifyAction_Default).Default
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ModifyAction_SkipProcessing:
+		if fv, exists := v.FldValidators["action_type.skip_processing"]; exists {
+			val := m.GetActionType().(*ModifyAction_SkipProcessing).SkipProcessing
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("skip_processing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultModifyActionValidator = func() *ValidateModifyAction {
+	v := &ValidateModifyAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhActionType := v.ActionTypeValidationRuleHandler
+	rulesActionType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhActionType(rulesActionType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ModifyAction.action_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["action_type"] = vFn
+
+	return v
+}()
+
+func ModifyActionValidator() db.Validator {
+	return DefaultModifyActionValidator
 }
 
 // augmented methods on protoc/std generated struct

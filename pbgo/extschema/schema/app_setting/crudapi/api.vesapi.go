@@ -2639,13 +2639,13 @@ var APISwaggerJSON string = `{
                     "description": " Configuration for timeseries analyses",
                     "title": "Timeseries Analyses Setting",
                     "$ref": "#/definitions/app_settingTimeseriesAnalysesSetting",
-                    "x-displayname": "Timeseries Analysis Setting"
+                    "x-displayname": "DDoS Detection"
                 },
                 "user_behavior_analysis_setting": {
                     "description": " Configuration for user behavior analysis in this namespace",
                     "title": "User Behavior Analysis Setting",
                     "$ref": "#/definitions/app_settingUserBehaviorAnalysisSetting",
-                    "x-displayname": "User Behavior Analysis Setting"
+                    "x-displayname": "Malicious User Detection"
                 }
             }
         },

@@ -4149,6 +4149,14 @@ func (v *ValidateCreateSpecType) DeploymentValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4377,6 +4385,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("deployment"),
 				db.WithValidateField("aws_cred"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
+		val := m.GetDirectConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDirectConnectChoice().(type) {
+	case *CreateSpecType_DirectConnectDisabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_disabled"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectDisabled).DirectConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DirectConnectEnabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_enabled"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_DirectConnectEnabled).DirectConnectEnabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4614,6 +4658,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["deployment"] = vFn
 
+	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
+	rulesDirectConnectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectChoice(rulesDirectConnectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.direct_connect_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4744,6 +4799,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5033,6 +5090,14 @@ func (v *ValidateGetSpecType) DeploymentValidationRuleHandler(rules map[string]s
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for deployment")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
 	}
 	return validatorFn, nil
 }
@@ -5344,6 +5409,51 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
+		val := m.GetDirectConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDirectConnectChoice().(type) {
+	case *GetSpecType_DirectConnectDisabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_disabled"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectDisabled).DirectConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DirectConnectEnabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_enabled"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_DirectConnectEnabled).DirectConnectEnabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_info"))
+		if err := fv(ctx, m.GetDirectConnectInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["disk_size"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disk_size"))
@@ -5599,6 +5709,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["deployment"] = vFn
 
+	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
+	rulesDirectConnectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectChoice(rulesDirectConnectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.direct_connect_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5764,6 +5885,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = AWSVPCIngressGwTypeValidator().Validate
@@ -5773,6 +5896,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["vpc"] = ves_io_schema_views.AWSVPCchoiceTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
 }()
@@ -6522,6 +6647,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_info"))
+		if err := fv(ctx, m.GetDirectConnectInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["disk_size"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disk_size"))
@@ -7011,6 +7145,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["cloud_site_info"] = AWSVPCSiteInfoTypeValidator().Validate
 
+	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
+
 	return v
 }()
 
@@ -7210,6 +7346,14 @@ func (v *ValidateReplaceSpecType) BlockedServicesChoiceValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) DirectConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7323,6 +7467,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
+		val := m.GetDirectConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDirectConnectChoice().(type) {
+	case *ReplaceSpecType_DirectConnectDisabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_disabled"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectDisabled).DirectConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DirectConnectEnabled:
+		if fv, exists := v.FldValidators["direct_connect_choice.direct_connect_enabled"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_DirectConnectEnabled).DirectConnectEnabled
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("direct_connect_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -7483,6 +7663,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
 
+	vrhDirectConnectChoice := v.DirectConnectChoiceValidationRuleHandler
+	rulesDirectConnectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectChoice(rulesDirectConnectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.direct_connect_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_choice"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7552,6 +7743,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["address"] = vFn
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
+
+	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -8233,6 +8426,41 @@ func (r *CreateSpecType) GetDeploymentFromGlobalSpecType(o *GlobalSpecType) erro
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DirectConnectChoice.(type) {
+	case nil:
+		o.DirectConnectChoice = nil
+
+	case *CreateSpecType_DirectConnectDisabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *CreateSpecType_DirectConnectEnabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DirectConnectChoice.(type) {
+	case nil:
+		r.DirectConnectChoice = nil
+
+	case *GlobalSpecType_DirectConnectDisabled:
+		r.DirectConnectChoice = &CreateSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *GlobalSpecType_DirectConnectEnabled:
+		r.DirectConnectChoice = &CreateSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetLogsReceiverChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LogsReceiverChoice.(type) {
 	case nil:
@@ -8358,6 +8586,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
+	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.InstanceType = f.GetInstanceType()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
@@ -8390,6 +8619,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
+	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.InstanceType = m1.InstanceType
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
@@ -8473,6 +8703,41 @@ func (r *GetSpecType) GetDeploymentFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_AwsCred:
 		r.Deployment = &GetSpecType_AwsCred{AwsCred: of.AwsCred}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DirectConnectChoice.(type) {
+	case nil:
+		o.DirectConnectChoice = nil
+
+	case *GetSpecType_DirectConnectDisabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *GetSpecType_DirectConnectEnabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DirectConnectChoice.(type) {
+	case nil:
+		r.DirectConnectChoice = nil
+
+	case *GlobalSpecType_DirectConnectDisabled:
+		r.DirectConnectChoice = &GetSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *GlobalSpecType_DirectConnectEnabled:
+		r.DirectConnectChoice = &GetSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -8606,6 +8871,8 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
+	m.GetDirectConnectChoiceFromGlobalSpecType(f)
+	m.DirectConnectInfo = f.GetDirectConnectInfo()
 	m.DiskSize = f.GetDiskSize()
 	m.InstanceType = f.GetInstanceType()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
@@ -8641,6 +8908,8 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
+	m1.SetDirectConnectChoiceToGlobalSpecType(f)
+	f.DirectConnectInfo = m1.DirectConnectInfo
 	f.DiskSize = m1.DiskSize
 	f.InstanceType = m1.InstanceType
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
@@ -8692,6 +8961,41 @@ func (r *ReplaceSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSp
 
 	case *GlobalSpecType_DefaultBlockedServices:
 		r.BlockedServicesChoice = &ReplaceSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DirectConnectChoice.(type) {
+	case nil:
+		o.DirectConnectChoice = nil
+
+	case *ReplaceSpecType_DirectConnectDisabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *ReplaceSpecType_DirectConnectEnabled:
+		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DirectConnectChoice.(type) {
+	case nil:
+		r.DirectConnectChoice = nil
+
+	case *GlobalSpecType_DirectConnectDisabled:
+		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectDisabled{DirectConnectDisabled: of.DirectConnectDisabled}
+
+	case *GlobalSpecType_DirectConnectEnabled:
+		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -8850,6 +9154,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Address = f.GetAddress()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.GetWorkerNodesFromGlobalSpecType(f)
@@ -8873,6 +9178,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Address = m1.Address
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	m1.SetSiteTypeToGlobalSpecType(f)
 	m1.SetWorkerNodesToGlobalSpecType(f)

@@ -1770,6 +1770,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
+		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
@@ -1792,6 +1801,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_bypass"))
 		if err := fv(ctx, m.GetMaliciousUserMitigationBypass(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mum_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mum_action"))
+		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2112,6 +2130,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
 
 	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
+
+	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	return v
 }()
@@ -3185,6 +3207,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
+		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
@@ -3207,6 +3238,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_bypass"))
 		if err := fv(ctx, m.GetMaliciousUserMitigationBypass(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mum_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mum_action"))
+		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3527,6 +3567,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
 
 	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
+
+	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	return v
 }()
@@ -4699,6 +4743,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
+		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
@@ -4721,6 +4774,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_bypass"))
 		if err := fv(ctx, m.GetMaliciousUserMitigationBypass(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mum_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mum_action"))
+		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5052,6 +5114,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
 
 	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
+
+	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	return v
 }()
@@ -6589,6 +6655,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
+		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
@@ -6611,6 +6686,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_bypass"))
 		if err := fv(ctx, m.GetMaliciousUserMitigationBypass(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mum_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mum_action"))
+		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6931,6 +7015,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
 
 	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
+
+	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	return v
 }()
@@ -7406,9 +7494,11 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Headers = f.GetHeaders()
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
+	m.IpReputationAction = f.GetIpReputationAction()
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MaliciousUserMitigationBypass = f.GetMaliciousUserMitigationBypass()
+	m.MumAction = f.GetMumAction()
 	m.Path = f.GetPath()
 	m.PortMatcher = f.GetPortMatcher()
 	m.QueryParams = f.GetQueryParams()
@@ -7477,9 +7567,11 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
+	f.IpReputationAction = m1.IpReputationAction
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MaliciousUserMitigationBypass = m1.MaliciousUserMitigationBypass
+	f.MumAction = m1.MumAction
 	f.Path = m1.Path
 	f.PortMatcher = m1.PortMatcher
 	f.QueryParams = m1.QueryParams
@@ -7771,9 +7863,11 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Headers = f.GetHeaders()
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
+	m.IpReputationAction = f.GetIpReputationAction()
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MaliciousUserMitigationBypass = f.GetMaliciousUserMitigationBypass()
+	m.MumAction = f.GetMumAction()
 	m.Path = f.GetPath()
 	m.PortMatcher = f.GetPortMatcher()
 	m.QueryParams = f.GetQueryParams()
@@ -7842,9 +7936,11 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
+	f.IpReputationAction = m1.IpReputationAction
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MaliciousUserMitigationBypass = m1.MaliciousUserMitigationBypass
+	f.MumAction = m1.MumAction
 	f.Path = m1.Path
 	f.PortMatcher = m1.PortMatcher
 	f.QueryParams = m1.QueryParams
@@ -8195,9 +8291,11 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Headers = f.GetHeaders()
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
+	m.IpReputationAction = f.GetIpReputationAction()
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MaliciousUserMitigationBypass = f.GetMaliciousUserMitigationBypass()
+	m.MumAction = f.GetMumAction()
 	m.Path = f.GetPath()
 	m.PortMatcher = f.GetPortMatcher()
 	m.QueryParams = f.GetQueryParams()
@@ -8266,9 +8364,11 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
+	f.IpReputationAction = m1.IpReputationAction
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MaliciousUserMitigationBypass = m1.MaliciousUserMitigationBypass
+	f.MumAction = m1.MumAction
 	f.Path = m1.Path
 	f.PortMatcher = m1.PortMatcher
 	f.QueryParams = m1.QueryParams

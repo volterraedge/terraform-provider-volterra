@@ -3,7 +3,7 @@
 
 // app api group object
 //
-// x-displayName: "API Group"
+// x-displayName: "App API Group"
 // The app_api_group construct provides a mechanism to classify the universal set of request APIs into a much smaller number of logical groups in order
 // to make it easier to author and maintain API level access control policies. The app_api_group holds api_group child object with the same content for
 // internal use by data path and other services.
@@ -1786,7 +1786,7 @@ type APIClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List API Group"
+	// x-displayName: "List App API Group"
 	// List the set of app_api_group in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace app api group
@@ -1796,7 +1796,7 @@ type APIClient interface {
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete API Group"
+	// x-displayName: "Delete App API Group"
 	// Delete the specified app_api_group
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*types.Empty, error)
 }
@@ -1868,7 +1868,7 @@ type APIServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List API Group"
+	// x-displayName: "List App API Group"
 	// List the set of app_api_group in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace app api group
@@ -1878,7 +1878,7 @@ type APIServer interface {
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete API Group"
+	// x-displayName: "Delete App API Group"
 	// Delete the specified app_api_group
 	Delete(context.Context, *DeleteRequest) (*types.Empty, error)
 }

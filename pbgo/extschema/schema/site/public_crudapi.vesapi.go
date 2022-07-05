@@ -2543,6 +2543,39 @@ var APISwaggerJSON string = `{
             "x-displayname": "Virtual Network Type",
             "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
         },
+        "schemasiteNode": {
+            "type": "object",
+            "description": "Node Information for connectivity across sites.",
+            "title": "Node",
+            "x-displayname": "Node",
+            "x-ves-proto-message": "ves.io.schema.site.Node",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the master/main node on the site.",
+                    "title": "name",
+                    "x-displayname": "Node name"
+                },
+                "sli_address": {
+                    "type": "string",
+                    "description": " Site Local Inside IP address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "sli_address",
+                    "x-displayname": "Site Local Inside IP addresses",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "slo_address": {
+                    "type": "string",
+                    "description": " Site Local Outside IP address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "slo_address",
+                    "x-displayname": "Site Local Outside IP addresses",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                }
+            }
+        },
         "siteActiveState": {
             "type": "string",
             "description": "Active/Backup state for the interface\n\nUnknown state\nInterface in active state\nInterface in backup state",
@@ -3237,6 +3270,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
+                "ipsec_ssl_nodes_fqdn": {
+                    "type": "array",
+                    "description": " FQDN resolves to responders node IP, if there are multiple nodes at site the resolution will give\n a list of all/some individual node IP. Multiple FQDN for same site is also allowed.\n\nExample: - \"re01-node.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "FQDN for IPSEC/SSL resolving to individual node IP",
+                    "x-ves-example": "re01-node.ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
+                },
                 "local_access_k8s_enabled": {
                     "type": "boolean",
                     "format": "boolean"
@@ -3514,6 +3559,19 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
+                "ipsec_ssl_nodes_fqdn": {
+                    "type": "array",
+                    "description": " FQDN resolves to responders node IP, if there are multiple nodes at site the resolution will give\n a list of all/some individual node IP. Multiple FQDN for same site is also allowed.\n\nExample: - \"re01-node.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
+                    "title": "ipsec_ssl_nodes_fqdn",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "FQDN for IPSEC/SSL resolving to individual node IP",
+                    "x-ves-example": "re01-node.ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
+                },
                 "ipsec_ssl_vip_fqdn": {
                     "type": "string",
                     "description": " FQDN resolves in public ip on public network and private ip on private network\n\nExample: - \"re01.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
@@ -3543,6 +3601,15 @@ var APISwaggerJSON string = `{
                     "title": "Local K8s Cluster Access Enabled",
                     "format": "boolean",
                     "x-displayname": "Local K8s Cluster Access Enabled"
+                },
+                "main_nodes": {
+                    "type": "array",
+                    "description": " Connectivity information of main/master nodes to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
+                    "title": "main_nodes",
+                    "items": {
+                        "$ref": "#/definitions/schemasiteNode"
+                    },
+                    "x-displayname": "Main Nodes"
                 },
                 "mars_list": {
                     "type": "array",
@@ -3600,6 +3667,15 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
                     }
+                },
+                "phobos_list": {
+                    "type": "array",
+                    "description": " Phobos services in a CE site. This is used to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
+                    "title": "phobos_list",
+                    "items": {
+                        "$ref": "#/definitions/schemaServiceParameters"
+                    },
+                    "x-displayname": "Phobos Services"
                 },
                 "private_ip": {
                     "type": "string",
@@ -4773,7 +4849,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteToSiteTunnelConnectivity": {
             "type": "object",
-            "description": "x-displayName: \"Site To Sute Tunnel Connectivity\"\nSiteToSiteTunnelConnectivity is for connecting to a site in site mesh group",
+            "description": "x-displayName: \"Site To Site Tunnel Connectivity\"\nSiteToSiteTunnelConnectivity is for connecting to a site in site mesh group",
             "title": "Site To Site Tunnel Connectivity",
             "properties": {
                 "destination": {

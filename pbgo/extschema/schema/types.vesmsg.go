@@ -5091,6 +5091,144 @@ func MetricValueValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *NamespaceAccessType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NamespaceAccessType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NamespaceAccessType) DeepCopy() *NamespaceAccessType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NamespaceAccessType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NamespaceAccessType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NamespaceAccessType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NamespaceAccessTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNamespaceAccessType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNamespaceAccessType) NamespaceRoleMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for namespace_role_map")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]*RoleListType, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := RoleListTypeValidator().Validate(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for namespace_role_map")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]*RoleListType)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]*RoleListType, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map namespace_role_map")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items namespace_role_map")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNamespaceAccessType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NamespaceAccessType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NamespaceAccessType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace_role_map"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_role_map"))
+		if err := fv(ctx, m.GetNamespaceRoleMap(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNamespaceAccessTypeValidator = func() *ValidateNamespaceAccessType {
+	v := &ValidateNamespaceAccessType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespaceRoleMap := v.NamespaceRoleMapValidationRuleHandler
+	rulesNamespaceRoleMap := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len":         "256",
+		"ves.io.schema.rules.map.keys.string.ves_object_name": "true",
+		"ves.io.schema.rules.message.required":                "true",
+	}
+	vFn, err = vrhNamespaceRoleMap(rulesNamespaceRoleMap)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NamespaceAccessType.namespace_role_map: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace_role_map"] = vFn
+
+	return v
+}()
+
+func NamespaceAccessTypeValidator() db.Validator {
+	return DefaultNamespaceAccessTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *NamespaceRoleType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -8320,6 +8458,147 @@ var DefaultRetryPolicyTypeValidator = func() *ValidateRetryPolicyType {
 
 func RetryPolicyTypeValidator() db.Validator {
 	return DefaultRetryPolicyTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RoleListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RoleListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RoleListType) DeepCopy() *RoleListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RoleListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RoleListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RoleListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RoleListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRoleListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRoleListType) NamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for names")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated names")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items names")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRoleListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RoleListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RoleListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["names"]; exists {
+		vOpts := append(opts, db.WithValidateField("names"))
+		if err := fv(ctx, m.GetNames(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRoleListTypeValidator = func() *ValidateRoleListType {
+	v := &ValidateRoleListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNames := v.NamesValidationRuleHandler
+	rulesNames := map[string]string{
+		"ves.io.schema.rules.message.required":                      "true",
+		"ves.io.schema.rules.repeated.items.string.max_len":         "256",
+		"ves.io.schema.rules.repeated.items.string.ves_object_name": "true",
+		"ves.io.schema.rules.repeated.unique":                       "true",
+	}
+	vFn, err = vrhNames(rulesNames)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RoleListType.names: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["names"] = vFn
+
+	return v
+}()
+
+func RoleListTypeValidator() db.Validator {
+	return DefaultRoleListTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

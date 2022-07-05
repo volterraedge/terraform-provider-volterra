@@ -2442,7 +2442,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "service_policies": {
                     "type": "array",
-                    "description": " A list of references to service_policy objects.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
+                    "description": " Service Policies is a sequential engine where policies (and rules within the policy) are evaluated one after the other. It's important to define the\n correct order (policies evaluated from top to bottom in the list) for service policies, to get the intended result.\n For each request, its characteristics are evaluated based on the match criteria in each service policy starting at the top. If there is a match in the\n current policy, then the policy takes effect, and no more policies are evaluated. Otherwise, the next policy is evaluated.\n If all policies are evaluated and none match, then the request will be denied by default.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "service_policies",
                     "maxItems": 32,
                     "items": {

@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -89,6 +90,15 @@ func (v *ValidateSetCloudSiteInfoRequest) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_info"))
+		if err := fv(ctx, m.GetDirectConnectInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -115,6 +125,8 @@ var DefaultSetCloudSiteInfoRequestValidator = func() *ValidateSetCloudSiteInfoRe
 	v := &ValidateSetCloudSiteInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["aws_vpc_info"] = AWSVPCSiteInfoTypeValidator().Validate
+
+	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
 }()

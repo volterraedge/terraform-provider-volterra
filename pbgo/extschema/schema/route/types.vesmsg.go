@@ -3085,6 +3085,15 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["skip_lb_override"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("skip_lb_override"))
+		if err := fv(ctx, m.GetSkipLbOverride(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["waf_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("waf_type"))

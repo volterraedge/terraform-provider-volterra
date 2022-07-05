@@ -4845,6 +4845,28 @@ var CustomDataK8SAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "corev1Node": {
+            "type": "object",
+            "description": "Node is a worker node in Kubernetes.\nEach node will have a unique identifier in the cache (i.e. in etcd).",
+            "x-ves-proto-message": "k8s.io.api.core.v1.Node",
+            "properties": {
+                "metadata": {
+                    "description": " +optional",
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "description": " +optional",
+                    "title": "Spec defines the behavior of a node.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1NodeSpec"
+                },
+                "status": {
+                    "description": " Read-only.\n More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n +optional",
+                    "title": "Most recently observed status of the node.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1NodeStatus"
+                }
+            }
+        },
         "intstrIntOrString": {
             "type": "object",
             "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
@@ -7467,28 +7489,6 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
-        "v1Node": {
-            "type": "object",
-            "description": "Node is a worker node in Kubernetes.\nEach node will have a unique identifier in the cache (i.e. in etcd).",
-            "x-ves-proto-message": "k8s.io.api.core.v1.Node",
-            "properties": {
-                "metadata": {
-                    "description": " +optional",
-                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
-                    "$ref": "#/definitions/v1ObjectMeta"
-                },
-                "spec": {
-                    "description": " +optional",
-                    "title": "Spec defines the behavior of a node.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
-                    "$ref": "#/definitions/v1NodeSpec"
-                },
-                "status": {
-                    "description": " Read-only.\n More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n +optional",
-                    "title": "Most recently observed status of the node.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
-                    "$ref": "#/definitions/v1NodeStatus"
-                }
-            }
-        },
         "v1NodeAddress": {
             "type": "object",
             "description": "NodeAddress contains information for the node's address.",
@@ -7613,7 +7613,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "type": "array",
                     "title": "List of nodes",
                     "items": {
-                        "$ref": "#/definitions/v1Node"
+                        "$ref": "#/definitions/corev1Node"
                     }
                 },
                 "metadata": {

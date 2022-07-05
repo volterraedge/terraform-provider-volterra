@@ -2490,6 +2490,20 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "API Endpoint Info",
             "x-ves-proto-message": "ves.io.schema.app_type.APIEPInfo",
             "properties": {
+                "access_discovery_time": {
+                    "type": "string",
+                    "description": " access_discovery_time is the time when the API endpoint\n was updated from the access logs by the discovery mechanism.\n It is the UTC time and represented in RFC3339 form.",
+                    "title": "access_discovery_time",
+                    "format": "date-time",
+                    "x-displayname": "Access Discovery Time"
+                },
+                "base_path": {
+                    "type": "string",
+                    "description": " The base path for this Endpoint.\n\nExample: - \"/v1\"-",
+                    "title": "base_path",
+                    "x-displayname": "Base Path",
+                    "x-ves-example": "/v1"
+                },
                 "category": {
                     "type": "array",
                     "description": " The category of the API Endpoint relative to API Inventory.\n\nExample: - APIEP_CATEGORY_DISCOVERED, APIEP_CATEGORY_INVENTORY-",
@@ -2536,6 +2550,12 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/app_typeAPIEPPDFInfo",
                     "x-displayname": "PDF(Value)"
                 },
+                "pii_level": {
+                    "description": " Signifies if the pii data is detected.\n\nExample: - APIEP_PII_NOT_DETECTED, APIEP_PII_DETECTED-",
+                    "title": "pii_level",
+                    "$ref": "#/definitions/app_typeAPIEPPIILevel",
+                    "x-displayname": "PII Level"
+                },
                 "request_percentage": {
                     "type": "number",
                     "description": " Percentage of requests that were directed to this API Endpoint\n\nExample: - \"78.5789\"-",
@@ -2543,6 +2563,12 @@ var CustomAPISwaggerJSON string = `{
                     "format": "float",
                     "x-displayname": "Request Percentage",
                     "x-ves-example": "78.5789"
+                },
+                "security_risk": {
+                    "description": " Signifies api endpoint security risk level.\n\nExample: - APIEP_SEC_RISK_LOW, APIEP_SEC_RISK_MED, APIEP_SEC_RISK_HIGH-",
+                    "title": "security_risk",
+                    "$ref": "#/definitions/app_typeAPIEPSecurityRisk",
+                    "x-displayname": "Security Risk Level"
                 }
             }
         },
@@ -2667,6 +2693,32 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "PDF(Response Throughput)"
                 }
             }
+        },
+        "app_typeAPIEPPIILevel": {
+            "type": "string",
+            "description": "x-displayName: API EP PII Level\nAPI Endpoint's PII Level.\n\n - APIEP_PII_NOT_DETECTED: x-displayName: API EP PII Level\nNo PII data detected for the given API Endpoint.\n - APIEP_PII_DETECTED: x-displayName: API EP PII Level Detected\nDetected PII data for a given API Endpoint.",
+            "title": "APIEP PII Level",
+            "enum": [
+                "APIEP_PII_NOT_DETECTED",
+                "APIEP_PII_DETECTED"
+            ],
+            "default": "APIEP_PII_NOT_DETECTED",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.app_type.APIEPPIILevel"
+        },
+        "app_typeAPIEPSecurityRisk": {
+            "type": "string",
+            "description": "Signifies API Endpoint Security Risk Level\n\nSecurity risk is not detected (for example, when no traffic).\nAPI Endpoint has low security risk.\nAPI Endpoint has medium security risk.\nAPI Endpoint has high security risk.",
+            "title": "APIEP Security Risk",
+            "enum": [
+                "APIEP_SEC_RISK_NONE",
+                "APIEP_SEC_RISK_LOW",
+                "APIEP_SEC_RISK_MED",
+                "APIEP_SEC_RISK_HIGH"
+            ],
+            "default": "APIEP_SEC_RISK_NONE",
+            "x-displayname": "API Endpoint Security Risk",
+            "x-ves-proto-enum": "ves.io.schema.app_type.APIEPSecurityRisk"
         },
         "app_typeAPIEndpointLearntSchemaReq": {
             "type": "object",

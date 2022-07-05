@@ -33,12 +33,18 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // x-displayName: "GroupMembers"
 // GroupMembers.
 type GroupMembers struct {
-	// id
+	// value
 	//
-	// x-displayName: "id"
+	// x-displayName: "value"
 	// x-example: "value"
-	// unique Id of the users
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// unique Id of the users or groups
+	Value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	// $ref
+	//
+	// x-displayName: "$ref"
+	// x-example: "$ref"
+	// url of the users or groups
+	Ref string `protobuf:"bytes,3,opt,name=ref,json=$ref,proto3" json:"ref,omitempty"`
 }
 
 func (m *GroupMembers) Reset()      { *m = GroupMembers{} }
@@ -69,9 +75,16 @@ func (m *GroupMembers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GroupMembers proto.InternalMessageInfo
 
-func (m *GroupMembers) GetId() string {
+func (m *GroupMembers) GetValue() string {
 	if m != nil {
-		return m.Id
+		return m.Value
+	}
+	return ""
+}
+
+func (m *GroupMembers) GetRef() string {
+	if m != nil {
+		return m.Ref
 	}
 	return ""
 }
@@ -117,6 +130,12 @@ type Group struct {
 	// x-example: "Users with unique Id"
 	// users with unique Id.
 	Members []*GroupMembers `protobuf:"bytes,5,rep,name=members,proto3" json:"members,omitempty"`
+	// ExternalId
+	//
+	// x-displayName: "ExternalId"
+	// x-example: "external Id"
+	// external Id for the group.
+	ExternalId string `protobuf:"bytes,8,opt,name=externalId,proto3" json:"externalId,omitempty"`
 }
 
 func (m *Group) Reset()      { *m = Group{} }
@@ -189,6 +208,13 @@ func (m *Group) GetMembers() []*GroupMembers {
 	return nil
 }
 
+func (m *Group) GetExternalId() string {
+	if m != nil {
+		return m.ExternalId
+	}
+	return ""
+}
+
 // CreateGroupRequest
 //
 // x-displayName: "CreateGroupRequest"
@@ -224,6 +250,12 @@ type CreateGroupRequest struct {
 	// x-example: "id of object in external identity provider"
 	// Defines id of the obj
 	Id string `protobuf:"bytes,7,opt,name=id,proto3" json:"id,omitempty"`
+	// ExternalId
+	//
+	// x-displayName: "ExternalId"
+	// x-example: "external Id"
+	// external Id for the group.
+	ExternalId string `protobuf:"bytes,8,opt,name=externalId,proto3" json:"externalId,omitempty"`
 }
 
 func (m *CreateGroupRequest) Reset()      { *m = CreateGroupRequest{} }
@@ -289,6 +321,13 @@ func (m *CreateGroupRequest) GetId() string {
 	return ""
 }
 
+func (m *CreateGroupRequest) GetExternalId() string {
+	if m != nil {
+		return m.ExternalId
+	}
+	return ""
+}
+
 // ListGroup;resources
 //
 // x-displayName: "ListGroupResources"
@@ -311,7 +350,19 @@ type ListGroupResources struct {
 	// x-displayName: "groups"
 	// x-example: "list of groups"
 	// List of available groups.
-	Groups []*Group `protobuf:"bytes,3,rep,name=groups,proto3" json:"groups,omitempty"`
+	Resources []*Group `protobuf:"bytes,3,rep,name=Resources,proto3" json:"Resources,omitempty"`
+	// startIndex
+	//
+	// x-displayName: "startIndex"
+	// x-required
+	// startIndex The 1-based index of the first result in the current set of list results.
+	StartIndex uint64 `protobuf:"varint,4,opt,name=startIndex,proto3" json:"startIndex,omitempty"`
+	// itemsPerPage
+	//
+	// x-displayName: "itemsPerPage"
+	// x-required
+	// itemsPerPage The number of resources returned in a list response page
+	ItemsPerPage uint64 `protobuf:"varint,5,opt,name=itemsPerPage,proto3" json:"itemsPerPage,omitempty"`
 }
 
 func (m *ListGroupResources) Reset()      { *m = ListGroupResources{} }
@@ -356,88 +407,25 @@ func (m *ListGroupResources) GetTotalResults() uint64 {
 	return 0
 }
 
-func (m *ListGroupResources) GetGroups() []*Group {
+func (m *ListGroupResources) GetResources() []*Group {
 	if m != nil {
-		return m.Groups
+		return m.Resources
 	}
 	return nil
 }
 
-// id
-//
-// x-displayName: "id"
-// x-example: "value"
-// unique Id for the group.
-type GroupOperation struct {
-	// op
-	//
-	// x-displayName: "op"
-	// x-example: "add, delete, replace, remove"
-	// unique Id for the group.
-	Op string `protobuf:"bytes,1,opt,name=op,proto3" json:"op,omitempty"`
-	// path
-	//
-	// x-displayName: "path"
-	// x-example: "group field path to be modified"
-	// x-required
-	// unique path for the group field to be modified.
-	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	// value
-	//
-	// x-displayName: "value"
-	// x-example: "value to be updated"
-	// x-required
-	// value specifying what section of the group needs to be modified.
-	Value *Group `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
-}
-
-func (m *GroupOperation) Reset()      { *m = GroupOperation{} }
-func (*GroupOperation) ProtoMessage() {}
-func (*GroupOperation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0158b7dc2a17fa6b, []int{4}
-}
-func (m *GroupOperation) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GroupOperation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *GroupOperation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GroupOperation.Merge(m, src)
-}
-func (m *GroupOperation) XXX_Size() int {
-	return m.Size()
-}
-func (m *GroupOperation) XXX_DiscardUnknown() {
-	xxx_messageInfo_GroupOperation.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GroupOperation proto.InternalMessageInfo
-
-func (m *GroupOperation) GetOp() string {
+func (m *ListGroupResources) GetStartIndex() uint64 {
 	if m != nil {
-		return m.Op
+		return m.StartIndex
 	}
-	return ""
+	return 0
 }
 
-func (m *GroupOperation) GetPath() string {
+func (m *ListGroupResources) GetItemsPerPage() uint64 {
 	if m != nil {
-		return m.Path
+		return m.ItemsPerPage
 	}
-	return ""
-}
-
-func (m *GroupOperation) GetValue() *Group {
-	if m != nil {
-		return m.Value
-	}
-	return nil
+	return 0
 }
 
 // PatchGroupOperation
@@ -452,13 +440,13 @@ type PatchGroupRequest struct {
 	// x-required
 	// schemas as per scim spec.
 	Schemas []string `protobuf:"bytes,1,rep,name=schemas,proto3" json:"schemas,omitempty"`
-	// Group Operation
+	// Operations
 	//
-	// x-displayName: "GroupOperation"
+	// x-displayName: "Operations"
 	// x-example: "add, remove, replace, delete"
 	// x-required
-	// Operation to modify or delete group.
-	Operation *GroupOperation `protobuf:"bytes,2,opt,name=operation,proto3" json:"operation,omitempty"`
+	// Operations to modify or delete group.
+	Operations []*PatchOperation `protobuf:"bytes,4,rep,name=Operations,proto3" json:"Operations,omitempty"`
 	// id
 	//
 	// x-displayName: "id"
@@ -471,7 +459,7 @@ type PatchGroupRequest struct {
 func (m *PatchGroupRequest) Reset()      { *m = PatchGroupRequest{} }
 func (*PatchGroupRequest) ProtoMessage() {}
 func (*PatchGroupRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0158b7dc2a17fa6b, []int{5}
+	return fileDescriptor_0158b7dc2a17fa6b, []int{4}
 }
 func (m *PatchGroupRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -503,9 +491,9 @@ func (m *PatchGroupRequest) GetSchemas() []string {
 	return nil
 }
 
-func (m *PatchGroupRequest) GetOperation() *GroupOperation {
+func (m *PatchGroupRequest) GetOperations() []*PatchOperation {
 	if m != nil {
-		return m.Operation
+		return m.Operations
 	}
 	return nil
 }
@@ -526,8 +514,6 @@ func init() {
 	golang_proto.RegisterType((*CreateGroupRequest)(nil), "ves.io.schema.scim.CreateGroupRequest")
 	proto.RegisterType((*ListGroupResources)(nil), "ves.io.schema.scim.ListGroupResources")
 	golang_proto.RegisterType((*ListGroupResources)(nil), "ves.io.schema.scim.ListGroupResources")
-	proto.RegisterType((*GroupOperation)(nil), "ves.io.schema.scim.GroupOperation")
-	golang_proto.RegisterType((*GroupOperation)(nil), "ves.io.schema.scim.GroupOperation")
 	proto.RegisterType((*PatchGroupRequest)(nil), "ves.io.schema.scim.PatchGroupRequest")
 	golang_proto.RegisterType((*PatchGroupRequest)(nil), "ves.io.schema.scim.PatchGroupRequest")
 }
@@ -540,44 +526,46 @@ func init() {
 }
 
 var fileDescriptor_0158b7dc2a17fa6b = []byte{
-	// 579 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x3d, 0x8f, 0xd3, 0x4c,
-	0x10, 0xf6, 0x26, 0xce, 0xd7, 0xe6, 0x74, 0xca, 0xbb, 0x95, 0x2f, 0xaf, 0xb4, 0xb2, 0x2c, 0x84,
-	0x52, 0x10, 0x5b, 0x84, 0xee, 0x2a, 0x04, 0x05, 0xe8, 0xc4, 0x01, 0x72, 0x49, 0x73, 0xda, 0x24,
-	0x7b, 0x8e, 0x45, 0x7c, 0xbb, 0xec, 0xae, 0x03, 0x57, 0x41, 0x45, 0x87, 0xc4, 0xcf, 0xe0, 0x3f,
-	0xd0, 0x50, 0x22, 0xaa, 0x94, 0xe9, 0x20, 0x4e, 0x43, 0x79, 0x3f, 0x01, 0x79, 0xfd, 0x41, 0x7c,
-	0x1f, 0xd1, 0xd1, 0xcd, 0xee, 0x3c, 0x33, 0xf3, 0x3c, 0x33, 0xb3, 0x0b, 0xef, 0x2c, 0xa8, 0x74,
-	0x43, 0xe6, 0xc9, 0xc9, 0x8c, 0x46, 0xc4, 0x93, 0x93, 0x30, 0xf2, 0x02, 0xc1, 0x62, 0x7e, 0xa2,
-	0xce, 0x39, 0x95, 0x2e, 0x17, 0x4c, 0x31, 0x84, 0x32, 0x94, 0x9b, 0xa1, 0xdc, 0x14, 0xd5, 0x1f,
-	0x06, 0xa1, 0x9a, 0xc5, 0x63, 0x77, 0xc2, 0x22, 0x2f, 0x60, 0x01, 0xf3, 0x34, 0x74, 0x1c, 0x9f,
-	0xea, 0x93, 0x3e, 0x68, 0x2b, 0x4b, 0xd1, 0xff, 0xbf, 0x5a, 0x88, 0x71, 0x15, 0xb2, 0xb3, 0x3c,
-	0x7f, 0x1f, 0x5f, 0xc3, 0x62, 0xab, 0x7e, 0xff, 0xa0, 0xea, 0xdf, 0x76, 0xd9, 0x55, 0xd7, 0x22,
-	0xa4, 0x6f, 0x4f, 0x2a, 0xc9, 0x9d, 0xbb, 0x70, 0xef, 0x49, 0xaa, 0xe8, 0x98, 0x46, 0x63, 0x2a,
-	0x24, 0xda, 0x87, 0xb5, 0x70, 0x6a, 0x01, 0x1b, 0x0c, 0x3a, 0x7e, 0x2d, 0x9c, 0x1e, 0x36, 0x7f,
-	0x7c, 0x05, 0xb5, 0x1e, 0x70, 0x7e, 0x02, 0xd8, 0xd0, 0x40, 0x64, 0xc1, 0x56, 0x96, 0x4e, 0x5a,
-	0xc0, 0xae, 0x0f, 0x3a, 0x7e, 0x71, 0xcc, 0x63, 0x6b, 0x45, 0x2c, 0xba, 0x07, 0xcd, 0x88, 0x2a,
-	0x62, 0xd5, 0x6d, 0x30, 0xe8, 0x8e, 0x2c, 0xf7, 0x6a, 0x9f, 0xdc, 0x63, 0xaa, 0x88, 0xaf, 0x51,
-	0xc8, 0x86, 0xdd, 0x69, 0x28, 0xf9, 0x9c, 0x9c, 0x3f, 0x27, 0x11, 0xb5, 0x4c, 0x9d, 0x66, 0xfb,
-	0x0a, 0x21, 0x68, 0x9e, 0xa5, 0xae, 0xa6, 0x76, 0x69, 0x1b, 0x1d, 0xc2, 0x56, 0x94, 0x51, 0xb7,
-	0x1a, 0x76, 0x7d, 0xd0, 0x1d, 0xd9, 0xd7, 0x95, 0xd9, 0x96, 0xe8, 0x17, 0x01, 0x85, 0xb6, 0x23,
-	0xb3, 0xdd, 0xea, 0xb5, 0x9d, 0x15, 0x80, 0xe8, 0xb1, 0xa0, 0x44, 0x51, 0x8d, 0xf6, 0xe9, 0x9b,
-	0x98, 0x4a, 0xb5, 0x43, 0xee, 0x25, 0xc2, 0xb5, 0xab, 0x84, 0xb7, 0xc8, 0xd5, 0xff, 0x91, 0x5c,
-	0xd9, 0x3c, 0xf3, 0x56, 0xcd, 0xcb, 0x5a, 0xdf, 0xba, 0x3c, 0xb6, 0x23, 0xb3, 0xdd, 0xec, 0xb5,
-	0x9c, 0x4f, 0x00, 0xa2, 0x67, 0xa1, 0x54, 0xb9, 0x30, 0xc9, 0x62, 0x31, 0xa1, 0x72, 0x87, 0x34,
-	0x07, 0xee, 0x29, 0xa6, 0xc8, 0xdc, 0xa7, 0x32, 0x9e, 0x2b, 0xa9, 0xb5, 0x99, 0x7e, 0xe5, 0x0e,
-	0xdd, 0x87, 0x4d, 0xfd, 0x16, 0x0a, 0x6d, 0x07, 0x37, 0x6a, 0xf3, 0x73, 0x60, 0xb9, 0x4c, 0x11,
-	0xdc, 0xd7, 0x8e, 0x17, 0x9c, 0x0a, 0x92, 0x6e, 0x63, 0xca, 0x9f, 0xf1, 0x62, 0xed, 0x18, 0x4f,
-	0x47, 0xcd, 0x89, 0x9a, 0xe5, 0x4d, 0xd5, 0x36, 0xf2, 0x60, 0x63, 0x41, 0xe6, 0x31, 0xcd, 0xf7,
-	0x69, 0x47, 0xbd, 0x0c, 0x57, 0x96, 0x7b, 0x0f, 0xff, 0x7b, 0x49, 0xd4, 0x64, 0x76, 0xcb, 0xb9,
-	0x3e, 0x84, 0x1d, 0x56, 0x10, 0xd3, 0x04, 0xba, 0x23, 0xe7, 0xc6, 0x5a, 0xa5, 0x04, 0xff, 0x6f,
-	0x50, 0x3e, 0x8d, 0x7a, 0x31, 0x8d, 0x47, 0x1f, 0xc1, 0x72, 0x8d, 0x8d, 0xd5, 0x1a, 0x1b, 0x17,
-	0x6b, 0x0c, 0x3e, 0x24, 0x18, 0x7c, 0x49, 0x30, 0xf8, 0x9e, 0x60, 0xb0, 0x4c, 0x30, 0x58, 0x25,
-	0x18, 0xfc, 0x4a, 0x30, 0xf8, 0x9d, 0x60, 0xe3, 0x22, 0xc1, 0xe0, 0xf3, 0x06, 0x1b, 0xdf, 0x36,
-	0x18, 0x2c, 0x37, 0xd8, 0x58, 0x6d, 0xb0, 0xf1, 0xea, 0x69, 0xc0, 0xf8, 0xeb, 0xc0, 0x5d, 0xb0,
-	0xb9, 0xa2, 0x42, 0x10, 0x37, 0x96, 0x9e, 0x36, 0x4e, 0x99, 0x88, 0x86, 0x5c, 0xb0, 0x45, 0x38,
-	0xa5, 0x62, 0x58, 0xb8, 0x3d, 0x3e, 0x0e, 0x98, 0x47, 0xdf, 0xa9, 0xf2, 0xbf, 0x28, 0xbf, 0x8d,
-	0x71, 0x53, 0x3f, 0xfa, 0x07, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0xbb, 0x52, 0xfb, 0xa5, 0xd9,
-	0x04, 0x00, 0x00,
+	// 614 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0xb1, 0x6f, 0xd3, 0x4e,
+	0x14, 0xce, 0xd9, 0x4e, 0xd2, 0x5e, 0xab, 0x9f, 0xd2, 0xd3, 0x6f, 0x70, 0x83, 0x74, 0xb2, 0xac,
+	0x0e, 0x1d, 0xa8, 0x2d, 0x95, 0x01, 0xa9, 0x63, 0x11, 0x82, 0x22, 0x0a, 0x95, 0x47, 0x96, 0xea,
+	0x12, 0xbf, 0xb8, 0x16, 0x76, 0xce, 0xdc, 0x9d, 0x43, 0xbb, 0x31, 0xb1, 0xc2, 0x9f, 0xc1, 0xff,
+	0xc0, 0xc2, 0x88, 0x98, 0xba, 0xd1, 0x91, 0x3a, 0x0b, 0x63, 0x47, 0x36, 0x90, 0xcf, 0x71, 0x70,
+	0x68, 0xa9, 0xc2, 0x76, 0xf7, 0xde, 0xe7, 0xef, 0x7d, 0xdf, 0xf7, 0xe4, 0xc3, 0x5b, 0x13, 0x90,
+	0x5e, 0xcc, 0x7d, 0x39, 0x3c, 0x81, 0x94, 0xf9, 0x72, 0x18, 0xa7, 0x7e, 0x24, 0x78, 0x9e, 0x1d,
+	0xab, 0xb3, 0x0c, 0xa4, 0x97, 0x09, 0xae, 0x38, 0x21, 0x15, 0xca, 0xab, 0x50, 0x5e, 0x89, 0xea,
+	0xef, 0x44, 0xb1, 0x3a, 0xc9, 0x07, 0xde, 0x90, 0xa7, 0x7e, 0xc4, 0x23, 0xee, 0x6b, 0xe8, 0x20,
+	0x1f, 0xe9, 0x9b, 0xbe, 0xe8, 0x53, 0x45, 0xd1, 0xbf, 0xb3, 0x38, 0x88, 0x67, 0x2a, 0xe6, 0xe3,
+	0x19, 0x7f, 0x9f, 0xde, 0xa0, 0xa2, 0x31, 0xbf, 0xbf, 0xb9, 0xd8, 0x6f, 0xb6, 0x9c, 0xc5, 0xd6,
+	0x24, 0x86, 0xd7, 0xc7, 0x0b, 0xe4, 0xee, 0x43, 0xbc, 0xfe, 0xa8, 0x74, 0x74, 0x08, 0xe9, 0x00,
+	0x84, 0x24, 0xff, 0xe3, 0xf6, 0x84, 0x25, 0x39, 0xd8, 0x86, 0x83, 0xb6, 0x57, 0x83, 0xea, 0x42,
+	0x36, 0xb0, 0x29, 0x60, 0x64, 0x9b, 0xba, 0x66, 0x6d, 0x09, 0x18, 0xed, 0x75, 0xbe, 0x7c, 0x44,
+	0x46, 0x0f, 0x3d, 0xb1, 0x56, 0x50, 0xcf, 0x70, 0x7f, 0x22, 0xdc, 0xd6, 0x3c, 0xc4, 0xc6, 0xdd,
+	0x6a, 0x9a, 0xb4, 0x91, 0x63, 0x6e, 0xaf, 0x06, 0xf5, 0x95, 0xfc, 0x87, 0x8d, 0x38, 0x9c, 0xf1,
+	0x1a, 0x71, 0x48, 0xee, 0x62, 0x2b, 0x05, 0xc5, 0x34, 0xeb, 0xda, 0xae, 0xed, 0x5d, 0x8f, 0xd1,
+	0x3b, 0x04, 0xc5, 0x02, 0x8d, 0x22, 0x0e, 0x5e, 0x0b, 0x63, 0x99, 0x25, 0xec, 0xec, 0x19, 0x4b,
+	0xc1, 0xb6, 0x34, 0x4d, 0xb3, 0x44, 0x08, 0xb6, 0xc6, 0x65, 0xab, 0x53, 0xa9, 0x2c, 0xcf, 0x64,
+	0x0f, 0x77, 0xd3, 0xca, 0x99, 0xdd, 0x76, 0xcc, 0xed, 0xb5, 0x5d, 0xe7, 0xa6, 0x31, 0xcd, 0x04,
+	0x82, 0xfa, 0x03, 0x42, 0x31, 0x86, 0x53, 0x05, 0x62, 0xcc, 0x92, 0x83, 0xd0, 0x5e, 0xd1, 0xac,
+	0x8d, 0x4a, 0x23, 0x81, 0x6e, 0x6f, 0xc5, 0xfd, 0x81, 0x30, 0x79, 0x20, 0x80, 0x29, 0xd0, 0x6c,
+	0x01, 0xbc, 0xca, 0x41, 0xaa, 0x5b, 0xe2, 0xf8, 0xc3, 0x90, 0x71, 0xdd, 0x50, 0x43, 0xbc, 0xf9,
+	0xaf, 0xe2, 0xeb, 0x70, 0xad, 0xa5, 0xc2, 0xad, 0x56, 0xd3, 0x9d, 0xaf, 0x66, 0x79, 0xeb, 0x9d,
+	0x5e, 0xd7, 0xfd, 0x8a, 0x30, 0x79, 0x1a, 0x4b, 0x35, 0x33, 0x2e, 0x79, 0x2e, 0x86, 0x20, 0x6f,
+	0xb1, 0xee, 0xe2, 0x75, 0xc5, 0x15, 0x4b, 0x02, 0x90, 0x79, 0xa2, 0xa4, 0xf6, 0x6e, 0x05, 0x0b,
+	0x35, 0x72, 0x1f, 0xaf, 0xce, 0xa9, 0x66, 0xf6, 0x37, 0xff, 0x6a, 0x3f, 0xf8, 0x8d, 0x2d, 0xb5,
+	0x4b, 0xc5, 0x84, 0x3a, 0x18, 0x87, 0x70, 0xaa, 0xfd, 0x5b, 0x41, 0xa3, 0x52, 0x0e, 0x8f, 0x15,
+	0xa4, 0xf2, 0x08, 0xc4, 0x11, 0x8b, 0xc0, 0x6e, 0x57, 0xc3, 0x9b, 0xb5, 0xda, 0x9f, 0xfb, 0x0e,
+	0xe1, 0x8d, 0x23, 0xa6, 0x86, 0x27, 0x4b, 0xee, 0x74, 0x1f, 0xe3, 0xe7, 0x19, 0x08, 0xa6, 0xff,
+	0x30, 0xdb, 0xd2, 0xaa, 0xdd, 0x9b, 0x54, 0x6b, 0xd2, 0x39, 0x34, 0x68, 0x7c, 0x35, 0xdb, 0x85,
+	0x59, 0xef, 0xa2, 0x91, 0xb5, 0xd1, 0x33, 0xf7, 0xdf, 0xa2, 0xf3, 0x4b, 0xda, 0xba, 0xb8, 0xa4,
+	0xad, 0xab, 0x4b, 0x8a, 0xde, 0x14, 0x14, 0x7d, 0x28, 0x28, 0xfa, 0x5c, 0x50, 0x74, 0x5e, 0x50,
+	0x74, 0x51, 0x50, 0xf4, 0xad, 0xa0, 0xe8, 0x7b, 0x41, 0x5b, 0x57, 0x05, 0x45, 0xef, 0xa7, 0xb4,
+	0xf5, 0x69, 0x4a, 0xd1, 0xf9, 0x94, 0xb6, 0x2e, 0xa6, 0xb4, 0xf5, 0xe2, 0x71, 0xc4, 0xb3, 0x97,
+	0x91, 0x37, 0xe1, 0x89, 0x02, 0x21, 0x98, 0x97, 0x4b, 0x5f, 0x1f, 0x46, 0x5c, 0xa4, 0x3b, 0x99,
+	0xe0, 0x93, 0x38, 0x04, 0xb1, 0x53, 0xb7, 0xfd, 0x6c, 0x10, 0x71, 0x1f, 0x4e, 0xd5, 0xfc, 0xe9,
+	0x99, 0xbf, 0x40, 0x83, 0x8e, 0x7e, 0x3f, 0xee, 0xfd, 0x0a, 0x00, 0x00, 0xff, 0xff, 0xfa, 0xf7,
+	0xef, 0x35, 0x24, 0x05, 0x00, 0x00,
 }
 
 func (this *GroupMembers) Equal(that interface{}) bool {
@@ -599,7 +587,10 @@ func (this *GroupMembers) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.Id != that1.Id {
+	if this.Value != that1.Value {
+		return false
+	}
+	if this.Ref != that1.Ref {
 		return false
 	}
 	return true
@@ -651,6 +642,9 @@ func (this *Group) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if this.ExternalId != that1.ExternalId {
+		return false
+	}
 	return true
 }
 func (this *CreateGroupRequest) Equal(that interface{}) bool {
@@ -697,6 +691,9 @@ func (this *CreateGroupRequest) Equal(that interface{}) bool {
 	if this.Id != that1.Id {
 		return false
 	}
+	if this.ExternalId != that1.ExternalId {
+		return false
+	}
 	return true
 }
 func (this *ListGroupResources) Equal(that interface{}) bool {
@@ -729,42 +726,18 @@ func (this *ListGroupResources) Equal(that interface{}) bool {
 	if this.TotalResults != that1.TotalResults {
 		return false
 	}
-	if len(this.Groups) != len(that1.Groups) {
+	if len(this.Resources) != len(that1.Resources) {
 		return false
 	}
-	for i := range this.Groups {
-		if !this.Groups[i].Equal(that1.Groups[i]) {
+	for i := range this.Resources {
+		if !this.Resources[i].Equal(that1.Resources[i]) {
 			return false
 		}
 	}
-	return true
-}
-func (this *GroupOperation) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GroupOperation)
-	if !ok {
-		that2, ok := that.(GroupOperation)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
+	if this.StartIndex != that1.StartIndex {
 		return false
 	}
-	if this.Op != that1.Op {
-		return false
-	}
-	if this.Path != that1.Path {
-		return false
-	}
-	if !this.Value.Equal(that1.Value) {
+	if this.ItemsPerPage != that1.ItemsPerPage {
 		return false
 	}
 	return true
@@ -796,8 +769,13 @@ func (this *PatchGroupRequest) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if !this.Operation.Equal(that1.Operation) {
+	if len(this.Operations) != len(that1.Operations) {
 		return false
+	}
+	for i := range this.Operations {
+		if !this.Operations[i].Equal(that1.Operations[i]) {
+			return false
+		}
 	}
 	if this.Id != that1.Id {
 		return false
@@ -808,9 +786,10 @@ func (this *GroupMembers) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 6)
 	s = append(s, "&scim.GroupMembers{")
-	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "Ref: "+fmt.Sprintf("%#v", this.Ref)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -818,7 +797,7 @@ func (this *Group) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 11)
 	s = append(s, "&scim.Group{")
 	s = append(s, "Schemas: "+fmt.Sprintf("%#v", this.Schemas)+",\n")
 	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
@@ -830,6 +809,7 @@ func (this *Group) GoString() string {
 	if this.Members != nil {
 		s = append(s, "Members: "+fmt.Sprintf("%#v", this.Members)+",\n")
 	}
+	s = append(s, "ExternalId: "+fmt.Sprintf("%#v", this.ExternalId)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -837,7 +817,7 @@ func (this *CreateGroupRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&scim.CreateGroupRequest{")
 	s = append(s, "Schemas: "+fmt.Sprintf("%#v", this.Schemas)+",\n")
 	s = append(s, "DisplayName: "+fmt.Sprintf("%#v", this.DisplayName)+",\n")
@@ -848,6 +828,7 @@ func (this *CreateGroupRequest) GoString() string {
 		s = append(s, "Meta: "+fmt.Sprintf("%#v", this.Meta)+",\n")
 	}
 	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	s = append(s, "ExternalId: "+fmt.Sprintf("%#v", this.ExternalId)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -855,27 +836,15 @@ func (this *ListGroupResources) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&scim.ListGroupResources{")
 	s = append(s, "Schemas: "+fmt.Sprintf("%#v", this.Schemas)+",\n")
 	s = append(s, "TotalResults: "+fmt.Sprintf("%#v", this.TotalResults)+",\n")
-	if this.Groups != nil {
-		s = append(s, "Groups: "+fmt.Sprintf("%#v", this.Groups)+",\n")
+	if this.Resources != nil {
+		s = append(s, "Resources: "+fmt.Sprintf("%#v", this.Resources)+",\n")
 	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *GroupOperation) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&scim.GroupOperation{")
-	s = append(s, "Op: "+fmt.Sprintf("%#v", this.Op)+",\n")
-	s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
-	if this.Value != nil {
-		s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
-	}
+	s = append(s, "StartIndex: "+fmt.Sprintf("%#v", this.StartIndex)+",\n")
+	s = append(s, "ItemsPerPage: "+fmt.Sprintf("%#v", this.ItemsPerPage)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -886,8 +855,8 @@ func (this *PatchGroupRequest) GoString() string {
 	s := make([]string, 0, 7)
 	s = append(s, "&scim.PatchGroupRequest{")
 	s = append(s, "Schemas: "+fmt.Sprintf("%#v", this.Schemas)+",\n")
-	if this.Operation != nil {
-		s = append(s, "Operation: "+fmt.Sprintf("%#v", this.Operation)+",\n")
+	if this.Operations != nil {
+		s = append(s, "Operations: "+fmt.Sprintf("%#v", this.Operations)+",\n")
 	}
 	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
 	s = append(s, "}")
@@ -921,12 +890,19 @@ func (m *GroupMembers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintGroupTypes(dAtA, i, uint64(len(m.Id)))
+	if len(m.Ref) > 0 {
+		i -= len(m.Ref)
+		copy(dAtA[i:], m.Ref)
+		i = encodeVarintGroupTypes(dAtA, i, uint64(len(m.Ref)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x1a
+	}
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintGroupTypes(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0x12
 	}
 	return len(dAtA) - i, nil
 }
@@ -951,6 +927,13 @@ func (m *Group) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.ExternalId) > 0 {
+		i -= len(m.ExternalId)
+		copy(dAtA[i:], m.ExternalId)
+		i = encodeVarintGroupTypes(dAtA, i, uint64(len(m.ExternalId)))
+		i--
+		dAtA[i] = 0x42
+	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
 		copy(dAtA[i:], m.Name)
@@ -1030,6 +1013,13 @@ func (m *CreateGroupRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.ExternalId) > 0 {
+		i -= len(m.ExternalId)
+		copy(dAtA[i:], m.ExternalId)
+		i = encodeVarintGroupTypes(dAtA, i, uint64(len(m.ExternalId)))
+		i--
+		dAtA[i] = 0x42
+	}
 	if len(m.Id) > 0 {
 		i -= len(m.Id)
 		copy(dAtA[i:], m.Id)
@@ -1102,10 +1092,20 @@ func (m *ListGroupResources) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Groups) > 0 {
-		for iNdEx := len(m.Groups) - 1; iNdEx >= 0; iNdEx-- {
+	if m.ItemsPerPage != 0 {
+		i = encodeVarintGroupTypes(dAtA, i, uint64(m.ItemsPerPage))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.StartIndex != 0 {
+		i = encodeVarintGroupTypes(dAtA, i, uint64(m.StartIndex))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.Resources) > 0 {
+		for iNdEx := len(m.Resources) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.Groups[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.Resources[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -1133,55 +1133,6 @@ func (m *ListGroupResources) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *GroupOperation) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GroupOperation) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GroupOperation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Value != nil {
-		{
-			size, err := m.Value.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintGroupTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Path) > 0 {
-		i -= len(m.Path)
-		copy(dAtA[i:], m.Path)
-		i = encodeVarintGroupTypes(dAtA, i, uint64(len(m.Path)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Op) > 0 {
-		i -= len(m.Op)
-		copy(dAtA[i:], m.Op)
-		i = encodeVarintGroupTypes(dAtA, i, uint64(len(m.Op)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *PatchGroupRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1202,24 +1153,26 @@ func (m *PatchGroupRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Operations) > 0 {
+		for iNdEx := len(m.Operations) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Operations[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGroupTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.Id) > 0 {
 		i -= len(m.Id)
 		copy(dAtA[i:], m.Id)
 		i = encodeVarintGroupTypes(dAtA, i, uint64(len(m.Id)))
 		i--
 		dAtA[i] = 0x1a
-	}
-	if m.Operation != nil {
-		{
-			size, err := m.Operation.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintGroupTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
 	}
 	if len(m.Schemas) > 0 {
 		for iNdEx := len(m.Schemas) - 1; iNdEx >= 0; iNdEx-- {
@@ -1250,7 +1203,11 @@ func (m *GroupMembers) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Id)
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovGroupTypes(uint64(l))
+	}
+	l = len(m.Ref)
 	if l > 0 {
 		n += 1 + l + sovGroupTypes(uint64(l))
 	}
@@ -1291,6 +1248,10 @@ func (m *Group) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovGroupTypes(uint64(l))
 	}
+	l = len(m.ExternalId)
+	if l > 0 {
+		n += 1 + l + sovGroupTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1324,6 +1285,10 @@ func (m *CreateGroupRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovGroupTypes(uint64(l))
 	}
+	l = len(m.ExternalId)
+	if l > 0 {
+		n += 1 + l + sovGroupTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1342,32 +1307,17 @@ func (m *ListGroupResources) Size() (n int) {
 	if m.TotalResults != 0 {
 		n += 1 + sovGroupTypes(uint64(m.TotalResults))
 	}
-	if len(m.Groups) > 0 {
-		for _, e := range m.Groups {
+	if len(m.Resources) > 0 {
+		for _, e := range m.Resources {
 			l = e.Size()
 			n += 1 + l + sovGroupTypes(uint64(l))
 		}
 	}
-	return n
-}
-
-func (m *GroupOperation) Size() (n int) {
-	if m == nil {
-		return 0
+	if m.StartIndex != 0 {
+		n += 1 + sovGroupTypes(uint64(m.StartIndex))
 	}
-	var l int
-	_ = l
-	l = len(m.Op)
-	if l > 0 {
-		n += 1 + l + sovGroupTypes(uint64(l))
-	}
-	l = len(m.Path)
-	if l > 0 {
-		n += 1 + l + sovGroupTypes(uint64(l))
-	}
-	if m.Value != nil {
-		l = m.Value.Size()
-		n += 1 + l + sovGroupTypes(uint64(l))
+	if m.ItemsPerPage != 0 {
+		n += 1 + sovGroupTypes(uint64(m.ItemsPerPage))
 	}
 	return n
 }
@@ -1384,13 +1334,15 @@ func (m *PatchGroupRequest) Size() (n int) {
 			n += 1 + l + sovGroupTypes(uint64(l))
 		}
 	}
-	if m.Operation != nil {
-		l = m.Operation.Size()
-		n += 1 + l + sovGroupTypes(uint64(l))
-	}
 	l = len(m.Id)
 	if l > 0 {
 		n += 1 + l + sovGroupTypes(uint64(l))
+	}
+	if len(m.Operations) > 0 {
+		for _, e := range m.Operations {
+			l = e.Size()
+			n += 1 + l + sovGroupTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -1406,7 +1358,8 @@ func (this *GroupMembers) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GroupMembers{`,
-		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`Ref:` + fmt.Sprintf("%v", this.Ref) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1427,6 +1380,7 @@ func (this *Group) String() string {
 		`DisplayName:` + fmt.Sprintf("%v", this.DisplayName) + `,`,
 		`Members:` + repeatedStringForMembers + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`ExternalId:` + fmt.Sprintf("%v", this.ExternalId) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1446,6 +1400,7 @@ func (this *CreateGroupRequest) String() string {
 		`Members:` + repeatedStringForMembers + `,`,
 		`Meta:` + strings.Replace(fmt.Sprintf("%v", this.Meta), "Meta", "Meta", 1) + `,`,
 		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
+		`ExternalId:` + fmt.Sprintf("%v", this.ExternalId) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1454,27 +1409,17 @@ func (this *ListGroupResources) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForGroups := "[]*Group{"
-	for _, f := range this.Groups {
-		repeatedStringForGroups += strings.Replace(f.String(), "Group", "Group", 1) + ","
+	repeatedStringForResources := "[]*Group{"
+	for _, f := range this.Resources {
+		repeatedStringForResources += strings.Replace(f.String(), "Group", "Group", 1) + ","
 	}
-	repeatedStringForGroups += "}"
+	repeatedStringForResources += "}"
 	s := strings.Join([]string{`&ListGroupResources{`,
 		`Schemas:` + fmt.Sprintf("%v", this.Schemas) + `,`,
 		`TotalResults:` + fmt.Sprintf("%v", this.TotalResults) + `,`,
-		`Groups:` + repeatedStringForGroups + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GroupOperation) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GroupOperation{`,
-		`Op:` + fmt.Sprintf("%v", this.Op) + `,`,
-		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
-		`Value:` + strings.Replace(this.Value.String(), "Group", "Group", 1) + `,`,
+		`Resources:` + repeatedStringForResources + `,`,
+		`StartIndex:` + fmt.Sprintf("%v", this.StartIndex) + `,`,
+		`ItemsPerPage:` + fmt.Sprintf("%v", this.ItemsPerPage) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1483,10 +1428,15 @@ func (this *PatchGroupRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForOperations := "[]*PatchOperation{"
+	for _, f := range this.Operations {
+		repeatedStringForOperations += strings.Replace(fmt.Sprintf("%v", f), "PatchOperation", "PatchOperation", 1) + ","
+	}
+	repeatedStringForOperations += "}"
 	s := strings.Join([]string{`&PatchGroupRequest{`,
 		`Schemas:` + fmt.Sprintf("%v", this.Schemas) + `,`,
-		`Operation:` + strings.Replace(this.Operation.String(), "GroupOperation", "GroupOperation", 1) + `,`,
 		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
+		`Operations:` + repeatedStringForOperations + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1528,9 +1478,9 @@ func (m *GroupMembers) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GroupMembers: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1558,7 +1508,39 @@ func (m *GroupMembers) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Id = string(dAtA[iNdEx:postIndex])
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ref", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGroupTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGroupTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGroupTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ref = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1811,6 +1793,38 @@ func (m *Group) Unmarshal(dAtA []byte) error {
 			}
 			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExternalId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGroupTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGroupTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGroupTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExternalId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGroupTypes(dAtA[iNdEx:])
@@ -2030,6 +2044,38 @@ func (m *CreateGroupRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.Id = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExternalId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGroupTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGroupTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGroupTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExternalId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGroupTypes(dAtA[iNdEx:])
@@ -2136,7 +2182,7 @@ func (m *ListGroupResources) Unmarshal(dAtA []byte) error {
 			}
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Groups", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Resources", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2163,69 +2209,16 @@ func (m *ListGroupResources) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Groups = append(m.Groups, &Group{})
-			if err := m.Groups[len(m.Groups)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Resources = append(m.Resources, &Group{})
+			if err := m.Resources[len(m.Resources)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGroupTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartIndex", wireType)
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GroupOperation) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGroupTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GroupOperation: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GroupOperation: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Op", wireType)
-			}
-			var stringLen uint64
+			m.StartIndex = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGroupTypes
@@ -2235,29 +2228,16 @@ func (m *GroupOperation) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.StartIndex |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGroupTypes
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemsPerPage", wireType)
 			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Op = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-			var stringLen uint64
+			m.ItemsPerPage = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGroupTypes
@@ -2267,60 +2247,11 @@ func (m *GroupOperation) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.ItemsPerPage |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Path = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGroupTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Value == nil {
-				m.Value = &Group{}
-			}
-			if err := m.Value.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGroupTypes(dAtA[iNdEx:])
@@ -2406,42 +2337,6 @@ func (m *PatchGroupRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.Schemas = append(m.Schemas, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Operation", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGroupTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGroupTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Operation == nil {
-				m.Operation = &GroupOperation{}
-			}
-			if err := m.Operation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
@@ -2473,6 +2368,40 @@ func (m *PatchGroupRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Operations", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGroupTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGroupTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGroupTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Operations = append(m.Operations, &PatchOperation{})
+			if err := m.Operations[len(m.Operations)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

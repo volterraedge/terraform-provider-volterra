@@ -234,6 +234,32 @@ func (v *ValidateCreateObjectRequest) Validate(ctx context.Context, pm interface
 
 	}
 
+	switch m.GetObjectAttributes().(type) {
+	case *CreateObjectRequest_NoAttributes:
+		if fv, exists := v.FldValidators["object_attributes.no_attributes"]; exists {
+			val := m.GetObjectAttributes().(*CreateObjectRequest_NoAttributes).NoAttributes
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("no_attributes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateObjectRequest_MobileSdk:
+		if fv, exists := v.FldValidators["object_attributes.mobile_sdk"]; exists {
+			val := m.GetObjectAttributes().(*CreateObjectRequest_MobileSdk).MobileSdk
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_sdk"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["object_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("object_type"))
@@ -294,7 +320,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -338,6 +364,8 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["description"] = vFn
+
+	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 
 	return v
 }()
@@ -630,7 +658,7 @@ var DefaultDeleteObjectRequestValidator = func() *ValidateDeleteObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -912,7 +940,7 @@ var DefaultGetObjectRequestValidator = func() *ValidateGetObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1188,6 +1216,32 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 
 	}
 
+	switch m.GetObjectAttributes().(type) {
+	case *ListItemDescriptor_NoAttributes:
+		if fv, exists := v.FldValidators["object_attributes.no_attributes"]; exists {
+			val := m.GetObjectAttributes().(*ListItemDescriptor_NoAttributes).NoAttributes
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("no_attributes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ListItemDescriptor_MobileSdk:
+		if fv, exists := v.FldValidators["object_attributes.mobile_sdk"]; exists {
+			val := m.GetObjectAttributes().(*ListItemDescriptor_MobileSdk).MobileSdk
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_sdk"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant"))
@@ -1215,6 +1269,8 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 // Well-known symbol for default validator implementation
 var DefaultListItemDescriptorValidator = func() *ValidateListItemDescriptor {
 	v := &ValidateListItemDescriptor{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 
 	v.FldValidators["versions"] = VersionDescriptorValidator().Validate
 
@@ -1383,7 +1439,7 @@ var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\"]",
+		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1492,6 +1548,129 @@ var DefaultListObjectsResponseValidator = func() *ValidateListObjectsResponse {
 
 func ListObjectsResponseValidator() db.Validator {
 	return DefaultListObjectsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MobileSDKAttributes) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MobileSDKAttributes) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MobileSDKAttributes) DeepCopy() *MobileSDKAttributes {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MobileSDKAttributes{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MobileSDKAttributes) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MobileSDKAttributes) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MobileSDKAttributesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMobileSDKAttributes struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMobileSDKAttributes) OsTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(OSType)
+		return int32(i)
+	}
+	// OSType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, OSType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for os_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMobileSDKAttributes) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MobileSDKAttributes)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MobileSDKAttributes got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["mobile_sdk_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mobile_sdk_version"))
+		if err := fv(ctx, m.GetMobileSdkVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["os_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os_type"))
+		if err := fv(ctx, m.GetOsType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMobileSDKAttributesValidator = func() *ValidateMobileSDKAttributes {
+	v := &ValidateMobileSDKAttributes{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOsType := v.OsTypeValidationRuleHandler
+	rulesOsType := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.message.required":  "true",
+	}
+	vFn, err = vrhOsType(rulesOsType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MobileSDKAttributes.os_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["os_type"] = vFn
+
+	return v
+}()
+
+func MobileSDKAttributesValidator() db.Validator {
+	return DefaultMobileSDKAttributesValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1831,6 +2010,32 @@ func (v *ValidateStoredObjectDescriptor) Validate(ctx context.Context, pm interf
 
 	}
 
+	switch m.GetObjectAttributes().(type) {
+	case *StoredObjectDescriptor_NoAttributes:
+		if fv, exists := v.FldValidators["object_attributes.no_attributes"]; exists {
+			val := m.GetObjectAttributes().(*StoredObjectDescriptor_NoAttributes).NoAttributes
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("no_attributes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StoredObjectDescriptor_MobileSdk:
+		if fv, exists := v.FldValidators["object_attributes.mobile_sdk"]; exists {
+			val := m.GetObjectAttributes().(*StoredObjectDescriptor_MobileSdk).MobileSdk
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_sdk"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["url"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("url"))
@@ -1929,6 +2134,8 @@ var DefaultStoredObjectDescriptorValidator = func() *ValidateStoredObjectDescrip
 		panic(errMsg)
 	}
 	v.FldValidators["version"] = vFn
+
+	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 
 	return v
 }()

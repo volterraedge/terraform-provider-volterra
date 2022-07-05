@@ -162,6 +162,7 @@ func (c *CustomAPIRestClient) doRPCSetTGWInfo(ctx context.Context, callOpts *ser
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("direct_connect_info", fmt.Sprintf("%v", req.DirectConnectInfo))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("tgw_info", fmt.Sprintf("%v", req.TgwInfo))
@@ -1277,6 +1278,12 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Request to configure TGW Information",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest",
             "properties": {
+                "direct_connect_info": {
+                    "description": " Direct Connect information obtained after creating the site and TGW",
+                    "title": "Direct Connect information",
+                    "$ref": "#/definitions/viewsDirectConnectInfo",
+                    "x-displayname": "Direct Connect Information"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of the object to be configured\n\nExample: - \"aws-tgw-site-1\"-",
@@ -1569,6 +1576,38 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
+        "viewsDirectConnectInfo": {
+            "type": "object",
+            "description": "DirectConnect Info",
+            "title": "DirectConnect Info",
+            "x-displayname": "DirectConnect Info",
+            "x-ves-proto-message": "ves.io.schema.views.DirectConnectInfo",
+            "properties": {
+                "direct_connect_gateway_id": {
+                    "type": "string",
+                    "description": " DirectConnect Gateway ID\n\nExample: - \"f2a50c04-xxxx-yyyy-zzzz-00000000a043\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "DirectConnect Gateway ID",
+                    "x-displayname": "DirectConnect Gateway ID",
+                    "x-ves-example": "f2a50c04-xxxx-yyyy-zzzz-00000000a043",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vgw_id": {
+                    "type": "string",
+                    "description": " Virtual Private Gateway ID\n\nExample: - \"vgw-12345678\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Virtual Private Gateway ID",
+                    "x-displayname": "Virtual Private Gateway ID",
+                    "x-ves-example": "vgw-12345678",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.pattern": "^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
                 }
             }

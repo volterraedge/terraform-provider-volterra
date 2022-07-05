@@ -2905,8 +2905,9 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with K8s service name and site information",
             "title": "OriginServerK8SService",
             "x-displayname": "K8s Service Name on given Sites",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "10,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\",\"vk8s_networks\"]",
+            "x-ves-oneof-field-service_info": "[\"service_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerK8SService",
             "properties": {
                 "inside_network": {
@@ -2923,7 +2924,7 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": " K8s service name of the origin server, including the namespace and cluster-id\n (servicename.namespace.cluster-id). For example, if the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest.prod\".\n Both namespace and cluster-id are optional. cluster-id can be specified only if namespace is\n configured.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n (servicename.namespace.cluster-id). For example, if the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest.prod\".\n Both namespace and cluster-id are optional. cluster-id can be specified only if namespace is\n configured.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
                     "x-ves-example": "value",
@@ -3302,10 +3303,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\n Do not use MTLS for this pool",
+                    "description": "Exclusive with [use_mtls]\n",
                     "title": "No MTLS",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No MTLS"
+                    "x-displayname": "Disable"
                 },
                 "skip_server_verification": {
                     "description": "Exclusive with [use_server_verification volterra_trusted_ca]\n Skip origin server verification",
@@ -3341,10 +3342,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n Use MTLS for this pool using provided certificates",
+                    "description": "Exclusive with [no_mtls]\n",
                     "title": "Use MTLS",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
-                    "x-displayname": "MTLS"
+                    "x-displayname": "Enable"
                 },
                 "use_server_verification": {
                     "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided trusted CA list",
@@ -3590,6 +3591,21 @@ var APISwaggerJSON string = `{
                     "title": "result",
                     "$ref": "#/definitions/schemaStatusType",
                     "x-displayname": "Result"
+                }
+            }
+        },
+        "schemaLabelSelectorType": {
+            "type": "object",
+            "description": "x-displayName: \"Label Selector\"\nThis type can be used to establish a 'selector reference' from one object(called selector) to\na set of other objects(called selectees) based on the value of expresssions.\nA label selector is a label query over a set of resources. An empty label selector matches all objects.\nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression.\nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "title": "LabelSelectorType",
+            "properties": {
+                "expressions": {
+                    "type": "array",
+                    "description": "x-displayName: \"Selector Expression\"\nx-required\nx-example: \"region in (us-west1, us-west2),tier in (staging)\"\nexpressions contains the kubernetes style label expression for selections.",
+                    "title": "expressions",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -4219,7 +4235,7 @@ var APISwaggerJSON string = `{
         },
         "schemaTlsProtocol": {
             "type": "string",
-            "description": "TlsProtocol is enumeration of supported TLS versions\n\nVolterra will choose the optimal TLS version.\nTLS 1.0\nTLS 1.1\nTLS 1.2\nTLS 1.3",
+            "description": "TlsProtocol is enumeration of supported TLS versions\n\nF5 Distributed Cloud will choose the optimal TLS version.",
             "title": "TlsProtocol",
             "enum": [
                 "TLS_AUTO",
@@ -4436,19 +4452,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom"
                 },
                 "default_security": {
-                    "description": "Exclusive with [custom_security low_security medium_security]\n High Option chooses highest level of security.\n TLS v1.2+ with PFS ciphers with strong crypto algorithms.",
+                    "description": "Exclusive with [custom_security low_security medium_security]\n TLS v1.2+ with PFS ciphers and strong crypto algorithms.",
                     "title": "Default Security",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "High"
                 },
                 "low_security": {
-                    "description": "Exclusive with [custom_security default_security medium_security]\n Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms.",
+                    "description": "Exclusive with [custom_security default_security medium_security]\n TLS v1.0+ including non-PFS ciphers and weak crypto algorithms.",
                     "title": "Low Security",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Low"
                 },
                 "medium_security": {
-                    "description": "Exclusive with [custom_security default_security low_security]\n Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms.",
+                    "description": "Exclusive with [custom_security default_security low_security]\n TLS v1.0+ with PFS ciphers and medium strength crypto algorithms.",
                     "title": "Medium Security",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Medium"
@@ -4509,9 +4525,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_tls": {
-                    "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
+                    "description": "Exclusive with [use_tls]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No TLS"
+                    "x-displayname": "Disable"
                 },
                 "origin_servers": {
                     "type": "array",
@@ -4549,9 +4565,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint port"
                 },
                 "use_tls": {
-                    "description": "Exclusive with [no_tls]\n Origin servers use TLS",
+                    "description": "Exclusive with [no_tls]\n",
                     "$ref": "#/definitions/origin_poolUpstreamTlsParameters",
-                    "x-displayname": "TLS"
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -4609,9 +4625,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_tls": {
-                    "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
+                    "description": "Exclusive with [use_tls]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No TLS"
+                    "x-displayname": "Disable"
                 },
                 "origin_servers": {
                     "type": "array",
@@ -4649,9 +4665,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint port"
                 },
                 "use_tls": {
-                    "description": "Exclusive with [no_tls]\n Origin servers use TLS",
+                    "description": "Exclusive with [no_tls]\n",
                     "$ref": "#/definitions/origin_poolUpstreamTlsParameters",
-                    "x-displayname": "TLS"
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -4714,10 +4730,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_tls": {
-                    "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
+                    "description": "Exclusive with [use_tls]\n",
                     "title": "No TLS",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No TLS"
+                    "x-displayname": "Disable"
                 },
                 "origin_servers": {
                     "type": "array",
@@ -4758,10 +4774,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint port"
                 },
                 "use_tls": {
-                    "description": "Exclusive with [no_tls]\n Origin servers use TLS",
+                    "description": "Exclusive with [no_tls]\n",
                     "title": "Use TLS",
                     "$ref": "#/definitions/origin_poolUpstreamTlsParameters",
-                    "x-displayname": "TLS"
+                    "x-displayname": "Enable"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",
@@ -4825,9 +4841,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_tls": {
-                    "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
+                    "description": "Exclusive with [use_tls]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No TLS"
+                    "x-displayname": "Disable"
                 },
                 "origin_servers": {
                     "type": "array",
@@ -4865,9 +4881,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint port"
                 },
                 "use_tls": {
-                    "description": "Exclusive with [no_tls]\n Origin servers use TLS",
+                    "description": "Exclusive with [no_tls]\n",
                     "$ref": "#/definitions/origin_poolUpstreamTlsParameters",
-                    "x-displayname": "TLS"
+                    "x-displayname": "Enable"
                 }
             }
         }

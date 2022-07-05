@@ -3179,6 +3179,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
+                "dc_cluster_group": {
+                    "description": "x-displayName: \"DC Cluster Group\"\nthe peer represents a group of peers derived from other sites in the DC Cluster Group",
+                    "title": "dc_cluster_group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
                 "disable_mtls": {
                     "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
                     "title": "disable_mtls",
@@ -3219,11 +3224,21 @@ var APISwaggerJSON string = `{
                     "title": "from_site",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "local": {
+                    "description": "x-displayName: \"local\"\nthe peer is a single, local peer, not a group",
+                    "title": "local",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "port": {
                     "type": "integer",
-                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nPeer TCP port number.",
+                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nLocal Peer TCP Port Number (ignored for Site Mesh Groups or DC Cluster Groups).",
                     "title": "port",
                     "format": "int64"
+                },
+                "site_mesh_group": {
+                    "description": "x-displayName: \"Site Mesh Group\"\nthe peer represents a group of peers derived from other sites in the Site Mesh Group",
+                    "title": "site_mesh_group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
